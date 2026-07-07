@@ -1,0 +1,33 @@
+{
+    "name": "jamstackvietnam/region",
+    "description": "region",
+    "homepage": "https://jamstackvietnam.com",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Whoosh",
+            "email": "nhatkha1407@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "JamstackVietnam\\Region\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "JamstackVietnam\\Region\\ServiceProvider"
+            ]
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

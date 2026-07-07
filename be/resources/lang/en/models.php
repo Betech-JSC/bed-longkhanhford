@@ -1,0 +1,77 @@
+<?php
+
+return [
+    'actions' => [
+        'create' => 'Tạo mới',
+    ],
+    'admins' => [
+        'id' => 'ID',
+        'name' => 'Tên',
+        'email' => 'Địa chỉ email',
+        'password' => 'Mật khẩu',
+        'phone' => 'Số điện thoại',
+        'type' => 'Loại tài khoản',
+        'status' => 'Trạng thái'
+    ],
+    'table_list' => [
+        'collections' => 'Bộ sưu tập',
+        'discounts' => 'Discount',
+        'Discounts' => 'Discount',
+        'Vouchers' => 'Vouchers',
+        'collection-categories' => 'Danh mục bộ sưu tập',
+        'admins' => 'Quản trị viên',
+        'translations' => 'Bản dịch',
+        'roles' => 'Vai trò',
+        'users' => 'Khách hàng',
+        'settings' => 'Cấu hình',
+        'posts' => 'Bài viết',
+        'media' => 'Media',
+        'files' => 'Quản lý Tệp',
+        'banners' => 'Banners',
+        'vehicle-categories' => 'Vehicle Categories',
+        'vehicles' => 'Vehicles',
+        'used-vehicles' => 'Used Vehicles',
+        'used_vehicles' => 'Used Vehicles',
+        'customer-reviews' => 'Customer Reviews',
+        'partners' => 'Partners',
+        'sales-consultants' => 'Sales Consultants',
+        'dealer-activities' => 'Dealer Activities',
+        'awards' => 'Awards',
+        'chat-sessions' => 'AI Chat History',
+        'ChatSessions' => 'AI Chat History',
+        'cms-manuals' => 'CMS Manuals',
+        'maintenance-schedules' => 'Maintenance Schedules',
+        'maintenance_schedules' => 'Maintenance Schedules',
+        'test-drive-surveys' => 'Test Drive Surveys',
+        'test_drive_surveys' => 'Test Drive Surveys',
+        'TestDriveSurveys' => 'Test Drive Surveys',
+        'service-surveys' => 'Service Surveys',
+        'service_surveys' => 'Service Surveys',
+        'ServiceSurveys' => 'Service Surveys',
+        'service-bookings' => 'Service Bookings',
+        'service_bookings' => 'Service Bookings',
+        'ServiceBookings' => 'Service Bookings',
+    ],
+    'chat-sessions' => [
+        'id' => 'ID',
+        'session_id' => 'Session ID',
+        'lead_score' => 'Lead Rating',
+        'interested_vehicle' => 'Interested Vehicle',
+        'contact_info' => 'Contact Info',
+        'notified' => 'Notified Sales',
+        'created_at' => 'Started At',
+        'updated_at' => 'Last Updated',
+    ],
+    'posts' => [
+        'type' => [
+            'health-corner'  => 'HEALTH_CORNER',
+            'look-up-disease' => 'LOOK_UP_DISEASE',
+            'collection'     => 'COLLECTION',
+        ]
+    ],
+    'message' => [
+        'confirm_message'  => 'Changes are not saved. Are you sure you want to leave?',
+        'trashed_message1' => 'This record was deleted on',
+        'trashed_message2' => 'Click here to restore.',
+    ]
+];

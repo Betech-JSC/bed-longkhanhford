@@ -1,0 +1,18 @@
+{
+    "name": "jamstackvietnam/rule-generator",
+    "require": {
+        "doctrine/dbal": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "JamstackVietnam\\RuleGenerator\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Test\\Models\\": "tests/models"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

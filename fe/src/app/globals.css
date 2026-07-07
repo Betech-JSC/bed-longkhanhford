@@ -1,0 +1,1170 @@
+@import "tailwindcss";
+
+/* Ford Antenna (with space) */
+@font-face {
+  font-family: 'Ford Antenna';
+  src: url('/fonts/FordAntenna-Thin.eot');
+  src: local('Ford Antenna Thin'), local('FordAntenna-Thin'),
+       url('/fonts/FordAntenna-Thin.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/FordAntenna-Thin.woff') format('woff'),
+       url('/fonts/FordAntenna-Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ford Antenna';
+  src: url('/fonts/FordAntenna-ExtraLight.eot');
+  src: local('Ford Antenna ExtraLight'), local('FordAntenna-ExtraLight'),
+       url('/fonts/FordAntenna-ExtraLight.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/FordAntenna-ExtraLight.woff') format('woff'),
+       url('/fonts/FordAntenna-ExtraLight.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ford Antenna';
+  src: url('/fonts/FordAntenna-Light.eot');
+  src: local('Ford Antenna Light'), local('FordAntenna-Light'),
+       url('/fonts/FordAntenna-Light.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/FordAntenna-Light.woff') format('woff'),
+       url('/fonts/FordAntenna-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ford Antenna';
+  src: url('/fonts/FordAntenna-Regular.eot');
+  src: local('Ford Antenna Regular'), local('FordAntenna-Regular'),
+       url('/fonts/FordAntenna-Regular.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/FordAntenna-Regular.woff') format('woff'),
+       url('/fonts/FordAntenna-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ford Antenna';
+  src: url('/fonts/FordAntenna-Medium.eot');
+  src: local('Ford Antenna Medium'), local('FordAntenna-Medium'),
+       url('/fonts/FordAntenna-Medium.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/FordAntenna-Medium.woff') format('woff'),
+       url('/fonts/FordAntenna-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ford Antenna';
+  src: url('/fonts/FordAntenna-Semibold.eot');
+  src: local('Ford Antenna Semibold'), local('FordAntenna-Semibold'),
+       url('/fonts/FordAntenna-Semibold.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/FordAntenna-Semibold.woff') format('woff'),
+       url('/fonts/FordAntenna-Semibold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ford Antenna';
+  src: url('/fonts/FordAntenna-Bold.eot');
+  src: local('Ford Antenna Bold'), local('FordAntenna-Bold'),
+       url('/fonts/FordAntenna-Bold.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/FordAntenna-Bold.woff') format('woff'),
+       url('/fonts/FordAntenna-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ford Antenna';
+  src: url('/fonts/FordAntenna-Black.eot');
+  src: local('Ford Antenna Black'), local('FordAntenna-Black'),
+       url('/fonts/FordAntenna-Black.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/FordAntenna-Black.woff') format('woff'),
+       url('/fonts/FordAntenna-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Ford_Antenna (with underscore) */
+@font-face {
+  font-family: 'Ford_Antenna';
+  src: url('/fonts/FordAntenna-Thin.eot');
+  src: local('Ford Antenna Thin'), local('FordAntenna-Thin'),
+       url('/fonts/FordAntenna-Thin.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/FordAntenna-Thin.woff') format('woff'),
+       url('/fonts/FordAntenna-Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ford_Antenna';
+  src: url('/fonts/FordAntenna-ExtraLight.eot');
+  src: local('Ford Antenna ExtraLight'), local('FordAntenna-ExtraLight'),
+       url('/fonts/FordAntenna-ExtraLight.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/FordAntenna-ExtraLight.woff') format('woff'),
+       url('/fonts/FordAntenna-ExtraLight.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ford_Antenna';
+  src: url('/fonts/FordAntenna-Light.eot');
+  src: local('Ford Antenna Light'), local('FordAntenna-Light'),
+       url('/fonts/FordAntenna-Light.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/FordAntenna-Light.woff') format('woff'),
+       url('/fonts/FordAntenna-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ford_Antenna';
+  src: url('/fonts/FordAntenna-Regular.eot');
+  src: local('Ford Antenna Regular'), local('FordAntenna-Regular'),
+       url('/fonts/FordAntenna-Regular.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/FordAntenna-Regular.woff') format('woff'),
+       url('/fonts/FordAntenna-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ford_Antenna';
+  src: url('/fonts/FordAntenna-Medium.eot');
+  src: local('Ford Antenna Medium'), local('FordAntenna-Medium'),
+       url('/fonts/FordAntenna-Medium.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/FordAntenna-Medium.woff') format('woff'),
+       url('/fonts/FordAntenna-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ford_Antenna';
+  src: url('/fonts/FordAntenna-Semibold.eot');
+  src: local('Ford Antenna Semibold'), local('FordAntenna-Semibold'),
+       url('/fonts/FordAntenna-Semibold.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/FordAntenna-Semibold.woff') format('woff'),
+       url('/fonts/FordAntenna-Semibold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ford_Antenna';
+  src: url('/fonts/FordAntenna-Bold.eot');
+  src: local('Ford Antenna Bold'), local('FordAntenna-Bold'),
+       url('/fonts/FordAntenna-Bold.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/FordAntenna-Bold.woff') format('woff'),
+       url('/fonts/FordAntenna-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ford_Antenna';
+  src: url('/fonts/FordAntenna-Black.eot');
+  src: local('Ford Antenna Black'), local('FordAntenna-Black'),
+       url('/fonts/FordAntenna-Black.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/FordAntenna-Black.woff') format('woff'),
+       url('/fonts/FordAntenna-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+
+:root {
+  /* Brand color tokens from Figma */
+  --brand-primary: #00095B;      /* Deep Navy Ford Blue */
+  --brand-secondary: #003478;    /* Classic Ford Blue */
+  --brand-accent: #066FEF;       /* Vivid Highlight Blue */
+  --brand-vivid: #0562D2;        /* Direct Action Blue */
+  --brand-orange: #F97316;       /* Warm CTA Orange */
+  --brand-red: #DC453A;          /* Accent Red / Promotions */
+  --brand-dark: #1A1A1A;         /* Figma Exact Dark Text */
+  --brand-gray-dark: #333333;    /* Figma Exact Slate */
+  --brand-gray-med: #424242;     /* Figma Exact Subtext */
+  --brand-gray-light: #E5E5E5;   /* Figma Exact Light border */
+  --brand-light: #F9FAFB;        /* Page Background */
+  
+  --background: var(--brand-light);
+  --foreground: var(--brand-dark);
+}
+
+@theme {
+  /* Typography */
+  --font-sans: "Ford Antenna", "Ford_Antenna", var(--font-inter), sans-serif;
+  --font-display: "Ford Antenna", "Ford_Antenna", var(--font-inter), sans-serif;
+  --font-antenna: "Ford Antenna", "Ford_Antenna", var(--font-inter), sans-serif;
+
+  /* Theme Colors */
+  --color-primary: var(--brand-primary);
+  --color-secondary: var(--brand-secondary);
+  --color-accent: var(--brand-accent);
+  --color-vivid: var(--brand-vivid);
+  --color-orange: var(--brand-orange);
+  --color-red: var(--brand-red);
+  --color-dark: var(--brand-dark);
+  --color-gray-dark: var(--brand-gray-dark);
+  --color-gray-med: var(--brand-gray-med);
+  --color-gray-light: var(--brand-gray-light);
+  --color-light: var(--brand-light);
+  
+  /* Layout Radius (Sharp Geometry for Premium Feel) */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+}
+
+/* Base resets & styles */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  overflow-x: clip;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Premium micro-interactions & utility styles */
+.transition-premium {
+  transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Custom interactive button base */
+.btn-ford-primary {
+  background-color: var(--brand-vivid);
+  color: #ffffff;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  transition: all 200ms ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-ford-primary:hover {
+  background-color: var(--brand-secondary);
+  transform: translateY(-1px);
+}
+
+.btn-ford-secondary {
+  background-color: transparent;
+  color: var(--brand-vivid);
+  border: 1px solid var(--brand-vivid);
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  transition: all 200ms ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-ford-secondary:hover {
+  background-color: var(--brand-vivid);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+/* Glass card style (v4 compatible solid border look) */
+.ford-card {
+  background-color: #ffffff;
+  border: 1px solid var(--brand-gray-light);
+  border-radius: var(--radius-xl);
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ford-card:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+  transform: translateY(-2px);
+  border-color: var(--brand-vivid);
+}
+
+/* Scroll reveal helper classes */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: reveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes reveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Figma 18-Level Typography System */
+.text-display-1 {
+  font-family: var(--font-display);
+  font-size: 72px;
+  line-height: 100.8px;
+  letter-spacing: -1.44px;
+}
+.text-display-2 {
+  font-family: var(--font-display);
+  font-size: 48px;
+  line-height: 57.6px;
+  letter-spacing: -0.96px;
+}
+.text-display-3 {
+  font-family: var(--font-display);
+  font-size: 36px;
+  line-height: 47.5px;
+}
+.text-headline-1 {
+  font-family: var(--font-display);
+  font-size: 32px;
+  line-height: 38.4px;
+}
+.text-headline-2 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  line-height: 33.6px;
+}
+.text-headline-3 {
+  font-family: var(--font-display);
+  font-size: 24px;
+  line-height: 30px;
+}
+.text-title-1 {
+  font-family: var(--font-sans);
+  font-size: 22px;
+  line-height: 31.9px;
+  font-weight: 600;
+}
+.text-title-2 {
+  font-family: var(--font-sans);
+  font-size: 18px;
+  line-height: 26.1px;
+  letter-spacing: 0.18px;
+  font-weight: 600;
+}
+.text-title-3 {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+}
+.text-title-4 {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 19.6px;
+  font-weight: 600;
+}
+.text-button-1 {
+  font-family: var(--font-sans);
+  font-size: 18px;
+  line-height: 27px;
+  font-weight: 600;
+  letter-spacing: 0.18px;
+}
+.text-button-2 {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 19.6px;
+  font-weight: 600;
+  letter-spacing: 0.14px;
+}
+.text-body-1 {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+}
+.text-body-2 {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 19.6px;
+  font-weight: 400;
+}
+.text-body-3 {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 400;
+}
+.text-label-1 {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 500;
+}
+.text-label-2 {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 19.6px;
+  font-weight: 500;
+}
+.text-label-3 {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 500;
+}
+
+/* Custom variables for Popular Fleet slider responsive layout */
+:root {
+  --card-width-popular: 660px;
+  --card-gap-popular: 24px;
+}
+
+@media (max-width: 1200px) {
+  :root {
+    --card-width-popular: 500px;
+    --card-gap-popular: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --card-width-popular: 320px;
+    --card-gap-popular: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --card-width-popular: 280px;
+    --card-gap-popular: 12px;
+  }
+}
+
+/* Custom variables for Testimonials slider responsive layout */
+:root {
+  --card-width-testimonial: 480px;
+  --card-gap-testimonial: 32px;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --card-width-testimonial: 280px;
+    --card-gap-testimonial: 16px;
+  }
+}
+
+/* Custom variables for News & Offers slider responsive layout */
+:root {
+  --card-width-news: 320px;
+  --card-gap-news: 24px;
+}
+
+@media (max-width: 480px) {
+  :root {
+    --card-width-news: 280px;
+    --card-gap-news: 16px;
+  }
+}
+
+/* Custom variables for Services slider responsive layout */
+:root {
+  --card-width-service: 380px;
+  --card-gap-service: 24px;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --card-width-service: 280px;
+    --card-gap-service: 16px;
+  }
+}
+
+/* Custom variables for Handovers slider responsive layout */
+:root {
+  --card-width-handover: 360px;
+  --card-gap-handover: 24px;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --card-width-handover: 280px;
+    --card-gap-handover: 16px;
+  }
+}
+
+/* News track horizontal translation on mobile only */
+.news-track {
+  transform: translateX(calc(-1 * var(--active-news-index) * (var(--card-width-news) + var(--card-gap-news))));
+}
+
+@media (min-width: 768px) {
+  .news-track {
+    transform: none !important;
+  }
+}
+
+/* Sticky secondary navigation tab bar utility */
+.sticky-tabs {
+  position: sticky;
+  top: 72px;
+  z-index: 30;
+}
+
+@media (min-width: 1024px) {
+  .sticky-tabs {
+    top: 104px;
+  }
+}
+
+/* 360 Colorizer Styling */
+.cmp-360-colorizer-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 1152px;
+  margin: 0 auto;
+  font-family: "Ford Antenna", "Ford_Antenna", sans-serif;
+  color: #1a1a1a;
+}
+
+.cmp-360-colorizer {
+  position: relative;
+  width: 100%;
+  border-radius: 12px;
+  background: #fafafa;
+  border: 1px solid #e5e5e5;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.model-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Vehicle variation dropdown container */
+.cmp-360-colorizer__vehicle-variation-container {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  z-index: 40;
+}
+
+.dropdown.trimAware__dropdown {
+  position: relative;
+  width: 320px;
+}
+
+.dropdown-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  border: 1px solid #d6d6d6;
+  border-radius: 40px;
+  padding: 10px 24px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.dropdown-trigger:hover {
+  border-color: #0562D2;
+  box-shadow: 0 2px 8px rgba(5, 98, 210, 0.15);
+}
+
+.dropdown-activeTrim {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.dropdown-active__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #424242;
+  transition: transform 0.2s ease;
+}
+
+.dropdown[aria-expanded="true"] .dropdown-active__icon {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu-wrapper {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+  overflow: hidden;
+  z-index: 50;
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dropdown[aria-expanded="true"] .dropdown-menu-wrapper {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.dropdown-item.trimAware__item {
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #424242;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.dropdown-item.trimAware__item:last-child {
+  border-bottom: none;
+}
+
+.dropdown-item.trimAware__item:hover {
+  background: #f0f7ff;
+  color: #0562D2;
+}
+
+.dropdown-item.trimAware__item.active-option {
+  background: #0562D2;
+  color: #ffffff;
+}
+
+/* View toggle (Exterior / Interior) */
+.toggle-wrapper {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  z-index: 40;
+}
+
+.model-view.toggle-container {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 4px;
+  border-radius: 40px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.toggle {
+  display: flex;
+  gap: 4px;
+}
+
+.toggle-option {
+  padding: 8px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #424242;
+  border-radius: 40px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.toggle-option:hover {
+  color: #1a1a1a;
+}
+
+.toggle-option.active {
+  background: #1a1a1a;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+/* Selector controls */
+.view-wrapper {
+  display: none;
+}
+
+.view-wrapper.show {
+  display: block;
+}
+
+.exteriorPaint, .interiorColors {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.paint-color {
+  font-size: 12px;
+  font-weight: 600;
+  color: #424242;
+}
+
+.paint-color span {
+  color: #1a1a1a;
+  font-weight: 700;
+  margin-left: 6px;
+}
+
+.color-selector-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 8px 16px;
+  border-radius: 40px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.color-selector {
+  display: flex;
+  gap: 8px;
+}
+
+.color-container {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  padding: 2px;
+  border: 1px solid #d6d6d6;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.color-container:hover {
+  transform: scale(1.1);
+  border-color: #424242;
+}
+
+.color-container.selected {
+  border-color: #0562D2;
+  border-width: 2px;
+  box-shadow: 0 0 0 2px rgba(5, 98, 210, 0.2);
+}
+
+.color-container .color {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Wheel type selector */
+.wheelTypes {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  z-index: 40;
+}
+
+.wheel-selector-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 8px 16px;
+  border-radius: 40px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.cmp-360-wheeltype {
+  display: flex;
+  gap: 8px;
+}
+
+.wheel-container {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #d6d6d6;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+}
+
+.wheel-container:hover {
+  transform: scale(1.1);
+  border-color: #424242;
+}
+
+.wheel-container.selected {
+  border-color: #0562D2;
+  border-width: 2px;
+  box-shadow: 0 0 0 2px rgba(5, 98, 210, 0.2);
+}
+
+.wheel-image {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+/* Mobile Paint and Wheel popovers */
+.exterior-paint-mobile, .interior-paint-mobile, .wheelTypesMobile {
+  display: none;
+}
+
+/* Main Car Image viewport */
+.car-image-container {
+  width: 100%;
+  height: 580px;
+  position: relative;
+  background: radial-gradient(circle at 50% 50%, #ffffff 0%, #eaeaea 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Make sure Three canvas fills container */
+.car-image-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+  outline: none;
+}
+
+/* Responsive adjustment */
+@media (max-width: 768px) {
+  .cmp-360-colorizer__vehicle-variation-container {
+    top: 16px;
+    left: 16px;
+    width: calc(100% - 32px);
+  }
+  
+  .dropdown.trimAware__dropdown {
+    width: 100%;
+  }
+  
+  .toggle-wrapper {
+    top: 80px;
+    left: 16px;
+    right: auto;
+  }
+  
+  .exteriorPaint, .interiorColors, .wheelTypes {
+    display: none; /* Hide desktop selectors on mobile */
+  }
+  
+  /* Show mobile simplified variants */
+  .exterior-paint-mobile, .interior-paint-mobile, .wheelTypesMobile {
+    display: block;
+    position: absolute;
+    bottom: 16px;
+    z-index: 40;
+  }
+  
+  .exterior-paint-mobile, .interior-paint-mobile {
+    left: 16px;
+  }
+  
+  .wheelTypesMobile {
+    right: 16px;
+  }
+  
+  .selector-small {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    cursor: pointer;
+  }
+  
+  .selector-container-mobile {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(0,0,0,0.05);
+  }
+  
+  .selector-container-mobile .color {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+  
+  .popover {
+    position: absolute;
+    bottom: 60px;
+    background: #ffffff;
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+    width: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  
+  .popover.closed {
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+    display: none;
+  }
+  
+  .popover_cross-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    cursor: pointer;
+  }
+  
+  .popover_cross {
+    width: 16px;
+    height: 16px;
+    position: relative;
+  }
+  
+  .popover_cross::before, .popover_cross::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 2px;
+    background: #424242;
+    top: 7px;
+    left: 2px;
+  }
+  
+  .popover_cross::before {
+    transform: rotate(45deg);
+  }
+  
+  .popover_cross::after {
+    transform: rotate(-45deg);
+  }
+  
+  .car-image-container {
+    height: 480px;
+  }
+}
+
+/* CMS Page Builder visual theme overrides mapping to dnf Design System */
+.page-builder-container {
+  background-color: var(--brand-primary) !important; /* #00095B */
+  font-family: var(--font-sans) !important;
+}
+.page-builder-container .bg-slate-950 {
+  background-color: #00052a !important; /* Deepest Navy sidebar background */
+}
+.page-builder-container .bg-slate-900 {
+  background-color: var(--brand-primary) !important; /* #00095B header/preview bg */
+}
+.page-builder-container .border-slate-800,
+.page-builder-container .border-r-slate-800,
+.page-builder-container .border-b-slate-800,
+.page-builder-container .border-t-slate-800 {
+  border-color: rgba(0, 52, 120, 0.5) !important; /* Classic Blue border transparent */
+}
+.page-builder-container .bg-slate-900\/50,
+.page-builder-container .bg-slate-900\/80,
+.page-builder-container .bg-slate-900\/60 {
+  background-color: #000d6b !important; /* Card navy matching secondary */
+}
+.page-builder-container .text-blue-400 {
+  color: var(--brand-accent) !important; /* #066FEF */
+}
+.page-builder-container .bg-blue-600 {
+  background-color: var(--brand-vivid) !important; /* #0562D2 */
+}
+.page-builder-container .bg-blue-950\/80 {
+  background-color: rgba(5, 98, 210, 0.15) !important;
+  border-color: rgba(5, 98, 210, 0.4) !important;
+}
+.page-builder-container input,
+.page-builder-container textarea,
+.page-builder-container select {
+  background-color: var(--brand-primary) !important; /* #00095B */
+  border-color: var(--brand-secondary) !important; /* #003478 */
+  color: #ffffff !important;
+}
+.page-builder-container input:focus,
+.page-builder-container textarea:focus,
+.page-builder-container select:focus {
+  border-color: var(--brand-vivid) !important; /* #0562D2 */
+  box-shadow: 0 0 0 2px rgba(5, 98, 210, 0.3) !important;
+}
+
+/* Custom scrollbar utilities for Tailwind CSS v4 */
+@utility scrollbar-none {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
+}
+
+@utility scrollbar-thin {
+  scrollbar-width: thin;
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--brand-gray-light);
+    border-radius: 3px;
+  }
+}
+
+/* Continuous infinite marquee keyframes and helper classes */
+@keyframes marquee-horizontal {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee-continuous {
+  display: flex;
+  width: max-content;
+  animation: marquee-horizontal 35s linear infinite;
+}
+
+.animate-marquee-continuous-fast {
+  display: flex;
+  width: max-content;
+  animation: marquee-horizontal 25s linear infinite;
+}
+
+.animate-marquee-continuous:hover,
+.animate-marquee-continuous-fast:hover {
+  animation-play-state: paused;
+}
+
+/* Fix WordPress migrated images overflow */
+.prose figure,
+.prose .wp-caption {
+  max-width: 100% !important;
+  width: auto !important;
+}
+.prose img:not(.xz74otr) {
+  max-width: 100% !important;
+  height: auto !important;
+}
+/* Fix Facebook/WP inline emoji images */
+.prose img.xz74otr,
+.prose img[src*="emoji.php"] {
+  display: inline-block !important;
+  width: 1.1em !important;
+  height: 1.1em !important;
+  margin: 0 4px !important;
+  vertical-align: -0.15em;
+}
+
+
+/* Custom Typography styles for migrated WordPress HTML content (.prose wrapper) */
+.prose {
+  h2 {
+    font-size: 24px !important;
+    font-weight: 700 !important;
+    margin-top: 32px !important;
+    margin-bottom: 16px !important;
+    color: #00095b !important;
+  }
+  h3 {
+    font-size: 20px !important;
+    font-weight: 600 !important;
+    margin-top: 28px !important;
+    margin-bottom: 12px !important;
+    color: #00095b !important;
+  }
+  p {
+    margin-bottom: 16px !important;
+    line-height: 1.75 !important;
+  }
+  ul {
+    list-style-type: disc !important;
+    padding-left: 24px !important;
+    margin-bottom: 16px !important;
+  }
+  ol {
+    list-style-type: decimal !important;
+    padding-left: 24px !important;
+    margin-bottom: 16px !important;
+  }
+  li {
+    margin-bottom: 8px !important;
+    line-height: 1.6 !important;
+  }
+  a {
+    color: #0562d2 !important;
+    text-decoration: underline !important;
+    &:hover {
+      color: #00095b !important;
+    }
+  }
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin: 24px 0 !important;
+    font-size: 15px !important;
+    
+    th, td {
+      border: 1px solid #e5e5e5 !important;
+      padding: 12px 16px !important;
+      text-align: left !important;
+    }
+    th {
+      background-color: #f8fafc !important;
+      font-weight: 600 !important;
+      color: #1a1a1a !important;
+    }
+    tr:nth-child(even) {
+      background-color: #fcfcfc !important;
+    }
+  }
+}

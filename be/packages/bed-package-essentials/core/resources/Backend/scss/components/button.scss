@@ -1,0 +1,73 @@
+.p-button {
+    @extend .btn;
+}
+
+.p-button[type="submit"] {
+    @extend .btn-primary;
+}
+
+.btn {
+    @apply inline-flex items-center justify-center space-x-2 font-medium transition rounded cursor-pointer disabled:opacity-25 outline-transparent outline outline-offset-2 shadow-sm uppercase;
+    @media (prefers-reduced-motion: reduce) {
+        @apply transition-none;
+    }
+}
+
+.btn {
+    &.btn-primary {
+        @apply text-white bg-primary hover:bg-primary-dark active:bg-primary-darker;
+        @apply focus:outline-primary;
+    }
+    &.btn-outline-primary {
+        @apply bg-transparent text-primary hover:bg-primary active:bg-primary border border-primary hover:text-white;
+        @apply focus:outline-primary;
+    }
+    &.btn-secondary {
+        @apply border border-gray-200 bg-gray-100 hover:bg-gray-200;
+        @apply focus:outline-gray-100;
+    }
+    &.btn-success {
+        @apply border bg-green-600 hover:bg-green-700 text-white;
+        @apply focus:outline-green-600;
+    }
+    &.btn-warning {
+        @apply border border-yellow-500 bg-yellow-100 hover:bg-yellow-200 text-yellow-500;
+        @apply focus:outline-green-500;
+    }
+    &.btn-danger {
+        @apply border border-orange-600 bg-orange-100 hover:bg-orange-200 text-orange-600;
+        @apply focus:outline-orange-600;
+    }
+    &.btn-danger-link {
+        @apply bg-transparent text-red-600 hover:underline shadow-none;
+    }
+
+    &:not(
+            .btn-primary,
+            .btn-outline-primary,
+            .btn-secondary,
+            .btn-success,
+            .btn-warning,
+            .btn-danger,
+            .btn-danger-link
+        ) {
+        @apply bg-white border hover:border-gray-400;
+    }
+}
+
+.btn {
+    &.btn-sm {
+        @apply text-xs h-6 px-3;
+    }
+    &.btn-lg {
+        @apply text-lg h-10 px-4;
+    }
+
+    &:not(.btn-sm, .btn-lg) {
+        @apply text-sm h-9 px-4;
+    }
+
+    &:not(.btn-sm, .btn-icon) {
+        @apply min-w-[6rem];
+    }
+}

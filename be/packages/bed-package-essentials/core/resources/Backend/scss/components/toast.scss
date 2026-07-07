@@ -1,0 +1,15 @@
+.p-toast-summary {
+    @apply text-sm;
+}
+
+.p-toast-detail {
+    @apply text-sm mt-1;
+}
+
+.p-toast-message-content {
+    @apply p-3;
+}
+
+.p-toast-message-icon {
+    @apply text-3xl;
+}

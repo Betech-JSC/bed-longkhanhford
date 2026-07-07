@@ -1,0 +1,492 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Lotus Institute API",
+    "description": "Public API cho website Lotus Institute. Base URL: `http://localhost:8000/api`",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Betech JSC"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000/api",
+      "description": "Local Development"
+    },
+    {
+      "url": "https://yourdomain.com/api",
+      "description": "Production"
+    }
+  ],
+  "tags": [
+    { "name": "Banners", "description": "Banner quảng cáo" },
+    { "name": "Categories", "description": "Danh mục khoá học" },
+    { "name": "Courses", "description": "Khoá học" },
+    { "name": "Reviews", "description": "Đánh giá khoá học" },
+    { "name": "Sponsors", "description": "Nhà tài trợ" }
+  ],
+  "paths": {
+    "/lotus/banners": {
+      "get": {
+        "tags": ["Banners"],
+        "summary": "Danh sách banners",
+        "description": "Trả về banners đang active. Có thể filter theo vị trí hiển thị.",
+        "operationId": "getLotusbanners",
+        "parameters": [
+          {
+            "name": "location",
+            "in": "query",
+            "required": false,
+            "description": "Filter theo vị trí: `homepage`, `courses`, `about`, `contact`",
+            "schema": {
+              "type": "string",
+              "enum": ["homepage", "courses", "about", "contact"],
+              "example": "homepage"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/ApiSuccess" },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": { "$ref": "#/components/schemas/Banner" }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "example": {
+                  "status": true,
+                  "data": [
+                    {
+                      "id": 1,
+                      "title": "Khoá học chuyên nghiệp",
+                      "subtitle": "Nâng tầm kỹ năng",
+                      "image_url": "http://localhost:8000/storage/banners/desktop.webp",
+                      "image_mobile_url": "http://localhost:8000/storage/banners/mobile.webp",
+                      "location": ["homepage", "courses"],
+                      "button_text": "Xem ngay",
+                      "button_link": "/courses"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lotus/hero-banners": {
+      "get": {
+        "tags": ["Banners"],
+        "summary": "Hero banners theo vị trí",
+        "operationId": "getLotusHeroBanners",
+        "parameters": [
+          {
+            "name": "location",
+            "in": "query",
+            "required": false,
+            "description": "Filter theo location slug",
+            "schema": { "type": "string", "example": "home" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/ApiSuccess" },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": { "$ref": "#/components/schemas/HeroBanner" }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lotus/categories": {
+      "get": {
+        "tags": ["Categories"],
+        "summary": "Danh sách danh mục khoá học",
+        "operationId": "getLotusCategories",
+        "responses": {
+          "200": {
+            "description": "Thành công",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/ApiSuccess" },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": { "$ref": "#/components/schemas/Category" }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "example": {
+                  "status": true,
+                  "data": [
+                    {
+                      "id": 1,
+                      "title": "Kỹ năng mềm",
+                      "slug": "ky-nang-mem",
+                      "icon": "🎯",
+                      "image_url": "http://localhost:8000/storage/categories/cat1.webp",
+                      "products_count": 5
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lotus/courses": {
+      "get": {
+        "tags": ["Courses"],
+        "summary": "Danh sách khoá học",
+        "operationId": "getLotusCourses",
+        "parameters": [
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "description": "Slug của danh mục để filter",
+            "schema": { "type": "string", "example": "ky-nang-mem" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/ApiSuccess" },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": { "$ref": "#/components/schemas/CourseListItem" }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "example": {
+                  "status": true,
+                  "data": [
+                    {
+                      "id": 1,
+                      "category_id": 2,
+                      "title": "Khóa học kỹ năng lãnh đạo",
+                      "slug": "khoa-hoc-ky-nang-lanh-dao",
+                      "image_url": "http://localhost:8000/storage/products/thumb.webp",
+                      "author": "Nguyễn Văn A",
+                      "author_title": "CEO - LOTUS INSTITUTE",
+                      "author_avatar_url": "http://localhost:8000/storage/authors/avatar.webp",
+                      "price": "5000000.00"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lotus/courses/featured": {
+      "get": {
+        "tags": ["Courses"],
+        "summary": "Khoá học nổi bật (is_hot)",
+        "description": "Trả về tối đa 3 khoá học được đánh dấu nổi bật.",
+        "operationId": "getLotusCouresFeatured",
+        "responses": {
+          "200": {
+            "description": "Thành công",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/ApiSuccess" },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "maxItems": 3,
+                          "items": { "$ref": "#/components/schemas/CourseListItem" }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lotus/courses/{slug}": {
+      "get": {
+        "tags": ["Courses"],
+        "summary": "Chi tiết khoá học",
+        "operationId": "getLotusCoursesShow",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "example": "khoa-hoc-ky-nang-lanh-dao" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/ApiSuccess" },
+                    {
+                      "properties": {
+                        "data": { "$ref": "#/components/schemas/CourseDetail" }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Không tìm thấy khoá học",
+            "content": {
+              "application/json": {
+                "example": { "status": false, "message": "Không tìm thấy khoá học" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lotus/reviews": {
+      "get": {
+        "tags": ["Reviews"],
+        "summary": "Danh sách đánh giá",
+        "operationId": "getLotusReviews",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "query",
+            "required": false,
+            "description": "Filter theo ID khoá học",
+            "schema": { "type": "integer", "example": 1 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/ApiSuccess" },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": { "$ref": "#/components/schemas/Review" }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "example": {
+                  "status": true,
+                  "data": [
+                    {
+                      "id": 1,
+                      "product_id": 1,
+                      "customer_name": "Trần Thị B",
+                      "rating": 5,
+                      "content": "Khoá học rất hay và bổ ích!"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lotus/sponsors": {
+      "get": {
+        "tags": ["Sponsors"],
+        "summary": "Danh sách nhà tài trợ",
+        "operationId": "getLotusSponsors",
+        "responses": {
+          "200": {
+            "description": "Thành công",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/ApiSuccess" },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": { "$ref": "#/components/schemas/Sponsor" }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "example": {
+                  "status": true,
+                  "data": [
+                    {
+                      "id": 1,
+                      "name": "Công ty ABC",
+                      "logo_url": "http://localhost:8000/storage/sponsors/abc.webp",
+                      "link": "https://abc.com"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ApiSuccess": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "boolean", "example": true },
+          "data": {}
+        }
+      },
+      "Banner": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 1 },
+          "title": { "type": "string", "nullable": true, "example": "Khoá học chuyên nghiệp" },
+          "subtitle": { "type": "string", "nullable": true, "example": "Nâng tầm kỹ năng" },
+          "image_url": { "type": "string", "nullable": true, "format": "uri", "example": "http://localhost:8000/storage/img.webp" },
+          "image_mobile_url": { "type": "string", "nullable": true, "format": "uri", "description": "URL ảnh mobile, null nếu không upload" },
+          "location": { "type": "array", "items": { "type": "string" }, "example": ["homepage"] },
+          "button_text": { "type": "string", "nullable": true, "example": "Xem ngay" },
+          "button_link": { "type": "string", "nullable": true, "example": "/courses" }
+        }
+      },
+      "HeroBanner": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "title": { "type": "string", "nullable": true },
+          "image_url": { "type": "string", "nullable": true, "format": "uri" },
+          "location": { "type": "string", "nullable": true }
+        }
+      },
+      "Category": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 1 },
+          "title": { "type": "string", "example": "Kỹ năng mềm" },
+          "slug": { "type": "string", "example": "ky-nang-mem" },
+          "icon": { "type": "string", "nullable": true, "example": "🎯" },
+          "image_url": { "type": "string", "nullable": true, "format": "uri" },
+          "products_count": { "type": "integer", "example": 5 }
+        }
+      },
+      "CourseListItem": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 1 },
+          "category_id": { "type": "integer", "nullable": true },
+          "title": { "type": "string", "example": "Khóa học kỹ năng lãnh đạo" },
+          "slug": { "type": "string", "example": "khoa-hoc-ky-nang-lanh-dao" },
+          "image_url": { "type": "string", "nullable": true, "format": "uri" },
+          "author": { "type": "string", "nullable": true },
+          "author_title": { "type": "string", "nullable": true },
+          "author_avatar_url": { "type": "string", "nullable": true, "format": "uri" },
+          "price": { "type": "string", "nullable": true, "example": "5000000.00" }
+        }
+      },
+      "CourseDetail": {
+        "allOf": [
+          { "$ref": "#/components/schemas/CourseListItem" },
+          {
+            "type": "object",
+            "properties": {
+              "banner_product_url": { "type": "string", "nullable": true, "format": "uri", "description": "Banner trang danh sách" },
+              "banner_detail_url": { "type": "string", "nullable": true, "format": "uri", "description": "Banner trang chi tiết" },
+              "overview": { "type": "string", "nullable": true, "description": "Giới thiệu tổng quan" },
+              "overview_courses": { "type": "string", "nullable": true, "description": "Khoá học bao gồm" },
+              "overview_future": { "type": "string", "nullable": true, "description": "Hướng tới" },
+              "author_description": { "type": "string", "nullable": true },
+              "sections": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "image_url": { "type": "string", "nullable": true, "format": "uri" },
+                    "text": { "type": "string" }
+                  }
+                }
+              },
+              "reviews": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/Review" }
+              }
+            }
+          }
+        ]
+      },
+      "Review": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "product_id": { "type": "integer", "nullable": true },
+          "customer_name": { "type": "string", "example": "Trần Thị B" },
+          "rating": { "type": "integer", "minimum": 1, "maximum": 5, "example": 5 },
+          "content": { "type": "string", "nullable": true }
+        }
+      },
+      "Sponsor": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string", "example": "Công ty ABC" },
+          "logo_url": { "type": "string", "nullable": true, "format": "uri" },
+          "link": { "type": "string", "nullable": true, "format": "uri" }
+        }
+      }
+    }
+  }
+}

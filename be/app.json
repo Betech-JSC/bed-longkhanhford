@@ -1,0 +1,43 @@
+{
+    "name": "deploy-heroku",
+    "scripts": {
+        "postdeploy": "php artisan migrate:fresh --seed --force"
+    },
+    "stack": "heroku-22",
+    "env": {
+        "APP_KEY": {
+            "value": "base64:ar4zPiHwGEFlcR7ZsQH6enhx8/dZOokPOdEAvgURUqQ="
+        },
+        "APP_ENV": {
+            "value": "staging"
+        },
+        "APP_DEBUG": {
+            "value": true
+        },
+        "YARN_PRODUCTION": {
+            "value": false
+        },
+        "COMPOSER_AUTH": {
+            "required": true
+        }
+    },
+    "formation": {
+        "web": {
+            "quantity": 1,
+            "size": "hobby"
+        },
+        "worker": {
+            "quantity": 1,
+            "size": "hobby"
+        }
+    },
+    "addons": ["heroku-postgresql:hobby-dev"],
+    "buildpacks": [
+        {
+            "url": "heroku/php"
+        },
+        {
+            "url": "heroku/nodejs"
+        }
+    ]
+}

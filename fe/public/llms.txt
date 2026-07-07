@@ -1,0 +1,18 @@
+# Ford Đồng Nai (Đồng Nai Ford)
+
+> Thông tin chính thức về showroom Đồng Nai Ford: Bảng giá xe Ford mới nhất, đăng ký lái thử, đặt lịch bảo dưỡng, và phụ kiện chính hãng.
+
+## Thông tin Showroom
+- **Tên showroom**: Đại lý Ủy quyền Chính thức của Ford Việt Nam tại Đồng Nai
+- **Địa chỉ**: B04-KP.3, Khu Thương Mại Amata, Phường Long Bình, TP. Biên Hòa, Tỉnh Đồng Nai
+- **Hotline**: 0918.90.90.60
+- **Website chính thức**: https://dongnaiford.com.vn
+
+## Cấu trúc Website & Các trang chính
+- [Trang chủ](https://dongnaiford.com.vn/): Giới thiệu các dòng xe Ford và chương trình khuyến mãi.
+- [Bảng giá xe](https://dongnaiford.com.vn/bang-gia): Bảng giá xe Ford lăn bánh mới nhất (Everest, Ranger, Territory, Explorer, Transit, Mustang Mach-E).
+- [Đăng ký lái thử](https://dongnaiford.com.vn/dang-ky-lai-thu): Form đăng ký lái thử các dòng xe Ford miễn phí.
+- [Đặt lịch bảo dưỡng](https://dongnaiford.com.vn/dat-lich-dich-vu): Đặt hẹn dịch vụ bảo dưỡng nhanh, bảo dưỡng định kỳ và sửa chữa chính hãng.
+- [Dịch vụ giao nhận xe tận nơi](https://dongnaiford.com.vn/dich-vu/giao-nhan-xe-tan-noi): Dịch vụ nhận và giao xe bảo dưỡng tận nhà cho khách hàng tại Đồng Nai và các khu vực lân cận.
+- [Công cụ Ước tính lăn bánh](https://dongnaiford.com.vn/cong-cu/uoc-tinh-lan-banh): Tính toán chi phí lăn bánh chi tiết (thuế trước bạ, phí biển số theo tỉnh/thành phố).
+- [Tin tức & Sự kiện](https://dongnaiford.com.vn/tin-tuc): Tin tức xe Ford, mẹo bảo dưỡng và kinh nghiệm lái xe an toàn.

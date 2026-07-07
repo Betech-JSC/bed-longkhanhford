@@ -1,0 +1,26 @@
+/bootstrap/ssr
+/node_modules
+/public/vite.frontend.hot
+/public/vite.backend.hot
+/public/build/
+/public/storage
+/storage/*.key
+/vendor
+.env.backup
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+auth.json
+npm-debug.log
+yarn-error.log
+/.idea
+/.vscode
+.DS_Store
+config.bat
+
+# Uploaded files
+/public/uploads/
+
+# Backups
+/resources/Frontend.bak/
+/vite.frontend.config.js.bak

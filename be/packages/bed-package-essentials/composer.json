@@ -1,0 +1,46 @@
+{
+    "name": "jamstackvietnam/essentials",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Whoosh",
+            "email": "nhatkha1407@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "extra": {
+        "laravel": {
+            "providers": [
+                "JamstackVietnam\\Core\\Providers\\CoreServiceProvider",
+                "JamstackVietnam\\Core\\Providers\\AppServiceProvider",
+                "JamstackVietnam\\Core\\Providers\\MacroServiceProvider",
+                "JamstackVietnam\\Core\\Providers\\RouteServiceProvider",
+                "JamstackVietnam\\Redirect\\ServiceProvider",
+                "JamstackVietnam\\MetaPage\\ServiceProvider",
+                "JamstackVietnam\\Blog\\ServiceProvider",
+                "JamstackVietnam\\Slider\\ServiceProvider",
+                "JamstackVietnam\\Contact\\ServiceProvider",
+                "JamstackVietnam\\Policy\\ServiceProvider",
+                "JamstackVietnam\\Job\\ServiceProvider",
+                "JamstackVietnam\\Agency\\ServiceProvider",
+                "JamstackVietnam\\Translation\\ServiceProvider",
+                "JamstackVietnam\\Sitemap\\SitemapServiceProvider",
+                "JamstackVietnam\\Region\\ServiceProvider",
+                "JamstackVietnam\\Option\\ServiceProvider",
+                "JamstackVietnam\\Tag\\ServiceProvider",
+                "JamstackVietnam\\Project\\ServiceProvider",
+                "Tightenco\\Ziggy\\ZiggyServiceProvider",
+                "Artesaos\\SEOTools\\Providers\\SEOToolsServiceProvider",
+                "MartinLindhe\\VueInternationalizationGenerator\\GeneratorProvider",
+                "QCod\\Settings\\SettingsServiceProvider",
+                "Bjerke\\ApiQueryBuilder\\QueryBuilderServiceProvider",
+                "Amirami\\Localizator\\ServiceProvider"
+            ]
+        },
+        "aliases": {
+            "SEO": "Artesaos\\SEOTools\\Facades\\SEOTools",
+            "Settings": "QCod\\Settings\\Facade"
+        }
+    }
+}

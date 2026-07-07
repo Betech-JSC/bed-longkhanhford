@@ -1,0 +1,21 @@
+.p-inputwrapper-filled.p-multiselect.p-multiselect-chip .p-multiselect-label {
+    @apply flex flex-wrap;
+}
+
+.p-multiselect.p-multiselect-chip .p-multiselect-token {
+    margin: 0.1rem !important;
+    max-width: 100%;
+}
+
+.p-multiselect.p-multiselect-chip .p-multiselect-token .p-multiselect-token-label {
+    @apply overflow-hidden;
+}
+
+.p-multiselect-token-icon {
+    @apply flex-shrink-0;
+}
+
+.p-treeselect-token .p-multiselect-token-icon,
+.p-multiselect-token .p-multiselect-token-icon {
+    margin-left: 0.5rem;
+}

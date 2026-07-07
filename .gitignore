@@ -1,0 +1,68 @@
+# OS files
+.DS_Store
+Thumbs.db
+*.db
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# PHP / Composer
+vendor/
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+auth.json
+
+# Laravel specific
+be/bootstrap/ssr/
+be/public/vite.frontend.hot
+be/public/vite.backend.hot
+be/public/build/
+be/public/storage
+be/storage/*.key
+be/storage/logs/*
+be/storage/framework/cache/data/*
+be/storage/framework/sessions/*
+be/storage/framework/testing/*
+be/storage/framework/views/*
+
+# Next.js specific
+fe/.next/
+fe/out/
+fe/build/
+
+# Environment files
+.env.development.local
+.env.test.local
+.env.production.local
+.env.backup
+*.env
+
+# IDEs
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Uploaded files
+be/public/uploads/
+
+# Backups
+be/resources/Frontend.bak/
+be/vite.frontend.config.js.bak
+config.bat
+
+# Python virtual environment
+.venv/
+
+# SEO documents and reports
+*.docx
+*.pdf
+

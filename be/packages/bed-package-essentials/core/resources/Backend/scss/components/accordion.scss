@@ -1,0 +1,15 @@
+.p-accordion-tab {
+    .p-accordion-content {
+        @apply p-2 bg-gray-100;
+    }
+    .item {
+        @apply flex items-center px-4 py-3 text-sm font-medium hover:bg-white  border-transparent border-l-[3px] rounded-sm my-1;
+        &.active {
+            @apply border-primary bg-white;
+        }
+    }
+}
+
+.p-accordion .p-accordion-header .p-accordion-header-link {
+    @apply bg-gray-200;
+}

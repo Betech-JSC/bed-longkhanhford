@@ -1,0 +1,18 @@
+.p-dialog-title {
+    @apply text-xl font-medium;
+}
+
+.p-dialog-header {
+    @apply px-5 py-3 border-b;
+}
+
+.p-dialog-content {
+    @apply px-5 py-5;
+}
+
+.p-dialog-footer {
+    @apply px-5 py-3;
+    button {
+        @apply ml-2;
+    }
+}

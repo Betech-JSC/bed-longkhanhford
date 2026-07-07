@@ -1,0 +1,82 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Backend\PostController;
+use App\Http\Controllers\Backend\MediaController;
+use App\Http\Controllers\Backend\PostCategoryController;
+use App\Http\Controllers\Backend\TagController;
+use App\Http\Controllers\Backend\AgencyController;
+use App\Http\Controllers\Backend\ContactController;
+use App\Http\Controllers\Backend\ApplyController;
+use App\Http\Controllers\Backend\CertificateController;
+use App\Http\Controllers\Backend\SliderController;
+use App\Http\Controllers\Backend\HistoryController;
+use App\Http\Controllers\Backend\JobController;
+use App\Http\Controllers\Backend\PolicyController;
+use App\Http\Controllers\Backend\ServiceController;
+use App\Http\Controllers\Backend\RegionController;
+use App\Http\Controllers\Backend\ConfigController;
+use App\Http\Controllers\Backend\FeedbackController;
+use App\Http\Controllers\Backend\BannerController;
+use App\Http\Controllers\Backend\VehicleCategoryController;
+use App\Http\Controllers\Backend\VehicleController;
+use App\Http\Controllers\Backend\UsedVehicleController;
+use App\Http\Controllers\Backend\CustomerReviewController;
+use App\Http\Controllers\Backend\PartnerController;
+use App\Http\Controllers\Backend\SalesConsultantController;
+use App\Http\Controllers\Backend\DealerActivityController;
+use App\Http\Controllers\Backend\AwardController;
+use App\Http\Controllers\Backend\AccessoryController;
+use App\Http\Controllers\Backend\AccessoryCategoryController;
+use App\Http\Controllers\Backend\ChatSessionController;
+use App\Http\Controllers\Backend\BrandController;
+use App\Http\Controllers\Backend\CmsManualController;
+use App\Http\Controllers\Backend\MaintenanceScheduleController;
+use App\Http\Controllers\Backend\CustomerHandoverController;
+use App\Http\Controllers\Backend\TestDriveSurveyController;
+use App\Http\Controllers\Backend\ServiceSurveyController;
+use App\Http\Controllers\Backend\ServiceBookingController;
+use App\Http\Controllers\Backend\RegistrationFeeController;
+
+Route::localized(function () {
+    Route::middleware(['auth:admin'])->name('admin.')->group(function () {
+        Route::module(PostController::class);
+        Route::module(MediaController::class);
+        Route::module(CertificateController::class);
+        Route::module(FeedbackController::class);
+        Route::module(PostCategoryController::class);
+        Route::module(TagController::class);
+        Route::module(PolicyController::class);
+        Route::module(AgencyController::class);
+        Route::module(ContactController::class);
+        Route::module(SliderController::class);
+        Route::module(HistoryController::class);
+        Route::module(JobController::class);
+        Route::module(ServiceController::class);
+        Route::module(ApplyController::class);
+        Route::module(RegionController::class);
+        Route::module(ConfigController::class);
+
+        // Ford DNF Modules
+        Route::module(BannerController::class);
+        Route::module(VehicleCategoryController::class);
+        Route::module(VehicleController::class);
+        Route::module(UsedVehicleController::class);
+        Route::module(CustomerReviewController::class);
+        Route::module(PartnerController::class);
+        Route::module(SalesConsultantController::class);
+        Route::module(DealerActivityController::class);
+        Route::module(AwardController::class);
+        Route::module(AccessoryController::class);
+        Route::module(AccessoryCategoryController::class);
+        Route::module(ChatSessionController::class);
+        Route::module(BrandController::class);
+        Route::module(CmsManualController::class);
+        Route::module(MaintenanceScheduleController::class);
+        Route::module(CustomerHandoverController::class);
+        Route::module(TestDriveSurveyController::class);
+        Route::module(ServiceSurveyController::class);
+        Route::module(ServiceBookingController::class);
+        Route::module(RegistrationFeeController::class);
+    });
+});

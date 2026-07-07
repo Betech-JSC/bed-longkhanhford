@@ -1,0 +1,35 @@
+{
+    "name": "librenms/laravel-vue-i18n-generator",
+    "license": "MIT",
+    "description": "Generates a vue-i18n compatible include file from your Laravel translations.",
+    "keywords": ["laravel","vue-i18n"],
+    "homepage": "http://github.com/librenms/laravel-vue-i18n-generator",
+    "authors": [
+        {
+            "name": "Martin Lindhe",
+            "email": "martin@ubique.se"
+        },
+        {
+            "name": "Tony Murray",
+            "email": "murraytony@gmail.com"
+        }
+    ],
+    "require": {
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "illuminate/console": "*",
+        "illuminate/support": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "MartinLindhe\\VueInternationalizationGenerator\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "MartinLindhe\\VueInternationalizationGenerator\\GeneratorProvider"
+            ]
+        }
+    }
+}

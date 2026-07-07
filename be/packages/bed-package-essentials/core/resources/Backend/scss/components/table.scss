@@ -1,0 +1,49 @@
+.table {
+    @extend .p-datatable;
+}
+
+.p-datatable {
+    @apply overflow-hidden align-middle min-w-full whitespace-nowrap w-full text-sm;
+    table {
+        @apply min-w-full;
+    }
+    thead {
+        @apply bg-gray-50 text-xs uppercase;
+    }
+    tbody {
+        @apply bg-white border-t border-gray-200;
+    }
+    tr {
+        @apply hover:bg-gray-50;
+        &:not(:last-child) {
+            @apply border-b border-gray-200;
+        }
+        td:first-child,
+        th:first-child {
+            @apply pl-4;
+        }
+    }
+    td {
+        @apply whitespace-pre-line;
+    }
+
+    &:not(.table-sm) {
+        @apply shadow sm:rounded-lg;
+        th,
+        td {
+            @apply px-2 py-4;
+        }
+    }
+
+    &.table-sm {
+        @apply shadow sm:rounded-lg;
+        th,
+        td {
+            @apply px-2 py-3;
+        }
+    }
+}
+
+.p-datatable .p-datatable-loading-overlay {
+    display: none !important;
+}

@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["resources/Frontend/js/*"]
+        }
+    },
+    "exclude": ["node_modules", "public"]
+}

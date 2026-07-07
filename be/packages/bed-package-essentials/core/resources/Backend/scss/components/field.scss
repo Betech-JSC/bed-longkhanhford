@@ -1,0 +1,90 @@
+.field {
+    > *:not(.grid) {
+        @apply flex;
+    }
+    > .label {
+        @apply mb-[6px];
+    }
+}
+
+.field-row {
+    @apply flex space-y-6 md:space-y-0 md:space-x-5 flex-col md:flex-row;
+    & > * {
+        @apply flex-grow;
+    }
+}
+
+.label {
+    @apply mb-1 text-sm font-medium text-gray-600 capitalize;
+}
+.p-inputtext,
+.p-treeselect {
+    min-height: 38px;
+    @apply outline-0 block w-full shadow-sm border-gray-300 rounded;
+    @apply block py-[0.5em] px-[0.8em] w-full border appearance-none bg-white;
+
+    .p-inputnumber-buttons-horizontal > & {
+        @apply py-0;
+    }
+
+    &:not([disabled]):not(.p-invalid):not(.p-dropdown-label) {
+        @apply focus:border-blue-400 focus:ring-1 focus:ring-blue-400;
+    }
+
+    &.p-invalid {
+        @apply border-red-400 focus:ring-1 focus:ring-red-400;
+    }
+}
+
+.p-treeselect {
+    @apply flex py-[0.2em] px-[0.3em];
+    &.p-inputwrapper-focus {
+        @apply border-blue-400 ring-1 ring-blue-400;
+    }
+}
+
+.p-chips .p-chips-multiple-container {
+    &:hover {
+        @apply border-blue-400 ring-1 ring-blue-400;
+    }
+    .p-chips-token {
+        @apply my-1;
+    }
+}
+
+.p-inputnumber-buttons-stacked {
+    .p-button {
+        min-width: unset;
+    }
+
+    .p-inputnumber-input {
+        width: 50px;
+    }
+}
+
+.p-inputnumber-buttons-horizontal {
+    .p-inputnumber-input {
+        @apply w-14 text-center;
+    }
+
+    .p-button {
+        @apply bg-transparent;
+    }
+
+    .p-button-danger,
+    .p-button-success {
+        @apply text-gray-700 hover:text-gray-700;
+    }
+}
+
+.sub-inputnumber {
+    .p-inputnumber-input {
+        width: 5rem !important;
+    }
+}
+
+[canaction="false"] {
+    .p-inputtext {
+        @apply pointer-events-none bg-gray-100;
+    }
+}

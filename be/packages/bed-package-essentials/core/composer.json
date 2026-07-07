@@ -1,0 +1,44 @@
+{
+    "name": "jamstackvietnam/core",
+    "description": "jamstackvietnam/core",
+    "homepage": "https://jamstackvietnam.com",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "email": "nhatkha1407@gmail.com",
+            "name": "Whoosh"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "JamstackVietnam\\Core\\": "src/",
+            "JamstackVietnam\\Core\\Database\\Seeders\\": "database/seeders/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "dive-be/laravel-dry-requests": "*",
+        "hammerstone/fast-paginate": "*",
+        "inertiajs/inertia-laravel": "*",
+        "itsgoingd/clockwork": "*",
+        "league/glide-laravel": "*",
+        "nicolaslopezj/searchable": "*",
+        "qcod/laravel-settings": "*",
+        "rap2hpoutre/fast-excel": "*",
+        "spatie/laravel-permission": "*",
+        "spiritix/lada-cache": "*",
+        "stechstudio/laravel-ssh-tunnel": "*",
+        "appstract/laravel-opcache": "*",
+        "codezero/laravel-localized-routes": "2.9.1",
+        "intervention/imagecache": "*"
+    }
+}

@@ -1,0 +1,36 @@
+{
+    "name": "jamstackvietnam/project",
+    "description": "project",
+    "homepage": "https://jamstackvietnam.com",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Whoosh",
+            "email": "nhatkha1407@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "JamstackVietnam\\Project\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "JamstackVietnam\\Project\\ServiceProvider"
+            ]
+        }
+    },
+    "require": {
+        "astrotomic/laravel-translatable": "*"
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

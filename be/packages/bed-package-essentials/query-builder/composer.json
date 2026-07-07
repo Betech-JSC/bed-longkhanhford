@@ -1,0 +1,11 @@
+{
+    "name": "jamstackvietnam/query-builder",
+    "autoload": {
+        "psr-4": {
+            "JamstackVietnam\\QueryBuilder\\": "src/"
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "license": "MIT"
+}

@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  # Next.js Frontend
+  frontend:
+    build:
+      context: ./fe
+      dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost/api}
+    environment:
+      - PORT=3000
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost/api}
+    restart: always
+    depends_on:
+      - backend
+
+  # Laravel Backend (PHP-FPM)
+  backend:
+    build:
+      context: ./be
+      dockerfile: Dockerfile
+    volumes:
+      - backend-public:/var/www/public
+      - backend-storage:/var/www/storage
+    environment:
+      - APP_NAME=${APP_NAME:-Ford Dong Nai}
+      - APP_ENV=${APP_ENV:-production}
+      - APP_KEY=${APP_KEY}
+      - APP_DEBUG=${APP_DEBUG:-false}
+      - APP_URL=${APP_URL:-http://localhost}
+      - DB_CONNECTION=mysql
+      - DB_HOST=${DB_HOST:-db}
+      - DB_PORT=${DB_PORT:-3306}
+      - DB_DATABASE=${DB_DATABASE:-dnf_db}
+      - DB_USERNAME=${DB_USERNAME:-dnf_user}
+      - DB_PASSWORD=${DB_PASSWORD:-dnf_password}
+    restart: always
+    depends_on:
+      - db
+
+  # Nginx Gateway / Reverse Proxy
+  webserver:
+    image: nginx:alpine
+    ports:
+      - "${PORT_WEBSERVER:-80}:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - backend-public:/var/www/public
+      - backend-storage:/var/www/storage
+    restart: always
+    depends_on:
+      - backend
+      - frontend
+
+  # MySQL Database
+  db:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-dnf_db}
+      MYSQL_USER: ${DB_USERNAME:-dnf_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-dnf_password}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root_password}
+    ports:
+      - "${PORT_DB:-3306}:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+
+volumes:
+  backend-public:
+  backend-storage:
+  db-data:
