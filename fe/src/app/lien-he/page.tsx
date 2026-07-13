@@ -114,7 +114,7 @@ function ContactFormContent() {
         setShowToast(true);
       } else {
         setToastMessage(
-          "Đăng ký thành công! Đồng Nai Ford đã nhận được yêu cầu đặt hẹn dịch vụ của bạn. Cố vấn dịch vụ sẽ liên hệ xác nhận lịch hẹn trong ít phút."
+          "Đăng ký thành công! Long Khánh Ford đã nhận được yêu cầu đặt hẹn dịch vụ của bạn. Cố vấn dịch vụ sẽ liên hệ xác nhận lịch hẹn trong ít phút."
         );
         setShowToast(true);
 
@@ -150,16 +150,16 @@ function ContactFormContent() {
   };
 
   return (
-    <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] py-12 w-full">
+    <div className="w-full flex flex-col items-center">
       {/* Toast Notification (Centered Modal style) */}
       {showToast && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-fade-in">
-          <div className="bg-white border border-[#d6d6d6] text-[#1a1a1a] p-6 max-w-md w-full rounded-2xl shadow-2xl flex gap-4 items-start relative">
-            <div className="w-10 h-10 bg-blue-50 text-[#0562d2] flex items-center justify-center rounded-full flex-shrink-0">
-              <CheckCircle className="w-6 h-6 text-[#0562d2]" />
+          <div className="bg-white border border-[#d6d6d6] text-[#1a1a1a] p-6 max-w-md w-full rounded-none shadow-2xl flex gap-4 items-start relative">
+            <div className="w-10 h-10 bg-blue-50 text-[#066fef] flex items-center justify-center rounded-[4px] flex-shrink-0">
+              <CheckCircle className="w-6 h-6 text-[#066fef]" />
             </div>
             <div className="flex-1 space-y-2 pr-6">
-              <h4 className="font-bold text-sm text-[#0562d2]">Thông báo hệ thống</h4>
+              <h4 className="font-bold text-sm text-[#066fef]">Thông báo hệ thống</h4>
               <p className="text-sm text-[#424242] leading-relaxed">{toastMessage}</p>
             </div>
             <button
@@ -173,39 +173,49 @@ function ContactFormContent() {
       )}
 
       {/* Top Showroom Banner */}
-      <div className="h-[384px] relative rounded-[24px] overflow-hidden w-full mb-12 shadow-sm border border-[#e5e5e5]">
-        <img
-          alt="Showroom Ford Đồng Nai"
-          className="absolute inset-0 object-cover w-full h-full"
-          src={siteAssets.showroomBg}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent" />
-      </div>
+      <section className="relative w-full h-[400px] bg-slate-900 overflow-hidden flex items-end pt-24 pb-12">
+        <div className="absolute inset-0 z-0">
+          <img
+            src={siteAssets.showroomBg}
+            alt="Showroom Ford Long Khánh"
+            className="w-full h-full object-cover object-center"
+          />
+          <div className="absolute bottom-0 left-0 right-0 h-[170px] bg-gradient-to-t from-black/80 to-transparent" />
+        </div>
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full z-10">
+          <h1 className="text-[40px] md:text-[48px] font-bold text-white leading-tight uppercase font-antenna">
+            Liên hệ Long Khánh Ford
+          </h1>
+          <p className="text-white/80 text-base max-w-2xl mt-2 font-antenna">
+            Chúng tôi luôn sẵn sàng lắng nghe và hỗ trợ mọi nhu cầu của bạn.
+          </p>
+        </div>
+      </section>
 
       {/* Main Grid Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start mb-12">
+      <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] py-16 w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
         
         {/* Left Side: Contact Information Cards */}
         <div className="flex flex-col gap-8 w-full">
           {/* Header */}
           <div className="flex flex-col gap-4">
-            <h2 className="font-['Ford_Antenna',sans-serif] font-semibold leading-[1.32] text-[#101828] text-[36px] tracking-tight">
-              Liên hệ trực tiếp với đại lý Đồng Nai Ford
+            <h2 className="font-['Ford_Antenna',sans-serif] font-semibold leading-[1.32] text-[#1a1a1a] text-[36px] tracking-tight">
+              Đại lý Long Khánh Ford
             </h2>
-            <p className="font-['Ford_Antenna',sans-serif] leading-[1.5] text-[#1d2939] text-[16px]">
-              Đồng Nai Ford luôn sẵn sàng lắng nghe và hỗ trợ mọi nhu cầu của bạn. Cho dù bạn cần tư vấn dòng xe mới, đặt lịch bảo dưỡng hay phản hồi về dịch vụ, hãy kết nối với chúng tôi qua các kênh liên hệ thuận tiện nhất dưới đây.
+            <p className="font-['Ford_Antenna',sans-serif] leading-[1.5] text-[#424242] text-[16px]">
+              Cho dù bạn cần tư vấn dòng xe mới, đặt lịch bảo dưỡng hay phản hồi về dịch vụ, hãy kết nối với chúng tôi qua các kênh liên hệ thuận tiện nhất dưới đây.
             </p>
           </div>
 
           {/* Details Wrapper Card */}
-          <div className="bg-white border border-[#d6d6d6] flex flex-col gap-6 p-6 rounded-[12px] shadow-sm">
+          <div className="bg-white border border-[#e5e5e5] flex flex-col gap-6 p-6 rounded-none shadow-xs">
             {/* Showroom Address */}
             <div className="flex gap-4 items-start">
-              <div className="w-10 h-10 bg-[#0562d2]/10 text-[#0562d2] flex items-center justify-center rounded-lg flex-shrink-0">
+              <div className="w-10 h-10 bg-[#066fef]/10 text-[#066fef] flex items-center justify-center rounded-[4px] flex-shrink-0">
                 <MapPin className="w-5 h-5" />
               </div>
               <div className="flex-1 flex flex-col gap-1">
-                <h4 className="font-['Ford_Antenna',sans-serif] font-semibold text-sm uppercase tracking-wider text-[#0562d2]">
+                <h4 className="font-['Ford_Antenna',sans-serif] font-semibold text-sm uppercase tracking-wider text-[#066fef]">
                   Showroom
                 </h4>
                 <p className="font-['Ford_Antenna',sans-serif] text-sm text-[#1a1a1a] leading-relaxed">
@@ -216,11 +226,11 @@ function ContactFormContent() {
 
             {/* Hotlines */}
             <div className="flex gap-4 items-start border-t border-gray-100 pt-6">
-              <div className="w-10 h-10 bg-[#0562d2]/10 text-[#0562d2] flex items-center justify-center rounded-lg flex-shrink-0">
+              <div className="w-10 h-10 bg-[#066fef]/10 text-[#066fef] flex items-center justify-center rounded-[4px] flex-shrink-0">
                 <Phone className="w-5 h-5" />
               </div>
               <div className="flex-1 flex flex-col gap-1">
-                <h4 className="font-['Ford_Antenna',sans-serif] font-semibold text-sm uppercase tracking-wider text-[#0562d2]">
+                <h4 className="font-['Ford_Antenna',sans-serif] font-semibold text-sm uppercase tracking-wider text-[#066fef]">
                   Hotline
                 </h4>
                 <div className="font-['Ford_Antenna',sans-serif] text-sm text-[#1a1a1a] leading-relaxed space-y-1">
@@ -233,11 +243,11 @@ function ContactFormContent() {
 
             {/* Email & Website */}
             <div className="flex gap-4 items-start border-t border-gray-100 pt-6">
-              <div className="w-10 h-10 bg-[#0562d2]/10 text-[#0562d2] flex items-center justify-center rounded-lg flex-shrink-0">
+              <div className="w-10 h-10 bg-[#066fef]/10 text-[#066fef] flex items-center justify-center rounded-[4px] flex-shrink-0">
                 <Mail className="w-5 h-5" />
               </div>
               <div className="flex-1 flex flex-col gap-1">
-                <h4 className="font-['Ford_Antenna',sans-serif] font-semibold text-sm uppercase tracking-wider text-[#0562d2]">
+                <h4 className="font-['Ford_Antenna',sans-serif] font-semibold text-sm uppercase tracking-wider text-[#066fef]">
                   Email
                 </h4>
                 <p className="font-['Ford_Antenna',sans-serif] text-sm text-[#1a1a1a]">
@@ -249,7 +259,7 @@ function ContactFormContent() {
         </div>
 
         {/* Right Side: Appointment Booking Form */}
-        <div className="bg-[#003478] flex flex-col gap-6 p-8 rounded-[16px] shadow-lg text-white">
+        <div className="bg-[#00095B] flex flex-col gap-6 p-8 rounded-none border border-neutral-800 text-white">
           <h3 className="font-['Ford_Antenna',sans-serif] font-semibold text-[28px] text-center text-white">
             Đặt hẹn dịch vụ
           </h3>
@@ -266,7 +276,7 @@ function ContactFormContent() {
                 value={formName}
                 onChange={(e) => setFormName(e.target.value)}
                 placeholder="Nhập tên của bạn"
-                className="w-full bg-white border border-[#d6d6d6] text-gray-900 placeholder-[#808080] rounded-[8px] px-3.5 py-2.5 text-sm focus:outline-none focus:border-[#0562d2] focus:ring-4 focus:ring-[#0562d2]/20 transition shadow-sm font-sans"
+                className="w-full bg-white border border-[#d6d6d6] text-gray-900 placeholder-[#808080] rounded-[8px] px-3.5 py-2.5 text-sm focus:outline-none focus:border-[#066fef] focus:ring-4 focus:ring-[#066fef]/20 transition shadow-sm font-sans"
               />
             </div>
 
@@ -282,7 +292,7 @@ function ContactFormContent() {
                   value={formPhone}
                   onChange={(e) => setFormPhone(e.target.value)}
                   placeholder="0909888888"
-                  className="w-full bg-white border border-[#d6d6d6] text-gray-900 placeholder-[#808080] rounded-[8px] px-3.5 py-2.5 text-sm focus:outline-none focus:border-[#0562d2] focus:ring-4 focus:ring-[#0562d2]/20 transition shadow-sm font-sans"
+                  className="w-full bg-white border border-[#d6d6d6] text-gray-900 placeholder-[#808080] rounded-[8px] px-3.5 py-2.5 text-sm focus:outline-none focus:border-[#066fef] focus:ring-4 focus:ring-[#066fef]/20 transition shadow-sm font-sans"
                 />
               </div>
               <div className="flex flex-col gap-1.5">
@@ -294,7 +304,7 @@ function ContactFormContent() {
                   value={formEmail}
                   onChange={(e) => setFormEmail(e.target.value)}
                   placeholder="example@gmail.com"
-                  className="w-full bg-white border border-[#d6d6d6] text-gray-900 placeholder-[#808080] rounded-[8px] px-3.5 py-2.5 text-sm focus:outline-none focus:border-[#0562d2] focus:ring-4 focus:ring-[#0562d2]/20 transition shadow-sm font-sans"
+                  className="w-full bg-white border border-[#d6d6d6] text-gray-900 placeholder-[#808080] rounded-[8px] px-3.5 py-2.5 text-sm focus:outline-none focus:border-[#066fef] focus:ring-4 focus:ring-[#066fef]/20 transition shadow-sm font-sans"
                 />
               </div>
             </div>
@@ -311,7 +321,7 @@ function ContactFormContent() {
                   value={formLicensePlate}
                   onChange={(e) => setFormLicensePlate(e.target.value)}
                   placeholder="60C-525.45"
-                  className="w-full bg-white border border-[#d6d6d6] text-gray-900 placeholder-[#808080] rounded-[8px] px-3.5 py-2.5 text-sm focus:outline-none focus:border-[#0562d2] focus:ring-4 focus:ring-[#0562d2]/20 transition shadow-sm font-sans"
+                  className="w-full bg-white border border-[#d6d6d6] text-gray-900 placeholder-[#808080] rounded-[8px] px-3.5 py-2.5 text-sm focus:outline-none focus:border-[#066fef] focus:ring-4 focus:ring-[#066fef]/20 transition shadow-sm font-sans"
                 />
               </div>
               <div className="flex flex-col gap-1.5">
@@ -323,7 +333,7 @@ function ContactFormContent() {
                   required
                   value={formAppointmentTime}
                   onChange={(e) => setFormAppointmentTime(e.target.value)}
-                  className="w-full bg-white border border-[#d6d6d6] text-gray-900 placeholder-[#808080] rounded-[8px] px-3.5 py-2.5 text-sm focus:outline-none focus:border-[#0562d2] focus:ring-4 focus:ring-[#0562d2]/20 transition shadow-sm font-sans text-black"
+                  className="w-full bg-white border border-[#d6d6d6] text-gray-900 placeholder-[#808080] rounded-[8px] px-3.5 py-2.5 text-sm focus:outline-none focus:border-[#066fef] focus:ring-4 focus:ring-[#066fef]/20 transition shadow-sm font-sans text-black"
                 />
               </div>
             </div>
@@ -341,9 +351,9 @@ function ContactFormContent() {
                       key={loc}
                       type="button"
                       onClick={() => setFormLocation(loc)}
-                      className={`py-2.5 rounded-lg border font-semibold text-xs transition cursor-pointer text-center
+                      className={`py-2.5 rounded-[4px] border font-semibold text-xs transition cursor-pointer text-center
                         ${isSel 
-                          ? "bg-[#0562d2] border-[#0562d2] text-white" 
+                          ? "bg-[#066fef] border-[#066fef] text-white" 
                           : "bg-white/10 border-white/20 text-white hover:bg-white/20"}`}
                     >
                       {loc === "Tại đại lý" ? "Tại đại lý" : "Tại nhà"}
@@ -363,7 +373,7 @@ function ContactFormContent() {
                 value={formServiceContent}
                 onChange={(e) => setFormServiceContent(e.target.value)}
                 placeholder="Nhập nội dung yêu cầu dịch vụ..."
-                className="w-full h-[120px] bg-white border border-[#d6d6d6] text-gray-900 placeholder-[#808080] rounded-[8px] px-3.5 py-2.5 text-sm focus:outline-none focus:border-[#0562d2] focus:ring-4 focus:ring-[#0562d2]/20 transition shadow-sm resize-none font-sans"
+                className="w-full h-[120px] bg-white border border-[#d6d6d6] text-gray-900 placeholder-[#808080] rounded-[8px] px-3.5 py-2.5 text-sm focus:outline-none focus:border-[#066fef] focus:ring-4 focus:ring-[#066fef]/20 transition shadow-sm resize-none font-sans"
               />
             </div>
 
@@ -372,7 +382,7 @@ function ContactFormContent() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-[240px] py-[10px] bg-[#0562d2] border border-[#0562d2] hover:bg-[#00095b] hover:border-[#00095b] disabled:bg-gray-400 disabled:border-gray-400 text-white font-semibold text-[16px] tracking-wide rounded-[800px] shadow-md transition cursor-pointer text-center"
+                className="w-[240px] py-[12px] bg-[#066fef] border border-[#066fef] hover:bg-[#01095c] hover:border-[#01095c] disabled:bg-gray-400 disabled:border-gray-400 text-white font-semibold text-xs tracking-widest uppercase rounded-[4px] shadow-md transition cursor-pointer text-center"
               >
                 {isSubmitting ? "Đang gửi..." : "Đặt lịch"}
               </button>
@@ -382,18 +392,20 @@ function ContactFormContent() {
       </div>
 
       {/* Google Maps Full Width at Bottom */}
-      <div className="w-full h-[427px] rounded-[24px] overflow-hidden border border-[#d6d6d6] shadow-sm relative mb-6">
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d9639.97148545994!2d106.86767807583985!3d10.948647055991795!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3174dfa7287e67b7%3A0xe69044f2892be499!2zxJDhu5NuZyBOYWkgRm9yZA!5e1!3m2!1svi!2s!4v1782375726740!5m2!1svi!2s"
-          width="100%"
-          height="100%"
-          style={{ border: 0 }}
-          allowFullScreen={true}
-          loading="lazy"
-          referrerPolicy="strict-origin-when-cross-origin"
-          title="Địa chỉ Đồng Nai Ford trên Google Map"
-          className="absolute inset-0"
-        ></iframe>
+      <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full mb-16">
+        <div className="w-full h-[427px] rounded-none overflow-hidden border border-[#e5e5e5] shadow-xs relative">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d9639.97148545994!2d106.86767807583985!3d10.948647055991795!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3174dfa7287e67b7%3A0xe69044f2892be499!2zxJDhu5NuZyBOYWkgRm9yZA!5e1!3m2!1svi!2s!4v1782375726740!5m2!1svi!2s"
+            width="100%"
+            height="100%"
+            style={{ border: 0 }}
+            allowFullScreen={true}
+            loading="lazy"
+            referrerPolicy="strict-origin-when-cross-origin"
+            title="Địa chỉ Long Khánh Ford trên Google Map"
+            className="absolute inset-0"
+          ></iframe>
+        </div>
       </div>
     </div>
   );
@@ -401,10 +413,10 @@ function ContactFormContent() {
 
 export default function ContactPage() {
   return (
-    <div className="bg-[#fafafa] flex-1 min-h-screen">
+    <div className="bg-[#F8F8F8] flex-1 min-h-screen">
       <Suspense fallback={
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] py-24 text-center">
-          <div className="animate-spin inline-block w-8 h-8 border-4 border-[#0562d2] border-t-transparent rounded-full" role="status">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] py-24 text-center">
+          <div className="animate-spin inline-block w-8 h-8 border-4 border-[#066fef] border-t-transparent rounded-full" role="status">
             <span className="sr-only">Đang tải...</span>
           </div>
         </div>

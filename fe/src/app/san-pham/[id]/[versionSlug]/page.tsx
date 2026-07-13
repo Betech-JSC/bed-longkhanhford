@@ -45,10 +45,10 @@ export async function generateMetadata({ params }: Props) {
       : "";
 
     const title = matchedVersion 
-      ? `${vehicleName} ${versionDisplayName} | Thông số & Giá lăn bánh | Đồng Nai Ford`
-      : `${vehicleName} | Thông số & Giá lăn bánh | Đồng Nai Ford`;
+      ? `${vehicleName} ${versionDisplayName} | Thông số & Giá lăn bánh | Long Khánh Ford`
+      : `${vehicleName} | Thông số & Giá lăn bánh | Long Khánh Ford`;
 
-    const description = matchedVersion?.description || vehicle.tagline || `Khám phá chi tiết phiên bản Ford ${vehicleName} ${versionDisplayName} chính hãng tại Đồng Nai Ford. Nhận báo giá lăn bánh mới nhất.`;
+    const description = matchedVersion?.description || vehicle.tagline || `Khám phá chi tiết phiên bản Ford ${vehicleName} ${versionDisplayName} chính hãng tại Long Khánh Ford. Nhận báo giá lăn bánh mới nhất.`;
 
     let imageUrl = "";
     if (matchedVersion && matchedVersion.image_url) {

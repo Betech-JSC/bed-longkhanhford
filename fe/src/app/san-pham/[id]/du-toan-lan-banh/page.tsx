@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: Props) {
 
     if (!vehicle) return {};
 
-    const title = `Dự toán chi phí lăn bánh xe Ford ${vehicle.title} | Đồng Nai Ford`;
+    const title = `Dự toán chi phí lăn bánh xe Ford ${vehicle.title} | Long Khánh Ford`;
     const description = `Tính dự toán chi phí lăn bánh xe Ford ${vehicle.title} tại Đồng Nai, TP.HCM và các tỉnh thành khác. Nhận dự toán thuế trước bạ, phí cấp biển số xe.`;
 
     return {

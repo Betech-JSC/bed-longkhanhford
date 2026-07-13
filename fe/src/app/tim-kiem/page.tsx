@@ -252,13 +252,13 @@ function SearchPageContent() {
     <div className="bg-[#fafafa] min-h-screen pb-20 text-[#1a1a1a]">
       {/* 1. HERO SEARCH CONTAINER (Deep Navy & Accent Blue) */}
       <section className="bg-gradient-to-br from-[#00095B] via-[#00095B] to-[#00224b] text-white py-16 px-4">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full flex flex-col items-center gap-6">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full flex flex-col items-center gap-6">
           <div className="text-center space-y-2">
             <h1 className="font-['Ford_Antenna',sans-serif] font-bold text-[32px] md:text-[40px] leading-tight uppercase tracking-wide">
               Tìm kiếm thông tin
             </h1>
             <p className="text-white/70 text-sm md:text-base font-normal font-sans max-w-xl mx-auto">
-              Nhập từ khóa để tìm nhanh dòng xe, phụ kiện chính hãng hoặc tin tức khuyến mãi mới nhất tại đại lý Đồng Nai Ford.
+              Nhập từ khóa để tìm nhanh dòng xe, phụ kiện chính hãng hoặc tin tức khuyến mãi mới nhất tại đại lý Long Khánh Ford.
             </p>
           </div>
 
@@ -312,7 +312,7 @@ function SearchPageContent() {
       {/* 2. RESULTS FILTER TABS */}
       {!loading && (
         <section className="bg-white border-b border-[#e5e5e5] sticky top-[72px] lg:top-[104px] z-30 shadow-xs">
-          <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full flex items-center justify-start overflow-x-auto scrollbar-none gap-2">
+          <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full flex items-center justify-start overflow-x-auto scrollbar-none gap-2">
             {[
               { id: "all", label: "Tất cả", count: totalCount, icon: HelpCircle },
               { id: "vehicles", label: "Xe Ford", count: vehiclesList.length, icon: Car },
@@ -344,7 +344,7 @@ function SearchPageContent() {
       )}
 
       {/* 3. SEARCH RESULTS LISTING */}
-      <main className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full py-12">
+      <main className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full py-12">
         {loading ? (
           <div className="py-24 text-center">
             <div className="animate-spin inline-block w-10 h-10 border-4 border-[#0562D2] border-t-transparent rounded-full" role="status">

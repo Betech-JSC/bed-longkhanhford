@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: Props) {
 
     if (!vehicle) return {};
 
-    const title = `Tính năng & Công nghệ xe Ford ${vehicle.title} | Đồng Nai Ford`;
+    const title = `Tính năng & Công nghệ xe Ford ${vehicle.title} | Long Khánh Ford`;
     const description = `Khám phá các tính năng thông minh, trang bị an toàn Co-Pilot360, tiện nghi cabin và hiệu năng vận hành vượt trội trên xe Ford ${vehicle.title} mới nhất.`;
 
     return {

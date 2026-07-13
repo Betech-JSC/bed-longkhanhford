@@ -16,8 +16,8 @@ export async function generateMetadata({ params }: Props) {
 
     if (!vehicle) return {};
 
-    const title = `${vehicle.title} | Xe cũ chính hãng | Đồng Nai Ford`;
-    const description = vehicle.tagline || `Mua bán xe đã qua sử dụng ${vehicle.title} chất lượng cao, kiểm định 167 điểm nghiêm ngặt từ Đồng Nai Ford.`;
+    const title = `${vehicle.title} | Xe cũ chính hãng | Long Khánh Ford`;
+    const description = vehicle.tagline || `Mua bán xe đã qua sử dụng ${vehicle.title} chất lượng cao, kiểm định 167 điểm nghiêm ngặt từ Long Khánh Ford.`;
     const imageUrl = vehicle.image_url || "";
 
     return {

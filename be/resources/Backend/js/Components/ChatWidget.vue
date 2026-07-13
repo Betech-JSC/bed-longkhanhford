@@ -53,7 +53,7 @@
                         <img src="/ford_logo.svg" alt="Ford Logo" class="w-8 h-8 object-contain" style="width: 32px; height: 32px; min-width: 32px; min-height: 32px; object-fit: contain;" />
                     </div>
                     <div>
-                        <h4 class="font-bold text-sm leading-tight tracking-wide">Trợ Lý AI Đồng Nai Ford</h4>
+                        <h4 class="font-bold text-sm leading-tight tracking-wide">Trợ Lý AI Long Khánh Ford</h4>
                         <div class="flex items-center space-x-1.5 mt-0.5">
                             <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                             <span class="text-[10px] text-white/80 font-medium">Sẵn sàng hỗ trợ</span>
@@ -83,7 +83,7 @@
                     </div>
                     <div class="max-w-[75%] bg-white border border-gray-100 rounded-2xl rounded-tl-none p-3 shadow-xs">
                         <p class="text-xs text-gray-800 leading-relaxed font-medium">
-                            Xin chào! Tôi là Trợ lý AI của Đồng Nai Ford. Tôi có thể giúp bạn kiểm tra thông tin xe, phụ kiện hoặc hỗ trợ các vấn đề vận hành trên CMS. Bạn cần hỗ trợ gì hôm nay?
+                            Xin chào! Tôi là Trợ lý AI của Long Khánh Ford. Tôi có thể giúp bạn kiểm tra thông tin xe, phụ kiện hoặc hỗ trợ các vấn đề vận hành trên CMS. Bạn cần hỗ trợ gì hôm nay?
                         </p>
                     </div>
                 </div>

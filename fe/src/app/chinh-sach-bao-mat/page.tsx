@@ -6,12 +6,12 @@ export async function generateMetadata() {
     const res = await policiesAPI.getBySlug("chinh-sach-bao-mat", { type: "privacy" });
     const content = res?.content;
     return {
-      title: `${content?.title || "Chính sách Bảo mật"} | Đồng Nai Ford`,
-      description: content?.description || "Chính sách bảo mật thông tin khách hàng của Đồng Nai Ford.",
+      title: `${content?.title || "Chính sách Bảo mật"} | Long Khánh Ford`,
+      description: content?.description || "Chính sách bảo mật thông tin khách hàng của Long Khánh Ford.",
     };
   } catch (err) {
     return {
-      title: "Chính sách Bảo mật | Đồng Nai Ford",
+      title: "Chính sách Bảo mật | Long Khánh Ford",
     };
   }
 }

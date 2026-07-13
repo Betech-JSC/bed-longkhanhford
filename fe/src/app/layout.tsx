@@ -20,10 +20,10 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://dongnaiford.com.vn"),
-  title: "Đồng Nai Ford | Đại lý xe Ford chính hãng lớn nhất Đồng Nai",
+  title: "Long Khánh Ford | Đại lý xe Ford chính hãng lớn nhất Đồng Nai",
   description: "Đại lý ủy quyền chính thức của Ford Việt Nam tại Đồng Nai. Cung cấp các dòng xe Ford Everest, Ford Ranger, Ford Territory chính hãng, bảo dưỡng nhanh, hỗ trợ trả góp 80%.",
-  keywords: ["Ford Đồng Nai", "Đồng Nai Ford", "đại lý Ford Đồng Nai", "mua xe Ford Đồng Nai", "Ford Everest", "Ford Ranger", "Ford Territory"],
-  authors: [{ name: "Đồng Nai Ford" }],
+  keywords: ["Ford Long Khánh", "Long Khánh Ford", "đại lý Ford Long Khánh", "mua xe Ford Long Khánh", "Ford Everest", "Ford Ranger", "Ford Territory"],
+  authors: [{ name: "Long Khánh Ford" }],
   robots: {
     index: true,
     follow: true,
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "Đồng Nai Ford | Đại lý xe Ford chính hãng lớn nhất Đồng Nai",
+    title: "Long Khánh Ford | Đại lý xe Ford chính hãng lớn nhất Đồng Nai",
     description: "Đại lý ủy quyền chính thức của Ford Việt Nam tại Đồng Nai. Cung cấp các dòng xe Ford Everest, Ranger, Territory, Raptor chính hãng giá ưu đãi.",
     type: "website",
     locale: "vi_VN",
@@ -42,8 +42,8 @@ export const metadata: Metadata = {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "AutoDealer",
-  name: "Ford Đồng Nai (Đại lý Tấn Phát Đạt)",
-  alternateName: "Đồng Nai Ford",
+  name: "Ford Long Khánh (Đại lý Tấn Phát Đạt)",
+  alternateName: "Long Khánh Ford",
   description:
     "Đại lý ủy quyền chính thức của Ford Việt Nam tại Đồng Nai. Cung cấp các dòng xe Ford chính hãng, dịch vụ bảo dưỡng, sửa chữa, phụ kiện.",
   url: "https://dongnaiford.com.vn",

@@ -1,20 +1,20 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Bảng Giá Xe Ford 2026 | Đồng Nai Ford — Giá niêm yết mới nhất",
+  title: "Bảng Giá Xe Ford 2026 | Long Khánh Ford — Giá niêm yết mới nhất",
   description:
-    "Bảng giá xe Ford mới nhất 2026 tại Đồng Nai: Ford Everest, Territory, Ranger, Raptor, Transit, Mustang. Giá niêm yết chính hãng, hỗ trợ trả góp.",
+    "Bảng giá xe Ford mới nhất 2026 tại Long Khánh, Đồng Nai: Ford Everest, Territory, Ranger, Raptor, Transit, Mustang. Giá niêm yết chính hãng, hỗ trợ trả góp.",
   keywords: [
     "bảng giá xe Ford",
-    "giá xe Ford Đồng Nai",
+    "giá xe Ford Long Khánh",
     "giá Ford Everest",
     "giá Ford Ranger",
     "giá Ford Territory",
   ],
   openGraph: {
-    title: "Bảng Giá Xe Ford 2026 | Đồng Nai Ford",
+    title: "Bảng Giá Xe Ford 2026 | Long Khánh Ford",
     description:
-      "Bảng giá xe Ford mới nhất 2026 tại showroom Đồng Nai Ford.",
+      "Bảng giá xe Ford mới nhất 2026 tại showroom Long Khánh Ford.",
   },
 };
 

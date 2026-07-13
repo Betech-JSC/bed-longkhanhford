@@ -234,7 +234,7 @@ export default function VehicleAccessoriesClient() {
       <VehicleTabBar />
       {/* 1. Category Selector Header Slider */}
       <section className="bg-[#fafafa] border-b border-[#d6d6d6] py-8">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full flex flex-col gap-5">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full flex flex-col gap-5">
           <div className="flex flex-col gap-1 items-start">
             <span className="text-xs font-extrabold uppercase tracking-widest text-[#0562d2]">
               Phụ kiện dòng xe
@@ -249,7 +249,7 @@ export default function VehicleAccessoriesClient() {
       </section>
 
       {/* 2. Main Content Grid */}
-      <section className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full py-12">
+      <section className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full py-12">
         <div className="flex flex-col md:flex-row gap-12 items-start justify-center">
           
           {/* Left Sidebar Filter */}

@@ -403,7 +403,7 @@ export default function VehicleVersionDetailClient() {
       <VehicleTabBar />
 
       {/* 1. Version Selector Section */}
-      <section className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full pt-12 pb-4">
+      <section className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full pt-12 pb-4">
         <div className="w-full text-left">
           <h2 className="font-['Ford_Antenna',sans-serif] font-bold text-[20px] text-gray-900 mb-2">
             Các phiên bản
@@ -427,11 +427,11 @@ export default function VehicleVersionDetailClient() {
                       className="w-full h-full object-contain"
                     />
                   </div>
-                  <span className={`text-xs font-bold tracking-tight transition-colors ${isActive ? "text-[#0562d2]" : "text-[#424242]"}`}>
+                  <span className={`text-xs font-bold tracking-tight transition-colors uppercase ${isActive ? "text-[#066fef]" : "text-[#424242]"}`}>
                     {ver.name}
                   </span>
                   {isActive && (
-                    <div className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-[#0562d2] rounded-full" />
+                    <div className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-[#066fef]" />
                   )}
                 </button>
               );
@@ -441,7 +441,7 @@ export default function VehicleVersionDetailClient() {
       </section>
 
       {/* 2. Selected Version Details & 360 Viewer Grid */}
-      <section className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full pb-12 pt-4">
+      <section className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full pb-12 pt-4">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
 
           {/* Left Column: Specifications & Info */}
@@ -469,9 +469,9 @@ export default function VehicleVersionDetailClient() {
 
             {/* Spec Sheets Details */}
             <div className="flex flex-col gap-6 text-left w-full mt-6">
-              <div className="space-y-1">
+              <div className="space-y-1 font-antenna">
                 <span className="text-[11px] text-gray-500 font-bold uppercase tracking-wider block">Giá niêm yết từ</span>
-                <span className="text-[28px] sm:text-[32px] font-extrabold text-[#00095b] block leading-none">
+                <span className="text-[28px] sm:text-[32px] font-extrabold text-[#066fef] block leading-none">
                   {selectedVersion ? formatPrice(selectedVersion.price) : formatPrice(vehicle.basePrice)}
                 </span>
               </div>
@@ -481,7 +481,7 @@ export default function VehicleVersionDetailClient() {
             <div className="mt-8">
               <button
                 onClick={() => openQuoteDrawer(vehicle.id, selectedVersion?.id)}
-                className="bg-[#0068d9] hover:bg-[#0052b0] transition-colors px-10 py-3 rounded-full text-white text-[15px] font-bold cursor-pointer inline-flex items-center justify-center min-w-[140px] border-0"
+                className="bg-[#066fef] hover:bg-[#01095c] transition-colors px-10 py-3 rounded-[4px] text-white text-[13px] font-bold cursor-pointer inline-flex items-center justify-center min-w-[140px] border-0 uppercase tracking-wider font-antenna"
               >
                 Báo giá
               </button>
@@ -499,7 +499,7 @@ export default function VehicleVersionDetailClient() {
               onTouchStart={is360Active && isImageSequence ? handleTouchStart : undefined}
               onTouchMove={is360Active && isImageSequence ? handleTouchMove : undefined}
               onTouchEnd={is360Active && isImageSequence ? handleMouseUpOrLeave : undefined}
-              className={`w-full aspect-[16/10] bg-[#f5f5f5] rounded-2xl relative overflow-hidden flex items-center justify-center transition-all ${is360Active ? "cursor-grab active:cursor-grabbing shadow-inner" : "shadow-xs"
+              className={`w-full aspect-[16/10] bg-[#f8f8f8] rounded-none border border-gray-200 relative overflow-hidden flex items-center justify-center transition-all ${is360Active ? "cursor-grab active:cursor-grabbing shadow-inner" : "shadow-xs"
                 }`}
             >
               {is360Active ? (
@@ -543,7 +543,7 @@ export default function VehicleVersionDetailClient() {
                     setIs360Active(false);
                     setRotation(0);
                   }}
-                  className="absolute top-4 right-4 bg-black/75 hover:bg-black text-white px-3.5 py-1.5 rounded-full border-0 cursor-pointer text-xs font-bold transition-all shadow-md z-20"
+                  className="absolute top-4 right-4 bg-black/75 hover:bg-black text-white px-3.5 py-1.5 rounded-[4px] border-0 cursor-pointer text-xs font-bold transition-all shadow-md z-20 font-antenna uppercase tracking-wider"
                 >
                   Tắt 360°
                 </button>
@@ -581,11 +581,11 @@ export default function VehicleVersionDetailClient() {
 
                 {/* Right: View Type Toggle Switch */}
                 {hasInteriorPhotos && (
-                  <div className="bg-white border border-[#e5e5e5] p-1 rounded-full flex gap-1 shadow-sm self-end">
+                  <div className="bg-white border border-gray-200 p-1 rounded-[4px] flex gap-1 shadow-xs self-end">
                     <button
                       type="button"
                       onClick={() => setViewType("exterior")}
-                      className={`px-5 py-2 rounded-full text-xs font-bold border-0 cursor-pointer transition-all ${viewType === "exterior" ? "bg-slate-900 text-white shadow-xs" : "text-gray-500 hover:text-gray-900 bg-transparent"
+                      className={`px-5 py-2 rounded-[4px] text-xs font-bold border-0 cursor-pointer transition-all uppercase tracking-wider ${viewType === "exterior" ? "bg-[#066fef] text-white shadow-xs" : "text-gray-500 hover:text-gray-900 bg-transparent"
                         }`}
                     >
                       Vẻ ngoài
@@ -593,7 +593,7 @@ export default function VehicleVersionDetailClient() {
                     <button
                       type="button"
                       onClick={() => setViewType("interior")}
-                      className={`px-5 py-2 rounded-full text-xs font-bold border-0 cursor-pointer transition-all ${viewType === "interior" ? "bg-slate-900 text-white shadow-xs" : "text-gray-500 hover:text-gray-900 bg-transparent"
+                      className={`px-5 py-2 rounded-[4px] text-xs font-bold border-0 cursor-pointer transition-all uppercase tracking-wider ${viewType === "interior" ? "bg-[#066fef] text-white shadow-xs" : "text-gray-500 hover:text-gray-900 bg-transparent"
                         }`}
                     >
                       Khoang Lái
@@ -610,27 +610,27 @@ export default function VehicleVersionDetailClient() {
       {/* 3. "Thiết kế chuẩn Ford" Features Carousel */}
       {features.length > 0 && (
         <section className="bg-[#fafafa] border-t border-[#e5e5e5] py-20 overflow-hidden">
-          <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full flex flex-col gap-10">
+          <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full flex flex-col gap-10">
 
             {/* Header controls */}
             <div className="flex items-center justify-between w-full">
-              <div className="space-y-1 text-left">
-                <span className="text-xs font-bold uppercase tracking-wider text-[#0562d2]">Đặc trưng dòng xe</span>
-                <h2 className="font-['Ford_Antenna',sans-serif] font-bold text-[32px] sm:text-[38px] text-[#1a1a1a] leading-tight">
+              <div className="space-y-1 text-left font-antenna">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#066fef]">Đặc trưng dòng xe</span>
+                <h2 className="font-display font-bold text-[32px] sm:text-[38px] text-[#1a1a1a] leading-tight uppercase tracking-wide">
                   Thiết kế chuẩn Ford
                 </h2>
               </div>
               <div className="flex gap-2">
                 <button
                   onClick={() => scrollSlider('left')}
-                  className="p-2.5 border border-gray-200 rounded-full bg-white hover:bg-gray-100 transition shadow-sm cursor-pointer focus:outline-none"
+                  className="p-2.5 border border-gray-250 rounded-[4px] bg-white hover:bg-gray-55 transition shadow-xs cursor-pointer focus:outline-none flex items-center justify-center"
                   aria-label="Scroll left"
                 >
                   <ChevronLeft className="w-4.5 h-4.5 text-gray-650" />
                 </button>
                 <button
                   onClick={() => scrollSlider('right')}
-                  className="p-2.5 border border-gray-200 rounded-full bg-white hover:bg-gray-100 transition shadow-sm cursor-pointer focus:outline-none"
+                  className="p-2.5 border border-gray-250 rounded-[4px] bg-white hover:bg-gray-55 transition shadow-xs cursor-pointer focus:outline-none flex items-center justify-center"
                   aria-label="Scroll right"
                 >
                   <ChevronRight className="w-4.5 h-4.5 text-gray-650" />
@@ -646,7 +646,7 @@ export default function VehicleVersionDetailClient() {
               {features.map((feat: any, idx: number) => (
                 <div
                   key={idx}
-                  className="flex flex-col bg-white border border-gray-200/50 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow shrink-0 w-[280px] sm:w-[340px] snap-start"
+                  className="flex flex-col bg-white border border-gray-200 rounded-none overflow-hidden shadow-xs hover:shadow-sm transition-all shrink-0 w-[280px] sm:w-[340px] snap-start"
                 >
                   <div className="aspect-[4/3] relative overflow-hidden bg-gray-50 shrink-0">
                     <img
@@ -669,9 +669,9 @@ export default function VehicleVersionDetailClient() {
 
       {/* 4. Detailed Technical Specifications Section */}
       <section className="bg-white py-16 md:py-24 border-t border-[#e5e5e5]">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full flex flex-col gap-8 md:gap-10">
-          <div className="space-y-1 text-left">
-            <h2 className="font-['Ford_Antenna',sans-serif] font-bold text-2xl md:text-[32px] text-[#00095b] leading-tight tracking-tight">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full flex flex-col gap-8 md:gap-10">
+          <div className="space-y-1 text-left font-antenna">
+            <h2 className="font-display font-bold text-2xl md:text-[32px] text-[#066fef] leading-tight tracking-tight uppercase tracking-wide">
               Thông số kỹ thuật của {vehicle.name === "Ford Mustang Mach-E" ? "Mach-E" : vehicle.name} {getVersionDisplayName(selectedVersion?.name || "", vehicle.name)}
             </h2>
           </div>
@@ -683,7 +683,7 @@ export default function VehicleVersionDetailClient() {
                 <div key={catGroup.category} className="border-b border-[#e5e5e5] w-full">
                   <button
                     onClick={() => setOpenSpecsGroup(isOpen ? null : catGroup.category)}
-                    className={`flex justify-between items-center w-full text-left font-['Ford_Antenna',sans-serif] font-bold text-base md:text-[18px] py-6 transition-colors cursor-pointer bg-transparent border-0 p-0 focus:outline-none ${isOpen ? "text-[#0562d2]" : "text-[#424242] hover:text-[#0562d2]"
+                    className={`flex justify-between items-center w-full text-left font-display font-bold text-base md:text-[18px] py-6 transition-colors cursor-pointer bg-transparent border-0 p-0 focus:outline-none uppercase tracking-wider ${isOpen ? "text-[#066fef]" : "text-[#424242] hover:text-[#066fef]"
                       }`}
                   >
                     <span>{catGroup.category}</span>

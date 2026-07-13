@@ -23,7 +23,7 @@ const jobPositions: JobPosition[] = [
     department: "Phòng Kinh doanh",
     location: "Showroom Amata, Biên Hòa, Đồng Nai",
     shortDesc: "Đam mê ngành ô tô, giao tiếp tốt, có kỹ năng tư vấn và chăm sóc khách hàng.",
-    description: "Chúng tôi tìm kiếm những cộng sự đam mê ngành ô tô, năng động và mong muốn bứt phá thu nhập, đại diện cho hình ảnh chuyên nghiệp của Đồng Nai Ford.",
+    description: "Chúng tôi tìm kiếm những cộng sự đam mê ngành ô tô, năng động và mong muốn bứt phá thu nhập, đại diện cho hình ảnh chuyên nghiệp của Long Khánh Ford.",
     requirements: [
       "Tốt nghiệp Cao đẳng trở lên các ngành Quản trị kinh doanh, Marketing, Kỹ thuật ô tô...",
       "Yêu thích kinh doanh, giao tiếp tốt, tác phong lịch sự, chuyên nghiệp.",
@@ -40,7 +40,7 @@ const jobPositions: JobPosition[] = [
   {
     title: "Kỹ thuật viên Sửa chữa Chung (Máy - Gầm - Điện)",
     department: "Xưởng Dịch vụ",
-    location: "Xưởng dịch vụ Đồng Nai Ford, Biên Hòa",
+    location: "Xưởng dịch vụ Long Khánh Ford, Biên Hòa",
     shortDesc: "Đảm nhận công việc chẩn đoán, sửa chữa và bảo dưỡng các dòng xe Ford theo tiêu chuẩn.",
     description: "Đảm nhận công việc chẩn đoán, sửa chữa và bảo dưỡng các dòng xe Ford theo tiêu chuẩn kỹ thuật nghiêm ngặt nhằm mang đến sự an toàn tuyệt đối cho khách hàng.",
     requirements: [
@@ -59,7 +59,7 @@ const jobPositions: JobPosition[] = [
   {
     title: "Nhân viên Cố vấn Dịch vụ",
     department: "Phòng Dịch vụ",
-    location: "Xưởng dịch vụ Đồng Nai Ford, Biên Hòa",
+    location: "Xưởng dịch vụ Long Khánh Ford, Biên Hòa",
     shortDesc: "Đại diện tiếp đón khách hàng, tiếp nhận yêu cầu, tư vấn dịch vụ và bàn giao xe.",
     description: "Đại diện đại lý tiếp đón khách hàng, tiếp nhận yêu cầu sửa chữa, tư vấn dịch vụ kỹ thuật tối ưu và bàn giao xe chu đáo.",
     requirements: [
@@ -318,13 +318,13 @@ export default function AboutPage() {
   const currentOffset = cardOffsets[activeIndex] || 0;
 
   return (
-    <div className="bg-gray-50 flex-1 min-h-screen">
+    <div className="bg-[#F8F8F8] flex-1 min-h-screen">
       {/* SECTION 1: HERO BANNER (Frame 1000005577) */}
       <section className="relative w-full h-[480px] bg-slate-900 overflow-hidden flex items-end">
         <div className="absolute inset-0 z-0">
           <img
             src="/images/about/banner.jpg"
-            alt="Đồng Nai Ford Banner"
+            alt="Long Khánh Ford Banner"
             className="w-full h-full object-cover object-center"
           />
           {/* Rectangle 2017: Black gradient shadow overlay on bottom (170px height) */}
@@ -334,17 +334,17 @@ export default function AboutPage() {
 
       {/* SECTION 2: LỊCH SỬ HÌNH THÀNH (Frame 1000005584) */}
       <section id="our-story" className="py-[72px] scroll-mt-20">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full flex flex-col gap-20">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full flex flex-col gap-20">
           {/* Paragraph intro text */}
           <p className="text-[28px] font-normal leading-[42px] text-[#1a1a1a] max-w-[1152px] font-antenna">
-            Được thành lập với mục tiêu mang lại những giá trị di chuyển đích thực, Đồng Nai Ford tự hào là đại lý ủy quyền chính thức đạt tiêu chuẩn 3S toàn cầu của Ford Việt Nam. Chúng tôi không ngừng nỗ lực để cung cấp các dòng xe chất lượng cao và dịch vụ hậu mãi hoàn hảo nhất cho khách hàng.
+            Được thành lập với mục tiêu mang lại những giá trị di chuyển đích thực, Long Khánh Ford tự hào là đại lý ủy quyền chính thức đạt tiêu chuẩn 3S toàn cầu của Ford Việt Nam. Chúng tôi không ngừng nỗ lực để cung cấp các dòng xe chất lượng cao và dịch vụ hậu mãi hoàn hảo nhất cho khách hàng.
           </p>
 
-          {/* Showroom Image (Rectangle 2024 - 1152x576px, rounded-24) */}
-          <div className="relative w-full aspect-[2/1] rounded-[24px] overflow-hidden shadow-md">
+          {/* Showroom Image (Rectangle 2024 - 1152x576px, rounded-none) */}
+          <div className="relative w-full aspect-[2/1] rounded-none overflow-hidden shadow-xs border border-[#e5e5e5]">
             <img
               src="/images/about/image-introduce.jpg"
-              alt="Showroom Đồng Nai Ford"
+              alt="Showroom Long Khánh Ford"
               className="w-full h-full object-cover object-center"
             />
           </div>
@@ -353,24 +353,24 @@ export default function AboutPage() {
 
       {/* SECTION 3: LỊCH SỬ CHI TIẾT - DÒNG 1 (Frame 1000005587) */}
       <section className="py-[72px]">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full flex flex-col lg:flex-row gap-20 items-center">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full flex flex-col lg:flex-row gap-20 items-center">
           {/* Left Text Block */}
           <div className="w-full lg:w-[536px] flex flex-col gap-6">
             <h2 className="text-[36px] font-semibold leading-[47.52px] text-[#00095b] font-antenna uppercase">
-              ĐỒNG NAI FORD
+              LONG KHÁNH FORD
               <br />
               ĐẠI LÝ ỦY QUYỀN FORD VIỆT NAM
             </h2>
             <p className="text-base text-gray-600 leading-6 font-antenna">
-              Công ty TNHH Dịch vụ – Thương mại TẤN PHÁT ĐẠT, được thành lập vào tháng 12 năm 2006 với tên giao dịch là ĐỒNG NAI FORD, nằm trên quốc lộ 1A nối liền hai miền Nam Bắc ngay ngã tư KCN Amata, khuôn viên của Đồng Nai Ford có tổng diện tích trên 3200m2 bao gồm hệ thống phòng trưng bày và xưởng dịch vụ hiện đại đạt tiêu chuẩn Brand@Retail của Ford toàn cầu.
+              Công ty TNHH Dịch vụ – Thương mại TẤN PHÁT ĐẠT, được thành lập vào tháng 12 năm 2006 với tên giao dịch là LONG KHÁNH FORD, nằm trên quốc lộ 1A nối liền hai miền Nam Bắc ngay ngã tư KCN Amata, khuôn viên của Long Khánh Ford có tổng diện tích trên 3200m2 bao gồm hệ thống phòng trưng bày và xưởng dịch vụ hiện đại đạt tiêu chuẩn Brand@Retail của Ford toàn cầu.
             </p>
           </div>
 
           {/* Right Image */}
-          <div className="w-full lg:w-[536px] h-[349.68px] relative rounded-xl overflow-hidden shadow-sm">
+          <div className="w-full lg:w-[536px] h-[349.68px] relative rounded-none overflow-hidden border border-[#e5e5e5]">
             <img
               src="/images/about/image-about-1.jpg"
-              alt="Xưởng Dịch vụ Đồng Nai Ford"
+              alt="Xưởng Dịch vụ Long Khánh Ford"
               className="w-full h-full object-cover object-center"
             />
           </div>
@@ -379,24 +379,24 @@ export default function AboutPage() {
 
       {/* SECTION 4: LỊCH SỬ CHI TIẾT - DÒNG 2 (Frame 1000005588) */}
       <section id="facilities" className="py-[72px] scroll-mt-20">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full flex flex-col lg:flex-row-reverse gap-20 items-center">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full flex flex-col lg:flex-row-reverse gap-20 items-center">
           {/* Right Text Block */}
           <div className="w-full lg:w-[536px] flex flex-col gap-6">
             <div className="text-base text-gray-600 leading-6 font-antenna space-y-4">
               <p>
-                Đồng Nai Ford được trang bị các dụng cụ, thiết bị hiện đại và hoàn hảo nhất và tự hào cung cấp các dòng xe Ford chất lượng cao, các dịch vụ sửa chữa, bảo dưỡng tin cậy, phụ tùng phụ kiện chính hãng cũng như các chương trình ưu đãi hấp dẫn cho khách hàng.
+                Long Khánh Ford được trang bị các dụng cụ, thiết bị hiện đại và hoàn hảo nhất và tự hào cung cấp các dòng xe Ford chất lượng cao, các dịch vụ sửa chữa, bảo dưỡng tin cậy, phụ tùng phụ kiện chính hãng cũng như các chương trình ưu đãi hấp dẫn cho khách hàng.
               </p>
               <p>
-                Với phương châm “Vui lòng khách đến, hài lòng khách đi”, Đồng Nai Ford luôn trân trọng và lắng nghe tất cả các ý kiến đóng góp của quý khách hàng, mong mang lại cho khách hàng sự hài lòng cao nhất.
+                Với phương châm “Vui lòng khách đến, hài lòng khách đi”, Long Khánh Ford luôn trân trọng và lắng nghe tất cả các ý kiến đóng góp của quý khách hàng, mong mang lại cho khách hàng sự hài lòng cao nhất.
               </p>
             </div>
           </div>
 
           {/* Left Image */}
-          <div className="w-full lg:w-[536px] h-[349.68px] relative rounded-xl overflow-hidden shadow-sm">
+          <div className="w-full lg:w-[536px] h-[349.68px] relative rounded-none overflow-hidden border border-[#e5e5e5]">
             <img
               src="/images/about/image-about-2.jpg"
-              alt="Thiết bị sửa chữa Đồng Nai Ford"
+              alt="Thiết bị sửa chữa Long Khánh Ford"
               className="w-full h-full object-cover object-center"
             />
           </div>
@@ -405,7 +405,7 @@ export default function AboutPage() {
 
       {/* SECTION 5: TẦM NHÌN & ĐỘI NGŨ NHÂN SỰ (Frame 1000005589) */}
       <section className="bg-[#066fef] py-[72px] text-white w-full scroll-mt-20">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full flex flex-col gap-10">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full flex flex-col gap-10">
           {/* Header Block */}
           <div className="flex flex-col gap-6">
             <h2 className="text-[36px] font-semibold leading-[47.52px] font-antenna uppercase">
@@ -419,7 +419,7 @@ export default function AboutPage() {
           {/* Asymmetric Gallery (1152x600px container) */}
           <div className="flex flex-col md:flex-row gap-4 w-full h-auto md:h-[600px]">
             {/* Left Column (500x600px image) */}
-            <div className="w-full md:w-[500px] h-[350px] md:h-full relative rounded-xl overflow-hidden shadow-md">
+            <div className="w-full md:w-[500px] h-[350px] md:h-full relative rounded-none overflow-hidden border border-white/10">
               <img
                 src="/images/about/image-vision-1.jpg"
                 alt="Vision Gallery Left"
@@ -430,7 +430,7 @@ export default function AboutPage() {
             {/* Right Column (636x600px flex stack) */}
             <div className="flex-1 md:w-[636px] flex flex-col gap-4 h-auto md:h-full">
               {/* Top row image (636x292px) */}
-              <div className="w-full h-[180px] md:h-[292px] relative rounded-xl overflow-hidden shadow-md">
+              <div className="w-full h-[180px] md:h-[292px] relative rounded-none overflow-hidden border border-white/10">
                 <img
                   src="/images/about/image-vision-2.jpg"
                   alt="Vision Gallery Top Right"
@@ -440,14 +440,14 @@ export default function AboutPage() {
 
               {/* Bottom row (two 310x292px images) */}
               <div className="grid grid-cols-2 gap-4 h-[150px] md:h-[292px]">
-                <div className="relative rounded-xl overflow-hidden shadow-md h-full">
+                <div className="relative rounded-none overflow-hidden border border-white/10 h-full">
                   <img
                     src="/images/about/image-vision-3.jpg"
                     alt="Vision Gallery Bottom Left"
                     className="w-full h-full object-cover object-center"
                   />
                 </div>
-                <div className="relative rounded-xl overflow-hidden shadow-md h-full">
+                <div className="relative rounded-none overflow-hidden border border-white/10 h-full">
                   <img
                     src="/images/about/image-vision-4.jpg"
                     alt="Vision Gallery Bottom Right"
@@ -462,7 +462,7 @@ export default function AboutPage() {
 
       {/* SECTION 6: TUYỂN DỤNG NHÂN SỰ (Frame 1000005586) */}
       <section id="recruitment" className="bg-[#f0f0f0] py-16 scroll-mt-20">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full flex flex-col gap-8">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full flex flex-col gap-8">
           <h2 className="text-[36px] font-semibold leading-[47.52px] text-[#1a1a1a] font-antenna uppercase text-center">
             TUYỂN DỤNG NHÂN SỰ
           </h2>
@@ -475,7 +475,7 @@ export default function AboutPage() {
                 <div
                   key={idx}
                   onClick={() => handleJobClick(job)}
-                  className="w-full bg-white rounded-xl shadow-xs p-6 flex items-center gap-4 border border-gray-100 hover:shadow-md transition-all duration-300 group cursor-pointer"
+                  className="w-full bg-white rounded-none p-6 flex items-center gap-4 border-b border-gray-200 hover:bg-gray-50 transition-all duration-300 group cursor-pointer"
                 >
                   {/* Logo Ford Oval */}
                   <div className="w-[85.3px] h-8 relative flex-shrink-0 flex items-center">
@@ -498,8 +498,8 @@ export default function AboutPage() {
                     </p>
                   </div>
 
-                  {/* Interactive circular toggle button */}
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center border border-gray-200 transition-all duration-300 flex-shrink-0 bg-white group-hover:bg-[#0562d2] group-hover:border-[#0562d2] text-[#0562d2] group-hover:text-white">
+                  {/* Interactive square toggle button */}
+                  <div className="w-10 h-10 rounded-[4px] flex items-center justify-center border border-gray-200 transition-all duration-300 flex-shrink-0 bg-white group-hover:bg-[#066fef] group-hover:border-[#066fef] text-[#066fef] group-hover:text-white">
                     <ArrowRight className="w-5 h-5" />
                   </div>
                 </div>
@@ -511,12 +511,12 @@ export default function AboutPage() {
 
       {/* SECTION 7: SLIDER CÁC DÒNG XE NỔI BẬT (Board of Directors / Team collection) */}
       <section id="board-of-directors" className="bg-white py-[72px] overflow-hidden scroll-mt-20 w-full">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full">
           {/* Header Row */}
           <div className="flex justify-between items-end gap-6 mb-10">
             <div>
               <h2 className="text-[48px] font-semibold text-[#1a1a1a] leading-[57.6px] font-antenna uppercase">
-                Đội ngũ Ford Đồng Nai
+                Đội ngũ Ford Long Khánh
               </h2>
             </div>
 
@@ -524,14 +524,14 @@ export default function AboutPage() {
             <div className="flex gap-6">
               <button
                 onClick={handlePrev}
-                className="w-10 h-10 rounded-full bg-black hover:bg-gray-800 text-white flex items-center justify-center transition-colors focus:outline-none cursor-pointer"
+                className="w-10 h-10 rounded-[4px] bg-black hover:bg-gray-800 text-white flex items-center justify-center transition-colors focus:outline-none cursor-pointer"
                 aria-label="Previous slide"
               >
                 <ArrowLeft className="w-5 h-5" />
               </button>
               <button
                 onClick={handleNext}
-                className="w-10 h-10 rounded-full bg-black hover:bg-gray-800 text-white flex items-center justify-center transition-colors focus:outline-none cursor-pointer"
+                className="w-10 h-10 rounded-[4px] bg-black hover:bg-gray-800 text-white flex items-center justify-center transition-colors focus:outline-none cursor-pointer"
                 aria-label="Next slide"
               >
                 <ArrowRight className="w-5 h-5" />
@@ -565,7 +565,7 @@ export default function AboutPage() {
                 <Link
                   key={`${card.id}-${idx}`}
                   href={card.link}
-                  className="h-[480px] relative flex-shrink-0 rounded-xl overflow-hidden group cursor-pointer block"
+                  className="h-[480px] relative flex-shrink-0 rounded-none overflow-hidden group cursor-pointer block border border-gray-200"
                   style={{ width: `${defaultWidth}px` }}
                 >
                   <img
@@ -591,7 +591,7 @@ export default function AboutPage() {
       {/* RECRUITMENT MODAL (Option A) */}
       {selectedJob && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 backdrop-blur-xs">
-          <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl relative border border-[#e5e5e5] p-8 flex flex-col gap-6 scrollbar-thin">
+          <div className="bg-white rounded-none w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl relative border border-[#e5e5e5] p-8 flex flex-col gap-6 scrollbar-thin">
             {/* Close Button */}
             <button
               onClick={() => setSelectedJob(null)}
@@ -638,7 +638,7 @@ export default function AboutPage() {
                     />
                   ) : (
                     <>
-                      <p className="italic text-gray-600 bg-gray-50 p-4 rounded-xl border-l-4 border-[#0562d2]">
+                      <p className="italic text-gray-600 bg-gray-50 p-4 rounded-none border-l-4 border-[#066fef]">
                         {selectedJob.description}
                       </p>
 
@@ -680,7 +680,7 @@ export default function AboutPage() {
               <Link
                 href={selectedJob.slug ? `/tuyen-dung/${selectedJob.slug}` : "/lien-he"}
                 onClick={() => setSelectedJob(null)}
-                className="w-full md:w-auto text-center px-6 py-3 bg-[#0562d2] hover:bg-[#00095b] text-white font-semibold text-sm uppercase tracking-wider rounded-full transition-colors duration-200 shadow-sm"
+                className="w-full md:w-auto text-center px-6 py-3 bg-[#066fef] hover:bg-[#01095c] text-white font-semibold text-xs tracking-widest uppercase rounded-[4px] transition-colors duration-200 shadow-sm"
               >
                 Nộp đơn ứng tuyển
               </Link>

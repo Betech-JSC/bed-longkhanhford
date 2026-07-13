@@ -2,15 +2,14 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useVehicle, VehicleTabBar } from "@/components/vehicle/VehicleLayoutClient";
+import { useVehicle } from "@/components/vehicle/VehicleLayoutClient";
 import { regionsAPI, contactsAPI, registrationFeesAPI } from "@/lib/api";
 import { calculateRollingCost } from "@/lib/rolling-cost";
 import { Check, Info, FileText } from "lucide-react";
 
 export default function VehiclePriceCalculatorClient() {
   const {
-    vehicle,
-    allVehicles
+    vehicle
   } = useVehicle();
 
   // Selected state
@@ -156,20 +155,20 @@ export default function VehiclePriceCalculatorClient() {
   if (!vehicle) return null;
 
   return (
-    <div className="flex-1 bg-[#fafafa] py-12 flex flex-col items-center w-full">
-      <section className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full flex flex-col gap-8">
+    <div className="flex-1 bg-[#F8F8F8] py-12 flex flex-col items-center w-full">
+      <section className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full flex flex-col gap-8">
         
         {/* Breadcrumbs */}
-        <div className="flex flex-wrap items-center gap-2 text-xs text-gray-500 font-medium">
-          <Link href="/" className="hover:text-[#0562D2] transition-colors">
+        <div className="flex flex-wrap items-center gap-2 text-xs text-gray-500 font-medium font-antenna">
+          <Link href="/" className="hover:text-[#066fef] transition-colors">
             Trang chủ
           </Link>
           <span>/</span>
-          <Link href="/san-pham" className="hover:text-[#0562D2] transition-colors">
+          <Link href="/san-pham" className="hover:text-[#066fef] transition-colors">
             Sản phẩm
           </Link>
           <span>/</span>
-          <Link href={`/${vehicle.id}`} className="hover:text-[#0562D2] transition-colors">
+          <Link href={`/${vehicle.id}`} className="hover:text-[#066fef] transition-colors">
             {vehicle.name}
           </Link>
           <span>/</span>
@@ -177,8 +176,8 @@ export default function VehiclePriceCalculatorClient() {
         </div>
 
         {/* Dynamic header title */}
-        <div className="flex flex-col gap-3 items-start w-full border-b border-gray-200 pb-6">
-          <h1 className="font-['Ford_Antenna',sans-serif] font-semibold text-[#00095b] text-[32px] md:text-[36px] leading-[1.2]">
+        <div className="flex flex-col gap-3 items-start w-full border-b border-gray-200 pb-6 font-antenna">
+          <h1 className="font-display font-bold text-[#066fef] text-[32px] md:text-[36px] leading-[1.2] uppercase tracking-wide">
             Dự toán chi phí lăn bánh xe Ford {vehicle.name}
           </h1>
           <p className="text-gray-600 text-sm">
@@ -189,8 +188,8 @@ export default function VehiclePriceCalculatorClient() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start w-full">
           
           {/* Left Column: Calculator inputs & sheet */}
-          <div className="lg:col-span-8 bg-white border border-[#e5e5e5] rounded-[12px] p-6 md:p-8 flex flex-col gap-6 shadow-xs">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="lg:col-span-8 bg-white border border-[#e5e5e5] rounded-none p-6 md:p-8 flex flex-col gap-6 shadow-xs">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 font-antenna">
               
               {/* Select version */}
               <div className="flex flex-col gap-1.5">
@@ -198,7 +197,7 @@ export default function VehiclePriceCalculatorClient() {
                 <select
                   value={selectedVersionId}
                   onChange={(e) => setSelectedVersionId(e.target.value)}
-                  className="w-full bg-white border border-gray-300 px-3 py-2.5 rounded-lg text-sm text-black focus:outline-none focus:border-[#0562d2]"
+                  className="w-full bg-white border border-gray-350 px-3 py-2.5 rounded-[4px] text-sm text-black focus:outline-none focus:border-[#066fef]"
                 >
                   {vehicle.versions?.map((ver: any) => (
                     <option key={ver.id} value={ver.id}>
@@ -214,7 +213,7 @@ export default function VehiclePriceCalculatorClient() {
                 <select
                   value={selectedProvince}
                   onChange={(e) => setSelectedProvince(e.target.value)}
-                  className="w-full bg-white border border-gray-300 px-3 py-2.5 rounded-lg text-sm text-black focus:outline-none focus:border-[#0562d2]"
+                  className="w-full bg-white border border-gray-350 px-3 py-2.5 rounded-[4px] text-sm text-black focus:outline-none focus:border-[#066fef]"
                 >
                   {provinces.length > 0 ? (
                     provinces.map((p) => (
@@ -236,12 +235,12 @@ export default function VehiclePriceCalculatorClient() {
             </div>
 
             {/* Calculations Table */}
-            <div className="border border-[#e5e5e5] rounded-xl overflow-hidden shadow-xs bg-[#fafafa]">
-              <div className="bg-[#00095b] text-white px-6 py-4 flex items-center gap-2">
+            <div className="border border-[#e5e5e5] rounded-none overflow-hidden shadow-xs bg-[#fafafa]">
+              <div className="bg-[#00095b] text-white px-6 py-4 flex items-center gap-2 font-antenna">
                 <FileText className="w-5 h-5" />
                 <h3 className="font-bold text-sm uppercase tracking-wider">Chi tiết bảng tính chi phí lăn bánh:</h3>
               </div>
-              <div className="p-6 space-y-4 text-sm text-gray-700">
+              <div className="p-6 space-y-4 text-sm text-gray-700 font-antenna">
                 <div className="flex justify-between items-center pb-3 border-b border-gray-200">
                   <span>Giá xe niêm yết:</span>
                   <span className="font-bold text-gray-900 text-base">{formatPrice(rollingCost.basePrice)}</span>
@@ -279,30 +278,30 @@ export default function VehiclePriceCalculatorClient() {
                 ) : null}
                 <div className="pt-4 flex justify-between items-center">
                   <span className="font-bold text-gray-900 text-base">Tổng dự toán chi phí lăn bánh:</span>
-                  <span className="font-extrabold text-[#0562D2] text-xl md:text-2xl">{formatPrice(rollingCost.total)}</span>
+                  <span className="font-extrabold text-[#066fef] text-xl md:text-2xl">{formatPrice(rollingCost.total)}</span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Right Column: Lead Form */}
-          <div className="lg:col-span-4 bg-white border border-[#e5e5e5] rounded-[12px] p-6 md:p-8 flex flex-col gap-6 shadow-xs sticky top-[140px]">
-            <h3 className="font-['Ford_Antenna',sans-serif] font-bold text-lg text-[#00095b] border-b border-gray-150 pb-4">
-              Nhận báo giá lăn bánh chính xác nhất
+          <div className="lg:col-span-4 bg-white border border-[#e5e5e5] rounded-none p-6 md:p-8 flex flex-col gap-6 shadow-xs sticky top-[140px]">
+            <h3 className="font-display font-bold text-lg text-[#066fef] border-b border-gray-150 pb-4 uppercase tracking-wide">
+              Nhận báo giá lăn bánh chính xác
             </h3>
 
             {isSubmitted ? (
-              <div className="py-8 text-center space-y-4">
-                <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
+              <div className="py-8 text-center space-y-4 font-antenna">
+                <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-[4px] flex items-center justify-center mx-auto">
                   <Check className="w-6 h-6" />
                 </div>
                 <h4 className="font-bold text-gray-950">Gửi thông tin thành công!</h4>
-                <p className="text-xs text-gray-500 leading-relaxed">Yêu cầu báo giá của bạn đã được tiếp nhận. Đội ngũ Đồng Nai Ford sẽ liên hệ tư vấn trong ít phút.</p>
+                <p className="text-xs text-gray-500 leading-relaxed">Yêu cầu báo giá của bạn đã được tiếp nhận. Đội ngũ Long Khánh Ford sẽ liên hệ tư vấn trong ít phút.</p>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-4 font-antenna">
                 {errorMessage && (
-                  <div className="bg-red-50 border border-red-200 text-red-600 p-3 rounded-lg text-xs text-center font-semibold">
+                  <div className="bg-red-50 border border-red-200 text-red-600 p-3 rounded-[4px] text-xs text-center font-semibold">
                     {errorMessage}
                   </div>
                 )}
@@ -316,7 +315,7 @@ export default function VehiclePriceCalculatorClient() {
                     onChange={handleInputChange}
                     required
                     placeholder="Nguyễn Văn A"
-                    className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-xs focus:outline-none focus:border-[#0562D2] bg-white text-black"
+                    className="w-full px-4 py-2.5 rounded-[4px] border border-gray-200 text-xs focus:outline-none focus:border-[#066fef] bg-white text-black"
                   />
                 </div>
 
@@ -329,7 +328,7 @@ export default function VehiclePriceCalculatorClient() {
                     onChange={handleInputChange}
                     required
                     placeholder="0918xxxxxx"
-                    className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-xs focus:outline-none focus:border-[#0562D2] bg-white text-black"
+                    className="w-full px-4 py-2.5 rounded-[4px] border border-gray-200 text-xs focus:outline-none focus:border-[#066fef] bg-white text-black"
                   />
                 </div>
 
@@ -341,7 +340,7 @@ export default function VehiclePriceCalculatorClient() {
                     value={formData.email}
                     onChange={handleInputChange}
                     placeholder="example@mail.com"
-                    className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-xs focus:outline-none focus:border-[#0562D2] bg-white text-black"
+                    className="w-full px-4 py-2.5 rounded-[4px] border border-gray-200 text-xs focus:outline-none focus:border-[#066fef] bg-white text-black"
                   />
                 </div>
 
@@ -353,14 +352,14 @@ export default function VehiclePriceCalculatorClient() {
                     onChange={handleInputChange}
                     rows={3}
                     placeholder="vd: Cần thông tin khuyến mãi mới nhất, hỗ trợ vay ngân hàng thế nào..."
-                    className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-xs focus:outline-none focus:border-[#0562D2] bg-white resize-none text-black"
+                    className="w-full px-4 py-2.5 rounded-[4px] border border-gray-200 text-xs focus:outline-none focus:border-[#066fef] bg-white resize-none text-black"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-[#0562d2] hover:bg-[#044EA7] text-white py-3 rounded-full font-bold uppercase text-xs tracking-wider transition-colors cursor-pointer border-0 mt-2 shadow-xs"
+                  className="w-full bg-[#066fef] hover:bg-[#01095c] text-white py-3 rounded-[4px] font-bold uppercase text-xs tracking-wider transition-colors cursor-pointer border-0 mt-2 shadow-xs font-antenna"
                 >
                   {isSubmitting ? "Đang xử lý..." : "Yêu cầu báo giá lăn bánh"}
                 </button>

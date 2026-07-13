@@ -37,7 +37,7 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer className="bg-[#00095b] text-white pt-[40px] pb-[20px] px-4 lg:px-[144px] border-t border-[#00095b] mt-auto">
+    <footer className="bg-[#00095b] text-white pt-[40px] pb-[20px] px-4 lg:px-[80px] border-t border-[#00095b] mt-auto">
       {/* Upper Grid Area */}
       <div className="max-w-[1152px] mx-auto flex flex-col lg:flex-row gap-12 justify-between items-start mb-12">
         
@@ -83,7 +83,7 @@ export default function Footer() {
               </h4>
               <ul className="space-y-2.5 text-xs text-white/70">
                 <li>
-                  <Link href="/san-pham" className="hover:text-[#0562d2] transition-colors block">
+                  <Link href="/san-pham" className="hover:text-[#066fef] transition-colors block">
                     Tất cả dòng xe
                   </Link>
                 </li>
@@ -92,7 +92,7 @@ export default function Footer() {
                     <li key={cat.id}>
                       <Link 
                         href={`/dong-xe/${cat.slug}`} 
-                        className="hover:text-[#0562d2] transition-colors block"
+                        className="hover:text-[#066fef] transition-colors block"
                       >
                         {cat.title.startsWith("Xe") ? cat.title : `Xe ${cat.title}`}
                       </Link>
@@ -101,19 +101,19 @@ export default function Footer() {
                 ) : (
                   <>
                     <li>
-                      <Link href="/dong-xe/suv" className="hover:text-[#0562d2] transition-colors block">
+                      <Link href="/dong-xe/suv" className="hover:text-[#066fef] transition-colors block">
                         Xe SUV
                       </Link>
                     </li>
                     <li>
-                      <Link href="/dong-xe/thuong-mai" className="hover:text-[#0562d2] transition-colors block">
+                      <Link href="/dong-xe/thuong-mai" className="hover:text-[#066fef] transition-colors block">
                         Xe Thương Mại
                       </Link>
                     </li>
                   </>
                 )}
                 <li>
-                  <Link href="/xe-da-qua-su-dung" className="hover:text-[#0562d2] transition-colors block">
+                  <Link href="/xe-da-qua-su-dung" className="hover:text-[#066fef] transition-colors block">
                     Xe đã qua sử dụng
                   </Link>
                 </li>
@@ -123,7 +123,7 @@ export default function Footer() {
             {/* DỊCH VỤ & BẢO DƯỠNG */}
             <div className="space-y-4">
               <h4 className="text-sm font-bold tracking-wider text-white uppercase font-display border-b border-white/10 pb-2">
-                <Link href="/dich-vu" className="hover:text-[#0562d2] transition-colors">
+                <Link href="/dich-vu" className="hover:text-[#066fef] transition-colors">
                   DỊCH VỤ & BẢO DƯỠNG
                 </Link>
               </h4>
@@ -135,7 +135,7 @@ export default function Footer() {
                       : `/dich-vu/${srv.slug}`;
                     return (
                       <li key={srv.id}>
-                        <Link href={href} className="hover:text-[#0562d2] transition-colors block">
+                        <Link href={href} className="hover:text-[#066fef] transition-colors block">
                           {srv.title}
                         </Link>
                       </li>
@@ -144,22 +144,22 @@ export default function Footer() {
                 ) : (
                   <>
                     <li>
-                      <Link href="/dich-vu/cham-soc-khach-hang" className="hover:text-[#0562d2] transition-colors block">
+                      <Link href="/dich-vu/cham-soc-khach-hang" className="hover:text-[#066fef] transition-colors block">
                         Chăm sóc khách hàng
                       </Link>
                     </li>
                     <li>
-                      <Link href="/dich-vu/bao-duong-nhanh" className="hover:text-[#0562d2] transition-colors block">
+                      <Link href="/dich-vu/bao-duong-nhanh" className="hover:text-[#066fef] transition-colors block">
                         Bảo dưỡng nhanh
                       </Link>
                     </li>
                     <li>
-                      <Link href="/dich-vu/bao-duong-dinh-ky" className="hover:text-[#0562d2] transition-colors block">
+                      <Link href="/dich-vu/bao-duong-dinh-ky" className="hover:text-[#066fef] transition-colors block">
                         Bảo dưỡng định kỳ
                       </Link>
                     </li>
                     <li>
-                      <Link href="/dich-vu/giao-nhan-xe-tan-noi" className="hover:text-[#0562d2] transition-colors block">
+                      <Link href="/dich-vu/giao-nhan-xe-tan-noi" className="hover:text-[#066fef] transition-colors block">
                         Nhận & Giao xe tận nơi
                       </Link>
                     </li>
@@ -176,22 +176,22 @@ export default function Footer() {
               </h4>
               <ul className="space-y-2.5 text-xs text-white/70">
                 <li>
-                  <Link href="/bang-gia" className="hover:text-[#0562d2] transition-colors block">
+                  <Link href="/bang-gia" className="hover:text-[#066fef] transition-colors block">
                     Bảng giá xe Ford
                   </Link>
                 </li>
                 <li>
-                  <Link href="/cong-cu/uoc-tinh-lan-banh" className="hover:text-[#0562d2] transition-colors block">
+                  <Link href="/cong-cu/uoc-tinh-lan-banh" className="hover:text-[#066fef] transition-colors block">
                     Ước tính lăn bánh
                   </Link>
                 </li>
                 <li>
-                  <Link href="/cong-cu/uoc-tinh-tra-gop" className="hover:text-[#0562d2] transition-colors block">
+                  <Link href="/cong-cu/uoc-tinh-tra-gop" className="hover:text-[#066fef] transition-colors block">
                     Ước tính trả góp
                   </Link>
                 </li>
                 <li>
-                  <Link href="/cong-cu/so-sanh-xe" className="hover:text-[#0562d2] transition-colors block">
+                  <Link href="/cong-cu/so-sanh-xe" className="hover:text-[#066fef] transition-colors block">
                     So sánh xe
                   </Link>
                 </li>
@@ -199,7 +199,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Sub-column 2: Facebook Widget & Ford Đồng Nai Links */}
+          {/* Sub-column 2: Facebook Widget & Ford Long Khánh Links */}
           <div className="space-y-8 flex-1">
             
             {/* Facebook Fanpage Embed */}
@@ -213,37 +213,37 @@ export default function Footer() {
                 frameBorder="0"
                 allowFullScreen={true}
                 allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                title="Facebook Fanpage Đồng Nai Ford"
+                title="Facebook Fanpage Long Khánh Ford"
               ></iframe>
             </div>
 
             <div className="space-y-4">
               <h4 className="text-sm font-bold tracking-wider text-white uppercase font-display border-b border-white/10 pb-2">
-                FORD ĐỒNG NAI
+                FORD LONG KHÁNH
               </h4>
               <ul className="space-y-2.5 text-xs text-white/70">
                 <li>
-                  <Link href="/gioi-thieu" className="hover:text-[#0562d2] transition-colors block">
+                  <Link href="/gioi-thieu" className="hover:text-[#066fef] transition-colors block">
                     Giới thiệu công ty
                   </Link>
                 </li>
                 <li>
-                  <Link href="/tuyen-dung" className="hover:text-[#0562d2] transition-colors block">
+                  <Link href="/tuyen-dung" className="hover:text-[#066fef] transition-colors block">
                     Tuyển dụng
                   </Link>
                 </li>
                 <li>
-                  <Link href="/lien-he" className="hover:text-[#0562d2] transition-colors block">
+                  <Link href="/lien-he" className="hover:text-[#066fef] transition-colors block">
                     Liên hệ
                   </Link>
                 </li>
                 <li>
-                  <Link href="/khao-sat-lai-thu" className="hover:text-[#0562d2] transition-colors block">
+                  <Link href="/khao-sat-lai-thu" className="hover:text-[#066fef] transition-colors block">
                     Khảo sát lái thử
                   </Link>
                 </li>
                 <li>
-                  <Link href="/khao-sat-dich-vu" className="hover:text-[#0562d2] transition-colors block">
+                  <Link href="/khao-sat-dich-vu" className="hover:text-[#066fef] transition-colors block">
                     Khảo sát dịch vụ
                   </Link>
                 </li>
@@ -326,7 +326,7 @@ export default function Footer() {
       <div className="max-w-[1152px] mx-auto border-t border-white/10 pt-6">
         <div className="flex flex-col sm:flex-row justify-between items-center text-xs text-white/50 gap-4">
           <p>
-            Copyright © 2026 Ford Đồng Nai. Tất cả quyền được bảo lưu.
+            Copyright © 2026 Ford Long Khánh. Tất cả quyền được bảo lưu.
           </p>
           <div className="flex gap-6">
             <Link href="/dieu-khoan-su-dung" className="hover:text-white/80 transition-colors">

@@ -485,7 +485,7 @@ export default function ComparePage() {
     <div className="bg-[#fafafa] min-h-screen font-sans">
       {/* Breadcrumb */}
       <div className="bg-white border-b border-[#e5e5e5] py-4">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px]">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px]">
           <div className="text-xs text-gray-500 font-medium flex items-center gap-1.5">
             <Link href="/" className="hover:text-[#0562d2] transition-colors">
               Trang chủ
@@ -505,7 +505,7 @@ export default function ComparePage() {
 
       {/* Hero */}
       <section className="bg-gradient-to-br from-[#00095B] via-[#02337A] to-[#0562D2] text-white py-12 md:py-14">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] text-center">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] text-center">
           <h1 className="text-3xl md:text-4xl font-bold tracking-[-0.96px] leading-[1.2] mb-3">
             So sánh xe Ford
           </h1>
@@ -518,7 +518,7 @@ export default function ComparePage() {
 
       {/* Compare Content */}
       <section className="py-10 md:py-14">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px]">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px]">
           {selectedIds.length === 0 ? (
             <div className="bg-white rounded-2xl border border-gray-200 p-8 md:p-12 text-center max-w-2xl mx-auto shadow-sm">
               <div className="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center mx-auto mb-6">

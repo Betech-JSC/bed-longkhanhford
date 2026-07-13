@@ -458,7 +458,7 @@ export default function VehicleLayoutClient({
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full bg-[#0562d2] hover:bg-[#044ea7] disabled:bg-gray-400 text-white py-3 rounded-[800px] font-bold uppercase text-xs tracking-wider shadow-sm transition-colors cursor-pointer border-0 mt-2"
+                      className="w-full bg-[#066fef] hover:bg-[#01095c] disabled:bg-gray-400 text-white py-3 rounded-[4px] font-bold uppercase text-xs tracking-wider shadow-xs transition-colors cursor-pointer border-0 mt-2 font-antenna"
                     >
                       {isSubmitting ? "Đang gửi yêu cầu..." : "Gửi yêu cầu ngay"}
                     </button>
@@ -500,7 +500,7 @@ export default function VehicleLayoutClient({
                     <Check className="w-8 h-8" />
                   </div>
                   <h4 className="text-xl font-bold text-gray-900">Gửi yêu cầu thành công!</h4>
-                  <p className="text-sm text-gray-500 max-w-sm">Đội ngũ tư vấn bán hàng của Đồng Nai Ford sẽ liên hệ lại với bạn trong vòng 15 phút để báo giá chính xác.</p>
+                  <p className="text-sm text-gray-500 max-w-sm">Đội ngũ tư vấn bán hàng của Long Khánh Ford sẽ liên hệ lại với bạn trong vòng 15 phút để báo giá chính xác.</p>
                 </div>
               ) : drawerStep === "calculate" ? (
                 <div className="flex-1 flex flex-col gap-6 w-full">
@@ -627,13 +627,13 @@ export default function VehicleLayoutClient({
                     ) : null}
                     <div className="border-t border-gray-200 pt-3 mt-3 flex justify-between items-center">
                       <span className="font-bold text-gray-900 text-base">Tổng chi phí lăn bánh dự kiến:</span>
-                      <span className="font-extrabold text-[#0562D2] text-xl">{formatPrice(rollingCost.total)}</span>
+                      <span className="font-extrabold text-[#066fef] text-xl">{formatPrice(rollingCost.total)}</span>
                     </div>
                   </div>
 
                   <button
                     onClick={() => setDrawerStep("contact")}
-                    className="w-full bg-[#0562d2] hover:bg-[#044ea7] text-white py-3.5 rounded-[800px] font-bold uppercase text-xs tracking-wider shadow-md transition-colors cursor-pointer border-0 mt-4"
+                    className="w-full bg-[#066fef] hover:bg-[#01095c] text-white py-3.5 rounded-[4px] font-bold uppercase text-xs tracking-wider shadow-xs transition-colors cursor-pointer border-0 mt-4 font-antenna"
                   >
                     Nhận báo giá chính xác kèm khuyến mãi
                   </button>
@@ -642,7 +642,7 @@ export default function VehicleLayoutClient({
                 <div className="flex-1 flex flex-col gap-6 w-full">
                   <button
                     onClick={() => setDrawerStep("calculate")}
-                    className="text-xs font-semibold text-[#0562d2] hover:underline bg-transparent border-0 cursor-pointer self-start"
+                    className="text-xs font-semibold text-[#066fef] hover:underline bg-transparent border-0 cursor-pointer self-start"
                   >
                     ← Quay lại bảng tính
                   </button>
@@ -707,7 +707,7 @@ export default function VehicleLayoutClient({
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full bg-[#0562d2] hover:bg-[#044ea7] disabled:bg-gray-400 text-white py-3.5 rounded-[800px] font-bold uppercase text-xs tracking-wider shadow-md transition-colors cursor-pointer border-0 mt-2"
+                      className="w-full bg-[#066fef] hover:bg-[#01095c] disabled:bg-gray-400 text-white py-3.5 rounded-[4px] font-bold uppercase text-xs tracking-wider shadow-xs transition-colors cursor-pointer border-0 mt-2 font-antenna"
                     >
                       {isSubmitting ? "Đang gửi thông tin..." : "Gửi yêu cầu & Nhận báo giá chính xác"}
                     </button>
@@ -743,11 +743,11 @@ export function VehicleTabBar() {
 
   return (
     <div className="sticky-tabs bg-white border-b border-[#e5e5e5] shadow-xs">
-      <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full flex items-center justify-between gap-4">
+      <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full flex items-center justify-between gap-4">
         <div className="flex items-center gap-[32px] overflow-hidden">
           <Link 
             href={`/${id}`}
-            className="font-['Ford_Antenna',sans-serif] font-bold text-[#1a1a1a] text-[13px] uppercase tracking-wider whitespace-nowrap hidden sm:block hover:text-[#0562d2] no-underline"
+            className="font-['Ford_Antenna',sans-serif] font-bold text-[#1a1a1a] text-[13px] uppercase tracking-wider whitespace-nowrap hidden sm:block hover:text-[#066fef] no-underline"
           >
             {vehicle.name}
           </Link>
@@ -776,12 +776,12 @@ export function VehicleTabBar() {
                 <Link
                   key={tab.label}
                   href={targetPath}
-                  className={`py-[16px] px-[8px] text-[16px] font-medium leading-[1.5] cursor-pointer text-center relative whitespace-nowrap bg-transparent border-0 flex-shrink-0 transition-colors no-underline
-                    ${isActive ? "text-[#0562d2]" : "text-[#424242] hover:text-[#0562d2]"}`}
+                  className={`py-[16px] px-[8px] text-[16px] font-medium leading-[1.5] cursor-pointer text-center relative whitespace-nowrap bg-transparent border-0 flex-shrink-0 transition-colors no-underline font-antenna
+                    ${isActive ? "text-[#066fef]" : "text-[#424242] hover:text-[#066fef]"}`}
                 >
                   <span>{tab.label}</span>
                   {isActive && (
-                    <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#0562d2]" />
+                    <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#066fef]" />
                   )}
                 </Link>
               );
@@ -791,9 +791,9 @@ export function VehicleTabBar() {
 
         <button
           onClick={() => toggleCompare(vehicle.id)}
-          className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold transition-all active:scale-95 border cursor-pointer select-none shrink-0 ${compareIds.includes(vehicle.id)
-            ? "bg-[#0562D2] text-white border-[#0562D2] shadow-sm animate-pulse"
-            : "bg-white text-gray-700 hover:text-[#0562D2] border-gray-250 hover:bg-gray-50"
+          className={`flex items-center gap-1.5 px-4 py-2 rounded-[4px] text-xs font-bold transition-all border cursor-pointer select-none shrink-0 uppercase tracking-wider ${compareIds.includes(vehicle.id)
+            ? "bg-[#066fef] text-white border-[#066fef] shadow-xs"
+            : "bg-white text-gray-700 hover:text-[#066fef] border-gray-250 hover:bg-gray-50"
             }`}
         >
           <GitCompare className="w-3.5 h-3.5" />

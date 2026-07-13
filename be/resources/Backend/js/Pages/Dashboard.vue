@@ -5,7 +5,7 @@
         <!-- Header -->
         <div class="dashboard-header">
             <div class="header-content">
-                <h1 class="header-title">Hệ Thống Quản Trị Ford Dongnaiford</h1>
+                <h1 class="header-title">Hệ Thống Quản Trị Ford Longkhanhford</h1>
                 <p class="header-date">{{ currentDate }}</p>
             </div>
             <div class="header-badge">
@@ -239,7 +239,7 @@
                         <svg viewBox="0 0 20 20" fill="currentColor" class="summary-icon summary-icon--emerald" style="color: #059669;">
                             <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"/>
                         </svg>
-                        Thống Kê Tài Nguyên Ford Dongnaiford
+                        Thống Kê Tài Nguyên Ford Longkhanhford
                     </h2>
                 </div>
                 <div class="summary-card__body" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">

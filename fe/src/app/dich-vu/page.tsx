@@ -5,8 +5,8 @@ import { servicesAPI } from "@/lib/api";
 import { siteAssets } from "@/lib/site-assets";
 
 export const metadata: Metadata = {
-  title: "Dịch vụ Bảo hành, Sửa chữa & Chăm sóc xe chính hãng | Đồng Nai Ford",
-  description: "Xưởng dịch vụ lớn nhất khu vực Đồng Nai của đại lý Đồng Nai Ford. Cung cấp các gói bảo dưỡng định kỳ, bảo dưỡng nhanh 60 phút, sửa chữa chung, và nhận giao xe tận nhà chuyên nghiệp.",
+  title: "Dịch vụ Bảo hành, Sửa chữa & Chăm sóc xe chính hãng | Long Khánh Ford",
+  description: "Xưởng dịch vụ lớn nhất khu vực Đồng Nai của đại lý Long Khánh Ford. Cung cấp các gói bảo dưỡng định kỳ, bảo dưỡng nhanh 60 phút, sửa chữa chung, và nhận giao xe tận nhà chuyên nghiệp.",
   keywords: "dịch vụ bảo dưỡng xe ford, sửa xe ford chính hãng, đồng nai ford amata, bảo dưỡng nhanh biên hòa, thay nhớt ford đồng nai",
   alternates: {
     canonical: "/dich-vu",
@@ -83,7 +83,7 @@ export default async function ServicesPage() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "AutoDealer",
-    "name": "Đồng Nai Ford - Xưởng Dịch Vụ Chính Hãng",
+    "name": "Long Khánh Ford - Xưởng Dịch Vụ Chính Hãng",
     "image": "https://dongnaiford.com.vn" + siteAssets.showroomBg,
     "address": {
       "@type": "PostalAddress",
@@ -112,52 +112,49 @@ export default async function ServicesPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* Breadcrumb */}
-      <div className="bg-white border-b border-[#e5e5e5] py-4">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px]">
-          <div className="text-xs text-gray-500 font-medium flex items-center gap-1.5">
-            <Link href="/" className="hover:text-[#0562d2] transition-colors">
+      {/* Hero Section */}
+      <section className="relative w-full bg-gradient-to-br from-neutral-900 to-[#01095c] text-white pt-28 pb-16 md:pb-20 overflow-hidden">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] relative z-10">
+          {/* Breadcrumb inside Hero */}
+          <div className="text-xs text-white/60 font-medium flex items-center gap-1.5 mb-6 justify-center">
+            <Link href="/" className="hover:text-white transition-colors">
               Trang chủ
             </Link>
-            <div className="w-[3px] h-[3px] rounded-full bg-[#333] opacity-60 mx-1" />
-            <span className="text-black font-semibold">Dịch vụ chính hãng</span>
+            <span>/</span>
+            <span className="text-white">Dịch vụ chính hãng</span>
           </div>
-        </div>
-      </div>
-
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-[#00095B] via-[#02337A] to-[#0562D2] text-white py-16 md:py-20">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] text-center">
-          <span className="bg-white/15 text-white/95 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full border border-white/10 mb-4 inline-block">
-            Xưởng Dịch Vụ Chuẩn 3S Lớn Nhất Đồng Nai
-          </span>
-          <h1 className="text-3xl md:text-5xl font-bold tracking-tight leading-tight mb-4 mt-2">
-            DỊCH VỤ CHĂM SÓC XE CHUYÊN NGHIỆP
-          </h1>
-          <p className="text-white/80 text-base md:text-lg max-w-2xl mx-auto">
-            Hạ tầng kỹ thuật hiện đại, thiết bị chuẩn đoán độc quyền và đội ngũ kỹ thuật viên tay nghề cao giúp xế cưng của bạn luôn an toàn trên mọi hành trình.
-          </p>
+          <div className="text-center">
+            <span className="bg-white/15 text-white/95 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-[4px] border border-white/10 mb-4 inline-block">
+              Xưởng Dịch Vụ Chuẩn 3S Lớn Nhất Đồng Nai
+            </span>
+            <h1 className="text-3xl md:text-5xl font-bold tracking-tight uppercase leading-tight mb-4 mt-2 font-antenna">
+              Dịch vụ chăm sóc xe chuyên nghiệp
+            </h1>
+            <p className="text-white/80 text-base md:text-lg max-w-2xl mx-auto font-antenna">
+              Hạ tầng kỹ thuật hiện đại, thiết bị chuẩn đoán độc quyền và đội ngũ kỹ thuật viên tay nghề cao giúp xế cưng của bạn luôn an toàn trên mọi hành trình.
+            </p>
+          </div>
         </div>
       </section>
 
       {/* Intro Stats Section */}
       <section className="py-12 bg-white border-b border-gray-100">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px]">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px]">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             <div className="p-4">
-              <div className="text-3xl md:text-4xl font-bold text-[#0562d2] mb-1">30+</div>
+              <div className="text-3xl md:text-4xl font-bold text-[#066fef] mb-1">30+</div>
               <div className="text-xs md:text-sm text-gray-600 font-medium uppercase tracking-wider">Khoang Sửa Chữa</div>
             </div>
             <div className="p-4">
-              <div className="text-3xl md:text-4xl font-bold text-[#0562d2] mb-1">100%</div>
+              <div className="text-3xl md:text-4xl font-bold text-[#066fef] mb-1">100%</div>
               <div className="text-xs md:text-sm text-gray-600 font-medium uppercase tracking-wider">Phụ Tùng Chính Hãng</div>
             </div>
             <div className="p-4">
-              <div className="text-3xl md:text-4xl font-bold text-[#0562d2] mb-1">60 Phút</div>
+              <div className="text-3xl md:text-4xl font-bold text-[#066fef] mb-1">60 Phút</div>
               <div className="text-xs md:text-sm text-gray-600 font-medium uppercase tracking-wider">Bảo Dưỡng Nhanh</div>
             </div>
             <div className="p-4">
-              <div className="text-3xl md:text-4xl font-bold text-[#0562d2] mb-1">24/7</div>
+              <div className="text-3xl md:text-4xl font-bold text-[#066fef] mb-1">24/7</div>
               <div className="text-xs md:text-sm text-gray-600 font-medium uppercase tracking-wider">Cứu Hộ Giao Thông</div>
             </div>
           </div>
@@ -166,7 +163,7 @@ export default async function ServicesPage() {
 
       {/* Services Grid Section */}
       <section className="py-16 md:py-24">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px]">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px]">
           <div className="text-center mb-12">
             <h2 className="text-2xl md:text-3.5xl font-bold text-gray-900 tracking-tight mb-3">
               DANH MỤC DỊCH VỤ CHÍNH
@@ -180,7 +177,7 @@ export default async function ServicesPage() {
             {displayServices.map((service, index) => (
               <div
                 key={service.slug || index}
-                className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden flex flex-col group hover:shadow-md transition-all duration-300"
+                className="bg-white rounded-none border border-gray-200 overflow-hidden flex flex-col group hover:shadow-md transition-all duration-300"
               >
                 {/* Image Container with 16:9 aspect ratio and fit/full styles */}
                 <div className="relative w-full aspect-[16/9] overflow-hidden bg-gray-100">
@@ -192,7 +189,7 @@ export default async function ServicesPage() {
                     className="object-cover object-center w-full h-full transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute top-4 left-4">
-                    <span className="bg-[#0562d2] text-white text-xs font-bold px-3 py-1.5 rounded-md shadow-sm">
+                    <span className="bg-[#066fef] text-white text-xs font-bold px-3 py-1.5 rounded-[4px] shadow-sm uppercase tracking-wider">
                       {service.badge}
                     </span>
                   </div>
@@ -200,7 +197,7 @@ export default async function ServicesPage() {
 
                 {/* Content */}
                 <div className="p-6 md:p-8 flex flex-col flex-grow">
-                  <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-3 group-hover:text-[#0562d2] transition-colors line-clamp-1">
+                  <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-3 group-hover:text-[#066fef] transition-colors line-clamp-1">
                     {service.title}
                   </h3>
                   <p className="text-gray-600 text-sm leading-relaxed mb-6 flex-grow line-clamp-3">
@@ -209,7 +206,7 @@ export default async function ServicesPage() {
                   <div className="mt-auto">
                     <Link
                       href={service.href}
-                      className="inline-flex items-center gap-1 text-[#0562d2] font-bold text-sm hover:gap-2 transition-all"
+                      className="inline-flex items-center gap-1 text-[#066fef] font-bold text-sm hover:gap-2 transition-all uppercase tracking-wider text-[11px]"
                     >
                       Xem chi tiết dịch vụ
                       <span className="text-lg">→</span>
@@ -224,26 +221,26 @@ export default async function ServicesPage() {
 
       {/* CTA Booking Section */}
       <section className="bg-gray-900 text-white py-16">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px]">
-          <div className="bg-gradient-to-r from-[#00095B] to-[#02337A] rounded-3xl p-8 md:p-12 shadow-xl flex flex-col md:flex-row items-center justify-between gap-8">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px]">
+          <div className="bg-[#00095B] border border-neutral-800 rounded-none p-8 md:p-12 shadow-xl flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="max-w-xl text-center md:text-left">
               <h2 className="text-2xl md:text-3.5xl font-bold mb-3 tracking-tight">
                 ĐẶT LỊCH HẸN BẢO DƯỠNG NGAY
               </h2>
               <p className="text-white/80 text-sm md:text-base leading-relaxed">
-                Đăng ký đặt lịch hẹn sửa chữa và bảo dưỡng nhanh trực tuyến để nhận ưu tiên làm ngay khi tới xưởng dịch vụ Đồng Nai Ford, không mất thời gian chờ đợi.
+                Đăng ký đặt lịch hẹn sửa chữa và bảo dưỡng nhanh trực tuyến để nhận ưu tiên làm ngay khi tới xưởng dịch vụ Long Khánh Ford, không mất thời gian chờ đợi.
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-4 shrink-0 w-full sm:w-auto">
               <Link
                 href="/lien-he"
-                className="bg-[#0562d2] hover:bg-[#044ea7] text-white font-bold text-center px-8 py-4 rounded-full transition-colors text-sm shadow-md"
+                className="bg-[#066fef] hover:bg-[#01095c] text-white font-bold text-center px-8 py-4 rounded-[4px] transition-colors text-sm shadow-md uppercase tracking-wider text-[11px]"
               >
                 Đặt hẹn dịch vụ
               </Link>
               <a
                 href="tel:0918909060"
-                className="bg-white/10 hover:bg-white/15 text-white border border-white/20 font-bold text-center px-8 py-4 rounded-full transition-all text-sm"
+                className="bg-white/10 hover:bg-white/15 text-white border border-white/20 font-bold text-center px-8 py-4 rounded-[4px] transition-all text-sm uppercase tracking-wider text-[11px]"
               >
                 Hotline hỗ trợ kỹ thuật
               </a>

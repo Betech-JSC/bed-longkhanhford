@@ -298,7 +298,7 @@ export default function InstallmentCalculatorPage() {
       <div className="hidden print:block mb-8 border-b pb-4">
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-[#00095B] uppercase tracking-tight">ĐỒNG NAI FORD</h1>
+            <h1 className="text-2xl font-bold text-[#00095B] uppercase tracking-tight">LONG KHÁNH FORD</h1>
             <p className="text-xs text-gray-500 mt-1">
               Địa chỉ: Số B04, Khu thương mại Amata, Khu phố 29, Phường Long Bình, TP. Biên Hòa, Đồng Nai
             </p>
@@ -311,7 +311,7 @@ export default function InstallmentCalculatorPage() {
         </div>
       </div>
 
-      <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full flex flex-col items-center gap-[32px]">
+      <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full flex flex-col items-center gap-[32px]">
         
         {/* Page Header (14144:5312) */}
         <div className="w-full flex flex-col gap-[12px] items-start print:hidden">
@@ -659,7 +659,7 @@ export default function InstallmentCalculatorPage() {
               {/* Print Specific Footer Notes */}
               <div className="hidden print:block text-[10px] text-gray-400 mt-4 border-t pt-4">
                 <p>* Bảng tính này chỉ mang tính chất tham khảo. Lãi suất thực tế sẽ được cập nhật cụ thể theo quy định của ngân hàng đối tác tại từng thời điểm.</p>
-                <p>Mọi chi tiết xin vui lòng liên hệ Đồng Nai Ford - Hotline KD: 0918 90 90 60 để nhận báo giá chính xác nhất.</p>
+                <p>Mọi chi tiết xin vui lòng liên hệ Long Khánh Ford - Hotline KD: 0918 90 90 60 để nhận báo giá chính xác nhất.</p>
               </div>
               
             </div>

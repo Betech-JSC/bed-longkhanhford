@@ -48,7 +48,7 @@ const INITIAL_MESSAGE: Message = {
   id: "welcome",
   role: "assistant",
   content:
-    "Xin chào! 👋 Tôi là trợ lý AI của **Ford Đồng Nai**. Tôi có thể giúp bạn:\n\n• Tư vấn các dòng xe Ford\n• Tra cứu giá xe & ước tính lăn bánh\n• Đặt lịch lái thử\n• Thông tin dịch vụ bảo dưỡng\n\nBạn cần hỗ trợ gì ạ?",
+    "Xin chào! 👋 Tôi là trợ lý AI của **Ford Long Khánh**. Tôi có thể giúp bạn:\n\n• Tư vấn các dòng xe Ford\n• Tra cứu giá xe & ước tính lăn bánh\n• Đặt lịch lái thử\n• Thông tin dịch vụ bảo dưỡng\n\nBạn cần hỗ trợ gì ạ?",
   timestamp: new Date(),
 };
 
@@ -713,7 +713,7 @@ export default function AIChatWidget() {
             : "bg-[#0562d2] hover:bg-[#044ea7]"
         }`}
         title={isOpen ? "Đóng chat" : "Chat với AI tư vấn"}
-        aria-label={isOpen ? "Đóng chat" : "Mở chat AI tư vấn Ford Đồng Nai"}
+        aria-label={isOpen ? "Đóng chat" : "Mở chat AI tư vấn Ford Long Khánh"}
       >
         {isOpen ? (
           <X className="w-6 h-6 text-white pointer-events-none" />

@@ -7,37 +7,37 @@ import { siteAssets } from "@/lib/site-assets";
 
 export default function ExpressMaintenanceLayout({ service }: { service?: any }) {
   return (
-    <div className="w-full bg-[#fafafa] min-h-screen flex flex-col">
+    <div className="w-full bg-[#F8F8F8] min-h-screen flex flex-col items-center">
       <ServicePageBanner title={service?.title || "Dịch vụ bảo dưỡng nhanh"} backgroundImage={service?.banner_image?.url}>
-        <div className="flex flex-wrap gap-4 justify-center">
+        <div className="flex flex-wrap gap-4 justify-center font-antenna">
           <Link
             href="/lien-he"
-            className="bg-[#0562d2] hover:bg-[#044ea7] border border-[#0562d2] transition-colors text-white font-bold px-6 py-3 rounded-full text-sm"
+            className="bg-[#066fef] hover:bg-[#01095c] border border-[#066fef] transition-colors text-white font-bold px-6 py-3 rounded-[4px] text-xs uppercase tracking-wider shadow-xs"
           >
             Đặt hẹn
           </Link>
           <a
             href="tel:0918909060"
-            className="border border-white hover:bg-white/10 transition-colors text-white font-bold px-6 py-3 rounded-full text-sm"
+            className="border border-white hover:bg-white/10 transition-colors text-white font-bold px-6 py-3 rounded-[4px] text-xs uppercase tracking-wider shadow-xs"
           >
             Liên hệ hỗ trợ
           </a>
         </div>
       </ServicePageBanner>
 
-      <div className="max-w-[1440px] w-full mx-auto px-4 lg:px-[128px] py-16 flex flex-col gap-10">
+      <div className="max-w-[1440px] w-full mx-auto px-4 lg:px-[80px] py-16 flex flex-col gap-10 font-antenna">
         {service?.content ? (
           <div 
             className="prose max-w-none text-xl md:text-2xl text-gray-900 leading-relaxed font-normal"
             dangerouslySetInnerHTML={{ __html: service.content }}
           />
         ) : (
-          <h2 className="font-['Ford_Antenna',sans-serif] font-bold text-2xl md:text-3xl text-gray-900 tracking-tight">
+          <h2 className="font-display font-bold text-2xl md:text-3xl text-gray-900 tracking-tight uppercase">
             QUY TRÌNH BẢO DƯỠNG NHANH
           </h2>
         )}
 
-        <div className="relative w-full aspect-[1440/500] rounded-xl overflow-hidden shadow-sm">
+        <div className="relative w-full aspect-[1440/500] rounded-none overflow-hidden border border-gray-200 shadow-xs">
           <Image
             src={siteAssets.expressFlow}
             alt="Express Maintenance Flow"
@@ -48,19 +48,19 @@ export default function ExpressMaintenanceLayout({ service }: { service?: any })
         </div>
 
         <div className="flex flex-col gap-6 text-gray-900 mt-4">
-          <h3 className="font-['Ford_Antenna',sans-serif] font-bold text-2xl text-gray-900">
+          <h3 className="font-display font-bold text-2xl text-[#066fef] uppercase tracking-wide">
             {service?.benefit_title || "Ưu Điểm Chính"}
           </h3>
           <ul className="space-y-4 text-lg text-gray-700 leading-relaxed font-normal">
             {service?.benefits && Array.isArray(service.benefits) && service.benefits.length > 0 && service.benefits.some((b: any) => b && (b.title || b.description)) ? (
               service.benefits.filter((b: any) => b && (b.title || b.description)).map((benefit: any, bidx: number) => (
                 <li key={bidx} className="flex items-start gap-2.5">
-                  <span className="text-[#0562d2] mt-1.5 shrink-0 size-2 bg-[#0562d2] rounded-full" />
+                  <span className="text-[#066fef] mt-1.5 shrink-0 size-2 bg-[#066fef] rounded-full" />
                   <div>
                     <strong className="text-gray-950 font-bold block text-base md:text-lg mb-0.5">{benefit.title}</strong>
                     {benefit.description && (
                       <div 
-                        className="text-sm text-gray-600 prose leading-relaxed"
+                        className="text-sm text-gray-650 prose leading-relaxed"
                         dangerouslySetInnerHTML={{ __html: benefit.description }}
                       />
                     )}
@@ -69,24 +69,24 @@ export default function ExpressMaintenanceLayout({ service }: { service?: any })
               ))
             ) : (
               <>
-                <li className="flex items-start gap-2.5">
-                  <span className="text-[#0562d2] mt-1.5 shrink-0 size-2 bg-[#0562d2] rounded-full" />
+                <li className="flex items-start gap-2.5 text-base text-gray-650">
+                  <span className="text-[#066fef] mt-1.5 shrink-0 size-2 bg-[#066fef] rounded-full" />
                   <span>Sử dụng các dụng cụ bảo dưỡng tiêu chuẩn, các trang thiết bị hiện đại.</span>
                 </li>
-                <li className="flex items-start gap-2.5">
-                  <span className="text-[#0562d2] mt-1.5 shrink-0 size-2 bg-[#0562d2] rounded-full" />
+                <li className="flex items-start gap-2.5 text-base text-gray-650">
+                  <span className="text-[#066fef] mt-1.5 shrink-0 size-2 bg-[#066fef] rounded-full" />
                   <span>Phụ tùng bảo dưỡng chính hãng luôn được chuẩn bị sẵn sàng.</span>
                 </li>
-                <li className="flex items-start gap-2.5">
-                  <span className="text-[#0562d2] mt-1.5 shrink-0 size-2 bg-[#0562d2] rounded-full" />
+                <li className="flex items-start gap-2.5 text-base text-gray-650">
+                  <span className="text-[#066fef] mt-1.5 shrink-0 size-2 bg-[#066fef] rounded-full" />
                   <span>Đội ngũ kỹ thuật viên được đào tạo chuyên sâu về bảo dưỡng nhanh các dòng xe Ford.</span>
                 </li>
-                <li className="flex items-start gap-2.5">
-                  <span className="text-[#0562d2] mt-1.5 shrink-0 size-2 bg-[#0562d2] rounded-full" />
+                <li className="flex items-start gap-2.5 text-base text-gray-650">
+                  <span className="text-[#066fef] mt-1.5 shrink-0 size-2 bg-[#066fef] rounded-full" />
                   <span>Toàn bộ công đoạn bảo dưỡng nhanh chỉ diễn ra trong 60 phút với đầy đủ các quy trình và công đoạn như bảo dưỡng thông thường.</span>
                 </li>
-                <li className="flex items-start gap-2.5">
-                  <span className="text-[#0562d2] mt-1.5 shrink-0 size-2 bg-[#0562d2] rounded-full" />
+                <li className="flex items-start gap-2.5 text-base text-gray-650">
+                  <span className="text-[#066fef] mt-1.5 shrink-0 size-2 bg-[#066fef] rounded-full" />
                   <span>Giảm thiểu thời gian chờ đợi bảo dưỡng xe Ford của khách hàng.</span>
                 </li>
               </>

@@ -1,7 +1,7 @@
 <template>
     <div class="flex items-center justify-center flex-shrink-0 p-5 border-b border-gray-800">
         <Link href="/" class="flex items-center justify-center w-full p-2">
-            <span class="font-['Ford_Antenna',sans-serif] font-bold text-white text-[13px] tracking-tight leading-none uppercase">DONG NAI FORD</span>
+            <span class="font-['Ford_Antenna',sans-serif] font-bold text-white text-[13px] tracking-tight leading-none uppercase">LONG KHANH FORD</span>
         </Link>
     </div>
     <nav class="flex-1 px-2 pb-4 space-y-1 navs">

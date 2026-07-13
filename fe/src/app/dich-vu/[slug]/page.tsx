@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Props) {
     if (!service) return {};
 
     return {
-      title: seo?.title || `${service.title} | Đồng Nai Ford`,
+      title: seo?.title || `${service.title} | Long Khánh Ford`,
       description: seo?.description || service.description || "",
       keywords: seo?.keywords || "",
       alternates: {

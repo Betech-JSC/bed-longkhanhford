@@ -16,8 +16,8 @@ export async function generateMetadata({ params }: Props) {
 
     if (!vehicle) return {};
 
-    const title = `Phụ kiện xe Ford ${vehicle.title} chính hãng | Đồng Nai Ford`;
-    const description = `Danh sách phụ kiện nội thất, ngoại thất, mâm lốp, công nghệ và phụ tùng hiệu suất chính hãng thiết kế riêng cho dòng xe Ford ${vehicle.title} tại Đồng Nai Ford.`;
+    const title = `Phụ kiện xe Ford ${vehicle.title} chính hãng | Long Khánh Ford`;
+    const description = `Danh sách phụ kiện nội thất, ngoại thất, mâm lốp, công nghệ và phụ tùng hiệu suất chính hãng thiết kế riêng cho dòng xe Ford ${vehicle.title} tại Long Khánh Ford.`;
 
     return {
       title,

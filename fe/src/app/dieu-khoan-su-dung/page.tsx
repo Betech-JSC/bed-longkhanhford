@@ -6,12 +6,12 @@ export async function generateMetadata() {
     const res = await policiesAPI.getBySlug("dieu-khoan-su-dung", { type: "terms" });
     const content = res?.content;
     return {
-      title: `${content?.title || "Điều khoản Sử dụng"} | Đồng Nai Ford`,
-      description: content?.description || "Quy định và điều khoản sử dụng website chính thức của Đồng Nai Ford.",
+      title: `${content?.title || "Điều khoản Sử dụng"} | Long Khánh Ford`,
+      description: content?.description || "Quy định và điều khoản sử dụng website chính thức của Long Khánh Ford.",
     };
   } catch (err) {
     return {
-      title: "Điều khoản Sử dụng | Đồng Nai Ford",
+      title: "Điều khoản Sử dụng | Long Khánh Ford",
     };
   }
 }

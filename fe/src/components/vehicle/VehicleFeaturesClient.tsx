@@ -122,7 +122,7 @@ function FeatureSectionSlider({ sec, openDriveDrawer }: FeatureSectionSliderProp
       id={sec.id}
       className="w-full py-16 border-b border-[#e5e5e5] bg-white transition-colors duration-300 relative group/slider"
     >
-      <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full">
+      <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full">
 
         {/* Section Header with "Bắt đầu mua xe" on the right */}
         <div className="flex flex-row justify-between items-center border-b border-gray-150 pb-4 mb-8">
@@ -410,7 +410,7 @@ export default function VehicleFeaturesClient() {
           <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent opacity-10" />
         </div>
 
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full relative z-10 text-white flex flex-col gap-5 items-start text-left">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full relative z-10 text-white flex flex-col gap-5 items-start text-left">
           <h1 className="font-['Ford_Antenna',sans-serif] font-bold text-3xl md:text-5xl lg:text-[48px] tracking-tight max-w-2xl leading-[1.15] text-white">
             Trang bị ưu việt cùng Ford {vehicle.name}
           </h1>

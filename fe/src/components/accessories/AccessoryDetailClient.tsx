@@ -209,15 +209,15 @@ export default function AccessoryDetailClient({
     : [];
 
   return (
-    <div className="bg-[#fafafa] min-h-screen text-[#1a1a1a] font-sans pb-0 w-full">
+    <div className="bg-[#F8F8F8] min-h-screen text-[#1a1a1a] font-sans pb-0 w-full flex flex-col items-center">
       {/* Breadcrumbs Section */}
-      <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full pt-[32px] pb-[12px]">
-        <div className="flex flex-wrap items-center gap-[13px] text-[12px] text-gray-500 font-medium font-['Ford_Antenna',sans-serif]">
-          <Link href="/" className="hover:text-[#0562D2] transition-colors">
+      <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full pt-[32px] pb-[12px] font-antenna">
+        <div className="flex flex-wrap items-center gap-[13px] text-[12px] text-gray-500 font-medium">
+          <Link href="/" className="hover:text-[#066fef] transition-colors">
             Trang chủ
           </Link>
           <span className="w-[3px] h-[3px] rounded-full bg-[#333] opacity-60 shrink-0" />
-          <Link href="/phu-kien" className="hover:text-[#0562D2] transition-colors">
+          <Link href="/phu-kien" className="hover:text-[#066fef] transition-colors">
             Phụ Kiện
           </Link>
           <span className="w-[3px] h-[3px] rounded-full bg-[#333] opacity-60 shrink-0" />
@@ -228,8 +228,8 @@ export default function AccessoryDetailClient({
       </div>
 
       {/* Main Core Showcase Columns */}
-      <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full pb-[64px]">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-[32px] items-start bg-white rounded-[8px] overflow-hidden p-0">
+      <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full pb-[64px]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-[32px] items-start bg-white rounded-none border border-gray-200 overflow-hidden p-8 shadow-xs">
           
           {/* Left Column: Image Showcase */}
           <div className="lg:col-span-6 flex gap-[8px] w-full">
@@ -240,7 +240,7 @@ export default function AccessoryDetailClient({
                     key={idx}
                     onClick={() => setActiveImage(thumb)}
                     className={`aspect-square w-full relative overflow-hidden rounded-[4px] border transition-all duration-200 cursor-pointer bg-white
-                      ${(activeImage || accessory.images[0]) === thumb ? "border-2 border-[#0562D2] shadow-sm" : "border-gray-200 hover:border-gray-300"}`}
+                      ${(activeImage || accessory.images[0]) === thumb ? "border-2 border-[#066fef] shadow-xs" : "border-gray-200 hover:border-gray-300"}`}
                   >
                     <Image
                       src={thumb}
@@ -255,7 +255,7 @@ export default function AccessoryDetailClient({
               </div>
             )}
 
-            <div className="flex-1 aspect-square relative overflow-hidden rounded-[8px] border border-gray-100 bg-white">
+            <div className="flex-1 aspect-square relative overflow-hidden rounded-none border border-gray-100 bg-white">
               <Image
                 src={activeImage || accessory.images[0] || "/assets/images/placeholder_car.png"}
                 alt={accessory.name}
@@ -273,43 +273,43 @@ export default function AccessoryDetailClient({
             <div className="flex flex-col gap-[32px] items-start w-full">
               <div className="flex flex-col gap-[8px] items-start w-full">
                 {accessory.brand && (
-                  <span className="text-[12px] font-bold uppercase tracking-wider text-[#0562D2] bg-[#0562D2]/10 px-3 py-1 rounded-full font-sans mb-1">
+                  <span className="text-[12px] font-bold uppercase tracking-wider text-[#066fef] bg-[#066fef]/10 px-3 py-1 rounded-[4px] font-antenna mb-1">
                     Thương hiệu: {accessory.brand.title}
                   </span>
                 )}
-                <h1 className="font-['Ford_Antenna',sans-serif] font-semibold text-[28px] text-[#101828] leading-[1.2] w-full">
+                <h1 className="font-display font-bold text-[28px] text-[#101828] leading-[1.2] w-full uppercase tracking-tight">
                   {accessory.name}
                 </h1>
-                <p className="font-['Ford_Antenna',sans-serif] font-normal text-[12px] text-[#1d2939] leading-[1.5]">
+                <p className="font-antenna font-normal text-[12px] text-gray-550 leading-[1.5]">
                   Mã sản phẩm: {accessory.code}
                 </p>
               </div>
 
               <p 
-                className="font-['Ford_Antenna',sans-serif] font-normal text-[16px] text-[#1d2939] leading-[1.5]"
+                className="font-antenna font-normal text-[16px] text-[#1d2939] leading-[1.5]"
                 dangerouslySetInnerHTML={{ __html: accessory.description }}
               />
 
-              <div className="flex flex-col gap-[12px] w-full">
-                <div className="font-['Ford_Antenna',sans-serif] font-semibold text-[22px] text-[#344054] leading-[1.45]">
+              <div className="flex flex-col gap-[12px] w-full font-antenna">
+                <div className="font-display font-bold text-[22px] text-[#066fef] leading-[1.45]">
                   {formatPrice(accessory.price)}
                 </div>
                 
                 <div className="flex gap-[8px] items-start w-full">
-                  <div className="bg-white border border-[#d6d6d6] rounded-[800px] flex gap-[8px] h-[51px] items-center justify-center px-[16px] py-[12px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] w-[140px] shrink-0">
+                  <div className="bg-white border border-[#d6d6d6] rounded-[4px] flex gap-[8px] h-[51px] items-center justify-center px-[16px] py-[12px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] w-[140px] shrink-0">
                     <button
                       disabled={quantity <= 1}
                       onClick={() => setQuantity(prev => Math.max(1, prev - 1))}
-                      className="disabled:opacity-30 cursor-pointer border-0 bg-transparent p-1 hover:text-[#0562D2] transition-colors"
+                      className="disabled:opacity-30 cursor-pointer border-0 bg-transparent p-1 hover:text-[#066fef] transition-colors"
                     >
                       <Minus className="w-[20px] h-[20px] text-gray-600" />
                     </button>
-                    <span className="font-['Ford_Antenna',sans-serif] font-semibold text-[#424242] text-[18px] w-[40px] text-center">
+                    <span className="font-antenna font-semibold text-[#424242] text-[18px] w-[40px] text-center">
                       {quantity}
                     </span>
                     <button
                       onClick={() => setQuantity(prev => prev + 1)}
-                      className="cursor-pointer border-0 bg-transparent p-1 hover:text-[#0562D2] transition-colors"
+                      className="cursor-pointer border-0 bg-transparent p-1 hover:text-[#066fef] transition-colors"
                     >
                       <Plus className="w-[20px] h-[20px] text-gray-600" />
                     </button>
@@ -317,7 +317,7 @@ export default function AccessoryDetailClient({
 
                   <button
                     onClick={() => setShowBookingModal(true)}
-                    className="bg-[#0562d2] border border-[#0562d2] text-white rounded-[800px] flex flex-[1_0_0] gap-[8px] items-center justify-center px-[28px] py-[12px] h-[51px] font-['Ford_Antenna',sans-serif] font-semibold text-[18px] hover:bg-[#044ea7] transition-colors duration-200 cursor-pointer shadow-sm"
+                    className="bg-[#066fef] border border-[#066fef] text-white rounded-[4px] flex flex-[1_0_0] gap-[8px] items-center justify-center px-[28px] py-[12px] h-[51px] font-antenna font-bold text-[14px] hover:bg-[#01095c] transition-colors duration-200 cursor-pointer shadow-xs uppercase tracking-wider"
                   >
                     <Phone className="w-[20px] h-[20px]" />
                     <span>Liên hệ ngay</span>
@@ -325,8 +325,8 @@ export default function AccessoryDetailClient({
                 </div>
               </div>
 
-              <div className="flex items-center gap-[16px]">
-                <span className="font-['Ford_Antenna',sans-serif] font-normal text-[14px] text-[#1d2939] leading-[1.4]">
+              <div className="flex items-center gap-[16px] font-antenna">
+                <span className="font-antenna font-normal text-[14px] text-gray-500 leading-[1.4]">
                   Chia sẻ
                 </span>
                 <div className="flex gap-[20px] items-center">
@@ -334,7 +334,7 @@ export default function AccessoryDetailClient({
                     href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`} 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    className="p-0.5 text-gray-600 hover:text-[#0562D2] transition-colors flex items-center justify-center" 
+                    className="p-0.5 text-gray-650 hover:text-[#066fef] transition-colors flex items-center justify-center" 
                     title="Chia sẻ Facebook"
                   >
                     <svg className="w-[22px] h-[22px] fill-current" viewBox="0 0 24 24">
@@ -345,14 +345,14 @@ export default function AccessoryDetailClient({
                     href={`https://zalo.me/share?url=${encodeURIComponent(shareUrl)}`} 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    className="p-0.5 text-gray-600 hover:text-[#0562D2] transition-colors flex items-center justify-center" 
+                    className="p-0.5 text-gray-650 hover:text-[#066fef] transition-colors flex items-center justify-center" 
                     title="Chia sẻ Zalo"
                   >
                     <MessageCircle className="w-[22px] h-[22px]" />
                   </a>
                   <button 
                     onClick={handleCopyLink}
-                    className="p-0.5 text-gray-600 hover:text-[#0562D2] transition-colors flex items-center justify-center bg-transparent border-0 cursor-pointer"
+                    className="p-0.5 text-gray-650 hover:text-[#066fef] transition-colors flex items-center justify-center bg-transparent border-0 cursor-pointer"
                     title="Sao chép liên kết"
                   >
                     {copied ? (
@@ -364,22 +364,22 @@ export default function AccessoryDetailClient({
                 </div>
               </div>
 
-              <div className="border border-[#d6d6d6] p-[12px] rounded-[12px] flex flex-col gap-[8px] w-full">
+              <div className="border border-gray-200 p-[12px] rounded-none flex flex-col gap-[8px] w-full font-antenna">
                 <div className="flex gap-[8px] items-start w-full">
-                  <Check className="w-[20px] h-[20px] text-[#0562D2] shrink-0 mt-0.5" />
-                  <p className="font-['Ford_Antenna',sans-serif] font-normal text-[14px] text-[#1d2939] leading-[1.4]">
+                  <Check className="w-[20px] h-[20px] text-[#066fef] shrink-0 mt-0.5" />
+                  <p className="font-antenna font-normal text-[14px] text-[#1d2939] leading-[1.4]">
                     Khách hàng thân thiết nhận thêm 10% giảm giá cho lần mua tiếp theo.
                   </p>
                 </div>
                 <div className="flex gap-[8px] items-start w-full">
-                  <Check className="w-[20px] h-[20px] text-[#0562D2] shrink-0 mt-0.5" />
-                  <p className="font-['Ford_Antenna',sans-serif] font-normal text-[14px] text-[#1d2939] leading-[1.4]">
+                  <Check className="w-[20px] h-[20px] text-[#066fef] shrink-0 mt-0.5" />
+                  <p className="font-antenna font-normal text-[14px] text-[#1d2939] leading-[1.4]">
                     Đổi trả sản phẩm trong vòng 30 ngày nếu không hài lòng.
                   </p>
                 </div>
                 <div className="flex gap-[8px] items-start w-full">
-                  <Check className="w-[20px] h-[20px] text-[#0562D2] shrink-0 mt-0.5" />
-                  <p className="font-['Ford_Antenna',sans-serif] font-normal text-[14px] text-[#1d2939] leading-[1.4]">
+                  <Check className="w-[20px] h-[20px] text-[#066fef] shrink-0 mt-0.5" />
+                  <p className="font-antenna font-normal text-[14px] text-[#1d2939] leading-[1.4]">
                     Tặng kèm quà nhỏ cho mỗi đơn hàng trên 1.000.000 VNĐ.
                   </p>
                 </div>
@@ -396,12 +396,12 @@ export default function AccessoryDetailClient({
                   .map((acc) => {
                     const isOpen = activeAccordion === acc.id;
                     return (
-                      <div key={acc.id} className="border-b border-[#d6d6d6] py-[24px] flex flex-col gap-[16px] w-full">
+                      <div key={acc.id} className="border-b border-gray-200 py-[24px] flex flex-col gap-[16px] w-full">
                         <button
                           onClick={() => setActiveAccordion(isOpen ? "" : acc.id)}
-                          className="w-full flex justify-between items-center text-left cursor-pointer border-0 bg-transparent"
+                          className="w-full flex justify-between items-center text-left cursor-pointer border-0 bg-transparent font-antenna"
                         >
-                          <span className={`font-['Ford_Antenna',sans-serif] font-semibold text-[16px] ${isOpen ? "text-[#0562D2]" : "text-[#1a1a1a]"}`}>
+                          <span className={`font-display font-semibold text-[16px] uppercase tracking-wide ${isOpen ? "text-[#066fef]" : "text-[#1a1a1a]"}`}>
                             {acc.label}
                           </span>
                           <span className="text-[24px] font-medium leading-none text-[#1a1a1a]">
@@ -410,7 +410,7 @@ export default function AccessoryDetailClient({
                         </button>
                         {isOpen && (
                           <div 
-                            className="font-['Ford_Antenna',sans-serif] font-normal text-[16px] text-[#333] leading-[1.5] rich-text-content"
+                            className="font-antenna font-normal text-[16px] text-[#333] leading-[1.5] rich-text-content"
                             dangerouslySetInnerHTML={{ __html: acc.text || "" }}
                           />
                         )}
@@ -424,20 +424,20 @@ export default function AccessoryDetailClient({
       </div>
 
       {/* Related Accessories Section */}
-      <section className="bg-[#f0f0f0] border-t border-[#e5e5e5] py-[64px]">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full flex flex-col gap-[32px]">
+      <section className="bg-[#f0f0f0] border-t border-[#e5e5e5] py-[64px] w-full flex justify-center">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full flex flex-col gap-[32px]">
           <div className="flex flex-col items-start">
-            <h3 className="font-['Ford_Antenna',sans-serif] font-semibold text-[32px] text-[#1a1a1a] leading-[1.2]">
+            <h3 className="font-display font-bold text-[32px] text-[#1a1a1a] leading-[1.2] uppercase tracking-wide">
               Phụ kiện liên quan
             </h3>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-[24px] w-full">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-[24px] w-full font-antenna">
             {relatedAccessories.map((item) => (
               <Link
                 key={item.id}
                 href={`/phu-kien/${item.id}`}
-                className="group bg-white flex flex-col h-full rounded-[8px] overflow-hidden border border-transparent hover:border-[#0562D2] hover:shadow-lg transition-all duration-300"
+                className="group bg-white flex flex-col h-full rounded-none overflow-hidden border border-gray-200 hover:border-[#066fef]/55 hover:shadow-xs transition-all duration-300"
               >
                 <div className="aspect-square relative bg-gray-50 overflow-hidden">
                   <Image
@@ -452,15 +452,15 @@ export default function AccessoryDetailClient({
                 <div className="px-[16px] py-[12px] flex flex-col gap-[4px] items-center text-center flex-1 justify-between">
                   <div className="flex flex-col items-center gap-[4px]">
                     {item.brand && (
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#0562D2] bg-[#0562D2]/10 px-2.5 py-0.5 rounded-full font-sans mb-1">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#066fef] bg-[#066fef]/10 px-2.5 py-0.5 rounded-[4px] font-antenna mb-1">
                         {item.brand.title}
                       </span>
                     )}
-                    <h4 className="font-['Ford_Antenna',sans-serif] font-semibold text-[16px] text-[#1a1a1a] group-hover:text-[#0562D2] transition-colors leading-[1.5] line-clamp-2">
+                    <h4 className="font-display font-bold text-[16px] text-[#1a1a1a] group-hover:text-[#066fef] transition-colors leading-[1.5] line-clamp-2 uppercase">
                       {item.name}
                     </h4>
                   </div>
-                  <p className="font-['Ford_Antenna',sans-serif] font-medium text-[14px] text-[#0562d2] mt-auto leading-[1.4]">
+                  <p className="font-antenna font-medium text-[14px] text-[#066fef] mt-auto leading-[1.4]">
                     {formatPrice(item.price)}
                   </p>
                 </div>
@@ -473,12 +473,12 @@ export default function AccessoryDetailClient({
       {/* Booking Form Modal Overlay */}
       {showBookingModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg w-full max-w-[500px] max-h-[95vh] overflow-y-auto shadow-2xl relative">
+          <div className="bg-white rounded-none w-full max-w-[500px] max-h-[95vh] overflow-y-auto shadow-2xl relative">
             <div className="bg-[#00095b] text-white p-6 relative">
               <h3 className="text-lg font-bold uppercase tracking-wide font-display">
                 Đăng Ký Tư Vấn & Lắp Đặt
               </h3>
-              <p className="text-xs text-white/70 mt-1">
+              <p className="text-xs text-white/70 mt-1 font-antenna">
                 Sản phẩm: <span className="text-white font-bold">{accessory.name}</span>
               </p>
               <button 
@@ -491,17 +491,17 @@ export default function AccessoryDetailClient({
 
             <div className="p-6">
               {isSubmitted ? (
-                <div className="py-12 text-center space-y-4">
-                  <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
+                <div className="py-12 text-center space-y-4 font-antenna">
+                  <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-[4px] flex items-center justify-center mx-auto">
                     <Check className="w-8 h-8" />
                   </div>
                   <h4 className="text-base font-bold text-gray-900">Gửi yêu cầu thành công!</h4>
-                  <p className="text-xs text-gray-500">Đại lý Đồng Nai Ford sẽ gọi điện tư vấn và hẹn lịch lắp đặt cho bạn trong 15 phút.</p>
+                  <p className="text-xs text-gray-500">Đại lý Long Khánh Ford sẽ gọi điện tư vấn và hẹn lịch lắp đặt cho bạn trong 15 phút.</p>
                 </div>
               ) : (
                 <form onSubmit={handleBookingSubmit} className="space-y-4">
                   {errorMessage && (
-                    <div className="bg-red-50 border border-red-200 text-red-600 p-3 rounded-sm text-xs text-center font-semibold">
+                    <div className="bg-red-50 border border-red-200 text-red-600 p-3 rounded-[4px] text-xs text-center font-semibold">
                       {errorMessage}
                     </div>
                   )}
@@ -514,7 +514,7 @@ export default function AccessoryDetailClient({
                       onChange={handleInputChange}
                       required
                       placeholder="Nguyễn Văn A"
-                      className="w-full px-4 py-2.5 rounded-sm border border-gray-200 text-xs focus:outline-none focus:border-[#0562D2] bg-white text-black"
+                      className="w-full px-4 py-2.5 rounded-[4px] border border-gray-200 text-xs focus:outline-none focus:border-[#066fef] bg-white text-black"
                     />
                   </div>
 
@@ -527,7 +527,7 @@ export default function AccessoryDetailClient({
                       onChange={handleInputChange}
                       required
                       placeholder="0918xxxxxx"
-                      className="w-full px-4 py-2.5 rounded-sm border border-gray-200 text-xs focus:outline-none focus:border-[#0562D2] bg-white text-black"
+                      className="w-full px-4 py-2.5 rounded-[4px] border border-gray-200 text-xs focus:outline-none focus:border-[#066fef] bg-white text-black"
                     />
                   </div>
 
@@ -537,7 +537,7 @@ export default function AccessoryDetailClient({
                       name="carModel"
                       value={bookingForm.carModel}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-2.5 rounded-sm border border-gray-200 text-xs bg-white focus:outline-none focus:border-[#0562D2] cursor-pointer text-black"
+                      className="w-full px-4 py-2.5 rounded-[4px] border border-gray-200 text-xs bg-white focus:outline-none focus:border-[#066fef] cursor-pointer text-black"
                     >
                       <option value="Ford Everest">Ford Everest</option>
                       <option value="Ford Territory">Ford Territory</option>
@@ -557,7 +557,7 @@ export default function AccessoryDetailClient({
                       value={bookingForm.date}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-2.5 rounded-sm border border-gray-200 text-xs focus:outline-none focus:border-[#0562D2] bg-white text-black"
+                      className="w-full px-4 py-2.5 rounded-[4px] border border-gray-200 text-xs focus:outline-none focus:border-[#066fef] bg-white text-black"
                     />
                   </div>
 
@@ -569,14 +569,14 @@ export default function AccessoryDetailClient({
                       onChange={handleInputChange}
                       rows={3}
                       placeholder="Số lượng, màu sắc hoặc yêu cầu kỹ thuật đặc biệt..."
-                      className="w-full px-4 py-2.5 rounded-sm border border-gray-200 text-xs focus:outline-none focus:border-[#0562D2] bg-white resize-none text-black"
+                      className="w-full px-4 py-2.5 rounded-[4px] border border-gray-200 text-xs focus:outline-none focus:border-[#066fef] bg-white resize-none text-black"
                     />
                   </div>
 
                   <button 
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full bg-[#0562d2] hover:bg-[#044EA7] disabled:bg-gray-400 text-white py-3 rounded-sm font-bold uppercase text-xs tracking-wider transition-colors cursor-pointer border-0 mt-2"
+                    className="w-full bg-[#066fef] hover:bg-[#01095c] disabled:bg-gray-400 text-white py-3 rounded-[4px] font-bold uppercase text-xs tracking-wider transition-colors cursor-pointer border-0 mt-2 font-antenna"
                   >
                     {isSubmitting ? "Đang gửi..." : "Gửi yêu cầu tư vấn"}
                   </button>

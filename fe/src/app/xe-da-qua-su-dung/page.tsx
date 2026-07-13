@@ -84,37 +84,31 @@ export default function UsedVehiclesPage() {
   const hasActiveFilters = searchTerm !== "" || priceFilter !== null;
 
   return (
-    <div className="bg-[#f9fafb] min-h-screen font-sans pb-20">
-      {/* Breadcrumbs */}
-      <div className="bg-white border-b border-gray-200 py-4">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px]">
-          <div className="text-xs text-gray-500 font-medium flex items-center gap-1.5">
-            <Link href="/" className="hover:text-[#0562d2] transition-colors">
+    <div className="bg-[#F8F8F8] min-h-screen font-sans pb-20 w-full flex flex-col items-center">
+      {/* Hero Banner Section */}
+      <section className="relative w-full bg-gradient-to-br from-neutral-900 to-[#01095c] text-white pt-28 pb-16 md:pb-24 overflow-hidden">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] relative z-10">
+          {/* Breadcrumb inside Hero */}
+          <div className="text-xs text-white/60 font-medium flex items-center gap-1.5 mb-6">
+            <Link href="/" className="hover:text-white transition-colors">
               Trang chủ
             </Link>
-            <ChevronRight className="w-3 h-3 text-gray-400" />
-            <span className="text-gray-900 font-semibold">Xe đã qua sử dụng</span>
+            <span>/</span>
+            <span className="text-white">Xe đã qua sử dụng</span>
           </div>
-        </div>
-      </div>
-
-      {/* Hero Banner Section */}
-      <section className="bg-gradient-to-br from-[#0B192C] via-[#1E3E62] to-[#000000] text-white py-16 md:py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.05),transparent_75%)] pointer-events-none" />
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] relative z-10">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-semibold mb-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-[4px] bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-semibold mb-6 uppercase tracking-wider">
               <ShieldCheck className="w-4 h-4" />
               <span>Đại lý chính hãng Ford Assured</span>
             </div>
-            <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight uppercase font-sans mb-6">
+            <h1 className="text-3xl md:text-5xl font-bold tracking-tight uppercase leading-tight font-antenna mb-6">
               Xe đã qua sử dụng chất lượng cao
             </h1>
-            <p className="text-gray-300 text-sm md:text-base leading-relaxed mb-8">
-              Mỗi chiếc xe đã qua sử dụng tại Đồng Nai Ford đều được kiểm duyệt nghiêm ngặt qua quy trình 167 điểm của Ford toàn cầu, đảm bảo chất lượng tối ưu, pháp lý minh bạch và chế độ bảo hành dài hạn.
+            <p className="text-white/80 text-sm md:text-base leading-relaxed mb-8 font-antenna">
+              Mỗi chiếc xe đã qua sử dụng tại Long Khánh Ford đều được kiểm duyệt nghiêm ngặt qua quy trình 167 điểm của Ford toàn cầu, đảm bảo chất lượng tối ưu, pháp lý minh bạch và chế độ bảo hành dài hạn.
             </p>
             <div className="flex flex-wrap gap-4">
-              <a href="tel:090" className="inline-flex items-center gap-2 bg-[#0562d2] hover:bg-[#044eb0] text-white text-sm font-bold px-6 py-3 rounded-xl transition-all shadow-md shadow-blue-900/30">
+              <a href="tel:0918909060" className="inline-flex items-center gap-2 bg-[#066fef] hover:bg-[#01095c] text-white text-xs font-bold px-6 py-3.5 rounded-[4px] transition-all shadow-md uppercase tracking-wider">
                 <PhoneCall className="w-4 h-4" />
                 Hotline Tư vấn
               </a>
@@ -124,10 +118,10 @@ export default function UsedVehiclesPage() {
       </section>
 
       {/* Search and Filters */}
-      <section className="py-10">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px]">
+      <section className="py-10 w-full">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px]">
           
-          <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm mb-10 flex flex-wrap items-center justify-between gap-6">
+          <div className="bg-white border border-gray-200 rounded-none p-6 shadow-xs mb-10 flex flex-wrap items-center justify-between gap-6">
             
             {/* Search Input */}
             <div className="flex-1 min-w-[280px] relative">
@@ -136,7 +130,7 @@ export default function UsedVehiclesPage() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Tìm kiếm mẫu xe, từ khóa..."
-                className="w-full text-sm bg-gray-50 border border-gray-200 rounded-xl py-3 pl-11 pr-10 focus:outline-none focus:border-[#0562d2] focus:bg-white transition-all text-black"
+                className="w-full text-sm bg-gray-50 border border-gray-250 rounded-[8px] py-3 pl-11 pr-10 focus:outline-none focus:border-[#066fef] focus:bg-white transition-all text-black font-antenna"
               />
               <Search className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
               {searchTerm && (
@@ -151,7 +145,7 @@ export default function UsedVehiclesPage() {
 
             {/* Price Filter */}
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-xs font-bold text-gray-500 uppercase tracking-wider mr-2">Mức giá:</span>
+              <span className="text-xs font-bold text-gray-500 uppercase tracking-wider mr-2 font-antenna">Mức giá:</span>
               {[
                 { slug: null, label: "Tất cả" },
                 { slug: "under-800", label: "Dưới 800 Tr" },
@@ -163,10 +157,10 @@ export default function UsedVehiclesPage() {
                   <button
                     key={item.label}
                     onClick={() => setPriceFilter(item.slug)}
-                    className={`px-4 py-2 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
+                    className={`px-4 py-2 rounded-[4px] text-xs font-bold border transition-all cursor-pointer uppercase tracking-wider ${
                       isSelected 
-                        ? "bg-[#0562d2] border-[#0562d2] text-white shadow-sm" 
-                        : "bg-white border-gray-200 text-gray-700 hover:bg-gray-50"
+                        ? "bg-[#066fef] border-[#066fef] text-white shadow-xs" 
+                        : "bg-white border-gray-200 text-gray-700 hover:bg-gray-50 hover:text-black"
                     }`}
                   >
                     {item.label}
@@ -177,11 +171,11 @@ export default function UsedVehiclesPage() {
 
             {/* Sort Options */}
             <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-gray-500 uppercase tracking-wider whitespace-nowrap">Sắp xếp:</span>
+              <span className="text-xs font-bold text-gray-500 uppercase tracking-wider whitespace-nowrap font-antenna">Sắp xếp:</span>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="bg-white border border-gray-200 text-xs font-semibold text-gray-800 py-2.5 px-4 rounded-xl focus:outline-none focus:border-[#0562d2] cursor-pointer shadow-xs"
+                className="bg-white border border-gray-200 text-xs font-semibold text-gray-800 py-2.5 px-4 rounded-[8px] focus:outline-none focus:border-[#066fef] cursor-pointer shadow-xs font-antenna"
               >
                 <option value="featured">Sắp xếp mặc định</option>
                 <option value="price-asc">Giá: Thấp đến Cao</option>
@@ -194,9 +188,9 @@ export default function UsedVehiclesPage() {
           {/* Active Filter Tags */}
           {hasActiveFilters && (
             <div className="flex items-center gap-2 flex-wrap mb-8">
-              <span className="text-xs text-gray-500">Bộ lọc đang kích hoạt:</span>
+              <span className="text-xs text-gray-500 font-antenna">Bộ lọc đang kích hoạt:</span>
               {searchTerm && (
-                <span className="inline-flex items-center gap-1 text-xs bg-blue-50 text-blue-700 px-3 py-1 rounded-full border border-blue-100 font-medium">
+                <span className="inline-flex items-center gap-1 text-xs bg-[#066fef]/10 text-[#066fef] px-3 py-1 rounded-[4px] border border-[#066fef]/20 font-semibold font-antenna">
                   Từ khóa: &quot;{searchTerm}&quot;
                   <button onClick={() => setSearchTerm("")} className="hover:text-blue-900 border-0 bg-transparent p-0 cursor-pointer">
                     <X className="w-3 h-3 ml-0.5" />
@@ -204,7 +198,7 @@ export default function UsedVehiclesPage() {
                 </span>
               )}
               {priceFilter && (
-                <span className="inline-flex items-center gap-1 text-xs bg-blue-50 text-blue-700 px-3 py-1 rounded-full border border-blue-100 font-medium">
+                <span className="inline-flex items-center gap-1 text-xs bg-[#066fef]/10 text-[#066fef] px-3 py-1 rounded-[4px] border border-[#066fef]/20 font-semibold font-antenna">
                   Khoảng giá: {priceFilter === "under-800" ? "Dưới 800 triệu" : priceFilter === "800-1200" ? "800 triệu - 1.2 tỷ" : "Trên 1.2 tỷ"}
                   <button onClick={() => setPriceFilter(null)} className="hover:text-blue-900 border-0 bg-transparent p-0 cursor-pointer">
                     <X className="w-3 h-3 ml-0.5" />
@@ -213,7 +207,7 @@ export default function UsedVehiclesPage() {
               )}
               <button 
                 onClick={clearFilters}
-                className="text-xs font-semibold text-red-500 hover:text-red-700 ml-2 border-0 bg-transparent cursor-pointer flex items-center gap-1"
+                className="text-xs font-semibold text-[#D20000] hover:text-red-755 ml-2 border-0 bg-transparent cursor-pointer flex items-center gap-1"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 Xóa tất cả
@@ -225,7 +219,7 @@ export default function UsedVehiclesPage() {
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[1, 2, 3].map((n) => (
-                <div key={n} className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm animate-pulse h-[400px]">
+                <div key={n} className="bg-white rounded-none overflow-hidden border border-gray-200 shadow-xs animate-pulse h-[400px]">
                   <div className="bg-gray-200 h-[220px]" />
                   <div className="p-6 space-y-4">
                     <div className="h-4 bg-gray-200 rounded w-2/3" />
@@ -236,17 +230,17 @@ export default function UsedVehiclesPage() {
               ))}
             </div>
           ) : sortedVehicles.length === 0 ? (
-            <div className="bg-white border border-gray-100 rounded-3xl p-16 text-center shadow-sm max-w-xl mx-auto mt-10">
-              <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
+            <div className="bg-white border border-gray-200 rounded-none p-16 text-center shadow-xs max-w-xl mx-auto mt-10">
+              <div className="w-16 h-16 bg-gray-50 rounded-[4px] flex items-center justify-center mx-auto mb-6">
                 <SlidersHorizontal className="w-8 h-8 text-gray-400" />
               </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2">Không tìm thấy xe phù hợp</h3>
-              <p className="text-gray-500 text-sm mb-6 leading-relaxed">
+              <h3 className="text-lg font-bold text-gray-900 mb-2 font-display">Không tìm thấy xe phù hợp</h3>
+              <p className="text-gray-500 text-sm mb-6 leading-relaxed font-antenna">
                 Rất tiếc, các bộ lọc hiện tại của bạn không khớp với bất kỳ chiếc xe đã qua sử dụng nào. Hãy thử xóa bớt tiêu chí lọc hoặc tìm kiếm lại.
               </p>
               <button 
                 onClick={clearFilters}
-                className="bg-gray-900 hover:bg-gray-800 text-white text-xs font-bold px-6 py-3 rounded-xl transition-all cursor-pointer"
+                className="bg-[#066fef] hover:bg-[#01095c] text-white text-xs font-bold px-6 py-3 rounded-[4px] transition-all cursor-pointer uppercase tracking-wider"
               >
                 Xóa bộ lọc và xem tất cả
               </button>
@@ -261,10 +255,10 @@ export default function UsedVehiclesPage() {
                 return (
                   <div 
                     key={vehicle.id} 
-                    className="group bg-white border border-gray-200/60 hover:border-blue-500/30 rounded-2xl overflow-hidden shadow-xs hover:shadow-lg transition-all duration-300 flex flex-col h-full"
+                    className="group bg-white border border-gray-200 hover:border-[#066fef]/55 rounded-none overflow-hidden shadow-xs hover:shadow-sm transition-all duration-300 flex flex-col h-full"
                   >
                     {/* Image Area */}
-                    <div className="relative h-[220px] bg-white overflow-hidden flex items-center justify-center border-b border-gray-100">
+                    <div className="relative h-[220px] bg-white overflow-hidden flex items-center justify-center border-b border-gray-150">
                       <Image 
                         src={vehicle.image_url || "/assets/images/placeholder_car.png"} 
                         alt={vehicle.title}
@@ -274,29 +268,29 @@ export default function UsedVehiclesPage() {
                       />
                       
                       {/* Assured Badge */}
-                      <div className="absolute top-4 left-4 bg-[#0562d2]/90 backdrop-blur-xs text-white text-[10px] font-bold uppercase tracking-wider py-1.5 px-3 rounded-lg shadow-sm flex items-center gap-1 z-10">
+                      <div className="absolute top-4 left-4 bg-[#066fef]/90 backdrop-blur-xs text-white text-[9px] font-bold uppercase tracking-wider py-1.5 px-3 rounded-[4px] shadow-xs flex items-center gap-1 z-10 font-antenna">
                         <ShieldCheck className="w-3.5 h-3.5" />
                         <span>Ford Assured</span>
                       </div>
                     </div>
 
                     {/* Info Area */}
-                    <div className="p-6 flex-1 flex flex-col justify-between">
+                    <div className="p-6 flex-1 flex flex-col justify-between font-antenna">
                       <div>
                         {/* Highlights (odo, year) */}
                         <div className="flex items-center gap-4 text-xs text-gray-500 font-medium mb-3">
                           <span className="flex items-center gap-1">
-                            <Calendar className="w-3.5 h-3.5 text-[#0562d2]" />
+                            <Calendar className="w-3.5 h-3.5 text-[#066fef]" />
                             Đời {year}
                           </span>
                           <span className="flex items-center gap-1">
-                            <Gauge className="w-3.5 h-3.5 text-[#0562d2]" />
+                            <Gauge className="w-3.5 h-3.5 text-[#066fef]" />
                             {odo}
                           </span>
                         </div>
 
                         {/* Title */}
-                        <h3 className="text-base font-bold text-gray-900 mb-2 group-hover:text-[#0562d2] transition-colors leading-snug">
+                        <h3 className="text-base font-bold text-gray-900 mb-2 group-hover:text-[#066fef] transition-colors leading-snug font-display">
                           {vehicle.title}
                         </h3>
 
@@ -311,13 +305,13 @@ export default function UsedVehiclesPage() {
                         <div className="border-t border-gray-100 pt-4 flex items-center justify-between">
                           <div>
                             <span className="text-[10px] font-bold text-gray-400 uppercase block tracking-wider mb-0.5">Giá ưu đãi</span>
-                            <span className="text-lg font-bold text-red-600">
+                            <span className="text-lg font-bold text-[#D20000]">
                               {formatPrice(vehicle.price)}
                             </span>
                           </div>
                           <Link 
                             href={`/xe-da-qua-su-dung/${vehicle.slug}`}
-                            className="bg-gray-950 hover:bg-[#0562d2] text-white text-xs font-bold py-2.5 px-5 rounded-xl transition-all shadow-xs"
+                            className="bg-gray-950 hover:bg-[#066fef] text-white text-[11px] font-bold py-2.5 px-5 rounded-[4px] transition-all shadow-xs uppercase tracking-wider"
                           >
                             Xem chi tiết
                           </Link>

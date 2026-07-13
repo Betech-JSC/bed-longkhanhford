@@ -112,7 +112,7 @@ export default function VehicleDetailClient() {
             type: "Promotions",
             data: {
               title: `Ưu Đãi Đặc Biệt Cho Xe ${vehicle.name}`,
-              description: `Nhận ngay ưu đãi giá bán tốt nhất, quà tặng đặc quyền và hỗ trợ trả góp ưu đãi khi mua xe ${vehicle.name} tại Đồng Nai Ford.`,
+              description: `Nhận ngay ưu đãi giá bán tốt nhất, quà tặng đặc quyền và hỗ trợ trả góp ưu đãi khi mua xe ${vehicle.name} tại Long Khánh Ford.`,
               image: vehicle.images?.[1] || vehicle.images?.[0] || "/assets/img-gradient-2.png",
               button_text: "Báo giá"
             }
@@ -153,7 +153,7 @@ export default function VehicleDetailClient() {
             data: {
               title: "Câu hỏi thường gặp",
               faqs: [
-                { q: "Điều gì tạo nên sự nổi bật của showroom Đồng Nai Ford?", a: "Đồng Nai Ford được đầu ty quy mô về trang thiết bị hiện đại, đội ngũ kỹ thuật tay nghề cao, được đào tạo chuyên nghiệp từ Ford Motor." },
+                { q: "Điều gì tạo nên sự nổi bật của showroom Long Khánh Ford?", a: "Long Khánh Ford được đầu ty quy mô về trang thiết bị hiện đại, đội ngũ kỹ thuật tay nghề cao, được đào tạo chuyên nghiệp từ Ford Motor." },
                 { q: "Có hỗ trợ mua xe trả góp không?", a: "Có, đại lý hỗ trợ trả góp lên đến 80% giá trị xe với lãi suất ưu đãi và thủ tục nhanh gọn." }
               ]
             }
@@ -161,7 +161,7 @@ export default function VehicleDetailClient() {
           {
             type: "BookingBanner",
             data: {
-              title: "Kết nối ngay với chuyên viên Đồng Nai Ford",
+              title: "Kết nối ngay với chuyên viên Long Khánh Ford",
               phone: "1800 55 68 58",
               btn_text: "Đặt lịch hẹn",
               btn_link: "/lien-he",

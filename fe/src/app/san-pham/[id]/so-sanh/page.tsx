@@ -16,8 +16,8 @@ export async function generateMetadata({ params }: Props) {
 
     if (!vehicle) return {};
 
-    const title = `Thông số kỹ thuật & So sánh xe Ford ${vehicle.title} | Đồng Nai Ford`;
-    const description = `Chi tiết bảng thông số kỹ thuật xe Ford ${vehicle.title}, so sánh trang bị giữa các phiên bản. Nhận báo giá lăn bánh mới nhất tại Đồng Nai Ford.`;
+    const title = `Thông số kỹ thuật & So sánh xe Ford ${vehicle.title} | Long Khánh Ford`;
+    const description = `Chi tiết bảng thông số kỹ thuật xe Ford ${vehicle.title}, so sánh trang bị giữa các phiên bản. Nhận báo giá lăn bánh mới nhất tại Long Khánh Ford.`;
 
     return {
       title,

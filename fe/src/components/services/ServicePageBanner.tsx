@@ -40,7 +40,7 @@ export default function ServicePageBanner({
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
       </div>
 
-      <div className="max-w-[1440px] w-full mx-auto px-4 lg:px-[128px] relative z-10 flex flex-col items-center gap-6 py-6 text-center">
+      <div className="max-w-[1440px] w-full mx-auto px-4 lg:px-[80px] relative z-10 flex flex-col items-center gap-6 py-6 text-center">
         <h1 className="font-['Ford_Antenna',sans-serif] font-bold text-4xl md:text-5xl text-white tracking-tight">
           {title}
         </h1>

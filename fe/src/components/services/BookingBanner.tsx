@@ -7,14 +7,14 @@ import { siteAssets } from "@/lib/site-assets";
 
 export default function BookingBanner() {
   return (
-    <div className="w-full bg-[#00095b] py-[32px] px-4 md:px-[144px] flex justify-center overflow-visible">
+    <div className="w-full bg-[#00095b] py-[32px] px-4 md:px-[80px] flex justify-center overflow-visible">
       <div className="max-w-[1152px] w-full relative flex items-center overflow-visible">
         {/* Inner Rounded Banner */}
         <div className="w-full lg:w-[913px] bg-gradient-to-r from-[#00095B] via-[#02337A] to-[#0562D2] rounded-[12px] p-8 lg:p-[32px] h-auto lg:h-[320px] flex items-center relative overflow-hidden lg:overflow-visible shadow-xl">
           {/* Content */}
           <div className="flex flex-col gap-6 max-w-full lg:max-w-[505px] relative z-10 text-white">
             <h3 className="text-3xl lg:text-[36px] font-bold font-display leading-[1.32]">
-              Kết nối ngay với chuyên viên Đồng Nai Ford
+              Kết nối ngay với chuyên viên Long Khánh Ford
             </h3>
             <div className="flex flex-col sm:flex-row gap-4">
               <a

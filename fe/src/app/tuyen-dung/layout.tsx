@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Tuyển dụng | Ford Đồng Nai — Cơ hội nghề nghiệp",
+  title: "Tuyển dụng | Ford Long Khánh — Cơ hội nghề nghiệp",
   description:
-    "Tuyển dụng tại Ford Đồng Nai. Tham gia đội ngũ đại lý ủy quyền Ford uy tín nhất tại Đồng Nai với nhiều vị trí hấp dẫn.",
+    "Tuyển dụng tại Ford Long Khánh. Tham gia đội ngũ đại lý ủy quyền Ford uy tín nhất tại Đồng Nai với nhiều vị trí hấp dẫn.",
   openGraph: {
-    title: "Tuyển dụng | Ford Đồng Nai",
+    title: "Tuyển dụng | Ford Long Khánh",
     description:
-      "Tham gia đội ngũ Ford Đồng Nai — môi trường làm việc chuyên nghiệp, phúc lợi hấp dẫn.",
+      "Tham gia đội ngũ Ford Long Khánh — môi trường làm việc chuyên nghiệp, phúc lợi hấp dẫn.",
   },
 };
 

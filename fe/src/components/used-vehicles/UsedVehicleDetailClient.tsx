@@ -210,15 +210,15 @@ export default function UsedVehicleDetailClient({ vehicle }: { vehicle: any }) {
   const odo = vehicle.odo ? `${new Intl.NumberFormat("vi-VN").format(vehicle.odo)} km` : "Đang cập nhật";
 
   return (
-    <div className="bg-[#fafafa] min-h-screen text-[#1a1a1a] font-sans pb-20 w-full">
+    <div className="bg-[#F8F8F8] min-h-screen text-[#1a1a1a] font-sans pb-20 w-full">
       {/* Breadcrumbs */}
-      <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full pt-8 pb-3">
-        <div className="flex flex-wrap items-center gap-2 text-xs text-gray-500 font-medium">
-          <Link href="/" className="hover:text-[#0562D2] transition-colors">
+      <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full pt-8 pb-3">
+        <div className="flex flex-wrap items-center gap-2 text-xs text-gray-500 font-medium font-antenna">
+          <Link href="/" className="hover:text-[#066fef] transition-colors">
             Trang chủ
           </Link>
           <ChevronRight className="w-3 h-3 text-gray-400" />
-          <Link href="/xe-da-qua-su-dung" className="hover:text-[#0562D2] transition-colors">
+          <Link href="/xe-da-qua-su-dung" className="hover:text-[#066fef] transition-colors">
             Xe đã qua sử dụng
           </Link>
           <ChevronRight className="w-3 h-3 text-gray-400" />
@@ -229,14 +229,14 @@ export default function UsedVehicleDetailClient({ vehicle }: { vehicle: any }) {
       </div>
 
       {/* Main Core Showcase Columns */}
-      <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full pt-4">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start bg-white rounded-2xl overflow-hidden p-6 md:p-8 border border-gray-100 shadow-xs">
+      <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full pt-4">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start bg-white rounded-none overflow-hidden p-6 md:p-8 border border-gray-200 shadow-xs">
           
           {/* Left Column: Image Showcase */}
           <div className="lg:col-span-7 space-y-4">
             {/* Main Big Image Preview */}
             <div 
-              className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-inner group cursor-zoom-in select-none"
+              className="relative aspect-[16/10] w-full overflow-hidden rounded-none border border-gray-150 bg-white shadow-inner group cursor-zoom-in select-none"
               onClick={() => { if (!hasDraggedRef.current) setShowLightbox(true); }}
               onTouchStart={onTouchStart}
               onTouchMove={onTouchMove}
@@ -260,7 +260,7 @@ export default function UsedVehicleDetailClient({ vehicle }: { vehicle: any }) {
                     onClick={(e) => { e.stopPropagation(); handlePrevImage(); }}
                     onMouseDown={(e) => e.stopPropagation()}
                     onMouseUp={(e) => e.stopPropagation()}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-[#0562D2] text-white p-3 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 border-0 cursor-pointer flex items-center justify-center z-10 hover:scale-105"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-[#066fef] text-white p-3 rounded-[4px] opacity-0 group-hover:opacity-100 transition-all duration-300 border-0 cursor-pointer flex items-center justify-center z-10 hover:scale-105"
                     aria-label="Previous image"
                   >
                     <ChevronRight className="w-5 h-5 rotate-180" />
@@ -269,7 +269,7 @@ export default function UsedVehicleDetailClient({ vehicle }: { vehicle: any }) {
                     onClick={(e) => { e.stopPropagation(); handleNextImage(); }}
                     onMouseDown={(e) => e.stopPropagation()}
                     onMouseUp={(e) => e.stopPropagation()}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-[#0562D2] text-white p-3 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 border-0 cursor-pointer flex items-center justify-center z-10 hover:scale-105"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-[#066fef] text-white p-3 rounded-[4px] opacity-0 group-hover:opacity-100 transition-all duration-300 border-0 cursor-pointer flex items-center justify-center z-10 hover:scale-105"
                     aria-label="Next image"
                   >
                     <ChevronRight className="w-5 h-5" />
@@ -293,8 +293,8 @@ export default function UsedVehicleDetailClient({ vehicle }: { vehicle: any }) {
                     key={idx}
                     onClick={() => setActiveIndex(idx)}
                     onMouseDown={(e) => e.stopPropagation()}
-                    className={`relative w-24 aspect-[16/10] rounded-xl overflow-hidden border-2 transition-all shrink-0 cursor-pointer bg-white
-                      ${activeIndex === idx ? "border-[#0562D2] scale-95 shadow-md" : "border-gray-200 hover:border-gray-300"}`}
+                    className={`relative w-24 aspect-[16/10] rounded-[4px] overflow-hidden border-2 transition-all shrink-0 cursor-pointer bg-white
+                      ${activeIndex === idx ? "border-[#066fef] scale-95 shadow-xs" : "border-gray-200 hover:border-gray-300"}`}
                   >
                     <Image
                       src={thumb}
@@ -312,45 +312,45 @@ export default function UsedVehicleDetailClient({ vehicle }: { vehicle: any }) {
           {/* Right Column: Specs Info panel */}
           <div className="lg:col-span-5 space-y-6">
             
-            <div className="space-y-4">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold border border-blue-100">
+            <div className="space-y-4 font-antenna">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-[4px] bg-[#066fef]/10 text-[#066fef] text-[10px] font-bold border border-[#066fef]/20 uppercase tracking-wider">
                 <ShieldCheck className="w-4 h-4" />
                 <span>Ford Assured Đã Kiểm Định</span>
               </div>
-              <h1 className="font-sans font-bold text-2xl md:text-3xl text-gray-900 leading-tight">
+              <h1 className="font-display font-bold text-2xl md:text-3xl text-gray-900 leading-tight">
                 {vehicle.title}
               </h1>
-              <p className="text-gray-500 text-sm leading-relaxed">
+              <p className="text-gray-550 text-sm leading-relaxed">
                 {vehicle.tagline}
               </p>
             </div>
 
             {/* Odo & Year highlights */}
-            <div className="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-xl border border-gray-100">
+            <div className="grid grid-cols-2 gap-4 bg-[#F8F8F8] p-4 rounded-none border border-gray-200">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-blue-100/50 flex items-center justify-center shrink-0">
-                  <Calendar className="w-5 h-5 text-[#0562D2]" />
+                <div className="w-10 h-10 rounded-[4px] bg-[#066fef]/10 flex items-center justify-center shrink-0">
+                  <Calendar className="w-5 h-5 text-[#066fef]" />
                 </div>
                 <div>
-                  <span className="text-[10px] text-gray-400 font-bold uppercase block tracking-wider">Năm sản xuất</span>
-                  <span className="text-sm font-bold text-gray-800">{year}</span>
+                  <span className="text-[10px] text-gray-400 font-bold uppercase block tracking-wider font-antenna">Năm sản xuất</span>
+                  <span className="text-sm font-bold text-gray-800 font-antenna">{year}</span>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-blue-100/50 flex items-center justify-center shrink-0">
-                  <Gauge className="w-5 h-5 text-[#0562D2]" />
+                <div className="w-10 h-10 rounded-[4px] bg-[#066fef]/10 flex items-center justify-center shrink-0">
+                  <Gauge className="w-5 h-5 text-[#066fef]" />
                 </div>
                 <div>
-                  <span className="text-[10px] text-gray-400 font-bold uppercase block tracking-wider">Số Km đã đi</span>
-                  <span className="text-sm font-bold text-gray-800">{odo}</span>
+                  <span className="text-[10px] text-gray-400 font-bold uppercase block tracking-wider font-antenna">Số Km đã đi</span>
+                  <span className="text-sm font-bold text-gray-800 font-antenna">{odo}</span>
                 </div>
               </div>
             </div>
 
             {/* Price Box */}
-            <div className="bg-[#0b192c]/5 p-5 rounded-2xl border border-blue-900/5 space-y-1">
-              <span className="text-xs font-bold text-gray-500 uppercase tracking-wider block">Giá bán ưu đãi</span>
-              <div className="text-2xl md:text-3xl font-extrabold text-red-600">
+            <div className="bg-[#00095B] text-white p-5 rounded-none border border-neutral-800 space-y-1">
+              <span className="text-xs font-bold text-white/60 uppercase tracking-wider block font-antenna">Giá bán ưu đãi</span>
+              <div className="text-2xl md:text-3xl font-bold text-white font-antenna">
                 {formatPrice(vehicle.price)}
               </div>
             </div>
@@ -359,22 +359,22 @@ export default function UsedVehicleDetailClient({ vehicle }: { vehicle: any }) {
             <div className="flex gap-4">
               <button
                 onClick={() => setShowBookingModal(true)}
-                className="flex-1 bg-[#0562d2] text-white rounded-xl flex gap-2 items-center justify-center py-4 font-bold text-sm hover:bg-[#044ea7] transition-all shadow-sm cursor-pointer border-0"
+                className="flex-1 bg-[#066fef] text-white rounded-[4px] flex gap-2 items-center justify-center py-4 font-bold text-xs uppercase tracking-wider hover:bg-[#01095c] transition-all shadow-xs cursor-pointer border-0"
               >
                 <Car className="w-5 h-5" />
                 <span>Đăng ký lái thử / Tư vấn</span>
               </button>
 
               <a
-                href="tel:090"
-                className="flex items-center justify-center border border-gray-200 hover:border-gray-300 text-gray-700 bg-white hover:bg-gray-50 rounded-xl px-5 transition-all cursor-pointer"
+                href="tel:0918909060"
+                className="flex items-center justify-center border border-gray-200 hover:border-[#066fef] text-[#066fef] bg-white rounded-[4px] px-5 transition-all cursor-pointer"
               >
                 <Phone className="w-5 h-5" />
               </a>
             </div>
 
             {/* Assured highlights */}
-            <div className="border border-gray-200/80 p-4 rounded-2xl space-y-3.5 bg-white">
+            <div className="border border-gray-200 p-4 rounded-none space-y-3.5 bg-white font-antenna">
               <div className="flex gap-3 items-start">
                 <Check className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
                 <p className="text-xs text-gray-600 leading-relaxed font-medium">
@@ -400,9 +400,9 @@ export default function UsedVehicleDetailClient({ vehicle }: { vehicle: any }) {
 
         {/* Detailed description panel */}
         {vehicle.description && (
-          <div className="mt-8 bg-white border border-gray-100 rounded-2xl p-6 md:p-8 shadow-xs space-y-6">
-            <div className="flex items-center gap-2 border-b border-gray-100 pb-4">
-              <FileText className="w-5 h-5 text-[#0562D2]" />
+          <div className="mt-8 bg-white border border-gray-200 rounded-none p-6 md:p-8 shadow-xs space-y-6">
+            <div className="flex items-center gap-2 border-b border-gray-100 pb-4 font-antenna">
+              <FileText className="w-5 h-5 text-[#066fef]" />
               <h2 className="text-lg font-bold text-gray-900">Chi tiết xe & Mô tả từ đại lý</h2>
             </div>
             <div 
@@ -417,10 +417,10 @@ export default function UsedVehicleDetailClient({ vehicle }: { vehicle: any }) {
       {/* Booking Form Modal Overlay */}
       {showBookingModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl w-full max-w-[500px] max-h-[90vh] overflow-y-auto shadow-2xl relative border border-gray-100">
+          <div className="bg-white rounded-none w-full max-w-[500px] max-h-[90vh] overflow-y-auto shadow-2xl relative border border-gray-200">
             
             {/* Modal Header */}
-            <div className="bg-[#0b192c] text-white p-6 relative">
+            <div className="bg-[#00095B] text-white p-6 relative font-antenna">
               <h3 className="text-lg font-bold uppercase tracking-wide">
                 Đăng ký Tư vấn / Lái thử
               </h3>
@@ -443,7 +443,7 @@ export default function UsedVehicleDetailClient({ vehicle }: { vehicle: any }) {
                     <Check className="w-8 h-8" />
                   </div>
                   <h4 className="text-base font-bold text-gray-900">Gửi yêu cầu thành công!</h4>
-                  <p className="text-xs text-gray-500 leading-relaxed">Đồng Nai Ford đã nhận được thông tin. Đội ngũ tư vấn xe cũ sẽ chủ động liên hệ hỗ trợ bạn trong ít phút.</p>
+                  <p className="text-xs text-gray-500 leading-relaxed">Long Khánh Ford đã nhận được thông tin. Đội ngũ tư vấn xe cũ sẽ chủ động liên hệ hỗ trợ bạn trong ít phút.</p>
                 </div>
               ) : (
                 <form onSubmit={handleBookingSubmit} className="space-y-4">
@@ -452,7 +452,7 @@ export default function UsedVehicleDetailClient({ vehicle }: { vehicle: any }) {
                       {errorMessage}
                     </div>
                   )}
-                  <div className="space-y-1">
+                  <div className="space-y-1 font-antenna">
                     <label className="text-xs font-bold text-gray-700 uppercase tracking-wider block">Họ và tên của bạn *</label>
                     <input 
                       type="text" 
@@ -461,11 +461,11 @@ export default function UsedVehicleDetailClient({ vehicle }: { vehicle: any }) {
                       onChange={handleInputChange}
                       required
                       placeholder="Nguyễn Văn A"
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#0562D2] bg-white text-black"
+                      className="w-full px-4 py-3 rounded-[8px] border border-gray-200 text-xs focus:outline-none focus:border-[#066fef] bg-white text-black"
                     />
                   </div>
 
-                  <div className="space-y-1">
+                  <div className="space-y-1 font-antenna">
                     <label className="text-xs font-bold text-gray-700 uppercase tracking-wider block">Số điện thoại liên hệ *</label>
                     <input 
                       type="tel" 
@@ -474,11 +474,11 @@ export default function UsedVehicleDetailClient({ vehicle }: { vehicle: any }) {
                       onChange={handleInputChange}
                       required
                       placeholder="0918xxxxxx"
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#0562D2] bg-white text-black"
+                      className="w-full px-4 py-3 rounded-[8px] border border-gray-200 text-xs focus:outline-none focus:border-[#066fef] bg-white text-black"
                     />
                   </div>
 
-                  <div className="space-y-1">
+                  <div className="space-y-1 font-antenna">
                     <label className="text-xs font-bold text-gray-700 uppercase tracking-wider block">Lời nhắn / Yêu cầu thêm</label>
                     <textarea 
                       name="note"
@@ -486,14 +486,14 @@ export default function UsedVehicleDetailClient({ vehicle }: { vehicle: any }) {
                       onChange={handleInputChange}
                       rows={3}
                       placeholder="vd: Hẹn xem xe trực tiếp tại showroom, hỗ trợ vay ngân hàng thế nào..."
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#0562D2] bg-white resize-none text-black"
+                      className="w-full px-4 py-3 rounded-[8px] border border-gray-200 text-xs focus:outline-none focus:border-[#066fef] bg-white resize-none text-black"
                     />
                   </div>
 
                   <button 
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full bg-[#0562d2] hover:bg-[#044EA7] disabled:bg-gray-400 text-white py-3.5 rounded-xl font-bold uppercase text-xs tracking-wider transition-colors cursor-pointer border-0 mt-4 shadow-sm"
+                    className="w-full bg-[#066fef] hover:bg-[#01095c] disabled:bg-gray-400 text-white py-3.5 rounded-[4px] font-bold uppercase text-xs tracking-wider transition-colors cursor-pointer border-0 mt-4 shadow-xs font-antenna"
                   >
                     {isSubmitting ? "Đang gửi..." : "Gửi thông tin đăng ký"}
                   </button>
@@ -513,13 +513,13 @@ export default function UsedVehicleDetailClient({ vehicle }: { vehicle: any }) {
           {/* Top Panel */}
           <div className="absolute top-0 inset-x-0 h-16 flex items-center justify-between px-6 z-10 text-white bg-gradient-to-b from-black/60 to-transparent">
             {/* Index Counter */}
-            <div className="bg-white/10 backdrop-blur-md text-white text-xs px-3.5 py-1.5 rounded-full font-bold">
+            <div className="bg-white/10 backdrop-blur-md text-white text-xs px-3.5 py-1.5 rounded-[4px] font-bold">
               {activeIndex + 1} / {displayThumbnails.length}
             </div>
             {/* Close Button */}
             <button
               onClick={() => setShowLightbox(false)}
-              className="bg-white/10 hover:bg-[#0562D2] text-white p-2.5 rounded-full transition-all duration-300 border-0 cursor-pointer flex items-center justify-center"
+              className="bg-white/10 hover:bg-[#066fef] text-white p-2.5 rounded-[4px] transition-all duration-300 border-0 cursor-pointer flex items-center justify-center"
               aria-label="Close Lightbox"
             >
               <X className="w-5 h-5" />
@@ -561,8 +561,8 @@ export default function UsedVehicleDetailClient({ vehicle }: { vehicle: any }) {
                   key={idx}
                   onClick={() => setActiveIndex(idx)}
                   onMouseDown={(e) => e.stopPropagation()}
-                  className={`relative w-16 md:w-20 aspect-[16/10] rounded-lg overflow-hidden border-2 transition-all shrink-0 cursor-pointer bg-white
-                    ${activeIndex === idx ? "border-[#0562D2] scale-95 shadow-md" : "border-transparent opacity-50 hover:opacity-100"}`}
+                  className={`relative w-16 md:w-20 aspect-[16/10] rounded-[4px] overflow-hidden border-2 transition-all shrink-0 cursor-pointer bg-white
+                    ${activeIndex === idx ? "border-[#066fef] scale-95 shadow-xs" : "border-transparent opacity-50 hover:opacity-100"}`}
                 >
                   <Image
                     src={thumb}
@@ -583,7 +583,7 @@ export default function UsedVehicleDetailClient({ vehicle }: { vehicle: any }) {
                 onClick={(e) => { e.stopPropagation(); handlePrevImage(); }}
                 onMouseDown={(e) => e.stopPropagation()}
                 onMouseUp={(e) => e.stopPropagation()}
-                className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-[#0562D2] text-white p-3 md:p-4 rounded-full transition-all duration-300 border-0 cursor-pointer flex items-center justify-center z-10 hover:scale-105"
+                className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-[#066fef] text-white p-3 md:p-4 rounded-[4px] transition-all duration-300 border-0 cursor-pointer flex items-center justify-center z-10 hover:scale-105"
                 aria-label="Previous image"
               >
                 <ChevronRight className="w-6 h-6 rotate-180" />
@@ -592,7 +592,7 @@ export default function UsedVehicleDetailClient({ vehicle }: { vehicle: any }) {
                 onClick={(e) => { e.stopPropagation(); handleNextImage(); }}
                 onMouseDown={(e) => e.stopPropagation()}
                 onMouseUp={(e) => e.stopPropagation()}
-                className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-[#0562D2] text-white p-3 md:p-4 rounded-full transition-all duration-300 border-0 cursor-pointer flex items-center justify-center z-10 hover:scale-105"
+                className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-[#066fef] text-white p-3 md:p-4 rounded-[4px] transition-all duration-300 border-0 cursor-pointer flex items-center justify-center z-10 hover:scale-105"
                 aria-label="Next image"
               >
                 <ChevronRight className="w-6 h-6" />

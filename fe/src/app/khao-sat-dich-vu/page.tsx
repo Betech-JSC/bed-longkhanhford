@@ -184,7 +184,7 @@ export default function ServiceSurveyPage() {
       {/* Banner Header */}
       <div className="relative bg-gradient-to-r from-[#0b192c] via-[#0e223b] to-[#0562D2] text-white py-12 md:py-16 overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] relative z-10">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] relative z-10">
           <div className="flex items-center gap-2 text-xs text-blue-200 mb-4">
             <Link href="/" className="hover:text-white transition-colors">Trang chủ</Link>
             <ChevronRight className="w-3 h-3" />
@@ -195,13 +195,13 @@ export default function ServiceSurveyPage() {
             <span>Khảo sát Chất lượng Dịch vụ</span>
           </h1>
           <p className="text-sm md:text-base text-blue-100 max-w-xl mt-3 font-medium">
-            Hãy chia sẻ trải nghiệm bảo dưỡng, sửa chữa của bạn tại Xưởng dịch vụ Đồng Nai Ford. Phản hồi thực tế từ bạn là chìa khóa để chúng tôi nâng cao chất lượng phục vụ mỗi ngày.
+            Hãy chia sẻ trải nghiệm bảo dưỡng, sửa chữa của bạn tại Xưởng dịch vụ Long Khánh Ford. Phản hồi thực tế từ bạn là chìa khóa để chúng tôi nâng cao chất lượng phục vụ mỗi ngày.
           </p>
         </div>
       </div>
 
       {/* Main Container */}
-      <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] mt-10">
+      <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] mt-10">
         <div className="max-w-3xl mx-auto">
           {isSubmitted ? (
             <div className="bg-white rounded-3xl p-8 md:p-12 border border-gray-100 shadow-2xl text-center space-y-6 animate-fade-in">
@@ -211,7 +211,7 @@ export default function ServiceSurveyPage() {
               <div className="space-y-2">
                 <h2 className="text-2xl font-bold text-gray-900">Gửi Ý Kiến Thành Công!</h2>
                 <p className="text-sm text-gray-500 max-w-md mx-auto leading-relaxed">
-                  Đồng Nai Ford chân thành ghi nhận ý kiến phản hồi của bạn. Đóng góp này sẽ được chuyển trực tiếp tới Ban quản lý xưởng dịch vụ để tối ưu hóa chất lượng phục vụ. Kính chúc bạn vạn dặm bình an!
+                  Long Khánh Ford chân thành ghi nhận ý kiến phản hồi của bạn. Đóng góp này sẽ được chuyển trực tiếp tới Ban quản lý xưởng dịch vụ để tối ưu hóa chất lượng phục vụ. Kính chúc bạn vạn dặm bình an!
                 </p>
               </div>
               <div className="pt-6 flex flex-wrap gap-4 justify-center">
@@ -349,7 +349,7 @@ export default function ServiceSurveyPage() {
                 </div>
                 <div className="space-y-3">
                   <p className="text-xs text-gray-500 leading-relaxed font-semibold">
-                    Trên thang điểm từ 0 (Hoàn toàn không muốn) đến 10 (Chắc chắn giới thiệu), bạn đánh giá khả năng giới thiệu dịch vụ của Đồng Nai Ford cho người thân hoặc bạn bè như thế nào? *
+                    Trên thang điểm từ 0 (Hoàn toàn không muốn) đến 10 (Chắc chắn giới thiệu), bạn đánh giá khả năng giới thiệu dịch vụ của Long Khánh Ford cho người thân hoặc bạn bè như thế nào? *
                   </p>
                   
                   {/* NPS Rating Grid Row */}

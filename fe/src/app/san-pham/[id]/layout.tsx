@@ -111,8 +111,8 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
     if (!apiVehicle) return {};
 
-    const title = `${apiVehicle.title} | Giá & Thông số | Đồng Nai Ford`;
-    const description = apiVehicle.tagline || `Khám phá chi tiết dòng xe Ford ${apiVehicle.title} chính hãng tại Đồng Nai Ford. Nhận báo giá lăn bánh mới nhất.`;
+    const title = `${apiVehicle.title} | Giá & Thông số | Long Khánh Ford`;
+    const description = apiVehicle.tagline || `Khám phá chi tiết dòng xe Ford ${apiVehicle.title} chính hãng tại Long Khánh Ford. Nhận báo giá lăn bánh mới nhất.`;
 
     return {
       title,

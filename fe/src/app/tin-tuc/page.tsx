@@ -253,10 +253,32 @@ function NewsListPageContent() {
   };
 
   return (
-    <div className="bg-[#fafafa] min-h-screen py-12 flex flex-col items-center">
+    <div className="bg-[#F8F8F8] flex-1 min-h-screen flex flex-col items-center w-full pb-16">
+      {/* HERO BANNER */}
+      <section className="relative w-full h-[320px] bg-slate-900 overflow-hidden flex items-end pt-24 pb-10 mb-12">
+        <div className="absolute inset-0 z-0">
+          <img
+            src="/images/about/banner.jpg"
+            alt="Tin tức Long Khánh Ford"
+            className="w-full h-full object-cover object-center opacity-60"
+          />
+          <div className="absolute bottom-0 left-0 right-0 h-[120px] bg-gradient-to-t from-black/80 to-transparent" />
+        </div>
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full z-10">
+          <h1 className="text-[40px] md:text-[48px] font-bold text-white leading-tight uppercase font-antenna">
+            {pathname === "/khuyen-mai" ? "Chương trình Khuyến mãi" : "Tin tức & Sự kiện"}
+          </h1>
+          <p className="text-white/80 text-base max-w-2xl mt-2 font-antenna">
+            {pathname === "/khuyen-mai" 
+              ? "Tổng hợp các chương trình ưu đãi, khuyến mãi mới nhất từ đại lý Long Khánh Ford."
+              : "Cập nhật tin tức mới nhất về các dòng xe Ford và hoạt động tại đại lý."}
+          </p>
+        </div>
+      </section>
+
       {/* 1. FEATURED NEWS SECTION */}
       {pathname !== "/khuyen-mai" && topPosts.length > 0 && (
-        <section className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full mb-16">
+        <section className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full mb-16">
           <h2 className="font-['Ford_Antenna',sans-serif] font-semibold text-[36px] leading-[1.32] text-[#1a1a1a] mb-8">
             Tin tức nổi bật
           </h2>
@@ -265,7 +287,7 @@ function NewsListPageContent() {
               <Link
                 key={`featured-${art.id}`}
                 href={`/${art.slug}`}
-                className="bg-white rounded-[12px] overflow-hidden border border-[#e5e5e5] shadow-sm hover:shadow-md transition-premium group flex flex-col"
+                className="bg-white rounded-none overflow-hidden border border-[#e5e5e5] hover:shadow-sm transition-premium group flex flex-col"
               >
                 {/* Image Container */}
                 <div className="aspect-[600/380] relative overflow-hidden w-full bg-gray-100">
@@ -276,7 +298,7 @@ function NewsListPageContent() {
                     onError={handleImageError}
                   />
                   {art.category && (
-                    <div className="absolute top-4 left-4 bg-[#0562d2] text-white text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">
+                    <div className="absolute top-4 left-4 bg-[#066fef] text-white text-xs font-semibold px-3 py-1 rounded-[4px] uppercase tracking-wider">
                       {art.category.title}
                     </div>
                   )}
@@ -286,13 +308,13 @@ function NewsListPageContent() {
                   <span className="text-sm font-medium text-[#424242]">
                     {formatDate(art.published_at)}
                   </span>
-                  <h3 className="font-['Ford_Antenna',sans-serif] font-semibold text-[18px] leading-[1.45] text-[#1a1a1a] group-hover:text-[#0562d2] transition-colors duration-200 line-clamp-2">
+                  <h3 className="font-['Ford_Antenna',sans-serif] font-semibold text-[18px] leading-[1.45] text-[#1a1a1a] group-hover:text-[#066fef] transition-colors duration-200 line-clamp-2">
                     {art.title}
                   </h3>
-                  <p className="text-sm text-[#424242] leading-relaxed line-clamp-3 mt-1">
+                  <p className="text-sm text-[#424242] leading-relaxed line-clamp-3 mt-1 font-antenna">
                     {art.description}
                   </p>
-                  <div className="mt-auto pt-4 flex items-center text-sm font-semibold text-[#0562d2] group-hover:underline">
+                  <div className="mt-auto pt-4 flex items-center text-sm font-semibold text-[#066fef] group-hover:underline uppercase tracking-wider text-[11px]">
                     Xem chi tiết
                   </div>
                 </div>
@@ -303,12 +325,12 @@ function NewsListPageContent() {
       )}
 
       {/* 2. ALL NEWS & FILTER SECTION */}
-      <section className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full">
+      <section className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full">
         <div className="flex flex-col gap-8">
           {/* Section Heading & Category Tabs */}
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 border-b border-[#e5e2dc] pb-4">
-            <h2 className="font-['Ford_Antenna',sans-serif] font-semibold text-[28px] leading-[1.2] text-[#1a1a1a] shrink-0">
-              {pathname === "/khuyen-mai" ? "Chương trình Khuyến mãi" : "Tin tức & Ưu Đãi"}
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 border-b border-[#e5e5e5] pb-4">
+            <h2 className="font-['Ford_Antenna',sans-serif] font-semibold text-[28px] leading-[1.2] text-[#1a1a1a] shrink-0 font-display">
+              Danh sách bài viết
             </h2>
 
             {/* Filter controls wrapper */}
@@ -320,8 +342,8 @@ function NewsListPageContent() {
                     onClick={() => handleTabChange("all")}
                     className={`px-5 py-2.5 text-base font-semibold transition-all relative whitespace-nowrap cursor-pointer ${
                       activeTab === "all"
-                        ? "text-[#0562d2] border-b-3 border-[#0562d2]"
-                        : "text-[#424242] hover:text-[#0562d2]"
+                        ? "text-[#066fef] border-b-2 border-[#066fef]"
+                        : "text-[#424242] hover:text-[#066fef]"
                     }`}
                   >
                     Tất cả
@@ -332,8 +354,8 @@ function NewsListPageContent() {
                       onClick={() => handleTabChange(cat.id)}
                       className={`px-5 py-2.5 text-base font-semibold transition-all relative whitespace-nowrap cursor-pointer ${
                         activeTab === cat.id
-                          ? "text-[#0562d2] border-b-3 border-[#0562d2]"
-                          : "text-[#424242] hover:text-[#0562d2]"
+                          ? "text-[#066fef] border-b-2 border-[#066fef]"
+                          : "text-[#424242] hover:text-[#066fef]"
                       }`}
                     >
                       {cat.title}
@@ -349,7 +371,7 @@ function NewsListPageContent() {
                   placeholder="Tìm bài viết..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-white border border-[#d6d6d6] text-gray-900 placeholder-[#808080] rounded-[8px] pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-[#0562d2] transition shadow-xs"
+                  className="w-full bg-white border border-[#d6d6d6] text-gray-900 placeholder-[#808080] rounded-[8px] pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-[#066fef] transition shadow-xs"
                 />
                 <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#808080]" />
               </div>
@@ -358,7 +380,7 @@ function NewsListPageContent() {
 
           {/* Loading Indicator or Grid of paginated articles */}
           {loading ? (
-            <div className="text-center py-20 bg-white border border-[#e5e5e5] rounded-[12px]">
+            <div className="text-center py-20 bg-white border border-[#e5e5e5] rounded-none">
               <p className="text-gray-500 text-sm">Đang tải danh sách bài viết...</p>
             </div>
           ) : posts.length > 0 ? (
@@ -367,7 +389,7 @@ function NewsListPageContent() {
                 <Link
                   key={art.id}
                   href={`/${art.slug}`}
-                  className="bg-white rounded-[12px] overflow-hidden border border-[#e5e5e5] shadow-sm hover:shadow-md transition-premium group flex flex-col h-full"
+                  className="bg-white rounded-none overflow-hidden border border-[#e5e5e5] hover:shadow-xs transition-premium group flex flex-col h-full"
                 >
                   <div className="aspect-[600/400] relative overflow-hidden w-full bg-gray-100">
                     <img
@@ -377,7 +399,7 @@ function NewsListPageContent() {
                       onError={handleImageError}
                     />
                     {art.category && (
-                      <div className="absolute top-4 left-4 bg-[#0562d2] text-white text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">
+                      <div className="absolute top-4 left-4 bg-[#066fef] text-white text-xs font-semibold px-3 py-1 rounded-[4px] uppercase tracking-wider">
                         {art.category.title}
                       </div>
                     )}
@@ -386,10 +408,10 @@ function NewsListPageContent() {
                     <span className="text-xs font-medium text-[#424242]">
                       {formatDate(art.published_at)}
                     </span>
-                    <h3 className="font-['Ford_Antenna',sans-serif] font-semibold text-[16px] leading-[1.4] text-[#1a1a1a] group-hover:text-[#0562d2] transition-colors duration-200 line-clamp-2">
+                    <h3 className="font-['Ford_Antenna',sans-serif] font-semibold text-[16px] leading-[1.4] text-[#1a1a1a] group-hover:text-[#066fef] transition-colors duration-200 line-clamp-2">
                       {art.title}
                     </h3>
-                    <p className="text-xs text-[#424242] leading-relaxed line-clamp-3 mt-1">
+                    <p className="text-xs text-[#424242] leading-relaxed line-clamp-3 mt-1 font-antenna">
                       {art.description}
                     </p>
                   </div>
@@ -397,7 +419,7 @@ function NewsListPageContent() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-20 bg-white border border-[#e5e5e5] rounded-[12px]">
+            <div className="text-center py-20 bg-white border border-[#e5e5e5] rounded-none">
               <p className="text-gray-500 text-sm">Không tìm thấy bài viết nào phù hợp.</p>
             </div>
           )}
@@ -405,12 +427,12 @@ function NewsListPageContent() {
           {/* Pagination component block */}
           {!loading && totalPages > 1 && (
             <div className="flex justify-center mt-8">
-              <div className="bg-white border border-[#e5e5e5] flex gap-2 items-center px-4 py-2 rounded-[400px] shadow-xs">
+              <div className="bg-white border border-[#e5e5e5] flex gap-2 items-center px-4 py-2 rounded-none shadow-xs">
                 {/* Prev button */}
                 <button
                   onClick={() => handlePageChange(currentPage - 1)}
                   disabled={currentPage === 1}
-                  className={`w-10 h-10 flex items-center justify-center rounded-full transition cursor-pointer ${
+                  className={`w-10 h-10 flex items-center justify-center rounded-[4px] transition cursor-pointer ${
                     currentPage === 1
                       ? "text-gray-300 pointer-events-none"
                       : "text-[#424242] hover:bg-gray-100"
@@ -440,7 +462,7 @@ function NewsListPageContent() {
                         onClick={() => handlePageChange(pageNum)}
                         className={`w-11 h-11 flex items-center justify-center font-semibold text-sm rounded-[4px] transition cursor-pointer ${
                           isActive
-                            ? "bg-[#044ea7] text-white"
+                            ? "bg-[#066fef] text-white"
                             : "bg-white text-[#808080] hover:bg-gray-100"
                         }`}
                       >
@@ -453,7 +475,7 @@ function NewsListPageContent() {
                 <button
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage === totalPages}
-                  className={`w-10 h-10 flex items-center justify-center rounded-full transition cursor-pointer ${
+                  className={`w-10 h-10 flex items-center justify-center rounded-[4px] transition cursor-pointer ${
                     currentPage === totalPages
                       ? "text-gray-300 pointer-events-none"
                       : "text-[#424242] hover:bg-gray-100"
@@ -472,9 +494,9 @@ function NewsListPageContent() {
       {testimonials.length > 0 && (
         <section id="media" className="bg-gray-light border-y border-gray-200 py-20 px-0 overflow-x-clip w-full mt-16">
           <div className="w-full">
-            <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] flex flex-col md:flex-row md:items-end justify-between mb-12">
+            <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] flex flex-col md:flex-row md:items-end justify-between mb-12">
               <div>
-                <span className="text-xs font-semibold text-[#0562d2] uppercase tracking-wider block mb-2">
+                <span className="text-xs font-semibold text-[#066fef] uppercase tracking-wider block mb-2 font-antenna">
                   Ý KIẾN TỪ KHÁCH HÀNG
                 </span>
                 <h2 className="font-['Ford_Antenna',sans-serif] text-[36px] font-semibold text-[#1a1a1a] leading-tight">
@@ -543,29 +565,29 @@ function NewsListPageContent() {
                         if (testimonialWasDragged.current) return;
                         setActiveTestimonialIndex(idx);
                       }}
-                      className={`h-auto min-h-[320px] sm:h-[320px] bg-white px-5 py-6 sm:px-6 sm:py-8 rounded-[8px] flex-shrink-0 flex flex-col justify-between cursor-pointer transition-all ${isActive
-                        ? "border-b-4 border-[#0562d2] shadow-md scale-100 opacity-100"
-                        : "border-b border-[#d6d6d6] scale-95 opacity-50"
+                      className={`h-auto min-h-[320px] sm:h-[320px] bg-white px-5 py-6 sm:px-6 sm:py-8 rounded-none flex-shrink-0 flex flex-col justify-between cursor-pointer transition-all ${isActive
+                        ? "border-b-4 border-[#066fef] shadow-xs scale-100 opacity-100"
+                        : "border-b border-gray-200 scale-95 opacity-50"
                         }`}
                       style={{
                         width: 'var(--card-width-testimonial)',
                       }}
                     >
                       {/* Comment text */}
-                      <p className="text-[15px] sm:text-[18px] text-[#424242] font-normal leading-[1.5]">
+                      <p className="text-[15px] sm:text-[18px] text-[#424242] font-normal leading-[1.5] font-antenna">
                         &ldquo;{item.comment}&rdquo;
                       </p>
 
                       {/* Author Info */}
                       <div className="flex items-center gap-3 sm:gap-4 pt-3 sm:pt-4">
-                        <div className="size-[48px] sm:size-[64px] rounded-full border-[2px] sm:border-[3px] border-[#0562d2] bg-[#003478] flex items-center justify-center font-bold text-white text-base sm:text-lg flex-shrink-0">
+                        <div className="size-[48px] sm:size-[64px] rounded-[4px] border-[2px] sm:border-[3px] border-[#066fef] bg-[#00095B] flex items-center justify-center font-bold text-white text-base sm:text-lg flex-shrink-0">
                           {item.avatarText}
                         </div>
                         <div>
-                          <h4 className="text-[15px] sm:text-[18px] font-semibold text-[#1a1a1a] tracking-[0.18px] leading-tight">
+                          <h4 className="text-[15px] sm:text-[18px] font-semibold text-[#1a1a1a] tracking-[0.18px] leading-tight font-display">
                             {item.name}
                           </h4>
-                          <p className="text-[14px] sm:text-[16px] text-[#333333] mt-0.5 sm:mt-1">
+                          <p className="text-[14px] sm:text-[16px] text-[#333333] mt-0.5 sm:mt-1 font-antenna">
                             {item.role}
                           </p>
                         </div>
@@ -577,7 +599,7 @@ function NewsListPageContent() {
             </div>
 
             {/* Pagination Indicators dots */}
-            <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] flex justify-center gap-2 mt-8">
+            <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] flex justify-center gap-2 mt-8">
               {testimonials.map((_, idx) => (
                 <button
                   key={idx}
@@ -585,7 +607,7 @@ function NewsListPageContent() {
                     setActiveTestimonialIndex(idx);
                     setIsTestimonialInteracted(true);
                   }}
-                  className={`h-2 transition-all rounded-full cursor-pointer ${activeTestimonialIndex === idx ? "w-6 bg-[#0562d2]" : "w-2 bg-gray-300"
+                  className={`h-2 transition-all rounded-full cursor-pointer ${activeTestimonialIndex === idx ? "w-6 bg-[#066fef]" : "w-2 bg-gray-300"
                     }`}
                   aria-label={`Go to slide ${idx + 1}`}
                 />
@@ -601,8 +623,8 @@ function NewsListPageContent() {
 export default function NewsListPage() {
   return (
     <Suspense fallback={
-      <div className="bg-[#fafafa] min-h-screen py-16 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#0562d2]" />
+      <div className="bg-[#F8F8F8] min-h-screen py-16 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#066fef]" />
       </div>
     }>
       <NewsListPageContent />

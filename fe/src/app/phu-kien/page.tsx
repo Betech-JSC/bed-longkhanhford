@@ -275,7 +275,7 @@ export default function AccessoriesPage() {
 
       {/* 1. Featured Category Slider Section */}
       <section className="bg-[#fafafa] border-b border-[#d6d6d6] py-[40px]">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full flex flex-col gap-[24px]">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full flex flex-col gap-[24px]">
 
           <div className="flex flex-col gap-[8px]">
             <h1 className="font-['Ford_Antenna',sans-serif] font-semibold text-[32px] text-[#1a1a1a] leading-[1.2]">
@@ -291,7 +291,7 @@ export default function AccessoriesPage() {
       </section>
 
       {/* 2. Main Content Grid & Sidebar */}
-      <section className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full py-[72px]">
+      <section className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full py-[72px]">
         <div className="flex flex-col md:flex-row gap-[48px] items-start justify-center">
 
           {/* Left Filter Sidebar - Flat, Clean Accordion List */}

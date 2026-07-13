@@ -92,7 +92,7 @@ export const vehicleMediaAssets: Record<string, VehicleMediaAssets> = {
   "ford-transit-2024": {
     promoTitle: "Giải pháp vận tải chuyên nghiệp. Tối ưu hóa dòng tiền.",
     promoDesc:
-      "Hỗ trợ lệ phí trước bạ lên đến 100% cùng chương trình vay lãi suất đặc quyền cố định dài hạn tại Đồng Nai Ford.",
+      "Hỗ trợ lệ phí trước bạ lên đến 100% cùng chương trình vay lãi suất đặc quyền cố định dài hạn tại Long Khánh Ford.",
     promoImage: "/assets/car-transit.png",
     grid1: "/assets/img-gradient-3.png",
     grid2: "/assets/img-gradient-1.png",

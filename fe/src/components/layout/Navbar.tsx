@@ -21,6 +21,19 @@ type NavLink = {
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const isTransparentPage = pathname === "/" || [
+    "/gioi-thieu",
+    "/lien-he",
+    "/bang-gia",
+    "/dich-vu",
+    "/dong-xe",
+    "/xe-da-qua-su-dung",
+    "/tin-tuc",
+    "/tuyen-dung",
+    "/phu-kien",
+    "/san-pham",
+    "/cong-cu"
+  ].some(path => pathname === path || pathname.startsWith(path + "/"));
   const router = useRouter();
   const [activeSection, setActiveSection] = useState("");
 
@@ -150,7 +163,7 @@ export default function Navbar() {
       return {
         bannerTitle: "Khám phá các dòng xe SUV của Ford",
         bannerDesc: "Mạnh mẽ, thông minh, sẵn sàng cho mọi hành trình gia đình",
-        bannerBg: "bg-gradient-to-r from-[#00095B] via-[#02337A] to-[#0562D2]"
+        bannerBg: "bg-gradient-to-r from-[#00095B] via-[#02337A] to-[#066fef]"
       };
     }
     if (cleanSlug.includes("ban-tai") || cleanSlug.includes("raptor") || cleanSlug.includes("pick")) {
@@ -171,7 +184,7 @@ export default function Navbar() {
     return {
       bannerTitle: `Khám phá các dòng xe ${title} của Ford`,
       bannerDesc: "Sự kết hợp hoàn hảo giữa công nghệ hiện đại và khả năng vận hành mạnh mẽ",
-      bannerBg: "bg-gradient-to-r from-[#00095B] via-[#02337A] to-[#0562D2]"
+      bannerBg: "bg-gradient-to-r from-[#00095B] via-[#02337A] to-[#066fef]"
     };
   };
 
@@ -181,7 +194,7 @@ export default function Navbar() {
       name: "Xe SUV",
       bannerTitle: "Khám phá các dòng xe SUV của Ford",
       bannerDesc: "Mạnh mẽ, thông minh, sẵn sàng cho mọi hành trình gia đình",
-      bannerBg: "bg-gradient-to-r from-[#00095B] via-[#02337A] to-[#0562D2]",
+      bannerBg: "bg-gradient-to-r from-[#00095B] via-[#02337A] to-[#066fef]",
       cars: [
         { id: "ford-territory", displayName: "TERRITORY" },
         { id: "ford-everest", displayName: "FORD EVEREST" },
@@ -254,7 +267,7 @@ export default function Navbar() {
       name: "Giới thiệu",
       href: "/gioi-thieu",
       dropdownItems: [
-        { name: "Câu chuyện Ford Đồng Nai", href: "/gioi-thieu#our-story" },
+        { name: "Câu chuyện Ford Long Khánh", href: "/gioi-thieu#our-story" },
         { name: "Ban giám đốc & Nhân sự", href: "/gioi-thieu#board-of-directors" },
         { name: "Cơ sở vật chất & Showroom", href: "/gioi-thieu#facilities" },
       ],
@@ -303,11 +316,16 @@ export default function Navbar() {
     { name: "Liên hệ", href: "/lien-he" },
   ];
 
-  useEffect(() => {
-    if (pathname !== "/") return;
+  const [isScrolled, setIsScrolled] = useState(false);
 
+  useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY < 100) {
+      if (window.scrollY > 50) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+      if (pathname === "/" && window.scrollY < 100) {
         setActiveSection("");
       }
     };
@@ -350,11 +368,107 @@ export default function Navbar() {
     };
   }, [pathname]);
 
+  const leftLinks = navLinks.slice(0, 4);
+  const rightLinks = navLinks.slice(4);
+
+  const renderNavLink = (link: NavLink, keySuffix: string = "") => {
+    const sectionId = link.href.includes("#") ? link.href.split("#")[1] : "";
+    const isCurrentPath = pathname === link.href || 
+      (link.href !== "/" && pathname.startsWith(link.href)) ||
+      (link.dropdownItems?.some(item => pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href))) ?? false);
+    const isActive = isCurrentPath || (pathname === "/" && sectionId && activeSection === sectionId);
+    
+    const hasDropdown = !!link.dropdownItems;
+    const isTransparent = isTransparentPage && !isScrolled && !isOpen;
+
+    // Active color class based on transparent state
+    const linkActiveColorClass = "text-[#066fef]";
+    const linkInactiveColorClass = isTransparent ? "text-white hover:text-[#066fef]" : "text-[#333333] hover:text-[#066fef]";
+    
+    if (link.name === "Sản phẩm") {
+      return (
+        <div
+          key={`${link.name}${keySuffix}`}
+          className="relative flex items-stretch h-full"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          <Link
+            href={link.href}
+            onClick={handleMouseLeaveImmediate}
+            className={`relative px-1 h-full flex items-center text-[15px] xl:text-[16px] whitespace-nowrap font-['Ford_Antenna',sans-serif] font-medium tracking-wide transition-colors duration-200 flex items-center gap-1 cursor-pointer
+              after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-[#066fef] after:transition-all after:duration-300
+              ${isProductHovered || isActive ? `${linkActiveColorClass} after:w-full` : `${linkInactiveColorClass} after:w-0 hover:after:w-full`}`}
+          >
+            {link.name}
+            <ChevronDown className={`w-3.5 h-3.5 opacity-60 transition-transform duration-300 ${isProductHovered ? "rotate-180 text-[#066fef] opacity-100" : ""}`} />
+          </Link>
+        </div>
+      );
+    }
+
+    if (hasDropdown) {
+      return (
+        <div 
+          key={`${link.name}${keySuffix}`} 
+          className="relative group flex items-stretch h-full" 
+          onMouseEnter={handleMouseLeaveImmediate}
+        >
+          <Link
+            href={link.href}
+            className={`relative px-1 h-full flex items-center text-[15px] xl:text-[16px] whitespace-nowrap font-['Ford_Antenna',sans-serif] font-medium tracking-wide transition-colors duration-200 flex items-center gap-1 cursor-pointer
+              after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-[#066fef] after:transition-all after:duration-300
+              ${isActive ? `${linkActiveColorClass} after:w-full` : `${linkInactiveColorClass} after:w-0 group-hover:after:w-full`}`}
+          >
+            {link.name}
+            <ChevronDown className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:text-[#066fef] group-hover:rotate-180 transition-transform duration-300" />
+          </Link>
+
+          {/* Hover Dropdown Menu */}
+          <div className="absolute top-full left-1/2 -translate-x-1/2 w-64 bg-white shadow-[0px_4px_4px_rgba(16,24,40,0.1),0px_2px_2px_rgba(16,24,40,0.06)] py-0 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 z-50 before:absolute before:-top-3 before:left-0 before:right-0 before:h-3 before:content-[''] rounded-b-[12px] rounded-t-none">
+            {link.dropdownItems?.map((subItem) => (
+              <Link
+                key={subItem.name}
+                href={subItem.href}
+                className="block px-5 py-3 text-sm font-['Ford_Antenna',sans-serif] font-medium text-[#333333] hover:bg-[#f0f0f0] hover:text-gray-900 transition-colors first:rounded-t-none last:rounded-b-[12px]"
+              >
+                {subItem.name}
+              </Link>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <Link
+        key={`${link.name}${keySuffix}`}
+        href={link.href}
+        onMouseEnter={handleMouseLeaveImmediate}
+        className={`relative px-1 h-full flex items-center text-[15px] xl:text-[16px] whitespace-nowrap font-['Ford_Antenna',sans-serif] font-medium tracking-wide transition-colors duration-200 flex items-center gap-1 cursor-pointer
+          after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-[#066fef] after:transition-all after:duration-300
+          ${isActive ? `${linkActiveColorClass} after:w-full` : `${linkInactiveColorClass} after:w-0 hover:after:w-full`}`}
+      >
+        {link.name}
+      </Link>
+    );
+  };
+
+  const isTransparent = isTransparentPage && !isScrolled && !isOpen;
+
+  const headerClass = isTransparentPage
+    ? `fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b ${
+        isTransparent ? "bg-transparent border-transparent" : "bg-white border-gray-200 shadow-md"
+      }`
+    : "w-full z-50 bg-white border-b border-gray-200 sticky top-0 transition-all duration-300";
+
   return (
-    <header className="w-full z-50 bg-white border-b border-gray-200 sticky top-0">
+    <header className={headerClass}>
       {/* Top Header Utility Bar */}
-      <div className="hidden lg:block bg-[#00095b] text-white text-xs py-2">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[128px] flex justify-between items-center font-medium">
+      <div className={`hidden lg:block text-xs py-2 transition-all duration-300 ${
+        isTransparent ? "bg-black/20 text-white border-b border-white/10" : "bg-[#00095b] text-white"
+      }`}>
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] flex justify-between items-center font-medium">
           <div className="flex items-center gap-6">
             <button 
               onClick={() => { window.location.href = "tel:1800556858"; }}
@@ -385,12 +499,56 @@ export default function Navbar() {
       </div>
 
       {/* Main Navigation Bar */}
-      <nav className="max-w-[1440px] mx-auto px-4 xl:px-[128px] h-[72px] flex items-center">
-        <div className="flex justify-between items-center w-full h-full">
-          
-          {/* Logo with Oval styling inspired by Ford */}
-          <Link href="/" className="flex items-center gap-[5.2px] group">
-            <div className="h-[32px] w-[85.3px] relative shrink-0">
+      <nav className="max-w-[1440px] mx-auto px-4 xl:px-[80px] h-[72px] flex items-center">
+        {/* Desktop Split Layout */}
+        <div className="hidden lg:grid lg:grid-cols-[1fr_auto_1fr] items-center w-full h-full">
+          {/* Left Menu Links */}
+          <div className="flex justify-end items-stretch gap-3 xl:gap-5 h-full pr-8 xl:pr-12">
+            {leftLinks.map((link) => renderNavLink(link, "-left"))}
+          </div>
+
+          {/* Center Logo */}
+          <div className="flex justify-center items-center px-4 shrink-0 h-full">
+            <Link href="/" className="flex flex-col items-center justify-center gap-[3px] group py-1 text-center">
+              <div className="h-[24px] w-[64px] relative shrink-0">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img 
+                  src="/ford_logo.svg" 
+                  alt="Ford Oval Logo" 
+                  className="block size-full object-contain"
+                />
+              </div>
+              <span className={`font-['Ford_Antenna',sans-serif] font-bold text-[10px] tracking-wider leading-none uppercase transition-colors duration-300 ${
+                isTransparent ? "text-white" : "text-[#00095b]"
+              }`}>
+                LONG KHANH FORD
+              </span>
+            </Link>
+          </div>
+
+          {/* Right Menu Links & Search */}
+          <div className="flex justify-between items-center h-full pl-8 xl:pl-12 w-full">
+            <div className="flex items-stretch gap-3 xl:gap-5 h-full">
+              {rightLinks.map((link) => renderNavLink(link, "-right"))}
+            </div>
+            {/* Search Icon */}
+            <Link 
+              href="/tim-kiem" 
+              className={`p-2 transition-colors duration-300 cursor-pointer ${
+                isTransparent ? "text-white hover:text-[#066fef]" : "text-[#333333] hover:text-[#066fef]"
+              }`} 
+              aria-label="Search"
+            >
+              <Search className="w-5 h-5" />
+            </Link>
+          </div>
+        </div>
+
+        {/* Mobile & Tablet Layout */}
+        <div className="lg:hidden flex justify-between items-center w-full h-full">
+          {/* Logo */}
+          <Link href="/" className="flex flex-col items-center justify-center gap-[3px] group py-1 text-center">
+            <div className="h-[24px] w-[64px] relative shrink-0">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img 
                 src="/ford_logo.svg" 
@@ -398,102 +556,22 @@ export default function Navbar() {
                 className="block size-full object-contain"
               />
             </div>
-            <span className="font-['Ford_Antenna',sans-serif] font-bold text-[#00095b] text-[13px] tracking-tight leading-none uppercase">
-              DONG NAI FORD
+            <span className={`font-['Ford_Antenna',sans-serif] font-bold text-[10px] tracking-wider leading-none uppercase transition-colors duration-300 ${
+              isTransparent ? "text-white" : "text-[#00095b]"
+            }`}>
+              LONG KHANH FORD
             </span>
           </Link>
 
-          {/* Desktop Navigation Links */}
-          <div className="hidden lg:flex items-stretch lg:gap-3 xl:gap-5 h-full">
-            {navLinks.map((link) => {
-              const sectionId = link.href.includes("#") ? link.href.split("#")[1] : "";
-              const isCurrentPath = pathname === link.href || 
-                (link.href !== "/" && pathname.startsWith(link.href)) ||
-                (link.dropdownItems?.some(item => pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href))) ?? false);
-              const isActive = isCurrentPath || (pathname === "/" && sectionId && activeSection === sectionId);
-              
-              const hasDropdown = !!link.dropdownItems;
-
-              if (link.name === "Sản phẩm") {
-                return (
-                  <div
-                    key={link.name}
-                    className="relative flex items-stretch h-full"
-                    onMouseEnter={handleMouseEnter}
-                    onMouseLeave={handleMouseLeave}
-                  >
-                    <Link
-                      href={link.href}
-                      onClick={handleMouseLeaveImmediate}
-                      className={`relative px-1 h-full flex items-center text-[15px] xl:text-[16px] whitespace-nowrap font-['Ford_Antenna',sans-serif] font-medium tracking-wide transition-colors duration-200 hover:text-[#0562d2] flex items-center gap-1 cursor-pointer
-                        after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-[#0562d2] after:transition-all after:duration-300
-                        ${isProductHovered || isActive ? "text-[#0562d2] after:w-full" : "text-[#333333] after:w-0 hover:after:w-full"}`}
-                    >
-                      {link.name}
-                      <ChevronDown className={`w-3.5 h-3.5 opacity-60 transition-transform duration-300 ${isProductHovered ? "rotate-180 text-[#0562d2] opacity-100" : ""}`} />
-                    </Link>
-                  </div>
-                );
-              }
-
-              if (hasDropdown) {
-                return (
-                  <div 
-                    key={link.name} 
-                    className="relative group flex items-stretch h-full" 
-                    onMouseEnter={handleMouseLeaveImmediate}
-                  >
-                    <Link
-                      href={link.href}
-                      className={`relative px-1 h-full flex items-center text-[15px] xl:text-[16px] whitespace-nowrap font-['Ford_Antenna',sans-serif] font-medium tracking-wide transition-colors duration-200 group-hover:text-[#0562d2] flex items-center gap-1 cursor-pointer
-                        after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-[#0562d2] after:transition-all after:duration-300
-                        ${isActive ? "text-[#0562d2] after:w-full" : "text-[#333333] after:w-0 group-hover:after:w-full"}`}
-                    >
-                      {link.name}
-                      <ChevronDown className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:text-[#0562d2] group-hover:rotate-180 transition-transform duration-300" />
-                    </Link>
-
-                    {/* Hover Dropdown Menu */}
-                    <div className="absolute top-full left-1/2 -translate-x-1/2 w-64 bg-white shadow-[0px_4px_4px_rgba(16,24,40,0.1),0px_2px_2px_rgba(16,24,40,0.06)] py-0 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 z-50 before:absolute before:-top-3 before:left-0 before:right-0 before:h-3 before:content-[''] rounded-b-[12px] rounded-t-none">
-                      {link.dropdownItems?.map((subItem) => (
-                        <Link
-                          key={subItem.name}
-                          href={subItem.href}
-                          className="block px-5 py-3 text-sm font-['Ford_Antenna',sans-serif] font-medium text-[#333333] hover:bg-[#f0f0f0] hover:text-gray-900 transition-colors first:rounded-t-none last:rounded-b-[12px]"
-                        >
-                          {subItem.name}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                );
-              }
-
-              return (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  onMouseEnter={handleMouseLeaveImmediate}
-                  className={`relative px-1 h-full flex items-center text-[15px] xl:text-[16px] whitespace-nowrap font-['Ford_Antenna',sans-serif] font-medium tracking-wide transition-colors duration-200 hover:text-[#0562d2] flex items-center gap-1 cursor-pointer
-                    after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-[#0562d2] after:transition-all after:duration-300
-                    ${isActive ? "text-[#0562d2] after:w-full" : "text-[#333333] after:w-0 hover:after:w-full"}`}
-                >
-                  {link.name}
-                </Link>
-              );
-            })}
-          </div>
-
-          {/* Search Icon & Call to Action */}
-          <div className="hidden lg:flex items-center gap-4">
-            <Link href="/tim-kiem" className="p-2 text-[#333333] hover:text-[#0562d2] transition-colors cursor-pointer" aria-label="Search">
-              <Search className="w-5 h-5" />
-            </Link>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="lg:hidden flex items-center gap-3">
-            <Link href="/tim-kiem" className="p-2 text-[#333333] hover:text-[#0562d2] transition-colors cursor-pointer" aria-label="Search">
+          {/* Controls */}
+          <div className="flex items-center gap-3">
+            <Link 
+              href="/tim-kiem" 
+              className={`p-2 transition-colors duration-300 cursor-pointer ${
+                isTransparent ? "text-white hover:text-[#066fef]" : "text-[#333333] hover:text-[#066fef]"
+              }`} 
+              aria-label="Search"
+            >
               <Search className="w-5 h-5" />
             </Link>
             <Link
@@ -504,7 +582,9 @@ export default function Navbar() {
             </Link>
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 text-[#333333] hover:text-[#0562d2] transition-colors cursor-pointer relative w-10 h-10 flex items-center justify-center"
+              className={`p-2 transition-colors duration-300 cursor-pointer relative w-10 h-10 flex items-center justify-center ${
+                isTransparent ? "text-white" : "text-[#333333]"
+              }`}
               aria-label="Toggle menu"
             >
               <div className="relative w-6 h-[18px]">
@@ -534,7 +614,7 @@ export default function Navbar() {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[128px] py-8 grid grid-cols-4 gap-8">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] py-8 grid grid-cols-4 gap-8">
           {/* Left Category Sidebar */}
           <div className="col-span-1 border-r border-gray-100 pr-6 flex flex-col gap-3 text-left">
             {finalCategories.map((cat) => {
@@ -549,8 +629,8 @@ export default function Navbar() {
                   onMouseEnter={() => setActiveTab(cat.id)}
                   className={`flex items-center justify-between px-4 py-3 rounded-lg font-['Ford_Antenna',sans-serif] font-bold text-sm tracking-wider uppercase transition-all duration-200 text-left cursor-pointer
                     ${isActive 
-                      ? "text-[#0562D2] bg-blue-50/50 border-l-4 border-[#0562D2] pl-3" 
-                      : "text-[#333333] hover:text-[#0562D2] hover:bg-gray-50 border-l-4 border-transparent"}`}
+                      ? "text-[#066fef] bg-blue-50/50 border-l-4 border-[#066fef] pl-3" 
+                      : "text-[#333333] hover:text-[#066fef] hover:bg-gray-50 border-l-4 border-transparent"}`}
                 >
                   <span>{cat.name}</span>
                   <ChevronRight className={`w-4 h-4 transition-transform duration-200 ${isActive ? "translate-x-1" : ""}`} />
@@ -573,8 +653,8 @@ export default function Navbar() {
                   onMouseEnter={() => setActiveTab("xe-da-qua-su-dung")}
                   className={`flex items-center justify-between px-4 py-3 rounded-lg font-['Ford_Antenna',sans-serif] font-bold text-sm tracking-wider uppercase transition-all duration-200 text-left cursor-pointer
                     ${isActive 
-                      ? "text-[#0562D2] bg-blue-50/50 border-l-4 border-[#0562D2] pl-3" 
-                      : "text-[#333333] hover:text-[#0562D2] hover:bg-gray-50 border-l-4 border-transparent"}`}
+                      ? "text-[#066fef] bg-blue-50/50 border-l-4 border-[#066fef] pl-3" 
+                      : "text-[#333333] hover:text-[#066fef] hover:bg-gray-50 border-l-4 border-transparent"}`}
                 >
                   <span>Xe đã qua sử dụng</span>
                   <ChevronRight className={`w-4 h-4 transition-transform duration-200 ${isActive ? "translate-x-1" : ""}`} />
@@ -597,7 +677,7 @@ export default function Navbar() {
               return (
                 <div className="col-span-3 flex flex-col gap-6">
                   {/* Banner Card */}
-                  <div className="p-6 rounded-xl text-white flex justify-between items-center bg-gradient-to-r from-[#02337A] via-[#0562D2] to-[#00095B]">
+                  <div className="p-6 rounded-xl text-white flex justify-between items-center bg-gradient-to-r from-[#02337A] via-[#066fef] to-[#00095B]">
                     <div className="space-y-1 text-left">
                       <h4 className="font-['Ford_Antenna',sans-serif] font-bold text-lg">
                         Xe đã qua sử dụng chính hãng
@@ -647,7 +727,7 @@ export default function Navbar() {
                             )}
                           </div>
                           {/* Title */}
-                          <h5 className="font-['Ford_Antenna',sans-serif] font-bold text-xs text-gray-900 group-hover:text-[#0562D2] transition-colors mb-1 line-clamp-1 w-full">
+                          <h5 className="font-['Ford_Antenna',sans-serif] font-bold text-xs text-gray-900 group-hover:text-[#066fef] transition-colors mb-1 line-clamp-1 w-full">
                             {name}
                           </h5>
                           {/* Info */}
@@ -656,7 +736,7 @@ export default function Navbar() {
                           </p>
                           {/* Price */}
                           <p className="text-[11px] text-gray-550 font-medium">
-                            Giá bán: <span className="text-[#0562D2] font-bold">{price > 0 ? formatPrice(price) : "Liên hệ"}</span>
+                            Giá bán: <span className="text-[#066fef] font-bold">{price > 0 ? formatPrice(price) : "Liên hệ"}</span>
                           </p>
                         </Link>
                       );
@@ -667,12 +747,18 @@ export default function Navbar() {
             }
 
             if (activeTab === "phu-kien") {
-              const displayAccessories = accessoriesList.slice(0, 3);
-                
+              const displayAccessories = accessoriesList.length > 0
+                ? accessoriesList.slice(0, 3)
+                : [
+                    { id: "nap-thung-ranger", name: "Nắp thùng cuộn điện Ranger", price: 21500000, image_url: "/assets/quality-care-circle.png" },
+                    { id: "phim-cach-nhiet-everest", name: "Phim cách nhiệt cao cấp Everest", price: 9500000, image_url: "/assets/territory-interior.png" },
+                    { id: "tham-lot-san-territory", name: "Thảm lót sàn 3D cao cấp Territory", price: 2200000, image_url: "/assets/territory-promo.png" }
+                  ];
+
               return (
                 <div className="col-span-3 flex flex-col gap-6">
                   {/* Banner Card */}
-                  <div className="p-6 rounded-xl text-white flex justify-between items-center bg-gradient-to-r from-[#00095B] via-[#02337A] to-[#0562D2]">
+                  <div className="p-6 rounded-xl text-white flex justify-between items-center bg-gradient-to-r from-[#00095B] via-[#02337A] to-[#066fef]">
                     <div className="space-y-1 text-left">
                       <h4 className="font-['Ford_Antenna',sans-serif] font-bold text-lg">
                         Phụ kiện chính hãng Ford
@@ -723,7 +809,7 @@ export default function Navbar() {
                             )}
                           </div>
                           {/* Title */}
-                          <h5 className="font-['Ford_Antenna',sans-serif] font-bold text-xs text-gray-900 group-hover:text-[#0562D2] transition-colors mb-1 line-clamp-1 w-full">
+                          <h5 className="font-['Ford_Antenna',sans-serif] font-bold text-xs text-gray-900 group-hover:text-[#066fef] transition-colors mb-1 line-clamp-1 w-full">
                             {name}
                           </h5>
                           {/* Category */}
@@ -732,7 +818,7 @@ export default function Navbar() {
                           </p>
                           {/* Price */}
                           <p className="text-[11px] text-gray-550 font-medium">
-                            Giá bán: <span className="text-[#0562D2] font-bold">{formatPrice(price)}</span>
+                            Giá bán: <span className="text-[#066fef] font-bold">{formatPrice(price)}</span>
                           </p>
                         </Link>
                       );
@@ -795,12 +881,12 @@ export default function Navbar() {
                           )}
                         </div>
                         {/* Vehicle Title */}
-                        <h5 className="font-['Ford_Antenna',sans-serif] font-bold text-sm text-gray-900 group-hover:text-[#0562D2] transition-colors mb-1">
+                        <h5 className="font-['Ford_Antenna',sans-serif] font-bold text-sm text-gray-900 group-hover:text-[#066fef] transition-colors mb-1">
                           {car.displayName}
                         </h5>
                         {/* Vehicle Starting Price */}
                         <p className="text-xs text-gray-500 font-medium">
-                          Giá khởi điểm: <span className="text-[#0562D2] font-bold">{carData.price}</span>
+                          Giá khởi điểm: <span className="text-[#066fef] font-bold">{carData.price}</span>
                         </p>
                       </Link>
                     );
@@ -833,7 +919,7 @@ export default function Navbar() {
                     className="w-full flex items-center justify-between px-3 py-2 text-base font-bold text-[#333333] hover:bg-gray-50 rounded-sm text-left"
                   >
                     <span>{link.name}</span>
-                    <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform duration-300 ${isMobileProductOpen ? "rotate-180 text-[#0562D2]" : ""}`} />
+                    <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform duration-300 ${isMobileProductOpen ? "rotate-180 text-[#066fef]" : ""}`} />
                   </button>
                   
                   <div 
@@ -848,10 +934,10 @@ export default function Navbar() {
                           <div key={cat.id} className="space-y-1">
                             <button
                               onClick={() => setMobileActiveTab(isSubOpen ? null : cat.id)}
-                              className="w-full flex items-center justify-between px-2 py-1.5 text-sm font-semibold text-gray-700 hover:text-[#0562D2] hover:bg-gray-50 rounded text-left cursor-pointer"
+                              className="w-full flex items-center justify-between px-2 py-1.5 text-sm font-semibold text-gray-700 hover:text-[#066fef] hover:bg-gray-50 rounded text-left cursor-pointer"
                             >
                               <span>{cat.name}</span>
-                              <ChevronDown className={`w-3.5 h-3.5 text-gray-400 transition-transform duration-200 ${isSubOpen ? "rotate-180 text-[#0562D2]" : ""}`} />
+                              <ChevronDown className={`w-3.5 h-3.5 text-gray-400 transition-transform duration-200 ${isSubOpen ? "rotate-180 text-[#066fef]" : ""}`} />
                             </button>
                             <div 
                               className={`pl-4 flex flex-col gap-1 transition-all duration-300 ease-in-out overflow-hidden
@@ -867,7 +953,7 @@ export default function Navbar() {
                                       setIsOpen(false);
                                       setIsMobileProductOpen(false);
                                     }}
-                                    className="block px-2 py-1.5 text-xs font-medium text-gray-550 hover:text-[#0562D2] hover:bg-gray-50 rounded"
+                                    className="block px-2 py-1.5 text-xs font-medium text-gray-550 hover:text-[#066fef] hover:bg-gray-50 rounded"
                                   >
                                     {car.displayName}
                                   </Link>
@@ -890,7 +976,7 @@ export default function Navbar() {
                           setIsOpen(false);
                           setIsMobileProductOpen(false);
                         }}
-                        className="w-full block px-2 py-1.5 text-sm font-semibold text-gray-700 hover:text-[#0562D2] hover:bg-gray-50 rounded text-left cursor-pointer"
+                        className="w-full block px-2 py-1.5 text-sm font-semibold text-gray-700 hover:text-[#066fef] hover:bg-gray-50 rounded text-left cursor-pointer"
                       >
                         Xe đã qua sử dụng
                       </Link>
@@ -919,7 +1005,7 @@ export default function Navbar() {
                         key={subItem.name}
                         href={subItem.href}
                         onClick={() => setIsOpen(false)}
-                        className="text-sm font-medium text-gray-550 hover:text-[#0562d2] py-1 block"
+                        className="text-sm font-medium text-gray-550 hover:text-[#066fef] py-1 block"
                       >
                         {subItem.name}
                       </Link>
@@ -935,7 +1021,7 @@ export default function Navbar() {
                 📞 Tổng đài &amp; CSKH:{" "}
                 <button
                   onClick={() => { window.location.href = "tel:1800556858"; }}
-                  className="font-bold text-[#0562d2] bg-transparent border-0 p-0 cursor-pointer text-xs"
+                  className="font-bold text-[#066fef] bg-transparent border-0 p-0 cursor-pointer text-xs"
                 >
                   1800 55 68 58
                 </button>
@@ -944,7 +1030,7 @@ export default function Navbar() {
                 📞 Hotline kinh doanh:{" "}
                 <button
                   onClick={() => { window.location.href = "tel:0918909060"; }}
-                  className="font-bold text-[#0562d2] bg-transparent border-0 p-0 cursor-pointer text-xs"
+                  className="font-bold text-[#066fef] bg-transparent border-0 p-0 cursor-pointer text-xs"
                 >
                   0918 90 90 60
                 </button>

@@ -419,7 +419,7 @@ function HeroBannerBlock({ blockIndex, data, vehicle, openQuoteDrawer, openDrive
         )}
       </div>
 
-      <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full relative z-20">
+      <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full relative z-20">
         <div className={`flex flex-col gap-[16px] sm:gap-[24px] py-[24px] w-full ${alignClass}`}>
           <h1
             className={`font-['Ford_Antenna',sans-serif] font-semibold text-white tracking-[-0.96px] leading-[1.15] uppercase ${titleSizeClass}
@@ -603,7 +603,7 @@ function SpecsGridBlock({ data, vehicle, isEditMode, onChangeData, openQuoteDraw
   const justifyClass = compareItems.length <= 3 ? 'lg:justify-center' : 'lg:justify-start';
 
   return (
-    <section id={anchorId || undefined} className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full pt-16 pb-12">
+    <section id={anchorId || undefined} className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full pt-16 pb-12">
       <div className="space-y-12">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 w-full">
           <div className="space-y-2 text-left">
@@ -789,7 +789,7 @@ function FeaturesListBlock({ blockIndex, data, vehicle, isEditMode, onChangeData
       : 'text-center mx-auto';
 
   return (
-    <section id={anchorId || undefined} className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full py-16">
+    <section id={anchorId || undefined} className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full py-16">
       <div className="space-y-12">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-gray-150 pb-4">
           <div className="space-y-2 text-left">
@@ -967,7 +967,7 @@ function AccordionFAQsBlock({ data, vehicle, isEditMode, onChangeData, anchorId 
   const faqs = data.faqs || [
     {
       q: `Xe ${vehicle?.name || "Ford"} có những màu ngoại thất nào?`,
-      a: `Dòng xe ${vehicle?.name || "Ford"} hiện đang phân phối tại Đồng Nai Ford với các lựa chọn màu sắc ngoại thất: ${colorListStr || 'các phiên bản màu tiêu chuẩn'}.`
+      a: `Dòng xe ${vehicle?.name || "Ford"} hiện đang phân phối tại Long Khánh Ford với các lựa chọn màu sắc ngoại thất: ${colorListStr || 'các phiên bản màu tiêu chuẩn'}.`
     },
     {
       q: `Chính sách bảo hành xe mới như thế nào?`,
@@ -998,7 +998,7 @@ function AccordionFAQsBlock({ data, vehicle, isEditMode, onChangeData, anchorId 
       : 'text-left';
 
   return (
-    <section id={anchorId || undefined} className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full py-16 border-t border-[#e5e5e5]">
+    <section id={anchorId || undefined} className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full py-16 border-t border-[#e5e5e5]">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-[40px] lg:gap-[80px] items-start justify-center">
 
         <div className={`lg:col-span-4 space-y-3 ${alignClass}`}>
@@ -1127,7 +1127,7 @@ function PromotionsBlock({ blockIndex, data, isEditMode, onChangeData, openQuote
   const descStyle = data.desc_color ? { color: data.desc_color } : {};
 
   return (
-    <section id={anchorId || undefined} className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full py-16">
+    <section id={anchorId || undefined} className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full py-16">
       <div className="flex flex-col gap-[32px] w-full">
         <div className={`flex flex-col gap-[24px] pt-[32px] w-full max-w-[1152px] mx-auto ${alignClass}`}>
           <div className={`flex flex-col gap-[12px] w-full ${data.align === 'center' ? 'items-center' : data.align === 'right' ? 'items-end' : 'items-start'}`}>
@@ -1238,7 +1238,7 @@ function ThreeSixtyViewerBlock({ data, vehicle, isEditMode, onChangeData, threeS
 
   if (!threeSixtyProps) {
     return (
-      <section className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full py-16 border-t border-[#e5e5e5] text-center text-gray-400">
+      <section className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full py-16 border-t border-[#e5e5e5] text-center text-gray-400">
         360 Viewer đang tải...
       </section>
     );
@@ -1274,7 +1274,7 @@ function ThreeSixtyViewerBlock({ data, vehicle, isEditMode, onChangeData, threeS
     || (vehicle && (vehicle as any).images_360_internal && (vehicle as any).images_360_internal.length > 0);
 
   return (
-    <section id={anchorId || undefined} className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full py-16 border-t border-[#e5e5e5]">
+    <section id={anchorId || undefined} className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full py-16 border-t border-[#e5e5e5]">
       <div className="flex flex-col gap-[32px] items-start w-full">
         <div className={`flex flex-col pt-[32px] w-full max-w-[1152px] gap-[12px] ${alignClass}`}>
           <h2
@@ -1575,7 +1575,7 @@ function FeaturesGridBlock({ blockIndex, data, vehicle, isEditMode, onChangeData
       : 'items-center text-center';
 
   return (
-    <section id={anchorId || undefined} className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full py-16 border-t border-[#e5e5e5]">
+    <section id={anchorId || undefined} className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full py-16 border-t border-[#e5e5e5]">
       <div className="flex flex-col gap-[48px] items-center">
 
         <div className={`flex flex-col pt-[32px] px-[48px] w-full max-w-[1152px] text-black ${alignClass}`}>
@@ -1941,7 +1941,7 @@ function VersionsGridBlock({ data, vehicle, isEditMode, onChangeData, anchorId, 
       : 'text-center';
 
   return (
-    <section id={anchorId || undefined} className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full py-16 border-t border-[#e5e5e5]">
+    <section id={anchorId || undefined} className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full py-16 border-t border-[#e5e5e5]">
       <div className="flex flex-col gap-[32px] items-center w-full">
 
         <div className="flex items-center justify-between w-full max-w-[1152px] gap-4">
@@ -2043,7 +2043,7 @@ function VersionsGridBlock({ data, vehicle, isEditMode, onChangeData, anchorId, 
    9. BOOKING BANNER BLOCK
    ========================================================================== */
 function BookingBannerBlock({ blockIndex, data, vehicle, isEditMode, onChangeData, anchorId }: any) {
-  const title = data.title || "Kết nối ngay với chuyên viên Đồng Nai Ford";
+  const title = data.title || "Kết nối ngay với chuyên viên Long Khánh Ford";
   const phone = data.phone || "1800 55 68 58";
   const btnText = data.btn_text || "Đặt lịch hẹn";
   const btnLink = data.btn_link || "/lien-he";
@@ -2084,7 +2084,7 @@ function BookingBannerBlock({ blockIndex, data, vehicle, isEditMode, onChangeDat
       : 'justify-start';
 
   return (
-    <section id={anchorId || undefined} className="w-full bg-[#00095b] py-[32px] px-4 md:px-[144px] flex justify-center overflow-visible">
+    <section id={anchorId || undefined} className="w-full bg-[#00095b] py-[32px] px-4 md:px-[80px] flex justify-center overflow-visible">
       <div className="max-w-[1152px] w-full relative flex flex-col lg:flex-row items-center overflow-visible">
         {/* Inner Rounded Banner */}
         <div className="w-full lg:w-[913px] bg-gradient-to-r from-[#00095B] via-[#02337A] to-[#0562D2] rounded-[12px] p-8 lg:p-[32px] h-auto lg:h-[320px] flex items-center relative overflow-hidden lg:overflow-visible shadow-xl">

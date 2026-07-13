@@ -16,8 +16,8 @@ export async function generateMetadata({ params }: Props) {
 
     if (!job || typeof job !== "object") return {};
 
-    const title = `${job.title} | Tuyển dụng | Đồng Nai Ford`;
-    const description = job.description || `Ứng tuyển vị trí ${job.title} tại đại lý Đồng Nai Ford. Cơ hội thăng tiến, chế độ đãi ngộ hấp dẫn, thu nhập cạnh tranh.`;
+    const title = `${job.title} | Tuyển dụng | Long Khánh Ford`;
+    const description = job.description || `Ứng tuyển vị trí ${job.title} tại đại lý Long Khánh Ford. Cơ hội thăng tiến, chế độ đãi ngộ hấp dẫn, thu nhập cạnh tranh.`;
 
     return {
       title,

@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: Props) {
 
     if (!article) return {};
 
-    const title = article.seo_title || `${article.title} | Tin tức | Đồng Nai Ford`;
+    const title = article.seo_title || `${article.title} | Tin tức | Long Khánh Ford`;
     const description = article.seo_description || article.description || "";
     const imageUrl = article.seo_image || article.image?.url || "";
 

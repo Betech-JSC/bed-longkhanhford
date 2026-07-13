@@ -124,7 +124,7 @@ function TestDriveFormContent() {
         setShowToast(true);
       } else {
         setToastMessage(
-          "Đăng ký lái thử thành công! Đồng Nai Ford đã nhận được thông tin của bạn. Đại diện bán hàng sẽ liên hệ xác nhận lịch lái thử sớm nhất."
+          "Đăng ký lái thử thành công! Long Khánh Ford đã nhận được thông tin của bạn. Đại diện bán hàng sẽ liên hệ xác nhận lịch lái thử sớm nhất."
         );
         setShowToast(true);
 
@@ -161,7 +161,7 @@ function TestDriveFormContent() {
   };
 
   return (
-    <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] py-12 w-full">
+    <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] py-12 w-full">
       {/* Toast Notification */}
       {showToast && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-fade-in">
@@ -202,7 +202,7 @@ function TestDriveFormContent() {
         <div className="flex flex-col gap-8 w-full">
           <div className="flex flex-col gap-4">
             <h2 className="font-['Ford_Antenna',sans-serif] font-semibold leading-[1.32] text-[#101828] text-[36px] tracking-tight">
-              Đăng ký lái thử xe cùng Đồng Nai Ford
+              Đăng ký lái thử xe cùng Long Khánh Ford
             </h2>
             <p className="font-['Ford_Antenna',sans-serif] leading-[1.5] text-[#1d2939] text-[16px]">
               Hãy đăng ký ngay hôm nay để nhận cơ hội trải nghiệm thực tế cảm giác lái đỉnh cao, công nghệ hỗ trợ lái thông minh cùng các tính năng an toàn vượt trội trên các dòng xe Ford mới nhất.
@@ -385,7 +385,7 @@ function TestDriveFormContent() {
           allowFullScreen={true}
           loading="lazy"
           referrerPolicy="strict-origin-when-cross-origin"
-          title="Địa chỉ Đồng Nai Ford trên Google Map"
+          title="Địa chỉ Long Khánh Ford trên Google Map"
           className="absolute inset-0"
         ></iframe>
       </div>
@@ -397,7 +397,7 @@ export default function TestDriveRegistrationPage() {
   return (
     <div className="bg-[#fafafa] flex-1 min-h-screen">
       <Suspense fallback={
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] py-24 text-center">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] py-24 text-center">
           <div className="animate-spin inline-block w-8 h-8 border-4 border-[#0562d2] border-t-transparent rounded-full" role="status">
             <span className="sr-only">Đang tải...</span>
           </div>

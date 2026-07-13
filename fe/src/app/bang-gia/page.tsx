@@ -117,36 +117,33 @@ export default function PriceListPage() {
   }, []);
   return (
     <div className="bg-[#fafafa] min-h-screen font-sans">
-      {/* Breadcrumb */}
-      <div className="bg-white border-b border-[#e5e5e5] py-4">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px]">
-          <div className="text-xs text-gray-500 font-medium flex items-center gap-1.5">
-            <Link href="/" className="hover:text-[#0562d2] transition-colors">
+      {/* Hero */}
+      <section className="relative w-full bg-gradient-to-br from-neutral-900 to-[#01095c] text-white pt-28 pb-14 md:pb-18 overflow-hidden">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] relative z-10">
+          {/* Breadcrumb inside Hero */}
+          <div className="text-xs text-white/60 font-medium flex items-center gap-1.5 mb-6 justify-center">
+            <Link href="/" className="hover:text-white transition-colors">
               Trang chủ
             </Link>
-            <div className="w-[3px] h-[3px] rounded-full bg-[#333] opacity-60 mx-1" />
-            <span className="text-black font-semibold">Bảng giá xe Ford</span>
+            <span>/</span>
+            <span className="text-white">Bảng giá xe Ford</span>
           </div>
-        </div>
-      </div>
-
-      {/* Hero */}
-      <section className="bg-gradient-to-br from-[#00095B] via-[#02337A] to-[#0562D2] text-white py-14 md:py-18">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] text-center">
-          <h1 className="text-3xl md:text-5xl font-bold tracking-[-0.96px] leading-[1.2] mb-3">
-            Bảng giá xe Ford 2026
-          </h1>
-          <p className="text-white/80 text-base md:text-lg max-w-2xl mx-auto">
-            Giá niêm yết chính hãng mới nhất, cập nhật liên tục. Liên hệ
-            Hotline <strong className="text-white">0918 90 90 60</strong> để
-            nhận ưu đãi tốt nhất.
-          </p>
+          <div className="text-center">
+            <h1 className="text-3xl md:text-5xl font-bold tracking-tight uppercase leading-[1.2] mb-3 font-antenna">
+              Bảng giá xe Ford 2026
+            </h1>
+            <p className="text-white/80 text-base md:text-lg max-w-2xl mx-auto font-antenna">
+              Giá niêm yết chính hãng mới nhất, cập nhật liên tục. Liên hệ
+              Hotline <strong className="text-white">0918 90 90 60</strong> để
+              nhận ưu đãi tốt nhất.
+            </p>
+          </div>
         </div>
       </section>
 
       {/* Price Table */}
       <section className="py-12 md:py-16">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px]">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px]">
           {loading ? (
             <div className="py-24 text-center">
               <div className="animate-spin inline-block w-10 h-10 border-4 border-[#0562d2] border-t-transparent rounded-full" role="status">
@@ -157,7 +154,7 @@ export default function PriceListPage() {
           ) : (
             <>
               {/* Desktop Table */}
-              <div className="hidden md:block bg-white rounded-2xl border border-gray-200 overflow-x-auto shadow-sm">
+              <div className="hidden md:block bg-white rounded-none border border-gray-200 overflow-x-auto shadow-xs">
                 <table className="w-full">
                   <thead>
                     <tr className="bg-[#00095B] text-white text-sm font-bold">
@@ -209,7 +206,7 @@ export default function PriceListPage() {
                             >
                               <Link
                                 href={`/${vehicle.id}`}
-                                className="font-bold text-[#1a1a1a] hover:text-[#0562d2] transition-colors uppercase text-sm"
+                                className="font-bold text-[#1a1a1a] hover:text-[#066fef] transition-colors uppercase text-sm"
                               >
                                 {vehicle.name}
                               </Link>
@@ -227,14 +224,14 @@ export default function PriceListPage() {
                               className="py-4 px-6 align-top"
                               rowSpan={vehicle.versions.length}
                             >
-                              <span className="text-xs font-semibold text-[#0562D2] bg-blue-50 px-2.5 py-1 rounded-full">
+                              <span className="text-xs font-semibold text-[#066fef] bg-[#066fef]/10 px-2.5 py-1 rounded-[4px]">
                                 {vehicle.typeName}
                               </span>
                             </td>
                           )}
                           {/* Price */}
                           <td className="py-4 px-6 text-right whitespace-nowrap">
-                            <span className="font-bold text-[#0562D2] text-sm">
+                            <span className="font-bold text-[#066fef] text-sm">
                               {formatVND(version.price)}
                             </span>
                           </td>
@@ -243,7 +240,7 @@ export default function PriceListPage() {
                             <div className="flex items-center justify-center gap-2">
                               <Link
                                 href={`/cong-cu/uoc-tinh-lan-banh?vehicle=${vehicle.id}&version=${version.id}`}
-                                className="text-xs font-semibold text-gray-600 hover:text-[#0562d2] transition-colors flex items-center gap-1"
+                                className="text-xs font-semibold text-gray-600 hover:text-[#066fef] transition-colors flex items-center gap-1"
                                 title="Ước tính lăn bánh"
                               >
                                 <Calculator className="w-3.5 h-3.5" />
@@ -252,7 +249,7 @@ export default function PriceListPage() {
                               <span className="text-gray-300">|</span>
                               <Link
                                 href="/lien-he"
-                                className="text-xs font-semibold text-[#0562d2] hover:text-[#044ea7] transition-colors flex items-center gap-1"
+                                className="text-xs font-semibold text-[#066fef] hover:text-[#01095c] transition-colors flex items-center gap-1"
                               >
                                 <FileText className="w-3.5 h-3.5" />
                                 Báo giá
@@ -271,7 +268,7 @@ export default function PriceListPage() {
                 {vehicles.map((vehicle) => (
                   <div
                     key={vehicle.id}
-                    className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm"
+                    className="bg-white rounded-none border border-gray-200 overflow-hidden shadow-xs"
                   >
                     {/* Vehicle Header */}
                     <Link
@@ -295,7 +292,7 @@ export default function PriceListPage() {
                         <h3 className="font-bold text-sm uppercase text-[#1a1a1a]">
                           {vehicle.name}
                         </h3>
-                        <span className="text-xs text-[#0562D2] font-semibold">
+                        <span className="text-xs text-[#066fef] font-semibold">
                           {vehicle.typeName}
                         </span>
                       </div>
@@ -313,13 +310,13 @@ export default function PriceListPage() {
                             <p className="text-sm font-medium text-gray-700">
                               {version.name}
                             </p>
-                            <p className="text-sm font-bold text-[#0562D2] whitespace-nowrap">
+                            <p className="text-sm font-bold text-[#066fef] whitespace-nowrap">
                               {formatVND(version.price)}
                             </p>
                           </div>
                           <Link
                             href="/lien-he"
-                            className="text-xs font-semibold text-white bg-[#0562d2] hover:bg-[#044ea7] px-3 py-1.5 rounded-full transition-colors"
+                            className="text-xs font-semibold text-white bg-[#066fef] hover:bg-[#01095c] px-3.5 py-1.5 rounded-[4px] transition-colors uppercase tracking-wider text-[11px]"
                           >
                             Báo giá
                           </Link>
@@ -331,13 +328,13 @@ export default function PriceListPage() {
               </div>
 
               {/* Disclaimer */}
-              <div className="mt-8 bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-800">
+              <div className="mt-8 bg-amber-50 border-l-4 border-amber-500 p-4 text-sm text-amber-800 rounded-none">
                 <strong>Lưu ý:</strong> Giá niêm yết trên chưa bao gồm các khoản
                 phí lăn bánh (thuế trước bạ, biển số, đăng kiểm, bảo hiểm...). Vui
                 lòng sử dụng{" "}
                 <Link
                   href="/cong-cu/uoc-tinh-lan-banh"
-                  className="text-[#0562d2] font-semibold underline"
+                  className="text-[#066fef] font-semibold underline"
                 >
                   Công cụ Ước tính Lăn bánh
                 </Link>{" "}

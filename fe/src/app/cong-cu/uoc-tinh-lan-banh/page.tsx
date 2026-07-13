@@ -224,7 +224,7 @@ function RollingCostContent() {
     <div className="bg-[#fafafa] min-h-screen font-sans">
       {/* Breadcrumb */}
       <div className="bg-white border-b border-[#e5e5e5] py-4">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px]">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px]">
           <div className="text-xs text-gray-500 font-medium flex items-center gap-1.5">
             <Link href="/" className="hover:text-[#0562d2] transition-colors">
               Trang chủ
@@ -246,7 +246,7 @@ function RollingCostContent() {
 
       {/* Hero */}
       <section className="bg-gradient-to-br from-[#00095B] via-[#02337A] to-[#0562D2] text-white py-12 md:py-16">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] text-center">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] text-center">
           <h1 className="text-3xl md:text-4xl font-bold tracking-[-0.96px] leading-[1.2] mb-3">
             Ước tính chi phí lăn bánh
           </h1>
@@ -259,7 +259,7 @@ function RollingCostContent() {
 
       {/* Calculator Section */}
       <section className="py-10 md:py-14">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px]">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px]">
           {loading ? (
             <div className="py-24 text-center">
               <div className="animate-spin inline-block w-10 h-10 border-4 border-[#0562d2] border-t-transparent rounded-full" role="status">
@@ -439,7 +439,7 @@ function RollingCostContent() {
                       * Bảng dự toán trên mang tính tham khảo. Giá lăn bánh thực
                       tế có thể thay đổi tùy theo chính sách khuyến mãi, lãi suất
                       ngân hàng, và khu vực đăng ký tại thời điểm giao dịch. Vui
-                      lòng liên hệ trực tiếp Đồng Nai Ford để nhận báo giá chính
+                      lòng liên hệ trực tiếp Long Khánh Ford để nhận báo giá chính
                       xác nhất.
                     </p>
 

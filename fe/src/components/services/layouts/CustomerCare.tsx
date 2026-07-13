@@ -8,18 +8,18 @@ import { siteAssets } from "@/lib/site-assets";
 
 export default function CustomerCareLayout({ service }: { service?: any }) {
   return (
-    <div className="w-full bg-[#fafafa] min-h-screen flex flex-col">
+    <div className="w-full bg-[#F8F8F8] min-h-screen flex flex-col items-center">
       <ServicePageBanner title={service?.title || "Dịch vụ chăm sóc khách hàng"} backgroundImage={service?.banner_image?.url}>
-        <div className="flex flex-wrap gap-4 justify-center">
+        <div className="flex flex-wrap gap-4 justify-center font-antenna">
           <Link
             href="/lien-he"
-            className="bg-[#0562d2] hover:bg-[#044ea7] border border-[#0562d2] transition-colors text-white font-bold px-6 py-3 rounded-full text-sm"
+            className="bg-[#066fef] hover:bg-[#01095c] border border-[#066fef] transition-colors text-white font-bold px-6 py-3 rounded-[4px] text-xs uppercase tracking-wider shadow-xs"
           >
             Đặt hẹn
           </Link>
           <a
             href="tel:0918909060"
-            className="border border-white hover:bg-white/10 transition-colors text-white font-bold px-6 py-3 rounded-full text-sm"
+            className="border border-white hover:bg-white/10 transition-colors text-white font-bold px-6 py-3 rounded-[4px] text-xs uppercase tracking-wider shadow-xs"
           >
             Liên hệ hỗ trợ
           </a>
@@ -27,21 +27,21 @@ export default function CustomerCareLayout({ service }: { service?: any }) {
       </ServicePageBanner>
 
       {/* Intro Description */}
-      <div className="max-w-[1440px] w-full mx-auto px-4 lg:px-[128px] py-16 text-center">
+      <div className="max-w-[1440px] w-full mx-auto px-4 lg:px-[80px] py-16 text-center">
         {service?.content ? (
           <div 
-            className="prose max-w-none text-xl md:text-2xl text-gray-900 leading-relaxed font-normal text-left md:text-center"
+            className="prose max-w-none text-xl md:text-2xl text-gray-900 leading-relaxed font-normal text-left md:text-center font-antenna"
             dangerouslySetInnerHTML={{ __html: service.content }}
           />
         ) : (
-          <div className="max-w-[1000px] mx-auto text-xl md:text-2xl text-gray-900 leading-relaxed font-normal">
+          <div className="max-w-[1000px] mx-auto text-xl md:text-2xl text-gray-900 leading-relaxed font-normal font-antenna">
             Quy trình dịch vụ tiêu chuẩn Ford toàn cầu Quality Care service được áp dụng tại tất cả các đại lý ủy quyền. Hàng năm, Ford tổ chức đánh giá và củng cố việc tuân thủ quy trình tại đại lý nhằm đảm bảo chất lượng dịch vụ cao nhất.
           </div>
         )}
       </div>
 
       {/* Quality Care Badge Image Display */}
-      <div className="max-w-[1440px] w-full mx-auto px-4 lg:px-[128px] py-[6px] flex justify-center">
+      <div className="max-w-[1440px] w-full mx-auto px-4 lg:px-[80px] py-[6px] flex justify-center">
         <div className="relative w-[500px] h-[500px] max-w-full">
           <Image
             src={siteAssets.qualityCareBadge}
@@ -54,16 +54,16 @@ export default function CustomerCareLayout({ service }: { service?: any }) {
       </div>
 
       {/* Core Detailed Columns */}
-      <div className="max-w-[1440px] w-full mx-auto px-4 lg:px-[128px] py-16 grid grid-cols-1 md:grid-cols-3 gap-12">
+      <div className="max-w-[1440px] w-full mx-auto px-4 lg:px-[80px] py-16 grid grid-cols-1 md:grid-cols-3 gap-12 font-antenna">
         {service?.benefits && Array.isArray(service.benefits) && service.benefits.length > 0 && service.benefits.some((b: any) => b && (b.title || b.description)) ? (
           service.benefits.filter((b: any) => b && (b.title || b.description)).map((benefit: any, bidx: number) => (
             <div key={bidx} className="flex flex-col gap-5">
-              <h3 className="font-['Ford_Antenna',sans-serif] font-bold text-lg text-gray-900 border-b border-gray-200 pb-3">
+              <h3 className="font-display font-bold text-lg text-gray-900 border-b border-gray-200 pb-3 uppercase tracking-wide">
                 {benefit.title}
               </h3>
               {benefit.description && (
                 <div 
-                  className="text-sm text-gray-600 leading-relaxed space-y-2 prose"
+                  className="text-sm text-gray-650 leading-relaxed space-y-2 prose"
                   dangerouslySetInnerHTML={{ __html: benefit.description }}
                 />
               )}
@@ -73,7 +73,7 @@ export default function CustomerCareLayout({ service }: { service?: any }) {
           <>
             {/* Column 1 */}
             <div className="flex flex-col gap-5">
-              <h3 className="font-['Ford_Antenna',sans-serif] font-bold text-lg text-gray-900 border-b border-gray-200 pb-3">
+              <h3 className="font-display font-bold text-lg text-gray-900 border-b border-gray-200 pb-3 uppercase tracking-wide">
                 Hài lòng khách hàng là mục tiêu hàng đầu
               </h3>
               <ul className="space-y-3 text-sm text-gray-600 list-disc pl-5 leading-relaxed">
@@ -86,7 +86,7 @@ export default function CustomerCareLayout({ service }: { service?: any }) {
 
             {/* Column 2 */}
             <div className="flex flex-col gap-5 items-start">
-              <h3 className="font-['Ford_Antenna',sans-serif] font-bold text-lg text-gray-900 border-b border-gray-200 pb-3 w-full">
+              <h3 className="font-display font-bold text-lg text-gray-900 border-b border-gray-200 pb-3 w-full uppercase tracking-wide">
                 Phiếu kiểm tra tình trạng xe
               </h3>
               <ul className="space-y-3 text-sm text-gray-600 list-disc pl-5 leading-relaxed">
@@ -97,7 +97,7 @@ export default function CustomerCareLayout({ service }: { service?: any }) {
               <a
                 href="/assets/express-maintenance-flow.png"
                 download
-                className="flex items-center gap-2 text-[#0562d2] font-bold text-sm hover:underline mt-2"
+                className="flex items-center gap-2 text-[#066fef] font-bold text-sm hover:underline mt-2"
               >
                 <Download className="w-5 h-5" />
                 <span>Tải phiếu tại đây</span>

@@ -16,8 +16,8 @@ export async function generateMetadata({ params }: Props) {
 
     if (!accessory) return {};
 
-    const title = `${accessory.title} | Phụ kiện chính hãng | Đồng Nai Ford`;
-    const description = accessory.description || `Mua lắp đặt phụ kiện xe Ford ${accessory.title} chất lượng cao, nhập khẩu chính hãng tại Đồng Nai Ford.`;
+    const title = `${accessory.title} | Phụ kiện chính hãng | Long Khánh Ford`;
+    const description = accessory.description || `Mua lắp đặt phụ kiện xe Ford ${accessory.title} chất lượng cao, nhập khẩu chính hãng tại Long Khánh Ford.`;
     const imageUrl = accessory.image?.url || (accessory.images?.[0]?.url) || "";
 
     return {

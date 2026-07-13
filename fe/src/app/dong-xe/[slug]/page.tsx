@@ -24,12 +24,12 @@ export async function generateMetadata({ params }: Props) {
       || staticCategories.find((c: any) => c.slug === slug);
 
     const title = matched 
-      ? `Các dòng xe Ford ${matched.title} | Đồng Nai Ford`
-      : `Các dòng xe Ford | Đồng Nai Ford`;
+      ? `Các dòng xe Ford ${matched.title} | Long Khánh Ford`
+      : `Các dòng xe Ford | Long Khánh Ford`;
 
     const description = matched
-      ? `Khám phá danh sách các dòng xe Ford ${matched.title} thế hệ mới chính hãng tại Đồng Nai Ford. Xem giá niêm yết, thông số kỹ thuật và nhận dự toán chi phí lăn bánh.`
-      : `Khám phá danh sách các dòng xe Ford thế hệ mới chính hãng tại Đồng Nai Ford.`;
+      ? `Khám phá danh sách các dòng xe Ford ${matched.title} thế hệ mới chính hãng tại Long Khánh Ford. Xem giá niêm yết, thông số kỹ thuật và nhận dự toán chi phí lăn bánh.`
+      : `Khám phá danh sách các dòng xe Ford thế hệ mới chính hãng tại Long Khánh Ford.`;
 
     return {
       title,

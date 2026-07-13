@@ -134,16 +134,16 @@ export default function JobDetailClient({ job }: { job: JobDetail }) {
   };
 
   return (
-    <div className="bg-[#fafafa] min-h-screen font-sans text-gray-900 w-full">
+    <div className="bg-[#F8F8F8] min-h-screen font-sans text-gray-900 w-full flex flex-col items-center">
       {/* Breadcrumb */}
-      <div className="bg-white border-b border-gray-100 py-4">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px]">
+      <div className="bg-white border-b border-gray-150 py-4 w-full flex justify-center font-antenna">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full">
           <div className="text-xs text-gray-500 font-medium flex items-center gap-1.5">
-            <Link href="/" className="hover:text-[#0562d2] transition-colors">
+            <Link href="/" className="hover:text-[#066fef] transition-colors">
               Trang chủ
             </Link>
             <div className="w-[3px] h-[3px] rounded-full bg-gray-400 mx-1" />
-            <Link href="/tuyen-dung" className="hover:text-[#0562d2] transition-colors">
+            <Link href="/tuyen-dung" className="hover:text-[#066fef] transition-colors">
               Tuyển dụng
             </Link>
             <div className="w-[3px] h-[3px] rounded-full bg-gray-400 mx-1" />
@@ -155,36 +155,36 @@ export default function JobDetailClient({ job }: { job: JobDetail }) {
       </div>
 
       {/* Main Content Area */}
-      <section className="py-10 md:py-16">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px]">
+      <section className="py-10 md:py-16 w-full flex justify-center">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full">
           
           {/* Back Button */}
           <Link
             href="/tuyen-dung"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-[#0562d2] transition-colors mb-6 cursor-pointer border-0 bg-transparent"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-[#066fef] transition-colors mb-6 cursor-pointer border-0 bg-transparent font-antenna"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Quay lại danh sách</span>
           </Link>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start w-full">
             
             {/* Left: Job Details Content (2 Cols) */}
-            <div className="lg:col-span-2 space-y-6">
+            <div className="lg:col-span-2 space-y-6 w-full">
               
-              <div className="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
+              <div className="bg-white rounded-none border border-gray-200 p-6 md:p-8 shadow-xs">
                 
                 {/* Title */}
-                <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#00095B] leading-tight mb-6 font-display">
+                <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#066fef] leading-tight mb-6 font-display uppercase tracking-wide">
                   {job.title}
                 </h1>
 
                 {/* Job Metadata Bar */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-5 bg-gray-50 border border-gray-100 rounded-xl mb-8">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-5 bg-[#F8F8F8] border border-gray-200 rounded-none mb-8 font-antenna shadow-xs">
                   <div className="space-y-1">
                     <span className="text-[10px] uppercase font-bold tracking-wider text-gray-400 block">Nơi làm việc</span>
                     <span className="text-xs font-bold text-gray-800 flex items-center gap-1">
-                      <MapPin className="w-3.5 h-3.5 text-[#0562d2] flex-shrink-0" />
+                      <MapPin className="w-3.5 h-3.5 text-[#066fef] flex-shrink-0" />
                       {job.work_address || job.location || "Đồng Nai"}
                     </span>
                   </div>
@@ -192,7 +192,7 @@ export default function JobDetailClient({ job }: { job: JobDetail }) {
                   <div className="space-y-1">
                     <span className="text-[10px] uppercase font-bold tracking-wider text-gray-400 block">Mức lương</span>
                     <span className="text-xs font-bold text-gray-800 flex items-center gap-1">
-                      <DollarSign className="w-3.5 h-3.5 text-[#0562d2] flex-shrink-0" />
+                      <DollarSign className="w-3.5 h-3.5 text-[#066fef] flex-shrink-0" />
                       {job.salary || "Thỏa thuận"}
                     </span>
                   </div>
@@ -200,7 +200,7 @@ export default function JobDetailClient({ job }: { job: JobDetail }) {
                   <div className="space-y-1">
                     <span className="text-[10px] uppercase font-bold tracking-wider text-gray-400 block">Thời gian làm việc</span>
                     <span className="text-xs font-bold text-gray-800 flex items-center gap-1">
-                      <Clock className="w-3.5 h-3.5 text-[#0562d2] flex-shrink-0" />
+                      <Clock className="w-3.5 h-3.5 text-[#066fef] flex-shrink-0" />
                       {job.working_time || "Toàn thời gian"}
                     </span>
                   </div>
@@ -208,7 +208,7 @@ export default function JobDetailClient({ job }: { job: JobDetail }) {
                   <div className="space-y-1">
                     <span className="text-[10px] uppercase font-bold tracking-wider text-gray-400 block">Số lượng cần tuyển</span>
                     <span className="text-xs font-bold text-gray-800 flex items-center gap-1">
-                      <Users className="w-3.5 h-3.5 text-[#0562d2] flex-shrink-0" />
+                      <Users className="w-3.5 h-3.5 text-[#066fef] flex-shrink-0" />
                       {job.quantity ? `${job.quantity} vị trí` : "Liên hệ"}
                     </span>
                   </div>
@@ -216,8 +216,8 @@ export default function JobDetailClient({ job }: { job: JobDetail }) {
 
                 {/* Description summary block */}
                 {job.description && (
-                  <div className="border-l-4 border-[#0562d2] pl-4 py-1.5 mb-8">
-                    <p className="text-sm font-medium text-gray-600 italic leading-relaxed">
+                  <div className="border-l-4 border-[#066fef] pl-4 py-1.5 mb-8 font-antenna">
+                    <p className="text-sm font-medium text-gray-650 italic leading-relaxed">
                       {job.description}
                     </p>
                   </div>
@@ -226,13 +226,13 @@ export default function JobDetailClient({ job }: { job: JobDetail }) {
                 {/* HTML content parsed safely */}
                 {job.content && (
                   <div
-                    className="prose prose-sm max-w-none text-gray-700 leading-relaxed
-                      prose-headings:text-[#00095B] prose-headings:font-bold prose-headings:font-display prose-headings:mt-6 prose-headings:mb-3
+                    className="prose prose-sm max-w-none text-gray-700 leading-relaxed font-antenna
+                      prose-headings:text-[#066fef] prose-headings:font-bold prose-headings:font-display prose-headings:mt-6 prose-headings:mb-3 uppercase prose-headings:tracking-wide
                       prose-h2:text-xl prose-h3:text-lg
                       prose-p:mb-4
-                      prose-a:text-[#0562d2] prose-a:underline hover:prose-a:text-[#044ea7]
+                      prose-a:text-[#066fef] prose-a:underline hover:prose-a:text-[#01095c]
                       prose-strong:text-gray-900 prose-strong:font-bold
-                      prose-li:marker:text-[#0562d2] prose-ul:list-disc prose-ul:pl-6 prose-ul:mb-4"
+                      prose-li:marker:text-[#066fef] prose-ul:list-disc prose-ul:pl-6 prose-ul:mb-4"
                     dangerouslySetInnerHTML={{ __html: job.content }}
                   />
                 )}
@@ -240,29 +240,29 @@ export default function JobDetailClient({ job }: { job: JobDetail }) {
             </div>
 
             {/* Right: Apply Form Card (1 Col) */}
-            <div className="lg:col-span-1">
-              <div className="bg-white border border-gray-200/80 rounded-2xl p-6 shadow-sm sticky top-[140px]">
+            <div className="lg:col-span-1 w-full">
+              <div className="bg-white border border-gray-200 rounded-none p-6 shadow-xs sticky top-[140px]">
                 
                 {submitted ? (
-                  <div className="text-center py-10 space-y-4">
-                    <div className="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-inner border border-emerald-100">
+                  <div className="text-center py-10 space-y-4 font-antenna">
+                    <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-[4px] flex items-center justify-center mx-auto shadow-xs border border-emerald-150">
                       <Check className="w-8 h-8" />
                     </div>
-                    <h3 className="text-lg font-bold text-gray-900 font-display">
+                    <h3 className="text-lg font-bold text-gray-900 font-display uppercase tracking-wide">
                       Gửi hồ sơ thành công!
                     </h3>
                     <p className="text-xs text-gray-500 leading-relaxed max-w-[280px] mx-auto">
-                      Cảm ơn bạn đã ứng tuyển vào vị trí <strong>{job.title}</strong> tại Đồng Nai Ford. Chúng tôi sẽ đánh giá hồ sơ và liên hệ với bạn trong thời gian sớm nhất.
+                      Cảm ơn bạn đã ứng tuyển vào vị trí <strong>{job.title}</strong> tại Long Khánh Ford. Chúng tôi sẽ đánh giá hồ sơ và liên hệ với bạn trong thời gian sớm nhất.
                     </p>
                   </div>
                 ) : (
                   <>
-                    <h2 className="text-lg font-bold text-[#00095B] border-b border-gray-100 pb-4 mb-5 font-display flex items-center gap-2">
-                      <Briefcase className="w-5 h-5 text-[#0562d2]" />
+                    <h2 className="text-lg font-bold text-[#066fef] border-b border-gray-100 pb-4 mb-5 font-display flex items-center gap-2 uppercase tracking-wide">
+                      <Briefcase className="w-5 h-5 text-[#066fef]" />
                       Ứng tuyển ngay
                     </h2>
 
-                    <form onSubmit={handleSubmit} className="space-y-4 text-left">
+                    <form onSubmit={handleSubmit} className="space-y-4 text-left font-antenna">
                       {/* Full Name */}
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-gray-700 uppercase tracking-wider block">
@@ -275,7 +275,7 @@ export default function JobDetailClient({ job }: { job: JobDetail }) {
                           onChange={handleInputChange}
                           required
                           placeholder="Nguyễn Văn A"
-                          className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-[#0562d2] focus:ring-1 focus:ring-[#0562d2] transition-colors text-black"
+                          className="w-full bg-gray-50 border border-gray-200 rounded-[4px] px-4 py-2.5 text-xs focus:outline-none focus:border-[#066fef] focus:ring-1 focus:ring-[#066fef] transition-colors text-black"
                         />
                       </div>
 
@@ -291,7 +291,7 @@ export default function JobDetailClient({ job }: { job: JobDetail }) {
                           onChange={handleInputChange}
                           required
                           placeholder="0918xxxxxx"
-                          className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-[#0562d2] focus:ring-1 focus:ring-[#0562d2] transition-colors text-black"
+                          className="w-full bg-gray-50 border border-gray-200 rounded-[4px] px-4 py-2.5 text-xs focus:outline-none focus:border-[#066fef] focus:ring-1 focus:ring-[#066fef] transition-colors text-black"
                         />
                       </div>
 
@@ -307,7 +307,7 @@ export default function JobDetailClient({ job }: { job: JobDetail }) {
                           onChange={handleInputChange}
                           required
                           placeholder="example@mail.com"
-                          className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-[#0562d2] focus:ring-1 focus:ring-[#0562d2] transition-colors text-black"
+                          className="w-full bg-gray-50 border border-gray-200 rounded-[4px] px-4 py-2.5 text-xs focus:outline-none focus:border-[#066fef] focus:ring-1 focus:ring-[#066fef] transition-colors text-black"
                         />
                       </div>
 
@@ -326,7 +326,7 @@ export default function JobDetailClient({ job }: { job: JobDetail }) {
                         <button
                           type="button"
                           onClick={() => fileInputRef.current?.click()}
-                          className="w-full flex items-center justify-center gap-2 bg-gray-50 border border-dashed border-gray-300 hover:border-[#0562d2] rounded-xl px-4 py-3.5 text-xs text-gray-500 hover:text-[#0562d2] transition-all cursor-pointer shadow-xs hover:bg-blue-50/20"
+                          className="w-full flex items-center justify-center gap-2 bg-gray-50 border border-dashed border-gray-300 hover:border-[#066fef] rounded-[4px] px-4 py-3.5 text-xs text-gray-500 hover:text-[#066fef] transition-all cursor-pointer shadow-xs hover:bg-[#066fef]/10"
                         >
                           <Upload className="w-4 h-4 text-gray-400" />
                           <span className="truncate max-w-[200px]">
@@ -361,13 +361,13 @@ export default function JobDetailClient({ job }: { job: JobDetail }) {
                           onChange={handleInputChange}
                           rows={3}
                           placeholder="Nhập ghi chú hoặc giới thiệu ngắn về bản thân..."
-                          className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-[#0562d2] focus:ring-1 focus:ring-[#0562d2] transition-colors resize-none text-black"
+                          className="w-full bg-gray-50 border border-gray-200 rounded-[4px] px-4 py-2.5 text-xs focus:outline-none focus:border-[#066fef] focus:ring-1 focus:ring-[#066fef] transition-colors resize-none text-black"
                         />
                       </div>
 
                       {/* Error Messages */}
                       {submitError && (
-                        <div className="bg-red-50 border border-red-100 text-red-600 p-3 rounded-lg text-xs font-semibold text-center flex items-center gap-1.5 justify-center">
+                        <div className="bg-red-50 border border-red-100 text-red-600 p-3 rounded-[4px] text-xs font-semibold text-center flex items-center gap-1.5 justify-center">
                           <AlertCircle className="w-4 h-4 flex-shrink-0" />
                           <span>{submitError}</span>
                         </div>
@@ -377,7 +377,7 @@ export default function JobDetailClient({ job }: { job: JobDetail }) {
                       <button
                         type="submit"
                         disabled={submitting}
-                        className="w-full bg-[#0562d2] hover:bg-[#044ea7] disabled:bg-gray-300 text-white text-xs font-bold uppercase tracking-wider py-3.5 rounded-full transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed border-0 shadow-sm hover:shadow-md mt-2"
+                        className="w-full bg-[#066fef] hover:bg-[#01095c] disabled:bg-gray-400 text-white text-xs font-bold uppercase tracking-wider py-3.5 rounded-[4px] transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed border-0 shadow-xs hover:shadow-sm mt-2 font-antenna"
                       >
                         {submitting ? (
                           <>

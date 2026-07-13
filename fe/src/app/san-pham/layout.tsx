@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Sản phẩm | Đồng Nai Ford — Các dòng xe Ford chính hãng",
+  title: "Sản phẩm | Long Khánh Ford — Các dòng xe Ford chính hãng",
   description:
-    "Khám phá đầy đủ các dòng xe Ford chính hãng tại Đồng Nai Ford: SUV, bán tải, xe thương mại. Giá ưu đãi, hỗ trợ trả góp 80%.",
+    "Khám phá đầy đủ các dòng xe Ford chính hãng tại Long Khánh Ford: SUV, bán tải, xe thương mại. Giá ưu đãi, hỗ trợ trả góp 80%.",
   keywords: [
     "xe Ford",
-    "Ford Đồng Nai",
+    "Ford Long Khánh",
     "Ford Everest",
     "Ford Ranger",
     "Ford Territory",
@@ -14,9 +14,9 @@ export const metadata: Metadata = {
     "mua xe Ford",
   ],
   openGraph: {
-    title: "Sản phẩm | Đồng Nai Ford",
+    title: "Sản phẩm | Long Khánh Ford",
     description:
-      "Khám phá đầy đủ các dòng xe Ford chính hãng tại showroom Ford Đồng Nai.",
+      "Khám phá đầy đủ các dòng xe Ford chính hãng tại showroom Ford Long Khánh.",
   },
 };
 

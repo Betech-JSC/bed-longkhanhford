@@ -123,49 +123,45 @@ export default function JobsPage() {
   };
 
   return (
-    <div className="bg-[#fafafa] min-h-screen font-sans text-gray-900">
-      {/* Breadcrumb */}
-      <div className="bg-white border-b border-gray-100 py-4">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px]">
-          <div className="text-xs text-gray-500 font-medium flex items-center gap-1.5">
-            <Link href="/" className="hover:text-[#0562d2] transition-colors">
+    <div className="bg-[#F8F8F8] min-h-screen font-sans text-gray-900 w-full flex flex-col items-center">
+      {/* Hero Banner */}
+      <section className="relative w-full bg-gradient-to-br from-neutral-900 to-[#01095c] text-white pt-28 pb-14 md:pb-18 overflow-hidden">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] relative z-10">
+          {/* Breadcrumb inside Hero */}
+          <div className="text-xs text-white/60 font-medium flex items-center gap-1.5 mb-6 justify-center">
+            <Link href="/" className="hover:text-white transition-colors">
               Trang chủ
             </Link>
-            <div className="w-[3px] h-[3px] rounded-full bg-gray-400 mx-1" />
-            <span className="text-gray-900 font-semibold">Tuyển dụng</span>
+            <span>/</span>
+            <span className="text-white">Tuyển dụng</span>
           </div>
-        </div>
-      </div>
-
-      {/* Hero Banner */}
-      <section className="bg-gradient-to-br from-[#00095B] via-[#02337A] to-[#0562D2] text-white py-12 md:py-16 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.08),transparent_70%)] pointer-events-none" />
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] text-center relative z-10">
-          <h1 className="text-3xl md:text-4xl font-bold tracking-[-0.96px] leading-[1.2] mb-3 uppercase font-['Ford_Antenna',sans-serif]">
-            Đồng hành cùng Đồng Nai Ford
-          </h1>
-          <p className="text-white/80 text-sm md:text-base max-w-xl mx-auto leading-relaxed">
-            Gia nhập đại gia đình Ford — nơi chắp cánh cho khát vọng, nâng tầm năng lực và cùng bạn xây dựng hành trình sự nghiệp chuyên nghiệp trong ngành ô tô.
-          </p>
+          <div className="text-center">
+            <h1 className="text-3xl md:text-5xl font-bold tracking-tight uppercase leading-[1.2] mb-3 font-antenna">
+              Đồng hành cùng Long Khánh Ford
+            </h1>
+            <p className="text-white/80 text-base md:text-lg max-w-2xl mx-auto font-antenna">
+              Gia nhập đại gia đình Ford — nơi chắp cánh cho khát vọng, nâng tầm năng lực và cùng bạn xây dựng hành trình sự nghiệp chuyên nghiệp trong ngành ô tô.
+            </p>
+          </div>
         </div>
       </section>
 
       {/* Filters & Job Listings */}
-      <section className="py-12 md:py-16">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px]">
+      <section className="py-12 md:py-16 w-full">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px]">
           
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start max-w-5xl mx-auto">
             {/* Left Column: Filter Sidebar */}
-            <div className="lg:col-span-1 bg-white border border-gray-200/80 rounded-2xl p-6 shadow-sm space-y-4 lg:sticky lg:top-[120px]">
+            <div className="lg:col-span-1 bg-white border border-gray-200 rounded-none p-6 shadow-xs space-y-4 lg:sticky lg:top-[120px]">
               <div className="flex items-center justify-between border-b border-gray-100 pb-3">
-                <h2 className="text-base font-bold font-['Ford_Antenna',sans-serif] text-gray-900 flex items-center gap-2">
-                  <Briefcase className="w-5 h-5 text-[#0562d2]" />
+                <h2 className="text-base font-bold font-display text-gray-900 flex items-center gap-2">
+                  <Briefcase className="w-5 h-5 text-[#066fef]" />
                   Bộ lọc
                 </h2>
                 {(searchTerm || selectedLocation !== "all" || selectedType !== "all") && (
                   <button
                     onClick={clearFilters}
-                    className="text-xs font-bold text-red-600 hover:text-red-700 flex items-center gap-1 transition-colors cursor-pointer border-0 bg-transparent"
+                    className="text-xs font-bold text-[#D20000] hover:text-red-700 flex items-center gap-1 transition-colors cursor-pointer border-0 bg-transparent"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
                     Xóa
@@ -176,14 +172,14 @@ export default function JobsPage() {
               <div className="flex flex-col gap-4">
                 {/* Search Bar */}
                 <div>
-                  <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wider">Từ khóa</label>
+                  <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wider font-antenna">Từ khóa</label>
                   <div className="relative">
                     <input
                       type="text"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       placeholder="Nhập tên vị trí..."
-                      className="w-full text-sm bg-gray-55 border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 focus:outline-none focus:border-[#0562d2] focus:ring-1 focus:ring-[#0562d2] transition-all text-black"
+                      className="w-full text-sm bg-gray-50 border border-gray-250 rounded-[8px] py-2.5 pl-10 pr-4 focus:outline-none focus:border-[#066fef] focus:ring-1 focus:ring-[#066fef] transition-all text-black font-antenna"
                     />
                     <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                   </div>
@@ -191,12 +187,12 @@ export default function JobsPage() {
 
                 {/* Location Filter */}
                 <div>
-                  <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wider">Địa điểm</label>
+                  <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wider font-antenna">Địa điểm</label>
                   <div className="relative">
                     <select
                       value={selectedLocation}
                       onChange={(e) => setSelectedLocation(e.target.value)}
-                      className="w-full text-sm bg-gray-55 border border-gray-200 rounded-xl py-2.5 pl-3 pr-8 focus:outline-none focus:border-[#0562d2] focus:ring-1 focus:ring-[#0562d2] transition-all text-black appearance-none cursor-pointer"
+                      className="w-full text-sm bg-gray-55 border border-gray-200 rounded-[8px] py-2.5 pl-3 pr-8 focus:outline-none focus:border-[#066fef] focus:ring-1 focus:ring-[#066fef] transition-all text-black appearance-none cursor-pointer font-antenna"
                     >
                       <option value="all">Tất cả địa điểm</option>
                       {locations.slice(1).map(loc => (
@@ -211,12 +207,12 @@ export default function JobsPage() {
 
                 {/* Type Filter */}
                 <div>
-                  <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wider">Phòng ban</label>
+                  <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wider font-antenna">Phòng ban</label>
                   <div className="relative">
                     <select
                       value={selectedType}
                       onChange={(e) => setSelectedType(e.target.value)}
-                      className="w-full text-sm bg-gray-55 border border-gray-200 rounded-xl py-2.5 pl-3 pr-8 focus:outline-none focus:border-[#0562d2] focus:ring-1 focus:ring-[#0562d2] transition-all text-black appearance-none cursor-pointer"
+                      className="w-full text-sm bg-gray-55 border border-gray-200 rounded-[8px] py-2.5 pl-3 pr-8 focus:outline-none focus:border-[#066fef] focus:ring-1 focus:ring-[#066fef] transition-all text-black appearance-none cursor-pointer font-antenna"
                     >
                       <option value="all">Tất cả phòng ban</option>
                       {positions.slice(1).map(pos => (
@@ -235,20 +231,20 @@ export default function JobsPage() {
             <div className="lg:col-span-3 w-full">
               {loading ? (
                 <div className="flex items-center justify-center py-24">
-                  <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#0562d2]" />
+                  <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#066fef]" />
                 </div>
               ) : filteredJobs.length === 0 ? (
-                <div className="text-center py-20 bg-white border border-gray-200/80 rounded-2xl shadow-xs">
+                <div className="text-center py-20 bg-white border border-gray-200 rounded-none shadow-xs">
                   <Briefcase className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                  <h2 className="text-xl font-bold text-gray-600 mb-2">
+                  <h2 className="text-xl font-bold text-gray-600 mb-2 font-display">
                     Chưa có vị trí tuyển dụng phù hợp
                   </h2>
-                  <p className="text-sm text-gray-400 max-w-md mx-auto mb-6">
+                  <p className="text-sm text-gray-400 max-w-md mx-auto mb-6 font-antenna">
                     Chúng tôi không tìm thấy kết quả phù hợp với bộ lọc của bạn. Thử thay đổi từ khóa hoặc liên hệ gửi CV trực tiếp.
                   </p>
                   <button
                     onClick={clearFilters}
-                    className="bg-[#0562d2] hover:bg-[#044ea7] text-white text-xs font-bold px-6 py-2.5 rounded-full transition-colors cursor-pointer border-0"
+                    className="bg-[#066fef] hover:bg-[#01095c] text-white text-xs font-semibold px-6 py-2.5 rounded-[4px] transition-colors cursor-pointer border-0 uppercase tracking-wider"
                   >
                     Xóa bộ lọc tìm kiếm
                   </button>
@@ -260,7 +256,7 @@ export default function JobsPage() {
                       <Link
                         key={job.id}
                         href={`/tuyen-dung/${job.slug}`}
-                        className="w-full bg-white rounded-xl shadow-xs p-6 flex items-center gap-4 border border-gray-100 hover:shadow-md transition-all duration-300 group cursor-pointer"
+                        className="w-full bg-white rounded-none shadow-xs p-6 flex items-center gap-4 border border-gray-200 hover:shadow-sm transition-all duration-300 group cursor-pointer"
                       >
                         {/* Logo Ford Oval */}
                         <div className="w-[85.3px] h-8 relative flex-shrink-0 flex items-center">
@@ -273,16 +269,16 @@ export default function JobsPage() {
 
                         {/* Job Title and Short Description */}
                         <div className="flex-1 flex flex-col gap-1 min-w-0">
-                          <h3 className="text-base font-semibold leading-6 text-[#1a1a1a] font-['Ford_Antenna',sans-serif] group-hover:text-[#0562d2] transition-colors truncate">
+                          <h3 className="text-base font-semibold leading-6 text-[#1a1a1a] font-display group-hover:text-[#066fef] transition-colors truncate">
                             {job.title}
                           </h3>
-                          <p className="text-sm font-normal leading-[19.6px] text-gray-500 font-sans truncate">
+                          <p className="text-sm font-normal leading-[19.6px] text-gray-500 font-antenna truncate">
                             {job.description}
                           </p>
                         </div>
 
                         {/* Interactive circular toggle button */}
-                        <div className="w-10 h-10 rounded-full flex items-center justify-center border border-gray-200 transition-all duration-300 flex-shrink-0 bg-white group-hover:bg-[#0562d2] group-hover:border-[#0562d2] text-[#0562d2] group-hover:text-white">
+                        <div className="w-10 h-10 rounded-[4px] flex items-center justify-center border border-gray-200 transition-all duration-300 flex-shrink-0 bg-white group-hover:bg-[#066fef] group-hover:border-[#066fef] text-[#066fef] group-hover:text-white">
                           <ArrowRight className="w-5 h-5" />
                         </div>
                       </Link>
@@ -292,12 +288,12 @@ export default function JobsPage() {
                   {/* Pagination component block */}
                   {totalPages > 1 && (
                     <div className="flex justify-center pt-8">
-                      <div className="bg-white border border-gray-200/80 flex gap-2 items-center px-4 py-2 rounded-full shadow-sm">
+                      <div className="bg-white border border-gray-200 flex gap-2 items-center px-4 py-2 rounded-none shadow-xs">
                         {/* Prev button */}
                         <button
                           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                           disabled={currentPage === 1}
-                          className={`w-10 h-10 flex items-center justify-center rounded-full transition cursor-pointer border-0 bg-transparent ${
+                          className={`w-10 h-10 flex items-center justify-center rounded-[4px] transition cursor-pointer border-0 bg-transparent ${
                             currentPage === 1
                               ? "text-gray-300 pointer-events-none"
                               : "text-[#424242] hover:bg-gray-100"
@@ -311,9 +307,9 @@ export default function JobsPage() {
                           <button
                             key={page}
                             onClick={() => setCurrentPage(page)}
-                            className={`w-10 h-10 flex items-center justify-center text-sm font-bold rounded-full transition cursor-pointer border-0 ${
+                            className={`w-10 h-10 flex items-center justify-center text-sm font-bold rounded-[4px] transition cursor-pointer border-0 ${
                               currentPage === page
-                                ? "bg-[#0562d2] text-white"
+                                ? "bg-[#066fef] text-white"
                                 : "bg-transparent text-[#424242] hover:bg-gray-100"
                             }`}
                           >
@@ -325,7 +321,7 @@ export default function JobsPage() {
                         <button
                           onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                           disabled={currentPage === totalPages}
-                          className={`w-10 h-10 flex items-center justify-center rounded-full transition cursor-pointer border-0 bg-transparent ${
+                          className={`w-10 h-10 flex items-center justify-center rounded-[4px] transition cursor-pointer border-0 bg-transparent ${
                             currentPage === totalPages
                               ? "text-gray-300 pointer-events-none"
                               : "text-[#424242] hover:bg-gray-100"
@@ -344,44 +340,44 @@ export default function JobsPage() {
       </section>
 
       {/* Why Join Section */}
-      <section className="bg-white border-y border-gray-200 py-16">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px]">
+      <section className="bg-white border-y border-gray-200 py-16 w-full">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px]">
           <div className="text-center max-w-2xl mx-auto mb-12">
-            <span className="text-xs font-bold text-[#0562d2] uppercase tracking-widest block mb-2">Giá trị cốt lõi</span>
-            <h2 className="text-2xl md:text-4xl font-bold font-['Ford_Antenna',sans-serif] text-[#00095B]">
-              Tại sao bạn nên chọn Đồng Nai Ford?
+            <span className="text-xs font-bold text-[#066fef] uppercase tracking-widest block mb-2 font-antenna">Giá trị cốt lõi</span>
+            <h2 className="text-2xl md:text-4xl font-bold font-display text-[#00095B] uppercase tracking-tight">
+              Tại sao bạn nên chọn Long Khánh Ford?
             </h2>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {[
               {
-                icon: <TrendingUp className="w-8 h-8 text-[#0562d2]" />,
+                icon: <TrendingUp className="w-8 h-8 text-[#066fef]" />,
                 title: "Phát triển và Thăng tiến",
                 desc: "Chúng tôi đầu tư lộ trình đào tạo chuyên sâu chuẩn toàn cầu của Ford Việt Nam, mở ra cơ hội thăng tiến không giới hạn.",
               },
               {
-                icon: <Award className="w-8 h-8 text-[#0562d2]" />,
+                icon: <Award className="w-8 h-8 text-[#066fef]" />,
                 title: "Thu nhập & Đãi ngộ xứng đáng",
                 desc: "Lương cứng cạnh tranh cộng hoa hồng hấp dẫn. Chế độ bảo hiểm, du lịch nghỉ dưỡng hàng năm và thưởng Tết hậu hĩnh.",
               },
               {
-                icon: <HeartHandshake className="w-8 h-8 text-[#0562d2]" />,
+                icon: <HeartHandshake className="w-8 h-8 text-[#066fef]" />,
                 title: "Môi trường năng động",
                 desc: "Cơ sở hạ tầng showroom và xưởng hiện đại, văn hóa làm việc tôn trọng, chia sẻ và đồng nghiệp thân thiện hỗ trợ nhau.",
               },
             ].map((item) => (
               <div
                 key={item.title}
-                className="bg-gray-50 border border-gray-100 rounded-2xl p-6 md:p-8 hover:shadow-lg transition-shadow duration-300"
+                className="bg-white border border-gray-200 rounded-none p-6 md:p-8 hover:shadow-xs transition-shadow duration-300"
               >
-                <div className="w-14 h-14 bg-white rounded-xl flex items-center justify-center shadow-sm border border-gray-100 mb-6">
+                <div className="w-14 h-14 bg-[#F8F8F8] rounded-[4px] flex items-center justify-center border border-gray-200 mb-6">
                   {item.icon}
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 mb-3 font-display">
                   {item.title}
                 </h3>
-                <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
+                <p className="text-sm text-gray-500 leading-relaxed font-antenna">{item.desc}</p>
               </div>
             ))}
           </div>
