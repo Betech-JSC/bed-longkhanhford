@@ -115,66 +115,26 @@ const jobPositions: JobPosition[] = [
   }
 ];
 
-// Featured team/vehicles list for bottom slider
-interface TeamVehicle {
+interface TeamCard {
   id: string;
   name: string;
   image: string;
   link: string;
-  quoteLink: string;
 }
 
-const teamVehicles: TeamVehicle[] = [
-  {
-    id: "team-le-ban-giao",
-    name: "Lễ Bàn Giao Xe Mới Cho Khách Hàng",
-    image: "/images/team/team_1.png",
-    link: "/lien-he",
-    quoteLink: "/lien-he"
-  },
-  {
-    id: "team-tu-van-sales",
-    name: "Đội Ngũ Tư Vấn Bán Hàng Chuyên Nghiệp",
-    image: "/images/team/team_3.png",
-    link: "/lien-he",
-    quoteLink: "/lien-he"
-  },
-  {
-    id: "team-su-kien-lai-thu",
-    name: "Sự Kiện Trưng Bày & Trải Nghiệm Lái Thử Xe",
-    image: "/images/team/team_2.png",
-    link: "/dang-ky-lai-thu",
-    quoteLink: "/dang-ky-lai-thu"
-  }
+const row1Cards: TeamCard[] = [
+  { id: "r1-1", name: "Lễ Bàn Giao Xe Mới Cho Khách Hàng", image: "/images/team/team_1.png", link: "/lien-he" },
+  { id: "r1-2", name: "Đội Ngũ Tư Vấn Bán Hàng Chuyên Nghiệp", image: "/images/team/team_3.png", link: "/lien-he" },
+  { id: "r1-3", name: "Sự Kiện Trưng Bày & Trải Nghiệm Lái Thử Xe", image: "/images/team/team_2.png", link: "/dang-ky-lai-thu" },
+  { id: "r1-4", name: "Lễ Bàn Giao Xe Cho Khách Hàng", image: "/images/team/team_1.png", link: "/lien-he" },
 ];
 
-// Create a base array that has at least 6 elements to support smooth infinite loop on all screen widths
-const getBaseCards = () => {
-  let base = [...teamVehicles];
-  if (base.length > 0) {
-    while (base.length < 6) {
-      base = [...base, ...teamVehicles];
-    }
-  }
-  return base;
-};
-
-const baseCards = getBaseCards();
-const N = baseCards.length;
-const duplicatedCards = [...baseCards, ...baseCards, ...baseCards];
-
-const initialCardOffsets: number[] = (() => {
-  const defaultWidths = [427, 660, 333];
-  const gap = 24;
-  const offsets: number[] = [];
-  let current = 0;
-  for (let i = 0; i < duplicatedCards.length; i++) {
-    offsets.push(current);
-    const cardWidth = teamVehicles.length > 0 ? defaultWidths[(i % teamVehicles.length) % defaultWidths.length] : 427;
-    current += cardWidth + gap;
-  }
-  return offsets;
-})();
+const row2Cards: TeamCard[] = [
+  { id: "r2-1", name: "Hệ Thống Showroom Hiện Đại", image: "/images/about/image-introduce.jpg", link: "/lien-he" },
+  { id: "r2-2", name: "Xưởng Dịch Vụ Đạt Chuẩn Brand@Retail", image: "/images/about/image-about-1.jpg", link: "/lien-he" },
+  { id: "r2-3", name: "Trang Thiết Bị Sửa Chữa Chuyên Dụng", image: "/images/about/image-about-2.jpg", link: "/lien-he" },
+  { id: "r2-4", name: "Không Gian Trưng Bày Xe Cao Cấp", image: "/images/about/image-vision-1.jpg", link: "/lien-he" },
+];
 
 export default function AboutPage() {
   // Modal State for recruitment details
@@ -226,82 +186,6 @@ export default function AboutPage() {
     }
   };
 
-  // Slider State (Infinite Loop support)
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [cardOffsets, setCardOffsets] = useState<number[]>(initialCardOffsets);
-  const [activeIndex, setActiveIndex] = useState(N);
-  const [isTransitioning, setIsTransitioning] = useState(true);
-  const [isHovered, setIsHovered] = useState(false);
-  const [isInteracted, setIsInteracted] = useState(false);
-
-  // Dynamically measure cards left offset relative to translated container on mount & resize
-  const measureCards = useCallback(() => {
-    if (!containerRef.current) return;
-    const children = Array.from(containerRef.current.children) as HTMLElement[];
-    const offsets = children.map((child) => child.offsetLeft);
-    setCardOffsets(offsets);
-  }, []);
-
-  useEffect(() => {
-    measureCards();
-    // Allow a small delay for image assets to load fully and measure dimensions
-    const timer = setTimeout(measureCards, 500);
-    window.addEventListener("resize", measureCards);
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener("resize", measureCards);
-    };
-  }, [measureCards]);
-
-  // Autoplay handler (pauses on hover or user interaction)
-  useEffect(() => {
-    if (isHovered || isInteracted) return;
-    const timer = setInterval(() => {
-      setIsTransitioning(true);
-      setActiveIndex((prev) => prev + 1);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, [isHovered, isInteracted]);
-
-  // Reset interaction timer to resume autoplay after 5s of inactivity
-  useEffect(() => {
-    if (isInteracted) {
-      const timer = setTimeout(() => {
-        setIsInteracted(false);
-      }, 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [isInteracted]);
-
-  const handleTransitionEnd = () => {
-    // Snap back to middle set if active index scrolls beyond bounds
-    if (activeIndex >= 2 * N) {
-      setIsTransitioning(false);
-      setActiveIndex(activeIndex - N);
-      setTimeout(() => {
-        setIsTransitioning(true);
-      }, 0);
-    } else if (activeIndex < N) {
-      setIsTransitioning(false);
-      setActiveIndex(activeIndex + N);
-      setTimeout(() => {
-        setIsTransitioning(true);
-      }, 0);
-    }
-  };
-
-  const handlePrev = () => {
-    setIsInteracted(true);
-    setIsTransitioning(true);
-    setActiveIndex((prev) => prev - 1);
-  };
-
-  const handleNext = () => {
-    setIsInteracted(true);
-    setIsTransitioning(true);
-    setActiveIndex((prev) => prev + 1);
-  };
-
   // Lock body scroll when Modal is active
   useEffect(() => {
     if (selectedJob) {
@@ -313,9 +197,6 @@ export default function AboutPage() {
       document.body.style.overflow = "";
     };
   }, [selectedJob]);
-
-  // Compute translation width
-  const currentOffset = cardOffsets[activeIndex] || 0;
 
   return (
     <div className="bg-white flex-1 min-h-screen text-[#1a1a1a]">
@@ -595,88 +476,109 @@ export default function AboutPage() {
       </section>
 
       {/* SECTION 7: SLIDER ĐỘI NGŨ (Filmstrip Infinite Stream) */}
-      <section id="board-of-directors" className="bg-white py-24 overflow-hidden scroll-mt-20 w-full">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full">
-          {/* Header Row */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-            <div>
-              <div className="text-xs font-bold text-[#066fef] uppercase tracking-[0.2em] font-antenna mb-3">
-                Đồng hành phát triển
-              </div>
-              <h2 className="text-[36px] md:text-[44px] font-bold text-[#01095c] leading-tight font-antenna uppercase">
-                ĐỘI NGŨ LONG KHÁNH FORD
-              </h2>
-            </div>
+      <section id="board-of-directors" className="bg-white py-24 overflow-hidden scroll-mt-20 w-full border-t border-[#e5e5e5]">
+        <style>{`
+          @keyframes marquee-left {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-50%, 0, 0); }
+          }
+          @keyframes marquee-right {
+            0% { transform: translate3d(-50%, 0, 0); }
+            100% { transform: translate3d(0, 0, 0); }
+          }
+          .animate-marquee-l {
+            display: flex;
+            width: max-content;
+            animation: marquee-left 35s linear infinite;
+          }
+          .animate-marquee-r {
+            display: flex;
+            width: max-content;
+            animation: marquee-right 35s linear infinite;
+          }
+          .animate-marquee-l:hover,
+          .animate-marquee-r:hover {
+            animation-play-state: paused;
+          }
+        `}</style>
 
-            {/* Navigation buttons */}
-            <div className="flex gap-4">
-              <button
-                onClick={handlePrev}
-                className="w-12 h-12 rounded-none border border-gray-200 hover:border-black text-black hover:bg-black hover:text-white flex items-center justify-center transition-all duration-300 focus:outline-none cursor-pointer"
-                aria-label="Previous slide"
-              >
-                <ArrowLeft className="w-5 h-5" />
-              </button>
-              <button
-                onClick={handleNext}
-                className="w-12 h-12 rounded-none border border-gray-200 hover:border-black text-black hover:bg-black hover:text-white flex items-center justify-center transition-all duration-300 focus:outline-none cursor-pointer"
-                aria-label="Next slide"
-              >
-                <ArrowRight className="w-5 h-5" />
-              </button>
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full mb-12">
+          {/* Header Row */}
+          <div className="text-center max-w-[800px] mx-auto">
+            <div className="text-xs font-bold text-[#066fef] uppercase tracking-[0.2em] font-antenna mb-3">
+              Đồng hành phát triển
             </div>
+            <h2 className="text-[36px] md:text-[44px] font-bold text-[#01095c] leading-tight font-antenna uppercase">
+              ĐỘI NGŨ LONG KHÁNH FORD
+            </h2>
           </div>
         </div>
 
-        {/* Slider Outer Wrapper */}
-        <div
-          className="w-full relative overflow-hidden"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-        >
-          {/* Flex row container */}
-          <div
-            ref={containerRef}
-            className="flex gap-6 select-none"
-            style={{
-              transform: `translateX(-${currentOffset}px)`,
-              transition: isTransitioning ? "transform 600ms cubic-bezier(0.25, 1, 0.5, 1)" : "none"
-            }}
-            onTransitionEnd={handleTransitionEnd}
-          >
-            {duplicatedCards.map((card, idx) => {
-              const origIdx = idx % teamVehicles.length;
-              const defaultWidth = origIdx === 0 ? 420 : origIdx === 1 ? 640 : 330;
-
-              return (
+        {/* Carousel rows container */}
+        <div className="flex flex-col gap-6 w-full relative">
+          
+          {/* Row 1: Sliding Left */}
+          <div className="w-full overflow-hidden">
+            <div className="animate-marquee-l gap-6">
+              {[...row1Cards, ...row1Cards].map((card, idx) => (
                 <Link
-                  key={`${card.id}-${idx}`}
+                  key={`r1-${card.id}-${idx}`}
                   href={card.link}
-                  className="h-[480px] relative flex-shrink-0 rounded-none overflow-hidden group cursor-pointer block border border-[#e5e5e5]"
-                  style={{ width: `${defaultWidth}px` }}
+                  className="w-[320px] md:w-[420px] h-[220px] md:h-[280px] relative flex-shrink-0 rounded-none overflow-hidden group cursor-pointer block border border-[#e5e5e5] bg-gray-50"
                 >
                   <img
                     src={card.image}
                     alt={card.name}
                     className="absolute inset-0 h-full w-full object-cover group-hover:scale-[1.03] transition-transform duration-700"
-                    onLoad={measureCards}
-                    onError={handleImageError}
+                    loading="lazy"
                   />
-                  {/* Subtle clean bottom strip info on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent flex items-end p-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
-                    <div className="flex flex-col gap-2">
-                      <span className="text-[10px] font-extrabold text-[#066fef] tracking-widest uppercase">
+                  {/* Subtle info on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent flex items-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[9px] font-extrabold text-[#066fef] tracking-widest uppercase">
                         SỰ KIỆN & ĐỘI NGŨ
                       </span>
-                      <span className="text-base font-bold text-white font-antenna uppercase">
+                      <span className="text-sm font-bold text-white font-antenna uppercase truncate max-w-full">
                         {card.name}
                       </span>
                     </div>
                   </div>
                 </Link>
-              );
-            })}
+              ))}
+            </div>
           </div>
+
+          {/* Row 2: Sliding Right */}
+          <div className="w-full overflow-hidden">
+            <div className="animate-marquee-r gap-6">
+              {[...row2Cards, ...row2Cards].map((card, idx) => (
+                <Link
+                  key={`r2-${card.id}-${idx}`}
+                  href={card.link}
+                  className="w-[320px] md:w-[420px] h-[220px] md:h-[280px] relative flex-shrink-0 rounded-none overflow-hidden group cursor-pointer block border border-[#e5e5e5] bg-gray-50"
+                >
+                  <img
+                    src={card.image}
+                    alt={card.name}
+                    className="absolute inset-0 h-full w-full object-cover group-hover:scale-[1.03] transition-transform duration-700"
+                    loading="lazy"
+                  />
+                  {/* Subtle info on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent flex items-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[9px] font-extrabold text-[#066fef] tracking-widest uppercase">
+                        CƠ SỞ VẬT CHẤT
+                      </span>
+                      <span className="text-sm font-bold text-white font-antenna uppercase truncate max-w-full">
+                        {card.name}
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+
         </div>
       </section>
 
