@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
 
+export const dynamic = "force-dynamic";
+
 // Trigger rebuild to clear sitemap cache and load correct staging URLs
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://cms.dongnaiford.com.vn/api";

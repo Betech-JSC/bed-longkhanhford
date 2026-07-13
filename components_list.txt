@@ -1,0 +1,30 @@
+=== FOUND COMPONENTS ===
+Component 0: class='component'
+  Text Preview: <div class="
+
+Component 1: class='component all-models'
+  Text Preview: 总有一款福特 契合您的生活 鉴赏全系车型 发现您的至爱 探索全部车型 车型对比 <div class="n-tabs n-tabs--line
+
+Component 2: class='component navigation-components'
+  Text Preview: 用智慧点亮 福特科技 以智慧驱动福特科技，解决每个细微挑战 用智慧点亮 <span style="color: var(--ford-highlight-color-blue
+
+Component 3: class='component'
+  Text Preview: 福特品牌 探寻视野的边界 探索品牌 福特品牌 探寻视野的边界 福特凭借其与
+
+Component 4: class='component'
+  Text Preview: 福特资讯 看见科技的每一步 更多资讯 这里汇聚福特最新动态、技术亮点与创新故事 <a class="item-box-link" href="/newsroom/2026/2026070
+
+Component 5: class='component'
+  Text Preview: <div class="text-line-1 first-class-title" style="color:var(--ford-text-color-black
+
+Component 6: class='component-pc'
+  Text Preview: 车型 <a class="foote
+
+Component 7: class='component-mob component-footer-box'
+  Text Preview: 车型
+
+Component 8: class='component cookie-component'
+  Text Preview: 除了运营本网站所必需的 Cookie 外，福特中国官方网站还会使用功能类 Cookie 为您提供最佳在线体验。若想了解更多，请参阅我们的 个人信息保护政策 同意 不同意 <div class="nav-list" data-v-eae64
+
+Component 9: class='nav-fixed component'
+  Text Preview: 在线客服 <a href="/test-d

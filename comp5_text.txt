@@ -1,0 +1,7 @@
+HTML:
+<div class="component" data-v-475bcbe5 data-v-9bb65f63><div style="width:0px;height:0px;" class="full-bg-show" data-v-9bb65f63><div class="lazy-image bg-img bg-img n-image n-image--preview-disabled" data-v-9bb65f63 role="none" data-v-3cc68391><!--[--><!--[--><img width="100%" height="100%" loading="eager" style="height:0;width:0;visibility:hidden;object-fit:cover;" data-error="false" data-preview-src="/content/dam/Ford/cncms-website-assets/ch/font/homepage/homepage-fordpass-pc.png"><!--]--><!----><!--]--><!--[--><!--]--></div><div class="content pc" data-v-9bb65f63><div class="text-line-1 first-class-title" style="color:var(--ford-text-color-black);" data-v-9bb65f63><span style="color: var(--ford-highlight-color-blue);">福特派</span>车主App</div><div class="text-line-2" style="color:var(--ford-text-color-black);" data-v-9bb65f63>一键远控，车况尽知，畅享便捷车生活​,召唤福特大使，
+获取一对一专属帮助​在线预约维保，上门取送车超省心​。
+海量干货趣文，丰富车主日常。</div><a href="/fordpass/get-app" class="btn btn-in-light-type-1" target="_self" data-v-9bb65f63>下载福特派互联APP</a></div></div><!----></div><!--]--><!--]--><!--[--><!--[--><footer data-v-475bcbe5 data-v-4448cb2f>
+
+CLEAN TEXT:
+福特派 车主App 一键远控，车况尽知，畅享便捷车生活​,召唤福特大使， 获取一对一专属帮助​在线预约维保，上门取送车超省心​。 海量干货趣文，丰富车主日常。 下载福特派互联APP
