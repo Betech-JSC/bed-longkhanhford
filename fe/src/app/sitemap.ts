@@ -2,6 +2,52 @@ import type { MetadataRoute } from "next";
 
 export const dynamic = "force-dynamic";
 
+// Default static pages to prevent empty sitemap in case of API failure
+const defaultStaticPages: MetadataRoute.Sitemap = [
+  {
+    url: "https://longkhanhford.com.vn",
+    lastModified: new Date(),
+    changeFrequency: "daily",
+    priority: 1.0,
+  },
+  {
+    url: "https://longkhanhford.com.vn/gioi-thieu",
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.8,
+  },
+  {
+    url: "https://longkhanhford.com.vn/lien-he",
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.8,
+  },
+  {
+    url: "https://longkhanhford.com.vn/bang-gia",
+    lastModified: new Date(),
+    changeFrequency: "daily",
+    priority: 0.9,
+  },
+  {
+    url: "https://longkhanhford.com.vn/dang-ky-lai-thu",
+    lastModified: new Date(),
+    changeFrequency: "weekly",
+    priority: 0.8,
+  },
+  {
+    url: "https://longkhanhford.com.vn/xe-da-qua-su-dung",
+    lastModified: new Date(),
+    changeFrequency: "daily",
+    priority: 0.8,
+  },
+  {
+    url: "https://longkhanhford.com.vn/dich-vu",
+    lastModified: new Date(),
+    changeFrequency: "weekly",
+    priority: 0.9,
+  },
+];
+
 // Trigger rebuild to clear sitemap cache and load correct staging URLs
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -10,52 +56,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.warn("NEXT_PUBLIC_API_URL is not set. Sitemap will default to static fallback pages.");
     return defaultStaticPages;
   }
-  
-  // Default static pages to prevent empty sitemap in case of API failure
-  const defaultStaticPages: MetadataRoute.Sitemap = [
-    {
-      url: "https://dongnaiford.com.vn",
-      lastModified: new Date(),
-      changeFrequency: "daily",
-      priority: 1.0,
-    },
-    {
-      url: "https://dongnaiford.com.vn/gioi-thieu",
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: "https://dongnaiford.com.vn/lien-he",
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: "https://dongnaiford.com.vn/bang-gia",
-      lastModified: new Date(),
-      changeFrequency: "daily",
-      priority: 0.9,
-    },
-    {
-      url: "https://dongnaiford.com.vn/dang-ky-lai-thu",
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.8,
-    },
-    {
-      url: "https://dongnaiford.com.vn/xe-da-qua-su-dung",
-      lastModified: new Date(),
-      changeFrequency: "daily",
-      priority: 0.8,
-    },
-    {
-      url: "https://dongnaiford.com.vn/dich-vu",
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-  ];
 
   try {
     const res = await fetch(`${apiUrl}/sitemap`, {
@@ -83,7 +83,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       
       if (locMatch) {
         let locUrl = locMatch[1];
-        const siteUrl = "https://dongnaiford.com.vn";
+        const siteUrl = "https://longkhanhford.com.vn";
         
         try {
           const urlObj = new URL(locUrl);
@@ -104,7 +104,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Add static services landing page explicitly if not present
     if (!urls.some(u => u.url.endsWith("/dich-vu"))) {
       urls.push({
-        url: "https://dongnaiford.com.vn/dich-vu",
+        url: "https://longkhanhford.com.vn/dich-vu",
         lastModified: new Date(),
         changeFrequency: "weekly",
         priority: 0.9,

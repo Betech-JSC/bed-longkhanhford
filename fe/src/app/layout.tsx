@@ -19,9 +19,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://dongnaiford.com.vn"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://longkhanhford.com.vn"),
   title: "Long Khánh Ford | Đại lý xe Ford chính hãng lớn nhất Đồng Nai",
-  description: "Đại lý ủy quyền chính thức của Ford Việt Nam tại Đồng Nai. Cung cấp các dòng xe Ford Everest, Ford Ranger, Ford Territory chính hãng, bảo dưỡng nhanh, hỗ trợ trả góp 80%.",
+  description: "Đại lý ủy quyền chính thức của Ford Việt Nam tại Long Khánh, Đồng Nai. Cung cấp các dòng xe Ford Everest, Ford Ranger, Ford Territory chính hãng, bảo dưỡng nhanh, hỗ trợ trả góp 80%.",
   keywords: ["Ford Long Khánh", "Long Khánh Ford", "đại lý Ford Long Khánh", "mua xe Ford Long Khánh", "Ford Everest", "Ford Ranger", "Ford Territory"],
   authors: [{ name: "Long Khánh Ford" }],
   robots: {
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Long Khánh Ford | Đại lý xe Ford chính hãng lớn nhất Đồng Nai",
-    description: "Đại lý ủy quyền chính thức của Ford Việt Nam tại Đồng Nai. Cung cấp các dòng xe Ford Everest, Ranger, Territory, Raptor chính hãng giá ưu đãi.",
+    description: "Đại lý ủy quyền chính thức của Ford Việt Nam tại Long Khánh, Đồng Nai. Cung cấp các dòng xe Ford Everest, Ranger, Territory, Raptor chính hãng giá ưu đãi.",
     type: "website",
     locale: "vi_VN",
   },
@@ -47,22 +47,22 @@ const jsonLd = {
   name: "Ford Long Khánh (Đại lý Tấn Phát Đạt)",
   alternateName: "Long Khánh Ford",
   description:
-    "Đại lý ủy quyền chính thức của Ford Việt Nam tại Đồng Nai. Cung cấp các dòng xe Ford chính hãng, dịch vụ bảo dưỡng, sửa chữa, phụ kiện.",
-  url: "https://dongnaiford.com.vn",
+    "Đại lý ủy quyền chính thức của Ford Việt Nam tại Long Khánh, Đồng Nai. Cung cấp các dòng xe Ford chính hãng, dịch vụ bảo dưỡng, sửa chữa, phụ kiện.",
+  url: "https://longkhanhford.com.vn",
   telephone: "+84918909060",
-  email: "marketing@dongnaiford.com.vn",
+  email: "marketing@longkhanhford.com.vn",
   address: {
     "@type": "PostalAddress",
     streetAddress:
-      "Số B04, Khu thương mại Amata, Khu phố 29, Phường Long Bình",
-    addressLocality: "Biên Hòa",
+      "Đường Hùng Vương, Phường Xuân An",
+    addressLocality: "Thành phố Long Khánh",
     addressRegion: "Đồng Nai",
     addressCountry: "VN",
   },
   geo: {
     "@type": "GeoCoordinates",
-    latitude: 10.9511,
-    longitude: 106.8434,
+    latitude: 10.9381,
+    longitude: 107.2415,
   },
   openingHoursSpecification: {
     "@type": "OpeningHoursSpecification",

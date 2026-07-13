@@ -1,8 +1,8 @@
 import type { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://dongnaiford.com.vn";
-  const isProduction = siteUrl.includes("dongnaiford.com.vn");
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://longkhanhford.com.vn";
+  const isProduction = siteUrl.includes("longkhanhford.com.vn");
 
   if (isProduction) {
     return {

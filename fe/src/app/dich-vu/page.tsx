@@ -84,11 +84,11 @@ export default async function ServicesPage() {
     "@context": "https://schema.org",
     "@type": "AutoDealer",
     "name": "Long Khánh Ford - Xưởng Dịch Vụ Chính Hãng",
-    "image": "https://dongnaiford.com.vn" + siteAssets.showroomBg,
+    "image": "https://longkhanhford.com.vn" + siteAssets.showroomBg,
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "Khu thương mại Amata, Đường Xa Lộ Hà Nội, P. Long Bình",
-      "addressLocality": "Biên Hòa",
+      "streetAddress": "Đường Hùng Vương, Phường Xuân An",
+      "addressLocality": "Thành phố Long Khánh",
       "addressRegion": "Đồng Nai",
       "postalCode": "810000",
       "addressCountry": "VN"

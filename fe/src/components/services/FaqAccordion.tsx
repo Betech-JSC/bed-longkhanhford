@@ -10,7 +10,7 @@ type FaqItem = {
 
 const defaultFaqs: FaqItem[] = [
   {
-    question: "Điều gì tạo nên sự nổi bật thương hiệu Dongnaiford?",
+    question: "Điều gì tạo nên sự nổi bật thương hiệu Long Khánh Ford?",
     answer: "Showroom được đầu tư khá quy mô về trang thiết bị hiện đại, cơ sở hạ tầng khang trang, rộng rãi, đội ngũ kỹ thuật viên đông đảo, tay nghề cao, nhiệt tình, nhiều năm kinh nghiệm, được đào tạo chuyên nghiệp."
   },
   {

@@ -185,8 +185,9 @@ Examples:
     print(f"Project: {project_path}")
     print(f"URL: {args.url if args.url else 'Not provided (performance checks skipped)'}")
     
-    # Detect agent directory dynamically (default to .agents if exists, fallback to .agent)
-    agent_dir_name = ".agents" if (project_path / ".agents").exists() else ".agents"
+    # Detect repo root dynamically (where .agents folder lives)
+    repo_root = Path(__file__).resolve().parent.parent.parent
+    agent_dir_name = ".agents" if (repo_root / ".agents").exists() else ".agents"
     
     results = []
     
@@ -194,7 +195,7 @@ Examples:
     print_header("📋 CORE CHECKS")
     for name, script_path, required in CORE_CHECKS:
         actual_script_path = Path(script_path.replace(".agents", agent_dir_name))
-        script = project_path / actual_script_path
+        script = repo_root / actual_script_path
         result = run_script(name, script, str(project_path))
         results.append(result)
         
@@ -209,7 +210,7 @@ Examples:
         print_header("⚡ PERFORMANCE CHECKS")
         for name, script_path, required in PERFORMANCE_CHECKS:
             actual_script_path = Path(script_path.replace(".agents", agent_dir_name))
-            script = project_path / actual_script_path
+            script = repo_root / actual_script_path
             result = run_script(name, script, str(project_path), args.url)
             results.append(result)
     

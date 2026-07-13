@@ -107,92 +107,51 @@ const quickActions = [
 
 const techItems = [
   {
-    title: "Sức mạnh thông minh",
-    description: "Động cơ EcoBoost® thế hệ thứ 5 mang lại sức mạnh vượt trội cùng khả năng tiết kiệm nhiên liệu tối ưu trên mọi hành trình của bạn.",
-    image: "/assets/mustang_dark_horse.png",
-    bgClass: "bg-[#f2f4f7]",
-    overlayText: "2.0T EcoBoost®",
-    overlaySub: "Thế hệ thứ 5",
-    imageAlign: "left",
-    link: "/lien-he"
-  },
-  {
-    title: "Sức mạnh thông minh",
-    description: "Hộp số tự động 10 cấp số điện tử chuyển số mượt mà, phân bổ lực kéo thông minh giúp xe bứt tốc ấn tượng và vận hành êm ái.",
-    image: "/assets/ranger_raptor.png",
-    bgClass: "bg-gradient-to-br from-neutral-900 to-[#01095c] text-white",
-    link: "/lien-he"
-  },
-  {
-    title: "Khoang lái thông minh",
-    description: "Hệ thống âm thanh Bang & Olufsen cao cấp được hiệu chỉnh đặc thù mang đến không gian âm nhạc sống động, chân thực đến từng chi tiết.",
-    image: "/assets/tech_audio.png",
-    bgClass: "bg-[#0f1115]",
-    overlayText: "B&O Sound System",
-    overlaySub: "Âm thanh vòm",
-    imageAlign: "right",
-    link: "/lien-he"
-  },
-  {
-    title: "Khoang lái thông minh",
-    description: "Màn hình giải trí SYNC® 4 cỡ lớn tích hợp kết nối Apple CarPlay và Android Auto không dây tiện lợi, ra lệnh bằng giọng nói thông minh.",
-    image: "/assets/territory-tech-split.png",
-    bgClass: "bg-gradient-to-br from-neutral-900 to-[#00095B] text-white",
-    link: "/lien-he"
-  },
-  {
-    title: "Lái xe thông minh",
-    description: "Công nghệ hỗ trợ người lái Co-Pilot360™ chủ động bảo vệ bạn với hệ thống cảnh báo va chạm, giữ làn đường và kiểm soát hành trình thích ứng.",
-    image: "/assets/tech_copilot360.png",
-    bgClass: "bg-[#f2f4f7]",
-    overlayText: "Co-Pilot360™",
-    overlaySub: "An toàn chủ động",
-    imageAlign: "left",
-    link: "/lien-he"
-  },
-  {
-    title: "Lái xe thông minh",
-    description: "Hệ thống hỗ trợ đỗ xe chủ động thông minh giúp bạn lùi và đỗ xe an toàn vào các khoảng trống chật hẹp chỉ bằng một nút bấm đơn giản.",
-    image: "/assets/booking-car.png",
-    bgClass: "bg-gradient-to-br from-neutral-900 to-neutral-800 text-white",
-    link: "/lien-he"
-  },
-  {
-    title: "Kết nối thông minh",
-    description: "Ứng dụng FordPass™ cho phép bạn nổ máy từ xa, định vị xe, kiểm tra áp suất lốp, mức nhiên liệu và quản lý lịch bảo dưỡng trực tiếp.",
+    title: "Kết nối thông minh FordPass™",
+    description: "Kết nối điện thoại của bạn với xe Ford thế hệ mới để khởi động từ xa, định vị xe, kiểm tra áp suất lốp và mức nhiên liệu trực quan ngay trên ứng dụng di động.",
     image: "/assets/tech_fordpass.png",
-    bgClass: "bg-[#0c1424]",
-    overlayText: "FordPass™ App",
-    overlaySub: "Kết nối di động",
-    imageAlign: "right",
+    buttonText: "Khám phá ứng dụng",
     link: "/lien-he"
   },
   {
-    title: "Kết nối thông minh",
-    description: "Hệ thống cập nhật phần mềm từ xa (OTA) tự động cải tiến hiệu năng và cập nhật các tính năng an toàn mới nhất giúp xe luôn hiện đại.",
-    image: "/assets/cat_tech_1780394190516.png",
-    bgClass: "bg-gradient-to-br from-neutral-900 to-[#01095c] text-white",
+    title: "An toàn chủ động Co-Pilot360™",
+    description: "Hệ thống hỗ trợ người lái tiên tiến trên các dòng xe Ford mới giúp bạn tự tin di chuyển nhờ cảnh báo va chạm, giữ làn đường và hỗ trợ đỗ xe chủ động.",
+    image: "/assets/tech_copilot360.png",
+    buttonText: "Đăng ký lái thử",
+    link: "/dang-ky-lai-thu"
+  },
+  {
+    title: "Khoang lái hiện đại SYNC® 4",
+    description: "Màn hình cảm ứng cỡ lớn tích hợp bản đồ dẫn đường thông minh, kết nối không dây Apple CarPlay / Android Auto cùng tính năng ra lệnh giọng nói tiện lợi.",
+    image: "/assets/territory-tech-split.png",
+    buttonText: "Nhận báo giá xe",
     link: "/lien-he"
   }
 ];
 
 const brandItems = [
   {
-    title: "Ford Bronco",
-    description: "Thiết kế off-road thuần chủng sẵn sàng cùng bạn vượt qua mọi địa hình gập ghềnh và khám phá thiên nhiên hoang dã.",
-    image: "/showroom_bg.png",
+    title: "Ford Everest",
+    description: "Dòng SUV 7 chỗ sang trọng và mạnh mẽ hàng đầu, trang bị động cơ Bi-Turbo tối tân cùng hệ dẫn động 2 cầu chủ động giúp bạn tự tin chinh phục mọi cung đường hiểm trở.",
+    image: "/assets/everest_platinum.png",
     link: "/lien-he"
   },
   {
-    title: "Ford Explorer",
-    description: "Đẳng cấp SUV cỡ lớn thượng lưu với không gian cabin rộng mở cùng động cơ Ecoboost mạnh mẽ dẫn đầu phân khúc.",
-    image: "/assets/hero_everest.jpg",
+    title: "Ford Ranger",
+    description: "Vua bán tải - Thiết kế cơ bắp, thông minh và vô cùng bền bỉ. Đáp ứng hoàn hảo từ nhu cầu chuyên chở công việc cho đến những hành trình khám phá mạo hiểm.",
+    image: "/assets/ranger_wildtrak.png",
     link: "/lien-he"
   },
   {
-    title: "Ford Mustang",
-    description: "Biểu tượng xe thể thao cơ bắp Mỹ với động cơ uy lực, thiết kế khí động học cùng cảm giác lái phấn khích vượt trội.",
-    image: "/assets/mustang-hero.png",
+    title: "Ford Territory",
+    description: "SUV 5 chỗ thông minh mang đậm hơi thở đô thị. Thiết kế sang trọng, không gian cabin kỹ thuật số hiện đại cùng gói công nghệ an toàn chủ động Co-Pilot360™.",
+    image: "/assets/territory-hero.png",
+    link: "/lien-he"
+  },
+  {
+    title: "Ford Transit",
+    description: "Giải pháp vận chuyển hành khách chuyên nghiệp thế hệ mới. Tiết kiệm nhiên liệu vượt trội, khoang lái rộng rãi tích hợp các trang bị tiện nghi cao cấp đạt chuẩn 5 sao.",
+    image: "/assets/transit-hero.png",
     link: "/lien-he"
   }
 ];
@@ -338,51 +297,22 @@ export default function Home() {
   // Hero Banner Active Slide
   const [activeHeroIndex, setActiveHeroIndex] = useState(0);
 
-  // Technology section states
-  const techCarouselRef = useRef<HTMLDivElement>(null);
-
-  const scrollCarousel = (direction: "left" | "right") => {
-    if (techCarouselRef.current) {
-      const { scrollLeft, clientWidth, scrollWidth } = techCarouselRef.current;
-      const scrollAmount = clientWidth * 0.5; // Scroll by half page
-      
-      let targetScroll = direction === "left" ? scrollLeft - scrollAmount : scrollLeft + scrollAmount;
-      
-      // Infinite scroll: if we reach the end and click right, loop to start. If we are at start and click left, loop to end.
-      if (direction === "right" && scrollLeft + clientWidth >= scrollWidth - 15) {
-        targetScroll = 0;
-      } else if (direction === "left" && scrollLeft <= 15) {
-        targetScroll = scrollWidth - clientWidth;
-      }
-      
-      techCarouselRef.current.scrollTo({
-        left: targetScroll,
-        behavior: "smooth"
-      });
-    }
-  };
-
   const brandCarouselRef = useRef<HTMLDivElement>(null);
 
   const scrollBrandCarousel = (direction: "left" | "right") => {
     if (brandCarouselRef.current) {
-      const { scrollLeft, clientWidth, scrollWidth } = brandCarouselRef.current;
-      const scrollAmount = clientWidth * 0.5; // Scroll by half page
-      
-      let targetScroll = direction === "left" ? scrollLeft - scrollAmount : scrollLeft + scrollAmount;
-      
-      if (direction === "right" && scrollLeft + clientWidth >= scrollWidth - 15) {
-        targetScroll = 0;
-      } else if (direction === "left" && scrollLeft <= 15) {
-        targetScroll = scrollWidth - clientWidth;
-      }
-      
-      brandCarouselRef.current.scrollTo({
-        left: targetScroll,
+      const container = brandCarouselRef.current;
+      const cardWidth = container.firstElementChild?.clientWidth || 800;
+      const gap = 24;
+      const scrollAmount = cardWidth + gap;
+      container.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
         behavior: "smooth"
       });
     }
   };
+
+
 
 
 
@@ -691,7 +621,7 @@ export default function Home() {
           left: 0;
           width: 100%;
           height: 2px;
-          background-color: #066fef;
+          background-color: #002F6C;
           transform: scaleX(0);
           transform-origin: right;
           transition: transform 0.3s ease-out;
@@ -753,13 +683,13 @@ export default function Home() {
               <div className="flex flex-row justify-start gap-4 pt-6 md:pt-8 w-full sm:w-auto">
                 <button
                   onClick={() => triggerQuickAction("Đăng ký lái thử", "Tôi đặt lịch hẹn đăng ký lái thử xe Ford.")}
-                  className="bg-[#066fef] hover:bg-[#01095c] text-white px-8 py-3 rounded-[4px] text-xs font-bold tracking-wider uppercase transition-colors duration-300 cursor-pointer border-0 w-full sm:w-auto text-center shadow-md"
+                  className="bg-[#002F6C] hover:bg-[#066FEF] text-white px-8 py-3 rounded-[4px] text-xs font-bold tracking-wider uppercase transition-all duration-300 cursor-pointer border-0 w-full sm:w-auto text-center shadow-md"
                 >
                   Đăng ký lái thử
                 </button>
                 <button
                   onClick={() => router.push("/lien-he")}
-                  className="bg-transparent hover:bg-white/10 border border-white text-white px-8 py-3 rounded-[4px] text-xs font-bold tracking-wider uppercase transition-colors duration-300 cursor-pointer w-full sm:w-auto text-center"
+                  className="bg-transparent hover:bg-white/10 border border-white text-white px-8 py-3 rounded-[4px] text-xs font-bold tracking-wider uppercase transition-all duration-300 cursor-pointer w-full sm:w-auto text-center"
                 >
                   Khám phá ngay
                 </button>
@@ -778,7 +708,7 @@ export default function Home() {
                 aria-label={`Go to slide ${idx + 1}`}
               >
                 {activeHeroIndex === idx && (
-                  <div className="absolute top-0 left-0 bottom-0 right-0 bg-[#066fef] animate-hero-progress" />
+                  <div className="absolute top-0 left-0 bottom-0 right-0 bg-[#002F6C] animate-hero-progress" />
                 )}
               </button>
             ))}
@@ -809,10 +739,10 @@ export default function Home() {
             {/* Header title block */}
             <div className="space-y-4 mb-16 text-left">
               <h2 className="text-3xl md:text-[40px] font-bold text-black tracking-tight uppercase font-sans max-w-[768px] leading-tight">
-              <span className="text-[#066fef] block">Mỗi dòng xe Ford.</span>
+              <span className="text-[#002F6C] block">Mỗi dòng xe Ford.</span>
               <span className="block">Phù hợp với cuộc sống của bạn</span>
             </h2>
-            <div className="h-[2px] w-[60px] bg-[#066fef]" />
+            <div className="h-[2px] w-[60px] bg-[#002F6C]" />
             <p className="text-sm text-neutral-500 max-w-2xl leading-relaxed">
                Khám phá toàn bộ sản phẩm và tìm kiếm mẫu xe yêu thích của bạn.
             </p>
@@ -841,8 +771,8 @@ export default function Home() {
                     }}
                     className={`pb-4 text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-300 relative cursor-pointer whitespace-nowrap border-0 bg-transparent ${
                       isActive
-                        ? "text-black border-b-[3px] border-[#066fef] -mb-[19px]"
-                        : "text-neutral-400 hover:text-black border-b-[3px] border-transparent -mb-[19px]"
+                        ? "text-black border-b-2 border-[#002F6C] -mb-[18px]"
+                        : "text-neutral-400 hover:text-black border-b-2 border-transparent -mb-[18px]"
                     }`}
                   >
                     {cat.title}
@@ -954,7 +884,7 @@ export default function Home() {
                               className="h-[3px] border-0 cursor-pointer p-0 transition-all duration-300"
                               style={{
                                 width: safeCarIndex === idx ? '40px' : '20px',
-                                backgroundColor: safeCarIndex === idx ? '#066fef' : '#e5e5e5'
+                                backgroundColor: safeCarIndex === idx ? '#002F6C' : '#e5e5e5'
                               }}
                               aria-label={`Go to vehicle ${idx + 1}`}
                             />
@@ -979,18 +909,18 @@ export default function Home() {
                       )}
 
                       {/* Specs columns matching the screenshot */}
-                      <div className="grid grid-cols-[1.25fr_0.75fr_1.35fr] gap-2 border-t border-b border-neutral-100 py-6 my-6 w-full">
+                      <div className="grid grid-cols-3 gap-4 border-t border-b border-neutral-200 py-6 my-6 w-full text-left">
                         <div>
-                          <p className="text-[10px] text-neutral-400 mb-1 uppercase font-semibold tracking-wider">Động cơ</p>
-                          <p className="text-sm xl:text-base font-bold text-black line-clamp-2 min-h-[40px] flex items-center">{specs.engine}</p>
+                          <p className="text-[10px] text-neutral-400 mb-1 uppercase font-bold tracking-wider">Động cơ</p>
+                          <p className="text-sm xl:text-base font-extrabold text-[#00095B] line-clamp-2 min-h-[40px] flex items-center">{specs.engine}</p>
                         </div>
                         <div>
-                          <p className="text-[10px] text-neutral-400 mb-1 uppercase font-semibold tracking-wider">Số chỗ</p>
-                          <p className="text-sm xl:text-base font-bold text-black line-clamp-2 min-h-[40px] flex items-center">{specs.seats}</p>
+                          <p className="text-[10px] text-neutral-400 mb-1 uppercase font-bold tracking-wider">Số chỗ</p>
+                          <p className="text-sm xl:text-base font-extrabold text-[#00095B] line-clamp-2 min-h-[40px] flex items-center">{specs.seats}</p>
                         </div>
                         <div>
-                          <p className="text-[10px] text-neutral-400 mb-1 uppercase font-semibold tracking-wider">Giá khởi điểm</p>
-                          <p className="text-sm xl:text-base font-bold text-black whitespace-nowrap min-h-[40px] flex items-center">{formatPrice(vehiclePrice)}</p>
+                          <p className="text-[10px] text-neutral-400 mb-1 uppercase font-bold tracking-wider">Giá khởi điểm</p>
+                          <p className="text-sm xl:text-base font-extrabold text-[#00095B] whitespace-nowrap min-h-[40px] flex items-center">{formatPrice(vehiclePrice)}</p>
                         </div>
                       </div>
 
@@ -998,7 +928,7 @@ export default function Home() {
                       <div className="flex gap-4 w-full">
                         <Link
                           href={`/${vehicleId}`}
-                          className="bg-[#066fef] hover:bg-[#01095c] border border-[#066fef] hover:border-[#01095c] text-white text-center px-8 py-3.5 rounded-[4px] text-xs font-bold tracking-wider uppercase transition-colors duration-300 w-full sm:w-auto shadow-md"
+                          className="bg-[#002F6C] hover:bg-[#066FEF] border border-[#002F6C] hover:border-[#066FEF] text-white text-center px-8 py-3.5 rounded-[4px] text-xs font-bold tracking-wider uppercase transition-all duration-300 w-full sm:w-auto shadow-md"
                         >
                           Tìm hiểu thêm
                         </Link>
@@ -1018,178 +948,127 @@ export default function Home() {
         <div className="max-w-[1440px] mx-auto w-full">
           <div className="max-w-[1152px] mx-auto w-full px-6 xl:px-0">
             {/* Title Block */}
-            <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 text-left">
-              <div className="space-y-4">
-                <span className="text-xs font-bold text-[#066fef] uppercase tracking-[0.2em] block">
-                  Công nghệ thông minh
-                </span>
-                <h2 className="text-3xl md:text-[40px] font-bold leading-tight tracking-tight uppercase font-sans text-black max-w-[832px]">
-                  <span className="block">Dùng trí tuệ thắp sáng <span className="text-[#066fef]">công nghệ</span></span>
-                  <span className="text-[#066fef] block">Ford</span>
-                </h2>
-              </div>
-
-              {/* Right side controls (Arrows + Explore button) */}
-              <div className="flex gap-4 items-center shrink-0">
-                {/* Scroll arrows */}
-                <div className="hidden md:flex gap-2">
-                  <button
-                    onClick={() => scrollCarousel("left")}
-                    className="w-9 h-9 border border-neutral-300 text-neutral-500 hover:border-black hover:text-black rounded-full flex items-center justify-center transition-all cursor-pointer bg-transparent"
-                    aria-label="Scroll left"
-                  >
-                    <ChevronLeft className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={() => scrollCarousel("right")}
-                    className="w-9 h-9 border border-neutral-300 text-neutral-500 hover:border-black hover:text-black rounded-full flex items-center justify-center transition-all cursor-pointer bg-transparent"
-                    aria-label="Scroll right"
-                  >
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
-                </div>
-
-                <button
-                  onClick={() => router.push("/lien-he")}
-                  className="bg-transparent hover:bg-neutral-50 border border-neutral-300 text-neutral-600 hover:text-black px-6 py-2.5 rounded-[4px] text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer"
-                >
-                  Khám phá công nghệ
-                </button>
-              </div>
+            <div className="flex flex-col gap-4 text-left mb-16 max-w-[900px]">
+              <h2 className="text-4xl md:text-[48px] font-extrabold text-[#002F6C] tracking-tight font-antenna leading-none">
+                Công nghệ trên xe Ford
+              </h2>
+              <p className="text-base md:text-lg text-[#002F6C] font-medium leading-relaxed font-antenna">
+                Khám phá các trang bị công nghệ hiện đại hàng đầu phân khúc trên các dòng xe Ford thế hệ mới giúp hành trình của bạn an toàn, kết nối liền mạch và tràn đầy cảm hứng.
+              </p>
             </div>
-          </div>
 
-          {/* Horizontal scrolling card showcase */}
-          <div 
-            ref={techCarouselRef}
-            className="flex gap-6 overflow-x-auto pb-6 scrollbar-none snap-x snap-mandatory scroll-smooth w-full transition-all duration-300 pl-6 pr-6 xl:pl-[calc((100%-1152px)/2)] xl:pr-[calc((100%-1152px)/2)]"
-          >
-            {techItems.map((card, idx) => {
-              const isLightBg = card.bgClass.includes("bg-[#f2f4f7]") || card.bgClass.includes("bg-neutral-100");
-              return (
-                <div 
-                  key={idx}
-                  className="flex-shrink-0 w-[85%] md:w-[48%] lg:w-[32%] snap-start flex flex-col gap-4 text-left group"
-                >
-                  {/* Card Image container (NO outer border, NO outer gray background, just image with rounded corners) */}
-                  <div className={`relative aspect-[16/9] overflow-hidden rounded-[8px] w-full ${card.bgClass}`}>
-                    {card.overlayText ? (
-                      <>
-                        <div className="absolute inset-0 z-0">
-                          <SafeImage
-                            src={card.image}
-                            alt=""
-                            fill
-                            sizes="(max-width: 1024px) 80vw, 400px"
-                            className={`transition-transform duration-500 group-hover:scale-102 ${
-                              card.imageAlign === "left" 
-                                ? "object-contain object-left p-6 pr-24" 
-                                : "object-contain object-right p-6 pl-24"
-                            }`}
-                          />
-                        </div>
-                        {/* Text Overlay inside the card */}
-                        <div className={`absolute top-1/2 -translate-y-1/2 z-10 pointer-events-none ${
-                          card.imageAlign === "left" ? "right-6 text-right pr-2" : "left-6 text-left pl-2"
-                        }`}>
-                          <p className={`text-[9px] uppercase tracking-wider font-bold ${isLightBg ? "text-neutral-400" : "text-white/60"}`}>{card.overlaySub}</p>
-                          <p className={`text-base font-bold font-sans mt-0.5 ${isLightBg ? "text-black" : "text-white"}`}>{card.overlayText}</p>
-                        </div>
-                      </>
-                    ) : (
-                      /* Full image background card */
-                      <SafeImage
-                        src={card.image}
-                        alt=""
-                        fill
-                        sizes="(max-width: 1024px) 80vw, 400px"
-                        className="object-cover group-hover:scale-102 transition-transform duration-500"
-                      />
-                    )}
+            {/* Grid layout - 3 columns */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 w-full mt-12">
+              {techItems.map((card, idx) => (
+                <div key={idx} className="flex flex-col gap-5 text-left group">
+                  {/* Card Image container with rounded corners */}
+                  <div className="relative aspect-[16/10] overflow-hidden rounded-[20px] border border-neutral-200/60 w-full bg-neutral-50 shadow-xs">
+                    <SafeImage
+                      src={card.image}
+                      alt={card.title}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 400px"
+                      className="object-cover group-hover:scale-[1.03] transition-transform duration-700"
+                    />
                   </div>
 
-                  {/* Card content: Title - subtext */}
-                  <div className="space-y-1 text-left mt-2">
-                    <span className="text-xs font-bold text-[#066fef] uppercase tracking-wider block">
+                  {/* Card content */}
+                  <div className="flex flex-col flex-1 gap-2.5">
+                    <h3 className="text-xl md:text-[22px] font-bold text-[#002F6C] tracking-tight leading-snug font-antenna">
                       {card.title}
-                    </span>
-                    <p className="text-xs text-neutral-500 leading-relaxed font-normal line-clamp-3">
+                    </h3>
+                    <p className="text-sm text-gray-600 leading-relaxed font-normal font-antenna flex-1">
                       {card.description}
                     </p>
+                    
+                    {/* Outline pill button */}
+                    <div className="pt-2">
+                      <Link
+                        href={card.link}
+                        className="border border-[#002F6C] text-[#002F6C] hover:bg-[#002F6C] hover:text-white rounded-full px-6 py-2.5 text-xs font-bold transition-all duration-300 w-fit cursor-pointer inline-block text-center font-antenna tracking-wide"
+                      >
+                        {card.buttonText}
+                      </Link>
+                    </div>
                   </div>
                 </div>
-              );
-            })}
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* 5. BRAND SHOWCASE SECTION */}
-      <section className="bg-white py-24">
-        <div className="max-w-[1440px] mx-auto w-full">
-          {/* Header */}
-          <div className="max-w-[1152px] mx-auto w-full px-6 xl:px-0 mb-16">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 text-left">
-              <div className="space-y-4">
-                <span className="text-xs font-bold text-neutral-400 uppercase tracking-[0.2em] block">Hành trình khám phá</span>
-                <h2 className="text-3xl md:text-[40px] font-bold text-black tracking-tight uppercase font-sans">
-                  Thương hiệu Ford
-                </h2>
-                <div className="h-[2px] w-[60px] bg-[#066fef]" />
-              </div>
-
-              {/* Scroll arrows */}
-              <div className="hidden md:flex gap-2 shrink-0">
-                <button
-                  onClick={() => scrollBrandCarousel("left")}
-                  className="w-9 h-9 border border-neutral-300 text-neutral-500 hover:border-black hover:text-black rounded-full flex items-center justify-center transition-all cursor-pointer bg-transparent"
-                  aria-label="Scroll left"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => scrollBrandCarousel("right")}
-                  className="w-9 h-9 border border-neutral-300 text-neutral-500 hover:border-black hover:text-black rounded-full flex items-center justify-center transition-all cursor-pointer bg-transparent"
-                  aria-label="Scroll right"
-                >
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          </div>
-
+      <section id="brand-showcase" className="bg-white py-20 border-t border-[#e5e5e5] w-full relative overflow-x-clip">
+        <div className="w-full relative">
+          
           {/* Horizontal scrolling card showcase */}
           <div 
             ref={brandCarouselRef}
-            className="flex gap-6 overflow-x-auto pb-6 scrollbar-none snap-x snap-mandatory scroll-smooth w-full transition-all duration-300 pl-6 pr-6 xl:pl-[calc((100%-1152px)/2)] xl:pr-[calc((100%-1152px)/2)]"
+            className="flex gap-6 overflow-x-auto pb-8 scrollbar-none snap-x snap-mandatory scroll-smooth w-full pl-6 pr-6 xl:pl-[calc((100vw-1152px)/2)] xl:pr-[calc((100vw-1152px)/2)]"
           >
             {brandItems.map((item, idx) => (
               <div 
                 key={idx}
-                className="flex-shrink-0 w-[85%] md:w-[48%] lg:w-[49%] snap-start relative h-[480px] overflow-hidden border border-neutral-200 group"
+                className="snap-start flex-shrink-0 w-[88vw] md:w-[75vw] lg:w-[68vw] xl:w-[980px] h-[340px] md:h-[500px] lg:h-[580px] xl:h-[620px]"
               >
-                <Image
-                  src={item.image}
-                  alt={item.title}
-                  fill
-                  sizes="(max-width: 1024px) 80vw, 600px"
-                  className="object-cover group-hover:scale-105 transition-transform duration-1000"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                <div className="absolute bottom-8 left-8 right-8 text-left text-white space-y-4">
-                  <h3 className="text-2xl font-bold uppercase tracking-wide">{item.title}</h3>
-                  <p className="text-xs text-white/80 max-w-sm leading-relaxed">
-                    {item.description}
-                  </p>
-                  <Link
-                    href={item.link}
-                    className="inline-flex bg-transparent hover:bg-white border border-white text-white hover:text-black px-6 py-2.5 rounded-[4px] text-xs font-bold uppercase tracking-wider transition-all duration-300"
-                  >
-                    Tìm hiểu thêm
-                  </Link>
-                </div>
+                <Link 
+                  href={item.link}
+                  className="relative w-full h-full overflow-hidden border border-neutral-200/80 group cursor-pointer block bg-neutral-100"
+                >
+                  <SafeImage
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 980px"
+                    className="object-cover group-hover:scale-102 transition-transform duration-700 ease-out"
+                  />
+                  
+                  {/* Gradient overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-black/10 transition-all duration-500 z-10 group-hover:from-black/95 group-hover:via-black/55" />
+                  
+                  {/* Content aligned at the bottom */}
+                  <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12 z-20 flex flex-col justify-end text-left select-none">
+                    <h3 className="text-3xl md:text-4xl font-extrabold uppercase tracking-wide text-white font-antenna">
+                      {item.title}
+                    </h3>
+                    
+                    {/* Expanding info on hover */}
+                    <div className="max-h-0 opacity-0 group-hover:max-h-[220px] group-hover:opacity-100 transition-all duration-500 ease-in-out overflow-hidden">
+                      <p className="text-sm md:text-base text-white/80 max-w-xl leading-relaxed mt-3 font-antenna">
+                        {item.description}
+                      </p>
+                      <div className="pt-6">
+                        <span className="inline-block bg-transparent border border-white text-white hover:bg-white hover:text-black px-8 py-3 text-xs font-bold uppercase tracking-widest transition-all duration-300">
+                          Tìm hiểu thêm
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
               </div>
             ))}
+          </div>
+
+          {/* Navigation arrows positioned relative to the 1152px container */}
+          <div className="max-w-[1152px] mx-auto w-full relative h-0 pointer-events-none z-30 hidden xl:block">
+            {/* Left arrow */}
+            <button
+              onClick={() => scrollBrandCarousel("left")}
+              className="absolute -left-6 top-[-340px] w-12 h-12 rounded-full bg-white/90 hover:bg-white text-black flex items-center justify-center shadow-md transition-all border border-neutral-200 cursor-pointer hover:scale-105 active:scale-95 pointer-events-auto"
+              aria-label="Scroll left"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+
+            {/* Right arrow */}
+            <button
+              onClick={() => scrollBrandCarousel("right")}
+              className="absolute -right-6 top-[-340px] w-12 h-12 rounded-full bg-white/90 hover:bg-white text-black flex items-center justify-center shadow-md transition-all border border-neutral-200 cursor-pointer hover:scale-105 active:scale-95 pointer-events-auto"
+              aria-label="Scroll right"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
           </div>
         </div>
       </section>
@@ -1201,11 +1080,11 @@ export default function Home() {
             {/* Header Block */}
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 text-left">
               <div className="space-y-4">
-                <span className="text-xs font-bold text-[#066fef] uppercase tracking-[0.2em] block">
+                <span className="text-xs font-bold text-[#002F6C] uppercase tracking-[0.2em] block">
                   Tin tức Ford
                 </span>
                 <h2 className="text-2xl md:text-[32px] font-bold leading-tight tracking-tight uppercase font-sans text-black">
-                  <span className="text-[#066fef]">Tin tức Ford</span> - Nhìn thấy từng bước đi của công nghệ
+                  <span className="text-[#002F6C]">Tin tức Ford</span> - Nhìn thấy từng bước đi của công nghệ
                 </h2>
                 <p className="text-sm text-neutral-500 max-w-2xl leading-relaxed">
                   Nơi hội tụ các tin tức mới nhất, điểm nhấn công nghệ và câu chuyện sáng tạo của Ford.
@@ -1227,7 +1106,7 @@ export default function Home() {
                 {homeArticles[0] && (
                   <Link
                     href={`/tin-tuc/${homeArticles[0].id}`}
-                    className="lg:col-span-8 relative aspect-[16/10] overflow-hidden rounded-[8px] group block"
+                    className="lg:col-span-8 relative aspect-[16/10] overflow-hidden rounded-none border border-neutral-200/80 group block"
                   >
                     <img
                       src={homeArticles[0].image}
@@ -1255,7 +1134,7 @@ export default function Home() {
                     <Link
                       key={art.id}
                       href={`/tin-tuc/${art.id}`}
-                      className="relative flex-1 min-h-[190px] overflow-hidden rounded-[8px] group block"
+                      className="relative flex-1 min-h-[190px] overflow-hidden rounded-none border border-neutral-200/80 group block"
                     >
                       <img
                         src={art.image}
@@ -1275,10 +1154,10 @@ export default function Home() {
               </div>
             ) : (
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 animate-pulse">
-                <div className="lg:col-span-8 aspect-[16/10] bg-neutral-100 rounded-[8px]" />
+                <div className="lg:col-span-8 aspect-[16/10] bg-neutral-100 rounded-none border border-neutral-200/80" />
                 <div className="lg:col-span-4 flex flex-col gap-6">
-                  <div className="flex-1 min-h-[190px] bg-neutral-100 rounded-[8px]" />
-                  <div className="flex-1 min-h-[190px] bg-neutral-100 rounded-[8px]" />
+                  <div className="flex-1 min-h-[190px] bg-neutral-100 rounded-none border border-neutral-200/80" />
+                  <div className="flex-1 min-h-[190px] bg-neutral-100 rounded-none border border-neutral-200/80" />
                 </div>
               </div>
             )}
@@ -1301,7 +1180,7 @@ export default function Home() {
           </h2>
           <Link
             href="/dang-ky-lai-thu"
-            className="bg-[#066fef] hover:bg-[#01095c] border border-[#066fef] hover:border-[#01095c] text-white px-10 py-4 rounded-[4px] text-xs font-bold tracking-wider uppercase transition-colors duration-300 shadow-lg cursor-pointer"
+            className="bg-[#002F6C] hover:bg-[#066FEF] border border-[#002F6C] hover:border-[#066FEF] text-white px-10 py-4 rounded-[4px] text-xs font-bold tracking-wider uppercase transition-all duration-300 shadow-lg cursor-pointer"
           >
             Đăng ký lái thử ngay
           </Link>
@@ -1333,7 +1212,7 @@ export default function Home() {
                 <h2 className="text-3xl md:text-[36px] font-bold text-black tracking-tight leading-tight uppercase font-sans">
                   Chúc mừng & Cảm ơn khách hàng
                 </h2>
-                <div className="h-[2px] w-[60px] bg-[#066fef]" />
+                <div className="h-[2px] w-[60px] bg-[#002F6C]" />
                 <p className="text-sm text-neutral-500 max-w-2xl leading-relaxed">
                   Sự tin tưởng và hài lòng của Quý khách hàng là động lực lớn nhất cho tập thể Long Khánh Ford phát triển vững mạnh.
                 </p>
@@ -1368,7 +1247,7 @@ export default function Home() {
                         <h3 className="text-white text-sm font-bold uppercase tracking-wider leading-snug">
                           {item.title}
                         </h3>
-                        <p className="text-[#066fef] text-[10px] uppercase font-bold tracking-wider mt-1.5">
+                        <p className="text-[#002F6C] text-[10px] uppercase font-bold tracking-wider mt-1.5">
                           Xem phóng to hình ảnh
                         </p>
                       </div>
@@ -1400,7 +1279,7 @@ export default function Home() {
                   <div
                     key={idx}
                     className={`relative overflow-hidden border transition-all duration-300 bg-white rounded-none p-6 ${
-                      isOpen ? "border-[#066fef]" : "border-neutral-200 hover:border-neutral-300"
+                      isOpen ? "border-[#002F6C]" : "border-neutral-200 hover:border-neutral-300"
                     }`}
                   >
                     {/* Title Toggle trigger */}
@@ -1408,11 +1287,11 @@ export default function Home() {
                       onClick={() => toggleFaq(idx)}
                       className="w-full flex items-center justify-between text-left transition-colors cursor-pointer bg-transparent border-0 p-0"
                     >
-                      <span className={`text-sm font-bold uppercase tracking-wider transition-colors ${isOpen ? "text-[#066fef]" : "text-black"}`}>
+                      <span className={`text-sm font-bold uppercase tracking-wider transition-colors ${isOpen ? "text-[#002F6C]" : "text-black"}`}>
                         {faq.q}
                       </span>
                       {isOpen ? (
-                        <Minus className="w-4 h-4 text-[#066fef] flex-shrink-0" />
+                        <Minus className="w-4 h-4 text-[#002F6C] flex-shrink-0" />
                       ) : (
                         <Plus className="w-4 h-4 text-black flex-shrink-0" />
                       )}
@@ -1441,9 +1320,9 @@ export default function Home() {
                   <button
                     key={idx}
                     onClick={() => triggerQuickAction(action.reason, action.note)}
-                    className="flex items-center gap-4 p-5 rounded-[4px] bg-[#f8f8f8] hover:bg-[#101010] hover:text-white text-black transition-all duration-300 cursor-pointer border border-neutral-200/60 text-left group"
+                    className="flex items-center gap-4 p-5 rounded-none bg-white hover:bg-[#00095B] hover:text-white text-black transition-all duration-300 cursor-pointer border border-neutral-200 text-left group"
                   >
-                    <Icon className="h-5 w-5 text-[#066fef] group-hover:text-white transition-colors duration-300 shrink-0" />
+                    <Icon className="h-5 w-5 text-[#002F6C] group-hover:text-white transition-colors duration-300 shrink-0" />
                     <span className="text-[10px] font-bold tracking-wider uppercase leading-snug">
                       {action.title}
                     </span>
@@ -1461,7 +1340,7 @@ export default function Home() {
             {/* Left Column: Title & Info */}
             <div className="w-full lg:w-[480px] flex flex-col gap-8 items-start justify-center text-black relative z-10 text-left">
               <div className="flex flex-col gap-2 items-start text-black w-full">
-                <span className="text-xs font-bold text-[#066fef] uppercase tracking-[0.2em] block">Liên hệ ngay</span>
+                <span className="text-xs font-bold text-[#002F6C] uppercase tracking-[0.2em] block">Liên hệ ngay</span>
                 <h2 className="text-3xl lg:text-[36px] font-bold leading-[1.32] tracking-tight uppercase font-sans text-black">
                   Long Khánh Ford
                 </h2>
@@ -1472,7 +1351,7 @@ export default function Home() {
               <div className="flex flex-col gap-4 items-start w-full">
                 {/* Showroom Address */}
                 <div className="flex gap-3 items-start w-full text-left">
-                  <MapPin className="w-4 h-4 text-[#066fef] shrink-0 mt-0.5" />
+                  <MapPin className="w-4 h-4 text-[#002F6C] shrink-0 mt-0.5" />
                   <p className="text-xs text-neutral-700 leading-relaxed font-normal">
                     <strong className="text-black font-semibold mr-2">Địa chỉ:</strong>
                     Đường Hùng Vương, Phường Xuân An, Thành Phố Long Khánh, Tỉnh Đồng Nai
@@ -1481,7 +1360,7 @@ export default function Home() {
 
                 {/* Hotline */}
                 <div className="flex gap-3 items-start w-full text-left">
-                  <Phone className="w-4 h-4 text-[#066fef] shrink-0 mt-0.5" />
+                  <Phone className="w-4 h-4 text-[#002F6C] shrink-0 mt-0.5" />
                   <p className="text-xs text-neutral-700 leading-relaxed font-normal">
                     <strong className="text-black font-semibold mr-2">Hotline:</strong>
                     Dịch vụ: 1800 55 68 58 - Kinh doanh: 0918 90 90 60
@@ -1490,7 +1369,7 @@ export default function Home() {
 
                 {/* Email */}
                 <div className="flex gap-3 items-start w-full text-left">
-                  <Mail className="w-4 h-4 text-[#066fef] shrink-0 mt-0.5" />
+                  <Mail className="w-4 h-4 text-[#002F6C] shrink-0 mt-0.5" />
                   <p className="text-xs text-neutral-700 leading-relaxed font-normal">
                     <strong className="text-black font-semibold mr-2">Email:</strong>
                     marketing@longkhanhford.com.vn
@@ -1507,7 +1386,7 @@ export default function Home() {
                 </button>
                 <a
                   href="tel:0918909060"
-                  className="bg-[#066fef] hover:bg-[#01095c] text-white px-8 py-3.5 rounded-[4px] text-xs font-bold tracking-wider uppercase transition-colors cursor-pointer inline-flex items-center justify-center w-full sm:w-auto shadow-md"
+                  className="bg-[#002F6C] hover:bg-[#066FEF] text-white px-8 py-3.5 rounded-[4px] text-xs font-bold tracking-wider uppercase transition-all duration-300 cursor-pointer inline-flex items-center justify-center w-full sm:w-auto shadow-md"
                 >
                   Gọi Hotline
                 </a>
@@ -1532,7 +1411,7 @@ export default function Home() {
       {/* BACK TO TOP ACCENT */}
       <button
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        className={`fixed bottom-6 right-6 z-40 w-10 h-10 rounded-[4px] bg-[#066fef] hover:bg-[#01095c] border border-[#066fef] hover:border-[#01095c] flex items-center justify-center text-white cursor-pointer shadow-lg transition-all duration-300 ${
+        className={`fixed bottom-6 right-6 z-40 w-10 h-10 rounded-[4px] bg-[#002F6C] hover:bg-[#066FEF] border border-[#002F6C] hover:border-[#066FEF] flex items-center justify-center text-white cursor-pointer shadow-lg transition-all duration-300 ${
           showToast ? "translate-y-[-100px]" : ""
         }`}
         aria-label="Back to top"
@@ -1608,7 +1487,7 @@ export default function Home() {
               <h3 className="text-white text-lg md:text-2xl font-bold tracking-wide drop-shadow-md uppercase">
                 {customerHandovers[lightboxIndex].title}
               </h3>
-              <p className="text-[#066fef] text-xs mt-1.5 uppercase tracking-[0.2em] font-semibold">
+              <p className="text-[#002F6C] text-xs mt-1.5 uppercase tracking-[0.2em] font-semibold">
                 LONG KHÁNH FORD
               </p>
             </div>

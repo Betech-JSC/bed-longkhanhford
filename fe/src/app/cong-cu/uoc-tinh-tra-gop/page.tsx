@@ -300,9 +300,9 @@ export default function InstallmentCalculatorPage() {
           <div>
             <h1 className="text-2xl font-bold text-[#00095B] uppercase tracking-tight">LONG KHÁNH FORD</h1>
             <p className="text-xs text-gray-500 mt-1">
-              Địa chỉ: Số B04, Khu thương mại Amata, Khu phố 29, Phường Long Bình, TP. Biên Hòa, Đồng Nai
+              Địa chỉ: Đường Hùng Vương, Phường Xuân An, Thành Phố Long Khánh, Tỉnh Đồng Nai
             </p>
-            <p className="text-xs text-gray-500">Hotline KD: 0918 90 90 60 | Email: marketing@dongnaiford.com.vn</p>
+            <p className="text-xs text-gray-500">Hotline KD: 0918 90 90 60 | Email: marketing@longkhanhford.com.vn</p>
           </div>
           <div className="text-right">
             <h2 className="text-lg font-bold text-gray-800">BẢNG ƯỚC TÍNH CHI PHÍ TRẢ GÓP</h2>

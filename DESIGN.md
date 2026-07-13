@@ -1,9 +1,9 @@
 ---
-name: Long Khanh Ford (Ford China Inspired Redesign)
+name: Long Khánh Ford (Ford UK Inspired Redesign)
 colors:
-  primary: "#066fef"       # Ford Highlight Blue (Electric Blue)
-  secondary: "#01095c"     # Ford Navy/Dark Blue (used for hovers on light bg)
-  accent: "#D20000"        # Bold Signal Red
+  primary: "#002F6C"       # Ford Classic Blue
+  secondary: "#00095b"     # Ford Navy/Dark Blue
+  accent: "#066fef"        # Electric Highlight Blue
   neutral-light: "#FFFFFF" # Pure White
   neutral-dark: "#000000"  # Deep Black
   bg-grey: "#F8F8F8"       # Light Grey Background
@@ -62,13 +62,13 @@ components:
     padding: 10px 24px
 ---
 
-# Long Khanh Ford - Redesign Specification
+# Long Khánh Ford - Redesign Specification
 
 ## Overview
-Rebuilding the frontend interface of Long Khanh Ford to mirror the premium, minimalist, and geometric design language of Ford China (https://www.ford.com.cn/). 
+Rebuilding the frontend interface of Long Khánh Ford to mirror the premium, minimalist, and clean digital design language of Ford UK (https://www.ford.co.uk/). 
 The core aesthetic principles are:
 *   **Geometric Precision**: Sharp corners (0px) for layouts and containers, flat borders, clean grid lines, and high structural contrast.
-*   **Localized Brand Tokens**: Utilizing the official Ford China Highlight Blue (`#066fef`), Navy Dark Blue (`#01095c`), and Light Grey (`#f8f8f8`).
+*   **Localized Brand Tokens**: Utilizing the official Ford UK Classic Blue (`#002F6C`), Navy Dark Blue (`#00095B`), Electric Highlight Blue (`#066fef`), and Light Grey/White.
 *   **Refined Interactive Elements**: Button elements use a subtle `4px` border-radius (`rounded-[4px]`) and slide-in hover transitions. Inputs use `8px` (`rounded-[8px]`).
 *   **Contrast Layering**: Switching between full-width black sections (for technology/premium focus) and clean white sections (for specifications/lineups).
 *   **Clean Typography**: Utilizing the wide, modern geometry of the `FordF1` typeface family with spacious margins.

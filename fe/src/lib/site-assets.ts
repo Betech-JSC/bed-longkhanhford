@@ -2,7 +2,7 @@ export const siteAssets = {
   heroSlides: [
     "/images-dynamic/image-hero-1.jpg",
     "/images-dynamic/image-hero-2.webp",
-    "/assets/car-mach-e.png",
+    "/images-dynamic/image-hero-3.jpg",
   ],
   showroomBg: "/showroom_bg.png",
   serviceBannerBg: "/assets/service-banner-bg.png",

@@ -44,14 +44,14 @@ export default function Footer() {
         {/* Column 1: Company Profile Info */}
         <div className="space-y-4 lg:w-[383px]">
           <h3 className="text-[22px] font-semibold tracking-tight text-white uppercase font-display leading-[1.3]">
-            CÔNG TY TNHH DỊCH VỤ – THƯƠNG MẠI TẤN PHÁT ĐẠT
+            LONG KHÁNH FORD (ĐẠI LÝ TẤN PHÁT ĐẠT)
           </h3>
           <div className="text-xs text-white/80 space-y-2 font-normal">
             <p>
               <strong className="text-white font-bold">Mã số thuế:</strong> 3600843328
             </p>
             <p>
-              <strong className="text-white font-bold">Địa chỉ:</strong> Số B04, Khu thương mại Amata, Khu phố 29, Phường Long Bình, Thành Phố Đồng Nai
+              <strong className="text-white font-bold">Địa chỉ:</strong> Đường Hùng Vương, Phường Xuân An, Thành Phố Long Khánh, Tỉnh Đồng Nai
             </p>
             <p>
               <strong className="text-white font-bold">Hotline KD:</strong> 0918 90 90 60
@@ -60,13 +60,10 @@ export default function Footer() {
               <strong className="text-white font-bold">Hotline Dv:</strong> 1800 55 68 58
             </p>
             <p>
-              <strong className="text-white font-bold">ĐT:</strong> (0251) 3857 130 – (0251) 3857 131
+              <strong className="text-white font-bold">Email:</strong> marketing@longkhanhford.com.vn
             </p>
             <p>
-              <strong className="text-white font-bold">Email:</strong> marketing@dongnaiford.com.vn
-            </p>
-            <p>
-              <strong className="text-white font-bold">Website:</strong> dongnaiford.com.vn
+              <strong className="text-white font-bold">Website:</strong> longkhanhford.com.vn
             </p>
           </div>
         </div>

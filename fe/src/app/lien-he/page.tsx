@@ -251,7 +251,7 @@ function ContactFormContent() {
                   Email
                 </h4>
                 <p className="font-['Ford_Antenna',sans-serif] text-sm text-[#1a1a1a]">
-                  marketing@dongnaiford.com.vn
+                  marketing@longkhanhford.com.vn
                 </p>
               </div>
             </div>
