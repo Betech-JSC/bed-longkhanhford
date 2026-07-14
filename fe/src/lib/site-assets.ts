@@ -1,7 +1,7 @@
 export const siteAssets = {
   heroSlides: [
     "/images-dynamic/image-hero-1.jpg",
-    "/images-dynamic/image-hero-2.webp",
+    "/images-dynamic/ford_ranger_banner.png",
     "/images-dynamic/image-hero-3.jpg",
   ],
   showroomBg: "/showroom_bg.png",

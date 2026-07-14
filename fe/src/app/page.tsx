@@ -24,6 +24,7 @@ import { vehicles, Vehicle } from "@/data/vehicles";
 import { getPopularVehicleImage, siteAssets, handleImageError } from "@/lib/site-assets";
 import { bannersAPI, postsAPI, vehiclesAPI, servicesAPI, customerHandoversAPI } from "@/lib/api";
 import SafeImage from "@/components/shared/SafeImage";
+import Button from "@/components/shared/Button";
 
 // Custom SVG Icons matching Figma and Ford China design
 const WheelIcon = ({ className }: { className?: string }) => (
@@ -132,24 +133,32 @@ const techItems = [
 const brandItems = [
   {
     title: "Ford Everest",
+    category: "Ford Everest Mới",
+    slogan: "Dấn Bước. Dẫn Đầu.",
     description: "Dòng SUV 7 chỗ sang trọng và mạnh mẽ hàng đầu, trang bị động cơ Bi-Turbo tối tân cùng hệ dẫn động 2 cầu chủ động giúp bạn tự tin chinh phục mọi cung đường hiểm trở.",
     image: "/assets/everest_platinum.png",
     link: "/lien-he"
   },
   {
     title: "Ford Ranger",
+    category: "Ford Ranger Mới",
+    slogan: "Bản Lĩnh. Thách Thức.",
     description: "Vua bán tải - Thiết kế cơ bắp, thông minh và vô cùng bền bỉ. Đáp ứng hoàn hảo từ nhu cầu chuyên chở công việc cho đến những hành trình khám phá mạo hiểm.",
     image: "/assets/ranger_wildtrak.png",
     link: "/lien-he"
   },
   {
     title: "Ford Territory",
+    category: "Ford Territory Mới",
+    slogan: "Thông Minh. Tiện Nghi.",
     description: "SUV 5 chỗ thông minh mang đậm hơi thở đô thị. Thiết kế sang trọng, không gian cabin kỹ thuật số hiện đại cùng gói công nghệ an toàn chủ động Co-Pilot360™.",
     image: "/assets/territory-hero.png",
     link: "/lien-he"
   },
   {
     title: "Ford Transit",
+    category: "Ford Transit Mới",
+    slogan: "Giải Pháp Vận Chuyển Chuyên Nghiệp.",
     description: "Giải pháp vận chuyển hành khách chuyên nghiệp thế hệ mới. Tiết kiệm nhiên liệu vượt trội, khoang lái rộng rãi tích hợp các trang bị tiện nghi cao cấp đạt chuẩn 5 sao.",
     image: "/assets/transit-hero.png",
     link: "/lien-he"
@@ -211,22 +220,17 @@ const defaultHandovers = [
   {
     id: "handover-1",
     title: "Bàn giao xe Ford Everest Titanium cho anh Tuấn tại Long Khánh",
-    image_url: "/assets/handover_1.png",
+    image_url: "/assets/customer_handover_everest.png",
   },
   {
     id: "handover-2",
     title: "Bàn giao xe Ford Ranger Wildtrak cho chị Vy",
-    image_url: "/assets/handover_2.png",
+    image_url: "/assets/customer_handover_ranger.png",
   },
   {
     id: "handover-3",
     title: "Bàn giao xe Ford Territory Titanium cho gia đình anh Hùng",
-    image_url: "/assets/handover_3.png",
-  },
-  {
-    id: "handover-4",
-    title: "Bàn giao xe Ford Transit Premium cho công ty vận tải",
-    image_url: "/assets/handover_4.png",
+    image_url: "/assets/customer_handover_territory.png",
   }
 ];
 
@@ -621,7 +625,7 @@ export default function Home() {
           left: 0;
           width: 100%;
           height: 2px;
-          background-color: #002F6C;
+          background-color: #066FEF;
           transform: scaleX(0);
           transform-origin: right;
           transition: transform 0.3s ease-out;
@@ -681,18 +685,20 @@ export default function Home() {
 
               {/* CTAs - Dark Background Hover styles */}
               <div className="flex flex-row justify-start gap-4 pt-6 md:pt-8 w-full sm:w-auto">
-                <button
+                <Button
+                  variant="primary"
                   onClick={() => triggerQuickAction("Đăng ký lái thử", "Tôi đặt lịch hẹn đăng ký lái thử xe Ford.")}
-                  className="bg-[#002F6C] hover:bg-[#066FEF] text-white px-8 py-3 rounded-[4px] text-xs font-bold tracking-wider uppercase transition-all duration-300 cursor-pointer border-0 w-full sm:w-auto text-center shadow-md"
+                  className="w-full sm:w-auto"
                 >
                   Đăng ký lái thử
-                </button>
-                <button
+                </Button>
+                <Button
+                  variant="white-outline"
                   onClick={() => router.push("/lien-he")}
-                  className="bg-transparent hover:bg-white/10 border border-white text-white px-8 py-3 rounded-[4px] text-xs font-bold tracking-wider uppercase transition-all duration-300 cursor-pointer w-full sm:w-auto text-center"
+                  className="w-full sm:w-auto"
                 >
                   Khám phá ngay
-                </button>
+                </Button>
               </div>
             </div>
           </div>
@@ -708,7 +714,7 @@ export default function Home() {
                 aria-label={`Go to slide ${idx + 1}`}
               >
                 {activeHeroIndex === idx && (
-                  <div className="absolute top-0 left-0 bottom-0 right-0 bg-[#002F6C] animate-hero-progress" />
+                  <div className="absolute top-0 left-0 bottom-0 right-0 bg-[#066FEF] animate-hero-progress" />
                 )}
               </button>
             ))}
@@ -737,16 +743,12 @@ export default function Home() {
         <div className="max-w-[1440px] mx-auto w-full">
           <div className="max-w-[1152px] mx-auto w-full px-6 xl:px-0">
             {/* Header title block */}
-            <div className="space-y-4 mb-16 text-left">
+            <div className="mb-12 text-left">
               <h2 className="text-3xl md:text-[40px] font-bold text-black tracking-tight uppercase font-sans max-w-[768px] leading-tight">
-              <span className="text-[#002F6C] block">Mỗi dòng xe Ford.</span>
-              <span className="block">Phù hợp với cuộc sống của bạn</span>
-            </h2>
-            <div className="h-[2px] w-[60px] bg-[#002F6C]" />
-            <p className="text-sm text-neutral-500 max-w-2xl leading-relaxed">
-               Khám phá toàn bộ sản phẩm và tìm kiếm mẫu xe yêu thích của bạn.
-            </p>
-          </div>
+                <span className="text-[#066FEF] block">Mỗi dòng xe Ford.</span>
+                <span className="block">Phù hợp với cuộc sống của bạn</span>
+              </h2>
+            </div>
 
           {/* Tab Navigation and Right side Buttons */}
           <div className="flex flex-col lg:flex-row lg:items-center justify-between border-b border-neutral-200 pb-4 mb-12 gap-6">
@@ -771,7 +773,7 @@ export default function Home() {
                     }}
                     className={`pb-4 text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-300 relative cursor-pointer whitespace-nowrap border-0 bg-transparent ${
                       isActive
-                        ? "text-black border-b-2 border-[#002F6C] -mb-[18px]"
+                        ? "text-black border-b-2 border-[#066FEF] -mb-[18px]"
                         : "text-neutral-400 hover:text-black border-b-2 border-transparent -mb-[18px]"
                     }`}
                   >
@@ -783,12 +785,13 @@ export default function Home() {
 
             {/* Right side buttons */}
             <div className="flex gap-3 flex-wrap">
-              <button
+              <Button
+                variant="outline-gray"
                 onClick={() => router.push("/san-pham")}
-                className="bg-transparent hover:bg-neutral-50 border border-neutral-300 text-neutral-600 hover:text-black px-6 py-2.5 rounded-[4px] text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer"
+                size="sm"
               >
                 Khám phá tất cả dòng xe
-              </button>
+              </Button>
             </div>
           </div>
 
@@ -884,7 +887,7 @@ export default function Home() {
                               className="h-[3px] border-0 cursor-pointer p-0 transition-all duration-300"
                               style={{
                                 width: safeCarIndex === idx ? '40px' : '20px',
-                                backgroundColor: safeCarIndex === idx ? '#002F6C' : '#e5e5e5'
+                                backgroundColor: safeCarIndex === idx ? '#066FEF' : '#e5e5e5'
                               }}
                               aria-label={`Go to vehicle ${idx + 1}`}
                             />
@@ -926,12 +929,13 @@ export default function Home() {
 
                       {/* CTA Button */}
                       <div className="flex gap-4 w-full">
-                        <Link
+                        <Button
+                          variant="primary"
                           href={`/${vehicleId}`}
-                          className="bg-[#002F6C] hover:bg-[#066FEF] border border-[#002F6C] hover:border-[#066FEF] text-white text-center px-8 py-3.5 rounded-[4px] text-xs font-bold tracking-wider uppercase transition-all duration-300 w-full sm:w-auto shadow-md"
+                          className="w-full sm:w-auto"
                         >
                           Tìm hiểu thêm
-                        </Link>
+                        </Button>
                       </div>
                     </div>
                   </div>
@@ -949,10 +953,10 @@ export default function Home() {
           <div className="max-w-[1152px] mx-auto w-full px-6 xl:px-0">
             {/* Title Block */}
             <div className="flex flex-col gap-4 text-left mb-16 max-w-[900px]">
-              <h2 className="text-4xl md:text-[48px] font-extrabold text-[#002F6C] tracking-tight font-antenna leading-none">
-                Công nghệ trên xe Ford
+              <h2 className="text-4xl md:text-[48px] font-extrabold text-black tracking-tight font-antenna leading-none">
+                <span className="text-[#066FEF]">Công nghệ</span> trên xe Ford
               </h2>
-              <p className="text-base md:text-lg text-[#002F6C] font-medium leading-relaxed font-antenna">
+              <p className="text-base md:text-lg text-neutral-600 font-medium leading-relaxed font-antenna">
                 Khám phá các trang bị công nghệ hiện đại hàng đầu phân khúc trên các dòng xe Ford thế hệ mới giúp hành trình của bạn an toàn, kết nối liền mạch và tràn đầy cảm hứng.
               </p>
             </div>
@@ -974,7 +978,7 @@ export default function Home() {
 
                   {/* Card content */}
                   <div className="flex flex-col flex-1 gap-2.5">
-                    <h3 className="text-xl md:text-[22px] font-bold text-[#002F6C] tracking-tight leading-snug font-antenna">
+                    <h3 className="text-xl md:text-[22px] font-bold text-[#00095B] tracking-tight leading-snug font-antenna">
                       {card.title}
                     </h3>
                     <p className="text-sm text-gray-600 leading-relaxed font-normal font-antenna flex-1">
@@ -983,12 +987,14 @@ export default function Home() {
                     
                     {/* Outline pill button */}
                     <div className="pt-2">
-                      <Link
+                      <Button
+                        variant="outline"
                         href={card.link}
-                        className="border border-[#002F6C] text-[#002F6C] hover:bg-[#002F6C] hover:text-white rounded-full px-6 py-2.5 text-xs font-bold transition-all duration-300 w-fit cursor-pointer inline-block text-center font-antenna tracking-wide"
+                        size="sm"
+                        className="w-fit"
                       >
                         {card.buttonText}
-                      </Link>
+                      </Button>
                     </div>
                   </div>
                 </div>
@@ -1000,75 +1006,95 @@ export default function Home() {
 
       {/* 5. BRAND SHOWCASE SECTION */}
       <section id="brand-showcase" className="bg-white py-20 border-t border-[#e5e5e5] w-full relative overflow-x-clip">
-        <div className="w-full relative">
-          
-          {/* Horizontal scrolling card showcase */}
-          <div 
-            ref={brandCarouselRef}
-            className="flex gap-6 overflow-x-auto pb-8 scrollbar-none snap-x snap-mandatory scroll-smooth w-full pl-6 pr-6 xl:pl-[calc((100vw-1152px)/2)] xl:pr-[calc((100vw-1152px)/2)]"
-          >
-            {brandItems.map((item, idx) => (
-              <div 
-                key={idx}
-                className="snap-start flex-shrink-0 w-[88vw] md:w-[75vw] lg:w-[68vw] xl:w-[980px] h-[340px] md:h-[500px] lg:h-[580px] xl:h-[620px]"
-              >
-                <Link 
-                  href={item.link}
-                  className="relative w-full h-full overflow-hidden border border-neutral-200/80 group cursor-pointer block bg-neutral-100"
-                >
-                  <SafeImage
-                    src={item.image}
-                    alt={item.title}
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 980px"
-                    className="object-cover group-hover:scale-102 transition-transform duration-700 ease-out"
-                  />
-                  
-                  {/* Gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-black/10 transition-all duration-500 z-10 group-hover:from-black/95 group-hover:via-black/55" />
-                  
-                  {/* Content aligned at the bottom */}
-                  <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12 z-20 flex flex-col justify-end text-left select-none">
-                    <h3 className="text-3xl md:text-4xl font-extrabold uppercase tracking-wide text-white font-antenna">
-                      {item.title}
-                    </h3>
-                    
-                    {/* Expanding info on hover */}
-                    <div className="max-h-0 opacity-0 group-hover:max-h-[220px] group-hover:opacity-100 transition-all duration-500 ease-in-out overflow-hidden">
-                      <p className="text-sm md:text-base text-white/80 max-w-xl leading-relaxed mt-3 font-antenna">
-                        {item.description}
-                      </p>
-                      <div className="pt-6">
-                        <span className="inline-block bg-transparent border border-white text-white hover:bg-white hover:text-black px-8 py-3 text-xs font-bold uppercase tracking-widest transition-all duration-300">
-                          Tìm hiểu thêm
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              </div>
-            ))}
+        <div className="max-w-[1152px] mx-auto w-full px-6 xl:px-0">
+          {/* Title Block */}
+          <div className="mb-10 text-left">
+            <span className="text-xs font-semibold text-neutral-500 block mb-2 font-sans">
+              Toàn Bộ Xe
+            </span>
+            <h2 className="text-3xl lg:text-[40px] font-bold text-black tracking-tight leading-tight font-sans">
+              Khám Phá Các Dòng Xe Ford
+            </h2>
           </div>
 
-          {/* Navigation arrows positioned relative to the 1152px container */}
-          <div className="max-w-[1152px] mx-auto w-full relative h-0 pointer-events-none z-30 hidden xl:block">
-            {/* Left arrow */}
-            <button
-              onClick={() => scrollBrandCarousel("left")}
-              className="absolute -left-6 top-[-340px] w-12 h-12 rounded-full bg-white/90 hover:bg-white text-black flex items-center justify-center shadow-md transition-all border border-neutral-200 cursor-pointer hover:scale-105 active:scale-95 pointer-events-auto"
-              aria-label="Scroll left"
+          <div className="w-full relative group/carousel">
+            {/* Horizontal scrolling card showcase with negative margins to bleed out to screen edges */}
+            <div 
+              ref={brandCarouselRef}
+              className="flex gap-6 overflow-x-auto pb-8 scrollbar-none snap-x snap-mandatory scroll-smooth -mx-6 px-6 xl:-mx-[calc((100vw-1152px)/2)] xl:px-[calc((100vw-1152px)/2)]"
             >
-              <ChevronLeft className="w-6 h-6" />
-            </button>
+              {brandItems.map((item: any, idx) => (
+                <div 
+                  key={idx}
+                  className="snap-start flex-shrink-0 w-[85vw] md:w-[75vw] lg:w-[70vw] xl:w-[920px] aspect-[16/10] h-auto"
+                >
+                  <Link 
+                    href={item.link}
+                    className="relative w-full h-full overflow-hidden border border-neutral-200/80 group cursor-pointer block bg-neutral-100 rounded-[8px] aspect-[16/10]"
+                  >
+                    <SafeImage
+                      src={item.image}
+                      alt={item.title}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 920px"
+                      className="object-cover group-hover:scale-102 transition-transform duration-700 ease-out"
+                    />
+                    
+                    {/* Subtle bottom gradient overlay for readability */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10" />
+                    
+                    {/* Content aligned at the bottom-left */}
+                    <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-20 flex flex-col justify-end text-left select-none gap-3">
+                      <div className="space-y-1">
+                        <span className="text-xs font-semibold text-white/90 block uppercase tracking-wider">
+                          {item.category}
+                        </span>
+                        <h3 className="text-2xl md:text-3xl font-bold text-white tracking-tight leading-tight">
+                          {item.slogan}
+                        </h3>
+                      </div>
+                      
+                      {/* Pill Buttons */}
+                      <div className="flex gap-3 items-center mt-2">
+                        <Button
+                          variant="white"
+                          size="sm"
+                        >
+                          Xem Thêm
+                        </Button>
+                        <Button
+                          variant="white-outline"
+                          size="sm"
+                        >
+                          Báo Giá
+                        </Button>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+              ))}
+            </div>
 
-            {/* Right arrow */}
-            <button
-              onClick={() => scrollBrandCarousel("right")}
-              className="absolute -right-6 top-[-340px] w-12 h-12 rounded-full bg-white/90 hover:bg-white text-black flex items-center justify-center shadow-md transition-all border border-neutral-200 cursor-pointer hover:scale-105 active:scale-95 pointer-events-auto"
-              aria-label="Scroll right"
-            >
-              <ChevronRight className="w-6 h-6" />
-            </button>
+            {/* Navigation arrows (relative to the 1152px parent container) */}
+            <div className="absolute inset-y-0 left-0 right-0 pointer-events-none z-30 hidden xl:block">
+              {/* Left arrow */}
+              <button
+                onClick={() => scrollBrandCarousel("left")}
+                className="absolute left-[-24px] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white text-black flex items-center justify-center shadow-lg transition-all border border-neutral-200 cursor-pointer hover:scale-105 active:scale-95 pointer-events-auto opacity-0 group-hover/carousel:opacity-100 duration-300"
+                aria-label="Scroll left"
+              >
+                <ChevronLeft className="w-6 h-6" />
+              </button>
+
+              {/* Right arrow */}
+              <button
+                onClick={() => scrollBrandCarousel("right")}
+                className="absolute right-[-24px] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white text-black flex items-center justify-center shadow-lg transition-all border border-neutral-200 cursor-pointer hover:scale-105 active:scale-95 pointer-events-auto opacity-0 group-hover/carousel:opacity-100 duration-300"
+                aria-label="Scroll right"
+              >
+                <ChevronRight className="w-6 h-6" />
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -1080,33 +1106,32 @@ export default function Home() {
             {/* Header Block */}
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 text-left">
               <div className="space-y-4">
-                <span className="text-xs font-bold text-[#002F6C] uppercase tracking-[0.2em] block">
-                  Tin tức Ford
+                <span className="text-xs font-bold text-[#066FEF] uppercase tracking-[0.2em] block">
+                  Tin tức & Chương Trình
                 </span>
                 <h2 className="text-2xl md:text-[32px] font-bold leading-tight tracking-tight uppercase font-sans text-black">
-                  <span className="text-[#002F6C]">Tin tức Ford</span> - Nhìn thấy từng bước đi của công nghệ
+                  Tin tức & Sự kiện
                 </h2>
-                <p className="text-sm text-neutral-500 max-w-2xl leading-relaxed">
-                  Nơi hội tụ các tin tức mới nhất, điểm nhấn công nghệ và câu chuyện sáng tạo của Ford.
-                </p>
               </div>
 
               {/* Right side button */}
-              <button
+              <Button
+                variant="outline-gray"
                 onClick={() => router.push("/tin-tuc")}
-                className="bg-transparent hover:bg-neutral-50 border border-neutral-300 text-neutral-600 hover:text-black px-6 py-2.5 rounded-[4px] text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer shrink-0"
+                className="shrink-0"
+                size="sm"
               >
                 Xem thêm tin tức
-              </button>
+              </Button>
             </div>
 
             {homeArticles.length > 0 ? (
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
                 {/* Left: Large featured article (66% width) */}
                 {homeArticles[0] && (
                   <Link
                     href={`/tin-tuc/${homeArticles[0].id}`}
-                    className="lg:col-span-8 relative aspect-[16/10] overflow-hidden rounded-none border border-neutral-200/80 group block"
+                    className="lg:col-span-8 relative aspect-[16/10] overflow-hidden rounded-[8px] border border-neutral-200/80 group block"
                   >
                     <img
                       src={homeArticles[0].image}
@@ -1115,26 +1140,21 @@ export default function Home() {
                       onError={handleImageError}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
-                    <div className="absolute bottom-8 left-8 right-8 text-left text-white space-y-3">
+                    <div className="absolute bottom-8 left-8 right-8 text-left text-white">
                       <h3 className="text-xl md:text-2xl font-bold uppercase tracking-wide font-sans line-clamp-2 drop-shadow-md">
                         {homeArticles[0].title}
                       </h3>
-                      {homeArticles[0].description && (
-                        <p className="text-xs text-white/80 line-clamp-2 font-light leading-relaxed">
-                          {homeArticles[0].description}
-                        </p>
-                      )}
                     </div>
                   </Link>
                 )}
 
                 {/* Right: Stacked smaller articles (33% width) */}
-                <div className="lg:col-span-4 flex flex-col justify-between gap-6">
+                <div className="lg:col-span-4 flex flex-col justify-between gap-4">
                   {homeArticles.slice(1, 3).map((art) => (
                     <Link
                       key={art.id}
                       href={`/tin-tuc/${art.id}`}
-                      className="relative flex-1 min-h-[190px] overflow-hidden rounded-none border border-neutral-200/80 group block"
+                      className="relative flex-1 min-h-[190px] overflow-hidden rounded-[8px] border border-neutral-200/80 group block"
                     >
                       <img
                         src={art.image}
@@ -1166,24 +1186,26 @@ export default function Home() {
       </section>
 
       {/* 7. FULL-WIDTH BRAND BANNER */}
-      <section className="relative w-full h-[450px] md:h-[600px] overflow-hidden select-none">
+      <section className="relative w-full h-[550px] md:h-[750px] overflow-hidden select-none">
         <Image
-          src="/assets/mustang-hero.png"
+          src="/assets/ford-ranger-raptor-desktop.webp"
           alt="Ford Brand Banner"
           fill
           sizes="100vw"
           className="object-cover object-center"
         />
         <div className="absolute inset-0 bg-black/45 flex flex-col items-center justify-center text-center p-6">
-          <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white uppercase tracking-wider font-sans mb-8 max-w-4xl leading-tight drop-shadow-md">
+          <h2 className="text-2xl md:text-4xl lg:text-[42px] font-extrabold text-white uppercase tracking-wider font-sans mb-6 max-w-4xl leading-tight drop-shadow-md">
             Khám Phá Hành Trình Mới Cùng Ford
           </h2>
-          <Link
+          <Button
+            variant="primary"
             href="/dang-ky-lai-thu"
-            className="bg-[#002F6C] hover:bg-[#066FEF] border border-[#002F6C] hover:border-[#066FEF] text-white px-10 py-4 rounded-[4px] text-xs font-bold tracking-wider uppercase transition-all duration-300 shadow-lg cursor-pointer"
+            size="lg"
+            className="shadow-lg"
           >
             Đăng ký lái thử ngay
-          </Link>
+          </Button>
         </div>
       </section>
 
@@ -1207,15 +1229,10 @@ export default function Home() {
           <div className="w-full">
             {/* Header row */}
             <div className="max-w-[1440px] mx-auto w-full mb-12">
-              <div className="max-w-[1152px] mx-auto w-full px-6 xl:px-0 space-y-4 text-left">
-                <span className="text-xs font-bold text-neutral-400 uppercase tracking-[0.2em] block">Tri ân khách hàng</span>
-                <h2 className="text-3xl md:text-[36px] font-bold text-black tracking-tight leading-tight uppercase font-sans">
-                  Chúc mừng & Cảm ơn khách hàng
+              <div className="max-w-[1152px] mx-auto w-full px-6 xl:px-0 flex flex-col items-center text-center">
+                <h2 className="text-3xl md:text-[40px] font-extrabold text-black tracking-tight leading-tight uppercase font-sans">
+                  Tri ân khách hàng
                 </h2>
-                <div className="h-[2px] w-[60px] bg-[#002F6C]" />
-                <p className="text-sm text-neutral-500 max-w-2xl leading-relaxed">
-                  Sự tin tưởng và hài lòng của Quý khách hàng là động lực lớn nhất cho tập thể Long Khánh Ford phát triển vững mạnh.
-                </p>
               </div>
             </div>
 
@@ -1228,7 +1245,7 @@ export default function Home() {
                     <div
                       key={`${item.id}-${idx}`}
                       onClick={() => setLightboxIndex(originalIdx)}
-                      className="relative overflow-hidden rounded-none aspect-[4/3] group cursor-pointer bg-neutral-100 flex-shrink-0 transition-all duration-300 block border border-neutral-200"
+                      className="relative overflow-hidden rounded-[8px] aspect-[4/3] group cursor-pointer bg-neutral-100 flex-shrink-0 transition-all duration-300 block border border-neutral-200"
                       style={{
                         width: "var(--card-width-handover, 360px)",
                       }}
@@ -1238,18 +1255,15 @@ export default function Home() {
                         alt={item.title || "Tri ân khách hàng"}
                         fill
                         sizes="(max-width: 768px) 280px, 360px"
-                        className="object-cover transition-transform duration-500 rounded-none"
+                        className="object-cover transition-transform duration-500 rounded-[8px]"
                         onError={handleImageError}
                       />
 
                       {/* Premium gradient overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 text-left rounded-none">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 text-left rounded-[8px]">
                         <h3 className="text-white text-sm font-bold uppercase tracking-wider leading-snug">
                           {item.title}
                         </h3>
-                        <p className="text-[#002F6C] text-[10px] uppercase font-bold tracking-wider mt-1.5">
-                          Xem phóng to hình ảnh
-                        </p>
                       </div>
                     </div>
                   );
@@ -1271,30 +1285,34 @@ export default function Home() {
               </h2>
             </div>
 
-            {/* Accordions list - Flow vertically */}
-            <div className="flex flex-col gap-4 w-full">
+            {/* Accordions list - Flow vertically with max-w-[800px] */}
+            <div className="flex flex-col gap-4 w-full max-w-[800px] mx-auto">
               {faqs.map((faq, idx) => {
                 const isOpen = openFaqIndex === idx;
                 return (
                   <div
                     key={idx}
-                    className={`relative overflow-hidden border transition-all duration-300 bg-white rounded-none p-6 ${
-                      isOpen ? "border-[#002F6C]" : "border-neutral-200 hover:border-neutral-300"
+                    className={`relative overflow-hidden border transition-all duration-300 rounded-[8px] p-6 ${
+                      isOpen ? "border-[#066FEF] bg-[#f0f7ff]/20 shadow-xs" : "border-neutral-200 hover:border-neutral-300 bg-white"
                     }`}
                   >
                     {/* Title Toggle trigger */}
                     <button
                       onClick={() => toggleFaq(idx)}
-                      className="w-full flex items-center justify-between text-left transition-colors cursor-pointer bg-transparent border-0 p-0"
+                      className="w-full flex items-center justify-between text-left transition-colors cursor-pointer bg-transparent border-0 p-0 gap-4"
                     >
-                      <span className={`text-sm font-bold uppercase tracking-wider transition-colors ${isOpen ? "text-[#002F6C]" : "text-black"}`}>
+                      <span className={`text-sm font-bold uppercase tracking-wider transition-colors ${isOpen ? "text-[#066FEF]" : "text-black"}`}>
                         {faq.q}
                       </span>
-                      {isOpen ? (
-                        <Minus className="w-4 h-4 text-[#002F6C] flex-shrink-0" />
-                      ) : (
-                        <Plus className="w-4 h-4 text-black flex-shrink-0" />
-                      )}
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 shrink-0 ${
+                        isOpen ? "bg-[#066FEF] text-white" : "bg-[#f0f7ff] text-[#066FEF] hover:bg-[#e0efff]"
+                      }`}>
+                        {isOpen ? (
+                          <Minus className="w-4 h-4" />
+                        ) : (
+                          <Plus className="w-4 h-4" />
+                        )}
+                      </div>
                     </button>
 
                     {/* Body Content with Smooth Height Transition */}
@@ -1302,7 +1320,7 @@ export default function Home() {
                       isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
                     }`}>
                       <div className="overflow-hidden">
-                        <p className="pt-4 text-xs text-neutral-500 leading-relaxed font-normal text-left">
+                        <p className="pt-4 text-sm text-neutral-500 leading-relaxed font-normal text-left">
                           {faq.a}
                         </p>
                       </div>
@@ -1312,93 +1330,83 @@ export default function Home() {
               })}
             </div>
 
-            {/* Minimalist Quick Actions Grid */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-20 pt-16 border-t border-neutral-100 w-full">
-              {quickActions.map((action, idx) => {
-                const Icon = action.icon;
-                return (
-                  <button
-                    key={idx}
-                    onClick={() => triggerQuickAction(action.reason, action.note)}
-                    className="flex items-center gap-4 p-5 rounded-none bg-white hover:bg-[#00095B] hover:text-white text-black transition-all duration-300 cursor-pointer border border-neutral-200 text-left group"
-                  >
-                    <Icon className="h-5 w-5 text-[#002F6C] group-hover:text-white transition-colors duration-300 shrink-0" />
-                    <span className="text-[10px] font-bold tracking-wider uppercase leading-snug">
-                      {action.title}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
+
           </div>
         </div>
       </section>
 
-      <section id="consultation" className="relative py-24 px-0 w-full overflow-hidden bg-gradient-to-br from-white via-neutral-50 to-[#eef6ff] text-black">
+      <section id="consultation" className="relative py-24 px-0 w-full overflow-hidden bg-gradient-to-br from-white via-[#f0f7ff] to-[#d6e8ff] text-black">
         <div className="max-w-[1440px] mx-auto w-full relative z-10">
           <div className="max-w-[1152px] mx-auto w-full px-6 xl:px-0 flex flex-col lg:flex-row gap-16 items-center justify-center">
             {/* Left Column: Title & Info */}
             <div className="w-full lg:w-[480px] flex flex-col gap-8 items-start justify-center text-black relative z-10 text-left">
-              <div className="flex flex-col gap-2 items-start text-black w-full">
-                <span className="text-xs font-bold text-[#002F6C] uppercase tracking-[0.2em] block">Liên hệ ngay</span>
-                <h2 className="text-3xl lg:text-[36px] font-bold leading-[1.32] tracking-tight uppercase font-sans text-black">
-                  Long Khánh Ford
+              <div className="flex flex-col gap-3 items-start text-black w-full">
+                <h2 className="text-3xl lg:text-[36px] font-extrabold leading-[1.2] tracking-tight uppercase font-sans text-black">
+                  <span className="text-[#066FEF]">Liên hệ</span> Long Khánh Ford
                 </h2>
-                <p className="text-sm text-neutral-500 leading-[1.5] font-normal">
+                <p className="text-sm md:text-base text-neutral-500 leading-[1.6] font-normal">
                   Đại lý ủy quyền chính thức tiêu chuẩn Signature mới nhất của Ford Việt Nam.
                 </p>
               </div>
-              <div className="flex flex-col gap-4 items-start w-full">
+              <div className="flex flex-col gap-6 items-start w-full">
                 {/* Showroom Address */}
-                <div className="flex gap-3 items-start w-full text-left">
-                  <MapPin className="w-4 h-4 text-[#002F6C] shrink-0 mt-0.5" />
-                  <p className="text-xs text-neutral-700 leading-relaxed font-normal">
-                    <strong className="text-black font-semibold mr-2">Địa chỉ:</strong>
+                <div className="flex gap-4 items-start w-full text-left">
+                  <div className="w-10 h-10 rounded-full bg-[#f0f7ff] border border-[#d6e8ff] flex items-center justify-center text-[#066FEF] shrink-0 mt-0.5">
+                    <MapPin className="w-5 h-5" />
+                  </div>
+                  <p className="text-sm md:text-base text-neutral-700 leading-relaxed font-normal pt-1.5">
+                    <strong className="text-black font-bold mr-1">Địa chỉ:</strong>
                     Đường Hùng Vương, Phường Xuân An, Thành Phố Long Khánh, Tỉnh Đồng Nai
                   </p>
                 </div>
 
                 {/* Hotline */}
-                <div className="flex gap-3 items-start w-full text-left">
-                  <Phone className="w-4 h-4 text-[#002F6C] shrink-0 mt-0.5" />
-                  <p className="text-xs text-neutral-700 leading-relaxed font-normal">
-                    <strong className="text-black font-semibold mr-2">Hotline:</strong>
+                <div className="flex gap-4 items-start w-full text-left">
+                  <div className="w-10 h-10 rounded-full bg-[#f0f7ff] border border-[#d6e8ff] flex items-center justify-center text-[#066FEF] shrink-0 mt-0.5">
+                    <Phone className="w-5 h-5" />
+                  </div>
+                  <p className="text-sm md:text-base text-neutral-700 leading-relaxed font-normal pt-1.5">
+                    <strong className="text-black font-bold mr-1">Hotline:</strong>
                     Dịch vụ: 1800 55 68 58 - Kinh doanh: 0918 90 90 60
                   </p>
                 </div>
 
                 {/* Email */}
-                <div className="flex gap-3 items-start w-full text-left">
-                  <Mail className="w-4 h-4 text-[#002F6C] shrink-0 mt-0.5" />
-                  <p className="text-xs text-neutral-700 leading-relaxed font-normal">
-                    <strong className="text-black font-semibold mr-2">Email:</strong>
+                <div className="flex gap-4 items-start w-full text-left">
+                  <div className="w-10 h-10 rounded-full bg-[#f0f7ff] border border-[#d6e8ff] flex items-center justify-center text-[#066FEF] shrink-0 mt-0.5">
+                    <Mail className="w-5 h-5" />
+                  </div>
+                  <p className="text-sm md:text-base text-neutral-700 leading-relaxed font-normal pt-1.5">
+                    <strong className="text-black font-bold mr-1">Email:</strong>
                     marketing@longkhanhford.com.vn
                   </p>
                 </div>
               </div>
 
               <div className="flex gap-4 items-start w-full sm:w-auto">
-                <button
+                <Button
+                  variant="secondary"
                   onClick={() => router.push("/lien-he")}
-                  className="bg-black hover:bg-neutral-900 text-white px-8 py-3.5 rounded-[4px] text-xs font-bold tracking-wider uppercase transition-colors cursor-pointer border-0 w-full sm:w-auto shadow-md"
+                  className="w-full sm:w-auto"
                 >
                   Đăng ký báo giá
-                </button>
-                <a
+                </Button>
+                <Button
+                  variant="primary"
                   href="tel:0918909060"
-                  className="bg-[#002F6C] hover:bg-[#066FEF] text-white px-8 py-3.5 rounded-[4px] text-xs font-bold tracking-wider uppercase transition-all duration-300 cursor-pointer inline-flex items-center justify-center w-full sm:w-auto shadow-md"
+                  className="w-full sm:w-auto"
                 >
                   Gọi Hotline
-                </a>
+                </Button>
               </div>
             </div>
 
             {/* Right Column: Google Maps Embed */}
-            <div className="w-full lg:flex-1 h-[350px] lg:h-[427px] relative rounded-[4px] overflow-hidden border border-neutral-200 shadow-sm z-10">
+            <div className="w-full lg:flex-1 h-[350px] lg:h-[427px] relative rounded-[8px] overflow-hidden border border-neutral-200 shadow-sm z-10">
               <iframe
                 title="Bản đồ Long Khánh Ford"
                 src={siteAssets.googleMapsEmbed}
-                className="absolute inset-0 w-full h-full border-0 rounded-[4px]"
+                className="absolute inset-0 w-full h-full border-0 rounded-[8px]"
                 loading="lazy"
                 referrerPolicy="strict-origin-when-cross-origin"
                 allowFullScreen
@@ -1411,7 +1419,7 @@ export default function Home() {
       {/* BACK TO TOP ACCENT */}
       <button
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        className={`fixed bottom-6 right-6 z-40 w-10 h-10 rounded-[4px] bg-[#002F6C] hover:bg-[#066FEF] border border-[#002F6C] hover:border-[#066FEF] flex items-center justify-center text-white cursor-pointer shadow-lg transition-all duration-300 ${
+        className={`fixed bottom-6 right-6 z-40 w-10 h-10 rounded-[8px] bg-[#066FEF] hover:bg-[#0562D2] border border-[#066FEF] hover:border-[#0562D2] flex items-center justify-center text-white cursor-pointer shadow-lg transition-all duration-300 ${
           showToast ? "translate-y-[-100px]" : ""
         }`}
         aria-label="Back to top"
@@ -1487,7 +1495,7 @@ export default function Home() {
               <h3 className="text-white text-lg md:text-2xl font-bold tracking-wide drop-shadow-md uppercase">
                 {customerHandovers[lightboxIndex].title}
               </h3>
-              <p className="text-[#002F6C] text-xs mt-1.5 uppercase tracking-[0.2em] font-semibold">
+              <p className="text-[#066FEF] text-xs mt-1.5 uppercase tracking-[0.2em] font-semibold">
                 LONG KHÁNH FORD
               </p>
             </div>

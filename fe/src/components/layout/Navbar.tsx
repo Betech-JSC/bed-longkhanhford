@@ -616,7 +616,7 @@ export default function Navbar() {
       >
         <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] py-8 grid grid-cols-4 gap-8">
           {/* Left Category Sidebar */}
-          <div className="col-span-1 border-r border-gray-100 pr-6 flex flex-col gap-3 text-left">
+          <div className="col-span-1 border-r border-neutral-100 pr-6 flex flex-col gap-2.5 text-left h-full min-h-[380px]">
             {finalCategories.map((cat) => {
               const isActive = activeTab === cat.id;
               return (
@@ -627,20 +627,16 @@ export default function Navbar() {
                     setIsProductHovered(false);
                   }}
                   onMouseEnter={() => setActiveTab(cat.id)}
-                  className={`flex items-center justify-between px-4 py-3 rounded-lg font-['Ford_Antenna',sans-serif] font-bold text-sm tracking-wider uppercase transition-all duration-200 text-left cursor-pointer
+                  className={`flex items-center justify-between px-4 py-2 font-['Ford_Antenna',sans-serif] font-bold text-[13px] tracking-wider uppercase transition-all duration-200 text-left cursor-pointer border-l-2
                     ${isActive 
-                      ? "text-[#066fef] bg-blue-50/50 border-l-4 border-[#066fef] pl-3" 
-                      : "text-[#333333] hover:text-[#066fef] hover:bg-gray-50 border-l-4 border-transparent"}`}
+                      ? "text-[#066fef] border-[#066fef] pl-3" 
+                      : "text-neutral-600 hover:text-[#066fef] hover:pl-3 border-transparent"}`}
                 >
                   <span>{cat.name}</span>
-                  <ChevronRight className={`w-4 h-4 transition-transform duration-200 ${isActive ? "translate-x-1" : ""}`} />
                 </button>
               );
             })}
-            <div className="h-px bg-gray-100 my-1" />
             
-            {/* Phụ kiện chính hãng tab button hidden */}
-
             {/* Xe đã qua sử dụng tab button */}
             {(() => {
               const isActive = activeTab === "xe-da-qua-su-dung";
@@ -651,23 +647,47 @@ export default function Navbar() {
                     setIsProductHovered(false);
                   }}
                   onMouseEnter={() => setActiveTab("xe-da-qua-su-dung")}
-                  className={`flex items-center justify-between px-4 py-3 rounded-lg font-['Ford_Antenna',sans-serif] font-bold text-sm tracking-wider uppercase transition-all duration-200 text-left cursor-pointer
+                  className={`flex items-center justify-between px-4 py-2 font-['Ford_Antenna',sans-serif] font-bold text-[13px] tracking-wider uppercase transition-all duration-200 text-left cursor-pointer border-l-2
                     ${isActive 
-                      ? "text-[#066fef] bg-blue-50/50 border-l-4 border-[#066fef] pl-3" 
-                      : "text-[#333333] hover:text-[#066fef] hover:bg-gray-50 border-l-4 border-transparent"}`}
+                      ? "text-[#066fef] border-[#066fef] pl-3" 
+                      : "text-neutral-600 hover:text-[#066fef] hover:pl-3 border-transparent"}`}
                 >
                   <span>Xe đã qua sử dụng</span>
-                  <ChevronRight className={`w-4 h-4 transition-transform duration-200 ${isActive ? "translate-x-1" : ""}`} />
                 </button>
               );
             })()}
+
+            {/* Custom CTA links stacked at the bottom */}
+            <div className="flex flex-col gap-2 mt-auto pt-4 border-t border-neutral-100">
+              <Link
+                href="/san-pham"
+                onClick={handleMouseLeaveImmediate}
+                className="w-full flex items-center justify-center text-[12px] py-2 px-3 border border-neutral-300 rounded-[4px] hover:border-[#066fef] hover:text-[#066fef] text-neutral-800 bg-white transition-all font-semibold uppercase tracking-wider text-center"
+              >
+                Xem tất cả dòng xe
+              </Link>
+              <Link
+                href="/thu-vien-media"
+                onClick={handleMouseLeaveImmediate}
+                className="w-full flex items-center justify-center text-[12px] py-2 px-3 border border-neutral-300 rounded-[4px] hover:border-[#066fef] hover:text-[#066fef] text-neutral-800 bg-white transition-all font-semibold uppercase tracking-wider text-center"
+              >
+                Tải Catalogue
+              </Link>
+              <Link
+                href="/cong-cu/so-sanh-xe"
+                onClick={handleMouseLeaveImmediate}
+                className="w-full flex items-center justify-center text-[12px] py-2 px-3 border border-neutral-300 rounded-[4px] hover:border-[#066fef] hover:text-[#066fef] text-neutral-800 bg-white transition-all font-semibold uppercase tracking-wider text-center"
+              >
+                So sánh xe
+              </Link>
+            </div>
           </div>
 
           {/* Right Product Showcase Panel */}
           {(() => {
             if (activeTab === "xe-da-qua-su-dung") {
               const displayUsedVehicles = usedVehiclesList.length > 0 
-                ? usedVehiclesList.slice(0, 3) 
+                ? usedVehiclesList.slice(0, 6) 
                 : [
                     { id: "ford-ranger-wildtrak-2-0l-4x4-at-2021", name: "Ranger Wildtrak 2.0L 2021", price: 680000000, year: 2021, odo: 45000, slug: "ford-ranger-wildtrak-2-0l-4x4-at-2021" },
                     { id: "ford-everest-titanium-2-0l-at-2023", name: "Everest Titanium 2.0L 2023", price: 1050000000, year: 2023, odo: 15000, slug: "ford-everest-titanium-2-0l-at-2023" },
@@ -675,29 +695,9 @@ export default function Navbar() {
                   ];
                 
               return (
-                <div className="col-span-3 flex flex-col gap-6">
-                  {/* Banner Card */}
-                  <div className="p-6 rounded-xl text-white flex justify-between items-center bg-gradient-to-r from-[#02337A] via-[#066fef] to-[#00095B]">
-                    <div className="space-y-1 text-left">
-                      <h4 className="font-['Ford_Antenna',sans-serif] font-bold text-lg">
-                        Xe đã qua sử dụng chính hãng
-                      </h4>
-                      <p className="text-xs text-white/80 font-medium">
-                        Đảm bảo chất lượng xe cũ, kiểm duyệt nghiêm ngặt, hỗ trợ trả góp và bảo hành uy tín
-                      </p>
-                    </div>
-                    <Link
-                      href="/xe-da-qua-su-dung"
-                      onClick={handleMouseLeaveImmediate}
-                      className="bg-white text-gray-900 hover:bg-gray-100 transition-colors px-5 py-2.5 rounded-full text-xs font-bold font-['Ford_Antenna',sans-serif] flex items-center gap-1.5 shrink-0"
-                    >
-                      <span>Xem tất cả xe cũ</span>
-                      <ChevronRight className="w-3.5 h-3.5" />
-                    </Link>
-                  </div>
-
+                <div className="col-span-3">
                   {/* Used Vehicles Grid */}
-                  <div className="grid grid-cols-3 gap-6 text-left">
+                  <div className="grid grid-cols-3 gap-y-10 gap-x-8 text-left">
                     {displayUsedVehicles.map((car: any) => {
                       const id = car.slug || car.id;
                       const name = car.title || car.name;
@@ -709,34 +709,30 @@ export default function Navbar() {
                           key={id}
                           href={`/xe-da-qua-su-dung/${id}`}
                           onClick={handleMouseLeaveImmediate}
-                          className="group border border-gray-100 hover:border-blue-200 rounded-xl p-4 flex flex-col items-center bg-gray-50/30 hover:bg-white hover:shadow-lg transition-all duration-300 text-center cursor-pointer"
+                          className="group flex flex-col items-center text-center cursor-pointer transition-all"
                         >
-                          <div className="w-full h-32 relative mb-3 overflow-hidden rounded-lg bg-white border border-gray-100 flex items-center justify-center">
+                          <div className="w-full h-32 relative mb-3 overflow-hidden flex items-center justify-center">
                             {image ? (
                               <Image
                                 src={image}
                                 alt={name}
                                 fill
                                 sizes="(max-width: 1024px) 30vw, 20vw"
-                                className="object-contain p-2 group-hover:scale-105 transition-transform duration-500"
+                                className="object-contain object-center group-hover:scale-[1.03] transition-transform duration-500"
                               />
                             ) : (
-                              <div className="w-full h-full flex items-center justify-center bg-gray-100 rounded-lg text-xs text-gray-400">
+                              <div className="w-full h-full flex items-center justify-center bg-gray-50 rounded-lg text-xs text-gray-400">
                                 Hình ảnh đang cập nhật
                               </div>
                             )}
                           </div>
                           {/* Title */}
-                          <h5 className="font-['Ford_Antenna',sans-serif] font-bold text-xs text-gray-900 group-hover:text-[#066fef] transition-colors mb-1 line-clamp-1 w-full">
+                          <h5 className="font-['Ford_Antenna',sans-serif] font-bold text-xs text-gray-900 group-hover:text-[#066fef] transition-colors mb-1 line-clamp-1 w-full uppercase tracking-wider">
                             {name}
                           </h5>
-                          {/* Info */}
-                          <p className="text-[10px] text-gray-400 mb-1">
-                            {car.year ? `Đời ${car.year}` : "Xe đã qua sử dụng"} {car.odo ? `• ${new Intl.NumberFormat("vi-VN").format(car.odo)} km` : ""}
-                          </p>
                           {/* Price */}
-                          <p className="text-[11px] text-gray-550 font-medium">
-                            Giá bán: <span className="text-[#066fef] font-bold">{price > 0 ? formatPrice(price) : "Liên hệ"}</span>
+                          <p className="text-[11px] text-gray-500 font-medium">
+                            Giá bán đề nghị từ: <span className="text-[#066fef] font-bold">{price > 0 ? formatPrice(price) : "Liên hệ"}</span>
                           </p>
                         </Link>
                       );
@@ -748,7 +744,7 @@ export default function Navbar() {
 
             if (activeTab === "phu-kien") {
               const displayAccessories = accessoriesList.length > 0
-                ? accessoriesList.slice(0, 3)
+                ? accessoriesList.slice(0, 6)
                 : [
                     { id: "nap-thung-ranger", name: "Nắp thùng cuộn điện Ranger", price: 21500000, image_url: "/assets/quality-care-circle.png" },
                     { id: "phim-cach-nhiet-everest", name: "Phim cách nhiệt cao cấp Everest", price: 9500000, image_url: "/assets/territory-interior.png" },
@@ -756,29 +752,9 @@ export default function Navbar() {
                   ];
 
               return (
-                <div className="col-span-3 flex flex-col gap-6">
-                  {/* Banner Card */}
-                  <div className="p-6 rounded-xl text-white flex justify-between items-center bg-gradient-to-r from-[#00095B] via-[#02337A] to-[#066fef]">
-                    <div className="space-y-1 text-left">
-                      <h4 className="font-['Ford_Antenna',sans-serif] font-bold text-lg">
-                        Phụ kiện chính hãng Ford
-                      </h4>
-                      <p className="text-xs text-white/80 font-medium">
-                        Nâng tầm phong cách, bảo vệ tối ưu và gia tăng tiện ích cho xe của bạn
-                      </p>
-                    </div>
-                    <Link
-                      href="/phu-kien"
-                      onClick={handleMouseLeaveImmediate}
-                      className="bg-white text-gray-900 hover:bg-gray-100 transition-colors px-5 py-2.5 rounded-full text-xs font-bold font-['Ford_Antenna',sans-serif] flex items-center gap-1.5 shrink-0"
-                    >
-                      <span>Xem tất cả phụ kiện</span>
-                      <ChevronRight className="w-3.5 h-3.5" />
-                    </Link>
-                  </div>
-
+                <div className="col-span-3">
                   {/* Accessories Grid */}
-                  <div className="grid grid-cols-3 gap-6">
+                  <div className="grid grid-cols-3 gap-y-10 gap-x-8">
                     {displayAccessories.map((acc: any) => {
                       const id = acc.slug || acc.id;
                       const name = acc.title || acc.name;
@@ -790,35 +766,31 @@ export default function Navbar() {
                           key={id}
                           href={`/phu-kien/${id}`}
                           onClick={handleMouseLeaveImmediate}
-                          className="group border border-gray-100 hover:border-blue-200 rounded-xl p-4 flex flex-col items-center bg-gray-50/30 hover:bg-white hover:shadow-lg transition-all duration-300 text-center"
+                          className="group flex flex-col items-center text-center cursor-pointer transition-all"
                         >
                           {/* Image Container */}
-                          <div className="w-full h-32 relative mb-3 overflow-hidden rounded-lg bg-gray-100">
+                          <div className="w-full h-32 relative mb-3 overflow-hidden flex items-center justify-center">
                             {image ? (
                               <Image
                                 src={image}
                                 alt={name}
                                 fill
                                 sizes="(max-width: 1024px) 30vw, 20vw"
-                                className="object-cover group-hover:scale-105 transition-transform duration-500"
+                                className="object-contain object-center group-hover:scale-[1.03] transition-transform duration-500"
                               />
                             ) : (
-                              <div className="w-full h-full flex items-center justify-center bg-gray-100 rounded-lg text-xs text-gray-400">
+                              <div className="w-full h-full flex items-center justify-center bg-gray-50 rounded-lg text-xs text-gray-400">
                                 Hình ảnh đang cập nhật
                               </div>
                             )}
                           </div>
                           {/* Title */}
-                          <h5 className="font-['Ford_Antenna',sans-serif] font-bold text-xs text-gray-900 group-hover:text-[#066fef] transition-colors mb-1 line-clamp-1 w-full">
+                          <h5 className="font-['Ford_Antenna',sans-serif] font-bold text-xs text-gray-900 group-hover:text-[#066fef] transition-colors mb-1 line-clamp-1 w-full uppercase tracking-wider">
                             {name}
                           </h5>
-                          {/* Category */}
-                          <p className="text-[9px] text-gray-400 mb-1">
-                            {acc.categoryName || "Phụ kiện"}
-                          </p>
                           {/* Price */}
                           <p className="text-[11px] text-gray-550 font-medium">
-                            Giá bán: <span className="text-[#066fef] font-bold">{formatPrice(price)}</span>
+                            Giá bán đề nghị từ: <span className="text-[#066fef] font-bold">{formatPrice(price)}</span>
                           </p>
                         </Link>
                       );
@@ -832,29 +804,9 @@ export default function Navbar() {
             if (!activeCategory) return null;
             
             return (
-              <div className="col-span-3 flex flex-col gap-6 text-left">
-                {/* Banner Card */}
-                <div className={`p-6 rounded-xl text-white flex justify-between items-center ${activeCategory.bannerBg}`}>
-                  <div className="space-y-1">
-                    <h4 className="font-['Ford_Antenna',sans-serif] font-bold text-lg">
-                      {activeCategory.bannerTitle}
-                    </h4>
-                    <p className="text-xs text-white/80 font-medium">
-                      {activeCategory.bannerDesc}
-                    </p>
-                  </div>
-                  <Link
-                    href="/lien-he"
-                    onClick={handleMouseLeaveImmediate}
-                    className="bg-white text-gray-900 hover:bg-gray-100 transition-colors px-5 py-2.5 rounded-full text-xs font-bold font-['Ford_Antenna',sans-serif] flex items-center gap-1.5 shrink-0"
-                  >
-                    <span>Chọn xe & Báo giá</span>
-                    <ChevronRight className="w-3.5 h-3.5" />
-                  </Link>
-                </div>
-
+              <div className="col-span-3">
                 {/* Vehicle Grid */}
-                <div className="grid grid-cols-3 gap-6">
+                <div className="grid grid-cols-3 gap-y-10 gap-x-8 text-left">
                   {activeCategory.cars.map((car) => {
                     const carData = getCarDisplayData(car);
                     return (
@@ -862,31 +814,31 @@ export default function Navbar() {
                         key={car.id}
                         href={`/${car.id}`}
                         onClick={handleMouseLeaveImmediate}
-                        className="group border border-gray-100 hover:border-blue-200 rounded-xl p-4 flex flex-col items-center bg-gray-50/30 hover:bg-white hover:shadow-lg transition-all duration-300 text-center"
+                        className="group flex flex-col items-center text-center cursor-pointer transition-all"
                       >
                         {/* Vehicle Image Container */}
-                        <div className="w-full h-32 relative mb-3 overflow-hidden">
+                        <div className="w-full h-32 relative mb-3 overflow-hidden flex items-center justify-center">
                           {carData.image ? (
                             <Image
                               src={carData.image}
                               alt={car.displayName}
                               fill
                               sizes="(max-width: 1024px) 30vw, 20vw"
-                              className="object-contain object-center group-hover:scale-105 transition-transform duration-500"
+                              className="object-contain object-center group-hover:scale-[1.03] transition-transform duration-500"
                             />
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-gray-100 rounded-lg text-xs text-gray-400">
+                            <div className="w-full h-full flex items-center justify-center bg-gray-50 rounded-lg text-xs text-gray-400">
                               Hình ảnh đang cập nhật
                             </div>
                           )}
                         </div>
                         {/* Vehicle Title */}
-                        <h5 className="font-['Ford_Antenna',sans-serif] font-bold text-sm text-gray-900 group-hover:text-[#066fef] transition-colors mb-1">
+                        <h5 className="font-['Ford_Antenna',sans-serif] font-bold text-xs text-gray-900 group-hover:text-[#066fef] transition-colors mb-1 uppercase tracking-wider">
                           {car.displayName}
                         </h5>
                         {/* Vehicle Starting Price */}
-                        <p className="text-xs text-gray-500 font-medium">
-                          Giá khởi điểm: <span className="text-[#066fef] font-bold">{carData.price}</span>
+                        <p className="text-[11px] text-gray-550 font-medium">
+                          Giá bán đề nghị từ: <span className="text-[#066fef] font-bold">{carData.price}</span>
                         </p>
                       </Link>
                     );
