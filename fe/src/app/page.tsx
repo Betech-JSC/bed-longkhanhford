@@ -302,19 +302,63 @@ export default function Home() {
   const [activeHeroIndex, setActiveHeroIndex] = useState(0);
 
   const brandCarouselRef = useRef<HTMLDivElement>(null);
+  const [activeBrandIndex, setActiveBrandIndex] = useState(0);
+  const [translateX, setTranslateX] = useState(0);
+
+  // Touch swiping states for mobile support
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  useEffect(() => {
+    const updateTranslate = () => {
+      if (brandCarouselRef.current) {
+        const container = brandCarouselRef.current;
+        const card = container.firstElementChild as HTMLElement;
+        if (card) {
+          const cardWidth = card.clientWidth;
+          const gap = 24; // gap-6 (24px)
+          setTranslateX(activeBrandIndex * (cardWidth + gap));
+        }
+      }
+    };
+    
+    updateTranslate();
+    window.addEventListener("resize", updateTranslate);
+    return () => window.removeEventListener("resize", updateTranslate);
+  }, [activeBrandIndex]);
 
   const scrollBrandCarousel = (direction: "left" | "right") => {
-    if (brandCarouselRef.current) {
-      const container = brandCarouselRef.current;
-      const cardWidth = container.firstElementChild?.clientWidth || 800;
-      const gap = 24;
-      const scrollAmount = cardWidth + gap;
-      container.scrollBy({
-        left: direction === "left" ? -scrollAmount : scrollAmount,
-        behavior: "smooth"
-      });
-    }
+    setActiveBrandIndex((prevIndex) => {
+      return direction === "left" 
+        ? Math.max(0, prevIndex - 1)
+        : Math.min(brandItems.length - 1, prevIndex + 1);
+    });
   };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStart === null || touchEnd === null) return;
+    const distance = touchStart - touchEnd;
+    const isSwipe = Math.abs(distance) > 50;
+    if (isSwipe) {
+      if (distance > 0) {
+        scrollBrandCarousel("right");
+      } else {
+        scrollBrandCarousel("left");
+      }
+    }
+    setTouchStart(null);
+    setTouchEnd(null);
+  };
+
+
 
 
 
@@ -639,7 +683,7 @@ export default function Home() {
       {/* 1. HERO SLIDER BANNER */}
       {heroSlides.length > 0 && (
         <section
-          className="relative h-[80vh] min-h-[500px] md:h-[calc(100vh-60px)] md:min-h-[680px] flex flex-col justify-end bg-black text-white overflow-hidden select-none cursor-grab active:cursor-grabbing"
+          className="relative h-[100dvh] min-h-[500px] md:h-screen md:min-h-[680px] flex flex-col justify-end bg-black text-white overflow-hidden select-none cursor-grab active:cursor-grabbing"
           onMouseDown={(e) => handleHeroStart(e.clientX)}
           onMouseUp={(e) => handleHeroEnd(e.clientX)}
           onMouseLeave={() => { isHeroDragging.current = false; }}
@@ -1018,61 +1062,67 @@ export default function Home() {
           </div>
 
           <div className="w-full relative group/carousel">
-            {/* Horizontal scrolling card showcase with negative margins to bleed out to screen edges */}
-            <div 
-              ref={brandCarouselRef}
-              className="flex gap-6 overflow-x-auto pb-8 scrollbar-none snap-x snap-mandatory scroll-smooth -mx-6 px-6 xl:-mx-[calc((100vw-1152px)/2)] xl:px-[calc((100vw-1152px)/2)]"
-            >
-              {brandItems.map((item: any, idx) => (
-                <div 
-                  key={idx}
-                  className="snap-start flex-shrink-0 w-[85vw] md:w-[75vw] lg:w-[70vw] xl:w-[920px] aspect-[16/10] h-auto"
-                >
-                  <Link 
-                    href={item.link}
-                    className="relative w-full h-full overflow-hidden border border-neutral-200/80 group cursor-pointer block bg-neutral-100 rounded-[8px] aspect-[16/10]"
+            {/* Overflow wrapper to prevent horizontal scrollbars on page */}
+            <div className="overflow-hidden -mx-6 xl:-mx-[calc((100vw-1152px)/2)]">
+              <div 
+                ref={brandCarouselRef}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+                className="flex gap-6 pb-8 px-6 xl:px-[calc((100vw-1152px)/2)] transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                style={{ transform: `translateX(-${translateX}px)` }}
+              >
+                {brandItems.map((item: any, idx) => (
+                  <div 
+                    key={idx}
+                    className={`flex-shrink-0 w-[85vw] md:w-[75vw] lg:w-[70vw] xl:w-[1120px] aspect-[16/8] h-auto transition-all duration-500 ease-out ${idx === activeBrandIndex ? "opacity-100 scale-100" : "opacity-50 scale-[0.98]"}`}
                   >
-                    <SafeImage
-                      src={item.image}
-                      alt={item.title}
-                      fill
-                      sizes="(max-width: 1024px) 100vw, 920px"
-                      className="object-cover group-hover:scale-102 transition-transform duration-700 ease-out"
-                    />
-                    
-                    {/* Subtle bottom gradient overlay for readability */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10" />
-                    
-                    {/* Content aligned at the bottom-left */}
-                    <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-20 flex flex-col justify-end text-left select-none gap-3">
-                      <div className="space-y-1">
-                        <span className="text-xs font-semibold text-white/90 block uppercase tracking-wider">
-                          {item.category}
-                        </span>
-                        <h3 className="text-2xl md:text-3xl font-bold text-white tracking-tight leading-tight">
-                          {item.slogan}
-                        </h3>
-                      </div>
+                    <Link 
+                      href={item.link}
+                      className="relative w-full h-full overflow-hidden border border-neutral-200/80 group cursor-pointer block bg-neutral-100 rounded-[8px] aspect-[16/8]"
+                    >
+                      <SafeImage
+                        src={item.image}
+                        alt={item.title}
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 1120px"
+                        className="object-cover group-hover:scale-105 group-hover:translate-x-1 transition-transform duration-700 ease-out"
+                      />
                       
-                      {/* Pill Buttons */}
-                      <div className="flex gap-3 items-center mt-2">
-                        <Button
-                          variant="white"
-                          size="sm"
-                        >
-                          Xem Thêm
-                        </Button>
-                        <Button
-                          variant="white-outline"
-                          size="sm"
-                        >
-                          Báo Giá
-                        </Button>
+                      {/* Subtle bottom gradient overlay for readability */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10" />
+                      
+                      {/* Content aligned at the bottom-left */}
+                      <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-20 flex flex-col justify-end text-left select-none gap-3">
+                        <div className="space-y-1">
+                          <span className="text-xs font-semibold text-white/90 block uppercase tracking-wider">
+                            {item.category}
+                          </span>
+                          <h3 className="text-2xl md:text-3xl font-bold text-white tracking-tight leading-tight">
+                            {item.slogan}
+                          </h3>
+                        </div>
+                        
+                        {/* Pill Buttons */}
+                        <div className="flex gap-3 items-center mt-2">
+                          <Button
+                            variant="white"
+                            size="sm"
+                          >
+                            Xem Thêm
+                          </Button>
+                          <Button
+                            variant="white-outline"
+                            size="sm"
+                          >
+                            Báo Giá
+                          </Button>
+                        </div>
                       </div>
-                    </div>
-                  </Link>
-                </div>
-              ))}
+                    </Link>
+                  </div>
+                ))}
+              </div>
             </div>
 
             {/* Navigation arrows (relative to the 1152px parent container) */}
@@ -1080,7 +1130,7 @@ export default function Home() {
               {/* Left arrow */}
               <button
                 onClick={() => scrollBrandCarousel("left")}
-                className="absolute left-[-24px] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white text-black flex items-center justify-center shadow-lg transition-all border border-neutral-200 cursor-pointer hover:scale-105 active:scale-95 pointer-events-auto opacity-0 group-hover/carousel:opacity-100 duration-300"
+                className={`absolute left-[-24px] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white text-black flex items-center justify-center shadow-lg transition-all border border-neutral-200 cursor-pointer hover:scale-105 active:scale-95 pointer-events-auto duration-300 ${activeBrandIndex === 0 ? "opacity-0 pointer-events-none" : "opacity-0 group-hover/carousel:opacity-100"}`}
                 aria-label="Scroll left"
               >
                 <ChevronLeft className="w-6 h-6" />
@@ -1089,7 +1139,7 @@ export default function Home() {
               {/* Right arrow */}
               <button
                 onClick={() => scrollBrandCarousel("right")}
-                className="absolute right-[-24px] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white text-black flex items-center justify-center shadow-lg transition-all border border-neutral-200 cursor-pointer hover:scale-105 active:scale-95 pointer-events-auto opacity-0 group-hover/carousel:opacity-100 duration-300"
+                className={`absolute left-[1096px] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white text-black flex items-center justify-center shadow-lg transition-all border border-neutral-200 cursor-pointer hover:scale-105 active:scale-95 pointer-events-auto duration-300 ${activeBrandIndex === brandItems.length - 1 ? "opacity-0 pointer-events-none" : "opacity-0 group-hover/carousel:opacity-100"}`}
                 aria-label="Scroll right"
               >
                 <ChevronRight className="w-6 h-6" />

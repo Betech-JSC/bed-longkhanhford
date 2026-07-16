@@ -1,7 +1,7 @@
 # Windows development startup script for Ford Long Khanh monorepo (without Docker)
 # Run in PowerShell: .\dev.ps1
 
-$phpPath = "C:\Users\Tien Cuong\AppData\Roaming\Local\lightning-services\php-8.2.23+0\bin\win64\php.exe"
+$phpPath = "php"
 
 # Ensure locales directory exists and generate i18n locales for Vue/Vite
 New-Item -ItemType Directory -Force -Path "be/public/build/locales" | Out-Null
