@@ -118,7 +118,7 @@ export const vehicles: Vehicle[] = [
     tagline: "Dấn bước. Dẫn đầu​.",
     description: "Được thiết kế để chinh phục mọi thử thách, Ford Everest thế hệ mới kết hợp khả năng vận hành mạnh mẽ ưu việt, nội thất sang trọng đỉnh cao và hệ thống an toàn thông minh bậc nhất.",
     images: [
-      "/assets/car-everest.png"
+      "/assets/everest_platinum.png"
     ],
     colors: [
       { name: "Đỏ Cam", hex: "#c2410c", image: "orange" },
@@ -214,7 +214,7 @@ export const vehicles: Vehicle[] = [
     tagline: "Vua bán tải chinh phục mọi nẻo đường.",
     description: "Được thiết kế để chinh phục những địa hình khắc nghiệt nhất, Ford Ranger kết hợp khả năng vận hành mạnh mẽ ưu việt cùng thiết kế hầm hố chuẩn Mỹ.",
     images: [
-      "/assets/car-ranger.png"
+      "/assets/ranger_wildtrak.png"
     ],
     colors: [
       { name: "Cam Code Orange", hex: "#ea580c", image: "orange" },
@@ -310,7 +310,7 @@ export const vehicles: Vehicle[] = [
     tagline: "Giải pháp vận chuyển hành khách chuyên nghiệp.",
     description: "Ford Transit Thế hệ Mới được thiết kế tối ưu với không gian rộng rãi hơn, tiện nghi vượt trội cùng độ bền bỉ cao, giúp tối đa hóa hiệu quả kinh doanh của doanh nghiệp.",
     images: [
-      "/assets/car-transit.png"
+      "/assets/transit_premium.png"
     ],
     colors: [
       { name: "Bạc Tinh Thể", hex: "#cbd5e1", image: "silver" },
@@ -374,7 +374,7 @@ export const vehicles: Vehicle[] = [
     tagline: "Tương lai của hiệu năng và phong cách.",
     description: "Dòng SUV thuần điện đầu tiên lấy cảm hứng từ biểu tượng xe cơ bắp Mỹ Mustang. Khả năng tăng tốc vượt trội, phạm vi di chuyển ấn tượng và thiết kế khí động học tương lai.",
     images: [
-      "/assets/car-mach-e.png"
+      "/assets/mach-e-hero.png"
     ],
     colors: [
       { name: "Xanh Lucid", hex: "#0b3c5d", image: "lucid-blue" },
@@ -409,7 +409,7 @@ export const vehicles: Vehicle[] = [
     tagline: "Biểu tượng xe cơ bắp Mỹ thế hệ mới.",
     description: "Trải nghiệm sức mạnh huyền thoại từ khối động cơ Coyote V8 kết hợp với thiết kế đột phá và khoang lái kỹ thuật số tối tân hướng trọn về người lái.",
     images: [
-      "/assets/mustang-hero.png"
+      "/assets/mustang_dark_horse.png"
     ],
     colors: [
       { name: "Adriatic Blue Metallic", hex: "#15444c", image: "adriatic-blue-green" },

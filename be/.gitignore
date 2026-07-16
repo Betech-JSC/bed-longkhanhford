@@ -24,3 +24,7 @@ config.bat
 # Backups
 /resources/Frontend.bak/
 /vite.frontend.config.js.bak
+
+# Composer binary
+/composer.phar
+

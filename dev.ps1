@@ -1,13 +1,12 @@
-# Windows development startup script for Ford Dong Nai monorepo (without Docker)
+# Windows development startup script for Ford Long Khanh monorepo (without Docker)
 # Run in PowerShell: .\dev.ps1
 
-# Auto-configure yarn to ignore node engine version checks
-yarn config set ignore-engines true
+$phpPath = "C:\Users\Tien Cuong\AppData\Roaming\Local\lightning-services\php-8.2.23+0\bin\win64\php.exe"
 
 # Ensure locales directory exists and generate i18n locales for Vue/Vite
 New-Item -ItemType Directory -Force -Path "be/public/build/locales" | Out-Null
 cd be
-php artisan vue-i18n:generate
+& $phpPath artisan vue-i18n:generate
 cd ..
 
 Write-Host "Starting development servers..." -ForegroundColor Green
@@ -15,13 +14,13 @@ Write-Host "----------------------------------" -ForegroundColor Cyan
 
 # 1. Start Laravel Backend serve
 Write-Host "[1/3] Starting Laravel Backend API on Port 8000..." -ForegroundColor Yellow
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd be; php artisan serve --port=8000"
+Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd be; & '$phpPath' artisan serve --port=8000"
 
 Start-Sleep -Seconds 1
 
 # 2. Start Vite Admin Compiler
 Write-Host "[2/3] Starting Admin panel asset compiler (Vite)..." -ForegroundColor Yellow
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd be; yarn dev"
+Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd be; npm run dev"
 
 Start-Sleep -Seconds 1
 

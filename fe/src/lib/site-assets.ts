@@ -35,11 +35,11 @@ export const aboutAssets = {
 
 export const popularVehicleImages: Record<string, string> = {
   "ford-territory": "/assets/territory-hero.png",
-  "ford-everest": "/assets/car-everest.png",
-  "new-mustang-mach-e": "/assets/car-mach-e.png",
-  "ford-ranger": "/assets/car-ranger.png",
-  "ford-transit-2024": "/assets/car-transit.png",
-  "mustang-fastback": "/assets/mustang-hero.png",
+  "ford-everest": "/assets/everest_platinum.png",
+  "new-mustang-mach-e": "/assets/mach-e-hero.png",
+  "ford-ranger": "/assets/ranger_wildtrak.png",
+  "ford-transit-2024": "/assets/transit_premium.png",
+  "mustang-fastback": "/assets/mustang_dark_horse.png",
 };
 
 export function getPopularVehicleImage(vehicleId: string, fallback?: string) {
