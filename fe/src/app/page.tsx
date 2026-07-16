@@ -1069,13 +1069,13 @@ export default function Home() {
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
-                className="flex gap-6 pb-8 px-6 xl:px-[calc((100vw-1152px)/2)] transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                className="flex gap-6 pb-8 px-6 xl:px-[calc((100vw-1152px)/2)] transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform"
                 style={{ transform: `translateX(-${translateX}px)` }}
               >
                 {brandItems.map((item: any, idx) => (
                   <div 
                     key={idx}
-                    className={`flex-shrink-0 w-[85vw] md:w-[75vw] lg:w-[70vw] xl:w-[1120px] aspect-[16/8] h-auto transition-all duration-500 ease-out ${idx === activeBrandIndex ? "opacity-100 scale-100" : "opacity-50 scale-[0.98]"}`}
+                    className={`flex-shrink-0 w-[85vw] md:w-[75vw] lg:w-[70vw] xl:w-[1120px] aspect-[16/8] h-auto transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform backface-hidden ${idx === activeBrandIndex ? "opacity-100 scale-100" : "opacity-50 scale-[0.98]"}`}
                   >
                     <Link 
                       href={item.link}
