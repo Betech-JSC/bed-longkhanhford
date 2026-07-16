@@ -1086,7 +1086,10 @@ export default function Home() {
                         alt={item.title}
                         fill
                         sizes="(max-width: 1024px) 100vw, 1120px"
-                        className="object-cover group-hover:scale-105 group-hover:translate-x-1 transition-transform duration-700 ease-out"
+                        className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform group-hover:[--img-scale:1.12] backface-hidden"
+                        style={{
+                          transform: `scale(var(--img-scale, 1.08)) translateX(${(idx - activeBrandIndex) * 3.5}%)`
+                        }}
                       />
                       
                       {/* Subtle bottom gradient overlay for readability */}
@@ -1130,7 +1133,7 @@ export default function Home() {
               {/* Left arrow */}
               <button
                 onClick={() => scrollBrandCarousel("left")}
-                className={`absolute left-[-24px] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white text-black flex items-center justify-center shadow-lg transition-all border border-neutral-200 cursor-pointer hover:scale-105 active:scale-95 pointer-events-auto duration-300 ${activeBrandIndex === 0 ? "opacity-0 pointer-events-none" : "opacity-0 group-hover/carousel:opacity-100"}`}
+                className={`absolute left-[-24px] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white text-black flex items-center justify-center shadow-lg transition-all border border-neutral-200 cursor-pointer hover:scale-105 active:scale-95 pointer-events-auto duration-300 ${activeBrandIndex === 0 ? "opacity-0 scale-90 pointer-events-none" : "opacity-0 scale-100 group-hover/carousel:opacity-100"}`}
                 aria-label="Scroll left"
               >
                 <ChevronLeft className="w-6 h-6" />
@@ -1139,7 +1142,7 @@ export default function Home() {
               {/* Right arrow */}
               <button
                 onClick={() => scrollBrandCarousel("right")}
-                className={`absolute left-[1096px] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white text-black flex items-center justify-center shadow-lg transition-all border border-neutral-200 cursor-pointer hover:scale-105 active:scale-95 pointer-events-auto duration-300 ${activeBrandIndex === brandItems.length - 1 ? "opacity-0 pointer-events-none" : "opacity-0 group-hover/carousel:opacity-100"}`}
+                className={`absolute left-[1096px] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white text-black flex items-center justify-center shadow-lg transition-all border border-neutral-200 cursor-pointer hover:scale-105 active:scale-95 pointer-events-auto duration-300 ${activeBrandIndex === brandItems.length - 1 ? "opacity-0 scale-90 pointer-events-none" : "opacity-0 scale-100 group-hover/carousel:opacity-100"}`}
                 aria-label="Scroll right"
               >
                 <ChevronRight className="w-6 h-6" />
