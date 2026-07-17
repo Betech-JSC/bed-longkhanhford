@@ -2047,8 +2047,8 @@ function BookingBannerBlock({ blockIndex, data, vehicle, isEditMode, onChangeDat
   const phone = data.phone || "1800 55 68 58";
   const btnText = data.btn_text || "Đặt lịch hẹn";
   const btnLink = data.btn_link || "/lien-he";
-  const hasCarImage = hasImageField(data.car_image);
-  const carImage = hasCarImage ? resolveImageUrl(data.car_image) : "";
+  const hasCarImage = hasImageField(data.car_image) || vehicle?.image_url;
+  const carImage = hasImageField(data.car_image) ? resolveImageUrl(data.car_image) : "/assets/everest_platinum.png";
 
   const handleUploadCarImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -2064,11 +2064,11 @@ function BookingBannerBlock({ blockIndex, data, vehicle, isEditMode, onChangeDat
   };
 
   // Title Size Classes
-  let titleSizeClass = "text-3xl lg:text-[36px]";
+  let titleSizeClass = "text-3xl lg:text-[38px]";
   if (data.title_size === 'small') {
     titleSizeClass = "text-xl lg:text-2xl";
   } else if (data.title_size === 'large') {
-    titleSizeClass = "text-[36px] lg:text-[44px]";
+    titleSizeClass = "text-[38px] lg:text-[44px]";
   }
 
   // Styles for colors
@@ -2084,85 +2084,89 @@ function BookingBannerBlock({ blockIndex, data, vehicle, isEditMode, onChangeDat
       : 'justify-start';
 
   return (
-    <section id={anchorId || undefined} className="w-full bg-[#00095b] py-[32px] px-4 md:px-[80px] flex justify-center overflow-visible">
-      <div className="max-w-[1152px] w-full relative flex flex-col lg:flex-row items-center overflow-visible">
-        {/* Inner Rounded Banner */}
-        <div className="w-full lg:w-[913px] bg-gradient-to-r from-[#00095B] via-[#02337A] to-[#0562D2] rounded-[12px] p-8 lg:p-[32px] h-auto lg:h-[320px] flex items-center relative overflow-hidden lg:overflow-visible shadow-xl">
-          {/* Content */}
-          <div className={`flex flex-col gap-6 max-w-full relative z-10 text-white w-full ${alignClass}
-            ${(hasCarImage || isEditMode) ? "lg:max-w-[505px]" : "lg:max-w-full"}`}>
-            <>
-              <h3
-                className={`font-bold font-display leading-[1.32] ${titleSizeClass} w-full
-                    ${isEditMode ? 'outline-[1px] outline-dashed outline-white/50 hover:outline-white outline-offset-2 cursor-pointer transition-all' : ''}`}
-                style={titleStyle}
-              >
-                {title}
-              </h3>
-              <div className={`flex flex-col sm:flex-row gap-4 w-full ${btnAlignClass}`}>
-                <a
-                  href={`tel:${phone.replace(/\s+/g, "")}`}
-                  className={`flex items-center justify-center gap-2 bg-[#0562d2] hover:bg-[#044ea7] border border-[#0562d2] transition-colors text-white font-bold px-6 py-3 rounded-full text-base shrink-0
-                      ${isEditMode ? 'outline-[1px] outline-dashed outline-white/50 hover:outline-white outline-offset-2 cursor-pointer transition-all' : ''}`}
-                >
-                  <Phone className="w-5 h-5" />
-                  <span>{phone}</span>
-                </a>
-                <a
-                  href={btnLink}
-                  className="flex items-center justify-center gap-2 bg-transparent hover:bg-white/10 border border-white transition-colors text-white font-bold px-6 py-3 rounded-full text-base shrink-0"
-                >
-                  <Bookmark className="w-5 h-5" />
-                  <span>{btnText}</span>
-                </a>
-              </div>
-            </>
+    <section id={anchorId || undefined} className="w-full relative h-[420px] md:h-[480px] flex items-center overflow-hidden border-t border-gray-100">
+      {/* Background Image */}
+      <img
+        src={carImage}
+        alt="Ford Lifestyle Banner"
+        className="absolute inset-0 w-full h-full object-cover object-center z-0"
+      />
+      {/* Overlay to darken image slightly for better contrast on the card's backdrop */}
+      <div className="absolute inset-0 bg-black/25 z-0" />
+
+      {/* Main Content Area */}
+      <div className="max-w-[1440px] w-full mx-auto px-4 xl:px-[80px] relative z-10 flex items-center h-full">
+        {/* Floating White Card */}
+        <div className={`bg-white p-8 md:p-10 rounded-[20px] shadow-2xl max-w-[480px] w-full flex flex-col gap-5 text-gray-900 border border-gray-100 ${alignClass}`}>
+          {/* Badge */}
+          <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-widest text-[#002F6C] bg-[#002F6C]/10 px-3 py-1.5 rounded-full w-fit font-antenna">
+            Tư vấn &amp; Hỗ trợ 24/7
+          </span>
+
+          <h3
+            className={`font-bold font-display leading-tight text-[#00095B] tracking-tight ${titleSizeClass} w-full
+                ${isEditMode ? 'outline-[1px] outline-dashed outline-gray-300 hover:outline-gray-400 outline-offset-2 cursor-pointer transition-all' : ''}`}
+            style={titleStyle}
+          >
+            {title.includes("Long Khánh Ford") ? (
+              <>
+                {title.replace("Long Khánh Ford", "").trim()}{" "}
+                <span className="text-[#0562d2]">Long Khánh Ford</span>
+              </>
+            ) : title}
+          </h3>
+
+          <p className="text-xs md:text-sm text-gray-500 font-medium font-antenna leading-relaxed">
+            Hãy để chúng tôi đồng hành cùng bạn. Đội ngũ chuyên viên tư vấn giàu kinh nghiệm luôn sẵn sàng giải đáp thắc mắc, gửi báo giá tốt nhất và đăng ký lịch lái thử xe nhanh chóng.
+          </p>
+
+          <div className={`flex flex-col sm:flex-row gap-3 w-full ${btnAlignClass} mt-1`}>
+            <a
+              href={`tel:${phone.replace(/\s+/g, "")}`}
+              className={`flex items-center justify-center gap-2.5 bg-[#002F6C] hover:bg-[#001D4A] text-white font-bold px-6 py-3.5 rounded-full text-xs md:text-sm transition-all duration-300 shadow-sm active:scale-95 cursor-pointer shrink-0 font-antenna uppercase tracking-wider flex-1
+                  ${isEditMode ? 'outline-[1px] outline-dashed outline-gray-300 hover:outline-gray-400 outline-offset-2 cursor-pointer transition-all' : ''}`}
+            >
+              <Phone className="w-4 h-4" />
+              <span>{phone}</span>
+            </a>
+            <a
+              href={btnLink}
+              className="flex items-center justify-center gap-2.5 bg-transparent hover:bg-gray-50 border border-gray-300 text-gray-700 hover:text-black font-bold px-6 py-3.5 rounded-full text-xs md:text-sm transition-all duration-300 active:scale-95 cursor-pointer shrink-0 font-antenna uppercase tracking-wider flex-1"
+            >
+              <Bookmark className="w-4 h-4" />
+              <span>{btnText}</span>
+            </a>
           </div>
         </div>
-
-        {/* Overlapping Car Image */}
-        {(hasCarImage || isEditMode) && (
-          <div className="relative lg:absolute h-[250px] lg:h-[420px] w-full lg:w-[587px] lg:left-[576px] lg:top-[-50px] pointer-events-none z-20 mt-6 lg:mt-0 flex justify-center">
-            {hasCarImage ? (
-              <img
-                src={carImage}
-                alt="Ford Booking Vehicle"
-                className="object-contain max-h-full lg:max-h-none"
-              />
-            ) : (
-              <div className="w-full h-full bg-gray-900/50 border border-dashed border-gray-700 rounded-lg flex items-center justify-center text-xs text-gray-500 pointer-events-auto min-h-[150px] p-4">
-                Chưa chọn ảnh xe đè (Sẽ ẩn trên giao diện thực tế)
-              </div>
-            )}
-            {isEditMode && (
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 bg-white/95 backdrop-blur-xs p-3 rounded-lg border border-gray-200 text-xs text-gray-800 pointer-events-auto shadow-md">
-                <span className="block mb-2 font-bold text-[10px] uppercase tracking-wider text-gray-500 text-center">Ảnh xe đè:</span>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleUploadCarImage}
-                  className="block w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-2 file:rounded-md file:border file:border-gray-300 file:text-[10px] file:font-semibold file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100 cursor-pointer"
-                />
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (typeof window !== "undefined") {
-                      window.parent.postMessage({
-                        type: "OPEN_FILE_MANAGER",
-                        index: blockIndex,
-                        field: "car_image"
-                      }, "*");
-                    }
-                  }}
-                  className="w-full mt-1.5 py-1 px-2.5 bg-[#008060] hover:bg-[#006e52] text-white text-[10px] font-bold rounded cursor-pointer border-0 transition-colors"
-                >
-                  📁 Chọn từ Quản lý file
-                </button>
-              </div>
-            )}
-          </div>
-        )}
       </div>
+
+      {/* Background Image Upload for Visual Editor (Admin Mode) */}
+      {isEditMode && (
+        <div className="absolute bottom-4 right-4 z-30 bg-white/95 backdrop-blur-xs p-3 rounded-lg border border-gray-200 text-xs text-gray-800 shadow-md">
+          <span className="block mb-2 font-bold text-[10px] uppercase tracking-wider text-gray-500">Ảnh nền banner:</span>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleUploadCarImage}
+            className="block w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-2 file:rounded-md file:border file:border-gray-300 file:text-[10px] file:font-semibold file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100 cursor-pointer"
+          />
+          <button
+            type="button"
+            onClick={() => {
+              if (typeof window !== "undefined") {
+                window.parent.postMessage({
+                  type: "OPEN_FILE_MANAGER",
+                  index: blockIndex,
+                  field: "car_image"
+                }, "*");
+              }
+            }}
+            className="w-full mt-1.5 py-1 px-2.5 bg-[#008060] hover:bg-[#006e52] text-white text-[10px] font-bold rounded cursor-pointer border-0 transition-colors"
+          >
+            📁 Chọn từ Quản lý file
+          </button>
+        </div>
+      )}
     </section>
   );
 }

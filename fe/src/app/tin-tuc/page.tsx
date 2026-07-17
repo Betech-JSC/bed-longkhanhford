@@ -21,6 +21,17 @@ function NewsListPageContent() {
   const pathname = usePathname();
   const router = useRouter();
 
+  const uniqueCategories = useMemo(() => {
+    const seen = new Set();
+    return categories.filter((cat) => {
+      if (!cat || !cat.title) return false;
+      const titleKey = cat.title.trim().toLowerCase();
+      const isDuplicate = seen.has(titleKey);
+      seen.add(titleKey);
+      return !isDuplicate;
+    });
+  }, [categories]);
+
   const getPageNumbers = () => {
     const pages: number[] = [];
     const delta = 1;
@@ -348,7 +359,7 @@ function NewsListPageContent() {
                   >
                     Tất cả
                   </button>
-                  {categories.map((cat) => (
+                  {uniqueCategories.map((cat) => (
                     <button
                       key={cat.id}
                       onClick={() => handleTabChange(cat.id)}

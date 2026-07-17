@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { motion, AnimatePresence } from "motion/react";
 import { 
   Search, 
   SlidersHorizontal, 
@@ -44,6 +45,7 @@ export default function ProductsPage({ initialCategory }: { initialCategory?: st
   
   // Mobile drawer filter visibility
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  const [isFiltersExpanded, setIsFiltersExpanded] = useState(false);
 
   // Compare Vehicles State
   const [compareIds, setCompareIds] = useState<string[]>([]);
@@ -180,7 +182,7 @@ export default function ProductsPage({ initialCategory }: { initialCategory?: st
     const firstVersionSpecs = v.versions?.[0]?.specs;
     
     // Parse real specifications from database
-    let parsedSpecs = { engine: "", transmission: "", drivetrain: "" };
+    const parsedSpecs = { engine: "", transmission: "", drivetrain: "" };
     if (Array.isArray(firstVersionSpecs)) {
       firstVersionSpecs.forEach((item: any) => {
         const title = (item.title || "").toLowerCase();
@@ -468,317 +470,235 @@ export default function ProductsPage({ initialCategory }: { initialCategory?: st
     selectedFuels.length > 0 || 
     selectedTransmissions.length > 0;
 
+  const getActiveFilterCount = () => {
+    let count = 0;
+    if (searchTerm !== "") count++;
+    if (selectedCategories.length > 0) count++;
+    if (priceRange) count++;
+    if (selectedSeats.length > 0) count++;
+    if (selectedFuels.length > 0) count++;
+    if (selectedTransmissions.length > 0) count++;
+    return count;
+  };
+
   // Render Category Name
   const getCategoryTitle = (slug: string) => {
-    const cat = categories.find(c => c.slug === slug);
+    const cat = categories.find((c: any) => c.slug === slug);
     return cat ? cat.title : slug;
   };
 
   return (
     <div className="bg-[#F8F8F8] min-h-screen font-sans pb-16 w-full flex flex-col items-center">
       {/* Hero Section */}
-      <section className="relative w-full bg-gradient-to-br from-neutral-900 to-[#01095c] text-white pt-28 pb-16 md:pb-20 overflow-hidden">
+      <section className="relative w-full bg-gradient-to-br from-neutral-900 via-[#002F6C] to-[#01095c] text-white pt-32 pb-20 md:pb-24 overflow-hidden">
+        {/* Subtle decorative glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-[#066fef]/10 rounded-full blur-[120px] pointer-events-none" />
+        
         <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] relative z-10">
           {/* Breadcrumb inside Hero */}
-          <div className="text-xs text-white/60 font-medium flex items-center gap-1.5 mb-6 justify-center">
+          <div className="text-xs text-white/50 font-bold flex items-center gap-1.5 mb-6 justify-center uppercase tracking-widest font-antenna">
             <Link href="/" className="hover:text-white transition-colors">
               Trang chủ
             </Link>
             <span>/</span>
-            <span className="text-white">Sản phẩm</span>
+            <span className="text-white/90">Sản phẩm</span>
           </div>
-          <div className="text-center font-antenna">
-            <h1 className="text-3xl md:text-5xl font-bold tracking-tight uppercase leading-[1.2] mb-4 font-antenna">
-              Các dòng xe Ford
+          <div className="text-center font-antenna max-w-3xl mx-auto">
+            <h1 className="text-4xl md:text-6xl font-bold tracking-tight uppercase leading-[1.1] mb-6 font-antenna">
+              Dòng xe Ford thế hệ mới
             </h1>
-            <p className="text-white/80 text-base md:text-lg max-w-2xl mx-auto font-antenna">
-              Khám phá các dòng xe Ford thế hệ mới tại Long Khánh Ford — Từ dòng SUV thông minh, bán tải địa hình hầm hố cho đến các dòng xe thương mại đa dụng tối ưu.
+            <p className="text-white/70 text-sm md:text-base max-w-xl mx-auto leading-relaxed font-antenna font-medium">
+              Khám phá sức mạnh, công nghệ thông minh và sự đa dụng vượt trội của các dòng xe Ford chính hãng tại showroom Long Khánh Ford.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Main Layout Area */}
-      <section className="py-12 w-full">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px]">
-          
-          <div className="lg:grid lg:grid-cols-4 lg:gap-8 items-start">
-            
-            {/* 1. FILTER SIDEBAR (Desktop only) */}
-            <div className="hidden lg:block lg:col-span-1 bg-white border border-gray-200 rounded-none p-6 shadow-xs space-y-6 sticky top-[100px]">
-              
-              {/* Header Title with Reset */}
-              <div className="flex items-center justify-between border-b border-gray-100 pb-4">
-                <span className="text-[15px] font-bold font-display text-gray-900 flex items-center gap-2">
-                  <SlidersHorizontal className="w-4 h-4 text-[#066fef]" />
-                  Bộ lọc xe
-                </span>
-                {hasActiveFilters && (
-                  <button 
-                    onClick={clearAllFilters}
-                    className="text-xs font-bold text-[#D20000] hover:text-red-755 flex items-center gap-1 transition-colors cursor-pointer border-0 bg-transparent"
-                  >
-                    <RotateCcw className="w-3 h-3" />
-                    Đặt lại
-                  </button>
-                )}
-              </div>
+      {/* Horizontal Category Navigation Tabs (Sticky Bar) */}
+      <div className="sticky top-[80px] z-20 bg-white/95 backdrop-blur-md border-b border-gray-200/80 w-full flex flex-col items-center transition-all duration-300 shadow-xs">
+        <div className="max-w-[1440px] w-full px-4 xl:px-[80px] py-4 flex items-center justify-between gap-6">
+          {/* Left side category tabs */}
+          <div className="flex items-center gap-2 md:gap-3 overflow-x-auto scrollbar-none py-1">
+            <button
+              onClick={() => setSelectedCategories([])}
+              className={`px-6 py-2.5 text-xs font-bold uppercase tracking-wider transition-all duration-300 rounded-full cursor-pointer whitespace-nowrap ${
+                selectedCategories.length === 0
+                  ? "bg-[#002F6C] text-white shadow-md shadow-blue-900/10"
+                  : "bg-gray-100 hover:bg-gray-200/80 text-gray-700 hover:text-gray-900"
+              }`}
+            >
+              Tất cả dòng xe
+            </button>
+            {categories.map((cat: any) => {
+              const isSelected = selectedCategories.includes(cat.slug);
+              return (
+                <button
+                  key={cat.slug}
+                  onClick={() => setSelectedCategories([cat.slug])}
+                  className={`px-6 py-2.5 text-xs font-bold uppercase tracking-wider transition-all duration-300 rounded-full cursor-pointer whitespace-nowrap ${
+                    isSelected
+                      ? "bg-[#002F6C] text-white shadow-md shadow-blue-900/10"
+                      : "bg-gray-100 hover:bg-gray-200/80 text-gray-700 hover:text-gray-900"
+                  }`}
+                >
+                  {cat.title}
+                </button>
+              );
+            })}
+          </div>
 
-              {/* Filter 1: Search */}
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-gray-800 uppercase tracking-wider block font-antenna">Tìm kiếm</label>
-                <div className="relative">
-                  <input 
-                    type="text"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder="Tên xe..."
-                    className="w-full text-xs bg-gray-50/50 hover:bg-gray-50 focus:bg-white text-black border border-gray-200 rounded-[8px] py-2.5 pl-9 pr-8 focus:outline-none focus:border-[#066fef] transition-colors font-antenna"
-                  />
-                  <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                  {searchTerm && (
+          {/* Right side search + filter toggle + compare */}
+          <div className="flex items-center gap-3 shrink-0">
+            {/* Desktop Search Box */}
+            <div className="relative hidden md:block w-48 lg:w-60">
+              <input 
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Tìm kiếm dòng xe..."
+                className="w-full text-xs bg-gray-50/80 hover:bg-gray-100/90 focus:bg-white text-black border border-gray-200 rounded-full py-2.5 pl-9 pr-8 focus:outline-none focus:ring-2 focus:ring-[#066fef]/20 transition-all font-semibold font-antenna"
+              />
+              <Search className="w-3.5 h-3.5 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              {searchTerm && (
+                <button 
+                  onClick={() => setSearchTerm("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black cursor-pointer border-0 bg-transparent p-0"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              )}
+            </div>
+
+            {/* Desktop Filters Toggle Button */}
+            <button 
+              onClick={() => setIsFiltersExpanded(!isFiltersExpanded)}
+              className={`hidden md:flex items-center gap-1.5 px-4 py-2.5 rounded-full border text-xs font-bold transition-all cursor-pointer font-antenna ${
+                isFiltersExpanded || getActiveFilterCount() > 0
+                  ? "bg-[#066fef]/10 text-[#066fef] border-[#066fef]/30 shadow-xs" 
+                  : "bg-gray-50/80 hover:bg-gray-100/90 border-gray-200 text-gray-700"
+              }`}
+            >
+              <SlidersHorizontal className="w-3.5 h-3.5" />
+              <span>Bộ lọc</span>
+              {getActiveFilterCount() > 0 && (
+                <span className="w-4 h-4 bg-[#066fef] text-white text-[9px] rounded-full flex items-center justify-center font-bold">
+                  {getActiveFilterCount()}
+                </span>
+              )}
+            </button>
+
+            {/* Mobile Filter Toggle Button */}
+            <button 
+              onClick={() => setIsMobileFilterOpen(true)}
+              className="md:hidden flex items-center justify-center gap-1.5 bg-[#002F6C] hover:bg-[#00095b] text-white text-xs font-bold py-2.5 px-4 rounded-full cursor-pointer shadow-xs uppercase tracking-wider whitespace-nowrap"
+            >
+              <Filter className="w-3.5 h-3.5" />
+              <span>Lọc xe</span>
+            </button>
+
+            {/* Compare Link */}
+            {compareIds.length > 0 && (
+              <Link 
+                href="/so-sanh"
+                className="flex items-center gap-2 bg-[#00095b] hover:bg-[#066fef] text-white text-xs font-bold px-5 py-2.5 rounded-full shadow-md transition-all duration-300 whitespace-nowrap uppercase tracking-wider hover:shadow-lg active:scale-95 shrink-0"
+              >
+                <GitCompare className="w-4 h-4" />
+                <span>So sánh ({compareIds.length}/3)</span>
+              </Link>
+            )}
+          </div>
+        </div>
+
+        {/* Dropdown Filters Panel (Desktop/Tablet) */}
+        <AnimatePresence>
+          {isFiltersExpanded && (
+            <motion.div 
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="w-full bg-white border-t border-gray-100 overflow-hidden"
+            >
+              <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] py-5 space-y-4">
+                <div className="flex items-center justify-between border-b border-gray-100 pb-3">
+                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Chọn các tiêu chí lọc nâng cao:</span>
+                  {hasActiveFilters && (
                     <button 
-                      onClick={() => setSearchTerm("")}
-                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black cursor-pointer border-0 bg-transparent p-0"
+                      onClick={clearAllFilters}
+                      className="text-xs font-bold text-[#D20000] hover:text-red-750 flex items-center gap-1.5 transition-colors cursor-pointer border-0 bg-transparent p-0"
                     >
-                      <X className="w-3.5 h-3.5" />
+                      <RotateCcw className="w-3.5 h-3.5" />
+                      Đặt lại bộ lọc
                     </button>
                   )}
                 </div>
-              </div>
-
-              {/* Filter 2: Categories */}
-              <div className="space-y-3 pt-2">
-                <label className="text-xs font-bold text-gray-800 uppercase tracking-wider block font-antenna">Dòng xe / Phân khúc</label>
-                <div className="space-y-2">
-                  {categories.map((cat: any) => {
-                    const isChecked = selectedCategories.includes(cat.slug);
-                    const count = counts.categories[cat.slug as keyof typeof counts.categories] || 0;
-                    return (
-                      <label 
-                        key={cat.slug} 
-                        className={`flex items-center justify-between px-3 py-2 rounded-[4px] text-xs font-bold cursor-pointer transition-colors border ${
-                          isChecked 
-                            ? "bg-[#066fef]/10 border-[#066fef]/20 text-[#066fef]" 
-                            : "bg-transparent border-transparent text-gray-700 hover:bg-gray-50 hover:text-black"
-                        }`}
-                      >
-                        <div className="flex items-center gap-2.5">
-                          <input 
-                            type="checkbox"
-                            checked={isChecked}
-                            onChange={() => toggleCategory(cat.slug)}
-                            className="rounded border-gray-300 text-[#066fef] focus:ring-[#066fef] cursor-pointer w-4 h-4"
-                          />
-                          <span>{cat.title}</span>
-                        </div>
-                        <span className={`text-[10px] px-2 py-0.5 rounded-[4px] font-bold ${
-                          isChecked ? "bg-[#066fef]/10 text-[#066fef]" : "bg-gray-100 text-gray-500"
-                        }`}>
-                          {count}
-                        </span>
-                      </label>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Filter 3: Price Range */}
-              <div className="space-y-3 pt-2">
-                <label className="text-xs font-bold text-gray-800 uppercase tracking-wider block font-antenna">Khoảng giá</label>
-                <div className="space-y-2">
-                  {[
-                    { slug: null, label: "Tất cả mức giá", count: resolvedVehicles.length },
-                    { slug: "under-800", label: "Dưới 800 triệu", count: counts.priceRanges.under800 },
-                    { slug: "800-1200", label: "800 triệu - 1.2 tỷ", count: counts.priceRanges.from800to1200 },
-                    { slug: "over-1200", label: "Trên 1.2 tỷ", count: counts.priceRanges.over1200 }
-                  ].map((range) => {
-                    const isSelected = priceRange === range.slug;
-                    return (
-                      <label 
-                        key={range.label} 
-                        className={`flex items-center justify-between px-3 py-2 rounded-[4px] text-xs font-bold cursor-pointer transition-colors border ${
-                          isSelected 
-                            ? "bg-[#066fef]/10 border-[#066fef]/20 text-[#066fef]" 
-                            : "bg-transparent border-transparent text-gray-700 hover:bg-gray-50 hover:text-black"
-                        }`}
-                      >
-                        <div className="flex items-center gap-2.5">
-                          <input 
-                            type="radio"
-                            name="priceRangeRadio"
-                            checked={isSelected}
-                            onChange={() => setPriceRange(range.slug)}
-                            className="text-[#066fef] focus:ring-[#066fef] cursor-pointer w-4 h-4"
-                          />
-                          <span>{range.label}</span>
-                        </div>
-                        <span className={`text-[10px] px-2 py-0.5 rounded-[4px] font-bold ${
-                          isSelected ? "bg-[#066fef]/10 text-[#066fef]" : "bg-gray-100 text-gray-500"
-                        }`}>
-                          {range.count}
-                        </span>
-                      </label>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Filter 4: Seats Capacity */}
-              <div className="space-y-3 pt-2">
-                <label className="text-xs font-bold text-gray-800 uppercase tracking-wider block font-antenna">Số chỗ ngồi</label>
-                <div className="space-y-2">
-                  {[
-                    { slug: "5", label: "Xe 5 chỗ", count: counts.seats["5"] },
-                    { slug: "7", label: "Xe 7 chỗ", count: counts.seats["7"] },
-                    { slug: "16", label: "Xe 16 chỗ", count: counts.seats["16"] }
-                  ].map((seat) => {
-                    const isChecked = selectedSeats.includes(seat.slug);
-                    return (
-                      <label 
-                        key={seat.slug} 
-                        className={`flex items-center justify-between px-3 py-2 rounded-[4px] text-xs font-bold cursor-pointer transition-colors border ${
-                          isChecked 
-                            ? "bg-[#066fef]/10 border-[#066fef]/20 text-[#066fef]" 
-                            : "bg-transparent border-transparent text-gray-700 hover:bg-gray-50 hover:text-black"
-                        }`}
-                      >
-                        <div className="flex items-center gap-2.5">
-                          <input 
-                            type="checkbox"
-                            checked={isChecked}
-                            onChange={() => toggleSeats(seat.slug)}
-                            className="rounded border-gray-300 text-[#066fef] focus:ring-[#066fef] cursor-pointer w-4 h-4"
-                          />
-                          <span>{seat.label}</span>
-                        </div>
-                        <span className={`text-[10px] px-2 py-0.5 rounded-[4px] font-bold ${
-                          isChecked ? "bg-[#066fef]/10 text-[#066fef]" : "bg-gray-100 text-gray-500"
-                        }`}>
-                          {seat.count}
-                        </span>
-                      </label>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Filter 5: Fuel Type */}
-              <div className="space-y-3 pt-2">
-                <label className="text-xs font-bold text-gray-800 uppercase tracking-wider block font-antenna">Nhiên liệu</label>
-                <div className="space-y-2">
-                  {[
-                    { name: "Xăng", code: "gasoline", count: counts.fuels.gasoline },
-                    { name: "Diesel", code: "diesel", count: counts.fuels.diesel }
-                  ].map((fuel) => {
-                    const isChecked = selectedFuels.includes(fuel.name);
-                    return (
-                      <label 
-                        key={fuel.name} 
-                        className={`flex items-center justify-between px-3 py-2 rounded-[4px] text-xs font-bold cursor-pointer transition-colors border ${
-                          isChecked 
-                            ? "bg-[#066fef]/10 border-[#066fef]/20 text-[#066fef]" 
-                            : "bg-transparent border-transparent text-gray-700 hover:bg-gray-50 hover:text-black"
-                        }`}
-                      >
-                        <div className="flex items-center gap-2.5">
-                          <input 
-                            type="checkbox"
-                            checked={isChecked}
-                            onChange={() => toggleFuel(fuel.name)}
-                            className="rounded border-gray-300 text-[#066fef] focus:ring-[#066fef] cursor-pointer w-4 h-4"
-                          />
-                          <span>Động cơ {fuel.name}</span>
-                        </div>
-                        <span className={`text-[10px] px-2 py-0.5 rounded-[4px] font-bold ${
-                          isChecked ? "bg-[#066fef]/10 text-[#066fef]" : "bg-gray-100 text-gray-500"
-                        }`}>
-                          {fuel.count}
-                        </span>
-                      </label>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Filter 6: Transmission */}
-              <div className="space-y-3 pt-2">
-                <label className="text-xs font-bold text-gray-800 uppercase tracking-wider block font-antenna">Hộp số</label>
-                <div className="space-y-2">
-                  {[
-                    { name: "Số tự động", code: "automatic", count: counts.transmissions.automatic },
-                    { name: "Số sàn", code: "manual", count: counts.transmissions.manual }
-                  ].map((trans) => {
-                    const isChecked = selectedTransmissions.includes(trans.name);
-                    return (
-                      <label 
-                        key={trans.name} 
-                        className={`flex items-center justify-between px-3 py-2 rounded-[4px] text-xs font-bold cursor-pointer transition-colors border ${
-                          isChecked 
-                            ? "bg-[#066fef]/10 border-[#066fef]/20 text-[#066fef]" 
-                            : "bg-transparent border-transparent text-gray-700 hover:bg-gray-50 hover:text-black"
-                        }`}
-                      >
-                        <div className="flex items-center gap-2.5">
-                          <input 
-                            type="checkbox"
-                            checked={isChecked}
-                            onChange={() => toggleTransmission(trans.name)}
-                            className="rounded border-gray-300 text-[#066fef] focus:ring-[#066fef] cursor-pointer w-4 h-4"
-                          />
-                          <span>{trans.name}</span>
-                        </div>
-                        <span className={`text-[10px] px-2 py-0.5 rounded-[4px] font-bold ${
-                          isChecked ? "bg-[#066fef]/10 text-[#066fef]" : "bg-gray-100 text-gray-500"
-                        }`}>
-                          {trans.count}
-                        </span>
-                      </label>
-                    );
-                  })}
-                </div>
-              </div>
-
-            </div>
-
-            {/* 2. PRODUCT LIST & TOOLBAR (Right side on Desktop, full width on Mobile) */}
-            <div className="lg:col-span-3 space-y-6">
-              
-              {/* Product Header Toolbar */}
-              <div className="bg-white border border-gray-200 px-6 py-4 flex items-center justify-between shadow-xs flex-wrap gap-4 rounded-none">
-                <div className="text-left font-antenna">
-                  <h2 className="text-base font-bold font-display text-gray-900 uppercase">
-                    Danh sách xe Ford
-                  </h2>
-                  <p className="text-xs text-gray-500 font-medium mt-0.5">
-                    Tìm thấy <span className="text-[#066fef] font-bold">{sortedVehicles.length}</span> mẫu xe phù hợp
-                  </p>
-                </div>
                 
-                <div className="flex items-center gap-3">
-                  
-                  {/* Mobile filter button trigger */}
-                  <button 
-                    onClick={() => setIsMobileFilterOpen(true)}
-                    className="lg:hidden flex items-center gap-2 bg-white hover:bg-gray-50 text-gray-700 text-xs font-bold px-4 py-2.5 rounded-[4px] border border-gray-200 cursor-pointer shadow-xs uppercase tracking-wider"
-                  >
-                    <Filter className="w-4 h-4 text-[#066fef]" />
-                    <span>Lọc xe ({[
-                      selectedCategories.length,
-                      priceRange ? 1 : 0,
-                      selectedSeats.length,
-                      selectedFuels.length,
-                      selectedTransmissions.length
-                    ].reduce((a, b) => a + b, 0)})</span>
-                  </button>
+                <div className="grid grid-cols-5 gap-4">
+                  {/* Price Filter */}
+                  <div className="flex flex-col gap-1.5">
+                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider ml-1">Khoảng giá</span>
+                    <select
+                      value={priceRange || ""}
+                      onChange={(e) => setPriceRange(e.target.value || null)}
+                      className="w-full text-xs font-bold bg-gray-50/60 hover:bg-gray-100/80 focus:bg-white border border-gray-250 rounded-full py-2.5 px-4 focus:outline-none focus:ring-2 focus:ring-[#066fef]/20 transition-all cursor-pointer font-antenna text-gray-700"
+                    >
+                      <option value="">Tất cả</option>
+                      <option value="under-800">Dưới 800 triệu</option>
+                      <option value="800-1200">800 triệu - 1.2 tỷ</option>
+                      <option value="over-1200">Trên 1.2 tỷ</option>
+                    </select>
+                  </div>
 
-                  {/* Sort options dropdown wrapper */}
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs text-gray-500 font-medium whitespace-nowrap hidden sm:inline">Sắp xếp:</span>
+                  {/* Seats Filter */}
+                  <div className="flex flex-col gap-1.5">
+                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider ml-1">Số chỗ ngồi</span>
+                    <select
+                      value={selectedSeats[0] || ""}
+                      onChange={(e) => setSelectedSeats(e.target.value ? [e.target.value] : [])}
+                      className="w-full text-xs font-bold bg-gray-50/60 hover:bg-gray-100/80 focus:bg-white border border-gray-250 rounded-full py-2.5 px-4 focus:outline-none focus:ring-2 focus:ring-[#066fef]/20 transition-all cursor-pointer font-antenna text-gray-700"
+                    >
+                      <option value="">Tất cả</option>
+                      <option value="5">5 chỗ</option>
+                      <option value="7">7 chỗ</option>
+                      <option value="16">16 chỗ</option>
+                    </select>
+                  </div>
+
+                  {/* Fuel Type */}
+                  <div className="flex flex-col gap-1.5">
+                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider ml-1">Nhiên liệu</span>
+                    <select
+                      value={selectedFuels[0] || ""}
+                      onChange={(e) => setSelectedFuels(e.target.value ? [e.target.value] : [])}
+                      className="w-full text-xs font-bold bg-gray-50/60 hover:bg-gray-100/80 focus:bg-white border border-gray-250 rounded-full py-2.5 px-4 focus:outline-none focus:ring-2 focus:ring-[#066fef]/20 transition-all cursor-pointer font-antenna text-gray-700"
+                    >
+                      <option value="">Tất cả</option>
+                      <option value="Xăng">Máy Xăng</option>
+                      <option value="Diesel">Máy Diesel</option>
+                    </select>
+                  </div>
+
+                  {/* Transmission Type */}
+                  <div className="flex flex-col gap-1.5">
+                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider ml-1">Hộp số</span>
+                    <select
+                      value={selectedTransmissions[0] || ""}
+                      onChange={(e) => setSelectedTransmissions(e.target.value ? [e.target.value] : [])}
+                      className="w-full text-xs font-bold bg-gray-50/60 hover:bg-gray-100/80 focus:bg-white border border-gray-250 rounded-full py-2.5 px-4 focus:outline-none focus:ring-2 focus:ring-[#066fef]/20 transition-all cursor-pointer font-antenna text-gray-700"
+                    >
+                      <option value="">Tất cả</option>
+                      <option value="Số tự động">Số tự động</option>
+                      <option value="Số sàn">Số sàn</option>
+                    </select>
+                  </div>
+
+                  {/* Sort Dropdown */}
+                  <div className="flex flex-col gap-1.5">
+                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider ml-1">Sắp xếp theo</span>
                     <select
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value)}
-                      className="bg-white border border-gray-200 text-xs font-semibold text-gray-800 py-2 px-3 rounded-[8px] focus:outline-none focus:border-[#066fef] cursor-pointer shadow-xs font-antenna"
+                      className="w-full text-xs font-bold bg-gray-50/60 hover:bg-gray-100/80 focus:bg-white border border-gray-255 rounded-full py-2.5 px-4 focus:outline-none focus:ring-2 focus:ring-[#066fef]/20 transition-all cursor-pointer font-antenna text-gray-700"
                     >
                       <option value="featured">Phổ biến nhất</option>
                       <option value="price-asc">Giá: Thấp đến Cao</option>
@@ -787,104 +707,117 @@ export default function ProductsPage({ initialCategory }: { initialCategory?: st
                   </div>
                 </div>
               </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
 
-              {/* Active Filter Tags */}
-              {hasActiveFilters && (
-                <div className="flex items-center gap-2 flex-wrap bg-white p-4 border border-gray-200 rounded-none shadow-xs">
-                  <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mr-1">Đang lọc theo:</span>
-                  
-                  {/* Category Tags */}
-                  {selectedCategories.map((cat) => (
-                    <span key={cat} className="inline-flex items-center gap-1 bg-[#066fef]/10 text-[#066fef] border border-[#066fef]/20 rounded-[4px] px-3 py-1 text-xs font-semibold font-antenna">
-                      <span>Dòng {getCategoryTitle(cat)}</span>
-                      <button onClick={() => toggleCategory(cat)} className="text-[#066fef]/60 hover:text-[#066fef] border-0 bg-transparent p-0 cursor-pointer">
-                        <X className="w-3 h-3" />
-                      </button>
-                    </span>
-                  ))}
+      {/* Main Layout Area */}
+      <section className="py-12 w-full">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] space-y-8">
+          
+          {/* Results Count Header */}
+          <div className="flex items-center justify-between border-b border-gray-200/50 pb-2">
+            <span className="text-xs text-gray-450 font-bold uppercase tracking-wider font-antenna">
+              Đang hiển thị <strong className="text-[#066fef]">{sortedVehicles.length}</strong> mẫu xe Ford
+            </span>
+          </div>
 
-                  {/* Price Tag */}
-                  {priceRange && (
-                    <span className="inline-flex items-center gap-1 bg-[#066fef]/10 text-[#066fef] border border-[#066fef]/20 rounded-[4px] px-3 py-1 text-xs font-semibold font-antenna">
-                      <span>{priceRange === "under-800" ? "Dưới 800 triệu" : priceRange === "800-1200" ? "800 triệu - 1.2 tỷ" : "Trên 1.2 tỷ"}</span>
-                      <button onClick={() => setPriceRange(null)} className="text-[#066fef]/60 hover:text-[#066fef] border-0 bg-transparent p-0 cursor-pointer">
-                        <X className="w-3 h-3" />
-                      </button>
-                    </span>
-                  )}
-
-                  {/* Seat Tags */}
-                  {selectedSeats.map((seat) => (
-                    <span key={seat} className="inline-flex items-center gap-1 bg-[#066fef]/10 text-[#066fef] border border-[#066fef]/20 rounded-[4px] px-3 py-1 text-xs font-semibold font-antenna">
-                      <span>{seat} Chỗ</span>
-                      <button onClick={() => toggleSeats(seat)} className="text-[#066fef]/60 hover:text-[#066fef] border-0 bg-transparent p-0 cursor-pointer">
-                        <X className="w-3 h-3" />
-                      </button>
-                    </span>
-                  ))}
-
-                  {/* Fuel Tags */}
-                  {selectedFuels.map((fuel) => (
-                    <span key={fuel} className="inline-flex items-center gap-1 bg-[#066fef]/10 text-[#066fef] border border-[#066fef]/20 rounded-[4px] px-3 py-1 text-xs font-semibold font-antenna">
-                      <span>Máy {fuel}</span>
-                      <button onClick={() => toggleFuel(fuel)} className="text-[#066fef]/60 hover:text-[#066fef] border-0 bg-transparent p-0 cursor-pointer">
-                        <X className="w-3 h-3" />
-                      </button>
-                    </span>
-                  ))}
-
-                  {/* Transmission Tags */}
-                  {selectedTransmissions.map((trans) => (
-                    <span key={trans} className="inline-flex items-center gap-1 bg-[#066fef]/10 text-[#066fef] border border-[#066fef]/20 rounded-[4px] px-3 py-1 text-xs font-semibold font-antenna">
-                      <span>{trans}</span>
-                      <button onClick={() => toggleTransmission(trans)} className="text-[#066fef]/60 hover:text-[#066fef] border-0 bg-transparent p-0 cursor-pointer">
-                        <X className="w-3 h-3" />
-                      </button>
-                    </span>
-                  ))}
-
-                  <button 
-                    onClick={clearAllFilters}
-                    className="text-xs font-bold text-[#D20000] hover:text-red-700 underline cursor-pointer border-0 bg-transparent p-0 ml-auto font-antenna"
-                  >
-                    Xóa tất cả
+          {/* Dynamic Active Tags Row */}
+          {hasActiveFilters && (
+            <div className="flex flex-wrap items-center gap-2 bg-white px-5 py-3 border border-gray-200/80 rounded-2xl shadow-sm">
+              <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mr-1">Bộ lọc đang bật:</span>
+              
+              {selectedCategories.map((cat) => (
+                <span key={cat} className="inline-flex items-center gap-1.5 bg-[#066fef]/10 text-[#066fef] border border-[#066fef]/15 rounded-full px-3 py-1 text-xs font-bold font-antenna">
+                  <span>Dòng {getCategoryTitle(cat)}</span>
+                  <button onClick={() => toggleCategory(cat)} className="text-[#066fef]/65 hover:text-[#066fef] border-0 bg-transparent p-0 cursor-pointer flex items-center">
+                    <X className="w-3 h-3" />
                   </button>
-                </div>
+                </span>
+              ))}
+
+              {priceRange && (
+                <span className="inline-flex items-center gap-1.5 bg-[#066fef]/10 text-[#066fef] border border-[#066fef]/15 rounded-full px-3 py-1 text-xs font-bold font-antenna">
+                  <span>{priceRange === "under-800" ? "Dưới 800 triệu" : priceRange === "800-1200" ? "800 triệu - 1.2 tỷ" : "Trên 1.2 tỷ"}</span>
+                  <button onClick={() => setPriceRange(null)} className="text-[#066fef]/65 hover:text-[#066fef] border-0 bg-transparent p-0 cursor-pointer flex items-center">
+                    <X className="w-3 h-3" />
+                  </button>
+                </span>
               )}
 
-              {/* Dynamic Product Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {sortedVehicles.map((vehicle: any) => {
-                  const vehicleId = vehicle.id;
-                  const vehicleName = vehicle.name;
-                  const vehicleImage = vehicle.image;
-                  const vehiclePrice = vehicle.price;
-                  const vehicleType = vehicle.typeName;
+              {selectedSeats.map((seat) => (
+                <span key={seat} className="inline-flex items-center gap-1.5 bg-[#066fef]/10 text-[#066fef] border border-[#066fef]/15 rounded-full px-3 py-1 text-xs font-bold font-antenna">
+                  <span>{seat} Chỗ</span>
+                  <button onClick={() => toggleSeats(seat)} className="text-[#066fef]/65 hover:text-[#066fef] border-0 bg-transparent p-0 cursor-pointer flex items-center">
+                    <X className="w-3 h-3" />
+                  </button>
+                </span>
+              ))}
 
-                  return (
-                    <div
-                      key={vehicleId}
-                      className="bg-white border border-gray-200 hover:border-[#066fef]/55 rounded-none p-5 flex flex-col hover:shadow-xs transition-all duration-300 group relative"
+              {selectedFuels.map((fuel) => (
+                <span key={fuel} className="inline-flex items-center gap-1.5 bg-[#066fef]/10 text-[#066fef] border border-[#066fef]/15 rounded-full px-3 py-1 text-xs font-bold font-antenna">
+                  <span>Máy {fuel}</span>
+                  <button onClick={() => toggleFuel(fuel)} className="text-[#066fef]/65 hover:text-[#066fef] border-0 bg-transparent p-0 cursor-pointer flex items-center">
+                    <X className="w-3 h-3" />
+                  </button>
+                </span>
+              ))}
+
+              {selectedTransmissions.map((trans) => (
+                <span key={trans} className="inline-flex items-center gap-1.5 bg-[#066fef]/10 text-[#066fef] border border-[#066fef]/15 rounded-full px-3 py-1 text-xs font-bold font-antenna">
+                  <span>{trans}</span>
+                  <button onClick={() => toggleTransmission(trans)} className="text-[#066fef]/65 hover:text-[#066fef] border-0 bg-transparent p-0 cursor-pointer flex items-center">
+                    <X className="w-3 h-3" />
+                  </button>
+                </span>
+              ))}
+
+              <button 
+                onClick={clearAllFilters}
+                className="text-xs font-bold text-[#D20000] hover:text-red-700 underline cursor-pointer border-0 bg-transparent p-0 ml-auto font-antenna uppercase tracking-wider"
+              >
+                Xóa tất cả bộ lọc
+              </button>
+            </div>
+          )}
+
+          {/* Grid Layout Container */}
+          <div className="w-full">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {sortedVehicles.map((vehicle: any) => {
+                const vehicleId = vehicle.id;
+                const vehicleName = vehicle.name;
+                const vehicleImage = vehicle.image;
+                const vehiclePrice = vehicle.price;
+                const vehicleType = vehicle.typeName;
+
+                return (
+                  <div
+                    key={vehicleId}
+                    className="bg-white border border-gray-200/80 hover:border-[#066fef]/30 rounded-2xl p-5 flex flex-col hover:shadow-xl hover:shadow-gray-200/40 hover:-translate-y-1 transition-all duration-300 group relative"
+                  >
+                    {/* Compare Toggle Button */}
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        toggleCompare(vehicleId);
+                      }}
+                      className={`absolute top-4 right-4 z-20 w-9 h-9 rounded-full flex items-center justify-center transition-all active:scale-90 border cursor-pointer ${
+                        compareIds.includes(vehicleId)
+                          ? "bg-[#066fef] text-white border-[#066fef] shadow-md shadow-blue-500/20"
+                          : "bg-white/90 text-gray-500 hover:text-[#066fef] border-gray-200 shadow-sm"
+                      }`}
+                      title={compareIds.includes(vehicleId) ? "Xóa khỏi so sánh" : "Thêm vào so sánh"}
                     >
-                      {/* Compare Toggle Button */}
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          toggleCompare(vehicleId);
-                        }}
-                        className={`absolute top-3 right-3 z-10 w-8 h-8 rounded-[4px] flex items-center justify-center transition-all active:scale-95 border cursor-pointer ${
-                          compareIds.includes(vehicleId)
-                            ? "bg-[#066fef] text-white border-[#066fef] shadow-md"
-                            : "bg-white/95 text-gray-555 hover:text-[#066fef] border-gray-200 hover:shadow-md"
-                        }`}
-                        title={compareIds.includes(vehicleId) ? "Xóa khỏi so sánh" : "Thêm vào so sánh"}
-                      >
-                        <GitCompare className={`w-4 h-4 ${compareIds.includes(vehicleId) ? "animate-pulse" : ""}`} />
-                      </button>
+                      <GitCompare className={`w-4 h-4 ${compareIds.includes(vehicleId) ? "animate-pulse" : ""}`} />
+                    </button>
+                    
+                    <div className="relative h-56 w-full bg-white overflow-hidden mb-4 flex items-center justify-center rounded-xl">
                       <Link
                         href={`/${vehicleId}`}
-                        className="relative h-48 w-full bg-white overflow-hidden mb-5 flex items-center justify-center block rounded-none border-b border-gray-100"
+                        className="w-full h-full flex items-center justify-center block"
                       >
                         <Image
                           src={vehicleImage}
@@ -895,87 +828,65 @@ export default function ProductsPage({ initialCategory }: { initialCategory?: st
                           onError={handleImageError}
                         />
                       </Link>
-
-                      {/* Badges Container */}
-                      <div className="flex gap-2 mb-3 items-center flex-wrap font-antenna">
-                        {vehicleType && (
-                          <span className="inline-block text-[11px] font-bold text-[#066fef] bg-[#066fef]/10 px-2.5 py-0.5 rounded-[4px]">
-                            {vehicleType}
-                          </span>
-                        )}
-                        <span className="inline-block text-[11px] font-bold text-gray-650 bg-gray-100 px-2.5 py-0.5 rounded-[4px]">
-                          Động cơ {vehicle.fuel}
-                        </span>
-                      </div>
-
-                      {/* Title & Price */}
-                      <h3 className="text-[17px] font-bold font-display tracking-tight uppercase text-gray-900 group-hover:text-[#066fef] transition-colors mb-1">
-                        {vehicleName}
-                      </h3>
-                      <p className="text-xs text-gray-500 font-medium mb-4 font-antenna">
-                        Giá khởi điểm:{" "}
-                        <span className="text-[#066fef] font-bold text-sm">
-                          {formatPrice(vehiclePrice)}
-                        </span>
-                      </p>
-
-                      {/* Technical specifications panel on card */}
-                      <div className="border-t border-gray-100 pt-3 mt-auto mb-4 text-[11px] text-gray-600 space-y-1.5 leading-tight text-left font-antenna">
-                        <div className="flex items-center gap-1.5">
-                          <Settings className="w-3.5 h-3.5 text-gray-400" />
-                          <span>Động cơ: <strong className="text-gray-800 font-semibold">{vehicle.engine}</strong></span>
-                        </div>
-                        <div className="flex items-center gap-1.5">
-                          <Fuel className="w-3.5 h-3.5 text-gray-400" />
-                          <span>Hộp số: <strong className="text-gray-800 font-semibold">{vehicle.transText}</strong></span>
-                        </div>
-                        <div className="flex items-center gap-1.5">
-                          <Users className="w-3.5 h-3.5 text-gray-400" />
-                          <span>Hệ dẫn động: <strong className="text-gray-800 font-semibold">{vehicle.drivetrain}</strong></span>
-                        </div>
-                      </div>
-
-                      {/* CTAs */}
-                      <div className="flex gap-2 text-xs font-antenna">
+                      {/* Hover Overlay Detail Button */}
+                      <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center pointer-events-none group-hover:pointer-events-auto rounded-xl">
                         <Link
                           href={`/${vehicleId}`}
-                          className="flex-1 text-center bg-gray-950 hover:bg-[#066fef] border border-gray-950 hover:border-[#066fef] text-white font-bold py-2.5 rounded-[4px] transition-colors cursor-pointer uppercase tracking-wider text-[11px]"
+                          className="bg-gray-950/90 hover:bg-[#066fef] text-white font-bold py-2.5 px-6 rounded-full transition-all duration-300 cursor-pointer uppercase tracking-wider text-[11px] shadow-md active:scale-95 transform translate-y-3 group-hover:translate-y-0"
                         >
                           Chi tiết
                         </Link>
-                        <Link
-                          href="/lien-he"
-                          className="flex-1 text-center border border-[#066fef] hover:bg-[#066fef] text-[#066fef] hover:text-white font-bold py-2.5 rounded-[4px] transition-colors cursor-pointer uppercase tracking-wider text-[11px]"
-                        >
-                          Báo giá
-                        </Link>
                       </div>
                     </div>
-                  );
-                })}
-              </div>
 
-              {/* Empty State */}
-              {sortedVehicles.length === 0 && (
-                <div className="text-center py-20 bg-white border border-gray-200 rounded-none shadow-xs">
-                  <div className="w-16 h-16 bg-gray-100 text-gray-400 rounded-[4px] flex items-center justify-center mx-auto mb-4">
-                    <Filter className="w-7 h-7" />
+                    {/* Badges Container */}
+                    <div className="flex gap-2 mb-2.5 items-center justify-center flex-wrap font-antenna">
+                      {vehicleType && (
+                        <span className="inline-block text-[10px] font-bold uppercase tracking-wider text-[#066fef] bg-[#066fef]/8 px-3 py-1 rounded-full">
+                          {vehicleType}
+                        </span>
+                      )}
+                      <span className="inline-block text-[10px] font-bold uppercase tracking-wider text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+                        Động cơ {vehicle.fuel}
+                      </span>
+                    </div>
+
+                    {/* Title & Price */}
+                    <h3 className="text-lg font-bold font-display tracking-tight uppercase text-gray-900 group-hover:text-[#066fef] transition-colors mb-1 font-antenna text-center">
+                      <Link href={`/${vehicleId}`} className="hover:text-[#066fef] transition-colors">
+                        {vehicleName}
+                      </Link>
+                    </h3>
+                    <p className="text-xs text-gray-500 font-medium font-antenna text-center mb-1">
+                      Giá khởi điểm:{" "}
+                      <span className="text-[#066fef] font-bold text-sm ml-0.5">
+                        {formatPrice(vehiclePrice)}
+                      </span>
+                    </p>
                   </div>
-                  <h3 className="text-base font-bold text-gray-900 mb-1 font-display">Không tìm thấy xe phù hợp</h3>
-                  <p className="text-xs text-gray-500 max-w-sm mx-auto mb-6 font-antenna">
-                    Không có dòng xe nào khớp với tất cả các tùy chọn lọc hiện tại của bạn.
-                  </p>
-                  <button 
-                    onClick={clearAllFilters}
-                    className="bg-[#066fef] hover:bg-[#01095c] text-white text-xs font-bold px-6 py-2.5 rounded-[4px] transition-colors cursor-pointer border-0 uppercase tracking-wider"
-                  >
-                    Xóa tất cả bộ lọc
-                  </button>
-                </div>
-              )}
+                );
+              })}
             </div>
-
           </div>
+
+          {/* Empty State */}
+          {sortedVehicles.length === 0 && (
+            <div className="text-center py-20 bg-white border border-gray-200/80 rounded-2xl shadow-sm max-w-lg mx-auto w-full">
+              <div className="w-16 h-16 bg-gray-100 text-gray-400 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Filter className="w-6 h-6" />
+              </div>
+              <h3 className="text-base font-bold text-gray-900 mb-1.5 font-display uppercase tracking-wider">Không tìm thấy xe phù hợp</h3>
+              <p className="text-xs text-gray-500 max-w-xs mx-auto mb-6 font-antenna leading-relaxed">
+                Không có dòng xe nào khớp với tất cả các tùy chọn lọc hiện tại của bạn.
+              </p>
+              <button 
+                onClick={clearAllFilters}
+                className="bg-[#002F6C] hover:bg-[#01095c] text-white text-xs font-bold px-6 py-2.5 rounded-full transition-all duration-300 cursor-pointer border-0 uppercase tracking-wider shadow-md hover:shadow-lg active:scale-95"
+              >
+                Xóa tất cả bộ lọc
+              </button>
+            </div>
+          )}
 
         </div>
       </section>
@@ -1035,11 +946,11 @@ export default function ProductsPage({ initialCategory }: { initialCategory?: st
           />
           
           {/* Drawer Body Panel */}
-          <div className="relative bg-white w-full max-w-[420px] h-full flex flex-col shadow-2xl z-10 animate-in slide-in-from-right duration-300">
+          <div className="relative bg-white w-full max-w-[420px] h-full flex flex-col shadow-2xl z-10 animate-in slide-in-from-right duration-300 rounded-l-3xl">
             {/* Header */}
-            <div className="bg-[#00095b] text-white p-5 flex items-center justify-between shrink-0">
-              <span className="text-[14px] font-bold font-['Ford_Antenna',sans-serif] uppercase tracking-wider flex items-center gap-2">
-                <SlidersHorizontal className="w-4 h-4 text-blue-400" />
+            <div className="bg-[#002F6C] text-white p-5 flex items-center justify-between shrink-0 rounded-tl-3xl">
+              <span className="text-[14px] font-bold font-antenna uppercase tracking-wider flex items-center gap-2">
+                <SlidersHorizontal className="w-4 h-4 text-blue-300" />
                 Bộ lọc xe
               </span>
               <button 
@@ -1056,29 +967,29 @@ export default function ProductsPage({ initialCategory }: { initialCategory?: st
               {hasActiveFilters && (
                 <button 
                   onClick={clearAllFilters}
-                  className="w-full bg-red-50 hover:bg-red-100 text-red-600 text-xs font-bold py-2.5 rounded-lg border border-red-100 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                  className="w-full bg-red-55/60 hover:bg-red-100 text-red-600 text-xs font-bold py-2.5 rounded-full border border-red-100 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                 >
-                  <RotateCcw className="w-4 h-4" />
-                  Xóa tất cả bộ lọc hiện tại
+                  <RotateCcw className="w-4 h-4 animate-spin-reverse" />
+                  Xóa tất cả bộ lọc
                 </button>
               )}
 
               {/* Search */}
               <div className="space-y-2">
-                <label className="text-xs font-bold text-gray-800 uppercase tracking-wider block">Tìm kiếm xe</label>
+                <label className="text-xs font-bold text-gray-800 uppercase tracking-wider block font-antenna">Tìm kiếm xe</label>
                 <div className="relative">
                   <input 
                     type="text"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder="Nhập tên dòng xe cần tìm..."
-                    className="w-full text-xs bg-gray-50 border border-gray-200 rounded-lg py-3 pl-9 pr-8 focus:outline-none focus:border-[#0562d2] text-black bg-white"
+                    placeholder="Nhập tên dòng xe..."
+                    className="w-full text-xs bg-gray-50 border border-gray-200 rounded-full py-3 pl-10 pr-8 focus:outline-none focus:border-[#066fef] text-black bg-white"
                   />
-                  <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                   {searchTerm && (
                     <button 
                       onClick={() => setSearchTerm("")}
-                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black cursor-pointer border-0 bg-transparent p-0"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black cursor-pointer border-0 bg-transparent p-0"
                     >
                       <X className="w-3.5 h-3.5" />
                     </button>
@@ -1088,7 +999,7 @@ export default function ProductsPage({ initialCategory }: { initialCategory?: st
 
               {/* Categories */}
               <div className="space-y-2.5">
-                <label className="text-xs font-bold text-gray-800 uppercase tracking-wider block">Dòng xe / Phân khúc</label>
+                <label className="text-xs font-bold text-gray-800 uppercase tracking-wider block font-antenna">Dòng xe / Phân khúc</label>
                 <div className="grid grid-cols-1 gap-2">
                   {categories.map((cat: any) => {
                     const isChecked = selectedCategories.includes(cat.slug);
@@ -1096,10 +1007,10 @@ export default function ProductsPage({ initialCategory }: { initialCategory?: st
                     return (
                       <label 
                         key={cat.slug} 
-                        className={`flex items-center justify-between px-3.5 py-3 rounded-lg text-xs font-semibold cursor-pointer transition-colors border ${
+                        className={`flex items-center justify-between px-4 py-3 rounded-xl text-xs font-semibold cursor-pointer transition-colors border ${
                           isChecked 
-                            ? "bg-blue-50 border-blue-200 text-[#0562d2]" 
-                            : "bg-transparent border-gray-200 text-gray-700"
+                            ? "bg-[#066fef]/10 border-[#066fef]/25 text-[#066fef]" 
+                            : "bg-transparent border-gray-200 text-gray-700 hover:bg-gray-50"
                         }`}
                       >
                         <div className="flex items-center gap-3">
@@ -1107,12 +1018,12 @@ export default function ProductsPage({ initialCategory }: { initialCategory?: st
                             type="checkbox"
                             checked={isChecked}
                             onChange={() => toggleCategory(cat.slug)}
-                            className="rounded border-gray-300 text-[#0562d2] focus:ring-[#0562d2] cursor-pointer w-4 h-4"
+                            className="rounded border-gray-300 text-[#066fef] focus:ring-[#066fef] cursor-pointer w-4 h-4"
                           />
                           <span>{cat.title}</span>
                         </div>
-                        <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
-                          isChecked ? "bg-blue-100 text-[#0562d2]" : "bg-gray-100 text-gray-500"
+                        <span className={`text-[10px] px-2.5 py-0.5 rounded-full font-bold ${
+                          isChecked ? "bg-[#066fef]/10 text-[#066fef]" : "bg-gray-100 text-gray-500"
                         }`}>
                           {count}
                         </span>
@@ -1124,7 +1035,7 @@ export default function ProductsPage({ initialCategory }: { initialCategory?: st
 
               {/* Price Ranges */}
               <div className="space-y-2.5">
-                <label className="text-xs font-bold text-gray-800 uppercase tracking-wider block">Khoảng giá ước tính</label>
+                <label className="text-xs font-bold text-gray-800 uppercase tracking-wider block font-antenna">Khoảng giá ước tính</label>
                 <div className="grid grid-cols-1 gap-2">
                   {[
                     { slug: null, label: "Tất cả mức giá", count: resolvedVehicles.length },
@@ -1136,10 +1047,10 @@ export default function ProductsPage({ initialCategory }: { initialCategory?: st
                     return (
                       <label 
                         key={range.label} 
-                        className={`flex items-center justify-between px-3.5 py-3 rounded-lg text-xs font-semibold cursor-pointer transition-colors border ${
+                        className={`flex items-center justify-between px-4 py-3 rounded-xl text-xs font-semibold cursor-pointer transition-colors border ${
                           isSelected 
-                            ? "bg-blue-50 border-blue-200 text-[#0562d2]" 
-                            : "bg-transparent border-gray-200 text-gray-700"
+                            ? "bg-[#066fef]/10 border-[#066fef]/25 text-[#066fef]" 
+                            : "bg-transparent border-gray-200 text-gray-700 hover:bg-gray-50"
                         }`}
                       >
                         <div className="flex items-center gap-3">
@@ -1148,12 +1059,12 @@ export default function ProductsPage({ initialCategory }: { initialCategory?: st
                             name="mobilePriceRangeRadio"
                             checked={isSelected}
                             onChange={() => setPriceRange(range.slug)}
-                            className="text-[#0562d2] focus:ring-[#0562d2] cursor-pointer w-4 h-4"
+                            className="text-[#066fef] focus:ring-[#066fef] cursor-pointer w-4 h-4"
                           />
                           <span>{range.label}</span>
                         </div>
-                        <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
-                          isSelected ? "bg-blue-100 text-[#0562d2]" : "bg-gray-100 text-gray-500"
+                        <span className={`text-[10px] px-2.5 py-0.5 rounded-full font-bold ${
+                          isSelected ? "bg-[#066fef]/10 text-[#066fef]" : "bg-gray-100 text-gray-500"
                         }`}>
                           {range.count}
                         </span>
@@ -1165,7 +1076,7 @@ export default function ProductsPage({ initialCategory }: { initialCategory?: st
 
               {/* Seats */}
               <div className="space-y-2.5">
-                <label className="text-xs font-bold text-gray-800 uppercase tracking-wider block">Số chỗ ngồi</label>
+                <label className="text-xs font-bold text-gray-800 uppercase tracking-wider block font-antenna">Số chỗ ngồi</label>
                 <div className="grid grid-cols-1 gap-2">
                   {[
                     { slug: "5", label: "Xe 5 chỗ", count: counts.seats["5"] },
@@ -1176,10 +1087,10 @@ export default function ProductsPage({ initialCategory }: { initialCategory?: st
                     return (
                       <label 
                         key={seat.slug} 
-                        className={`flex items-center justify-between px-3.5 py-3 rounded-lg text-xs font-semibold cursor-pointer transition-colors border ${
+                        className={`flex items-center justify-between px-4 py-3 rounded-xl text-xs font-semibold cursor-pointer transition-colors border ${
                           isChecked 
-                            ? "bg-blue-50 border-blue-200 text-[#0562d2]" 
-                            : "bg-transparent border-gray-200 text-gray-700"
+                            ? "bg-[#066fef]/10 border-[#066fef]/25 text-[#066fef]" 
+                            : "bg-transparent border-gray-200 text-gray-700 hover:bg-gray-50"
                         }`}
                       >
                         <div className="flex items-center gap-3">
@@ -1187,12 +1098,12 @@ export default function ProductsPage({ initialCategory }: { initialCategory?: st
                             type="checkbox"
                             checked={isChecked}
                             onChange={() => toggleSeats(seat.slug)}
-                            className="rounded border-gray-300 text-[#0562d2] focus:ring-[#0562d2] cursor-pointer w-4 h-4"
+                            className="rounded border-gray-300 text-[#066fef] focus:ring-[#066fef] cursor-pointer w-4 h-4"
                           />
                           <span>{seat.label}</span>
                         </div>
-                        <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
-                          isChecked ? "bg-blue-100 text-[#0562d2]" : "bg-gray-100 text-gray-500"
+                        <span className={`text-[10px] px-2.5 py-0.5 rounded-full font-bold ${
+                          isChecked ? "bg-[#066fef]/10 text-[#066fef]" : "bg-gray-100 text-gray-500"
                         }`}>
                           {seat.count}
                         </span>
@@ -1204,7 +1115,7 @@ export default function ProductsPage({ initialCategory }: { initialCategory?: st
 
               {/* Fuels */}
               <div className="space-y-2.5">
-                <label className="text-xs font-bold text-gray-800 uppercase tracking-wider block">Loại nhiên liệu</label>
+                <label className="text-xs font-bold text-gray-800 uppercase tracking-wider block font-antenna">Loại nhiên liệu</label>
                 <div className="grid grid-cols-1 gap-2">
                   {[
                     { name: "Xăng", count: counts.fuels.gasoline },
@@ -1214,10 +1125,10 @@ export default function ProductsPage({ initialCategory }: { initialCategory?: st
                     return (
                       <label 
                         key={fuel.name} 
-                        className={`flex items-center justify-between px-3.5 py-3 rounded-lg text-xs font-semibold cursor-pointer transition-colors border ${
+                        className={`flex items-center justify-between px-4 py-3 rounded-xl text-xs font-semibold cursor-pointer transition-colors border ${
                           isChecked 
-                            ? "bg-blue-50 border-blue-200 text-[#0562d2]" 
-                            : "bg-transparent border-gray-200 text-gray-700"
+                            ? "bg-[#066fef]/10 border-[#066fef]/25 text-[#066fef]" 
+                            : "bg-transparent border-gray-200 text-gray-700 hover:bg-gray-50"
                         }`}
                       >
                         <div className="flex items-center gap-3">
@@ -1225,12 +1136,12 @@ export default function ProductsPage({ initialCategory }: { initialCategory?: st
                             type="checkbox"
                             checked={isChecked}
                             onChange={() => toggleFuel(fuel.name)}
-                            className="rounded border-gray-300 text-[#0562d2] focus:ring-[#0562d2] cursor-pointer w-4 h-4"
+                            className="rounded border-gray-300 text-[#066fef] focus:ring-[#066fef] cursor-pointer w-4 h-4"
                           />
                           <span>Máy {fuel.name}</span>
                         </div>
-                        <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
-                          isChecked ? "bg-blue-100 text-[#0562d2]" : "bg-gray-100 text-gray-500"
+                        <span className={`text-[10px] px-2.5 py-0.5 rounded-full font-bold ${
+                          isChecked ? "bg-[#066fef]/10 text-[#066fef]" : "bg-gray-100 text-gray-500"
                         }`}>
                           {fuel.count}
                         </span>
@@ -1242,7 +1153,7 @@ export default function ProductsPage({ initialCategory }: { initialCategory?: st
 
               {/* Transmissions */}
               <div className="space-y-2.5">
-                <label className="text-xs font-bold text-gray-800 uppercase tracking-wider block">Hộp số truyền động</label>
+                <label className="text-xs font-bold text-gray-800 uppercase tracking-wider block font-antenna">Hộp số truyền động</label>
                 <div className="grid grid-cols-1 gap-2">
                   {[
                     { name: "Số tự động", count: counts.transmissions.automatic },
@@ -1252,10 +1163,10 @@ export default function ProductsPage({ initialCategory }: { initialCategory?: st
                     return (
                       <label 
                         key={trans.name} 
-                        className={`flex items-center justify-between px-3.5 py-3 rounded-lg text-xs font-semibold cursor-pointer transition-colors border ${
+                        className={`flex items-center justify-between px-4 py-3 rounded-xl text-xs font-semibold cursor-pointer transition-colors border ${
                           isChecked 
-                            ? "bg-blue-50 border-blue-200 text-[#0562d2]" 
-                            : "bg-transparent border-gray-200 text-gray-700"
+                            ? "bg-[#066fef]/10 border-[#066fef]/25 text-[#066fef]" 
+                            : "bg-transparent border-gray-200 text-gray-700 hover:bg-gray-50"
                         }`}
                       >
                         <div className="flex items-center gap-3">
@@ -1263,12 +1174,12 @@ export default function ProductsPage({ initialCategory }: { initialCategory?: st
                             type="checkbox"
                             checked={isChecked}
                             onChange={() => toggleTransmission(trans.name)}
-                            className="rounded border-gray-300 text-[#0562d2] focus:ring-[#0562d2] cursor-pointer w-4 h-4"
+                            className="rounded border-gray-300 text-[#066fef] focus:ring-[#066fef] cursor-pointer w-4 h-4"
                           />
                           <span>{trans.name}</span>
                         </div>
-                        <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
-                          isChecked ? "bg-blue-100 text-[#0562d2]" : "bg-gray-100 text-gray-500"
+                        <span className={`text-[10px] px-2.5 py-0.5 rounded-full font-bold ${
+                          isChecked ? "bg-[#066fef]/10 text-[#066fef]" : "bg-gray-100 text-gray-500"
                         }`}>
                           {trans.count}
                         </span>
@@ -1280,18 +1191,18 @@ export default function ProductsPage({ initialCategory }: { initialCategory?: st
             </div>
 
             {/* Footer buttons */}
-            <div className="p-4 border-t border-[#e5e5e5] flex gap-3 shrink-0 bg-gray-50">
+            <div className="p-4 border-t border-[#e5e5e5] flex gap-3 shrink-0 bg-gray-50 rounded-bl-3xl">
               <button 
                 onClick={clearAllFilters}
-                className="flex-1 text-center bg-white hover:bg-gray-100 text-gray-700 text-xs font-bold py-3.5 rounded-full border border-gray-200 cursor-pointer shadow-xs"
+                className="flex-1 text-center bg-white hover:bg-gray-100 text-gray-700 text-xs font-bold py-3.5 rounded-full border border-gray-200 cursor-pointer shadow-sm"
               >
                 Đặt lại
               </button>
               <button 
                 onClick={() => setIsMobileFilterOpen(false)}
-                className="flex-1 text-center bg-[#0562d2] hover:bg-[#044ea7] text-white text-xs font-bold py-3.5 rounded-full cursor-pointer shadow-xs border-0"
+                className="flex-1 text-center bg-[#002F6C] hover:bg-[#066fef] text-white text-xs font-bold py-3.5 rounded-full cursor-pointer shadow-md border-0"
               >
-                Xem {sortedVehicles.length} kết quả
+                Xem {sortedVehicles.length} xe
               </button>
             </div>
           </div>

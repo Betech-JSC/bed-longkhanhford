@@ -145,6 +145,7 @@ function SearchPageContent() {
         name,
         basePrice: price,
         typeName,
+        fuel: v.fuel || (titleLower.includes("territory") ? "Xăng" : "Diesel"),
         tagline: v.tagline || "",
         description: v.description || "",
         images: [image],
@@ -375,42 +376,60 @@ function SearchPageContent() {
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {suggestedVehicles.map((v) => (
-                  <Link
+                  <div
                     key={v.id}
-                    href={`/${v.id}`}
-                    className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-350 flex flex-col group"
+                    className="bg-white border border-gray-200/80 hover:border-[#066fef]/30 rounded-2xl p-5 flex flex-col hover:shadow-xl hover:shadow-gray-200/40 hover:-translate-y-1 transition-all duration-300 group relative"
                   >
-                    <div className="aspect-[16/10] bg-gray-50 relative overflow-hidden">
-                      <img
-                        src={v.images[0]}
-                        alt={v.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        onError={handleImageError}
-                      />
-                      <div className="absolute top-3 left-3 bg-[#0562D2] text-white text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wider shadow-sm">
-                        {v.typeName}
+                    <div className="relative h-56 w-full bg-white overflow-hidden mb-4 flex items-center justify-center rounded-xl">
+                      <Link
+                        href={`/${v.id}`}
+                        className="w-full h-full flex items-center justify-center block"
+                      >
+                        <img
+                          src={v.images[0]}
+                          alt={v.name}
+                          className="object-contain object-center select-none max-h-full max-w-full pointer-events-none"
+                          onError={handleImageError}
+                        />
+                      </Link>
+                      {/* Hover Overlay Detail Button */}
+                      <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center pointer-events-none group-hover:pointer-events-auto rounded-xl">
+                        <Link
+                          href={`/${v.id}`}
+                          className="bg-gray-950/90 hover:bg-[#066fef] text-white font-bold py-2.5 px-6 rounded-full transition-all duration-300 cursor-pointer uppercase tracking-wider text-[11px] shadow-md active:scale-95 transform translate-y-3 group-hover:translate-y-0"
+                        >
+                          Chi tiết
+                        </Link>
                       </div>
                     </div>
-                    <div className="p-5 flex-1 flex flex-col justify-between">
-                      <div className="space-y-2">
-                        <h4 className="font-['Ford_Antenna',sans-serif] font-bold text-[18px] text-[#00095B] leading-tight uppercase">
-                          {v.name}
-                        </h4>
-                        <p className="text-[11px] text-[#424242] line-clamp-2 leading-relaxed">
-                          {v.tagline}
-                        </p>
-                      </div>
-                      <div className="pt-4 border-t border-gray-100 flex items-center justify-between mt-4">
-                        <div>
-                          <span className="text-[10px] text-gray-400 font-bold block uppercase tracking-wider">Giá khởi điểm:</span>
-                          <span className="text-sm font-bold text-[#0562D2]">{formatPrice(v.basePrice)}</span>
-                        </div>
-                        <span className="w-7 h-7 bg-[#0562D2]/5 text-[#0562D2] rounded-full flex items-center justify-center group-hover:bg-[#0562D2] group-hover:text-white transition-colors duration-300">
-                          <ChevronRight className="w-4 h-4" />
+
+                    {/* Badges Container */}
+                    <div className="flex gap-2 mb-2.5 items-center justify-center flex-wrap font-antenna">
+                      {v.typeName && (
+                        <span className="inline-block text-[10px] font-bold uppercase tracking-wider text-[#066fef] bg-[#066fef]/8 px-3 py-1 rounded-full">
+                          {v.typeName}
                         </span>
-                      </div>
+                      )}
+                      {v.fuel && (
+                        <span className="inline-block text-[10px] font-bold uppercase tracking-wider text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+                          Động cơ {v.fuel}
+                        </span>
+                      )}
                     </div>
-                  </Link>
+
+                    {/* Title & Price */}
+                    <h3 className="text-lg font-bold font-display tracking-tight uppercase text-gray-900 group-hover:text-[#066fef] transition-colors mb-1 font-antenna text-center">
+                      <Link href={`/${v.id}`} className="hover:text-[#066fef] transition-colors">
+                        {v.name}
+                      </Link>
+                    </h3>
+                    <p className="text-xs text-gray-500 font-medium font-antenna text-center mb-1">
+                      Giá khởi điểm:{" "}
+                      <span className="text-[#066fef] font-bold text-sm ml-0.5">
+                        {formatPrice(v.basePrice)}
+                      </span>
+                    </p>
+                  </div>
                 ))}
               </div>
             </div>
@@ -429,42 +448,60 @@ function SearchPageContent() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {vehiclesList.map((v) => (
-                    <Link
+                    <div
                       key={v.id}
-                      href={`/${v.id}`}
-                      className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-350 flex flex-col group"
+                      className="bg-white border border-gray-200/80 hover:border-[#066fef]/30 rounded-2xl p-5 flex flex-col hover:shadow-xl hover:shadow-gray-200/40 hover:-translate-y-1 transition-all duration-300 group relative"
                     >
-                      <div className="aspect-[16/10] bg-gray-50 relative overflow-hidden">
-                        <img
-                          src={v.images[0]}
-                          alt={v.name}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          onError={handleImageError}
-                        />
-                        <div className="absolute top-3 left-3 bg-[#0562D2] text-white text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wider shadow-sm">
-                          {v.typeName}
+                      <div className="relative h-56 w-full bg-white overflow-hidden mb-4 flex items-center justify-center rounded-xl">
+                        <Link
+                          href={`/${v.id}`}
+                          className="w-full h-full flex items-center justify-center block"
+                        >
+                          <img
+                            src={v.images[0]}
+                            alt={v.name}
+                            className="object-contain object-center select-none max-h-full max-w-full pointer-events-none"
+                            onError={handleImageError}
+                          />
+                        </Link>
+                        {/* Hover Overlay Detail Button */}
+                        <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center pointer-events-none group-hover:pointer-events-auto rounded-xl">
+                          <Link
+                            href={`/${v.id}`}
+                            className="bg-gray-950/90 hover:bg-[#066fef] text-white font-bold py-2.5 px-6 rounded-full transition-all duration-300 cursor-pointer uppercase tracking-wider text-[11px] shadow-md active:scale-95 transform translate-y-3 group-hover:translate-y-0"
+                          >
+                            Chi tiết
+                          </Link>
                         </div>
                       </div>
-                      <div className="p-5 flex-1 flex flex-col justify-between">
-                        <div className="space-y-2">
-                          <h4 className="font-['Ford_Antenna',sans-serif] font-bold text-[18px] text-[#00095B] leading-tight uppercase">
-                            {v.name}
-                          </h4>
-                          <p className="text-[11px] text-[#424242] line-clamp-2 leading-relaxed">
-                            {v.tagline}
-                          </p>
-                        </div>
-                        <div className="pt-4 border-t border-gray-100 flex items-center justify-between mt-4">
-                          <div>
-                            <span className="text-[10px] text-gray-400 font-bold block uppercase tracking-wider">Giá khởi điểm:</span>
-                            <span className="text-sm font-bold text-[#0562D2]">{formatPrice(v.basePrice)}</span>
-                          </div>
-                          <span className="w-7 h-7 bg-[#0562D2]/5 text-[#0562D2] rounded-full flex items-center justify-center group-hover:bg-[#0562D2] group-hover:text-white transition-colors duration-300">
-                            <ChevronRight className="w-4 h-4" />
+
+                      {/* Badges Container */}
+                      <div className="flex gap-2 mb-2.5 items-center justify-center flex-wrap font-antenna">
+                        {v.typeName && (
+                          <span className="inline-block text-[10px] font-bold uppercase tracking-wider text-[#066fef] bg-[#066fef]/8 px-3 py-1 rounded-full">
+                            {v.typeName}
                           </span>
-                        </div>
+                        )}
+                        {v.fuel && (
+                          <span className="inline-block text-[10px] font-bold uppercase tracking-wider text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+                            Động cơ {v.fuel}
+                          </span>
+                        )}
                       </div>
-                    </Link>
+
+                      {/* Title & Price */}
+                      <h3 className="text-lg font-bold font-display tracking-tight uppercase text-gray-900 group-hover:text-[#066fef] transition-colors mb-1 font-antenna text-center">
+                        <Link href={`/${v.id}`} className="hover:text-[#066fef] transition-colors">
+                          {v.name}
+                        </Link>
+                      </h3>
+                      <p className="text-xs text-gray-500 font-medium font-antenna text-center mb-1">
+                        Giá khởi điểm:{" "}
+                        <span className="text-[#066fef] font-bold text-sm ml-0.5">
+                          {formatPrice(v.basePrice)}
+                        </span>
+                      </p>
+                    </div>
                   ))}
                 </div>
               </div>

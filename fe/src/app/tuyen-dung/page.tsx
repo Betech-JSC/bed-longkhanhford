@@ -4,8 +4,6 @@ import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { 
   MapPin, 
-  Clock, 
-  Users, 
   Briefcase, 
   ChevronRight, 
   Search, 
@@ -17,7 +15,9 @@ import {
   HeartHandshake,
   RotateCcw,
   ChevronLeft,
-  ArrowRight
+  ArrowRight,
+  Sparkles,
+  Users
 } from "lucide-react";
 import { jobsAPI } from "@/lib/api";
 import BookingBanner from "@/components/services/BookingBanner";
@@ -123,193 +123,115 @@ export default function JobsPage() {
   };
 
   return (
-    <div className="bg-[#F8F8F8] min-h-screen font-sans text-gray-900 w-full flex flex-col items-center">
-      {/* Hero Banner */}
-      <section className="relative w-full bg-gradient-to-br from-neutral-900 to-[#01095c] text-white pt-28 pb-14 md:pb-18 overflow-hidden">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] relative z-10">
-          {/* Breadcrumb inside Hero */}
-          <div className="text-xs text-white/60 font-medium flex items-center gap-1.5 mb-6 justify-center">
-            <Link href="/" className="hover:text-white transition-colors">
-              Trang chủ
-            </Link>
-            <span>/</span>
-            <span className="text-white">Tuyển dụng</span>
-          </div>
-          <div className="text-center">
-            <h1 className="text-3xl md:text-5xl font-bold tracking-tight uppercase leading-[1.2] mb-3 font-antenna">
-              Đồng hành cùng Long Khánh Ford
-            </h1>
-            <p className="text-white/80 text-base md:text-lg max-w-2xl mx-auto font-antenna">
-              Gia nhập đại gia đình Ford — nơi chắp cánh cho khát vọng, nâng tầm năng lực và cùng bạn xây dựng hành trình sự nghiệp chuyên nghiệp trong ngành ô tô.
-            </p>
-          </div>
+    <div className="bg-[#F8F9FA] min-h-screen font-sans text-gray-900 w-full flex flex-col items-center">
+      
+      {/* Top Careers Hero Banner */}
+      <section className="relative w-full h-[400px] md:h-[460px] bg-slate-900 overflow-hidden flex items-end">
+        <div className="absolute inset-0 z-0">
+          <img
+            src="/images-dynamic/image-hero-3.jpg"
+            alt="Tuyển dụng Ford Long Khánh"
+            className="w-full h-full object-cover object-center"
+          />
         </div>
       </section>
 
-      {/* Filters & Job Listings */}
-      <section className="py-12 md:py-16 w-full">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px]">
+      {/* Main Content List Section */}
+      <section className="py-16 w-full flex justify-center">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full flex flex-col items-center">
           
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start max-w-5xl mx-auto">
-            {/* Left Column: Filter Sidebar */}
-            <div className="lg:col-span-1 bg-white border border-gray-200 rounded-none p-6 shadow-xs space-y-4 lg:sticky lg:top-[120px]">
-              <div className="flex items-center justify-between border-b border-gray-100 pb-3">
-                <h2 className="text-base font-bold font-display text-gray-900 flex items-center gap-2">
-                  <Briefcase className="w-5 h-5 text-[#066fef]" />
-                  Bộ lọc
-                </h2>
-                {(searchTerm || selectedLocation !== "all" || selectedType !== "all") && (
-                  <button
-                    onClick={clearFilters}
-                    className="text-xs font-bold text-[#D20000] hover:text-red-700 flex items-center gap-1 transition-colors cursor-pointer border-0 bg-transparent"
-                  >
-                    <RotateCcw className="w-3.5 h-3.5" />
-                    Xóa
-                  </button>
-                )}
-              </div>
-
-              <div className="flex flex-col gap-4">
-                {/* Search Bar */}
-                <div>
-                  <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wider font-antenna">Từ khóa</label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      placeholder="Nhập tên vị trí..."
-                      className="w-full text-sm bg-gray-50 border border-gray-250 rounded-[8px] py-2.5 pl-10 pr-4 focus:outline-none focus:border-[#066fef] focus:ring-1 focus:ring-[#066fef] transition-all text-black font-antenna"
-                    />
-                    <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                  </div>
-                </div>
-
-                {/* Location Filter */}
-                <div>
-                  <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wider font-antenna">Địa điểm</label>
-                  <div className="relative">
-                    <select
-                      value={selectedLocation}
-                      onChange={(e) => setSelectedLocation(e.target.value)}
-                      className="w-full text-sm bg-gray-55 border border-gray-200 rounded-[8px] py-2.5 pl-3 pr-8 focus:outline-none focus:border-[#066fef] focus:ring-1 focus:ring-[#066fef] transition-all text-black appearance-none cursor-pointer font-antenna"
-                    >
-                      <option value="all">Tất cả địa điểm</option>
-                      {locations.slice(1).map(loc => (
-                        <option key={loc} value={loc}>{loc}</option>
-                      ))}
-                    </select>
-                    <div className="absolute top-1/2 right-3.5 transform -translate-y-1/2 pointer-events-none text-gray-550">
-                      <MapPin className="w-4 h-4" />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Type Filter */}
-                <div>
-                  <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wider font-antenna">Phòng ban</label>
-                  <div className="relative">
-                    <select
-                      value={selectedType}
-                      onChange={(e) => setSelectedType(e.target.value)}
-                      className="w-full text-sm bg-gray-55 border border-gray-200 rounded-[8px] py-2.5 pl-3 pr-8 focus:outline-none focus:border-[#066fef] focus:ring-1 focus:ring-[#066fef] transition-all text-black appearance-none cursor-pointer font-antenna"
-                    >
-                      <option value="all">Tất cả phòng ban</option>
-                      {positions.slice(1).map(pos => (
-                        <option key={pos} value={pos}>{pos}</option>
-                      ))}
-                    </select>
-                    <div className="absolute top-1/2 right-3.5 transform -translate-y-1/2 pointer-events-none text-gray-550">
-                      <Users className="w-4 h-4" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Column: Jobs list grid */}
-            <div className="lg:col-span-3 w-full">
+          <div className="max-w-4xl w-full flex flex-col gap-8">
+            
+            {/* List Results Column */}
+            <div className="w-full">
               {loading ? (
-                <div className="flex items-center justify-center py-24">
-                  <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#066fef]" />
+                <div className="flex items-center justify-center py-28">
+                  <div className="animate-spin rounded-full h-10 w-10 border-4 border-[#066fef] border-t-transparent" />
                 </div>
               ) : filteredJobs.length === 0 ? (
-                <div className="text-center py-20 bg-white border border-gray-200 rounded-none shadow-xs">
+                <div className="text-center py-20 bg-white border border-gray-200 rounded-[24px] shadow-[0_4px_25px_rgba(0,0,0,0.02)] w-full">
                   <Briefcase className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                  <h2 className="text-xl font-bold text-gray-600 mb-2 font-display">
+                  <h3 className="text-lg font-bold text-gray-750 mb-2 font-display">
                     Chưa có vị trí tuyển dụng phù hợp
-                  </h2>
-                  <p className="text-sm text-gray-400 max-w-md mx-auto mb-6 font-antenna">
-                    Chúng tôi không tìm thấy kết quả phù hợp với bộ lọc của bạn. Thử thay đổi từ khóa hoặc liên hệ gửi CV trực tiếp.
+                  </h3>
+                  <p className="text-xs text-gray-455 max-w-sm mx-auto mb-6 font-antenna leading-relaxed">
+                    Rất tiếc, hệ thống chưa có tin tuyển dụng nào hoạt động vào thời điểm này. Vui lòng quay lại sau hoặc liên hệ trực tiếp.
                   </p>
-                  <button
-                    onClick={clearFilters}
-                    className="bg-[#066fef] hover:bg-[#01095c] text-white text-xs font-semibold px-6 py-2.5 rounded-[4px] transition-colors cursor-pointer border-0 uppercase tracking-wider"
-                  >
-                    Xóa bộ lọc tìm kiếm
-                  </button>
                 </div>
               ) : (
-                <div className="space-y-6">
-                  <div className="grid grid-cols-1 gap-6">
+                <div className="space-y-6 w-full">
+                  {/* Total counter banner */}
+                  <div className="flex items-center justify-between text-xs text-gray-450 font-bold uppercase tracking-wider px-2">
+                    <span>Vị trí đang tuyển: {filteredJobs.length}</span>
+                    {currentPage > 1 && <span>Trang {currentPage} / {totalPages}</span>}
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-5 w-full">
                     {paginatedJobs.map((job) => (
                       <Link
                         key={job.id}
                         href={`/tuyen-dung/${job.slug}`}
-                        className="w-full bg-white rounded-none shadow-xs p-6 flex items-center gap-4 border border-gray-200 hover:shadow-sm transition-all duration-300 group cursor-pointer"
+                        className="w-full bg-white rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.02)] p-6 md:p-8 flex items-center justify-between gap-5 border border-gray-200/80 hover:border-blue-500/20 hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:-translate-y-0.5 transition-all duration-300 group cursor-pointer"
                       >
-                        {/* Logo Ford Oval */}
-                        <div className="w-[85.3px] h-8 relative flex-shrink-0 flex items-center">
-                          <img
-                            src="/ford_logo.svg"
-                            alt="Ford Logo"
-                            className="w-[85.3px] h-8 object-contain block"
-                          />
-                        </div>
-
-                        {/* Job Title and Short Description */}
-                        <div className="flex-1 flex flex-col gap-1 min-w-0">
-                          <h3 className="text-base font-semibold leading-6 text-[#1a1a1a] font-display group-hover:text-[#066fef] transition-colors truncate">
+                        {/* Job Details Content */}
+                        <div className="flex-1 flex flex-col gap-2 min-w-0 pr-2">
+                          <h3 className="text-base md:text-lg font-bold leading-snug text-[#00095B] font-display group-hover:text-[#066fef] transition-colors">
                             {job.title}
                           </h3>
-                          <p className="text-sm font-normal leading-[19.6px] text-gray-500 font-antenna truncate">
+                          <p className="text-xs md:text-sm text-gray-500 font-medium font-antenna leading-relaxed line-clamp-2">
                             {job.description}
                           </p>
+
+                          {/* Refined Rich Metadata badging row */}
+                          <div className="flex flex-wrap gap-x-4 gap-y-2 mt-1.5 text-[10px] font-bold font-antenna uppercase tracking-wider">
+                            {job.salary && (
+                              <span className="flex items-center gap-1.5 text-green-600 bg-green-50/70 px-2.5 py-1 rounded-md">
+                                <DollarSign className="w-3.5 h-3.5" />
+                                {job.salary}
+                              </span>
+                            )}
+                            {job.deadline && (
+                              <span className="flex items-center gap-1.5 text-amber-600 bg-amber-50/70 px-2.5 py-1 rounded-md">
+                                <Calendar className="w-3.5 h-3.5" />
+                                Hạn: {formatDate(job.deadline)}
+                              </span>
+                            )}
+                          </div>
                         </div>
 
-                        {/* Interactive circular toggle button */}
-                        <div className="w-10 h-10 rounded-[4px] flex items-center justify-center border border-gray-200 transition-all duration-300 flex-shrink-0 bg-white group-hover:bg-[#066fef] group-hover:border-[#066fef] text-[#066fef] group-hover:text-white">
-                          <ArrowRight className="w-5 h-5" />
+                        {/* Interactive toggle button */}
+                        <div className="w-10 h-10 rounded-full flex items-center justify-center border border-gray-100 transition-all duration-300 flex-shrink-0 bg-white group-hover:bg-[#002F6C] group-hover:border-[#002F6C] text-[#066fef] group-hover:text-white shadow-xs self-center">
+                          <ArrowRight className="w-4 h-4" />
                         </div>
                       </Link>
                     ))}
                   </div>
 
-                  {/* Pagination component block */}
+                  {/* Refined Pagination Component */}
                   {totalPages > 1 && (
                     <div className="flex justify-center pt-8">
-                      <div className="bg-white border border-gray-200 flex gap-2 items-center px-4 py-2 rounded-none shadow-xs">
-                        {/* Prev button */}
+                      <div className="bg-white border border-gray-200/80 flex gap-1.5 items-center px-4 py-2.5 rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
+                        {/* Prev page button */}
                         <button
                           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                           disabled={currentPage === 1}
-                          className={`w-10 h-10 flex items-center justify-center rounded-[4px] transition cursor-pointer border-0 bg-transparent ${
+                          className={`w-9 h-9 flex items-center justify-center rounded-full transition cursor-pointer border-0 bg-transparent ${
                             currentPage === 1
                               ? "text-gray-300 pointer-events-none"
                               : "text-[#424242] hover:bg-gray-100"
                           }`}
                         >
-                          <ChevronLeft className="w-5 h-5" />
+                          <ChevronLeft className="w-4.5 h-4.5" />
                         </button>
 
-                        {/* Page numbers */}
+                        {/* Numbers */}
                         {Array.from({ length: totalPages }, (_, idx) => idx + 1).map((page) => (
                           <button
                             key={page}
                             onClick={() => setCurrentPage(page)}
-                            className={`w-10 h-10 flex items-center justify-center text-sm font-bold rounded-[4px] transition cursor-pointer border-0 ${
+                            className={`w-9 h-9 flex items-center justify-center text-xs font-extrabold rounded-full transition cursor-pointer border-0 ${
                               currentPage === page
-                                ? "bg-[#066fef] text-white"
+                                ? "bg-[#002F6C] text-white shadow-md shadow-blue-900/10"
                                 : "bg-transparent text-[#424242] hover:bg-gray-100"
                             }`}
                           >
@@ -317,17 +239,17 @@ export default function JobsPage() {
                           </button>
                         ))}
 
-                        {/* Next button */}
+                        {/* Next page button */}
                         <button
                           onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                           disabled={currentPage === totalPages}
-                          className={`w-10 h-10 flex items-center justify-center rounded-[4px] transition cursor-pointer border-0 bg-transparent ${
+                          className={`w-9 h-9 flex items-center justify-center rounded-full transition cursor-pointer border-0 bg-transparent ${
                             currentPage === totalPages
                               ? "text-gray-300 pointer-events-none"
                               : "text-[#424242] hover:bg-gray-100"
                           }`}
                         >
-                          <ChevronRight className="w-5 h-5" />
+                          <ChevronRight className="w-4.5 h-4.5" />
                         </button>
                       </div>
                     </div>
@@ -335,49 +257,50 @@ export default function JobsPage() {
                 </div>
               )}
             </div>
+
           </div>
         </div>
       </section>
 
       {/* Why Join Section */}
-      <section className="bg-white border-y border-gray-200 py-16 w-full">
+      <section className="bg-white border-y border-gray-100 py-20 w-full">
         <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px]">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <span className="text-xs font-bold text-[#066fef] uppercase tracking-widest block mb-2 font-antenna">Giá trị cốt lõi</span>
-            <h2 className="text-2xl md:text-4xl font-bold font-display text-[#00095B] uppercase tracking-tight">
-              Tại sao bạn nên chọn Long Khánh Ford?
+          <div className="text-center max-w-2xl mx-auto mb-14">
+            <span className="text-[10px] font-extrabold text-[#066fef] uppercase tracking-widest block mb-2.5 font-antenna">MÔI TRƯỜNG LÀM VIỆC</span>
+            <h2 className="text-2xl md:text-4xl font-extrabold font-display text-[#00095B] uppercase tracking-tight leading-none">
+              Tại sao chọn Long Khánh Ford?
             </h2>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {[
               {
-                icon: <TrendingUp className="w-8 h-8 text-[#066fef]" />,
+                icon: <TrendingUp className="w-6 h-6 text-[#066fef]" />,
                 title: "Phát triển và Thăng tiến",
-                desc: "Chúng tôi đầu tư lộ trình đào tạo chuyên sâu chuẩn toàn cầu của Ford Việt Nam, mở ra cơ hội thăng tiến không giới hạn.",
+                desc: "Chúng tôi đầu tư lộ trình đào tạo chuyên sâu chuẩn toàn cầu của Ford Việt Nam, mở ra cơ hội thăng tiến rộng lớn, minh bạch.",
               },
               {
-                icon: <Award className="w-8 h-8 text-[#066fef]" />,
-                title: "Thu nhập & Đãi ngộ xứng đáng",
-                desc: "Lương cứng cạnh tranh cộng hoa hồng hấp dẫn. Chế độ bảo hiểm, du lịch nghỉ dưỡng hàng năm và thưởng Tết hậu hĩnh.",
+                icon: <Award className="w-6 h-6 text-[#066fef]" />,
+                title: "Thu nhập xứng đáng",
+                desc: "Lương cơ bản cạnh tranh cộng thưởng doanh thu. Đầy đủ bảo hiểm, du lịch nghỉ dưỡng hàng năm và lương tháng 13 hậu hĩnh.",
               },
               {
-                icon: <HeartHandshake className="w-8 h-8 text-[#066fef]" />,
-                title: "Môi trường năng động",
-                desc: "Cơ sở hạ tầng showroom và xưởng hiện đại, văn hóa làm việc tôn trọng, chia sẻ và đồng nghiệp thân thiện hỗ trợ nhau.",
+                icon: <HeartHandshake className="w-6 h-6 text-[#066fef]" />,
+                title: "Văn hóa Đại gia đình",
+                desc: "Showroom và xưởng dịch vụ hiện đại đạt chuẩn Ford Signature, không khí làm việc cởi mở, đồng nghiệp thân thiện hỗ trợ nhau.",
               },
             ].map((item) => (
               <div
                 key={item.title}
-                className="bg-white border border-gray-200 rounded-none p-6 md:p-8 hover:shadow-xs transition-shadow duration-300"
+                className="bg-white p-6 md:p-8 rounded-[24px] border border-gray-150 hover:border-blue-500/25 hover:shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:-translate-y-0.5 transition-all duration-300 flex flex-col items-start"
               >
-                <div className="w-14 h-14 bg-[#F8F8F8] rounded-[4px] flex items-center justify-center border border-gray-200 mb-6">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-50 to-cyan-50 text-[#066fef] flex items-center justify-center rounded-2xl mb-6 shadow-xs border border-blue-100/50">
                   {item.icon}
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-3 font-display">
+                <h3 className="text-base font-bold text-[#00095B] mb-2.5 font-display">
                   {item.title}
                 </h3>
-                <p className="text-sm text-gray-500 leading-relaxed font-antenna">{item.desc}</p>
+                <p className="text-xs text-gray-500 leading-relaxed font-antenna font-medium">{item.desc}</p>
               </div>
             ))}
           </div>

@@ -2,9 +2,10 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { MapPin, Phone, Mail, CheckCircle, X } from "lucide-react";
+import { MapPin, Phone, Mail, CheckCircle, X, Calendar, User, FileText, ChevronRight } from "lucide-react";
 import { siteAssets } from "@/lib/site-assets";
 import { contactsAPI, vehiclesAPI } from "@/lib/api";
+import Link from "next/link";
 
 function ContactFormContent() {
   const searchParams = useSearchParams();
@@ -150,17 +151,17 @@ function ContactFormContent() {
   };
 
   return (
-    <div className="w-full flex flex-col items-center">
+    <div className="w-full flex flex-col items-center bg-[#F8F9FA]">
       {/* Toast Notification (Centered Modal style) */}
       {showToast && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-fade-in">
-          <div className="bg-white border border-[#d6d6d6] text-[#1a1a1a] p-6 max-w-md w-full rounded-none shadow-2xl flex gap-4 items-start relative">
-            <div className="w-10 h-10 bg-blue-50 text-[#066fef] flex items-center justify-center rounded-[4px] flex-shrink-0">
+          <div className="bg-white border border-gray-150 text-[#1a1a1a] p-6 max-w-md w-full rounded-2xl shadow-2xl flex gap-4 items-start relative">
+            <div className="w-10 h-10 bg-[#066fef]/10 text-[#066fef] flex items-center justify-center rounded-xl flex-shrink-0">
               <CheckCircle className="w-6 h-6 text-[#066fef]" />
             </div>
             <div className="flex-1 space-y-2 pr-6">
-              <h4 className="font-bold text-sm text-[#066fef]">Thông báo hệ thống</h4>
-              <p className="text-sm text-[#424242] leading-relaxed">{toastMessage}</p>
+              <h4 className="font-bold text-sm text-[#002F6C] font-display">Thông báo hệ thống</h4>
+              <p className="text-xs text-[#555] leading-relaxed font-antenna">{toastMessage}</p>
             </div>
             <button
               onClick={() => setShowToast(false)}
@@ -172,85 +173,87 @@ function ContactFormContent() {
         </div>
       )}
 
-      {/* Top Showroom Banner */}
-      <section className="relative w-full h-[400px] bg-slate-900 overflow-hidden flex items-end pt-24 pb-12">
+      {/* Top Showroom Hero Banner */}
+      <section className="relative w-full h-[400px] md:h-[460px] bg-slate-900 overflow-hidden flex items-end">
         <div className="absolute inset-0 z-0">
           <img
-            src={siteAssets.showroomBg}
+            src="/images-dynamic/ford_ranger_banner.png"
             alt="Showroom Ford Long Khánh"
             className="w-full h-full object-cover object-center"
           />
-          <div className="absolute bottom-0 left-0 right-0 h-[170px] bg-gradient-to-t from-black/80 to-transparent" />
-        </div>
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full z-10">
-          <h1 className="text-[40px] md:text-[48px] font-bold text-white leading-tight uppercase font-antenna">
-            Liên hệ Long Khánh Ford
-          </h1>
-          <p className="text-white/80 text-base max-w-2xl mt-2 font-antenna">
-            Chúng tôi luôn sẵn sàng lắng nghe và hỗ trợ mọi nhu cầu của bạn.
-          </p>
         </div>
       </section>
 
-      {/* Main Grid Section */}
-      <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] py-16 w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+      {/* Main Content Grid */}
+      <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] py-20 w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
         
-        {/* Left Side: Contact Information Cards */}
-        <div className="flex flex-col gap-8 w-full">
-          {/* Header */}
+        {/* Left Side: Contact Information Cards (5 cols) */}
+        <div className="lg:col-span-5 flex flex-col gap-8 w-full">
           <div className="flex flex-col gap-4">
-            <h2 className="font-['Ford_Antenna',sans-serif] font-semibold leading-[1.32] text-[#1a1a1a] text-[36px] tracking-tight">
+            <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#066fef]">
+              THÔNG TIN ĐẠI LÝ
+            </span>
+            <h2 className="font-display font-bold leading-tight text-[#00095B] text-[36px] tracking-tight">
               Đại lý Long Khánh Ford
             </h2>
-            <p className="font-['Ford_Antenna',sans-serif] leading-[1.5] text-[#424242] text-[16px]">
-              Cho dù bạn cần tư vấn dòng xe mới, đặt lịch bảo dưỡng hay phản hồi về dịch vụ, hãy kết nối với chúng tôi qua các kênh liên hệ thuận tiện nhất dưới đây.
+            <p className="font-antenna leading-relaxed text-gray-500 text-sm font-medium">
+              Cho dù bạn cần tư vấn dòng xe mới, đặt lịch bảo dưỡng hay phản hồi ý kiến dịch vụ, hãy kết nối với đội ngũ chuyên viên của chúng tôi thông qua các kênh thuận tiện dưới đây.
             </p>
           </div>
 
-          {/* Details Wrapper Card */}
-          <div className="bg-white border border-[#e5e5e5] flex flex-col gap-6 p-6 rounded-none shadow-xs">
-            {/* Showroom Address */}
+          {/* Details Column Merged Card (No Borders) */}
+          <div className="bg-white p-8 rounded-[24px] shadow-[0_4px_25px_rgba(0,0,0,0.03)] flex flex-col gap-8 w-full border border-gray-100/50">
+            {/* Showroom Address Item */}
             <div className="flex gap-4 items-start">
-              <div className="w-10 h-10 bg-[#066fef]/10 text-[#066fef] flex items-center justify-center rounded-[4px] flex-shrink-0">
-                <MapPin className="w-5 h-5" />
+              <div className="w-11 h-11 bg-[#066fef]/10 text-[#066fef] flex items-center justify-center rounded-xl flex-shrink-0">
+                <MapPin className="w-5.5 h-5.5" />
               </div>
-              <div className="flex-1 flex flex-col gap-1">
-                <h4 className="font-['Ford_Antenna',sans-serif] font-semibold text-sm uppercase tracking-wider text-[#066fef]">
-                  Showroom
-                </h4>
-                <p className="font-['Ford_Antenna',sans-serif] text-sm text-[#1a1a1a] leading-relaxed">
+              <div className="flex-grow flex flex-col gap-1.5">
+                <span className="font-antenna font-extrabold text-[10px] uppercase tracking-wider text-[#066fef]">
+                  Địa chỉ Showroom
+                </span>
+                <p className="font-antenna text-xs lg:text-sm text-gray-800 leading-relaxed font-semibold">
                   Số B04, Khu thương mại Amata, Khu phố 29, Phường Long Bình, Thành Phố Đồng Nai
                 </p>
               </div>
             </div>
 
-            {/* Hotlines */}
+            {/* Hotlines Item */}
             <div className="flex gap-4 items-start border-t border-gray-100 pt-6">
-              <div className="w-10 h-10 bg-[#066fef]/10 text-[#066fef] flex items-center justify-center rounded-[4px] flex-shrink-0">
-                <Phone className="w-5 h-5" />
+              <div className="w-11 h-11 bg-[#066fef]/10 text-[#066fef] flex items-center justify-center rounded-xl flex-shrink-0">
+                <Phone className="w-5.5 h-5.5" />
               </div>
-              <div className="flex-1 flex flex-col gap-1">
-                <h4 className="font-['Ford_Antenna',sans-serif] font-semibold text-sm uppercase tracking-wider text-[#066fef]">
-                  Hotline
-                </h4>
-                <div className="font-['Ford_Antenna',sans-serif] text-sm text-[#1a1a1a] leading-relaxed space-y-1">
-                  <p>Dịch vụ: <span className="font-semibold text-dark">1800 55 68 58</span></p>
-                  <p>Kinh doanh: <span className="font-semibold text-dark">0918 90 90 60</span></p>
-                  <p>Điện thoại bàn: <span className="text-[#424242]">(0251) 3857 130 – (0251) 3857 131</span></p>
+              <div className="flex-grow flex flex-col gap-1.5">
+                <span className="font-antenna font-extrabold text-[10px] uppercase tracking-wider text-[#066fef]">
+                  Đường dây nóng Hỗ trợ
+                </span>
+                <div className="font-antenna text-xs lg:text-sm text-gray-800 leading-relaxed space-y-1.5">
+                  <p className="flex items-center justify-between border-b border-gray-100 pb-1.5">
+                    <span className="text-gray-400 font-medium">Bộ phận Dịch vụ:</span>
+                    <span className="font-bold text-[#002F6C]">1800 55 68 58</span>
+                  </p>
+                  <p className="flex items-center justify-between border-b border-gray-100 pb-1.5">
+                    <span className="text-gray-400 font-medium">Phòng Kinh doanh:</span>
+                    <span className="font-bold text-[#002F6C]">0918 90 90 60</span>
+                  </p>
+                  <p className="flex items-center justify-between">
+                    <span className="text-gray-400 font-medium">Điện thoại bàn:</span>
+                    <span className="font-semibold text-gray-700">(0251) 3857 130</span>
+                  </p>
                 </div>
               </div>
             </div>
 
-            {/* Email & Website */}
+            {/* Email Item */}
             <div className="flex gap-4 items-start border-t border-gray-100 pt-6">
-              <div className="w-10 h-10 bg-[#066fef]/10 text-[#066fef] flex items-center justify-center rounded-[4px] flex-shrink-0">
-                <Mail className="w-5 h-5" />
+              <div className="w-11 h-11 bg-[#066fef]/10 text-[#066fef] flex items-center justify-center rounded-xl flex-shrink-0">
+                <Mail className="w-5.5 h-5.5" />
               </div>
-              <div className="flex-1 flex flex-col gap-1">
-                <h4 className="font-['Ford_Antenna',sans-serif] font-semibold text-sm uppercase tracking-wider text-[#066fef]">
-                  Email
-                </h4>
-                <p className="font-['Ford_Antenna',sans-serif] text-sm text-[#1a1a1a]">
+              <div className="flex-grow flex flex-col gap-1.5">
+                <span className="font-antenna font-extrabold text-[10px] uppercase tracking-wider text-[#066fef]">
+                  Hòm thư điện tử
+                </span>
+                <p className="font-antenna text-xs lg:text-sm text-gray-800 font-bold">
                   marketing@longkhanhford.com.vn
                 </p>
               </div>
@@ -258,92 +261,115 @@ function ContactFormContent() {
           </div>
         </div>
 
-        {/* Right Side: Appointment Booking Form */}
-        <div className="bg-[#00095B] flex flex-col gap-6 p-8 rounded-none border border-neutral-800 text-white">
-          <h3 className="font-['Ford_Antenna',sans-serif] font-semibold text-[28px] text-center text-white">
-            Đặt hẹn dịch vụ
-          </h3>
+        {/* Right Side: Appointment Booking Form Card (7 cols) */}
+        <div className="lg:col-span-7 relative bg-white border border-gray-200/80 p-8 rounded-[24px] shadow-lg text-gray-900 overflow-hidden">
+          {/* Header colorful highlight bar */}
+          <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#002F6C] via-[#066fef] to-[#00aaff]" />
+
+          <div className="flex flex-col gap-1.5 mb-6 text-center lg:text-left">
+            <h3 className="font-display font-bold text-2xl text-[#00095B] tracking-tight">
+              Đặt hẹn dịch vụ trực tuyến
+            </h3>
+            <p className="text-xs text-gray-400 font-medium font-antenna">
+              Vui lòng điền thông tin dưới đây để được hỗ trợ nhanh chóng nhất.
+            </p>
+          </div>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
             {/* Họ và tên */}
-            <div className="flex flex-col gap-1.5">
-              <label className="font-['Ford_Antenna',sans-serif] font-medium text-sm text-white">
+            <div className="flex flex-col gap-1.5 relative">
+              <label className="font-antenna font-extrabold text-[10px] text-gray-450 uppercase tracking-wider ml-1">
                 Họ và tên <span className="text-[#f97066]">*</span>
               </label>
-              <input
-                type="text"
-                required
-                value={formName}
-                onChange={(e) => setFormName(e.target.value)}
-                placeholder="Nhập tên của bạn"
-                className="w-full bg-white border border-[#d6d6d6] text-gray-900 placeholder-[#808080] rounded-[8px] px-3.5 py-2.5 text-sm focus:outline-none focus:border-[#066fef] focus:ring-4 focus:ring-[#066fef]/20 transition shadow-sm font-sans"
-              />
+              <div className="relative">
+                <input
+                  type="text"
+                  required
+                  value={formName}
+                  onChange={(e) => setFormName(e.target.value)}
+                  placeholder="Nhập họ và tên của bạn"
+                  className="w-full bg-gray-50/30 hover:bg-gray-100/30 focus:bg-white border border-gray-200 focus:border-[#066fef] focus:ring-4 focus:ring-[#066fef]/10 rounded-xl py-3 pl-10 pr-4 text-xs font-semibold font-antenna transition-all outline-none"
+                />
+                <User className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              </div>
             </div>
 
             {/* Số điện thoại & Email */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5">
-                <label className="font-['Ford_Antenna',sans-serif] font-medium text-sm text-white">
+                <label className="font-antenna font-extrabold text-[10px] text-gray-450 uppercase tracking-wider ml-1">
                   Số điện thoại <span className="text-[#f97066]">*</span>
                 </label>
-                <input
-                  type="tel"
-                  required
-                  value={formPhone}
-                  onChange={(e) => setFormPhone(e.target.value)}
-                  placeholder="0909888888"
-                  className="w-full bg-white border border-[#d6d6d6] text-gray-900 placeholder-[#808080] rounded-[8px] px-3.5 py-2.5 text-sm focus:outline-none focus:border-[#066fef] focus:ring-4 focus:ring-[#066fef]/20 transition shadow-sm font-sans"
-                />
+                <div className="relative">
+                  <input
+                    type="tel"
+                    required
+                    value={formPhone}
+                    onChange={(e) => setFormPhone(e.target.value)}
+                    placeholder="Nhập số điện thoại liên hệ"
+                    className="w-full bg-gray-50/30 hover:bg-gray-100/30 focus:bg-white border border-gray-200 focus:border-[#066fef] focus:ring-4 focus:ring-[#066fef]/10 rounded-xl py-3 pl-10 pr-4 text-xs font-semibold font-antenna transition-all outline-none"
+                  />
+                  <Phone className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                </div>
               </div>
               <div className="flex flex-col gap-1.5">
-                <label className="font-['Ford_Antenna',sans-serif] font-medium text-sm text-white">
+                <label className="font-antenna font-extrabold text-[10px] text-gray-450 uppercase tracking-wider ml-1">
                   Email
                 </label>
-                <input
-                  type="email"
-                  value={formEmail}
-                  onChange={(e) => setFormEmail(e.target.value)}
-                  placeholder="example@gmail.com"
-                  className="w-full bg-white border border-[#d6d6d6] text-gray-900 placeholder-[#808080] rounded-[8px] px-3.5 py-2.5 text-sm focus:outline-none focus:border-[#066fef] focus:ring-4 focus:ring-[#066fef]/20 transition shadow-sm font-sans"
-                />
+                <div className="relative">
+                  <input
+                    type="email"
+                    value={formEmail}
+                    onChange={(e) => setFormEmail(e.target.value)}
+                    placeholder="example@gmail.com"
+                    className="w-full bg-gray-50/30 hover:bg-gray-100/30 focus:bg-white border border-gray-200 focus:border-[#066fef] focus:ring-4 focus:ring-[#066fef]/10 rounded-xl py-3 pl-10 pr-4 text-xs font-semibold font-antenna transition-all outline-none"
+                  />
+                  <Mail className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                </div>
               </div>
             </div>
 
             {/* Biển số xe & Thời gian hẹn */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5">
-                <label className="font-['Ford_Antenna',sans-serif] font-medium text-sm text-white">
+                <label className="font-antenna font-extrabold text-[10px] text-gray-450 uppercase tracking-wider ml-1">
                   Biển số xe <span className="text-[#f97066]">*</span>
                 </label>
-                <input
-                  type="text"
-                  required
-                  value={formLicensePlate}
-                  onChange={(e) => setFormLicensePlate(e.target.value)}
-                  placeholder="60C-525.45"
-                  className="w-full bg-white border border-[#d6d6d6] text-gray-900 placeholder-[#808080] rounded-[8px] px-3.5 py-2.5 text-sm focus:outline-none focus:border-[#066fef] focus:ring-4 focus:ring-[#066fef]/20 transition shadow-sm font-sans"
-                />
+                <div className="relative">
+                  <input
+                    type="text"
+                    required
+                    value={formLicensePlate}
+                    onChange={(e) => setFormLicensePlate(e.target.value)}
+                    placeholder="Ví dụ: 60C-525.45"
+                    className="w-full bg-gray-50/30 hover:bg-gray-100/30 focus:bg-white border border-gray-200 focus:border-[#066fef] focus:ring-4 focus:ring-[#066fef]/10 rounded-xl py-3 pl-10 pr-4 text-xs font-semibold font-antenna transition-all outline-none"
+                  />
+                  <FileText className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                </div>
               </div>
               <div className="flex flex-col gap-1.5">
-                <label className="font-['Ford_Antenna',sans-serif] font-medium text-sm text-white">
+                <label className="font-antenna font-extrabold text-[10px] text-gray-450 uppercase tracking-wider ml-1">
                   Thời gian hẹn <span className="text-[#f97066]">*</span>
                 </label>
-                <input
-                  type="date"
-                  required
-                  value={formAppointmentTime}
-                  onChange={(e) => setFormAppointmentTime(e.target.value)}
-                  className="w-full bg-white border border-[#d6d6d6] text-gray-900 placeholder-[#808080] rounded-[8px] px-3.5 py-2.5 text-sm focus:outline-none focus:border-[#066fef] focus:ring-4 focus:ring-[#066fef]/20 transition shadow-sm font-sans text-black"
-                />
+                <div className="relative">
+                  <input
+                    type="date"
+                    required
+                    value={formAppointmentTime}
+                    onChange={(e) => setFormAppointmentTime(e.target.value)}
+                    className="w-full bg-gray-50/30 hover:bg-gray-100/30 focus:bg-white border border-gray-200 focus:border-[#066fef] focus:ring-4 focus:ring-[#066fef]/10 rounded-xl py-3 pl-10 pr-4 text-xs font-semibold font-antenna transition-all outline-none text-gray-700"
+                  />
+                  <Calendar className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                </div>
               </div>
             </div>
 
             {/* Tại (Địa điểm thực hiện dịch vụ) */}
             <div className="flex flex-col gap-1.5">
-              <label className="font-['Ford_Antenna',sans-serif] font-medium text-sm text-white">
+              <label className="font-antenna font-extrabold text-[10px] text-gray-450 uppercase tracking-wider ml-1">
                 Địa điểm làm dịch vụ <span className="text-[#f97066]">*</span>
               </label>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="flex gap-4">
                 {["Tại đại lý", "Tại nhà"].map((loc) => {
                   const isSel = formLocation === loc;
                   return (
@@ -351,12 +377,12 @@ function ContactFormContent() {
                       key={loc}
                       type="button"
                       onClick={() => setFormLocation(loc)}
-                      className={`py-2.5 rounded-[4px] border font-semibold text-xs transition cursor-pointer text-center
+                      className={`py-2.5 rounded-xl border text-xs font-extrabold transition cursor-pointer text-center flex-1
                         ${isSel 
-                          ? "bg-[#066fef] border-[#066fef] text-white" 
-                          : "bg-white/10 border-white/20 text-white hover:bg-white/20"}`}
+                          ? "bg-[#002F6C] border-[#002F6C] text-white shadow-md shadow-blue-900/10" 
+                          : "bg-gray-50/50 border-gray-200 text-gray-500 hover:bg-gray-150 hover:text-gray-700"}`}
                     >
-                      {loc === "Tại đại lý" ? "Tại đại lý" : "Tại nhà"}
+                      {loc}
                     </button>
                   );
                 })}
@@ -365,15 +391,15 @@ function ContactFormContent() {
 
             {/* Nội dung yêu cầu dịch vụ */}
             <div className="flex flex-col gap-1.5">
-              <label className="font-['Ford_Antenna',sans-serif] font-medium text-sm text-white">
+              <label className="font-antenna font-extrabold text-[10px] text-gray-450 uppercase tracking-wider ml-1">
                 Nội dung yêu cầu dịch vụ <span className="text-[#f97066]">*</span>
               </label>
               <textarea
                 required
                 value={formServiceContent}
                 onChange={(e) => setFormServiceContent(e.target.value)}
-                placeholder="Nhập nội dung yêu cầu dịch vụ..."
-                className="w-full h-[120px] bg-white border border-[#d6d6d6] text-gray-900 placeholder-[#808080] rounded-[8px] px-3.5 py-2.5 text-sm focus:outline-none focus:border-[#066fef] focus:ring-4 focus:ring-[#066fef]/20 transition shadow-sm resize-none font-sans"
+                placeholder="Vui lòng cung cấp chi tiết yêu cầu dịch vụ của bạn..."
+                className="w-full h-[120px] bg-gray-50/30 hover:bg-gray-100/30 focus:bg-white border border-gray-200 focus:border-[#066fef] focus:ring-4 focus:ring-[#066fef]/10 rounded-xl px-3.5 py-3 text-xs font-semibold font-antenna transition-all outline-none resize-none"
               />
             </div>
 
@@ -382,9 +408,9 @@ function ContactFormContent() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-[240px] py-[12px] bg-[#066fef] border border-[#066fef] hover:bg-[#01095c] hover:border-[#01095c] disabled:bg-gray-400 disabled:border-gray-400 text-white font-semibold text-xs tracking-widest uppercase rounded-[4px] shadow-md transition cursor-pointer text-center"
+                className="w-full sm:w-[240px] py-3.5 bg-gradient-to-r from-[#002F6C] to-[#0562D2] hover:from-[#001D4A] hover:to-[#004ea7] disabled:from-gray-300 disabled:to-gray-400 text-white font-extrabold text-xs tracking-wider uppercase rounded-full shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer active:scale-95 text-center font-antenna"
               >
-                {isSubmitting ? "Đang gửi..." : "Đặt lịch"}
+                {isSubmitting ? "Đang gửi..." : "Đăng ký đặt lịch"}
               </button>
             </div>
           </form>
@@ -392,8 +418,8 @@ function ContactFormContent() {
       </div>
 
       {/* Google Maps Full Width at Bottom */}
-      <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full mb-16">
-        <div className="w-full h-[427px] rounded-none overflow-hidden border border-[#e5e5e5] shadow-xs relative">
+      <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full mb-20">
+        <div className="w-full h-[450px] rounded-[24px] overflow-hidden border border-gray-200 shadow-sm relative">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d9639.97148545994!2d106.86767807583985!3d10.948647055991795!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3174dfa7287e67b7%3A0xe69044f2892be499!2zxJDhu5NuZyBOYWkgRm9yZA!5e1!3m2!1svi!2s!4v1782375726740!5m2!1svi!2s"
             width="100%"
@@ -413,7 +439,7 @@ function ContactFormContent() {
 
 export default function ContactPage() {
   return (
-    <div className="bg-[#F8F8F8] flex-1 min-h-screen">
+    <div className="bg-[#F8F9FA] flex-1 min-h-screen">
       <Suspense fallback={
         <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] py-24 text-center">
           <div className="animate-spin inline-block w-8 h-8 border-4 border-[#066fef] border-t-transparent rounded-full" role="status">
