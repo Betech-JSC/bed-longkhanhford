@@ -263,7 +263,7 @@ class File
                     continue;
                 }
 
-                $isImage = str_contains($mimeType, 'image/') && !str_contains($mimeType, 'svg') && !str_contains($mimeType, 'gif');
+                $isImage = str_contains($mimeType, 'image/') && !str_contains($mimeType, 'svg') && !str_contains($mimeType, 'gif') && !str_contains($mimeType, 'png');
                 if ($isImage) {
                     try {
                         $image = Image::make($data);
@@ -323,7 +323,7 @@ class File
 
                     if ($this->fileValidation($file)) {
                         $mimeType = $file->getMimeType();
-                        $isImage = str_contains($mimeType, 'image/') && !str_contains($mimeType, 'svg') && !str_contains($mimeType, 'gif');
+                        $isImage = str_contains($mimeType, 'image/') && !str_contains($mimeType, 'svg') && !str_contains($mimeType, 'gif') && !str_contains($mimeType, 'png');
 
                         if ($isImage) {
                             try {

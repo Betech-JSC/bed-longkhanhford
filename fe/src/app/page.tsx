@@ -907,6 +907,7 @@ export default function Home() {
                           sizes="(max-width: 1024px) 100vw, 800px"
                           className="object-contain object-center select-none scale-[1.15]"
                           priority
+                          unoptimized={true}
                         />
 
                         {/* Right Arrow Button */}

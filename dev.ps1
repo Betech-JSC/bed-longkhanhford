@@ -6,7 +6,17 @@ param (
     [switch]$Inline
 )
 
-$phpPath = "C:\xampp\php\php.exe"
+$phpPath = "php"
+if (-not (Get-Command "php" -ErrorAction SilentlyContinue)) {
+    if (Test-Path "C:\xampp\php\php.exe") {
+        $phpPath = "C:\xampp\php\php.exe"
+    } elseif (Test-Path "D:\xampp\php\php.exe") {
+        $phpPath = "D:\xampp\php\php.exe"
+    } else {
+        Write-Error "Could not find 'php' in your PATH or at C:\xampp\php\php.exe / D:\xampp\php\php.exe. Please install PHP or add it to your PATH."
+        exit 1
+    }
+}
 
 # Ensure locales directory exists and generate i18n locales for Vue/Vite
 New-Item -ItemType Directory -Force -Path "be/public/build/locales" | Out-Null
