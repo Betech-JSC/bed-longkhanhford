@@ -38,6 +38,7 @@ export default function Navbar() {
   const [activeSection, setActiveSection] = useState("");
 
   const [isProductHovered, setIsProductHovered] = useState(false);
+  const [isDropdownHovered, setIsDropdownHovered] = useState(false);
   const [activeTab, setActiveTab] = useState<string>("suv");
   const [isMobileProductOpen, setIsMobileProductOpen] = useState(false);
   const [mobileActiveTab, setMobileActiveTab] = useState<string | null>(null);
@@ -317,17 +318,42 @@ export default function Navbar() {
   ];
 
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const lastScrollYRef = useRef(0);
+  const isAnyDropdownHovered = isProductHovered || isDropdownHovered;
+  const isTransparent = isTransparentPage && !isScrolled && !isOpen && !isAnyDropdownHovered;
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 50) {
+      const currentScrollY = window.scrollY;
+      
+      if (currentScrollY > 80) {
         setIsScrolled(true);
       } else {
         setIsScrolled(false);
       }
-      if (pathname === "/" && window.scrollY < 100) {
+      
+      if (pathname === "/" && currentScrollY < 100) {
         setActiveSection("");
       }
+
+      // Hide/Show Navbar on Scroll Down/Up
+      const lastScrollY = lastScrollYRef.current;
+      const scrollDiff = currentScrollY - lastScrollY;
+
+      if (currentScrollY <= 80) {
+        setIsVisible(true);
+      } else if (!isOpen && !isAnyDropdownHovered) {
+        if (scrollDiff > 5) {
+          setIsVisible(false);
+        } else if (scrollDiff < -5) {
+          setIsVisible(true);
+        }
+      } else {
+        setIsVisible(true);
+      }
+
+      lastScrollYRef.current = currentScrollY;
     };
 
     handleScroll();
@@ -335,7 +361,7 @@ export default function Navbar() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [pathname]);
+  }, [pathname, isOpen, isAnyDropdownHovered]);
 
   useEffect(() => {
     if (pathname !== "/") return;
@@ -379,7 +405,6 @@ export default function Navbar() {
     const isActive = isCurrentPath || (pathname === "/" && sectionId && activeSection === sectionId);
     
     const hasDropdown = !!link.dropdownItems;
-    const isTransparent = isTransparentPage && !isScrolled && !isOpen;
 
     // Active color class based on transparent state
     const linkActiveColorClass = "text-[#066fef]";
@@ -412,7 +437,13 @@ export default function Navbar() {
         <div 
           key={`${link.name}${keySuffix}`} 
           className="relative group flex items-stretch h-full" 
-          onMouseEnter={handleMouseLeaveImmediate}
+          onMouseEnter={() => {
+            handleMouseLeaveImmediate();
+            setIsDropdownHovered(true);
+          }}
+          onMouseLeave={() => {
+            setIsDropdownHovered(false);
+          }}
         >
           <Link
             href={link.href}
@@ -444,7 +475,10 @@ export default function Navbar() {
       <Link
         key={`${link.name}${keySuffix}`}
         href={link.href}
-        onMouseEnter={handleMouseLeaveImmediate}
+        onMouseEnter={() => {
+          handleMouseLeaveImmediate();
+          setIsDropdownHovered(false);
+        }}
         className={`relative px-1 h-full flex items-center text-[15px] xl:text-[16px] whitespace-nowrap font-['Ford_Antenna',sans-serif] font-medium tracking-wide transition-colors duration-200 flex items-center gap-1 cursor-pointer
           after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-[#066fef] after:transition-all after:duration-300
           ${isActive ? `${linkActiveColorClass} after:w-full` : `${linkInactiveColorClass} after:w-0 hover:after:w-full`}`}
@@ -454,13 +488,13 @@ export default function Navbar() {
     );
   };
 
-  const isTransparent = isTransparentPage && !isScrolled && !isOpen;
-
   const headerClass = isTransparentPage
-    ? `fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b ${
+    ? `fixed top-0 left-0 w-full z-50 transition-all duration-300 ease-in-out will-change-transform border-b ${
         isTransparent ? "bg-transparent border-transparent" : "bg-white border-gray-200 shadow-md"
-      }`
-    : "w-full z-50 bg-white border-b border-gray-200 sticky top-0 transition-all duration-300";
+      } ${isVisible ? "translate-y-0" : "-translate-y-full"}`
+    : `w-full z-50 bg-white border-b border-gray-200 sticky top-0 transition-all duration-300 ease-in-out will-change-transform ${
+        isVisible ? "translate-y-0" : "-translate-y-full"
+      }`;
 
   return (
     <header className={headerClass}>

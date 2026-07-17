@@ -37,6 +37,19 @@ class VehicleController extends Controller
             'sort_order'          => $v->sort_order,
             'brochure_url'        => $v->brochure_url,
             'brochure_file'       => $v->brochure_file ? $this->resolveFileUrl($v->brochure_file) : null,
+            'colors'              => collect($v->colors)->map(function ($color) {
+                $imagePath = null;
+                if (isset($color['image_path'])) {
+                    $imagePath = static_url($color['image_path']);
+                } elseif (isset($color['image'])) {
+                    $imagePath = $this->resolveFileUrl($color['image']);
+                }
+                return [
+                    'name'       => $color['name'] ?? ($color['color_name'] ?? ''),
+                    'hex'        => $color['hex'] ?? ($color['color_code'] ?? ''),
+                    'image_path' => $imagePath,
+                ];
+            })->toArray(),
         ];
 
         if ($v->relationLoaded('versions')) {

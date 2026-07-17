@@ -419,7 +419,7 @@ function HeroBannerBlock({ blockIndex, data, vehicle, openQuoteDrawer, openDrive
         )}
       </div>
 
-      <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full relative z-20">
+      <div className="max-w-[1440px] mx-auto px-4 xl:px-8 w-full relative z-20">
         <div className={`flex flex-col gap-[16px] sm:gap-[24px] py-[24px] w-full ${alignClass}`}>
           <h1
             className={`font-['Ford_Antenna',sans-serif] font-semibold text-white tracking-[-0.96px] leading-[1.15] uppercase ${titleSizeClass}
