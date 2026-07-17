@@ -490,28 +490,15 @@ export default function ProductsPage({ initialCategory }: { initialCategory?: st
   return (
     <div className="bg-[#F8F8F8] min-h-screen font-sans pb-16 w-full flex flex-col items-center">
       {/* Hero Section */}
-      <section className="relative w-full bg-gradient-to-br from-neutral-900 via-[#002F6C] to-[#01095c] text-white pt-32 pb-20 md:pb-24 overflow-hidden">
-        {/* Subtle decorative glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-[#066fef]/10 rounded-full blur-[120px] pointer-events-none" />
-        
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] relative z-10">
-          {/* Breadcrumb inside Hero */}
-          <div className="text-xs text-white/50 font-bold flex items-center gap-1.5 mb-6 justify-center uppercase tracking-widest font-antenna">
-            <Link href="/" className="hover:text-white transition-colors">
-              Trang chủ
-            </Link>
-            <span>/</span>
-            <span className="text-white/90">Sản phẩm</span>
-          </div>
-          <div className="text-center font-antenna max-w-3xl mx-auto">
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight uppercase leading-[1.1] mb-6 font-antenna">
-              Dòng xe Ford thế hệ mới
-            </h1>
-            <p className="text-white/70 text-sm md:text-base max-w-xl mx-auto leading-relaxed font-antenna font-medium">
-              Khám phá sức mạnh, công nghệ thông minh và sự đa dụng vượt trội của các dòng xe Ford chính hãng tại showroom Long Khánh Ford.
-            </p>
-          </div>
-        </div>
+      <section className="relative w-full h-[240px] sm:h-[320px] md:h-[400px] overflow-hidden">
+        <h1 className="sr-only">Dòng xe Ford thế hệ mới - Long Khánh Ford</h1>
+        <Image
+          src="/images/ford-lineup-banner.png"
+          alt="Ford Vehicles Lineup"
+          fill
+          className="object-cover object-center"
+          priority
+        />
       </section>
 
       {/* Horizontal Category Navigation Tabs (Sticky Bar) */}
