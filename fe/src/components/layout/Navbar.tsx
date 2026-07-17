@@ -510,7 +510,7 @@ export default function Navbar() {
           {/* Center Logo */}
           <div className="flex justify-center items-center px-4 shrink-0 h-full">
             <Link href="/" className="flex flex-col items-center justify-center gap-[3px] group py-1 text-center">
-              <div className="h-[24px] w-[64px] relative shrink-0">
+              <div className="h-[30px] w-[80px] relative shrink-0">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
                   src="/ford_logo.svg" 
@@ -518,7 +518,7 @@ export default function Navbar() {
                   className="block size-full object-contain"
                 />
               </div>
-              <span className={`font-['Ford_Antenna',sans-serif] font-bold text-[10px] tracking-wider leading-none uppercase transition-colors duration-300 ${
+              <span className={`font-['Ford_Antenna',sans-serif] font-bold text-[11px] tracking-wider leading-none uppercase transition-colors duration-300 ${
                 isTransparent ? "text-white" : "text-[#00095b]"
               }`}>
                 LONG KHANH FORD
@@ -548,7 +548,7 @@ export default function Navbar() {
         <div className="lg:hidden flex justify-between items-center w-full h-full">
           {/* Logo */}
           <Link href="/" className="flex flex-col items-center justify-center gap-[3px] group py-1 text-center">
-            <div className="h-[24px] w-[64px] relative shrink-0">
+            <div className="h-[30px] w-[80px] relative shrink-0">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img 
                 src="/ford_logo.svg" 
@@ -556,7 +556,7 @@ export default function Navbar() {
                 className="block size-full object-contain"
               />
             </div>
-            <span className={`font-['Ford_Antenna',sans-serif] font-bold text-[10px] tracking-wider leading-none uppercase transition-colors duration-300 ${
+            <span className={`font-['Ford_Antenna',sans-serif] font-bold text-[11px] tracking-wider leading-none uppercase transition-colors duration-300 ${
               isTransparent ? "text-white" : "text-[#00095b]"
             }`}>
               LONG KHANH FORD

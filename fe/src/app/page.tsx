@@ -720,9 +720,6 @@ export default function Home() {
             <div className="max-w-[1152px] mx-auto w-full px-6 xl:px-0 flex flex-col items-start justify-end text-left">
               {/* Slide Text Block */}
               <div key={activeHeroIndex} className="max-w-2xl flex flex-col items-start text-left animate-fade-in">
-              <span className="text-[11px] font-bold text-white/70 uppercase tracking-[0.2em] mb-3">
-                Long Khánh Ford
-              </span>
               <h2 className="text-3xl sm:text-5xl lg:text-[48px] font-bold tracking-tight leading-[1.15] text-white uppercase font-sans">
                 {heroSlides[activeHeroIndex]?.title || ""}
               </h2>
