@@ -4,6 +4,7 @@
 2. [Cài đặt Composer 2.x](#cài-đặt-composer-2x)
 3. [Cài đặt Laravel & Database](#cài-đặt-laravel--database)
 4. [Start dự án](#start-dự-án)
+5. [Hướng dẫn Deploy lên VPS](DEPLOYMENT.md)
 
 ----
 ## Cài đặt PHP 8.x
@@ -125,3 +126,8 @@ yarn backend
 
 - UI: http://localhost:8000/
 - Admin: http://localhost:8000/admin
+
+----
+## Hướng dẫn Deploy lên VPS
+
+Chi tiết các bước cài đặt môi trường VPS (Ubuntu, PHP 8.4, Nginx, MySQL, SSL Certbot) và deploy dự án được hướng dẫn cụ thể tại [DEPLOYMENT.md](DEPLOYMENT.md).

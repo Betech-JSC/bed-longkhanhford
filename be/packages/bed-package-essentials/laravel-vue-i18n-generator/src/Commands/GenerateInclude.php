@@ -68,6 +68,9 @@ class GenerateInclude extends Command
 
 
         $jsFile = $this->getFileName($fileName);
+        if (!is_dir(dirname($jsFile))) {
+            mkdir(dirname($jsFile), 0777, true);
+        }
         file_put_contents($jsFile, $data);
 
         if ($config['showOutputMessages']) {
