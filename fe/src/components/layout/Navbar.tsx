@@ -28,11 +28,8 @@ export default function Navbar() {
     "/dich-vu",
     "/dong-xe",
     "/xe-da-qua-su-dung",
-    "/tin-tuc",
     "/tuyen-dung",
-    "/phu-kien",
-    "/san-pham",
-    "/cong-cu"
+    "/san-pham"
   ].some(path => pathname === path || pathname.startsWith(path + "/"));
   const router = useRouter();
   const [activeSection, setActiveSection] = useState("");
@@ -146,7 +143,10 @@ export default function Navbar() {
   // Set active tab to first dynamic category once loaded
   useEffect(() => {
     if (categoriesList.length > 0) {
-      setActiveTab(categoriesList[0].slug);
+      const timer = setTimeout(() => {
+        setActiveTab(categoriesList[0].slug);
+      }, 0);
+      return () => clearTimeout(timer);
     }
   }, [categoriesList]);
 

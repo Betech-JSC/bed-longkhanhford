@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo, useRef, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { ChevronLeft, ChevronRight, Search } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { handleImageError } from "@/lib/site-assets";
 import { postsAPI, reviewsAPI } from "@/lib/api";
 
@@ -11,8 +11,6 @@ function NewsListPageContent() {
   const [categories, setCategories] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState<number | "all">("all");
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
   const [posts, setPosts] = useState<any[]>([]);
   const [topPosts, setTopPosts] = useState<any[]>([]);
   const [totalPages, setTotalPages] = useState(1);
@@ -74,16 +72,8 @@ function NewsListPageContent() {
   const [testimonialDragOffset, setTestimonialDragOffset] = useState(0);
   const testimonialDragStartX = useRef(0);
   const isTestimonialDragging = useRef(false);
+  const [isTestimonialDraggingState, setIsTestimonialDraggingState] = useState(false);
   const testimonialWasDragged = useRef(false);
-
-  // Debounce search query to prevent excessive API requests
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearchQuery(searchQuery);
-      setCurrentPage(1);
-    }, 400);
-    return () => clearTimeout(timer);
-  }, [searchQuery]);
 
   // Load data from Laravel API
   useEffect(() => {
@@ -95,9 +85,6 @@ function NewsListPageContent() {
         };
         if (activeTab !== "all") {
           params.categories = String(activeTab);
-        }
-        if (debouncedSearchQuery.trim() !== "") {
-          params.keyword = debouncedSearchQuery;
         }
 
         const res: any = await postsAPI.getAll(params).catch(() => null);
@@ -120,37 +107,40 @@ function NewsListPageContent() {
       }
     };
     loadData();
-  }, [currentPage, activeTab, debouncedSearchQuery]);
+  }, [currentPage, activeTab]);
 
   // Match category from URL search query parameters (ID or slug) or pathname once categories are loaded
   useEffect(() => {
     if (categories.length > 0) {
-      if (pathname === "/khuyen-mai") {
-        const found = categories.find((c) => c.slug === "khuyen-mai");
-        if (found) {
-          setActiveTab(found.id);
-        }
-      } else {
-        let catParam = searchParams.get("category");
-        if (!catParam) {
-          if (pathname.startsWith("/category/")) {
-            catParam = pathname.replace("/category/", "").replace(/\/$/, "");
-          } else if (pathname.startsWith("/chuyen-muc/")) {
-            catParam = pathname.replace("/chuyen-muc/", "").replace(/\/$/, "");
-          }
-        }
-
-        if (catParam) {
-          const found = categories.find(
-            (c) => String(c.id) === catParam || c.slug === catParam
-          );
+      const timer = setTimeout(() => {
+        if (pathname === "/khuyen-mai") {
+          const found = categories.find((c) => c.slug === "khuyen-mai");
           if (found) {
             setActiveTab(found.id);
           }
         } else {
-          setActiveTab("all");
+          let catParam = searchParams.get("category");
+          if (!catParam) {
+            if (pathname.startsWith("/category/")) {
+              catParam = pathname.replace("/category/", "").replace(/\/$/, "");
+            } else if (pathname.startsWith("/chuyen-muc/")) {
+              catParam = pathname.replace("/chuyen-muc/", "").replace(/\/$/, "");
+            }
+          }
+
+          if (catParam) {
+            const found = categories.find(
+              (c) => String(c.id) === catParam || c.slug === catParam
+            );
+            if (found) {
+              setActiveTab(found.id);
+            }
+          } else {
+            setActiveTab("all");
+          }
         }
-      }
+      }, 0);
+      return () => clearTimeout(timer);
     }
   }, [categories, searchParams, pathname]);
 
@@ -199,6 +189,7 @@ function NewsListPageContent() {
   const handleTestimonialStart = (clientX: number) => {
     testimonialDragStartX.current = clientX;
     isTestimonialDragging.current = true;
+    setIsTestimonialDraggingState(true);
     setIsTestimonialInteracted(true); // Pause autoplay
   };
 
@@ -211,6 +202,7 @@ function NewsListPageContent() {
   const handleTestimonialEnd = () => {
     if (!isTestimonialDragging.current) return;
     isTestimonialDragging.current = false;
+    setIsTestimonialDraggingState(false);
     
     const dist = Math.abs(testimonialDragOffset);
     if (dist > 10) {
@@ -264,167 +256,180 @@ function NewsListPageContent() {
   };
 
   return (
-    <div className="bg-[#F8F8F8] flex-1 min-h-screen flex flex-col items-center w-full pb-16">
-      {/* HERO BANNER */}
-      <section className="relative w-full h-[320px] bg-slate-900 overflow-hidden flex items-end pt-24 pb-10 mb-12">
-        <div className="absolute inset-0 z-0">
-          <img
-            src="/images/about/banner.jpg"
-            alt="Tin tức Long Khánh Ford"
-            className="w-full h-full object-cover object-center opacity-60"
-          />
-          <div className="absolute bottom-0 left-0 right-0 h-[120px] bg-gradient-to-t from-black/80 to-transparent" />
-        </div>
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full z-10">
-          <h1 className="text-[40px] md:text-[48px] font-bold text-white leading-tight uppercase font-antenna">
+    <div className="bg-white flex-1 min-h-screen flex flex-col items-center w-full pb-16">
+      {/* 1. HERO TITLE & FEATURED NEWS SECTION */}
+      <section className="w-full bg-white pt-12 pb-16 mb-16">
+        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full">
+          <h1 className="text-[40px] md:text-[56px] font-bold text-[#1a1a1a] leading-tight uppercase font-antenna mb-8">
             {pathname === "/khuyen-mai" ? "Chương trình Khuyến mãi" : "Tin tức & Sự kiện"}
           </h1>
-          <p className="text-white/80 text-base max-w-2xl mt-2 font-antenna">
-            {pathname === "/khuyen-mai" 
-              ? "Tổng hợp các chương trình ưu đãi, khuyến mãi mới nhất từ đại lý Long Khánh Ford."
-              : "Cập nhật tin tức mới nhất về các dòng xe Ford và hoạt động tại đại lý."}
-          </p>
-        </div>
-      </section>
-
-      {/* 1. FEATURED NEWS SECTION */}
-      {pathname !== "/khuyen-mai" && topPosts.length > 0 && (
-        <section className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full mb-16">
-          <h2 className="font-['Ford_Antenna',sans-serif] font-semibold text-[36px] leading-[1.32] text-[#1a1a1a] mb-8">
-            Tin tức nổi bật
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {topPosts.slice(0, 2).map((art) => (
+          
+          {pathname !== "/khuyen-mai" && topPosts.length > 0 ? (
+            <div className="flex flex-col gap-12">
+              {/* Single Large Horizontal Card */}
               <Link
-                key={`featured-${art.id}`}
-                href={`/${art.slug}`}
-                className="bg-white rounded-none overflow-hidden border border-[#e5e5e5] hover:shadow-sm transition-premium group flex flex-col"
+                href={`/${topPosts[0].slug}`}
+                className="group flex flex-col md:flex-row gap-8 lg:gap-12 w-full items-stretch"
               >
-                {/* Image Container */}
-                <div className="aspect-[600/380] relative overflow-hidden w-full bg-gray-100">
+                {/* Left: Image */}
+                <div className="w-full md:w-[60%] aspect-[16/9] relative overflow-hidden bg-gray-100 rounded-[16px] shrink-0">
                   <img
-                    src={art.image?.url || "/placeholder-news.jpg"}
-                    alt={art.title}
-                    className="absolute inset-0 object-cover w-full h-full group-hover:scale-[1.03] transition-transform duration-500"
+                    src={topPosts[0].image?.url || "/placeholder-news.jpg"}
+                    alt={topPosts[0].title}
+                    className="absolute inset-0 object-cover w-full h-full group-hover:scale-[1.02] transition-transform duration-500"
                     onError={handleImageError}
                   />
-                  {art.category && (
-                    <div className="absolute top-4 left-4 bg-[#066fef] text-white text-xs font-semibold px-3 py-1 rounded-[4px] uppercase tracking-wider">
-                      {art.category.title}
-                    </div>
-                  )}
                 </div>
-                {/* Content */}
-                <div className="p-6 flex flex-col flex-1 gap-3">
-                  <span className="text-sm font-medium text-[#424242]">
-                    {formatDate(art.published_at)}
-                  </span>
-                  <h3 className="font-['Ford_Antenna',sans-serif] font-semibold text-[18px] leading-[1.45] text-[#1a1a1a] group-hover:text-[#066fef] transition-colors duration-200 line-clamp-2">
-                    {art.title}
-                  </h3>
-                  <p className="text-sm text-[#424242] leading-relaxed line-clamp-3 mt-1 font-antenna">
-                    {art.description}
-                  </p>
-                  <div className="mt-auto pt-4 flex items-center text-sm font-semibold text-[#066fef] group-hover:underline uppercase tracking-wider text-[11px]">
-                    Xem chi tiết
+                {/* Right: Content */}
+                <div className="w-full md:w-[40%] flex flex-col justify-between py-2">
+                  <div className="flex flex-col">
+                    {topPosts[0].category && (
+                      <div className="mb-3">
+                        <span className="text-[#066fef] text-xs font-bold uppercase tracking-wider">
+                          {topPosts[0].category.title}
+                        </span>
+                      </div>
+                    )}
+                    <h2 className="font-antenna font-semibold text-[24px] md:text-[32px] leading-tight text-[#1a1a1a] group-hover:text-[#066fef] transition-colors duration-200 uppercase tracking-tight">
+                      {topPosts[0].title}
+                    </h2>
+                    <p className="text-sm text-[#424242] leading-relaxed line-clamp-4 mt-4 font-antenna">
+                      {topPosts[0].description}
+                    </p>
+                  </div>
+                  <div className="flex items-center text-xs text-[#707070] mt-6 font-antenna">
+                    <span>{formatDate(topPosts[0].published_at)}</span>
                   </div>
                 </div>
               </Link>
-            ))}
-          </div>
-        </section>
-      )}
+
+              {/* Remaining featured posts in 2 columns */}
+              {topPosts.length > 1 && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 pt-12">
+                  {topPosts.slice(1, 3).map((art) => (
+                    <Link
+                      key={`featured-${art.id}`}
+                      href={`/${art.slug}`}
+                      className="group flex flex-col w-full"
+                    >
+                      {/* Image Container */}
+                      <div className="aspect-[16/10] relative overflow-hidden w-full bg-gray-100 rounded-[16px]">
+                        <img
+                          src={art.image?.url || "/placeholder-news.jpg"}
+                          alt={art.title}
+                          className="absolute inset-0 object-cover w-full h-full group-hover:scale-[1.03] transition-transform duration-500"
+                          onError={handleImageError}
+                        />
+                      </div>
+                      {/* Content */}
+                      <div className="mt-4 flex flex-col">
+                        {art.category && (
+                          <div className="mb-2">
+                            <span className="text-[#066fef] text-xs font-bold uppercase tracking-wider">
+                              {art.category.title}
+                            </span>
+                          </div>
+                        )}
+                        <h3 className="font-antenna font-semibold text-[18px] md:text-[22px] leading-snug text-[#1a1a1a] group-hover:text-[#066fef] transition-colors duration-200 line-clamp-2">
+                          {art.title}
+                        </h3>
+                        <p className="text-sm text-[#424242] leading-relaxed line-clamp-3 mt-2 font-antenna">
+                          {art.description}
+                        </p>
+                        <div className="flex items-center text-xs text-[#707070] mt-4 font-antenna">
+                          <span>{formatDate(art.published_at)}</span>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="aspect-[21/9] w-full relative overflow-hidden bg-gray-100 border border-[#e5e5e5] rounded-[16px]">
+              <img
+                src="/images/about/banner.jpg"
+                alt="Long Khánh Ford"
+                className="absolute inset-0 object-cover w-full h-full"
+              />
+            </div>
+          )}
+        </div>
+      </section>
 
       {/* 2. ALL NEWS & FILTER SECTION */}
       <section className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full">
         <div className="flex flex-col gap-8">
-          {/* Section Heading & Category Tabs */}
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 border-b border-[#e5e5e5] pb-4">
-            <h2 className="font-['Ford_Antenna',sans-serif] font-semibold text-[28px] leading-[1.2] text-[#1a1a1a] shrink-0 font-display">
-              Danh sách bài viết
-            </h2>
-
-            {/* Filter controls wrapper */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full lg:w-auto lg:justify-end">
-              {/* Category tabs */}
-              {pathname !== "/khuyen-mai" && (
-                <div className="flex overflow-x-auto scrollbar-none border-b sm:border-b-0 border-gray-200">
-                  <button
-                    onClick={() => handleTabChange("all")}
-                    className={`px-5 py-2.5 text-base font-semibold transition-all relative whitespace-nowrap cursor-pointer ${
-                      activeTab === "all"
-                        ? "text-[#066fef] border-b-2 border-[#066fef]"
-                        : "text-[#424242] hover:text-[#066fef]"
-                    }`}
-                  >
-                    Tất cả
-                  </button>
-                  {uniqueCategories.map((cat) => (
-                    <button
-                      key={cat.id}
-                      onClick={() => handleTabChange(cat.id)}
-                      className={`px-5 py-2.5 text-base font-semibold transition-all relative whitespace-nowrap cursor-pointer ${
-                        activeTab === cat.id
-                          ? "text-[#066fef] border-b-2 border-[#066fef]"
-                          : "text-[#424242] hover:text-[#066fef]"
-                      }`}
-                    >
-                      {cat.title}
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              {/* Search input */}
-              <div className="relative min-w-[200px] sm:w-[240px]">
-                <input
-                  type="text"
-                  placeholder="Tìm bài viết..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-white border border-[#d6d6d6] text-gray-900 placeholder-[#808080] rounded-[8px] pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-[#066fef] transition shadow-xs"
-                />
-                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#808080]" />
-              </div>
+          {/* Category tabs as pill buttons (No search, no big title) */}
+          {pathname !== "/khuyen-mai" && (
+            <div className="flex flex-wrap gap-3 pb-6">
+              <button
+                onClick={() => handleTabChange("all")}
+                className={`px-5 py-2.5 text-sm font-semibold rounded-full border transition-all cursor-pointer ${
+                  activeTab === "all"
+                    ? "bg-[#066fef] border-[#066fef] text-white"
+                    : "bg-white border-[#d6d6d6] text-[#424242] hover:border-[#066fef] hover:text-[#066fef]"
+                }`}
+              >
+                Tất cả
+              </button>
+              {uniqueCategories.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => handleTabChange(cat.id)}
+                  className={`px-5 py-2.5 text-sm font-semibold rounded-full border transition-all cursor-pointer ${
+                    activeTab === cat.id
+                      ? "bg-[#066fef] border-[#066fef] text-white"
+                      : "bg-white border-[#d6d6d6] text-[#424242] hover:border-[#066fef] hover:text-[#066fef]"
+                  }`}
+                >
+                  {cat.title}
+                </button>
+              ))}
             </div>
-          </div>
+          )}
 
-          {/* Loading Indicator or Grid of paginated articles */}
+          {/* Loading Indicator or Grid of paginated articles (3 columns on desktop) */}
           {loading ? (
-            <div className="text-center py-20 bg-white border border-[#e5e5e5] rounded-none">
+            <div className="text-center py-20 bg-white border border-[#e5e5e5] rounded-[16px]">
               <p className="text-gray-500 text-sm">Đang tải danh sách bài viết...</p>
             </div>
           ) : posts.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
               {posts.map((art) => (
                 <Link
                   key={art.id}
                   href={`/${art.slug}`}
-                  className="bg-white rounded-none overflow-hidden border border-[#e5e5e5] hover:shadow-xs transition-premium group flex flex-col h-full"
+                  className="group flex flex-col h-full"
                 >
-                  <div className="aspect-[600/400] relative overflow-hidden w-full bg-gray-100">
+                  <div className="aspect-[16/10] relative overflow-hidden w-full bg-gray-100 rounded-[12px]">
                     <img
                       src={art.image?.url || "/placeholder-news.jpg"}
                       alt={art.title}
                       className="absolute inset-0 object-cover w-full h-full group-hover:scale-[1.03] transition-transform duration-500"
                       onError={handleImageError}
                     />
-                    {art.category && (
-                      <div className="absolute top-4 left-4 bg-[#066fef] text-white text-xs font-semibold px-3 py-1 rounded-[4px] uppercase tracking-wider">
-                        {art.category.title}
-                      </div>
-                    )}
                   </div>
-                  <div className="p-5 flex flex-col flex-1 gap-2.5">
-                    <span className="text-xs font-medium text-[#424242]">
-                      {formatDate(art.published_at)}
-                    </span>
-                    <h3 className="font-['Ford_Antenna',sans-serif] font-semibold text-[16px] leading-[1.4] text-[#1a1a1a] group-hover:text-[#066fef] transition-colors duration-200 line-clamp-2">
-                      {art.title}
-                    </h3>
-                    <p className="text-xs text-[#424242] leading-relaxed line-clamp-3 mt-1 font-antenna">
-                      {art.description}
-                    </p>
+                  <div className="flex flex-col flex-1 justify-between mt-3">
+                    <div className="flex flex-col">
+                      {art.category && (
+                        <div className="mb-1.5">
+                          <span className="text-[#066fef] text-[11px] font-bold uppercase tracking-wider">
+                            {art.category.title}
+                          </span>
+                        </div>
+                      )}
+                      <h3 className="font-['Ford_Antenna',sans-serif] font-semibold text-[16px] md:text-[18px] leading-snug text-[#1a1a1a] group-hover:text-[#066fef] transition-colors duration-200 line-clamp-2">
+                        {art.title}
+                      </h3>
+                      <p className="text-xs text-[#424242] leading-relaxed line-clamp-3 mt-1.5 font-antenna">
+                        {art.description}
+                      </p>
+                    </div>
+                    {/* Footer */}
+                    <div className="flex items-center text-[10px] text-[#707070] mt-3 font-antenna">
+                      <span>{formatDate(art.published_at)}</span>
+                    </div>
                   </div>
                 </Link>
               ))}
@@ -503,7 +508,7 @@ function NewsListPageContent() {
 
       {/* 3. CUSTOMER TESTIMONIALS */}
       {testimonials.length > 0 && (
-        <section id="media" className="bg-gray-light border-y border-gray-200 py-20 px-0 overflow-x-clip w-full mt-16">
+        <section id="media" className="bg-white py-20 px-0 overflow-x-clip w-full mt-16">
           <div className="w-full">
             <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] flex flex-col md:flex-row md:items-end justify-between mb-12">
               <div>
@@ -522,7 +527,7 @@ function NewsListPageContent() {
                     setActiveTestimonialIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
                     setIsTestimonialInteracted(true);
                   }}
-                  className="p-2 border border-gray-300 hover:bg-[#0562d2] hover:text-white hover:border-[#0562d2] text-primary rounded-full transition-colors cursor-pointer bg-white"
+                  className="p-2 border border-gray-300 hover:bg-[#002F6C] hover:text-white hover:border-[#002F6C] text-[#002F6C] rounded-[4px] transition-all duration-200 cursor-pointer bg-white w-10 h-10 flex items-center justify-center"
                   aria-label="Previous testimonial"
                 >
                   <ChevronLeft className="w-5 h-5" />
@@ -532,7 +537,7 @@ function NewsListPageContent() {
                     setActiveTestimonialIndex((prev) => (prev + 1) % testimonials.length);
                     setIsTestimonialInteracted(true);
                   }}
-                  className="p-2 border border-gray-300 hover:bg-[#0562d2] hover:text-white hover:border-[#0562d2] text-primary rounded-full transition-colors cursor-pointer bg-white"
+                  className="p-2 border border-gray-300 hover:bg-[#002F6C] hover:text-white hover:border-[#002F6C] text-[#002F6C] rounded-[4px] transition-all duration-200 cursor-pointer bg-white w-10 h-10 flex items-center justify-center"
                   aria-label="Next testimonial"
                 >
                   <ChevronRight className="w-5 h-5" />
@@ -547,10 +552,10 @@ function NewsListPageContent() {
                 style={{
                   gap: 'var(--card-gap-testimonial)',
                   transform: `translateX(calc(50% - (var(--card-width-testimonial) / 2) - ${activeTestimonialIndex} * (var(--card-width-testimonial) + var(--card-gap-testimonial)) + ${testimonialDragOffset}px))`,
-                  transition: isTestimonialDragging.current ? "none" : "transform 500ms ease-in-out"
+                  transition: isTestimonialDraggingState ? "none" : "transform 500ms ease-in-out"
                 }}
                 onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={(e) => {
+                onMouseLeave={() => {
                   setIsHovered(false);
                   handleTestimonialEnd();
                 }}
@@ -562,7 +567,7 @@ function NewsListPageContent() {
                   handleTestimonialStart(e.touches[0].clientX);
                 }}
                 onTouchMove={(e) => handleTestimonialMove(e.touches[0].clientX)}
-                onTouchEnd={(e) => {
+                onTouchEnd={() => {
                   setIsHovered(false);
                   handleTestimonialEnd();
                 }}
@@ -609,8 +614,8 @@ function NewsListPageContent() {
               </div>
             </div>
 
-            {/* Pagination Indicators dots */}
-            <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] flex justify-center gap-2 mt-8">
+            {/* Pagination Indicators lines */}
+            <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] flex justify-center gap-3 mt-8">
               {testimonials.map((_, idx) => (
                 <button
                   key={idx}
@@ -618,8 +623,9 @@ function NewsListPageContent() {
                     setActiveTestimonialIndex(idx);
                     setIsTestimonialInteracted(true);
                   }}
-                  className={`h-2 transition-all rounded-full cursor-pointer ${activeTestimonialIndex === idx ? "w-6 bg-[#066fef]" : "w-2 bg-gray-300"
-                    }`}
+                  className={`h-[2px] w-[40px] transition-all cursor-pointer rounded-none ${
+                    activeTestimonialIndex === idx ? "bg-[#066fef]" : "bg-gray-300 hover:bg-gray-400"
+                  }`}
                   aria-label={`Go to slide ${idx + 1}`}
                 />
               ))}
