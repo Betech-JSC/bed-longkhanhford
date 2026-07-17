@@ -160,7 +160,7 @@ export default async function RootLayout({
         </Suspense>
         <main className="flex-1 flex flex-col">{children}</main>
         <Footer />
-        <AIChatWidget />
+        {/* <AIChatWidget /> */}
         <CompareDrawer />
         <QuickAccessToolbar />
         <CookieConsent />
