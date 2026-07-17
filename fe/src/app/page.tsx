@@ -165,75 +165,6 @@ const brandItems = [
   }
 ];
 
-const defaultArticles = [
-  {
-    id: "everest-platinum-2026",
-    title: "Ford Everest Platinum 2026: Đỉnh Cao Công Nghệ Và Tiện Nghi Mới",
-    image: "/assets/everest_platinum.png",
-    category: { title: "Tin hoạt động" },
-    description: "Khám phá phiên bản Everest Platinum đẳng cấp với động cơ V6 mạnh mẽ và loạt nâng cấp sang trọng bậc nhất."
-  },
-  {
-    id: "khuyen-mai-he",
-    title: "Chương Trình Khuyến Mãi Hè: Ưu Đãi Lệ Phí Trước Bạ Cực Lớn",
-    image: "/assets/ranger_wildtrak.png",
-    category: { title: "Ưu đãi đặc biệt" },
-    description: "Nhận ngay ưu đãi 100% lệ phí trước bạ khi đặt mua xe Ranger Wildtrak và Territory trong tháng này."
-  },
-  {
-    id: "cam-nang-van-hanh",
-    title: "Bí Quyết Vận Hành Xe Ford An Toàn Trên Đường Trơn Trượt",
-    image: "/assets/cat_tech_1780394190516.png",
-    category: { title: "Cẩm nang sử dụng" },
-    description: "Cẩm nang hướng dẫn sử dụng chế độ lái Wet Mode và hệ thống kiểm soát lực kéo trên các dòng xe Ford thế hệ mới."
-  }
-];
-
-const defaultServices = [
-  {
-    id: "service-1",
-    title: "Đặt hẹn bảo dưỡng trực tuyến",
-    slug: "dat-hen-truc-tuyen",
-    description: "Tiết kiệm thời gian với dịch vụ đặt lịch hẹn bảo dưỡng trực tuyến nhanh chóng, nhận ngay thông tin báo giá dự kiến."
-  },
-  {
-    id: "service-2",
-    title: "Bảo dưỡng nhanh 60 phút",
-    slug: "bao-duong-nhanh",
-    description: "Dịch vụ bảo dưỡng định kỳ tiêu chuẩn 60 phút với quy trình tối ưu từ 2 kỹ thuật viên chuyên nghiệp."
-  },
-  {
-    id: "service-3",
-    title: "Dịch vụ cứu hộ 24/7 miễn phí",
-    slug: "cuu-ho-247",
-    description: "Hỗ trợ cứu hộ giao thông 24/7 cho các xe gặp sự cố trên đường trong phạm vi toàn quốc."
-  },
-  {
-    id: "service-4",
-    title: "Chính sách bảo hành mở rộng",
-    slug: "bao-hanh-mo-rong",
-    description: "Gói bảo hành mở rộng giúp bảo vệ chiếc xe của bạn trước những chi phí phát sinh ngoài ý muốn sau khi hết hạn bảo hành tiêu chuẩn."
-  }
-];
-
-const defaultHandovers = [
-  {
-    id: "handover-1",
-    title: "Bàn giao xe Ford Everest Titanium cho anh Tuấn tại Long Khánh",
-    image_url: "/assets/customer_handover_everest.png",
-  },
-  {
-    id: "handover-2",
-    title: "Bàn giao xe Ford Ranger Wildtrak cho chị Vy",
-    image_url: "/assets/customer_handover_ranger.png",
-  },
-  {
-    id: "handover-3",
-    title: "Bàn giao xe Ford Territory Titanium cho gia đình anh Hùng",
-    image_url: "/assets/customer_handover_territory.png",
-  }
-];
-
 
 
 export default function Home() {
@@ -443,14 +374,14 @@ export default function Home() {
         if (Array.isArray(servicesItems) && servicesItems.length > 0) {
           setServicesList(servicesItems);
         } else {
-          setServicesList(defaultServices);
+          // API trả rỗng, không hiển thị section dịch vụ
         }
 
         const handoversItems = (handoversData as any)?.data || handoversData;
         if (Array.isArray(handoversItems) && handoversItems.length > 0) {
           setCustomerHandovers(handoversItems);
         } else {
-          setCustomerHandovers(defaultHandovers);
+          // API trả rỗng, không hiển thị section bàn giao
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -477,8 +408,7 @@ export default function Home() {
             linkVehicleId: ""
           }
         ]);
-        setServicesList(defaultServices);
-        setCustomerHandovers(defaultHandovers);
+        // API lỗi, các section sẽ hiển thị trống
       } finally {
         setIsVehiclesLoading(false);
       }
@@ -521,11 +451,11 @@ export default function Home() {
           }));
           setHomeArticles(formatted);
         } else {
-          setHomeArticles(defaultArticles);
+          // API trả rỗng, không hiển thị section tin tức
         }
       } catch (error) {
         console.error("Error fetching tab posts, using fallbacks:", error);
-        setHomeArticles(defaultArticles);
+        // API lỗi, không hiển thị section tin tức
       }
     };
     fetchTabPosts();

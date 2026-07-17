@@ -277,7 +277,7 @@ export default function Footer() {
             </a>
             {/* YouTube */}
             <a 
-              href="https://youtube.com/@dongnaiford"
+              href="https://youtube.com/@longkhanhford"
               target="_blank"
               rel="noopener noreferrer"
               className="w-8 h-8 rounded-full bg-neutral-200/60 hover:bg-[#ff0000] transition-colors flex items-center justify-center text-neutral-700 hover:text-white"
@@ -289,7 +289,7 @@ export default function Footer() {
             </a>
             {/* TikTok */}
             <a 
-              href="https://www.tiktok.com/@dongnaiford.official"
+              href="https://www.tiktok.com/@longkhanhford.official"
               target="_blank"
               rel="noopener noreferrer"
               className="w-8 h-8 rounded-full bg-neutral-200/60 hover:bg-[#010101] transition-colors flex items-center justify-center text-neutral-700 hover:text-white"
