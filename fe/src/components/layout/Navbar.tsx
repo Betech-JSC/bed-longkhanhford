@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
@@ -56,6 +56,62 @@ export default function Navbar() {
     { name: "Nhận & Giao xe tận nơi", href: "/dich-vu/giao-nhan-xe-tan-noi" },
   ]);
   const [loading, setLoading] = useState(true);
+
+  // Compute suggestions based on searchQuery
+  const suggestions = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    
+    // If query is empty, return popular suggestions
+    if (!q) {
+      return {
+        vehicles: vehiclesList.slice(0, 3).map(v => ({
+          name: v.title || v.name,
+          href: `/san-pham/${v.slug || v.id}`,
+        })),
+        popular: [
+          { name: "Bảng giá xe Ford mới nhất", href: "/bang-gia" },
+          { name: "Tính phí lăn bánh", href: "/cong-cu/uoc-tinh-lan-banh" },
+          { name: "Đăng ký lái thử trực tuyến", href: "/dang-ky-lai-thu" },
+          { name: "Khuyến mãi & ưu đãi", href: "/tin-tuc" }
+        ]
+      };
+    }
+
+    // Filter matching vehicles
+    const matchedVehicles = vehiclesList
+      .filter(v => (v.title || v.name || "").toLowerCase().includes(q))
+      .map(v => ({
+        name: v.title || v.name,
+        href: `/san-pham/${v.slug || v.id}`,
+      }))
+      .slice(0, 4);
+
+    // Filter matching tools or pages
+    const toolItems = [
+      { name: "Bảng giá xe Ford", href: "/bang-gia", keywords: ["gia", "price", "bang gia"] },
+      { name: "Ước tính lăn bánh", href: "/cong-cu/uoc-tinh-lan-banh", keywords: ["lan banh", "chi phi", "tinh"] },
+      { name: "Ước tính trả góp", href: "/cong-cu/uoc-tinh-tra-gop", keywords: ["tra gop", "lai suat", "vay", "ngan hang"] },
+      { name: "So sánh xe Ford", href: "/cong-cu/so-sanh-xe", keywords: ["so sanh", "so sanh xe", "vs"] },
+      { name: "Đăng ký lái thử", href: "/dang-ky-lai-thu", keywords: ["lai thu", "test drive", "dang ky"] },
+      { name: "Dịch vụ bảo dưỡng", href: "/dich-vu", keywords: ["bao duong", "sua chua", "dich vu"] }
+    ];
+
+    const matchedTools = toolItems
+      .filter(item => 
+        item.name.toLowerCase().includes(q) || 
+        item.keywords.some(kw => kw.includes(q))
+      )
+      .map(item => ({
+        name: item.name,
+        href: item.href,
+      }))
+      .slice(0, 4);
+
+    return {
+      vehicles: matchedVehicles,
+      popular: matchedTools
+    };
+  }, [searchQuery, vehiclesList]);
 
   const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const headerRef = useRef<HTMLElement>(null);
@@ -694,7 +750,7 @@ export default function Navbar() {
           <div className="fixed left-0 right-0 bg-white shadow-2xl z-[60] transition-all duration-300 ease-out"
             style={{ top: headerRef.current ? `${headerRef.current.getBoundingClientRect().bottom}px` : '96px' }}
           >
-            <div className="max-w-[720px] mx-auto px-6 py-12">
+            <div className="max-w-[720px] mx-auto px-6 py-10">
               <div className="relative">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#808080]" />
                 <input
@@ -713,6 +769,106 @@ export default function Navbar() {
                   >
                     <X className="w-4 h-4" />
                   </button>
+                )}
+              </div>
+
+              {/* Suggestions Panel */}
+              <div className="mt-8 border-t border-neutral-100 pt-6">
+                {searchQuery.trim() === "" ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+                    <div>
+                      <h4 className="text-[10px] font-extrabold uppercase tracking-widest text-[#808080] mb-3 font-antenna">
+                        Dòng xe nổi bật
+                      </h4>
+                      <div className="flex flex-col gap-1.5">
+                        {suggestions.vehicles.map((v, i) => (
+                          <Link
+                            key={i}
+                            href={v.href}
+                            onClick={() => setIsSearchOpen(false)}
+                            className="text-xs font-semibold text-neutral-700 hover:text-[#066fef] transition-colors flex items-center gap-2 py-1"
+                          >
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#066fef]/40" />
+                            {v.name}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <h4 className="text-[10px] font-extrabold uppercase tracking-widest text-[#808080] mb-3 font-antenna">
+                        Tìm kiếm phổ biến
+                      </h4>
+                      <div className="flex flex-col gap-1.5">
+                        {suggestions.popular.map((p, i) => (
+                          <Link
+                            key={i}
+                            href={p.href}
+                            onClick={() => setIsSearchOpen(false)}
+                            className="text-xs font-semibold text-neutral-700 hover:text-[#066fef] transition-colors flex items-center gap-2 py-1"
+                          >
+                            <span className="w-1.5 h-1.5 rounded-full bg-neutral-300" />
+                            {p.name}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-left">
+                    <h4 className="text-[10px] font-extrabold uppercase tracking-widest text-[#808080] mb-4 font-antenna">
+                      Gợi ý tìm kiếm cho &quot;{searchQuery}&quot;
+                    </h4>
+                    
+                    {suggestions.vehicles.length === 0 && suggestions.popular.length === 0 ? (
+                      <p className="text-xs text-neutral-400 italic">
+                        Không tìm thấy gợi ý phù hợp. Nhấn Enter để tìm kiếm diện rộng.
+                      </p>
+                    ) : (
+                      <div className="space-y-4">
+                        {suggestions.vehicles.length > 0 && (
+                          <div>
+                            <span className="text-[9px] font-extrabold text-[#808080] uppercase tracking-wider block mb-2 font-antenna">
+                              Dòng xe
+                            </span>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                              {suggestions.vehicles.map((v, i) => (
+                                <Link
+                                  key={i}
+                                  href={v.href}
+                                  onClick={() => setIsSearchOpen(false)}
+                                  className="text-xs font-bold text-neutral-850 hover:text-[#066fef] transition-colors flex items-center gap-2.5 p-2 bg-neutral-50 hover:bg-[#066fef]/5 rounded-[4px] border border-neutral-100 hover:border-[#066fef]/10"
+                                >
+                                  <Search className="w-3.5 h-3.5 text-neutral-400" />
+                                  {v.name}
+                                </Link>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {suggestions.popular.length > 0 && (
+                          <div>
+                            <span className="text-[9px] font-extrabold text-[#808080] uppercase tracking-wider block mb-2 font-antenna">
+                              Chức năng & Công cụ
+                            </span>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                              {suggestions.popular.map((p, i) => (
+                                <Link
+                                  key={i}
+                                  href={p.href}
+                                  onClick={() => setIsSearchOpen(false)}
+                                  className="text-xs font-bold text-neutral-850 hover:text-[#066fef] transition-colors flex items-center gap-2.5 p-2 bg-neutral-50 hover:bg-[#066fef]/5 rounded-[4px] border border-neutral-100 hover:border-[#066fef]/10"
+                                >
+                                  <Search className="w-3.5 h-3.5 text-neutral-400" />
+                                  {p.name}
+                                </Link>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
             </div>
