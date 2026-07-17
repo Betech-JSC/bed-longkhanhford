@@ -232,6 +232,14 @@ export default function PriceListPage() {
                 <AnimatePresence mode="popLayout">
                   {filteredVehicles.map((vehicle) => {
                     const specs = vehicle.versions[0]?.specs || {};
+                    
+                    // Find the first color matching default image_url to highlight on initial load
+                    const firstMatchIdx = vehicle.colors.findIndex(c => c.image_path && (
+                      c.image_path === vehicle.image_url ||
+                      (typeof window !== 'undefined' && `${window.location.origin}/storage/${c.image_path}` === vehicle.image_url)
+                    ));
+                    const defaultActiveIdx = firstMatchIdx !== -1 ? firstMatchIdx : 0;
+                    
                     const activeImg = selectedColors[vehicle.id] || vehicle.image_url || getPopularVehicleImage(vehicle.id);
                     
                     return (
@@ -281,7 +289,7 @@ export default function PriceListPage() {
                                       // Determine if this color is currently active
                                       const isSelected = selectedColors[vehicle.id]
                                          ? selectedColors[vehicle.id] === colorImg
-                                         : (colorImg && (colorImg === vehicle.image_url || (!vehicle.colors.some(c => c.image_path === vehicle.image_url) && idx === 0)));
+                                         : idx === defaultActiveIdx;
 
                                       return (
                                         <button
@@ -337,7 +345,9 @@ export default function PriceListPage() {
                           <div className="lg:col-span-6 p-6 md:p-8 lg:p-10 flex flex-col justify-between bg-neutral-50/20">
                             <div>
                               <h2 className="text-xl md:text-2xl font-bold tracking-tight text-neutral-900 mb-6 font-antenna uppercase">
-                                {vehicle.name}
+                                <Link href={`/${vehicle.id}`} className="hover:text-[#066fef] transition-colors">
+                                  {vehicle.name}
+                                </Link>
                               </h2>
 
                               <div className="divide-y divide-neutral-200/60">
@@ -348,7 +358,9 @@ export default function PriceListPage() {
                                   >
                                     <div>
                                       <h4 className="font-bold text-[#1a1a1a] text-sm group-hover/row:text-[#066fef] transition-colors uppercase">
-                                        {version.name}
+                                        <Link href={`/${vehicle.id}`} className="hover:text-[#066fef] transition-colors block">
+                                          {version.name}
+                                        </Link>
                                       </h4>
                                       {version.specs?.drivetrain && (
                                         <span className="text-[11px] text-neutral-400 font-medium uppercase mt-0.5 block">
