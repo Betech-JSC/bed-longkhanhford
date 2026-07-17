@@ -128,14 +128,14 @@ export default async function RootLayout({
               __html: `
                 (function() {
                   const temp = document.createElement('div');
-                  temp.innerHTML = \`${injectHead.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`;
+                  temp.innerHTML = \`${injectHead.replace(/`/g, '\\`').replace(/\$/g, '\\$').replace(/<\/script>/gi, '<\\/script>')}\`;
                   Array.from(temp.childNodes).forEach(node => {
-                    if (node.tagName === 'SCRIPT') {
+                    if (node.nodeType === 1 && node.tagName === 'SCRIPT') {
                       const script = document.createElement('script');
                       Array.from(node.attributes).forEach(attr => script.setAttribute(attr.name, attr.value));
                       script.innerHTML = node.innerHTML;
                       document.head.appendChild(script);
-                    } else {
+                    } else if (node.nodeType === 1 || node.nodeType === 3 || node.nodeType === 8) {
                       document.head.appendChild(node.cloneNode(true));
                     }
                   });
