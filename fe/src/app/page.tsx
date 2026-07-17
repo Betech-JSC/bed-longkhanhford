@@ -236,9 +236,11 @@ export default function Home() {
   const [activeBrandIndex, setActiveBrandIndex] = useState(0);
   const [translateX, setTranslateX] = useState(0);
 
-  // Touch swiping states for mobile support
-  const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  // Dragging states for both Mouse and Touch
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStartX, setDragStartX] = useState(0);
+  const [dragOffset, setDragOffset] = useState(0);
+  const [hasMoved, setHasMoved] = useState(false);
 
   useEffect(() => {
     const updateTranslate = () => {
@@ -266,27 +268,72 @@ export default function Home() {
     });
   };
 
+  const handleDragStart = (clientX: number) => {
+    setIsDragging(true);
+    setDragStartX(clientX);
+    setDragOffset(0);
+    setHasMoved(false);
+  };
+
+  const handleDragMove = (clientX: number) => {
+    if (!isDragging) return;
+    const diff = dragStartX - clientX;
+    if (Math.abs(diff) > 5) {
+      setHasMoved(true);
+    }
+    // Add resistance when pulling past boundaries
+    if (activeBrandIndex === 0 && diff < 0) {
+      setDragOffset(diff * 0.35);
+    } else if (activeBrandIndex === brandItems.length - 1 && diff > 0) {
+      setDragOffset(diff * 0.35);
+    } else {
+      setDragOffset(diff);
+    }
+  };
+
+  const handleDragEnd = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    
+    const threshold = 120; // threshold to trigger slide change
+    if (dragOffset > threshold && activeBrandIndex < brandItems.length - 1) {
+      setActiveBrandIndex((prev) => prev + 1);
+    } else if (dragOffset < -threshold && activeBrandIndex > 0) {
+      setActiveBrandIndex((prev) => prev - 1);
+    }
+    setDragOffset(0);
+  };
+
+  // Mouse event adapters
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (e.button !== 0) return; // only left click
+    handleDragStart(e.clientX);
+    e.preventDefault(); // prevent default image drag and selection behavior
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    handleDragMove(e.clientX);
+  };
+
+  const handleMouseUp = () => {
+    handleDragEnd();
+  };
+
+  const handleMouseLeave = () => {
+    handleDragEnd();
+  };
+
+  // Touch event adapters
   const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStart(e.targetTouches[0].clientX);
+    handleDragStart(e.touches[0].clientX);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX);
+    handleDragMove(e.touches[0].clientX);
   };
 
   const handleTouchEnd = () => {
-    if (touchStart === null || touchEnd === null) return;
-    const distance = touchStart - touchEnd;
-    const isSwipe = Math.abs(distance) > 50;
-    if (isSwipe) {
-      if (distance > 0) {
-        scrollBrandCarousel("right");
-      } else {
-        scrollBrandCarousel("left");
-      }
-    }
-    setTouchStart(null);
-    setTouchEnd(null);
+    handleDragEnd();
   };
 
 
@@ -643,8 +690,6 @@ export default function Home() {
                 alt={slide.title}
                 className="block md:hidden object-cover w-full h-full object-top transform transition-transform duration-10000"
               />
-              {/* Linear dark gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
             </div>
           ))}
 
@@ -1000,8 +1045,15 @@ export default function Home() {
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
-                className="flex gap-6 pb-8 px-6 xl:px-[calc((100vw-1152px)/2)] transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform"
-                style={{ transform: `translateX(-${translateX}px)` }}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseLeave}
+                className={`flex gap-6 pb-8 px-6 xl:px-[calc((100vw-1152px)/2)] will-change-transform select-none ${isDragging ? "transition-none" : "transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"}`}
+                style={{ 
+                  transform: `translateX(-${translateX + dragOffset}px)`,
+                  cursor: isDragging ? 'grabbing' : 'grab'
+                }}
               >
                 {brandItems.map((item: any, idx) => (
                   <div 
@@ -1009,8 +1061,9 @@ export default function Home() {
                     className={`flex-shrink-0 w-[85vw] md:w-[75vw] lg:w-[70vw] xl:w-[1120px] aspect-[16/8] h-auto transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform backface-hidden ${idx === activeBrandIndex ? "opacity-100 scale-100" : "opacity-50 scale-[0.98]"}`}
                   >
                     <Link 
-                      href={item.link}
-                      className="relative w-full h-full overflow-hidden border border-neutral-200/80 group cursor-pointer block bg-neutral-100 rounded-[8px] aspect-[16/8]"
+                       href={item.link}
+                       onClick={(e) => hasMoved && e.preventDefault()}
+                       className="relative w-full h-full overflow-hidden border border-neutral-200/80 group block bg-neutral-100 rounded-[8px] aspect-[16/8] select-none"
                     >
                       <SafeImage
                         src={item.image}
