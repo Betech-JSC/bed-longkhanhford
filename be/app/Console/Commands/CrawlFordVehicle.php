@@ -433,7 +433,7 @@ class CrawlFordVehicle extends Command
                         'type' => 'Promotions',
                         'data' => [
                             'title' => "Ưu Đãi Đặc Biệt Cho Xe {$title}",
-                            'description' => "Nhận ngay ưu đãi giá bán tốt nhất, quà tặng đặc quyền và hỗ trợ trả góp ưu đãi khi mua xe {$title} tại Đồng Nai Ford.",
+                            'description' => "Nhận ngay ưu đãi giá bán tốt nhất, quà tặng đặc quyền và hỗ trợ trả góp ưu đãi khi mua xe {$title} tại Long Khánh Ford.",
                             'image' => count($gallery) > 0 ? ['path' => $gallery[0]['path']] : ($mainImage ? ['path' => $mainImage['path']] : null),
                             'button_text' => 'Tư vấn ưu đãi'
                         ]
@@ -984,7 +984,7 @@ class CrawlFordVehicle extends Command
             'đen' => ['absolute-black', 'black', 'shadow-black', 'den'],
             'đen bóng' => ['shadow-black', 'absolute-black', 'black', 'den-bong', 'den'],
             'đen huyền bí' => ['absolute-black', 'shadow-black', 'black', 'den-huyen-bi'],
-            'đen tuyệt đối' => ['absolute-black', 'black', 'shadow-black', 'den-tuyet-doi', 'den'],
+            'đen tuyệt đối' => ['absolute-black', 'shadow-black', 'black', 'den-tuyet-doi', 'den'],
             'trắng' => ['snowflake-white', 'oxford-white', 'white', 'trang'],
             'trắng tuyết' => ['snowflake-white', 'snowflake', 'trang-tuyet'],
             'trắng ánh sao' => ['star-white', 'snowflake-white', 'white', 'trang-anh-sao'],
@@ -1120,7 +1120,7 @@ class CrawlFordVehicle extends Command
         }
 
         // 3. Extract Description
-        $description = "Dòng xe {$title} mới nhất tại Đồng Nai Ford. Liên hệ hotline để nhận ưu đãi tốt nhất.";
+        $description = "Dòng xe {$title} mới nhất tại Long Khánh Ford. Liên hệ hotline để nhận ưu đãi tốt nhất.";
         if (preg_match('/<p[^>]*class="[^"]*body1-regular-black[^"]*"[^>]*>([^<]+)<\/p>/iu', $html, $matches)) {
             $description = trim($matches[1]);
         } elseif (preg_match('/<p[^>]*class="[^"]*body3-regular-black[^"]*"[^>]*>([^<]+)<\/p>/iu', $html, $matches)) {

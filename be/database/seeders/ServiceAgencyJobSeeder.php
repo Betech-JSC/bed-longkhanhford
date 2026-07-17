@@ -28,12 +28,12 @@ class ServiceAgencyJobSeeder extends Seeder
                 'vi' => [
                     'title' => 'Dịch vụ xe mới',
                     'slug' => 'dich-vu-xe-moi',
-                    'description' => 'Trải nghiệm mua sắm xe Ford mới với các ưu đãi đặc quyền tại showroom Đồng Nai Ford.',
+                    'description' => 'Trải nghiệm mua sắm xe Ford mới với các ưu đãi đặc quyền tại showroom Long Khánh Ford.',
                     'content' => '<p>Chúng tôi cung cấp đầy đủ các dòng xe Ford mới nhất, hỗ trợ lái thử và báo giá nhanh chóng.</p>'
                 ]
             ],
             [
-                'email' => 'periodic@dongnaiford.com.vn',
+                'email' => 'periodic@longkhanhford.com.vn',
                 'image' => ['path' => 'uploads/services/service_fixed_car.png'],
                 'benefit_image' => ['path' => 'uploads/services/service_fixed_car.png'],
                 'sliders' => [['path' => 'uploads/services/service_fixed_car.png']],
@@ -43,11 +43,11 @@ class ServiceAgencyJobSeeder extends Seeder
                     'title' => 'Dịch vụ bảo dưỡng',
                     'slug' => 'dich-vu-bao-duong',
                     'description' => 'Bảo dưỡng xe định kỳ theo chuẩn quy trình toàn cầu của Ford giúp tối ưu hóa hiệu suất xe.',
-                    'content' => '<p>Chương trình bảo dưỡng xe định kỳ chuyên nghiệp tại xưởng dịch vụ Đồng Nai Ford.</p>'
+                    'content' => '<p>Chương trình bảo dưỡng xe định kỳ chuyên nghiệp tại xưởng dịch vụ Long Khánh Ford.</p>'
                 ]
             ],
             [
-                'email' => 'repair@dongnaiford.com.vn',
+                'email' => 'repair@longkhanhford.com.vn',
                 'image' => ['path' => 'uploads/services/service_fixed_car.png'],
                 'benefit_image' => ['path' => 'uploads/services/service_fixed_car.png'],
                 'sliders' => [['path' => 'uploads/services/service_fixed_car.png']],
@@ -57,11 +57,11 @@ class ServiceAgencyJobSeeder extends Seeder
                     'title' => 'Dịch vụ sửa chữa',
                     'slug' => 'dich-vu-sua-chua',
                     'description' => 'Đội ngũ kỹ thuật viên tay nghề cao giúp chẩn đoán và khắc phục sự cố xe của bạn nhanh chóng.',
-                    'content' => '<p>Đồng Nai Ford cam kết mang đến dịch vụ sửa chữa chất lượng, sử dụng phụ tùng chính hãng.</p>'
+                    'content' => '<p>Long Khánh Ford cam kết mang đến dịch vụ sửa chữa chất lượng, sử dụng phụ tùng chính hãng.</p>'
                 ]
             ],
             [
-                'email' => 'rescue@dongnaiford.com.vn',
+                'email' => 'rescue@longkhanhford.com.vn',
                 'image' => ['path' => 'uploads/services/service_delivery.png'],
                 'benefit_image' => ['path' => 'uploads/services/service_delivery.png'],
                 'sliders' => [['path' => 'uploads/services/service_delivery.png']],
@@ -71,11 +71,11 @@ class ServiceAgencyJobSeeder extends Seeder
                     'title' => 'Dịch vụ cứu hộ 24/7',
                     'slug' => 'dich-vu-cuu-ho-247',
                     'description' => 'Hỗ trợ cứu hộ khẩn cấp mọi lúc, mọi nơi, sẵn sàng đồng hành cùng bạn trên mọi hành trình.',
-                    'content' => '<p>Dịch vụ cứu hộ 24/7 chuyên nghiệp của đại lý Đồng Nai Ford.</p>'
+                    'content' => '<p>Dịch vụ cứu hộ 24/7 chuyên nghiệp của đại lý Long Khánh Ford.</p>'
                 ]
             ],
             [
-                'email' => 'usedcars@dongnaiford.com.vn',
+                'email' => 'usedcars@longkhanhford.com.vn',
                 'image' => ['path' => 'uploads/showroom/showroom_bg.png'],
                 'benefit_image' => ['path' => 'uploads/showroom/showroom_bg.png'],
                 'sliders' => [['path' => 'uploads/showroom/showroom_bg.png']],
@@ -89,7 +89,7 @@ class ServiceAgencyJobSeeder extends Seeder
                 ]
             ],
             [
-                'email' => 'upgrade@dongnaiford.com.vn',
+                'email' => 'upgrade@longkhanhford.com.vn',
                 'image' => ['path' => 'uploads/services/service_fixed_car.png'],
                 'benefit_image' => ['path' => 'uploads/services/service_fixed_car.png'],
                 'sliders' => [['path' => 'uploads/services/service_fixed_car.png']],
@@ -103,7 +103,7 @@ class ServiceAgencyJobSeeder extends Seeder
                 ]
             ],
             [
-                'email' => 'service@dongnaiford.com.vn',
+                'email' => 'service@longkhanhford.com.vn',
                 'image' => ['path' => 'uploads/services/service_support_customer.png'],
                 'benefit_image' => ['path' => 'uploads/services/service_support_customer.png'],
                 'sliders' => [['path' => 'uploads/services/service_support_customer.png']],
@@ -117,7 +117,7 @@ class ServiceAgencyJobSeeder extends Seeder
                 ]
             ],
             [
-                'email' => 'express@dongnaiford.com.vn',
+                'email' => 'express@longkhanhford.com.vn',
                 'image' => ['path' => 'uploads/services/service_fixed_car.png'],
                 'benefit_image' => ['path' => 'uploads/services/service_fixed_car.png'],
                 'sliders' => [['path' => 'uploads/services/service_fixed_car.png']],
@@ -165,15 +165,15 @@ class ServiceAgencyJobSeeder extends Seeder
                     ['path' => 'uploads/showroom/showroom_map.png']
                 ],
                 'vi' => [
-                    'title' => 'Showroom Đồng Nai Ford - Biên Hòa',
-                    'slug' => 'showroom-dong-nai-ford-bien-hoa',
+                    'title' => 'Showroom Long Khánh Ford - Biên Hòa',
+                    'slug' => 'showroom-long-khanh-ford-bien-hoa',
                     'full_address' => 'Khu thương mại Amata, Đường Biên Hòa - Vũng Tàu, Long Bình, TP. Biên Hòa, Đồng Nai',
                     'phones' => [['number' => '(0251) 3857 130', 'type' => 'main']],
                     'info' => [
-                        'email' => 'contact@dongnaiford.com.vn',
+                        'email' => 'contact@longkhanhford.com.vn',
                         'working_time' => 'Thứ 2 - Chủ nhật: 8:00 - 18:00'
                     ],
-                    'content' => '<p>Showroom chính thức của Ford tại Đồng Nai với cơ sở vật chất hiện đại, đội ngũ chuyên nghiệp.</p>'
+                    'content' => '<p>Showroom chính thức của Ford tại Long Khánh với cơ sở vật chất hiện đại, đội ngũ chuyên nghiệp.</p>'
                 ]
             ],
             [
@@ -187,12 +187,12 @@ class ServiceAgencyJobSeeder extends Seeder
                 'link_google_map' => 'https://maps.google.com/?q=10.9804,106.9524',
                 'image' => ['path' => 'uploads/showroom/showroom_bg.png'],
                 'vi' => [
-                    'title' => 'Xưởng Dịch Vụ Đồng Nai Ford - Long Thành',
+                    'title' => 'Xưởng Dịch Vụ Long Khánh Ford - Long Thành',
                     'slug' => 'xuong-dich-vu-long-thanh',
                     'full_address' => 'KCN Long Thành, Huyện Long Thành, Đồng Nai',
                     'phones' => [['number' => '(0251) 3857 140', 'type' => 'main']],
                     'info' => [
-                        'email' => 'service@dongnaiford.com.vn',
+                        'email' => 'service@longkhanhford.com.vn',
                         'working_time' => 'Thứ 2 - Thứ 7: 8:00 - 17:30'
                     ],
                     'content' => '<p>Xưởng dịch vụ chuyên nghiệp với trang thiết bị hiện đại.</p>'
@@ -234,7 +234,7 @@ class ServiceAgencyJobSeeder extends Seeder
                     'work_address' => 'TP. Biên Hòa, Đồng Nai',
                     'working_time' => 'Thứ 2 - Thứ 7: 8:00 - 17:30, Chủ Nhật: 8:00 - 12:00',
                     'description' => 'Tư vấn và bán các sản phẩm xe Ford cho khách hàng cá nhân và doanh nghiệp.',
-                    'content' => '<h2>Mô tả công việc</h2><p>Gia nhập đội ngũ bán hàng chuyên nghiệp của Đồng Nai Ford.</p><h3>Yêu cầu</h3><ul><li>Tốt nghiệp Cao đẳng trở lên</li><li>Ưu tiên có kinh nghiệm bán hàng ô tô</li><li>Kỹ năng giao tiếp tốt, nhiệt tình</li><li>Có bằng lái xe B2</li></ul><h3>Quyền lợi</h3><ul><li>Lương cơ bản + Hoa hồng hấp dẫn (15,000,000 - 25,000,000 VNĐ)</li><li>Bảo hiểm đầy đủ theo luật</li><li>Được đào tạo chuyên sâu về sản phẩm Ford</li><li>Môi trường làm việc chuyên nghiệp</li></ul>'
+                    'content' => '<h2>Mô tả công việc</h2><p>Gia nhập đội ngũ bán hàng chuyên nghiệp của Long Khánh Ford.</p><h3>Yêu cầu</h3><ul><li>Tốt nghiệp Cao đẳng trở lên</li><li>Ưu tiên có kinh nghiệm bán hàng ô tô</li><li>Kỹ năng giao tiếp tốt, nhiệt tình</li><li>Có bằng lái xe B2</li></ul><h3>Quyền lợi</h3><ul><li>Lương cơ bản + Hoa hồng hấp dẫn (15,000,000 - 25,000,000 VNĐ)</li><li>Bảo hiểm đầy đủ theo luật</li><li>Được đào tạo chuyên sâu về sản phẩm Ford</li><li>Môi trường làm việc chuyên nghiệp</li></ul>'
                 ]
             ],
             [

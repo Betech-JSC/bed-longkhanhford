@@ -715,7 +715,7 @@ class VehicleTestSeeder extends Seeder
                         'data' => [
                             'faqs' => [
                                 ['q' => 'Ford Transit Thế hệ mới có mấy phiên bản?', 'a' => 'Transit hiện được phân phối với các phiên bản: Trend (16 chỗ), Premium (16 chỗ) và Premium (18 chỗ), đáp ứng đa dạng nhu cầu vận tải.', 'is_open' => true],
-                                ['q' => 'Chương trình ưu đãi cho khách hàng mua lô (Fleet) thế nào?', 'a' => 'Đồng Nai Ford có chính sách chiết khấu giá đặc biệt, tặng gói bảo dưỡng dài hạn và hỗ trợ hoàn tất thủ tục đăng ký biển số kinh doanh vận tải nhanh chóng cho doanh nghiệp.', 'is_open' => false]
+                                ['q' => 'Chương trình ưu đãi cho khách hàng mua lô (Fleet) thế nào?', 'a' => 'Long Khánh Ford có chính sách chiết khấu giá đặc biệt, tặng gói bảo dưỡng dài hạn và hỗ trợ hoàn tất thủ tục đăng ký biển số kinh doanh vận tải nhanh chóng cho doanh nghiệp.', 'is_open' => false]
                             ]
                         ]
                     ],
@@ -1234,7 +1234,7 @@ class VehicleTestSeeder extends Seeder
             ],
             [
                 'customer_name' => 'Chị Phương Vy (Long Thành)',
-                'content' => 'Gia đình mình mua chiếc Territory để đi lại trong phố. Xe 5 chỗ cabin rộng rãi, thiết kế đẹp và nhiều công nghệ hiện đại. Cảm ơn đội ngũ Đồng Nai Ford.',
+                'content' => 'Gia đình mình mua chiếc Territory để đi lại trong phố. Xe 5 chỗ cabin rộng rãi, thiết kế đẹp và nhiều công nghệ hiện đại. Cảm ơn đội ngũ Long Khánh Ford.',
                 'rating' => 5,
                 'vehicle_id' => $territoryDb ? $territoryDb->id : null
             ],
@@ -1270,7 +1270,7 @@ class VehicleTestSeeder extends Seeder
             ],
             [
                 'customer_name' => 'Anh Tuấn Hải (Biên Hòa)',
-                'content' => 'Trải nghiệm chiếc SUV điện Mustang Mach-E tại Đồng Nai Ford thật tuyệt vời. Xe vận hành cực kỳ êm ái, tăng tốc tức thời mà không có độ trễ của động cơ xăng, sạc pin cũng nhanh gọn.',
+                'content' => 'Trải nghiệm chiếc SUV điện Mustang Mach-E tại Long Khánh Ford thật tuyệt vời. Xe vận hành cực kỳ êm ái, tăng tốc tức thời mà không có độ trễ của động cơ xăng, sạc pin cũng nhanh gọn.',
                 'rating' => 5,
                 'vehicle_id' => $machEDb ? $machEDb->id : null
             ],
@@ -1288,7 +1288,7 @@ class VehicleTestSeeder extends Seeder
             ],
             [
                 'customer_name' => 'Anh Minh Khôi (Vĩnh Cửu)',
-                'content' => 'Đại lý Đồng Nai Ford hỗ trợ làm thủ tục vay trả góp mua xe Transit rất nhanh gọn. Xe chạy dịch vụ bền bỉ, chi phí bảo dưỡng định kỳ rẻ giúp tôi nhanh thu hồi vốn đầu tư.',
+                'content' => 'Đại lý Long Khánh Ford hỗ trợ làm thủ tục vay trả góp mua xe Transit rất nhanh gọn. Xe chạy dịch vụ bền bỉ, chi phí bảo dưỡng định kỳ rẻ giúp tôi nhanh thu hồi vốn đầu tư.',
                 'rating' => 5,
                 'vehicle_id' => $transitDb ? $transitDb->id : null
             ],

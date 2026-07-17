@@ -103,7 +103,7 @@ class ContactController extends Controller
                 ]);
             } else if ($contact->type == 'SERVICE_BOOKING') {
                 $emailData = [
-                    'mail_title' => 'Yêu cầu dịch vụ - Đồng Nai Ford',
+                    'mail_title' => 'Yêu cầu dịch vụ - Long Khánh Ford',
                     'customer_name' => $contactData['Họ và tên'],
                     'phone' => $contactData['Số điện thoại'],
                     'email' => $contactData['E-mail'] ?? '--',

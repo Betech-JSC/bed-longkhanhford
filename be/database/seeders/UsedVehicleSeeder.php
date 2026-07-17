@@ -38,14 +38,14 @@ class UsedVehicleSeeder extends Seeder
             'title' => 'Ford Ranger Wildtrak 2.0L 4x4 AT 2021',
             'slug' => 'ford-ranger-wildtrak-2-0l-4x4-at-2021',
             'tagline' => 'Xe một đời chủ, đi giữ gìn, Odo 35,000 km, cam kết không đâm đụng ngập nước.',
-            'description' => '<h3>Thông tin chi tiết xe:</h3><ul><li><strong>Năm sản xuất:</strong> 2021</li><li><strong>Số km đã đi:</strong> 35,000 km</li><li><strong>Hộp số:</strong> Tự động 10 cấp</li><li><strong>Động cơ:</strong> 2.0L Bi-Turbo Diesel</li><li><strong>Màu sắc:</strong> Cam Wildtrak đặc trưng</li></ul><p>Xe cá nhân sử dụng kỹ, bảo dưỡng định kỳ đầy đủ tại Ford Đồng Nai. Đã lên một số đồ chơi cơ bản: nắp thùng cuộn điện, dán phim cách nhiệt cao cấp 3M, thảm lót sàn 3D. Cam kết chất lượng xe bằng văn bản, hỗ trợ trả góp qua ngân hàng lên đến 70% giá trị xe.</p>'
+            'description' => '<h3>Thông tin chi tiết xe:</h3><ul><li><strong>Năm sản xuất:</strong> 2021</li><li><strong>Số km đã đi:</strong> 35,000 km</li><li><strong>Hộp số:</strong> Tự động 10 cấp</li><li><strong>Động cơ:</strong> 2.0L Bi-Turbo Diesel</li><li><strong>Màu sắc:</strong> Cam Wildtrak đặc trưng</li></ul><p>Xe cá nhân sử dụng kỹ, bảo dưỡng định kỳ đầy đủ tại Long Khánh Ford. Đã lên một số đồ chơi cơ bản: nắp thùng cuộn điện, dán phim cách nhiệt cao cấp 3M, thảm lót sàn 3D. Cam kết chất lượng xe bằng văn bản, hỗ trợ trả góp qua ngân hàng lên đến 70% giá trị xe.</p>'
         ]);
         $car1->translations()->create([
             'locale' => 'en',
             'title' => 'Used Ford Ranger Wildtrak 2.0L 4x4 AT 2021',
             'slug' => 'used-ford-ranger-wildtrak-2-0l-4x4-at-2021',
             'tagline' => 'One owner, well-maintained, Odo 35,000 km, no accident or flood history.',
-            'description' => '<h3>Vehicle Details:</h3><ul><li><strong>Year of manufacture:</strong> 2021</li><li><strong>Mileage:</strong> 35,000 km</li><li><strong>Transmission:</strong> 10-speed Automatic</li><li><strong>Engine:</strong> 2.0L Bi-Turbo Diesel</li><li><strong>Color:</strong> Signature Orange Wildtrak</li></ul><p>Privately owned car, full periodic maintenance history at Dong Nai Ford. Already upgraded with electric roller shutter, premium 3M window film, and 3D floor mats. Certified quality, bank loan support up to 70% of vehicle value.</p>'
+            'description' => '<h3>Vehicle Details:</h3><ul><li><strong>Year of manufacture:</strong> 2021</li><li><strong>Mileage:</strong> 35,000 km</li><li><strong>Transmission:</strong> 10-speed Automatic</li><li><strong>Engine:</strong> 2.0L Bi-Turbo Diesel</li><li><strong>Color:</strong> Signature Orange Wildtrak</li></ul><p>Privately owned car, full periodic maintenance history at Long Khanh Ford. Already upgraded with electric roller shutter, premium 3M window film, and 3D floor mats. Certified quality, bank loan support up to 70% of vehicle value.</p>'
         ]);
 
         // 2. Ford Everest Titanium 2023

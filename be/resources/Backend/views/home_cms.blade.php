@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đồng Nai Ford - Cổng CMS & API Gateway</title>
+    <title>Long Khánh Ford - Cổng CMS & API Gateway</title>
     <link rel="shortcut icon" type="image/png" href="/favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -237,7 +237,7 @@
     <div class="container">
         <div class="card">
             <div class="logo-container">
-                <span class="brand-name">ĐỒNG NAI FORD</span>
+                <span class="brand-name">LONG KHÁNH FORD</span>
             </div>
             
             <h1>Portal CMS & API Gateway</h1>

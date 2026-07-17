@@ -7,7 +7,7 @@ import { siteAssets } from "@/lib/site-assets";
 export const metadata: Metadata = {
   title: "Dịch vụ Bảo hành, Sửa chữa & Chăm sóc xe chính hãng | Long Khánh Ford",
   description: "Xưởng dịch vụ lớn nhất khu vực Đồng Nai của đại lý Long Khánh Ford. Cung cấp các gói bảo dưỡng định kỳ, bảo dưỡng nhanh 60 phút, sửa chữa chung, và nhận giao xe tận nhà chuyên nghiệp.",
-  keywords: "dịch vụ bảo dưỡng xe ford, sửa xe ford chính hãng, đồng nai ford amata, bảo dưỡng nhanh biên hòa, thay nhớt ford đồng nai",
+  keywords: "dịch vụ bảo dưỡng xe ford, sửa xe ford chính hãng, long khánh ford, bảo dưỡng nhanh long khánh, thay nhớt ford long khánh",
   alternates: {
     canonical: "/dich-vu",
   },

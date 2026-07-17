@@ -62,10 +62,10 @@ class PostNewsSeeder extends Seeder
                 'category_ids' => [1, 2], // Xe Ford
                 'tag_ids' => [3, 6], // Everest, Đánh giá xe
                 'vi' => [
-                    'title' => 'Ford Everest Máy Xăng: Sự Thật Ít Ai Biết & Tư Vấn Mua Xe Tại Đồng Nai Ford',
+                    'title' => 'Ford Everest Máy Xăng: Sự Thật Ít Ai Biết & Tư Vấn Mua Xe Tại Long Khánh Ford',
                     'slug' => 'ford-everest-may-xang-su-that-it-ai-biet',
                     'description' => 'Ford Everest luôn là cái tên hot trong phân khúc SUV 7 chỗ tại Việt Nam. Bài viết này sẽ phân tích chi tiết phiên bản máy xăng của Ford Everest thế hệ mới.',
-                    'content' => '<h2>Ưu điểm nổi bật của Ford Everest Động cơ Xăng</h2><p>Khác với động cơ dầu có tiếng nổ đặc trưng và độ rung nhẹ, động cơ xăng Ecoboost mang lại trải nghiệm vận hành êm ái đến kinh ngạc. Cabin xe hoàn toàn yên tĩnh, giúp các chuyến đi dài cùng gia dịch trở nên thư thái hơn rất nhiều.</p><h3>Mức tiêu hao nhiên liệu thực tế tại Đồng Nai</h3><p>Qua các thử nghiệm thực tế của đội ngũ kỹ thuật Đồng Nai Ford trên cung đường từ TP. Biên Hòa đi Long Khánh, mức tiêu hao nhiên liệu trung bình của Ford Everest máy xăng rơi vào khoảng 8.5L/100km đường trường và khoảng 11L - 12L/100km trong điều kiện đô thị đông đúc.</p>'
+                    'content' => '<h2>Ưu điểm nổi bật của Ford Everest Động cơ Xăng</h2><p>Khác với động cơ dầu có tiếng nổ đặc trưng và độ rung nhẹ, động cơ xăng Ecoboost mang lại trải nghiệm vận hành êm ái đến kinh ngạc. Cabin xe hoàn toàn yên tĩnh, giúp các chuyến đi dài cùng gia dịch trở nên thư thái hơn rất nhiều.</p><h3>Mức tiêu hao nhiên liệu thực tế tại Long Khánh</h3><p>Qua các thử nghiệm thực tế của đội ngũ kỹ thuật Long Khánh Ford trên cung đường từ TP. Biên Hòa đi Long Khánh, mức tiêu hao nhiên liệu trung bình của Ford Everest máy xăng rơi vào khoảng 8.5L/100km đường trường và khoảng 11L - 12L/100km trong điều kiện đô thị đông đúc.</p>'
                 ]
             ],
             [
@@ -79,7 +79,7 @@ class PostNewsSeeder extends Seeder
                 'vi' => [
                     'title' => 'CHƯƠNG TRÌNH KHUYẾN MÃI TRONG THÁNG 5',
                     'slug' => 'chuong-trinh-khuyen-mai-thang-5',
-                    'description' => 'Đồng Nai Ford triển khai chương trình khuyến mãi cực khủng: Hỗ trợ lên đến 100% lệ phí trước bạ cho các dòng xe SUV Territory, Ranger XLS.',
+                    'description' => 'Long Khánh Ford triển khai chương trình khuyến mãi cực khủng: Hỗ trợ lên đến 100% lệ phí trước bạ cho các dòng xe SUV Territory, Ranger XLS.',
                     'content' => '<h2>Đồng loạt giảm 10% các dịch vụ kỹ thuật cao</h2><ul><li>Vệ sinh buồng đốt bằng khí Hydro, vệ sinh kim phun bằng sóng siêu âm.</li><li>Dịch vụ vệ sinh và khử khuẩn dàn lạnh điều hòa bằng thiết bị chuyên dùng.</li><li>Cân chỉnh thước lái điện tử 3D bằng hệ thống Hunter hiện đại.</li></ul><h3>Ưu đãi cộng thêm dành cho khách hàng đặt lịch hẹn trước</h3><p>Giảm ngay 500.000đ cho các dòng xe Ford quay lại làm dịch vụ thay nhớt sau thời gian trên 12 tháng chưa quay lại xưởng.</p>'
                 ]
             ],
@@ -91,7 +91,7 @@ class PostNewsSeeder extends Seeder
                 'category_ids' => [2], // Xe Ford
                 'tag_ids' => [2, 5, 6], // Bán tải, Ranger, Đánh giá xe
                 'vi' => [
-                    'title' => 'Ford Ranger Raptor: Đánh Giá Chi Tiết & Báo Giá Mới Nhất Tại Đồng Nai Ford',
+                    'title' => 'Ford Ranger Raptor: Đánh Giá Chi Tiết & Báo Giá Mới Nhất Tại Long Khánh Ford',
                     'slug' => 'ford-ranger-raptor-danh-gia-chi-tiet',
                     'description' => 'Được phát triển bởi Ford Performance, dòng Ranger Raptor sở hữu những nâng cấp vượt trội về hệ thống lái và khung gầm.',
                     'content' => '<h2>Khả năng Off-road tối thượng nhờ hệ thống giảm xóc FOX</h2><p>Điểm đắt giá nhất trên Ranger Raptor chính là bộ giảm xóc FOX Live Valve 2.5 inch. Hệ thống treo này có khả năng tự động điều chỉnh độ cứng/mềm theo thời gian thực dựa trên địa hình thực tế.</p><h3>Động cơ Bi-Turbo 2.0L mạnh mẽ</h3><p>Trái tim của Ranger Raptor là khối động cơ Diesel Bi-Turbo 2.0L sản sinh công suất tối đa lên đến 210 mã lực và mô-men xoắn cực đại 500 Nm.</p>'
@@ -134,9 +134,9 @@ class PostNewsSeeder extends Seeder
                 'category_ids' => [1], // Tin tức
                 'tag_ids' => [],
                 'vi' => [
-                    'title' => 'Đồng Nai Ford đồng hành cùng chương trình Hướng dẫn Lái xe An toàn (DSFL)',
-                    'slug' => 'dong-nai-ford-chuong-trinh-lai-xe-an-toan',
-                    'description' => 'Chương trình Hướng dẫn Lái xe An toàn và Thân thiện với Môi trường (DSFL) do Ford Việt Nam phối hợp cùng Đồng Nai Ford tổ chức thu hút hơn 200 học viên tham gia.',
+                    'title' => 'Long Khánh Ford đồng hành cùng chương trình Hướng dẫn Lái xe An toàn (DSFL)',
+                    'slug' => 'long-khanh-ford-chuong-trinh-lai-xe-an-toan',
+                    'description' => 'Chương trình Hướng dẫn Lái xe An toàn và Thân thiện với Môi trường (DSFL) do Ford Việt Nam phối hợp cùng Long Khánh Ford tổ chức thu hút hơn 200 học viên tham gia.',
                     'content' => '<h2>Trang bị kiến thức và kỹ năng thực tế</h2><p>Chương trình tập trung huấn luyện các kỹ năng thiết thực như: nhận diện nguy hiểm từ xa, kiểm soát lái trong các tình huống trơn trượt, lái xe tiết kiệm nhiên liệu.</p>'
                 ]
             ],

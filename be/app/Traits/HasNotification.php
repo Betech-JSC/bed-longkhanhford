@@ -32,13 +32,13 @@ trait HasNotification
             } else {
                 $emails = array_filter(explode(',', notification_to()));
                 if (empty($emails)) {
-                    $emails = [config('contact.mail_spam') ?: 'admin@dongnaiford.com.vn'];
+                    $emails = [config('contact.mail_spam') ?: 'admin@longkhanhford.com.vn'];
                 }
 
                 if ($model->type === 'SERVICE_BOOKING') {
                     $contactData = $model->data;
                     $emailData = [
-                        'mail_title' => 'Yêu cầu dịch vụ - Đồng Nai Ford',
+                        'mail_title' => 'Yêu cầu dịch vụ - Long Khánh Ford',
                         'customer_name' => $contactData['Họ và tên'],
                         'phone' => $contactData['Số điện thoại'],
                         'email' => $contactData['E-mail'] ?? '--',

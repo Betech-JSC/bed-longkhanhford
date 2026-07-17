@@ -118,7 +118,7 @@
                         class="border border-gray-200 rounded p-4 bg-white max-w-2xl font-sans"
                     >
                         <div class="text-xs text-gray-500 mb-1 flex items-center">
-                            <span>https://dongnaiford.com.vn</span>
+                            <span>https://longkhanhford.com.vn</span>
                             <span class="mx-1">›</span>
                             <span class="truncate max-w-[200px]">{{ currentSlug || 'sample-slug' }}</span>
                         </div>
@@ -139,8 +139,8 @@
                         <div class="flex items-center space-x-2 text-xs text-gray-500 mb-1">
                             <div class="w-4 h-4 rounded-full bg-gray-100 flex items-center justify-center font-bold text-[8px] text-gray-600">F</div>
                             <div class="flex flex-col">
-                                <span class="text-[10px] text-gray-800 leading-none">Đồng Nai Ford</span>
-                                <span class="text-[9px] text-gray-400 leading-none mt-0.5">https://dongnaiford.com.vn/{{ currentSlug || 'slug' }}</span>
+                                <span class="text-[10px] text-gray-800 leading-none">Long Khánh Ford</span>
+                                <span class="text-[9px] text-gray-400 leading-none mt-0.5">https://longkhanhford.com.vn/{{ currentSlug || 'slug' }}</span>
                             </div>
                         </div>
                         <h4 class="text-base text-[#15c] font-medium hover:underline cursor-pointer m-0 leading-tight">
