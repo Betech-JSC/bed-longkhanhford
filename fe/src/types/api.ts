@@ -50,6 +50,7 @@ export interface APIVehicleVersion {
   id: number;
   vehicle_id: number;
   version_name: string;
+  name?: string;
   price: string;
   is_active: boolean;
   sort_order: number;
