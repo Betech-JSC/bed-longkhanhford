@@ -309,9 +309,6 @@ export default function PriceListPage() {
                                           style={{ backgroundColor: colorHex }}
                                           title={color.name || "Màu xe"}
                                         >
-                                          {isSelected && (
-                                            <span className="w-1.5 h-1.5 rounded-full bg-white mix-blend-difference" />
-                                          )}
                                         </button>
                                       );
                                     })}
