@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { MapPin, Mail, Phone, Search, ChevronDown, ChevronRight } from "lucide-react";
+import { MapPin, Mail, Phone, Search, ChevronDown, ChevronRight, X } from "lucide-react";
 import { vehiclesAPI, accessoriesAPI, servicesAPI, usedVehiclesAPI } from "@/lib/api";
 
 type DropdownItem = {
@@ -20,6 +20,9 @@ type NavLink = {
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const pathname = usePathname();
   const isTransparentPage = pathname === "/" || [
     "/gioi-thieu",
@@ -87,6 +90,43 @@ export default function Navbar() {
       }
     };
   }, []);
+
+  // Focus search input when overlay opens
+  useEffect(() => {
+    if (isSearchOpen) {
+      setTimeout(() => searchInputRef.current?.focus(), 100);
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [isSearchOpen]);
+
+  // Close search on Escape
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isSearchOpen) {
+        setIsSearchOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isSearchOpen]);
+
+  // Close search on route change
+  useEffect(() => {
+    setIsSearchOpen(false);
+    setSearchQuery("");
+  }, [pathname]);
+
+  const handleSearchSubmit = () => {
+    const q = searchQuery.trim();
+    if (q) {
+      setIsSearchOpen(false);
+      router.push(`/tim-kiem?q=${encodeURIComponent(q)}`);
+      setSearchQuery("");
+    }
+  };
 
   // Fetch Category, Vehicle, Accessories & Services data from API
   useEffect(() => {
@@ -567,15 +607,15 @@ export default function Navbar() {
             </div>
             {/* Search Icon */}
             <div className="flex items-center">
-              <Link 
-                href="/tim-kiem" 
+              <button 
+                onClick={() => setIsSearchOpen(!isSearchOpen)}
                 className={`p-2 transition-colors duration-300 cursor-pointer ${
-                  isTransparent ? "text-white hover:text-[#066fef]" : "text-[#333333] hover:text-[#066fef]"
+                  isSearchOpen ? "text-[#066fef]" : isTransparent ? "text-white hover:text-[#066fef]" : "text-[#333333] hover:text-[#066fef]"
                 }`} 
                 aria-label="Search"
               >
-                <Search className="w-5 h-5" />
-              </Link>
+                {isSearchOpen ? <X className="w-5 h-5" /> : <Search className="w-5 h-5" />}
+              </button>
             </div>
           </div>
         </div>
@@ -601,15 +641,15 @@ export default function Navbar() {
 
           {/* Controls */}
           <div className="flex items-center gap-3">
-            <Link 
-              href="/tim-kiem" 
+            <button 
+              onClick={() => setIsSearchOpen(!isSearchOpen)}
               className={`p-2 transition-colors duration-300 cursor-pointer ${
-                isTransparent ? "text-white hover:text-[#066fef]" : "text-[#333333] hover:text-[#066fef]"
+                isSearchOpen ? "text-[#066fef]" : isTransparent ? "text-white hover:text-[#066fef]" : "text-[#333333] hover:text-[#066fef]"
               }`} 
               aria-label="Search"
             >
-              <Search className="w-5 h-5" />
-            </Link>
+              {isSearchOpen ? <X className="w-5 h-5" /> : <Search className="w-5 h-5" />}
+            </button>
             <Link
               href="/dang-ky-lai-thu"
               className="btn-ford-primary text-xs py-1.5 px-3 uppercase tracking-wider font-bold whitespace-nowrap flex-shrink-0"
@@ -641,6 +681,46 @@ export default function Navbar() {
           </div>
         </div>
       </nav>
+
+      {/* Search Overlay Panel (Ford China style) */}
+      <div 
+        className={`absolute top-full left-0 w-full bg-white border-b border-gray-200 shadow-lg transition-all duration-300 ease-in-out z-[60] overflow-hidden
+          ${isSearchOpen 
+            ? "max-h-[200px] opacity-100 visible translate-y-0" 
+            : "max-h-0 opacity-0 invisible -translate-y-2 pointer-events-none"}`}
+      >
+        <div className="max-w-[720px] mx-auto px-6 py-10">
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#808080]" />
+            <input
+              ref={searchInputRef}
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") handleSearchSubmit(); }}
+              placeholder="Tìm kiếm xe, tin tức, dịch vụ..."
+              className="w-full bg-transparent border border-[#d6d6d6] rounded-none text-[16px] text-[#1a1a1a] placeholder-[#808080] pl-12 pr-12 py-3.5 focus:outline-none focus:border-[#066fef] transition-colors font-['Ford_Antenna',sans-serif]"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-[#808080] hover:text-[#1a1a1a] transition-colors cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Search overlay backdrop */}
+      {isSearchOpen && (
+        <div 
+          className="fixed inset-0 bg-black/30 z-[55] top-0" 
+          style={{ top: 'var(--navbar-height, 120px)' }}
+          onClick={() => setIsSearchOpen(false)} 
+        />
+      )}
 
       <div 
         className={`absolute top-full left-0 w-full bg-white border-t border-b border-gray-200 shadow-xl transition-all duration-500 ease-in-out z-50 overflow-hidden
