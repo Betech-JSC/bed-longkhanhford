@@ -23,6 +23,7 @@ import {
 import { vehicles, Vehicle } from "@/data/vehicles";
 import { getPopularVehicleImage, siteAssets, handleImageError } from "@/lib/site-assets";
 import { bannersAPI, postsAPI, vehiclesAPI, servicesAPI, customerHandoversAPI } from "@/lib/api";
+import { motion } from "motion/react";
 import SafeImage from "@/components/shared/SafeImage";
 import Button from "@/components/shared/Button";
 
@@ -859,43 +860,62 @@ export default function Home() {
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
                     {/* Left: Highlight Vehicle Image */}
                     <div className="lg:col-span-8 flex flex-col items-center justify-center">
-                      <div 
-                        className={`relative w-full aspect-[3/2] lg:aspect-[16/10] max-h-[420px] lg:max-h-[500px] flex items-center justify-center transition-all duration-300 transform group ${
+                      <motion.div 
+                        drag="x"
+                        dragConstraints={{ left: 0, right: 0 }}
+                        dragElastic={0.2}
+                        onDragEnd={(event, info) => {
+                          const swipeThreshold = 55;
+                          if (info.offset.x < -swipeThreshold) {
+                            handleNextCar();
+                          } else if (info.offset.x > swipeThreshold) {
+                            handlePrevCar();
+                          }
+                        }}
+                        className={`relative w-full aspect-[3/2] lg:aspect-[16/10] max-h-[420px] lg:max-h-[500px] flex items-center justify-center transition-all duration-300 transform group cursor-grab active:cursor-grabbing select-none ${
                           isFading ? "opacity-0 scale-95" : "opacity-100 scale-100"
                         }`}
                       >
                         {/* Left Arrow Button */}
                         {filteredVehicles.length > 1 && (
                           <button
-                            onClick={handlePrevCar}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handlePrevCar();
+                            }}
                             className="absolute left-2 z-20 p-2.5 rounded-full bg-white/80 hover:bg-white text-neutral-800 hover:text-black shadow-[0_4px_12px_rgba(0,0,0,0.1)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.15)] transition-all duration-200 border-0 cursor-pointer flex items-center justify-center opacity-100 lg:opacity-0 lg:group-hover:opacity-100"
                             aria-label="Previous vehicle"
                           >
-                            <ChevronLeft className="w-5 h-5" />
+                            <ChevronLeft className="w-5 h-5 pointer-events-none" />
                           </button>
                         )}
 
-                        <SafeImage
-                          src={vehicleCardImage}
-                          alt={vehicleName}
-                          fill
-                          sizes="(max-width: 1024px) 100vw, 800px"
-                          className="object-contain object-center select-none scale-[1.15]"
-                          priority
-                          unoptimized={true}
-                        />
+                        <div className="w-full h-full pointer-events-none relative flex items-center justify-center">
+                          <SafeImage
+                            src={vehicleCardImage}
+                            alt={vehicleName}
+                            fill
+                            sizes="(max-width: 1024px) 100vw, 800px"
+                            className="object-contain object-center select-none scale-[1.15] pointer-events-none"
+                            priority
+                            unoptimized={true}
+                          />
+                        </div>
 
                         {/* Right Arrow Button */}
                         {filteredVehicles.length > 1 && (
                           <button
-                            onClick={handleNextCar}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleNextCar();
+                            }}
                             className="absolute right-2 z-20 p-2.5 rounded-full bg-white/80 hover:bg-white text-neutral-800 hover:text-black shadow-[0_4px_12px_rgba(0,0,0,0.1)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.15)] transition-all duration-200 border-0 cursor-pointer flex items-center justify-center opacity-100 lg:opacity-0 lg:group-hover:opacity-100"
                             aria-label="Next vehicle"
                           >
-                            <ChevronRight className="w-5 h-5" />
+                            <ChevronRight className="w-5 h-5 pointer-events-none" />
                           </button>
                         )}
-                      </div>
+                      </motion.div>
 
                       {/* Slider indicator dots */}
                       {filteredVehicles.length > 1 && (
