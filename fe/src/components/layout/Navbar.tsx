@@ -503,7 +503,7 @@ export default function Navbar() {
         {/* Desktop Split Layout */}
         <div className="hidden lg:grid lg:grid-cols-[1fr_auto_1fr] items-center w-full h-full">
           {/* Left Menu Links */}
-          <div className="flex justify-end items-stretch gap-3 xl:gap-5 h-full pr-8 xl:pr-12">
+          <div className="flex justify-start items-stretch gap-3 xl:gap-5 h-full">
             {leftLinks.map((link) => renderNavLink(link, "-left"))}
           </div>
 
@@ -527,20 +527,22 @@ export default function Navbar() {
           </div>
 
           {/* Right Menu Links & Search */}
-          <div className="flex justify-between items-center h-full pl-8 xl:pl-12 w-full">
+          <div className="flex justify-end items-stretch gap-6 xl:gap-8 h-full w-full">
             <div className="flex items-stretch gap-3 xl:gap-5 h-full">
               {rightLinks.map((link) => renderNavLink(link, "-right"))}
             </div>
             {/* Search Icon */}
-            <Link 
-              href="/tim-kiem" 
-              className={`p-2 transition-colors duration-300 cursor-pointer ${
-                isTransparent ? "text-white hover:text-[#066fef]" : "text-[#333333] hover:text-[#066fef]"
-              }`} 
-              aria-label="Search"
-            >
-              <Search className="w-5 h-5" />
-            </Link>
+            <div className="flex items-center">
+              <Link 
+                href="/tim-kiem" 
+                className={`p-2 transition-colors duration-300 cursor-pointer ${
+                  isTransparent ? "text-white hover:text-[#066fef]" : "text-[#333333] hover:text-[#066fef]"
+                }`} 
+                aria-label="Search"
+              >
+                <Search className="w-5 h-5" />
+              </Link>
+            </div>
           </div>
         </div>
 
