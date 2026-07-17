@@ -101,7 +101,7 @@ function groupVehiclesBySeries(apiVehicles: APIVehicle[]): GroupedVehicle[] {
     const vehicleVersions = vehicle.versions && vehicle.versions.length > 0
       ? vehicle.versions.map(v => ({
           id: v.id,
-          name: v.version_name || vehicle.title,
+          name: v.name || v.version_name || vehicle.title,
           price: typeof v.price === 'string' ? parseFloat(v.price) : Number(v.price || 0),
           specs: (v.specs || {}) as Record<string, string | undefined>
         }))
@@ -280,8 +280,8 @@ export default function PriceListPage() {
                                       
                                       // Determine if this color is currently active
                                       const isSelected = selectedColors[vehicle.id]
-                                        ? selectedColors[vehicle.id] === colorImg
-                                        : false;
+                                         ? selectedColors[vehicle.id] === colorImg
+                                         : (colorImg && (colorImg === vehicle.image_url || (!vehicle.colors.some(c => c.image_path === vehicle.image_url) && idx === 0)));
 
                                       return (
                                         <button
