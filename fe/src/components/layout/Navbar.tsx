@@ -34,8 +34,7 @@ export default function Navbar() {
     "/tin-tuc",
     "/tuyen-dung",
     "/phu-kien",
-    "/san-pham",
-    "/cong-cu"
+    "/san-pham"
   ].some(path => pathname === path || pathname.startsWith(path + "/"));
   const router = useRouter();
   const [activeSection, setActiveSection] = useState("");
