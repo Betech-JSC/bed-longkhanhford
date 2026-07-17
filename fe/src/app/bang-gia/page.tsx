@@ -241,20 +241,25 @@ export default function PriceListPage() {
               <motion.div layout className="space-y-12">
                 <AnimatePresence mode="popLayout">
                   {filteredVehicles.map((vehicle) => {
-                    const specs = vehicle.versions[0]?.specs || {};
-                    
                     // Get active version selection
                     const defaultVersion = vehicle.versions[0];
                     const activeVersionId = selectedVersionIds[vehicle.id] !== undefined
                       ? selectedVersionIds[vehicle.id]
                       : defaultVersion?.id;
                     const activeVersion = vehicle.versions.find(v => v.id === activeVersionId) || defaultVersion;
-
+                    const specs = activeVersion?.specs || {};
+                    
                     // Find the first color matching active image_url to highlight on initial load
-                    const firstMatchIdx = vehicle.colors.findIndex(c => c.image_path && (
-                      c.image_path === vehicle.image_url ||
-                      (typeof window !== 'undefined' && `${window.location.origin}/storage/${c.image_path}` === vehicle.image_url)
-                    ));
+                    const firstMatchIdx = vehicle.colors.findIndex(c => {
+                      const versionColor = activeVersion?.colors?.find((vc: any) => 
+                        vc.name.toLowerCase() === c.name.toLowerCase() || 
+                        vc.hex.toLowerCase() === c.hex.toLowerCase()
+                      );
+                      const activeColorImg = (versionColor?.images_360 && versionColor.images_360.length > 0)
+                        ? versionColor.images_360[0]
+                        : (versionColor?.image_path || c.image_path || "");
+                      return activeColorImg && activeColorImg === (activeVersion?.image_url || vehicle.image_url);
+                    });
                     const defaultActiveIdx = firstMatchIdx !== -1 ? firstMatchIdx : 0;
                     
                     const activeImg = selectedColors[vehicle.id] 
