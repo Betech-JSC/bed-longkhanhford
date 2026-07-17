@@ -61,6 +61,42 @@ class VehicleController extends Controller
                 'image_thumbnail_url' => $ver->image_thumbnail_url,
                 'specs'               => $ver->specs ?? [],
                 'sort_order'          => $ver->sort_order,
+                'colors'              => collect($ver->colors ?? [])->map(function ($color) {
+                    $imagePath = null;
+                    if (isset($color['image_path'])) {
+                        $imagePath = static_url($color['image_path']);
+                    } elseif (isset($color['image'])) {
+                        $imagePath = $this->resolveFileUrl($color['image']);
+                    }
+
+                    $images360 = [];
+                    if (isset($color['images_360']) && is_array($color['images_360'])) {
+                        $images360 = collect($color['images_360'])->map(function($img) {
+                            return $this->resolveFileUrl($img);
+                        })->filter()->values()->toArray();
+                    }
+
+                    $image360Internal = null;
+                    if (isset($color['image_360_internal'])) {
+                        $image360Internal = $this->resolveFileUrl($color['image_360_internal']);
+                    }
+
+                    $images360Internal = [];
+                    if (isset($color['images_360_internal']) && is_array($color['images_360_internal'])) {
+                        $images360Internal = collect($color['images_360_internal'])->map(function($img) {
+                            return $this->resolveFileUrl($img);
+                        })->filter()->values()->toArray();
+                    }
+
+                    return [
+                        'name'                => $color['name'] ?? ($color['color_name'] ?? ''),
+                        'hex'                 => $color['hex'] ?? ($color['color_code'] ?? ''),
+                        'image_path'          => $imagePath,
+                        'images_360'          => $images360,
+                        'image_360_internal'  => $image360Internal,
+                        'images_360_internal' => $images360Internal,
+                    ];
+                })->toArray(),
             ])->toArray();
         }
 

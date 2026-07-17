@@ -18,6 +18,7 @@ interface VersionItem {
   image_url?: string;
   image_thumbnail_url?: string;
   specs: Record<string, string | undefined>;
+  colors?: any[];
 }
 
 interface ColorItem {
@@ -107,13 +108,15 @@ function groupVehiclesBySeries(apiVehicles: APIVehicle[]): GroupedVehicle[] {
           price: typeof v.price === 'string' ? parseFloat(v.price) : Number(v.price || 0),
           image_url: v.image_url,
           image_thumbnail_url: v.image_thumbnail_url,
-          specs: (v.specs || {}) as Record<string, string | undefined>
+          specs: (v.specs || {}) as Record<string, string | undefined>,
+          colors: v.colors || []
         }))
       : [{
           id: vehicle.slug || `version-${vehicle.id}`,
           name: vehicle.title,
           price: typeof vehicle.base_price === 'string' ? parseFloat(vehicle.base_price) : Number(vehicle.base_price || 0),
-          specs: {} as Record<string, string | undefined>
+          specs: {} as Record<string, string | undefined>,
+          colors: []
         }];
 
     vehicleVersions.forEach((v) => {
@@ -121,7 +124,8 @@ function groupVehiclesBySeries(apiVehicles: APIVehicle[]): GroupedVehicle[] {
         id: v.id || `v-${v.name}`,
         name: v.name,
         price: v.price,
-        specs: v.specs
+        specs: v.specs,
+        colors: v.colors
       });
     });
   });
@@ -300,7 +304,18 @@ export default function PriceListPage() {
                                   </span>
                                   <div className="flex flex-wrap gap-3">
                                     {vehicle.colors.map((color, idx) => {
-                                      const colorImg = color.image_path || "";
+                                      // Find matching color in the active version to get version-specific or color-shifted image
+                                      const versionColor = activeVersion?.colors?.find((c: any) => 
+                                        c.name.toLowerCase() === color.name.toLowerCase() || 
+                                        c.hex.toLowerCase() === color.hex.toLowerCase()
+                                      );
+                                      
+                                      // Try to get first image of 360 sequence of that version color, or its image_path
+                                      const versionColorImg = (versionColor?.images_360 && versionColor.images_360.length > 0)
+                                        ? versionColor.images_360[0]
+                                        : (versionColor?.image_path || "");
+
+                                      const colorImg = versionColorImg || color.image_path || "";
                                       const colorHex = color.hex || "#ffffff";
                                       
                                       // Determine if this color is currently active
