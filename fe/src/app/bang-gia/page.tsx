@@ -4,42 +4,21 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { vehiclesAPI } from "@/lib/api";
-import { formatVND } from "@/lib/rolling-cost";
+import { formatVND, formatPriceShort } from "@/lib/rolling-cost";
 import { getPopularVehicleImage, handleImageError } from "@/lib/site-assets";
-import { ChevronRight, Calculator, FileText, Info } from "lucide-react";
+import { ChevronRight, Calculator, FileText } from "lucide-react";
 import BookingBanner from "@/components/services/BookingBanner";
-import { motion, AnimatePresence } from "motion/react";
-import { APIVehicle } from "@/types/api";
-
-interface VersionItem {
-  id: string | number;
-  name: string;
-  price: number;
-  image_url?: string;
-  image_thumbnail_url?: string;
-  specs: Record<string, string | undefined>;
-  colors?: any[];
-}
-
-interface ColorItem {
-  name: string;
-  hex: string;
-  image_path: string | null;
-}
-
-interface GroupedVehicle {
-  id: string;
-  name: string;
-  type: string;
-  typeName: string;
-  image_url: string;
-  versions: VersionItem[];
-  colors: ColorItem[];
-}
 
 // Helper function to group individual dynamic variants into parent model series
-function groupVehiclesBySeries(apiVehicles: APIVehicle[]): GroupedVehicle[] {
-  const groups: Record<string, GroupedVehicle> = {};
+function groupVehiclesBySeries(apiVehicles: any[]) {
+  const groups: { [key: string]: {
+    id: string;
+    name: string;
+    type: string;
+    typeName: string;
+    image_url: string;
+    versions: any[];
+  }} = {};
 
   apiVehicles.forEach((vehicle) => {
     let seriesKey = "";
@@ -78,8 +57,6 @@ function groupVehiclesBySeries(apiVehicles: APIVehicle[]): GroupedVehicle[] {
       typeName = vehicle.type === "suv" ? "SUV" : vehicle.type === "pickup" ? "Bán tải" : "Thương mại";
     }
 
-    const vehicleColors = (vehicle.colors || []) as unknown as ColorItem[];
-
     if (!groups[seriesKey]) {
       groups[seriesKey] = {
         id: seriesKey,
@@ -87,45 +64,25 @@ function groupVehiclesBySeries(apiVehicles: APIVehicle[]): GroupedVehicle[] {
         type: vehicle.type || "suv",
         typeName: typeName,
         image_url: vehicle.image_thumbnail_url || vehicle.image_url || "",
-        versions: [],
-        colors: vehicleColors
+        versions: []
       };
-    } else {
-      // Merge colors
-      if (vehicleColors.length > 0) {
-        vehicleColors.forEach((col) => {
-          if (!groups[seriesKey].colors.some((existingCol) => existingCol.hex === col.hex)) {
-            groups[seriesKey].colors.push(col);
-          }
-        });
-      }
     }
 
     const vehicleVersions = vehicle.versions && vehicle.versions.length > 0
-      ? vehicle.versions.map(v => ({
-          id: v.id,
-          name: v.name || v.version_name || vehicle.title,
-          price: typeof v.price === 'string' ? parseFloat(v.price) : Number(v.price || 0),
-          image_url: v.image_url,
-          image_thumbnail_url: v.image_thumbnail_url,
-          specs: (v.specs || {}) as Record<string, string | undefined>,
-          colors: v.colors || []
-        }))
+      ? vehicle.versions
       : [{
           id: vehicle.slug || `version-${vehicle.id}`,
           name: vehicle.title,
-          price: typeof vehicle.base_price === 'string' ? parseFloat(vehicle.base_price) : Number(vehicle.base_price || 0),
-          specs: {} as Record<string, string | undefined>,
-          colors: []
+          price: typeof vehicle.base_price === 'string' ? parseFloat(vehicle.base_price) : (vehicle.base_price || 0),
+          specs: vehicle.specs || {}
         }];
 
-    vehicleVersions.forEach((v) => {
+    vehicleVersions.forEach((v: any) => {
       groups[seriesKey].versions.push({
-        id: v.id || `v-${v.name}`,
-        name: v.name,
-        price: v.price,
-        specs: v.specs,
-        colors: v.colors
+        id: v.slug || v.id || `v-${v.name}`,
+        name: v.name || v.title || vehicle.title,
+        price: typeof v.price === 'string' ? parseFloat(v.price) : (v.price || 0),
+        specs: v.specs || {}
       });
     });
   });
@@ -139,12 +96,8 @@ function groupVehiclesBySeries(apiVehicles: APIVehicle[]): GroupedVehicle[] {
 }
 
 export default function PriceListPage() {
-  const [vehicles, setVehicles] = useState<GroupedVehicle[]>([]);
+  const [vehicles, setVehicles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<string>("all");
-  const [selectedColors, setSelectedColors] = useState<Record<string, string>>({});
-  const [selectedColorNames, setSelectedColorNames] = useState<Record<string, string>>({});
-  const [selectedVersionIds, setSelectedVersionIds] = useState<Record<string, string | number>>({});
 
   useEffect(() => {
     vehiclesAPI
@@ -162,22 +115,10 @@ export default function PriceListPage() {
         setLoading(false);
       });
   }, []);
-
-  const categories = [
-    { id: "all", name: "Tất cả dòng xe" },
-    { id: "suv", name: "Dòng xe SUV" },
-    { id: "pickup", name: "Dòng xe bán tải" },
-    { id: "commercial", name: "Xe thương mại" }
-  ];
-
-  const filteredVehicles = activeTab === "all"
-    ? vehicles
-    : vehicles.filter(v => v.type === activeTab);
-
   return (
-    <div className="bg-[#f8f8f8] min-h-screen font-sans">
+    <div className="bg-[#fafafa] min-h-screen font-sans">
       {/* Hero */}
-      <section className="relative w-full bg-gradient-to-br from-neutral-900 to-[#00095b] text-white pt-28 pb-14 md:pb-18 overflow-hidden">
+      <section className="relative w-full bg-gradient-to-br from-neutral-900 to-[#01095c] text-white pt-28 pb-14 md:pb-18 overflow-hidden">
         <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] relative z-10">
           {/* Breadcrumb inside Hero */}
           <div className="text-xs text-white/60 font-medium flex items-center gap-1.5 mb-6 justify-center">
@@ -191,7 +132,7 @@ export default function PriceListPage() {
             <h1 className="text-3xl md:text-5xl font-bold tracking-tight uppercase leading-[1.2] mb-3 font-antenna">
               Bảng giá xe Ford 2026
             </h1>
-            <p className="text-white/80 text-sm md:text-base max-w-2xl mx-auto font-antenna">
+            <p className="text-white/80 text-base md:text-lg max-w-2xl mx-auto font-antenna">
               Giá niêm yết chính hãng mới nhất, cập nhật liên tục. Liên hệ
               Hotline <strong className="text-white">0918 90 90 60</strong> để
               nhận ưu đãi tốt nhất.
@@ -200,280 +141,206 @@ export default function PriceListPage() {
         </div>
       </section>
 
-      {/* Filter & Listing Section */}
+      {/* Price Table */}
       <section className="py-12 md:py-16">
         <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px]">
           {loading ? (
             <div className="py-24 text-center">
-              <div className="animate-spin inline-block w-10 h-10 border-4 border-[#066fef] border-t-transparent rounded-full" role="status">
+              <div className="animate-spin inline-block w-10 h-10 border-4 border-[#0562d2] border-t-transparent rounded-full" role="status">
                 <span className="sr-only">Đang tải...</span>
               </div>
               <p className="mt-4 text-gray-500 font-medium">Đang tải bảng giá xe mới nhất...</p>
             </div>
           ) : (
             <>
-              {/* Category Segment Tabs */}
-              <div className="flex items-center justify-center border-b border-neutral-200 mb-12">
-                <div className="flex gap-8 overflow-x-auto no-scrollbar py-2">
-                  {categories.map((cat) => (
-                    <button
-                      key={cat.id}
-                      onClick={() => setActiveTab(cat.id)}
-                      className={`pb-4 px-2 text-xs font-bold uppercase tracking-widest transition-all relative whitespace-nowrap cursor-pointer ${
-                        activeTab === cat.id
-                          ? "text-[#066fef]"
-                          : "text-neutral-500 hover:text-neutral-900"
-                      }`}
-                    >
-                      {cat.name}
-                      {activeTab === cat.id && (
-                        <motion.div
-                          layoutId="activeTabUnderline"
-                          className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#066fef]"
-                        />
-                      )}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Dynamic Model Blocks */}
-              <motion.div layout className="space-y-12">
-                <AnimatePresence mode="popLayout">
-                  {filteredVehicles.map((vehicle) => {
-                    // Get active version selection
-                    const defaultVersion = vehicle.versions[0];
-                    const activeVersionId = selectedVersionIds[vehicle.id] !== undefined
-                      ? selectedVersionIds[vehicle.id]
-                      : defaultVersion?.id;
-                    const activeVersion = vehicle.versions.find(v => v.id === activeVersionId) || defaultVersion;
-                    const specs = activeVersion?.specs || {};
-                    
-                    // Find the first color matching active image_url to highlight on initial load
-                    const firstMatchIdx = vehicle.colors.findIndex(c => {
-                      const versionColor = activeVersion?.colors?.find((vc: any) => 
-                        vc.name.toLowerCase() === c.name.toLowerCase() || 
-                        vc.hex.toLowerCase() === c.hex.toLowerCase()
-                      );
-                      const activeColorImg = (versionColor?.images_360 && versionColor.images_360.length > 0)
-                        ? versionColor.images_360[0]
-                        : (versionColor?.image_path || c.image_path || "");
-                      return activeColorImg && activeColorImg === (activeVersion?.image_url || vehicle.image_url);
-                    });
-                    const defaultActiveIdx = firstMatchIdx !== -1 ? firstMatchIdx : 0;
-                    
-                    const activeImg = selectedColors[vehicle.id] 
-                      || activeVersion?.image_url 
-                      || activeVersion?.image_thumbnail_url 
-                      || vehicle.image_url 
-                      || getPopularVehicleImage(vehicle.id);
-                    
-                    return (
-                      <motion.div
-                        layout
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.95 }}
-                        transition={{ duration: 0.4 }}
-                        key={vehicle.id}
-                        className="bg-white border border-neutral-200 rounded-none overflow-hidden hover:shadow-lg transition-all duration-300"
-                      >
-                        <div className="grid grid-cols-1 lg:grid-cols-12">
-                          {/* Left Panel: Visual, Color selector & Specs */}
-                          <div className="lg:col-span-6 p-6 md:p-8 lg:p-10 border-b lg:border-b-0 lg:border-r border-neutral-200 flex flex-col justify-between">
-                            <div>
-                              {/* Vehicle Type Name Tag */}
-                              <span className="text-[10px] font-bold tracking-widest text-[#066fef] uppercase bg-[#066fef]/10 px-2.5 py-1 rounded-[4px] inline-block mb-4">
-                                {vehicle.typeName}
-                              </span>
-                              
-                              {/* Large Visual Container */}
-                              <div className="relative w-full h-[200px] md:h-[280px] flex items-center justify-center overflow-hidden mb-6 group">
+              {/* Desktop Table */}
+              <div className="hidden md:block bg-white rounded-none border border-gray-200 overflow-x-auto shadow-xs">
+                <table className="w-full">
+                  <thead>
+                    <tr className="bg-[#00095B] text-white text-sm font-bold">
+                      <th className="text-left py-4 px-6 w-[80px]">Hình ảnh</th>
+                      <th className="text-left py-4 px-6">Dòng xe</th>
+                      <th className="text-left py-4 px-6">Phiên bản</th>
+                      <th className="text-left py-4 px-6">Loại xe</th>
+                      <th className="text-right py-4 px-6 whitespace-nowrap">Giá niêm yết</th>
+                      <th className="text-center py-4 px-6 w-[200px]">
+                        Hành động
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {vehicles.map((vehicle: any) =>
+                      vehicle.versions.map((version: any, vIdx: number) => (
+                        <tr
+                          key={`${vehicle.id}-${version.id}`}
+                          className={`border-t border-gray-100 hover:bg-blue-50/30 transition-colors ${
+                            vIdx === 0 ? "border-t-2 border-t-gray-200" : ""
+                          }`}
+                        >
+                          {/* Image — only for first version */}
+                          {vIdx === 0 && (
+                            <td
+                              className="py-4 px-6 align-top"
+                              rowSpan={vehicle.versions.length}
+                            >
+                              <div className="relative w-[72px] h-[48px]">
                                 <Image
-                                  src={activeImg}
+                                  src={
+                                    vehicle.image_url ||
+                                    getPopularVehicleImage(vehicle.id)
+                                  }
                                   alt={vehicle.name}
                                   fill
-                                  sizes="(max-width: 768px) 100vw, 50vw"
-                                  className="object-contain transition-transform duration-500 group-hover:scale-103"
+                                  sizes="72px"
+                                  className="object-contain"
                                   onError={handleImageError}
-                                  unoptimized={true}
-                                  priority
                                 />
                               </div>
-
-                              {/* Color selector dots */}
-                              {vehicle.colors && vehicle.colors.length > 0 && (
-                                <div className="mb-6">
-                                  <span className="text-[11px] font-bold tracking-widest text-neutral-400 uppercase mb-3 block">
-                                    Màu sắc ngoại thất
-                                  </span>
-                                  <div className="flex flex-wrap gap-3">
-                                    {vehicle.colors.map((color, idx) => {
-                                      // Find matching color in the active version to get version-specific or color-shifted image
-                                      const versionColor = activeVersion?.colors?.find((c: any) => 
-                                        c.name.toLowerCase() === color.name.toLowerCase() || 
-                                        c.hex.toLowerCase() === color.hex.toLowerCase()
-                                      );
-                                      
-                                      // Try to get first image of 360 sequence of that version color, or its image_path
-                                      const versionColorImg = (versionColor?.images_360 && versionColor.images_360.length > 0)
-                                        ? versionColor.images_360[0]
-                                        : (versionColor?.image_path || "");
-
-                                      const colorImg = versionColorImg || color.image_path || "";
-                                      const colorHex = color.hex || "#ffffff";
-                                      
-                                      // Determine if this color is currently active
-                                      const isSelected = selectedColorNames[vehicle.id]
-                                          ? selectedColorNames[vehicle.id] === color.name
-                                          : idx === defaultActiveIdx;
-
-                                      return (
-                                        <button
-                                          key={idx}
-                                          onClick={() => {
-                                            setSelectedColorNames(prev => ({ ...prev, [vehicle.id]: color.name }));
-                                            if (colorImg) {
-                                              setSelectedColors(prev => ({ ...prev, [vehicle.id]: colorImg }));
-                                            }
-                                          }}
-                                          className={`w-7 h-7 rounded-full border relative flex items-center justify-center transition-all duration-200 ${
-                                            isSelected 
-                                              ? "border-[#066fef] ring-2 ring-offset-2 ring-[#066fef] scale-110" 
-                                              : "border-neutral-300 hover:scale-105"
-                                          } ${!colorImg ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
-                                          style={{ backgroundColor: colorHex }}
-                                          title={color.name || "Màu xe"}
-                                        >
-                                        </button>
-                                      );
-                                    })}
-                                  </div>
-                                </div>
-                              )}
-                            </div>
-
-                            {/* Specs Breakdown */}
-                            <div className="grid grid-cols-3 gap-3 pt-6 border-t border-neutral-100">
-                              <div className="bg-neutral-50 p-3 border border-neutral-100 rounded-none">
-                                <span className="text-[10px] uppercase tracking-wider text-neutral-400 block mb-0.5">Động cơ</span>
-                                <span className="text-xs font-bold text-neutral-700 block truncate" title={specs.engine || "Liên hệ"}>
-                                  {specs.engine || "Liên hệ"}
-                                </span>
-                              </div>
-                              <div className="bg-neutral-50 p-3 border border-neutral-100 rounded-none">
-                                <span className="text-[10px] uppercase tracking-wider text-neutral-400 block mb-0.5">Hộp số</span>
-                                <span className="text-xs font-bold text-neutral-700 block truncate" title={specs.transmission || "Liên hệ"}>
-                                  {specs.transmission || "Liên hệ"}
-                                </span>
-                              </div>
-                              <div className="bg-neutral-50 p-3 border border-neutral-100 rounded-none">
-                                <span className="text-[10px] uppercase tracking-wider text-neutral-400 block mb-0.5">Công suất</span>
-                                <span className="text-xs font-bold text-neutral-700 block truncate" title={specs.power || "Liên hệ"}>
-                                  {specs.power || "Liên hệ"}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Right Panel: Versions List & Actions */}
-                          <div className="lg:col-span-6 p-6 md:p-8 lg:p-10 flex flex-col justify-between bg-neutral-50/20">
-                            <div>
-                              <h2 className="text-xl md:text-2xl font-bold tracking-tight text-neutral-900 mb-6 font-antenna uppercase">
-                                {vehicle.name}
-                              </h2>
-
-                              <div className="divide-y divide-neutral-200/60">
-                                {vehicle.versions.map((version) => {
-                                  const isVersionActive = version.id === activeVersionId;
-                                  return (
-                                    <div
-                                      key={version.id}
-                                      onClick={() => {
-                                        setSelectedVersionIds(prev => ({ ...prev, [vehicle.id]: version.id }));
-                                        if (version.image_url || version.image_thumbnail_url) {
-                                          setSelectedColors(prev => ({ ...prev, [vehicle.id]: "" }));
-                                          setSelectedColorNames(prev => ({ ...prev, [vehicle.id]: "" }));
-                                        }
-                                      }}
-                                      className={`py-4 px-3 flex flex-col sm:flex-row sm:items-center justify-between gap-4 group/row transition-all rounded-[6px] cursor-pointer ${
-                                        isVersionActive 
-                                          ? "bg-[#066fef]/5 border-l-4 border-l-[#066fef] pl-2" 
-                                          : "hover:bg-neutral-50/50 border-l-4 border-l-transparent"
-                                      }`}
-                                    >
-                                      <div>
-                                        <h4 className={`font-bold text-sm uppercase transition-colors ${
-                                          isVersionActive ? "text-[#066fef]" : "text-[#1a1a1a] group-hover/row:text-[#066fef]"
-                                        }`}>
-                                          {version.name}
-                                        </h4>
-                                        {version.specs?.drivetrain && (
-                                          <span className="text-[11px] text-neutral-400 font-medium uppercase mt-0.5 block">
-                                            Hệ dẫn động: {version.specs.drivetrain}
-                                          </span>
-                                        )}
-                                      </div>
-                                      
-                                      <div className="flex items-center justify-between sm:justify-end gap-4 flex-wrap sm:flex-nowrap">
-                                        <span className="font-extrabold text-[#066fef] text-sm md:text-base whitespace-nowrap">
-                                          {formatVND(version.price)}
-                                        </span>
-
-                                        <div className="flex items-center gap-2">
-                                          <Link
-                                            href={`/cong-cu/uoc-tinh-lan-banh?vehicle=${vehicle.id}&version=${version.id}`}
-                                            className="inline-flex items-center justify-center gap-1 px-3 py-1.5 border border-neutral-300 hover:border-[#066fef] text-neutral-600 hover:text-[#066fef] font-semibold text-xs rounded-[4px] transition-colors bg-white shadow-xs"
-                                            title="Ước tính lăn bánh"
-                                          >
-                                            <Calculator className="w-3 h-3" />
-                                            Lăn bánh
-                                          </Link>
-                                          <Link
-                                            href="/lien-he"
-                                            className="inline-flex items-center justify-center gap-1 px-3.5 py-1.5 bg-[#066fef] hover:bg-[#00095b] text-white font-semibold text-xs rounded-[4px] transition-colors uppercase tracking-wider text-[10px]"
-                                          >
-                                            <FileText className="w-3 h-3" />
-                                            Báo giá
-                                          </Link>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            </div>
-
-                            {/* Bottom Action Footer for the model */}
-                            <div className="pt-6 border-t border-neutral-200/60 mt-8 flex items-center justify-between">
-                              <span className="text-xs text-neutral-400 font-medium">
-                                * Liên hệ đại lý để nhận thêm ưu đãi đặc quyền.
-                              </span>
+                            </td>
+                          )}
+                          {/* Vehicle Name — only for first version */}
+                          {vIdx === 0 && (
+                            <td
+                              className="py-4 px-6 align-top"
+                              rowSpan={vehicle.versions.length}
+                            >
                               <Link
                                 href={`/${vehicle.id}`}
-                                className="text-xs font-bold uppercase tracking-wider text-[#066fef] hover:text-[#00095b] transition-colors inline-flex items-center gap-1"
+                                className="font-bold text-[#1a1a1a] hover:text-[#066fef] transition-colors uppercase text-sm"
                               >
-                                Khám phá dòng xe
-                                <ChevronRight className="w-3.5 h-3.5" />
+                                {vehicle.name}
+                              </Link>
+                            </td>
+                          )}
+                          {/* Version Name */}
+                          <td className="py-4 px-6">
+                            <span className="text-sm text-gray-700 font-medium">
+                              {version.name}
+                            </span>
+                          </td>
+                          {/* Vehicle Type — only for first version */}
+                          {vIdx === 0 && (
+                            <td
+                              className="py-4 px-6 align-top"
+                              rowSpan={vehicle.versions.length}
+                            >
+                              <span className="text-xs font-semibold text-[#066fef] bg-[#066fef]/10 px-2.5 py-1 rounded-[4px]">
+                                {vehicle.typeName}
+                              </span>
+                            </td>
+                          )}
+                          {/* Price */}
+                          <td className="py-4 px-6 text-right whitespace-nowrap">
+                            <span className="font-bold text-[#066fef] text-sm">
+                              {formatVND(version.price)}
+                            </span>
+                          </td>
+                          {/* Actions */}
+                          <td className="py-4 px-6 text-center whitespace-nowrap">
+                            <div className="flex items-center justify-center gap-2">
+                              <Link
+                                href={`/cong-cu/uoc-tinh-lan-banh?vehicle=${vehicle.id}&version=${version.id}`}
+                                className="text-xs font-semibold text-gray-600 hover:text-[#066fef] transition-colors flex items-center gap-1"
+                                title="Ước tính lăn bánh"
+                              >
+                                <Calculator className="w-3.5 h-3.5" />
+                                Lăn bánh
+                              </Link>
+                              <span className="text-gray-300">|</span>
+                              <Link
+                                href="/lien-he"
+                                className="text-xs font-semibold text-[#066fef] hover:text-[#01095c] transition-colors flex items-center gap-1"
+                              >
+                                <FileText className="w-3.5 h-3.5" />
+                                Báo giá
                               </Link>
                             </div>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Mobile Cards */}
+              <div className="md:hidden space-y-4">
+                {vehicles.map((vehicle) => (
+                  <div
+                    key={vehicle.id}
+                    className="bg-white rounded-none border border-gray-200 overflow-hidden shadow-xs"
+                  >
+                    {/* Vehicle Header */}
+                    <Link
+                      href={`/${vehicle.id}`}
+                      className="flex items-center gap-4 p-4 border-b border-gray-100"
+                    >
+                      <div className="relative w-[64px] h-[42px] flex-shrink-0">
+                        <Image
+                          src={
+                            vehicle.image_url ||
+                            getPopularVehicleImage(vehicle.id)
+                          }
+                          alt={vehicle.name}
+                          fill
+                          sizes="64px"
+                          className="object-contain"
+                          onError={handleImageError}
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-bold text-sm uppercase text-[#1a1a1a]">
+                          {vehicle.name}
+                        </h3>
+                        <span className="text-xs text-[#066fef] font-semibold">
+                          {vehicle.typeName}
+                        </span>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-gray-400" />
+                    </Link>
+
+                    {/* Versions */}
+                    <div className="divide-y divide-gray-50">
+                      {vehicle.versions.map((version: any) => (
+                        <div
+                          key={version.id}
+                          className="px-4 py-3 flex items-center justify-between"
+                        >
+                          <div>
+                            <p className="text-sm font-medium text-gray-700">
+                              {version.name}
+                            </p>
+                            <p className="text-sm font-bold text-[#066fef] whitespace-nowrap">
+                              {formatVND(version.price)}
+                            </p>
                           </div>
+                          <Link
+                            href="/lien-he"
+                            className="text-xs font-semibold text-white bg-[#066fef] hover:bg-[#01095c] px-3.5 py-1.5 rounded-[4px] transition-colors uppercase tracking-wider text-[11px]"
+                          >
+                            Báo giá
+                          </Link>
                         </div>
-                      </motion.div>
-                    );
-                  })}
-                </AnimatePresence>
-              </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
 
               {/* Disclaimer */}
-              <div className="mt-12 bg-neutral-50 border-l-4 border-l-[#066fef] p-6 text-xs text-neutral-500 leading-relaxed shadow-xs">
-                <div className="flex items-start gap-2.5">
-                  <Info className="w-4 h-4 text-[#066fef] flex-shrink-0 mt-0.5" />
-                  <div>
-                    <strong className="text-neutral-700 font-bold block mb-1">LƯU Ý QUAN TRỌNG:</strong>
-                    Giá hiển thị trên đây là Giá bán lẻ khuyến nghị của Ford Việt Nam (đã bao gồm thuế GTGT). Giá này chưa bao gồm các khoản phí đăng ký, đăng kiểm, thuế trước bạ, bảo hiểm đường bộ và các phụ phí khác để xe lăn bánh hợp pháp. Ưu đãi thực tế tại đại lý có thể thay đổi tùy thời điểm. Vui lòng sử dụng công cụ <Link href="/cong-cu/uoc-tinh-lan-banh" className="text-[#066fef] font-bold hover:underline">Ước tính Lăn bánh</Link> hoặc liên hệ trực tiếp hotline để nhận được mức báo giá chính xác nhất.
-                  </div>
-                </div>
+              <div className="mt-8 bg-amber-50 border-l-4 border-amber-500 p-4 text-sm text-amber-800 rounded-none">
+                <strong>Lưu ý:</strong> Giá niêm yết trên chưa bao gồm các khoản
+                phí lăn bánh (thuế trước bạ, biển số, đăng kiểm, bảo hiểm...). Vui
+                lòng sử dụng{" "}
+                <Link
+                  href="/cong-cu/uoc-tinh-lan-banh"
+                  className="text-[#066fef] font-semibold underline"
+                >
+                  Công cụ Ước tính Lăn bánh
+                </Link>{" "}
+                hoặc liên hệ Hotline{" "}
+                <strong className="text-amber-900">0918 90 90 60</strong> để nhận
+                báo giá chính xác nhất.
               </div>
             </>
           )}
