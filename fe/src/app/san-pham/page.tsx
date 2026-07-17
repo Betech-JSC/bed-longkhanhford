@@ -514,8 +514,8 @@ export default function ProductsPage({ initialCategory }: { initialCategory?: st
         </div>
       </section>
 
-      {/* Horizontal Category Navigation Tabs (Sticky Bar) */}
-      <div className="sticky top-[80px] z-20 bg-white/95 backdrop-blur-md border-b border-gray-200/80 w-full flex flex-col items-center transition-all duration-300 shadow-xs">
+      {/* Horizontal Category Navigation Tabs */}
+      <div className="bg-white border-b border-gray-200/80 w-full flex flex-col items-center transition-all duration-300 shadow-xs relative z-10">
         <div className="max-w-[1440px] w-full px-4 xl:px-[80px] py-4 flex items-center justify-between gap-6">
           {/* Left side category tabs */}
           <div className="flex items-center gap-2 md:gap-3 overflow-x-auto scrollbar-none py-1">
