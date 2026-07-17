@@ -19,7 +19,8 @@ import {
   Sparkles,
   User,
   Mail,
-  FileText
+  FileText,
+  Phone
 } from "lucide-react";
 import { contactsAPI } from "@/lib/api";
 import BookingBanner from "@/components/services/BookingBanner";
