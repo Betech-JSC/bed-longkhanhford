@@ -713,8 +713,6 @@ export default function Home() {
                 alt={slide.title}
                 className="block md:hidden object-cover w-full h-full object-top transform transition-transform duration-10000"
               />
-              {/* Linear dark gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
             </div>
           ))}
 

@@ -401,7 +401,7 @@ function HeroBannerBlock({ blockIndex, data, vehicle, openQuoteDrawer, openDrive
             onLoadedData={() => setIsVideoReady(true)}
           />
         ) : null}
-        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent h-[250px] z-10" />
+
 
         {isEditMode && (
           <div className="absolute top-24 left-4 z-30 bg-white/95 backdrop-blur-xs p-3 rounded-lg border border-gray-200 text-xs text-gray-800 shadow-md flex flex-col gap-2.5 max-w-[240px]">
