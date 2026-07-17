@@ -759,11 +759,11 @@ export default function Home() {
       )}
 
       {/* 3. VEHICLES SHOWROOM CATALOG (WITH FILTER TABS) */}
-      <section id="showroom" className="w-full py-24 bg-white">
+      <section id="showroom" className="w-full py-12 md:py-24 bg-white">
         <div className="max-w-[1440px] mx-auto w-full">
           <div className="max-w-[1152px] mx-auto w-full px-6 xl:px-0">
             {/* Header title block */}
-            <div className="mb-12 text-left">
+            <div className="mb-6 md:mb-12 text-left">
               <h2 className="text-3xl md:text-[40px] font-bold text-black tracking-tight uppercase font-sans max-w-[768px] leading-tight">
                 <span className="text-[#066FEF] block">Mỗi dòng xe Ford.</span>
                 <span className="block">Phù hợp với cuộc sống của bạn</span>
@@ -771,7 +771,7 @@ export default function Home() {
             </div>
 
           {/* Tab Navigation and Right side Buttons */}
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between border-b border-neutral-200 pb-4 mb-12 gap-6">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between border-b border-neutral-200 pb-4 mb-6 md:mb-12 gap-6">
             {/* Left side category tabs */}
             <div className="flex gap-8 overflow-x-auto scrollbar-none">
               {(categories.length > 0
@@ -857,7 +857,7 @@ export default function Home() {
                 };
 
                 return (
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-16 items-center">
                     {/* Left: Highlight Vehicle Image */}
                     <div className="lg:col-span-8 flex flex-col items-center justify-center">
                       <motion.div 
@@ -919,7 +919,7 @@ export default function Home() {
 
                       {/* Slider indicator dots */}
                       {filteredVehicles.length > 1 && (
-                        <div className="flex justify-center gap-2 mt-8">
+                        <div className="flex justify-center gap-2 mt-4 md:mt-8">
                           {filteredVehicles.map((_, idx) => (
                             <button
                               key={idx}
@@ -946,13 +946,13 @@ export default function Home() {
                         {vehicleName}
                       </h3>
                       {vehicle.tagline && (
-                        <p className="text-xs text-neutral-500 font-medium tracking-wide uppercase mb-6">
+                        <p className="text-xs text-neutral-500 font-medium tracking-wide uppercase mb-4 md:mb-6">
                           {vehicle.tagline}
                         </p>
                       )}
 
                       {/* Specs columns matching the screenshot */}
-                      <div className="grid grid-cols-3 gap-4 border-t border-b border-neutral-200 py-6 my-6 w-full text-left">
+                      <div className="grid grid-cols-3 gap-4 border-t border-b border-neutral-200 py-4 md:py-6 my-4 md:my-6 w-full text-left">
                         <div>
                           <p className="text-[10px] text-neutral-400 mb-1 uppercase font-bold tracking-wider">Động cơ</p>
                           <p className="text-sm xl:text-base font-extrabold text-[#00095B] line-clamp-2 min-h-[40px] flex items-center">{specs.engine}</p>
@@ -988,11 +988,11 @@ export default function Home() {
       </section>
 
       {/* 4. TECHNOLOGY SHOWCASE */}
-      <section id="technology" className="w-full bg-white py-24 text-black overflow-hidden relative select-none">
+      <section id="technology" className="w-full bg-white py-12 md:py-24 text-black overflow-hidden relative select-none">
         <div className="max-w-[1440px] mx-auto w-full">
           <div className="max-w-[1152px] mx-auto w-full px-6 xl:px-0">
             {/* Title Block */}
-            <div className="flex flex-col gap-4 text-left mb-16 max-w-[900px]">
+            <div className="flex flex-col gap-4 text-left mb-8 md:mb-16 max-w-[900px]">
               <h2 className="text-4xl md:text-[48px] font-extrabold text-black tracking-tight font-antenna leading-none">
                 <span className="text-[#066FEF]">Công nghệ</span> trên xe Ford
               </h2>
@@ -1168,11 +1168,11 @@ export default function Home() {
       </section>
 
       {/* 6. FORD NEWS SECTION (SPLIT GRID CARDS LAYOUT) */}
-      <section id="news" className="w-full bg-white py-24">
+      <section id="news" className="w-full bg-white py-12 md:py-24">
         <div className="max-w-[1440px] mx-auto w-full">
           <div className="max-w-[1152px] mx-auto w-full px-6 xl:px-0">
             {/* Header Block */}
-            <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 text-left">
+            <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 md:mb-16 gap-6 text-left">
               <div className="space-y-4">
                 <span className="text-xs font-bold text-[#066FEF] uppercase tracking-[0.2em] block">
                   Tin tức & Chương Trình
@@ -1280,7 +1280,7 @@ export default function Home() {
 
       {/* 9. CUSTOMER HANDOVER & CONSULTATION SECTION */}
       {customerHandovers.length > 0 && (
-        <section id="customer-handovers" className="w-full bg-white py-24 overflow-x-clip relative select-none">
+        <section id="customer-handovers" className="w-full bg-white py-12 md:py-24 overflow-x-clip relative select-none">
           <style dangerouslySetInnerHTML={{
             __html: `
             #customer-handovers {
@@ -1343,11 +1343,11 @@ export default function Home() {
       )}
 
       {/* 10. FAQ & QUICK ACTIONS SECTION (MERGED & MINIMALIST) */}
-      <section className="w-full bg-white py-24">
+      <section className="w-full bg-white py-12 md:py-24">
         <div className="max-w-[1440px] mx-auto w-full">
           <div className="max-w-[1152px] mx-auto w-full px-6 xl:px-0">
             {/* Title Area - Centered, no subtext */}
-            <div className="text-center mb-12">
+            <div className="text-center mb-6 md:mb-12">
               <h2 className="text-3xl lg:text-[40px] font-bold text-black tracking-tight uppercase font-sans">
                 Hỏi đáp dịch vụ
               </h2>
@@ -1403,7 +1403,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="consultation" className="relative py-24 px-0 w-full overflow-hidden bg-gradient-to-br from-white via-[#f0f7ff] to-[#d6e8ff] text-black">
+      <section id="consultation" className="relative py-12 md:py-24 px-0 w-full overflow-hidden bg-gradient-to-br from-white via-[#f0f7ff] to-[#d6e8ff] text-black">
         <div className="max-w-[1440px] mx-auto w-full relative z-10">
           <div className="max-w-[1152px] mx-auto w-full px-6 xl:px-0 flex flex-col lg:flex-row gap-16 items-center justify-center">
             {/* Left Column: Title & Info */}
