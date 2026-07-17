@@ -135,6 +135,7 @@ export default function PriceListPage() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<string>("all");
   const [selectedColors, setSelectedColors] = useState<Record<string, string>>({});
+  const [selectedColorNames, setSelectedColorNames] = useState<Record<string, string>>({});
 
   useEffect(() => {
     vehiclesAPI
@@ -287,14 +288,15 @@ export default function PriceListPage() {
                                       const colorHex = color.hex || "#ffffff";
                                       
                                       // Determine if this color is currently active
-                                      const isSelected = selectedColors[vehicle.id]
-                                         ? selectedColors[vehicle.id] === colorImg
-                                         : idx === defaultActiveIdx;
+                                      const isSelected = selectedColorNames[vehicle.id]
+                                          ? selectedColorNames[vehicle.id] === color.name
+                                          : idx === defaultActiveIdx;
 
                                       return (
                                         <button
                                           key={idx}
                                           onClick={() => {
+                                            setSelectedColorNames(prev => ({ ...prev, [vehicle.id]: color.name }));
                                             if (colorImg) {
                                               setSelectedColors(prev => ({ ...prev, [vehicle.id]: colorImg }));
                                             }
