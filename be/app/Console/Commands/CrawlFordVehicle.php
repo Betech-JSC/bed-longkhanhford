@@ -94,7 +94,7 @@ class CrawlFordVehicle extends Command
                 if (file_exists($featuresHtmlFile)) {
                     $featuresRawHtml = file_get_contents($featuresHtmlFile);
                     $this->info("✓ Read features HTML content from local file: {$featuresHtmlFile}");
-                    $localFeatures = $this->parseFeaturesFromHtml($featuresRawHtml, $url);
+                    $localFeatures = $this->parseFeaturesFromHtml($featuresRawHtml);
                     if (!empty($localFeatures)) {
                         $data['features'] = $localFeatures;
                         $this->info("✓ Parsed " . count($localFeatures) . " features from features HTML file.");
@@ -140,7 +140,7 @@ class CrawlFordVehicle extends Command
                 
                 if ($response->successful()) {
                     $featuresRawHtml = $response->body();
-                    $onlineFeatures = $this->parseFeaturesFromHtml($featuresRawHtml, $url);
+                    $onlineFeatures = $this->parseFeaturesFromHtml($featuresRawHtml);
                     if (!empty($onlineFeatures)) {
                         $data['features'] = $onlineFeatures;
                         $this->info("✓ Loaded " . count($onlineFeatures) . " features from features page online.");
@@ -1818,7 +1818,7 @@ class CrawlFordVehicle extends Command
      * @param string $html
      * @return array
      */
-    protected function parseFeaturesFromHtml(string $html, string $baseUrl = 'https://www.ford.com.vn'): array
+    protected function parseFeaturesFromHtml(string $html): array
     {
         $features = [];
         try {
@@ -1867,14 +1867,8 @@ class CrawlFordVehicle extends Command
                     continue;
                 }
 
-                if (!empty($imgSrc)) {
-                    if (!str_starts_with($imgSrc, 'http://') && !str_starts_with($imgSrc, 'https://')) {
-                        if (str_starts_with($imgSrc, '/')) {
-                            $imgSrc = 'https://www.ford.com.vn' . $imgSrc;
-                        } else {
-                            $imgSrc = rtrim($baseUrl, '/') . '/' . ltrim($imgSrc, '/');
-                        }
-                    }
+                if (str_starts_with($imgSrc, '/')) {
+                    $imgSrc = 'https://www.ford.com.vn' . $imgSrc;
                 }
 
                 $features[] = [
