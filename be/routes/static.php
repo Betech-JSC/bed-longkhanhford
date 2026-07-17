@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use JamstackVietnam\Core\Controllers\FileController;
+use App\Http\Controllers\Backend\FileController;
 
 // if (!str_contains(config('app.static_url'), config('app.url')) && config('app.url') !== config('app.frontend_url')) {
 if (!str_contains(config('app.static_url'), config('app.url'))) {

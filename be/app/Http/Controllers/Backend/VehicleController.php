@@ -65,51 +65,57 @@ class VehicleController extends Controller
 
     private function beforeForm($data)
     {
-        $data['categories'] = VehicleCategory::where('status', VehicleCategory::STATUS_ACTIVE)
-            ->orderBy('sort_order')
-            ->get()
-            ->map(fn($cat) => ['id' => $cat->id, 'title' => $cat->title]);
+        return \Illuminate\Support\Facades\Cache::remember('vehicle_form_meta_data', 1800, function () use ($data) {
+            $data['categories'] = VehicleCategory::where('status', VehicleCategory::STATUS_ACTIVE)
+                ->orderBy('sort_order')
+                ->get()
+                ->map(fn($cat) => ['id' => $cat->id, 'title' => $cat->title]);
 
-        // List reviews to select in form
-        $data['reviews'] = CustomerReview::query()
-            ->withoutGlobalScopes()
-            ->with(['vehicle:id', 'vehicle.categories', 'translations'])
-            ->where('status', CustomerReview::STATUS_ACTIVE)
-            ->orderBy('id', 'desc')
-            ->get()
-            ->map(fn($r) => [
-                'id'          => $r->id,
-                'product_id'  => $r->vehicle_id,
-                'category_id' => optional($r->vehicle)->category_id,
-                'label'       => "#{$r->id} — {$r->customer_name} (" . str_repeat('★', $r->rating ?? 0) . ")",
-            ]);
+            // List reviews to select in form
+            $data['reviews'] = CustomerReview::query()
+                ->withoutGlobalScopes()
+                ->with(['vehicle:id', 'vehicle.categories', 'translations'])
+                ->where('status', CustomerReview::STATUS_ACTIVE)
+                ->orderBy('id', 'desc')
+                ->get()
+                ->map(fn($r) => [
+                    'id'          => $r->id,
+                    'product_id'  => $r->vehicle_id,
+                    'category_id' => optional($r->vehicle)->category_id,
+                    'label'       => "#{$r->id} — {$r->customer_name} (" . str_repeat('★', $r->rating ?? 0) . ")",
+                ]);
 
-        // Load all active accessories for selection in the form
-        $data['accessories'] = Accessory::query()
-            ->where('status', Accessory::STATUS_ACTIVE)
-            ->with(['translations', 'categories'])
-            ->orderBy('sort_order')
-            ->get()
-            ->map(fn($acc) => [
-                'id'           => $acc->id,
-                'title'        => $acc->title,
-                'code'         => $acc->code,
-                'category'     => $acc->category,
-                'fit_vehicles' => $acc->fit_vehicles ?? [],
-                'image'        => $acc->image,
-            ]);
+            // Load all active accessories for selection in the form
+            $data['accessories'] = Accessory::query()
+                ->select('id', 'code', 'fit_vehicles', 'image')
+                ->where('status', Accessory::STATUS_ACTIVE)
+                ->with([
+                    'translations:id,accessory_id,title,locale',
+                    'categories'
+                ])
+                ->orderBy('sort_order')
+                ->get()
+                ->map(fn($acc) => [
+                    'id'           => $acc->id,
+                    'title'        => $acc->title,
+                    'code'         => $acc->code,
+                    'category'     => $acc->category,
+                    'fit_vehicles' => $acc->fit_vehicles ?? [],
+                    'image'        => $acc->image,
+                ]);
 
-        $data['accessory_categories'] = \App\Models\Vehicle\AccessoryCategory::where('status', 'ACTIVE')
-            ->sortByPosition()
-            ->get()
-            ->map(fn($cat) => ['id' => $cat->id, 'title' => $cat->title]);
+            $data['accessory_categories'] = \App\Models\Vehicle\AccessoryCategory::where('status', 'ACTIVE')
+                ->sortByPosition()
+                ->get()
+                ->map(fn($cat) => ['id' => $cat->id, 'title' => $cat->title]);
 
-        $data['brands'] = \App\Models\Brand\Brand::where('status', 'ACTIVE')
-            ->sortByPosition()
-            ->get()
-            ->map(fn($b) => ['id' => $b->id, 'title' => $b->title]);
+            $data['brands'] = \App\Models\Brand\Brand::where('status', 'ACTIVE')
+                ->sortByPosition()
+                ->get()
+                ->map(fn($b) => ['id' => $b->id, 'title' => $b->title]);
 
-        return $data;
+            return $data;
+        });
     }
 
     private function afterForm($item)
@@ -228,6 +234,8 @@ class VehicleController extends Controller
 
     private function afterStore($request, $resource)
     {
+        \Illuminate\Support\Facades\Cache::forget('vehicle_form_meta_data');
+
         DB::transaction(function () use ($request, $resource) {
             // Sync categories
             $categoryIds = $request->input('category_ids', []);

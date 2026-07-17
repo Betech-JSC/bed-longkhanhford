@@ -147,7 +147,7 @@ export default function ProductsPage({ initialCategory }: { initialCategory?: st
     const price = typeof v.base_price === 'string' ? parseFloat(v.base_price) : (v.base_price || v.basePrice || 0);
     const id = v.slug || v.id;
     const name = v.title || v.name || "";
-    const image = getPopularVehicleImage(id) || v.image_thumbnail_url || v.image_url || v.images?.[0] || "";
+    const image = v.image_thumbnail_url || v.image_url || v.images?.[0] || getPopularVehicleImage(id);
     
     let categorySlugs: string[] = [];
     if (v.category_ids && Array.isArray(v.category_ids)) {

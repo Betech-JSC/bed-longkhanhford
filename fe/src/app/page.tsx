@@ -863,7 +863,7 @@ export default function Home() {
                 const vehicle = filteredVehicles[safeCarIndex];
                 const vehicleId = vehicle.slug || vehicle.id;
                 const vehicleName = vehicle.title || vehicle.name;
-                const vehicleCardImage = getPopularVehicleImage(vehicleId) || vehicle.image_thumbnail_url || vehicle.image_url || vehicle.images?.[0] || "";
+                const vehicleCardImage = vehicle.image_thumbnail_url || vehicle.image_url || vehicle.images?.[0] || getPopularVehicleImage(vehicleId);
                 const vehiclePrice = vehicle.base_price || vehicle.basePrice || 0;
 
                 // Extract specs dynamically

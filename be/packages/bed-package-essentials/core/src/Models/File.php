@@ -51,28 +51,31 @@ class File
 
     public function tree()
     {
-        $rootPath = $this->storage->path('/');
-        $flatItems = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($rootPath),
-            RecursiveIteratorIterator::CHILD_FIRST
-        );
+        $cacheKey = 'file_manager_tree_' . $this->disk;
+        return \Illuminate\Support\Facades\Cache::remember($cacheKey, 3600, function () {
+            $rootPath = $this->storage->path('/');
+            $flatItems = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($rootPath),
+                RecursiveIteratorIterator::CHILD_FIRST
+            );
 
-        $tree = [];
-        foreach ($flatItems as $item) {
-            if (
-                !$item->isDir() ||
-                $this->firstCharIs($item->getFilename(), '.')
-            ) continue;
+            $tree = [];
+            foreach ($flatItems as $item) {
+                if (
+                    !$item->isDir() ||
+                    $this->firstCharIs($item->getFilename(), '.')
+                ) continue;
 
-            $path = [$item->getFilename() => []];
+                $path = [$item->getFilename() => []];
 
-            for ($depth = $flatItems->getDepth() - 1; $depth >= 0; $depth--) {
-                $path = [$flatItems->getSubIterator($depth)->current()->getFilename() => $path];
+                for ($depth = $flatItems->getDepth() - 1; $depth >= 0; $depth--) {
+                    $path = [$flatItems->getSubIterator($depth)->current()->getFilename() => $path];
+                }
+                $tree = array_merge_recursive($tree, $path);
             }
-            $tree = array_merge_recursive($tree, $path);
-        }
 
-        return $this->transformTree($tree);
+            return $this->transformTree($tree);
+        });
     }
 
     public function transformTree($item, $name = null, $path = null)
@@ -117,22 +120,29 @@ class File
         $files = $this->contents
             ->filter(fn ($item) => $item->isFile())
             ->values()
-            ->map(fn ($item) => $this->transformFile($item))
-            ->reject(fn ($item) => $this->firstCharIs($item['filename'], '.'))
-            ->sortByDesc('last_modified')
-            ->keyBy('path');
+            ->reject(fn ($item) => $this->firstCharIs(basename($item->path()), '.'));
 
         if (request()->has('keyword')) {
-            $files = $files->filter(fn ($item) => str_contains($item['search_name'], (request()->input('keyword'))));
+            $keyword = request()->input('keyword');
+            $keywordLower = mb_strtolower($keyword);
+            $files = $files->filter(function($item) use ($keywordLower) {
+                $filename = basename($item->path());
+                $searchName = str_replace('-', ' ', Str::slug($filename));
+                return str_contains(mb_strtolower($filename), $keywordLower) ||
+                       str_contains(mb_strtolower($searchName), $keywordLower);
+            });
         }
-        else if (request()->has('limit')) {
-            $page = request()->input('page') ?? 1;
-            $limit = request()->input('limit');
 
-            return $files->skip(($page - 1) * $limit)->take($limit);
+        // Sort by last modified descending
+        $files = $files->sortByDesc(fn ($item) => $item->lastModified());
+
+        if (request()->has('limit')) {
+            $page = (int) (request()->input('page') ?? 1);
+            $limit = (int) request()->input('limit');
+            $files = $files->skip(($page - 1) * $limit)->take($limit);
         }
 
-        return $files;
+        return $files->values()->map(fn ($item) => $this->transformFile($item))->keyBy('path');
     }
 
     public function findOrFail($options = [])
@@ -257,9 +267,15 @@ class File
         }
     }
 
+    protected function clearTreeCache()
+    {
+        \Illuminate\Support\Facades\Cache::forget('file_manager_tree_' . $this->disk);
+    }
+
     public function delete($items)
     {
         $deletedItems = [];
+        $hasDirDeleted = false;
 
         foreach ($items as $item) {
             if (!$this->storage->exists($item['path'])) {
@@ -267,19 +283,21 @@ class File
             } else {
                 if ($item['type'] === 'dir') {
                     $this->storage->deleteDirectory($item['path']);
-
                     $cacheFolder = 'cache/' . $item['path'];
-
                     $this->publicStorage->deleteDirectory($cacheFolder);
+                    $hasDirDeleted = true;
                 } else {
                     $this->storage->delete($item['path']);
                     $cacheFolder = 'cache/' . str_replace('.', '_', $item['path']);
-
                     $this->publicStorage->deleteDirectory($cacheFolder);
                 }
             }
 
             $deletedItems[] = $item;
+        }
+
+        if ($hasDirDeleted) {
+            $this->clearTreeCache();
         }
 
         return $deletedItems;
@@ -293,7 +311,11 @@ class File
             return false;
         }
 
-        return (bool) $this->storage->makeDirectory($pathName);
+        $result = (bool) $this->storage->makeDirectory($pathName);
+        if ($result) {
+            $this->clearTreeCache();
+        }
+        return $result;
     }
 
     public function folderDelete()
@@ -302,7 +324,11 @@ class File
             return false;
         }
 
-        return (bool) $this->storage->deleteDirectory($this->path);
+        $result = (bool) $this->storage->deleteDirectory($this->path);
+        if ($result) {
+            $this->clearTreeCache();
+        }
+        return $result;
     }
 
     public function folderRename($newName)
@@ -316,7 +342,7 @@ class File
         }
 
         if ($this->storage->move($oldPath, $newPath)) {
-            // Success
+            $this->clearTreeCache();
             return true;
         }
 
@@ -355,24 +381,6 @@ class File
 
             $imagePath = $this->storage->path($this->path);
 
-            // Check if the image has been modified
-            $lastModified = filemtime($imagePath);
-            $etag = md5_file($imagePath);
-            $headers = [
-                'Last-Modified' => gmdate('D, d M Y H:i:s', $lastModified) . ' GMT',
-                'ETag' => $etag,
-            ];
-            if (request()->headers->has('If-Modified-Since') &&
-                strtotime(request()->headers->get('If-Modified-Since')) >= $lastModified
-            ) {
-                return response()->make('', 304, $headers);
-            }
-            if (request()->headers->has('If-None-Match') &&
-                request()->headers->get('If-None-Match') == $etag
-            ) {
-                return response()->make('', 304, $headers);
-            }
-
             $image = Image::make($imagePath);
 
             if (isset($options['w'])) {
@@ -382,28 +390,13 @@ class File
             }
 
             $image
-                ->encode($options['fm'], 100)
+                ->encode($options['fm'], 80)
                 ->save($this->publicStorage->path($cacheFullPath));
-
-            // Set caching headers
-            $headers = [
-                'Content-Type' => 'image/' . $options['fm'],
-                'Cache-Control' => 'max-age=86400',
-                'Last-Modified' => gmdate('D, d M Y H:i:s', $lastModified) . ' GMT',
-                'ETag' => $etag,
-            ];
-        } else {
-            // Set caching headers
-            $headers = [
-                'Content-Type' => 'image/' . $options['fm'],
-                'Cache-Control' => 'max-age=86400',
-            ];
         }
 
-        $imageData = $this->publicStorage->get($cacheFullPath);
-
-        return response()
-            ->make($imageData, 200, $headers);
+        return redirect(asset('storage/' . $cacheFullPath), 302, [
+            'Cache-Control' => 'public, max-age=86400',
+        ]);
     }
 
 

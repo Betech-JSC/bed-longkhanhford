@@ -45,32 +45,35 @@ class File
 
     public function tree()
     {
-        $directories = $this->storage->allDirectories();
+        $cacheKey = 'file_manager_tree_' . $this->disk;
+        return \Illuminate\Support\Facades\Cache::remember($cacheKey, 3600, function () {
+            $directories = $this->storage->allDirectories();
 
-        $tree = [];
-        foreach ($directories as $dir) {
-            $parts = explode('/', $dir);
-            $hasHidden = false;
-            foreach ($parts as $part) {
-                if ($this->firstCharIs($part, '.')) {
-                    $hasHidden = true;
-                    break;
+            $tree = [];
+            foreach ($directories as $dir) {
+                $parts = explode('/', $dir);
+                $hasHidden = false;
+                foreach ($parts as $part) {
+                    if ($this->firstCharIs($part, '.')) {
+                        $hasHidden = true;
+                        break;
+                    }
+                }
+                if ($hasHidden) {
+                    continue;
+                }
+
+                $current = &$tree;
+                foreach ($parts as $part) {
+                    if (!isset($current[$part])) {
+                        $current[$part] = [];
+                    }
+                    $current = &$current[$part];
                 }
             }
-            if ($hasHidden) {
-                continue;
-            }
 
-            $current = &$tree;
-            foreach ($parts as $part) {
-                if (!isset($current[$part])) {
-                    $current[$part] = [];
-                }
-                $current = &$current[$part];
-            }
-        }
-
-        return $this->transformTree($tree);
+            return $this->transformTree($tree);
+        });
     }
 
     public function transformTree($item, $name = null, $path = null)
@@ -115,16 +118,17 @@ class File
         $files = $this->contents
             ->filter(fn($item) => $item->isFile())
             ->values()
-            ->map(fn($item) => $this->transformFile($item))
-            ->reject(fn($item) => $this->firstCharIs($item['filename'], '.'));
+            ->reject(fn($item) => $this->firstCharIs(basename($item->path()), '.'));
 
         // 1. Search/Keyword Filter
         $search = request()->input('search') ?? request()->input('keyword');
         if (!empty($search)) {
             $searchLower = mb_strtolower($search);
             $files = $files->filter(function($item) use ($searchLower) {
-                return str_contains(mb_strtolower($item['filename']), $searchLower) ||
-                       str_contains(mb_strtolower($item['search_name']), $searchLower);
+                $filename = basename($item->path());
+                $searchName = str_replace('-', ' ', Str::slug($filename));
+                return str_contains(mb_strtolower($filename), $searchLower) ||
+                       str_contains(mb_strtolower($searchName), $searchLower);
             });
         }
 
@@ -132,7 +136,7 @@ class File
         $type = request()->input('type');
         if (!empty($type) && $type !== 'all') {
             $files = $files->filter(function($item) use ($type) {
-                $ext = strtolower($item['extension']);
+                $ext = strtolower(pathinfo($item->path(), PATHINFO_EXTENSION));
                 if ($type === 'image') {
                     return in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp', 'ico', 'heic', 'avif']);
                 }
@@ -157,36 +161,35 @@ class File
         $sort = request()->input('sort', 'date_desc');
         switch ($sort) {
             case 'date_asc':
-                $files = $files->sortBy('last_modified');
+                $files = $files->sortBy(fn($item) => $item->lastModified());
                 break;
             case 'name_asc':
-                $files = $files->sortBy('filename', SORT_NATURAL | SORT_FLAG_CASE);
+                $files = $files->sortBy(fn($item) => basename($item->path()), SORT_NATURAL | SORT_FLAG_CASE);
                 break;
             case 'name_desc':
-                $files = $files->sortByDesc('filename', SORT_NATURAL | SORT_FLAG_CASE);
+                $files = $files->sortByDesc(fn($item) => basename($item->path()), SORT_NATURAL | SORT_FLAG_CASE);
                 break;
             case 'size_desc':
-                $files = $files->sortByDesc('file_size');
+                $files = $files->sortByDesc(fn($item) => $item->fileSize());
                 break;
             case 'size_asc':
-                $files = $files->sortBy('file_size');
+                $files = $files->sortBy(fn($item) => $item->fileSize());
                 break;
             case 'date_desc':
             default:
-                $files = $files->sortByDesc('last_modified');
+                $files = $files->sortByDesc(fn($item) => $item->lastModified());
                 break;
         }
-
-        $files = $files->values()->keyBy('path');
 
         // 4. Pagination
         if (request()->has('limit')) {
             $page = (int) request()->input('page', 1);
             $limit = (int) request()->input('limit', 50);
-            return $files->skip(($page - 1) * $limit)->take($limit);
+            $files = $files->skip(($page - 1) * $limit)->take($limit);
         }
 
-        return $files;
+        // 5. Transform only the paginated result slice
+        return $files->values()->map(fn($item) => $this->transformFile($item))->keyBy('path');
     }
 
     public function findOrFail($options = [])
@@ -412,9 +415,15 @@ class File
         }
     }
 
+    protected function clearTreeCache()
+    {
+        \Illuminate\Support\Facades\Cache::forget('file_manager_tree_' . $this->disk);
+    }
+
     public function delete($items)
     {
         $deletedItems = [];
+        $hasDirDeleted = false;
 
         foreach ($items as $item) {
             if (!$this->storage->exists($item['path'])) {
@@ -422,19 +431,21 @@ class File
             } else {
                 if ($item['type'] === 'dir') {
                     $this->storage->deleteDirectory($item['path']);
-
                     $cacheFolder = 'cache/' . $item['path'];
-
                     $this->publicStorage->deleteDirectory($cacheFolder);
+                    $hasDirDeleted = true;
                 } else {
                     $this->storage->delete($item['path']);
                     $cacheFolder = 'cache/' . str_replace('.', '_', $item['path']);
-
                     $this->publicStorage->deleteDirectory($cacheFolder);
                 }
             }
 
             $deletedItems[] = $item;
+        }
+
+        if ($hasDirDeleted) {
+            $this->clearTreeCache();
         }
 
         return $deletedItems;
@@ -448,7 +459,11 @@ class File
             return false;
         }
 
-        return (bool) $this->storage->makeDirectory($pathName);
+        $result = (bool) $this->storage->makeDirectory($pathName);
+        if ($result) {
+            $this->clearTreeCache();
+        }
+        return $result;
     }
 
     public function folderDelete()
@@ -457,7 +472,11 @@ class File
             return false;
         }
 
-        return (bool) $this->storage->deleteDirectory($this->path);
+        $result = (bool) $this->storage->deleteDirectory($this->path);
+        if ($result) {
+            $this->clearTreeCache();
+        }
+        return $result;
     }
 
     protected function responsePdf()
@@ -492,26 +511,6 @@ class File
 
             $imagePath = $this->storage->path($this->path);
 
-            // Check if the image has been modified
-            $lastModified = filemtime($imagePath);
-            $etag = md5_file($imagePath);
-            $headers = [
-                'Last-Modified' => gmdate('D, d M Y H:i:s', $lastModified) . ' GMT',
-                'ETag' => $etag,
-            ];
-            if (
-                request()->headers->has('If-Modified-Since') &&
-                strtotime(request()->headers->get('If-Modified-Since')) >= $lastModified
-            ) {
-                return response()->make('', 304, $headers);
-            }
-            if (
-                request()->headers->has('If-None-Match') &&
-                request()->headers->get('If-None-Match') == $etag
-            ) {
-                return response()->make('', 304, $headers);
-            }
-
             $image = Image::make($imagePath);
 
             if (isset($options['w'])) {
@@ -521,28 +520,13 @@ class File
             }
 
             $image
-                ->encode($options['fm'], 100)
+                ->encode($options['fm'], 80)
                 ->save($this->publicStorage->path($cacheFullPath));
-
-            // Set caching headers
-            $headers = [
-                'Content-Type' => 'image/' . $options['fm'],
-                'Cache-Control' => 'max-age=86400',
-                'Last-Modified' => gmdate('D, d M Y H:i:s', $lastModified) . ' GMT',
-                'ETag' => $etag,
-            ];
-        } else {
-            // Set caching headers
-            $headers = [
-                'Content-Type' => 'image/' . $options['fm'],
-                'Cache-Control' => 'max-age=86400',
-            ];
         }
 
-        $imageData = $this->publicStorage->get($cacheFullPath);
-
-        return response()
-            ->make($imageData, 200, $headers);
+        return redirect(asset('storage/' . $cacheFullPath), 302, [
+            'Cache-Control' => 'public, max-age=86400',
+        ]);
     }
 
 
