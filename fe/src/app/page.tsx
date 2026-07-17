@@ -1049,6 +1049,12 @@ export default function Home() {
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}
                 onMouseLeave={handleMouseLeave}
+                onClickCapture={(e) => {
+                  if (hasMoved) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }
+                }}
                 className={`flex gap-6 pb-8 px-6 xl:px-[calc((100vw-1152px)/2)] will-change-transform select-none ${isDragging ? "transition-none" : "transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"}`}
                 style={{ 
                   transform: `translateX(-${translateX + dragOffset}px)`,
@@ -1062,7 +1068,12 @@ export default function Home() {
                   >
                     <Link 
                        href={item.link}
-                       onClick={(e) => hasMoved && e.preventDefault()}
+                       onClick={(e) => {
+                         if (hasMoved) {
+                           e.preventDefault();
+                           e.stopPropagation();
+                         }
+                       }}
                        className="relative w-full h-full overflow-hidden border border-neutral-200/80 group block bg-neutral-100 rounded-[8px] aspect-[16/8] select-none"
                     >
                       <SafeImage
