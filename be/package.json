@@ -7,7 +7,7 @@
         "backend:build": "vite build --config vite.backend.config.ts",
         "start": "node bootstrap/ssr/ssr.mjs",
         "heroku-postbuild": "php artisan migrate:fresh --seed --force && yarn && php artisan vue-i18n:generate && yarn backend:build",
-        "build": "php artisan vue-i18n:generate && yarn backend:build && (sudo systemctl reload php8.3-fpm || systemctl reload php8.3-fpm || true)",
+        "build": "php artisan optimize:clear && php artisan vue-i18n:generate && yarn backend:build && (sudo systemctl reload php8.3-fpm || systemctl reload php8.3-fpm || true)",
         "setup": "sh setup.sh",
         "fix": "prettier --write '**/*.{js,vue,scss}'",
         "fresh": "php artisan migrate:fresh --seed",
