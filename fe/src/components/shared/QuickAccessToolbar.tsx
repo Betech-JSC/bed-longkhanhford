@@ -226,7 +226,7 @@ export default function QuickAccessToolbar() {
 
       {/* Mobile Version */}
       <div className={`flex md:hidden fixed right-4 z-50 flex-col items-center gap-2.5 select-none transition-all duration-300 ${
-        hasCompareItems ? "bottom-20" : "bottom-6"
+        hasCompareItems ? "bottom-28" : "bottom-20"
       }`}>
         {mobileMenuItems.map((item, idx) => {
           const isExternal = item.target === "_blank";

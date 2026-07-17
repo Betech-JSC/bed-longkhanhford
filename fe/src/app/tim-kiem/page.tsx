@@ -32,6 +32,15 @@ function SearchPageContent() {
   const [apiAccessories, setApiAccessories] = useState<any[]>([]);
   const [apiArticles, setApiArticles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 12;
+
+  // Reset page when tab or query changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeTab, initialQuery]);
+
+
 
   // Keep search input state updated with URL changes
   useEffect(() => {
@@ -240,6 +249,43 @@ function SearchPageContent() {
 
   const { vehiclesList, accessoriesList, articlesList, totalCount } = searchResults;
 
+  const { paginatedVehicles, paginatedAccessories, paginatedArticles, totalPages } = useMemo(() => {
+    if (activeTab === "all") {
+      return {
+        paginatedVehicles: vehiclesList.slice(0, 6),
+        paginatedAccessories: accessoriesList.slice(0, 8),
+        paginatedArticles: articlesList.slice(0, 6),
+        totalPages: 1
+      };
+    }
+
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+
+    if (activeTab === "vehicles") {
+      return {
+        paginatedVehicles: vehiclesList.slice(startIndex, endIndex),
+        paginatedAccessories: [],
+        paginatedArticles: [],
+        totalPages: Math.ceil(vehiclesList.length / ITEMS_PER_PAGE)
+      };
+    } else if (activeTab === "accessories") {
+      return {
+        paginatedVehicles: [],
+        paginatedAccessories: accessoriesList.slice(startIndex, endIndex),
+        paginatedArticles: [],
+        totalPages: Math.ceil(accessoriesList.length / ITEMS_PER_PAGE)
+      };
+    } else {
+      return {
+        paginatedVehicles: [],
+        paginatedAccessories: [],
+        paginatedArticles: articlesList.slice(startIndex, endIndex),
+        totalPages: Math.ceil(articlesList.length / ITEMS_PER_PAGE)
+      };
+    }
+  }, [activeTab, currentPage, vehiclesList, accessoriesList, articlesList]);
+
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("vi-VN").format(price) + " VNĐ";
   };
@@ -312,7 +358,7 @@ function SearchPageContent() {
 
       {/* 2. RESULTS FILTER TABS */}
       {!loading && (
-        <section className="bg-white border-b border-[#e5e5e5] sticky top-[72px] lg:top-[104px] z-30 shadow-xs">
+        <section className="bg-white border-b border-[#e5e5e5] z-30 shadow-xs">
           <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full flex items-center justify-start overflow-x-auto scrollbar-none gap-2">
             {[
               { id: "all", label: "Tất cả", count: totalCount, icon: HelpCircle },
@@ -447,7 +493,7 @@ function SearchPageContent() {
                   </h2>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {vehiclesList.map((v) => (
+                  {paginatedVehicles.map((v) => (
                     <div
                       key={v.id}
                       className="bg-white border border-gray-200/80 hover:border-[#066fef]/30 rounded-2xl p-5 flex flex-col hover:shadow-xl hover:shadow-gray-200/40 hover:-translate-y-1 transition-all duration-300 group relative"
@@ -517,7 +563,7 @@ function SearchPageContent() {
                   </h2>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-                  {accessoriesList.map((a) => (
+                  {paginatedAccessories.map((a) => (
                     <Link
                       key={a.id}
                       href={`/phu-kien/${a.id}`}
@@ -562,7 +608,7 @@ function SearchPageContent() {
                   </h2>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {articlesList.map((art) => (
+                  {paginatedArticles.map((art) => (
                     <Link
                       key={art.id}
                       href={`/${art.id}`}
@@ -593,6 +639,39 @@ function SearchPageContent() {
                     </Link>
                   ))}
                 </div>
+              </div>
+            )}
+
+            {/* Pagination Controls */}
+            {activeTab !== "all" && totalPages > 1 && (
+              <div className="flex items-center justify-center gap-2 mt-12 font-antenna">
+                <button
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  className="w-10 h-10 border border-neutral-300 rounded-lg flex items-center justify-center text-neutral-650 hover:border-[#0562D2] hover:text-[#0562D2] disabled:opacity-40 disabled:cursor-not-allowed transition-all bg-white cursor-pointer"
+                >
+                  &larr;
+                </button>
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`w-10 h-10 rounded-lg flex items-center justify-center text-xs font-bold transition-all cursor-pointer ${
+                      currentPage === page
+                        ? "bg-[#0562D2] text-white shadow-md shadow-[#0562D2]/25"
+                        : "border border-neutral-300 text-neutral-600 hover:border-[#0562D2] hover:text-[#0562D2] bg-white"
+                    }`}
+                  >
+                    {page}
+                  </button>
+                ))}
+                <button
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  className="w-10 h-10 border border-neutral-300 rounded-lg flex items-center justify-center text-neutral-650 hover:border-[#0562D2] hover:text-[#0562D2] disabled:opacity-40 disabled:cursor-not-allowed transition-all bg-white cursor-pointer"
+                >
+                  &rarr;
+                </button>
               </div>
             )}
           </div>

@@ -1484,16 +1484,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* BACK TO TOP ACCENT */}
-      <button
-        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        className={`fixed bottom-6 right-6 z-40 w-10 h-10 rounded-[8px] bg-[#066FEF] hover:bg-[#0562D2] border border-[#066FEF] hover:border-[#0562D2] flex items-center justify-center text-white cursor-pointer shadow-lg transition-all duration-300 ${
-          showToast ? "translate-y-[-100px]" : ""
-        }`}
-        aria-label="Back to top"
-      >
-        <ChevronUp className="w-5 h-5" />
-      </button>
+
 
       {/* CLIENT SIDE TOAST NOTIFICATION */}
       {showToast && (
