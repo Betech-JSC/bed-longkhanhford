@@ -1132,7 +1132,12 @@ export default function Home() {
                   >
                     <Link 
                        href={item.link}
-                       onClick={(e) => hasMoved && e.preventDefault()}
+                       onClick={(e) => {
+                         if (hasMoved) {
+                           e.preventDefault();
+                           e.stopPropagation();
+                         }
+                       }}
                        className="relative w-full h-full overflow-hidden border border-neutral-200/80 group block bg-neutral-100 rounded-[8px] aspect-[16/8] select-none"
                     >
                       <SafeImage
