@@ -59,6 +59,7 @@ export default function Navbar() {
   const [loading, setLoading] = useState(true);
 
   const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const headerRef = useRef<HTMLElement>(null);
 
   const handleMouseEnter = () => {
     if (hoverTimeoutRef.current) {
@@ -537,7 +538,7 @@ export default function Navbar() {
       }`;
 
   return (
-    <header className={headerClass}>
+    <header ref={headerRef} className={headerClass}>
       {/* Top Header Utility Bar */}
       <div className={`hidden lg:block text-xs py-2 transition-all duration-300 ${
         isTransparent ? "bg-black/20 text-white border-b border-white/10" : "bg-[#00095b] text-white"
@@ -683,43 +684,41 @@ export default function Navbar() {
       </nav>
 
       {/* Search Overlay Panel (Ford China style) */}
-      <div 
-        className={`absolute top-full left-0 w-full bg-white border-b border-gray-200 shadow-lg transition-all duration-300 ease-in-out z-[60] overflow-hidden
-          ${isSearchOpen 
-            ? "max-h-[200px] opacity-100 visible translate-y-0" 
-            : "max-h-0 opacity-0 invisible -translate-y-2 pointer-events-none"}`}
-      >
-        <div className="max-w-[720px] mx-auto px-6 py-10">
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#808080]" />
-            <input
-              ref={searchInputRef}
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={(e) => { if (e.key === "Enter") handleSearchSubmit(); }}
-              placeholder="Tìm kiếm xe, tin tức, dịch vụ..."
-              className="w-full bg-transparent border border-[#d6d6d6] rounded-none text-[16px] text-[#1a1a1a] placeholder-[#808080] pl-12 pr-12 py-3.5 focus:outline-none focus:border-[#066fef] transition-colors font-['Ford_Antenna',sans-serif]"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery("")}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-[#808080] hover:text-[#1a1a1a] transition-colors cursor-pointer"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Search overlay backdrop */}
       {isSearchOpen && (
-        <div 
-          className="fixed inset-0 bg-black/30 z-[55] top-0" 
-          style={{ top: 'var(--navbar-height, 120px)' }}
-          onClick={() => setIsSearchOpen(false)} 
-        />
+        <>
+          {/* Backdrop */}
+          <div 
+            className="fixed inset-0 bg-black/50 z-[59] transition-opacity duration-300" 
+            onClick={() => setIsSearchOpen(false)} 
+          />
+          {/* Search Panel */}
+          <div className="fixed left-0 right-0 bg-white shadow-2xl z-[60] transition-all duration-300 ease-out"
+            style={{ top: headerRef.current ? `${headerRef.current.getBoundingClientRect().bottom}px` : '96px' }}
+          >
+            <div className="max-w-[720px] mx-auto px-6 py-12">
+              <div className="relative">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#808080]" />
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === "Enter") handleSearchSubmit(); }}
+                  placeholder="Tìm kiếm xe, tin tức, dịch vụ..."
+                  className="w-full bg-transparent border border-[#d6d6d6] rounded-none text-[16px] text-[#1a1a1a] placeholder-[#808080] pl-12 pr-12 py-4 focus:outline-none focus:border-[#066fef] transition-colors font-['Ford_Antenna',sans-serif]"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-[#808080] hover:text-[#1a1a1a] transition-colors cursor-pointer"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </>
       )}
 
       <div 
