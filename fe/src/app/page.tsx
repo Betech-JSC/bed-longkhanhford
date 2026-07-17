@@ -506,9 +506,12 @@ export default function Home() {
     const fetchTabPosts = async () => {
       try {
         const postsData = await postsAPI.getAll();
+        // Ưu tiên top_posts (bài nổi bật từ CMS), sau đó mới fallback sang posts.data
+        const topPosts = (postsData as any)?.top_posts;
         const postsItems = (postsData as any)?.posts?.data || (postsData as any)?.data || postsData;
-        if (Array.isArray(postsItems) && postsItems.length > 0) {
-          const formatted = postsItems.map((item: any) => ({
+        const sourceItems = (Array.isArray(topPosts) && topPosts.length > 0) ? topPosts : postsItems;
+        if (Array.isArray(sourceItems) && sourceItems.length > 0) {
+          const formatted = sourceItems.slice(0, 5).map((item: any) => ({
             id: item.slug || item.id || String(Math.random()),
             title: item.title || "",
             image: item.image?.url || "/assets/mach-e-hero.png",
