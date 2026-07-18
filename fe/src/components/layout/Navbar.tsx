@@ -739,19 +739,18 @@ export default function Navbar() {
       {/* Search Overlay Panel (Ford China style) */}
       {/* Backdrop */}
       <div 
-        className={`fixed inset-0 bg-black/50 z-[59] transition-all duration-300 ease-in-out ${
+        className={`fixed left-0 right-0 bottom-0 bg-black/50 z-[59] transition-all duration-300 ease-in-out top-[72px] lg:top-[104px] ${
           isSearchOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`} 
         onClick={() => setIsSearchOpen(false)} 
       />
       {/* Search Panel */}
       <div 
-        className={`fixed left-0 right-0 bg-white shadow-2xl z-[60] transition-all duration-500 ease-in-out transform ${
+        className={`fixed left-0 right-0 bg-white shadow-2xl z-[60] transition-all duration-500 ease-in-out transform top-[72px] lg:top-[104px] ${
           isSearchOpen 
             ? "translate-y-0 opacity-100 pointer-events-auto" 
             : "-translate-y-4 opacity-0 pointer-events-none"
         }`}
-        style={{ top: headerRef.current ? `${headerRef.current.getBoundingClientRect().bottom}px` : '96px' }}
       >
         <div className="max-w-[720px] mx-auto px-6 py-10">
           <div className="relative">
