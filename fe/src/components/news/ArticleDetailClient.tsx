@@ -72,7 +72,7 @@ export default function ArticleDetailClient({
   };
 
   return (
-    <div className="bg-[#F8F8F8] min-h-screen py-12 flex flex-col items-center w-full">
+    <div className="bg-[#F8F8F8] min-h-screen pt-32 md:pt-36 pb-16 flex flex-col items-center w-full">
       {/* Back button container */}
       <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full mb-6 font-antenna">
         <Link 

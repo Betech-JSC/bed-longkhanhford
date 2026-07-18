@@ -32,8 +32,6 @@ export default function Navbar() {
     "/dong-xe",
     "/xe-da-qua-su-dung",
     "/tin-tuc",
-    "/tuyen-dung",
-    "/phu-kien",
     "/san-pham"
   ].some(path => pathname === path || pathname.startsWith(path + "/"));
   const router = useRouter();
