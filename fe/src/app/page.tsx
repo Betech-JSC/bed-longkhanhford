@@ -131,7 +131,7 @@ const techItems = [
   }
 ];
 
-const brandItems = [
+const INITIAL_BRAND_ITEMS = [
   {
     title: "Ford Everest",
     category: "Ford Everest Mới",
@@ -175,6 +175,7 @@ export default function Home() {
   const [homeArticles, setHomeArticles] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [vehiclesList, setVehiclesList] = useState<any[]>([]);
+  const [brandItems, setBrandItems] = useState<any[]>(INITIAL_BRAND_ITEMS);
   const [servicesList, setServicesList] = useState<any[]>([]);
   const [customerHandovers, setCustomerHandovers] = useState<any[]>([]);
   const [isVehiclesLoading, setIsVehiclesLoading] = useState(true);
@@ -416,6 +417,25 @@ export default function Home() {
         const vehiclesItems = (vehiclesData as any)?.data || vehiclesData;
         if (Array.isArray(vehiclesItems) && vehiclesItems.length > 0) {
           setVehiclesList(vehiclesItems);
+          
+          // Map dynamic vehicle thumbnail image to brandItems
+          setBrandItems(prevItems => prevItems.map(item => {
+            const matchedVehicle = vehiclesItems.find(v => 
+              v.title.toLowerCase().replace(/\s+/g, '') === item.title.toLowerCase().replace(/\s+/g, '') ||
+              v.title.toLowerCase().replace(/\s+/g, '').includes(item.title.toLowerCase().replace(/\s+/g, '')) ||
+              item.title.toLowerCase().replace(/\s+/g, '').includes(v.title.toLowerCase().replace(/\s+/g, ''))
+            );
+            if (matchedVehicle) {
+              return {
+                ...item,
+                image: matchedVehicle.image_thumbnail_url || matchedVehicle.image_url || item.image,
+                slogan: matchedVehicle.tagline || item.slogan,
+                description: matchedVehicle.description || item.description,
+                link: `/dong-xe/${matchedVehicle.slug}`
+              };
+            }
+            return item;
+          }));
         }
 
         const servicesItems = (servicesData as any)?.services || (servicesData as any)?.data || servicesData;
@@ -683,28 +703,34 @@ export default function Home() {
               <img
                 src={slide.image}
                 alt={slide.title}
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = "/images-dynamic/image-hero-1.jpg";
+                }}
                 className="hidden md:block object-cover w-full h-full object-top transform transition-transform duration-10000"
               />
               {/* Mobile Image */}
               <img
                 src={slide.imageMobile || slide.image}
                 alt={slide.title}
-                className="block md:hidden object-cover w-full h-full object-top transform transition-transform duration-10000"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = "/images-dynamic/image-hero-1.jpg";
+                }}
+                className="block md:hidden object-cover w-full h-full object-center transform transition-transform duration-10000"
               />
             </div>
           ))}
 
           {/* Main Content Area */}
-          <div className="max-w-[1440px] mx-auto w-full relative z-10 mt-auto pt-20 pb-16 md:pb-[60px]">
+          <div className="max-w-[1440px] mx-auto w-full relative z-10 mt-auto pt-20 pb-[100px] md:pb-[60px]">
             <div className="max-w-[1152px] mx-auto w-full px-6 xl:px-0 flex flex-col items-start justify-end text-left">
               {/* Slide Text Block */}
-              <div key={activeHeroIndex} className="max-w-2xl flex flex-col items-start text-left animate-fade-in">
+              <div key={activeHeroIndex} className="max-w-2xl flex flex-col items-start text-left animate-fade-in w-full">
               <h2 className="text-3xl sm:text-5xl lg:text-[48px] font-bold tracking-tight leading-[1.15] text-white uppercase font-sans">
                 {heroSlides[activeHeroIndex]?.title || ""}
               </h2>
 
               {/* CTAs - Dark Background Hover styles */}
-              <div className="flex flex-row justify-start gap-4 pt-6 md:pt-8 w-full sm:w-auto">
+              <div className="flex flex-col sm:flex-row justify-start gap-4 pt-6 md:pt-8 w-full sm:w-auto">
                 <Button
                   variant="primary"
                   onClick={() => triggerQuickAction("Đăng ký lái thử", "Tôi đặt lịch hẹn đăng ký lái thử xe Ford.")}

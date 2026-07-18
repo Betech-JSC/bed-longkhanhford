@@ -5,7 +5,7 @@ import Script from "next/script";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { settingsAPI } from "@/lib/api";
-import AIChatWidget from "@/components/shared/AIChatWidget";
+// import AIChatWidget from "@/components/shared/AIChatWidget";
 import CompareDrawer from "@/components/shared/CompareDrawer";
 import QuickAccessToolbar from "@/components/shared/QuickAccessToolbar";
 import PageTransitionLoader from "@/components/shared/PageTransitionLoader";
