@@ -168,10 +168,10 @@ function RollingCostContent() {
           const vehicle = grouped.find((v) => v.id === defaultVehicleId);
           if (vehicle) {
             const matchVersion =
-              urlVersionId && vehicle.versions.some((v: any) => v.id === urlVersionId)
+              urlVersionId && vehicle.versions.some((v: any) => String(v.id) === String(urlVersionId))
                 ? urlVersionId
                 : vehicle.versions[0]?.id || "";
-            setSelectedVersionId(matchVersion);
+            setSelectedVersionId(String(matchVersion));
           }
         }
       })
@@ -197,7 +197,7 @@ function RollingCostContent() {
   useEffect(() => {
     if (vehicles.length === 0 || !selectedVehicleId || !selectedVersionId) return;
     const vehicle = vehicles.find((v) => v.id === selectedVehicleId);
-    const version = vehicle?.versions.find((v: any) => v.id === selectedVersionId);
+    const version = vehicle?.versions.find((v: any) => String(v.id) === String(selectedVersionId));
     if (vehicle && version) {
       setResult(calculateRollingCost(vehicle, version, selectedProvince, registrationFees));
     }
@@ -205,7 +205,7 @@ function RollingCostContent() {
 
   const currentVehicle = vehicles.find((v) => v.id === selectedVehicleId);
   const currentVersion = currentVehicle?.versions.find(
-    (v: any) => v.id === selectedVersionId
+    (v: any) => String(v.id) === String(selectedVersionId)
   );
 
   const costBreakdown = result
