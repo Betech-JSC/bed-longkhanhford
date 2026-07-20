@@ -397,39 +397,35 @@ export default function ComparePage() {
   }, [selectedIds, allCompareOptions]);
 
   const handleSelect = (index: number, optionKey: string) => {
-    setSelectedIds((prev) => {
-      const updated = [...prev];
-      updated[index] = optionKey;
-      localStorage.setItem("compare-vehicles", JSON.stringify(updated.filter(Boolean)));
-      window.dispatchEvent(new Event("compare-updated"));
-      setHasClearedAll(false);
-      return updated;
-    });
+    const updated = [...selectedIds];
+    updated[index] = optionKey;
+    const cleanUpdated = updated.filter(Boolean);
+    setSelectedIds(cleanUpdated);
+    localStorage.setItem("compare-vehicles", JSON.stringify(cleanUpdated));
+    window.dispatchEvent(new Event("compare-updated"));
+    setHasClearedAll(false);
   };
 
   const handleRemove = (index: number) => {
-    setSelectedIds((prev) => {
-      const updated = prev.filter((_, i) => i !== index);
-      localStorage.setItem("compare-vehicles", JSON.stringify(updated.filter(Boolean)));
-      window.dispatchEvent(new Event("compare-updated"));
-      if (updated.length === 0) {
-        setHasClearedAll(true);
-      }
-      return updated;
-    });
+    const updated = selectedIds.filter((_, i) => i !== index);
+    const cleanUpdated = updated.filter(Boolean);
+    setSelectedIds(cleanUpdated);
+    localStorage.setItem("compare-vehicles", JSON.stringify(cleanUpdated));
+    window.dispatchEvent(new Event("compare-updated"));
+    if (cleanUpdated.length === 0) {
+      setHasClearedAll(true);
+    }
   };
 
   const handleAdd = () => {
     if (selectedIds.length < MAX_COMPARE) {
       const available = allCompareOptions.find((opt) => !selectedIds.includes(opt.key));
       if (available) {
-        setSelectedIds((prev) => {
-          const updated = [...prev, available.key];
-          localStorage.setItem("compare-vehicles", JSON.stringify(updated));
-          window.dispatchEvent(new Event("compare-updated"));
-          setHasClearedAll(false);
-          return updated;
-        });
+        const updated = [...selectedIds, available.key];
+        setSelectedIds(updated);
+        localStorage.setItem("compare-vehicles", JSON.stringify(updated));
+        window.dispatchEvent(new Event("compare-updated"));
+        setHasClearedAll(false);
       }
     }
   };
