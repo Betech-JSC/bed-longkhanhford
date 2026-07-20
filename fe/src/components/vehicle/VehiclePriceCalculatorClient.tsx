@@ -6,6 +6,7 @@ import { useVehicle } from "@/components/vehicle/VehicleLayoutClient";
 import { regionsAPI, contactsAPI, registrationFeesAPI } from "@/lib/api";
 import { calculateRollingCost } from "@/lib/rolling-cost";
 import { Check, Info, FileText } from "lucide-react";
+import AnimatedNumber from "@/components/shared/AnimatedNumber";
 
 export default function VehiclePriceCalculatorClient() {
   const {
@@ -243,7 +244,9 @@ export default function VehiclePriceCalculatorClient() {
               <div className="p-6 space-y-4 text-sm text-gray-700 font-antenna">
                 <div className="flex justify-between items-center pb-3 border-b border-gray-200">
                   <span>Giá xe niêm yết:</span>
-                  <span className="font-bold text-gray-900 text-base">{formatPrice(rollingCost.basePrice)}</span>
+                  <span className="font-bold text-gray-900 text-base">
+                    <AnimatedNumber value={rollingCost.basePrice} formatFn={formatPrice} />
+                  </span>
                 </div>
                 <div className="flex justify-between items-center pb-3 border-b border-gray-200">
                   <span className="flex items-center gap-1.5">
@@ -252,33 +255,47 @@ export default function VehiclePriceCalculatorClient() {
                       <Info className="w-3.5 h-3.5 text-gray-400" />
                     </span>
                   </span>
-                  <span className="font-semibold text-gray-900">+{formatPrice(rollingCost.registrationTax)}</span>
+                  <span className="font-semibold text-gray-900">
+                    +<AnimatedNumber value={rollingCost.registrationTax} formatFn={formatPrice} />
+                  </span>
                 </div>
                 <div className="flex justify-between items-center pb-3 border-b border-gray-200">
                   <span>Lệ phí cấp biển số:</span>
-                  <span className="font-semibold text-gray-900">+{formatPrice(rollingCost.plateFee)}</span>
+                  <span className="font-semibold text-gray-900">
+                    +<AnimatedNumber value={rollingCost.plateFee} formatFn={formatPrice} />
+                  </span>
                 </div>
                 <div className="flex justify-between items-center pb-3 border-b border-gray-200">
                   <span>Lệ phí đăng kiểm:</span>
-                  <span className="font-semibold text-gray-900">+{formatPrice(rollingCost.registryFee)}</span>
+                  <span className="font-semibold text-gray-900">
+                    +<AnimatedNumber value={rollingCost.registryFee} formatFn={formatPrice} />
+                  </span>
                 </div>
                 <div className="flex justify-between items-center pb-3 border-b border-gray-200">
                   <span>Phí bảo trì đường bộ (12 tháng):</span>
-                  <span className="font-semibold text-gray-900">+{formatPrice(rollingCost.roadFee)}</span>
+                  <span className="font-semibold text-gray-900">
+                    +<AnimatedNumber value={rollingCost.roadFee} formatFn={formatPrice} />
+                  </span>
                 </div>
                 <div className="flex justify-between items-center pb-3 border-b border-gray-200">
                   <span>Bảo hiểm trách nhiệm dân sự bắt buộc:</span>
-                  <span className="font-semibold text-gray-900">+{formatPrice(rollingCost.insuranceFee)}</span>
+                  <span className="font-semibold text-gray-900">
+                    +<AnimatedNumber value={rollingCost.insuranceFee} formatFn={formatPrice} />
+                  </span>
                 </div>
                 {rollingCost.serviceFee && rollingCost.serviceFee > 0 ? (
                   <div className="flex justify-between items-center pb-3 border-b border-gray-200">
                     <span>Phí dịch vụ đăng ký:</span>
-                    <span className="font-semibold text-gray-900">+{formatPrice(rollingCost.serviceFee)}</span>
+                    <span className="font-semibold text-gray-900">
+                      +<AnimatedNumber value={rollingCost.serviceFee} formatFn={formatPrice} />
+                    </span>
                   </div>
                 ) : null}
                 <div className="pt-4 flex justify-between items-center">
                   <span className="font-bold text-gray-900 text-base">Tổng dự toán chi phí lăn bánh:</span>
-                  <span className="font-extrabold text-[#066fef] text-xl md:text-2xl">{formatPrice(rollingCost.total)}</span>
+                  <span className="font-extrabold text-[#066fef] text-xl md:text-2xl">
+                    <AnimatedNumber value={rollingCost.total} formatFn={formatPrice} />
+                  </span>
                 </div>
               </div>
             </div>

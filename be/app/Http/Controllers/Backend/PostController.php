@@ -52,4 +52,18 @@ class PostController extends Controller
             'data' => $result['data']
         ]);
     }
+
+    public function hideSelected(\Illuminate\Http\Request $request)
+    {
+        if (!current_admin()->hasPermissionTo('admin.posts.index')) {
+            return abort(403);
+        }
+
+        $ids = $request->input('ids');
+        if (is_array($ids) && count($ids) > 0) {
+            $this->model::whereIn('id', $ids)->update(['status' => Post::STATUS_INACTIVE]);
+        }
+
+        return redirect()->back()->with('success', 'Ẩn các bài viết đã chọn thành công!');
+    }
 }

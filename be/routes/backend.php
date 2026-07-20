@@ -40,6 +40,7 @@ use App\Http\Controllers\Backend\RegistrationFeeController;
 
 Route::localized(function () {
     Route::middleware(['auth:admin'])->name('admin.')->group(function () {
+        Route::post('posts/hide-selected', [PostController::class, 'hideSelected'])->name('posts.hide-selected');
         Route::module(PostController::class);
         Route::module(MediaController::class);
         Route::module(CertificateController::class);
