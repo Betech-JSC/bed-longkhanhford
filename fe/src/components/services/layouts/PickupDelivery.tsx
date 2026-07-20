@@ -30,7 +30,7 @@ const steps: StepItem[] = [
       "Nhân viên Long Khánh Ford sẽ giới thiệu chi tiết về Dịch vụ và tư vấn cho Khách hàng.",
       "Nhân viên Long Khánh Ford xác nhận cuộc hẹn với khách hàng."
     ],
-    note: "(*) Tham khảo Hotline 0918 90 90 60 | (**) Liên hệ Long Khánh Ford để có thêm chi tiết."
+    note: "(*) Tham khảo Hotline Dịch vụ 1900 888 992 – 02513 646 998 | (**) Liên hệ Long Khánh Ford để có thêm chi tiết."
   },
   {
     title: "Tiếp nhận xe tại nhà",
@@ -81,7 +81,7 @@ export default function PickupDeliveryLayout({ service }: { service?: any }) {
             Đặt hẹn
           </Link>
           <a
-            href="tel:0918909060"
+            href="tel:1900888992"
             className="border border-white hover:bg-white/10 transition-colors text-white font-bold px-6 py-3 rounded-[4px] text-xs uppercase tracking-wider shadow-xs"
           >
             Liên hệ hỗ trợ

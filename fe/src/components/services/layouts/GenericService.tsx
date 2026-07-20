@@ -61,7 +61,7 @@ export default function GenericServiceLayout({ service }: { service: ServiceDeta
             Đặt hẹn dịch vụ
           </Link>
           <a
-            href="tel:0918909060"
+            href="tel:1900888992"
             className="border border-white hover:bg-white/10 transition-colors text-white font-bold px-6 py-3 rounded-[4px] text-xs uppercase tracking-wider shadow-xs"
           >
             Liên hệ hỗ trợ

@@ -102,7 +102,7 @@ export default function QuickAccessToolbar() {
     {
       label: "Hotline hỗ trợ",
       icon: <Phone className="w-[18px] h-[18px] stroke-[1.5]" />,
-      href: "tel:0918909060",
+      href: "tel:0812868622",
     },
     {
       label: "Kết nối Zalo",
@@ -116,7 +116,7 @@ export default function QuickAccessToolbar() {
     {
       label: "Facebook",
       icon: <FacebookIcon />,
-      href: "https://www.facebook.com/FordDongNai.Official",
+      href: "https://www.facebook.com/longkhanhfordofficial/",
       target: "_blank",
       colorClass: "text-[#1877f2]",
       rippleClass: "animate-quick-ripple-facebook",
@@ -125,7 +125,7 @@ export default function QuickAccessToolbar() {
     {
       label: "Messenger",
       icon: <MessengerIcon />,
-      href: "https://m.me/FordDongNai.Official",
+      href: "https://m.me/longkhanhfordofficial",
       target: "_blank",
       colorClass: "text-[#a200ff]",
       rippleClass: "animate-quick-ripple-messenger",
@@ -143,7 +143,7 @@ export default function QuickAccessToolbar() {
     {
       label: "Hotline",
       icon: <Phone className="w-5 h-5" />,
-      href: "tel:0918909060",
+      href: "tel:0812868622",
       colorClass: "text-[#e11d48]",
       rippleClass: "animate-quick-ripple-phone",
       delay: "0.9s",

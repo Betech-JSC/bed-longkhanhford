@@ -51,16 +51,16 @@ export default function Footer() {
               <strong className="text-neutral-800 font-bold">Mã số thuế:</strong> 3600843328
             </p>
             <p>
-              <strong className="text-neutral-800 font-bold">Địa chỉ:</strong> Đường Hùng Vương, Phường Xuân An, Thành Phố Long Khánh, Tỉnh Đồng Nai
+              <strong className="text-neutral-800 font-bold">Địa chỉ:</strong> Đường 21/4, Tổ 1, Khu phố Cẩm Tân, Phường Hàng Gòn, Thành phố Đồng Nai, Việt Nam
             </p>
             <p>
-              <strong className="text-neutral-800 font-bold">Hotline KD:</strong> 0918 90 90 60
+              <strong className="text-neutral-800 font-bold">Hotline KD:</strong> 0812 86 86 22
             </p>
             <p>
-              <strong className="text-neutral-800 font-bold">Hotline Dv:</strong> 1800 55 68 58
+              <strong className="text-neutral-800 font-bold">Hotline Dv:</strong> 1900 888 992 – 02513 646 998
             </p>
             <p>
-              <strong className="text-neutral-800 font-bold">Email:</strong> marketing@longkhanhford.com.vn
+              <strong className="text-neutral-800 font-bold">Email:</strong> Marketing@longkhanhford.com.vn
             </p>
             <p>
               <strong className="text-neutral-800 font-bold">Website:</strong> longkhanhford.com.vn
@@ -231,7 +231,7 @@ export default function Footer() {
           {/* Facebook Fanpage Embed */}
           <div className="w-full overflow-hidden rounded-lg bg-white border border-neutral-200 shadow-sm" style={{ height: "180px" }}>
             <iframe
-              src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FFordDongNai.Official&tabs&width=500&height=180&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=false&appId"
+              src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Flongkhanhfordofficial%2F&tabs&width=500&height=180&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=false&appId"
               width="100%"
               height="180"
               style={{ border: "none", overflow: "hidden" }}
@@ -247,7 +247,7 @@ export default function Footer() {
           <div className="flex gap-4 pt-2">
             {/* Facebook */}
             <a 
-              href="https://www.facebook.com/FordDongNai.Official"
+              href="https://www.facebook.com/longkhanhfordofficial/"
               target="_blank"
               rel="noopener noreferrer"
               className="w-8 h-8 rounded-full bg-neutral-200/60 hover:bg-[#1877f2] transition-colors flex items-center justify-center text-neutral-700 hover:text-white"

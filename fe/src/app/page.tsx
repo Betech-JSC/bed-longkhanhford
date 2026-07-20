@@ -1341,7 +1341,7 @@ export default function Home() {
                   </div>
                   <p className="text-sm md:text-base text-neutral-700 leading-relaxed font-normal pt-1.5">
                     <strong className="text-black font-bold mr-1">Địa chỉ:</strong>
-                    Đường Hùng Vương, Phường Xuân An, Thành Phố Long Khánh, Tỉnh Đồng Nai
+                    Đường 21/4, Tổ 1, Khu phố Cẩm Tân, Phường Hàng Gòn, Thành phố Đồng Nai, Việt Nam
                   </p>
                 </div>
 
@@ -1352,7 +1352,7 @@ export default function Home() {
                   </div>
                   <p className="text-sm md:text-base text-neutral-700 leading-relaxed font-normal pt-1.5">
                     <strong className="text-black font-bold mr-1">Hotline:</strong>
-                    Dịch vụ: 1800 55 68 58 - Kinh doanh: 0918 90 90 60
+                    Dịch vụ: 1900 888 992 – 02513 646 998 - Kinh doanh: 0812 86 86 22
                   </p>
                 </div>
 
@@ -1363,7 +1363,7 @@ export default function Home() {
                   </div>
                   <p className="text-sm md:text-base text-neutral-700 leading-relaxed font-normal pt-1.5">
                     <strong className="text-black font-bold mr-1">Email:</strong>
-                    marketing@longkhanhford.com.vn
+                    Marketing@longkhanhford.com.vn
                   </p>
                 </div>
               </div>
@@ -1378,7 +1378,7 @@ export default function Home() {
                 </Button>
                 <Button
                   variant="primary"
-                  href="tel:0918909060"
+                  href="tel:0812868622"
                   className="w-full sm:w-auto"
                 >
                   Gọi Hotline

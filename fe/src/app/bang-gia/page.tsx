@@ -134,7 +134,7 @@ export default function PriceListPage() {
             </h1>
             <p className="text-white/80 text-base md:text-lg max-w-2xl mx-auto font-antenna">
               Giá niêm yết chính hãng mới nhất, cập nhật liên tục. Liên hệ
-              Hotline <strong className="text-white">0918 90 90 60</strong> để
+              Hotline <strong className="text-white">0812 86 86 22</strong> để
               nhận ưu đãi tốt nhất.
             </p>
           </div>
@@ -339,7 +339,7 @@ export default function PriceListPage() {
                   Công cụ Ước tính Lăn bánh
                 </Link>{" "}
                 hoặc liên hệ Hotline{" "}
-                <strong className="text-amber-900">0918 90 90 60</strong> để nhận
+                <strong className="text-amber-900">0812 86 86 22</strong> để nhận
                 báo giá chính xác nhất.
               </div>
             </>

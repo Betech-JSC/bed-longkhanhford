@@ -220,7 +220,7 @@ function TestDriveFormContent() {
                   Địa điểm lái thử
                 </h4>
                 <p className="font-['Ford_Antenna',sans-serif] text-sm text-[#1a1a1a] leading-relaxed">
-                  Số B04, Khu thương mại Amata, Khu phố 29, Phường Long Bình, Thành Phố Biên Hòa, Đồng Nai
+                  Đường 21/4, Tổ 1, Khu phố Cẩm Tân, Phường Hàng Gòn, Thành phố Đồng Nai, Việt Nam
                 </p>
               </div>
             </div>
@@ -235,7 +235,7 @@ function TestDriveFormContent() {
                   Liên hệ Hotline đăng ký nhanh
                 </h4>
                 <div className="font-['Ford_Antenna',sans-serif] text-sm text-[#1a1a1a] leading-relaxed space-y-1">
-                  <p>Phòng kinh doanh xe mới: <span className="font-semibold text-dark">0918 90 90 60</span></p>
+                  <p>Phòng kinh doanh xe mới: <span className="font-semibold text-dark">0812 86 86 22</span></p>
                 </div>
               </div>
             </div>
@@ -250,7 +250,7 @@ function TestDriveFormContent() {
                   Email hỗ trợ thông tin
                 </h4>
                 <p className="font-['Ford_Antenna',sans-serif] text-sm text-[#1a1a1a]">
-                  marketing@longkhanhford.com.vn
+                  Marketing@longkhanhford.com.vn
                 </p>
               </div>
             </div>

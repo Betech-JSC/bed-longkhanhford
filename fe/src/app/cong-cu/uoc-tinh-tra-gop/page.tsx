@@ -300,9 +300,9 @@ export default function InstallmentCalculatorPage() {
           <div>
             <h1 className="text-2xl font-bold text-[#00095B] uppercase tracking-tight">LONG KHÁNH FORD</h1>
             <p className="text-xs text-gray-500 mt-1">
-              Địa chỉ: Đường Hùng Vương, Phường Xuân An, Thành Phố Long Khánh, Tỉnh Đồng Nai
+              Địa chỉ: Đường 21/4, Tổ 1, Khu phố Cẩm Tân, Phường Hàng Gòn, Thành phố Đồng Nai, Việt Nam
             </p>
-            <p className="text-xs text-gray-500">Hotline KD: 0918 90 90 60 | Email: marketing@longkhanhford.com.vn</p>
+            <p className="text-xs text-gray-500">Hotline KD: 0812 86 86 22 | Email: Marketing@longkhanhford.com.vn</p>
           </div>
           <div className="text-right">
             <h2 className="text-lg font-bold text-gray-800">BẢNG ƯỚC TÍNH CHI PHÍ TRẢ GÓP</h2>
@@ -659,7 +659,7 @@ export default function InstallmentCalculatorPage() {
               {/* Print Specific Footer Notes */}
               <div className="hidden print:block text-[10px] text-gray-400 mt-4 border-t pt-4">
                 <p>* Bảng tính này chỉ mang tính chất tham khảo. Lãi suất thực tế sẽ được cập nhật cụ thể theo quy định của ngân hàng đối tác tại từng thời điểm.</p>
-                <p>Mọi chi tiết xin vui lòng liên hệ Long Khánh Ford - Hotline KD: 0918 90 90 60 để nhận báo giá chính xác nhất.</p>
+                <p>Mọi chi tiết xin vui lòng liên hệ Long Khánh Ford - Hotline KD: 0812 86 86 22 để nhận báo giá chính xác nhất.</p>
               </div>
               
             </div>

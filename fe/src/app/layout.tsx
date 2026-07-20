@@ -49,12 +49,12 @@ const jsonLd = {
   description:
     "Đại lý ủy quyền chính thức của Ford Việt Nam tại Long Khánh, Đồng Nai. Cung cấp các dòng xe Ford chính hãng, dịch vụ bảo dưỡng, sửa chữa, phụ kiện.",
   url: "https://longkhanhford.com.vn",
-  telephone: "+84918909060",
-  email: "marketing@longkhanhford.com.vn",
+  telephone: "+84812868622",
+  email: "Marketing@longkhanhford.com.vn",
   address: {
     "@type": "PostalAddress",
     streetAddress:
-      "Đường Hùng Vương, Phường Xuân An",
+      "Đường 21/4, Tổ 1, Khu phố Cẩm Tân, Phường Hàng Gòn",
     addressLocality: "Thành phố Long Khánh",
     addressRegion: "Đồng Nai",
     addressCountry: "VN",
@@ -82,7 +82,7 @@ const jsonLd = {
     name: "Ford",
   },
   sameAs: [
-    "https://www.facebook.com/FordDongNai.Official",
+    "https://www.facebook.com/longkhanhfordofficial/",
     "https://www.tiktok.com/@longkhanhford.official",
     "https://youtube.com/@longkhanhford",
   ],

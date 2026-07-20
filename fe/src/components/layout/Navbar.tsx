@@ -616,11 +616,11 @@ export default function Navbar() {
           </div>
           <div className="flex items-center gap-6">
             <button 
-              onClick={() => { window.location.href = "tel:0918909060"; }}
+              onClick={() => { window.location.href = "tel:0812868622"; }}
               className="flex items-center gap-1.5 text-white hover:text-white/85 transition-colors cursor-pointer bg-transparent border-0 p-0 font-medium text-xs"
             >
               <Phone className="w-3.5 h-3.5 text-white/90 flex-shrink-0" />
-              <span>Hotline kinh doanh: 0918 90 90 60</span>
+              <span>Hotline kinh doanh: 0812 86 86 22</span>
             </button>
           </div>
         </div>
@@ -1251,10 +1251,10 @@ export default function Navbar() {
               <p className="text-[#424242]">
                 📞 Hotline kinh doanh:{" "}
                 <button
-                  onClick={() => { window.location.href = "tel:0918909060"; }}
+                  onClick={() => { window.location.href = "tel:0812868622"; }}
                   className="font-bold text-[#066fef] bg-transparent border-0 p-0 cursor-pointer text-xs"
                 >
-                  0918 90 90 60
+                  0812 86 86 22
                 </button>
               </p>
               <p className="text-[#424242]">

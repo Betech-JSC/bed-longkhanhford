@@ -87,13 +87,13 @@ export default async function ServicesPage() {
     "image": "https://longkhanhford.com.vn" + siteAssets.showroomBg,
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "Đường Hùng Vương, Phường Xuân An",
+      "streetAddress": "Đường 21/4, Tổ 1, Khu phố Cẩm Tân, Phường Hàng Gòn",
       "addressLocality": "Thành phố Long Khánh",
       "addressRegion": "Đồng Nai",
       "postalCode": "810000",
       "addressCountry": "VN"
     },
-    "telephone": "0918909060",
+    "telephone": "1900888992",
     "priceRange": "$$",
     "openingHours": "Mo-Sa 08:00-17:00",
     "geo": {
@@ -239,7 +239,7 @@ export default async function ServicesPage() {
                 Đặt hẹn dịch vụ
               </Link>
               <a
-                href="tel:0918909060"
+                href="tel:1900888992"
                 className="bg-white/10 hover:bg-white/15 text-white border border-white/20 font-bold text-center px-8 py-4 rounded-[4px] transition-all text-sm uppercase tracking-wider text-[11px]"
               >
                 Hotline hỗ trợ kỹ thuật

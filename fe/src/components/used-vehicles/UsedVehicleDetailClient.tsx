@@ -366,7 +366,7 @@ export default function UsedVehicleDetailClient({ vehicle }: { vehicle: any }) {
               </button>
 
               <a
-                href="tel:0918909060"
+                href="tel:0812868622"
                 className="flex items-center justify-center border border-gray-200 hover:border-[#066fef] text-[#066fef] bg-white rounded-[4px] px-5 transition-all cursor-pointer"
               >
                 <Phone className="w-5 h-5" />

@@ -108,7 +108,7 @@ export default function UsedVehiclesPage() {
               Mỗi chiếc xe đã qua sử dụng tại Long Khánh Ford đều được kiểm duyệt nghiêm ngặt qua quy trình 167 điểm của Ford toàn cầu, đảm bảo chất lượng tối ưu, pháp lý minh bạch và chế độ bảo hành dài hạn.
             </p>
             <div className="flex flex-wrap gap-4">
-              <a href="tel:0918909060" className="inline-flex items-center gap-2 bg-[#066fef] hover:bg-[#01095c] text-white text-xs font-bold px-6 py-3.5 rounded-[4px] transition-all shadow-md uppercase tracking-wider">
+              <a href="tel:0812868622" className="inline-flex items-center gap-2 bg-[#066fef] hover:bg-[#01095c] text-white text-xs font-bold px-6 py-3.5 rounded-[4px] transition-all shadow-md uppercase tracking-wider">
                 <PhoneCall className="w-4 h-4" />
                 Hotline Tư vấn
               </a>

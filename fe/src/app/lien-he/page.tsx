@@ -213,7 +213,7 @@ function ContactFormContent() {
                   Địa chỉ Showroom
                 </span>
                 <p className="font-antenna text-xs lg:text-sm text-gray-800 leading-relaxed font-semibold">
-                  Số B04, Khu thương mại Amata, Khu phố 29, Phường Long Bình, Thành Phố Đồng Nai
+                  Đường 21/4, Tổ 1, Khu phố Cẩm Tân, Phường Hàng Gòn, Thành phố Đồng Nai, Việt Nam
                 </p>
               </div>
             </div>
@@ -230,11 +230,11 @@ function ContactFormContent() {
                 <div className="font-antenna text-xs lg:text-sm text-gray-800 leading-relaxed space-y-1.5">
                   <p className="flex items-center justify-between border-b border-gray-100 pb-1.5">
                     <span className="text-gray-400 font-medium">Bộ phận Dịch vụ:</span>
-                    <span className="font-bold text-[#002F6C]">1800 55 68 58</span>
+                    <span className="font-bold text-[#002F6C]">1900 888 992 – 02513 646 998</span>
                   </p>
                   <p className="flex items-center justify-between border-b border-gray-100 pb-1.5">
                     <span className="text-gray-400 font-medium">Phòng Kinh doanh:</span>
-                    <span className="font-bold text-[#002F6C]">0918 90 90 60</span>
+                    <span className="font-bold text-[#002F6C]">0812 86 86 22</span>
                   </p>
                   <p className="flex items-center justify-between">
                     <span className="text-gray-400 font-medium">Điện thoại bàn:</span>
@@ -254,7 +254,7 @@ function ContactFormContent() {
                   Hòm thư điện tử
                 </span>
                 <p className="font-antenna text-xs lg:text-sm text-gray-800 font-bold">
-                  marketing@longkhanhford.com.vn
+                  Marketing@longkhanhford.com.vn
                 </p>
               </div>
             </div>

@@ -668,7 +668,7 @@ export default function AIChatWidget() {
         id: `error_${Date.now()}`,
         role: "assistant",
         content:
-          "Xin lỗi, tôi đang gặp sự cố kết nối. Bạn vui lòng gọi Hotline **0918 90 90 60** để được hỗ trợ trực tiếp nhé!",
+          "Xin lỗi, tôi đang gặp sự cố kết nối. Bạn vui lòng gọi Hotline **0812 86 86 22** để được hỗ trợ trực tiếp nhé!",
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, errorMsg]);
@@ -896,7 +896,7 @@ export default function AIChatWidget() {
             </button>
             {showDisclaimers && (
               <div className="px-6 pb-4 text-[11px] leading-relaxed text-gray-400 bg-white font-['Ford_Antenna',sans-serif]">
-                Trợ lý AI này là công cụ hỗ trợ thông tin nhanh dành cho khách hàng tìm hiểu xe Ford tại Đồng Nai. Mọi câu trả lời của AI (bao gồm ước tính chi phí lăn bánh, thông số kỹ thuật) được tạo tự động và chỉ mang tính chất tham khảo. Vui lòng liên hệ trực tiếp hotline <a href="tel:0918909060" className="text-[#0562d2] font-semibold hover:underline">0918 90 90 60</a> để nhận báo giá chính thức và tư vấn chuẩn xác nhất.
+                Trợ lý AI này là công cụ hỗ trợ thông tin nhanh dành cho khách hàng tìm hiểu xe Ford tại Đồng Nai. Mọi câu trả lời của AI (bao gồm ước tính chi phí lăn bánh, thông số kỹ thuật) được tạo tự động và chỉ mang tính chất tham khảo. Vui lòng liên hệ trực tiếp hotline <a href="tel:0812868622" className="text-[#0562d2] font-semibold hover:underline">0812 86 86 22</a> để nhận báo giá chính thức và tư vấn chuẩn xác nhất.
               </div>
             )}
           </div>
