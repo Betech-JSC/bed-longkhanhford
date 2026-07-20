@@ -94,14 +94,16 @@ export function calculateRollingCost(
     registrationTaxRate = 0.02;
   }
   
-  // Thuế trước bạ xe điện bằng 50% xe xăng
+  // Thuế trước bạ xe điện (Mustang Mach-E / Mustang / EV) bằng 0%
   const isElectric =
     vehicleNameLower.includes("mach-e") ||
     vehicleIdLower.includes("mach-e") ||
+    vehicleNameLower.includes("mustang") ||
+    vehicleIdLower.includes("mustang") ||
     vehicleNameLower.includes("ev ") ||
     vehicleIdLower.includes("ev-");
   if (isElectric) {
-    registrationTaxRate = registrationTaxRate * 0.5;
+    registrationTaxRate = 0;
   }
 
   const registrationTax = basePrice * registrationTaxRate;
