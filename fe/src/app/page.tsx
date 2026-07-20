@@ -424,7 +424,7 @@ export default function Home() {
             category: v.title.toUpperCase().includes("FORD") ? v.title : `FORD ${v.title.toUpperCase()} MỚI`,
             slogan: v.tagline || "Mạnh mẽ. Thông minh.",
             description: v.description || "",
-            image: v.image_featured_url || v.image_url || v.image_thumbnail_url || "",
+            image: v.image_featured_url || "",
             link: `/dong-xe/${v.slug}`
           }));
           setBrandItems(dynamicBrandItems);
