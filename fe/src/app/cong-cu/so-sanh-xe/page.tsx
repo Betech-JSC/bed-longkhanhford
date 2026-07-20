@@ -534,35 +534,41 @@ export default function ComparePage() {
                 Vui lòng chọn từ danh sách xe bên dưới để bắt đầu so sánh thông số kỹ thuật chi tiết.
               </p>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-left">
-                {allCompareOptions.slice(0, 6).map((opt) => (
-                  <button
-                    key={opt.key}
-                    onClick={() => {
-                      setSelectedIds([opt.key]);
-                      localStorage.setItem("compare-vehicles", JSON.stringify([opt.key]));
-                      window.dispatchEvent(new Event("compare-updated"));
-                      setHasClearedAll(false);
-                    }}
-                    className="p-4 rounded-xl border border-gray-100 hover:border-[#0562d2] hover:bg-blue-50/10 transition-all text-left flex flex-col items-center justify-center gap-2 group cursor-pointer bg-white"
-                  >
-                    <div className="relative w-full h-[60px]">
-                      <Image
-                        src={resolveImageUrl(opt.image)}
-                        alt={opt.displayName}
-                        fill
-                        sizes="120px"
-                        className="object-contain group-hover:scale-105 transition-transform"
-                        onError={handleImageError}
-                      />
-                    </div>
-                    <span className="text-xs font-bold text-[#1a1a1a] uppercase text-center truncate w-full mt-1">
-                      {opt.displayName}
-                    </span>
-                    <span className="text-[10px] font-semibold text-[#0562D2] bg-blue-50 px-2 py-0.5 rounded-full">
-                      + Thêm so sánh
-                    </span>
-                  </button>
-                ))}
+                {allVehicles.slice(0, 6).map((car) => {
+                  const targetKey = car.versions && car.versions.length > 0 
+                    ? `${car.id}__${car.versions[0].id}` 
+                    : car.id;
+                  const carImage = getPopularVehicleImage(car.id, car.image_thumbnail_url || car.image_url || "");
+                  return (
+                    <button
+                      key={car.id}
+                      onClick={() => {
+                        setSelectedIds([targetKey]);
+                        localStorage.setItem("compare-vehicles", JSON.stringify([targetKey]));
+                        window.dispatchEvent(new Event("compare-updated"));
+                        setHasClearedAll(false);
+                      }}
+                      className="p-4 rounded-xl border border-gray-150 hover:border-[#0562d2] hover:bg-blue-50/10 transition-all text-left flex flex-col items-center justify-center gap-2 group cursor-pointer bg-white shadow-sm"
+                    >
+                      <div className="relative w-full h-[60px]">
+                        <Image
+                          src={resolveImageUrl(carImage)}
+                          alt={car.name}
+                          fill
+                          sizes="120px"
+                          className="object-contain group-hover:scale-105 transition-transform"
+                          onError={handleImageError}
+                        />
+                      </div>
+                      <span className="text-xs font-bold text-[#1a1a1a] uppercase text-center truncate w-full mt-1">
+                        {car.name}
+                      </span>
+                      <span className="text-[10px] font-semibold text-[#0562D2] bg-blue-50 px-2 py-0.5 rounded-full">
+                        + Thêm so sánh
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           ) : (
