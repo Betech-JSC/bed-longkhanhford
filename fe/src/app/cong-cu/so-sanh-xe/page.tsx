@@ -601,7 +601,7 @@ export default function ComparePage() {
                       {/* Vehicle Dropdown */}
                       <div className="relative mb-4">
                         <select
-                          value={id}
+                          value={opt ? opt.key : id}
                           onChange={(e) => handleSelect(index, e.target.value)}
                           className="w-full appearance-none bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 pr-10 text-sm font-bold text-[#1a1a1a] uppercase focus:outline-none focus:ring-2 focus:ring-[#0562d2] focus:border-transparent cursor-pointer"
                         >
