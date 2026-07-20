@@ -631,7 +631,11 @@ export default function ComparePage() {
                               fill
                               sizes="300px"
                               className="object-contain animate-fade-in"
-                              onError={handleImageError}
+                              onError={(e) => {
+                                e.currentTarget.onerror = null;
+                                e.currentTarget.srcset = "";
+                                e.currentTarget.src = getPopularVehicleImage(opt.vehicleId);
+                              }}
                             />
                           </div>
                           <div className="text-center">
