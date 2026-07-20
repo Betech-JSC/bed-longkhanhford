@@ -785,72 +785,63 @@ export default function Home() {
       )}
 
       {/* 3. VEHICLES SHOWROOM CATALOG (WITH FILTER TABS) */}
-      <section id="showroom" className="w-full py-12 md:py-24 bg-white">
+      <section id="showroom" className="w-full py-16 md:py-24 bg-white">
         <div className="max-w-[1440px] mx-auto w-full">
           <div className="max-w-[1152px] mx-auto w-full px-6 xl:px-0">
             {/* Header title block */}
-            <div className="mb-6 md:mb-12 text-left">
-              <h2 className="text-3xl md:text-[40px] font-bold text-black tracking-tight uppercase font-sans max-w-[768px] leading-tight">
-                <span className="text-[#066FEF] block">Mỗi dòng xe Ford.</span>
-                <span className="block">Phù hợp với cuộc sống của bạn</span>
+            <div className="mb-10 text-center max-w-3xl mx-auto font-sans">
+              <h2 className="text-3xl md:text-[32px] font-bold text-[#00095B] tracking-tight uppercase leading-snug">
+                Dòng xe Ford Long Khánh
               </h2>
+              <p className="text-xs md:text-sm text-neutral-500 font-medium leading-relaxed mt-3">
+                Đa dạng lựa chọn từ SUV, bán tải đến xe thương mại — tất cả đều có sẵn tại showroom Long Khánh.
+              </p>
             </div>
 
-          {/* Tab Navigation and Right side Buttons */}
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between border-b border-neutral-200 pb-4 mb-6 md:mb-12 gap-6">
-            {/* Left side category tabs */}
-            <div className="flex gap-8 overflow-x-auto scrollbar-none">
-              {(categories.length > 0
-                ? [{ slug: "all", title: "Tất cả dòng xe" }, ...categories]
-                : [
-                    { slug: "all", title: "Tất cả dòng xe" },
-                    { slug: "suv", title: "SUV" },
-                    { slug: "pickup", title: "Bán tải" },
-                    { slug: "commercial", title: "Thương mại" }
-                  ]
-              ).map((cat) => {
-                const isActive = selectedCategory === cat.slug;
-                return (
-                  <button
-                    key={cat.slug}
-                    onClick={() => {
-                      setSelectedCategory(cat.slug);
-                      setActiveCarIndex(0);
-                    }}
-                    className={`pb-4 text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-300 relative cursor-pointer whitespace-nowrap border-0 bg-transparent ${
-                      isActive
-                        ? "text-black border-b-2 border-[#066FEF] -mb-[18px]"
-                        : "text-neutral-400 hover:text-black border-b-2 border-transparent -mb-[18px]"
-                    }`}
-                  >
-                    {cat.title}
-                  </button>
-                );
-              })}
+            {/* Tab Navigation centered */}
+            <div className="flex justify-center border-b border-neutral-200 pb-4 mb-10">
+              <div className="flex gap-8 overflow-x-auto scrollbar-none justify-center">
+                {(categories.length > 0
+                  ? [{ slug: "all", title: "Tất cả" }, ...categories]
+                  : [
+                      { slug: "all", title: "Tất cả" },
+                      { slug: "suv", title: "SUV" },
+                      { slug: "pickup", title: "Bán tải" },
+                      { slug: "commercial", title: "Thương mại" }
+                    ]
+                ).map((cat) => {
+                  const isActive = selectedCategory === cat.slug;
+                  return (
+                    <button
+                      key={cat.slug}
+                      onClick={() => {
+                        setSelectedCategory(cat.slug);
+                        setActiveCarIndex(0);
+                      }}
+                      className={`pb-4 text-xs sm:text-sm font-bold transition-all duration-300 relative cursor-pointer whitespace-nowrap border-0 bg-transparent ${
+                        isActive
+                          ? "text-[#066FEF] border-b-2 border-[#066FEF] -mb-[18px]"
+                          : "text-neutral-450 hover:text-black border-b-2 border-transparent -mb-[18px]"
+                      }`}
+                    >
+                      {cat.title}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-
-            {/* Right side buttons */}
-            <div className="flex gap-3 flex-wrap">
-              <Button
-                variant="outline-gray"
-                onClick={() => router.push("/san-pham")}
-                size="sm"
-              >
-                Khám phá tất cả dòng xe
-              </Button>
-            </div>
-          </div>
 
           {/* Split layout showcase container */}
           <div className="min-h-[420px] relative w-full">
             {isVehiclesLoading ? (
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center animate-pulse">
-                <div className="lg:col-span-8 h-[300px] bg-neutral-100 rounded-none w-full" />
-                <div className="lg:col-span-4 space-y-6">
-                  <div className="h-8 bg-neutral-200 w-2/3" />
-                  <div className="h-20 bg-neutral-100 w-full" />
-                  <div className="h-10 bg-neutral-200 w-1/3" />
-                </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 animate-pulse">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="bg-white border border-gray-100 rounded-2xl p-6 flex flex-col space-y-4">
+                    <div className="aspect-[16/10] w-full bg-neutral-100 rounded-xl" />
+                    <div className="h-6 bg-neutral-200 w-2/3 rounded" />
+                    <div className="h-4 bg-neutral-100 w-1/2 rounded" />
+                  </div>
+                ))}
               </div>
             ) : (
               (() => {
@@ -863,147 +854,46 @@ export default function Home() {
                   );
                 }
 
-                // Safely get active vehicle
-                const safeCarIndex = activeCarIndex < filteredVehicles.length ? activeCarIndex : 0;
-                const vehicle = filteredVehicles[safeCarIndex];
-                const vehicleId = vehicle.slug || vehicle.id;
-                const vehicleName = vehicle.title || vehicle.name;
-                const vehicleCardImage = vehicle.image_thumbnail_url || vehicle.image_url || vehicle.images?.[0] || getPopularVehicleImage(vehicleId);
-                const vehiclePrice = vehicle.base_price || vehicle.basePrice || 0;
-
-                // Extract specs dynamically
-                const specs = getVehicleSpecsForShowcase(vehicle);
-
-                // Slide navigation handlers
-                const handlePrevCar = () => {
-                  setActiveCarIndex((prev) => (prev - 1 + filteredVehicles.length) % filteredVehicles.length);
-                };
-                const handleNextCar = () => {
-                  setActiveCarIndex((prev) => (prev + 1) % filteredVehicles.length);
-                };
-
                 return (
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-16 items-center">
-                    {/* Left: Highlight Vehicle Image */}
-                    <div className="lg:col-span-8 flex flex-col items-center justify-center">
-                      <motion.div 
-                        drag="x"
-                        dragConstraints={{ left: 0, right: 0 }}
-                        dragElastic={0.2}
-                        onDragEnd={(event, info) => {
-                          const swipeThreshold = 55;
-                          if (info.offset.x < -swipeThreshold) {
-                            handleNextCar();
-                          } else if (info.offset.x > swipeThreshold) {
-                            handlePrevCar();
-                          }
-                        }}
-                        className={`relative w-full aspect-[3/2] lg:aspect-[16/10] max-h-[420px] lg:max-h-[500px] flex items-center justify-center transition-all duration-300 transform group cursor-grab active:cursor-grabbing select-none ${
-                          isFading ? "opacity-0 scale-95" : "opacity-100 scale-100"
-                        }`}
-                      >
-                        {/* Left Arrow Button */}
-                        {filteredVehicles.length > 1 && (
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handlePrevCar();
-                            }}
-                            className="absolute left-2 z-20 p-2.5 rounded-full bg-white/80 hover:bg-white text-neutral-800 hover:text-black shadow-[0_4px_12px_rgba(0,0,0,0.1)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.15)] transition-all duration-200 border-0 cursor-pointer flex items-center justify-center opacity-100 lg:opacity-0 lg:group-hover:opacity-100"
-                            aria-label="Previous vehicle"
-                          >
-                            <ChevronLeft className="w-5 h-5 pointer-events-none" />
-                          </button>
-                        )}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                    {filteredVehicles.map((vehicle: any) => {
+                      const vehicleId = vehicle.slug || vehicle.id;
+                      const vehicleName = vehicle.title || vehicle.name;
+                      const vehicleCardImage = vehicle.image_thumbnail_url || vehicle.image_url || vehicle.images?.[0] || getPopularVehicleImage(vehicleId);
+                      const vehiclePrice = vehicle.base_price || vehicle.basePrice || 0;
 
-                        <div className="w-full h-full pointer-events-none relative flex items-center justify-center">
-                          <SafeImage
-                            src={vehicleCardImage}
-                            alt={vehicleName}
-                            fill
-                            sizes="(max-width: 1024px) 100vw, 800px"
-                            className="object-contain object-center select-none scale-[1.15] pointer-events-none"
-                            priority
-                            unoptimized={true}
-                          />
-                        </div>
-
-                        {/* Right Arrow Button */}
-                        {filteredVehicles.length > 1 && (
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleNextCar();
-                            }}
-                            className="absolute right-2 z-20 p-2.5 rounded-full bg-white/80 hover:bg-white text-neutral-800 hover:text-black shadow-[0_4px_12px_rgba(0,0,0,0.1)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.15)] transition-all duration-200 border-0 cursor-pointer flex items-center justify-center opacity-100 lg:opacity-0 lg:group-hover:opacity-100"
-                            aria-label="Next vehicle"
-                          >
-                            <ChevronRight className="w-5 h-5 pointer-events-none" />
-                          </button>
-                        )}
-                      </motion.div>
-
-                      {/* Slider indicator dots */}
-                      {filteredVehicles.length > 1 && (
-                        <div className="flex justify-center gap-2 mt-4 md:mt-8">
-                          {filteredVehicles.map((_, idx) => (
-                            <button
-                              key={idx}
-                              onClick={() => setActiveCarIndex(idx)}
-                              className="h-[3px] border-0 cursor-pointer p-0 transition-all duration-300"
-                              style={{
-                                width: safeCarIndex === idx ? '40px' : '20px',
-                                backgroundColor: safeCarIndex === idx ? '#066FEF' : '#e5e5e5'
-                              }}
-                              aria-label={`Go to vehicle ${idx + 1}`}
-                            />
-                          ))}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Right: Info and Spec Columns */}
-                    <div 
-                      className={`lg:col-span-4 flex flex-col items-start text-left transition-all duration-300 ${
-                        isFading ? "opacity-0 translate-x-2" : "opacity-100 translate-x-0"
-                      }`}
-                    >
-                      <h3 className="text-2xl md:text-3xl font-bold tracking-wider text-black uppercase font-sans mb-1">
-                        {vehicleName}
-                      </h3>
-                      {vehicle.tagline && (
-                        <p className="text-xs text-neutral-500 font-medium tracking-wide uppercase mb-4 md:mb-6">
-                          {vehicle.tagline}
-                        </p>
-                      )}
-
-                      {/* Specs columns matching the screenshot */}
-                      <div className="grid grid-cols-3 gap-4 border-t border-b border-neutral-200 py-4 md:py-6 my-4 md:my-6 w-full text-left">
-                        <div>
-                          <p className="text-[10px] text-neutral-400 mb-1 uppercase font-bold tracking-wider">Động cơ</p>
-                          <p className="text-sm xl:text-base font-extrabold text-[#00095B] line-clamp-2 min-h-[40px] flex items-center">{specs.engine}</p>
-                        </div>
-                        <div>
-                          <p className="text-[10px] text-neutral-400 mb-1 uppercase font-bold tracking-wider">Số chỗ</p>
-                          <p className="text-sm xl:text-base font-extrabold text-[#00095B] line-clamp-2 min-h-[40px] flex items-center">{specs.seats}</p>
-                        </div>
-                        <div>
-                          <p className="text-[10px] text-neutral-400 mb-1 uppercase font-bold tracking-wider">Giá khởi điểm</p>
-                          <p className="text-sm xl:text-base font-extrabold text-[#00095B] whitespace-nowrap min-h-[40px] flex items-center">{formatPrice(vehiclePrice)}</p>
-                        </div>
-                      </div>
-
-                      {/* CTA Button */}
-                      <div className="flex gap-4 w-full">
-                        <Button
-                          variant="primary"
+                      return (
+                        <Link
+                          key={vehicleId}
                           href={`/${vehicleId}`}
-                          className="w-full sm:w-auto"
+                          className="bg-white border border-gray-100 hover:border-gray-200 rounded-2xl p-6 flex flex-col hover:shadow-md transition-all duration-300 group text-left"
                         >
-                          Tìm hiểu thêm
-                        </Button>
-                      </div>
-                    </div>
+                          {/* Image */}
+                          <div className="relative aspect-[16/10] w-full bg-white overflow-hidden mb-6 flex items-center justify-center">
+                            <SafeImage
+                              src={vehicleCardImage}
+                              alt={vehicleName}
+                              fill
+                              sizes="(max-width: 768px) 100vw, 350px"
+                              className="object-contain object-center scale-[1.05] group-hover:scale-[1.08] transition-transform duration-500 pointer-events-none"
+                              unoptimized={true}
+                            />
+                          </div>
+
+                          {/* Info */}
+                          <h3 className="text-base sm:text-lg font-bold tracking-tight uppercase text-black mb-1 group-hover:text-[#066FEF] transition-colors font-sans">
+                            {vehicleName}
+                          </h3>
+                          <p className="text-xs sm:text-sm text-neutral-500 font-medium font-sans">
+                            Giá khởi điểm:{" "}
+                            <span className="text-[#066FEF] font-bold">
+                              {formatPrice(vehiclePrice)}
+                            </span>
+                          </p>
+                        </Link>
+                      );
+                    })}
                   </div>
                 );
               })()
@@ -1014,11 +904,11 @@ export default function Home() {
       </section>
 
       {/* 4. TECHNOLOGY SHOWCASE */}
-      <section id="technology" className="w-full bg-white py-12 md:py-24 text-black overflow-hidden relative select-none">
+      <section id="technology" className="w-full bg-[#F8F8F8] py-16 md:py-24 text-black overflow-hidden relative select-none">
         <div className="max-w-[1440px] mx-auto w-full">
           <div className="max-w-[1152px] mx-auto w-full px-6 xl:px-0">
             {/* Title Block */}
-            <div className="flex flex-col gap-4 text-left mb-8 md:mb-16 max-w-[900px]">
+            <div className="flex flex-col gap-4 text-left mb-10 md:mb-12 max-w-[900px]">
               <h2 className="text-4xl md:text-[48px] font-extrabold text-black tracking-tight font-antenna leading-none">
                 <span className="text-[#066FEF]">Công nghệ</span> trên xe Ford
               </h2>
@@ -1071,7 +961,7 @@ export default function Home() {
       </section>
 
       {/* 5. BRAND SHOWCASE SECTION */}
-      <section id="brand-showcase" className="bg-white py-20 border-t border-[#e5e5e5] w-full relative overflow-x-clip">
+      <section id="brand-showcase" className="bg-white py-16 md:py-24 border-t border-[#e5e5e5] w-full relative overflow-x-clip">
         <div className="max-w-[1152px] mx-auto w-full px-6 xl:px-0">
           {/* Title Block */}
           <div className="mb-10 text-left">
@@ -1107,6 +997,7 @@ export default function Home() {
                   cursor: isDragging ? 'grabbing' : 'grab'
                 }}
               >
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 {brandItems.map((item: any, idx) => (
                   <div 
                     key={idx}
@@ -1194,11 +1085,11 @@ export default function Home() {
       </section>
 
       {/* 6. FORD NEWS SECTION (SPLIT GRID CARDS LAYOUT) */}
-      <section id="news" className="w-full bg-white py-12 md:py-24">
+      <section id="news" className="w-full bg-[#F8F8F8] py-16 md:py-24">
         <div className="max-w-[1440px] mx-auto w-full">
           <div className="max-w-[1152px] mx-auto w-full px-6 xl:px-0">
             {/* Header Block */}
-            <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 md:mb-16 gap-6 text-left">
+            <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 md:mb-12 gap-6 text-left">
               <div className="space-y-4">
                 <span className="text-xs font-bold text-[#066FEF] uppercase tracking-[0.2em] block">
                   Tin tức & Chương Trình
@@ -1306,7 +1197,7 @@ export default function Home() {
 
       {/* 9. CUSTOMER HANDOVER & CONSULTATION SECTION */}
       {customerHandovers.length > 0 && (
-        <section id="customer-handovers" className="w-full bg-white py-12 md:py-24 overflow-x-clip relative select-none">
+        <section id="customer-handovers" className="w-full bg-white py-16 md:py-24 overflow-x-clip relative select-none">
           <style dangerouslySetInnerHTML={{
             __html: `
             #customer-handovers {
@@ -1322,7 +1213,7 @@ export default function Home() {
           ` }} />
           <div className="w-full">
             {/* Header row */}
-            <div className="max-w-[1440px] mx-auto w-full mb-12">
+            <div className="max-w-[1440px] mx-auto w-full mb-10 md:mb-12">
               <div className="max-w-[1152px] mx-auto w-full px-6 xl:px-0 flex flex-col items-center text-center">
                 <h2 className="text-3xl md:text-[40px] font-extrabold text-black tracking-tight leading-tight uppercase font-sans">
                   Tri ân khách hàng
@@ -1369,11 +1260,11 @@ export default function Home() {
       )}
 
       {/* 10. FAQ & QUICK ACTIONS SECTION (MERGED & MINIMALIST) */}
-      <section className="w-full bg-white py-12 md:py-24">
+      <section className="w-full bg-[#F8F8F8] py-16 md:py-24">
         <div className="max-w-[1440px] mx-auto w-full">
           <div className="max-w-[1152px] mx-auto w-full px-6 xl:px-0">
             {/* Title Area - Centered, no subtext */}
-            <div className="text-center mb-6 md:mb-12">
+            <div className="text-center mb-10 md:mb-12">
               <h2 className="text-3xl lg:text-[40px] font-bold text-black tracking-tight uppercase font-sans">
                 Hỏi đáp dịch vụ
               </h2>
@@ -1429,7 +1320,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="consultation" className="relative py-12 md:py-24 px-0 w-full overflow-hidden bg-gradient-to-br from-white via-[#f0f7ff] to-[#d6e8ff] text-black">
+      <section id="consultation" className="relative py-16 md:py-24 px-0 w-full overflow-hidden bg-gradient-to-br from-white via-[#f0f7ff] to-[#d6e8ff] text-black">
         <div className="max-w-[1440px] mx-auto w-full relative z-10">
           <div className="max-w-[1152px] mx-auto w-full px-6 xl:px-0 flex flex-col lg:flex-row gap-16 items-center justify-center">
             {/* Left Column: Title & Info */}
