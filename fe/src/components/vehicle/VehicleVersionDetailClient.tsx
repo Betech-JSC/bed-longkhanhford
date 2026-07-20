@@ -77,6 +77,10 @@ export default function VehicleVersionDetailClient() {
   const [showAllSpecs, setShowAllSpecs] = useState(false);
   const [openSpecsGroup, setOpenSpecsGroup] = useState<string | null>("Vận hành");
 
+  // 360 preloading states
+  const [isPreloaded, setIsPreloaded] = useState(false);
+  const [preloadProgress, setPreloadProgress] = useState(0);
+
   const getDetailedSpecs = () => {
     let rawSpecs = selectedVersion?.specs;
     if (typeof rawSpecs === 'string') {
@@ -163,6 +167,71 @@ export default function VehicleVersionDetailClient() {
 
   const isImageSequence = (viewType === "exterior" && hasExteriorSeq) || (viewType === "interior" && hasInteriorSeq);
 
+  const images360 = useMemo(() => {
+    if (viewType === "exterior") {
+      return (currentColor && currentColor.images_360 && currentColor.images_360.length > 0)
+        ? currentColor.images_360
+        : (vehicle?.images_360_external || []);
+    } else {
+      return (currentColor && currentColor.images_360_internal && currentColor.images_360_internal.length > 0)
+        ? currentColor.images_360_internal
+        : (vehicle?.images_360_internal || []);
+    }
+  }, [viewType, currentColor, vehicle]);
+
+  // Preload 360 images in background sequentially/batches
+  useEffect(() => {
+    if (!is360Active || !isImageSequence || images360.length === 0) {
+      setIsPreloaded(false);
+      setPreloadProgress(0);
+      return;
+    }
+
+    setIsPreloaded(false);
+    setPreloadProgress(0);
+
+    let loadedCount = 0;
+    const total = images360.length;
+    let isCancelled = false;
+
+    const preloadImage = (url: string) => {
+      return new Promise<void>((resolve) => {
+        const img = new Image();
+        img.src = resolveImageUrl(url);
+        img.onload = () => {
+          if (isCancelled) return;
+          loadedCount++;
+          setPreloadProgress(Math.round((loadedCount / total) * 100));
+          resolve();
+        };
+        img.onerror = () => {
+          if (isCancelled) return;
+          loadedCount++;
+          setPreloadProgress(Math.round((loadedCount / total) * 100));
+          resolve();
+        };
+      });
+    };
+
+    const batchSize = 4;
+    const runBatches = async () => {
+      for (let i = 0; i < total; i += batchSize) {
+        if (isCancelled) break;
+        const batch = images360.slice(i, i + batchSize).map(url => preloadImage(url));
+        await Promise.all(batch);
+      }
+      if (!isCancelled) {
+        setIsPreloaded(true);
+      }
+    };
+
+    runBatches();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [is360Active, isImageSequence, images360]);
+
   const fallbackImageSrc = useMemo(() => {
     if (viewType === "interior") {
       return (currentColor?.images_360_internal && currentColor.images_360_internal.length > 0)
@@ -214,12 +283,14 @@ export default function VehicleVersionDetailClient() {
 
   // Drag handlers for 360 rotation
   const handleMouseDown = (e: React.MouseEvent) => {
+    if (!isPreloaded && isImageSequence) return; // Block drag during preload
     setIsDragging(true);
     setDragStart({ x: e.clientX, y: e.clientY });
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!isDragging) return;
+    if (!isPreloaded && isImageSequence) return;
     const deltaX = e.clientX - dragStart.x;
     const deltaY = e.clientY - dragStart.y;
     setDragStart({ x: e.clientX, y: e.clientY });
@@ -243,6 +314,7 @@ export default function VehicleVersionDetailClient() {
 
   const handleTouchStart = (e: React.TouchEvent) => {
     if (e.touches.length === 1) {
+      if (!isPreloaded && isImageSequence) return;
       setIsDragging(true);
       setDragStart({ x: e.touches[0].clientX, y: e.touches[0].clientY });
     }
@@ -250,6 +322,7 @@ export default function VehicleVersionDetailClient() {
 
   const handleTouchMove = (e: React.TouchEvent) => {
     if (!isDragging || e.touches.length !== 1) return;
+    if (!isPreloaded && isImageSequence) return;
     const deltaX = e.touches[0].clientX - dragStart.x;
     const deltaY = e.touches[0].clientY - dragStart.y;
     setDragStart({ x: e.touches[0].clientX, y: e.touches[0].clientY });
@@ -282,62 +355,74 @@ export default function VehicleVersionDetailClient() {
 
   // Render Exterior Sequence
   const renderExteriorSequence = () => {
-    const images360 = (currentColor && currentColor.images_360 && currentColor.images_360.length > 0)
-      ? currentColor.images_360
-      : (vehicle.images_360_external || []);
-
     if (images360.length === 0) return null;
     const imagesCount = images360.length;
     const frameIdx = Math.floor(((rotation % 360 + 360) % 360) / (360 / imagesCount)) % imagesCount;
 
     return (
       <div className="w-full h-full relative flex items-center justify-center">
-        {images360.map((imgUrl: string, idx: number) => {
-          const isActive = idx === frameIdx;
-          return (
-            <img
-              key={idx}
-              src={resolveImageUrl(imgUrl)}
-              alt={`${currentColor?.name || vehicle.name} exterior 360 view`}
-              className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
-              style={{
-                opacity: isActive ? 1 : 0,
-                zIndex: isActive ? 10 : 0
-              }}
-            />
-          );
-        })}
+        {!isPreloaded && (
+          <div className="absolute inset-0 bg-[#f8f8f8]/90 z-30 flex flex-col items-center justify-center gap-3">
+            <div className="relative w-10 h-10 flex items-center justify-center">
+              <div className="absolute w-10 h-10 border-4 border-gray-200 border-solid rounded-full"></div>
+              <div className="absolute w-10 h-10 border-4 border-[#066fef] border-t-transparent border-solid rounded-full animate-spin"></div>
+            </div>
+            <div className="text-[11px] font-bold text-gray-500 tracking-wider font-antenna uppercase">
+              Đang tải ảnh 3D... {preloadProgress}%
+            </div>
+            <div className="w-36 h-1 bg-gray-200 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-[#066fef] transition-all duration-150" 
+                style={{ width: `${preloadProgress}%` }}
+              />
+            </div>
+          </div>
+        )}
+
+        {images360[frameIdx] && (
+          <img
+            src={resolveImageUrl(images360[frameIdx])}
+            alt={`${currentColor?.name || vehicle.name} exterior 360 view`}
+            className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none z-10"
+          />
+        )}
       </div>
     );
   };
 
   // Render Interior Sequence
   const renderInteriorSequence = () => {
-    const images360 = (currentColor && currentColor.images_360_internal && currentColor.images_360_internal.length > 0)
-      ? currentColor.images_360_internal
-      : (vehicle.images_360_internal || []);
-
     if (images360.length === 0) return null;
     const imagesCount = images360.length;
     const frameIdx = Math.floor(((rotation % 360 + 360) % 360) / (360 / imagesCount)) % imagesCount;
 
     return (
       <div className="w-full h-full relative flex items-center justify-center">
-        {images360.map((imgUrl: string, idx: number) => {
-          const isActive = idx === frameIdx;
-          return (
-            <img
-              key={idx}
-              src={resolveImageUrl(imgUrl)}
-              alt={`${currentColor?.name || vehicle.name} interior 360 view`}
-              className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
-              style={{
-                opacity: isActive ? 1 : 0,
-                zIndex: isActive ? 10 : 0
-              }}
-            />
-          );
-        })}
+        {!isPreloaded && (
+          <div className="absolute inset-0 bg-[#f8f8f8]/90 z-30 flex flex-col items-center justify-center gap-3">
+            <div className="relative w-10 h-10 flex items-center justify-center">
+              <div className="absolute w-10 h-10 border-4 border-gray-200 border-solid rounded-full"></div>
+              <div className="absolute w-10 h-10 border-4 border-[#066fef] border-t-transparent border-solid rounded-full animate-spin"></div>
+            </div>
+            <div className="text-[11px] font-bold text-gray-500 tracking-wider font-antenna uppercase">
+              Đang tải nội thất 3D... {preloadProgress}%
+            </div>
+            <div className="w-36 h-1 bg-gray-200 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-[#066fef] transition-all duration-150" 
+                style={{ width: `${preloadProgress}%` }}
+              />
+            </div>
+          </div>
+        )}
+
+        {images360[frameIdx] && (
+          <img
+            src={resolveImageUrl(images360[frameIdx])}
+            alt={`${currentColor?.name || vehicle.name} interior 360 view`}
+            className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none z-10"
+          />
+        )}
       </div>
     );
   };

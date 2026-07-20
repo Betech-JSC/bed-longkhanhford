@@ -388,7 +388,7 @@ function HeroBannerBlock({ blockIndex, data, vehicle, openQuoteDrawer, openDrive
         ) : bgVideo ? (
           <video
             src={bgVideo}
-            preload="auto"
+            preload="metadata"
             autoPlay
             loop
             muted
@@ -1162,6 +1162,7 @@ function PromotionsBlock({ blockIndex, data, isEditMode, onChangeData, openQuote
                 src={bgImg}
                 alt="Promotion Banner"
                 className="object-cover rounded-[12px] w-full h-auto shadow-xs max-h-[500px]"
+                loading="lazy"
               />
             ) : (
               <div className="w-full h-[250px] bg-gray-50 border border-dashed border-gray-350 rounded-[12px] flex flex-col items-center justify-center text-xs text-gray-400">
@@ -1470,6 +1471,7 @@ function ThreeSixtyViewerBlock({ data, vehicle, isEditMode, onChangeData, threeS
                             : media.splitLeft))}
                       alt="3D vehicle preview"
                       className="w-full h-full object-cover pointer-events-none"
+                      loading="lazy"
                     />
                     <button
                       type="button"
@@ -1590,7 +1592,7 @@ function FeaturesGridBlock({ blockIndex, data, vehicle, isEditMode, onChangeData
             {(hasImg1 || isEditMode) && (
               <div className="aspect-[1100/600] relative rounded-[12px] overflow-hidden w-full bg-gray-150 shadow-xs">
                 {hasImg1 ? (
-                  <img src={image_1} alt="Grid 1" className="w-full h-full object-cover" />
+                  <img src={image_1} alt="Grid 1" className="w-full h-full object-cover" loading="lazy" />
                 ) : (
                   <div className="w-full h-full bg-gray-50 border border-dashed border-gray-300 flex items-center justify-center text-xs text-gray-400 min-h-[300px]">
                     Chưa chọn ảnh 1
@@ -1625,7 +1627,7 @@ function FeaturesGridBlock({ blockIndex, data, vehicle, isEditMode, onChangeData
                 {(hasImg2 || isEditMode) && (
                   <div className="aspect-[1100/600] flex-1 relative rounded-[12px] overflow-hidden bg-gray-150 shadow-xs w-full">
                     {hasImg2 ? (
-                      <img src={image_2} alt="Grid 2" className="w-full h-full object-cover" />
+                      <img src={image_2} alt="Grid 2" className="w-full h-full object-cover" loading="lazy" />
                     ) : (
                       <div className="w-full h-full bg-gray-50 border border-dashed border-gray-300 flex items-center justify-center text-xs text-gray-400 min-h-[150px]">
                         Chưa chọn ảnh 2
@@ -1657,7 +1659,7 @@ function FeaturesGridBlock({ blockIndex, data, vehicle, isEditMode, onChangeData
                 {(hasImg3 || isEditMode) && (
                   <div className="aspect-[1100/600] flex-1 relative rounded-[12px] overflow-hidden bg-gray-150 shadow-xs w-full">
                     {hasImg3 ? (
-                      <img src={image_3} alt="Grid 3" className="w-full h-full object-cover" />
+                      <img src={image_3} alt="Grid 3" className="w-full h-full object-cover" loading="lazy" />
                     ) : (
                       <div className="w-full h-full bg-gray-50 border border-dashed border-gray-300 flex items-center justify-center text-xs text-gray-400 min-h-[150px]">
                         Chưa chọn ảnh 3
@@ -1705,7 +1707,7 @@ function FeaturesGridBlock({ blockIndex, data, vehicle, isEditMode, onChangeData
               <div className={`aspect-[16/10] sm:aspect-auto relative bg-gray-150 w-full min-h-[300px]
                 ${(hasImgLarge2 || hasImgLarge3 || isEditMode) ? "flex-1 lg:flex-[2]" : "w-full flex-1"}`}>
                 {hasImgLarge ? (
-                  <img src={image_large} alt="Interior Large" className="w-full h-full object-cover" />
+                  <img src={image_large} alt="Interior Large" className="w-full h-full object-cover" loading="lazy" />
                 ) : (
                   <div className="w-full h-full bg-gray-50 border border-dashed border-gray-300 flex items-center justify-center text-xs text-gray-400">
                     Chưa chọn ảnh nội thất lớn
@@ -1741,7 +1743,7 @@ function FeaturesGridBlock({ blockIndex, data, vehicle, isEditMode, onChangeData
                 {(hasImgLarge2 || isEditMode) && (
                   <div className="flex-1 aspect-[16/10] sm:aspect-auto relative bg-gray-150 w-full min-h-[140px]">
                     {hasImgLarge2 ? (
-                      <img src={image_large_2} alt="Interior Small 1" className="w-full h-full object-cover" />
+                      <img src={image_large_2} alt="Interior Small 1" className="w-full h-full object-cover" loading="lazy" />
                     ) : (
                       <div className="w-full h-full bg-gray-50 border border-dashed border-gray-300 flex items-center justify-center text-xs text-gray-400">
                         Chưa chọn ảnh phụ 1
@@ -1773,7 +1775,7 @@ function FeaturesGridBlock({ blockIndex, data, vehicle, isEditMode, onChangeData
                 {(hasImgLarge3 || isEditMode) && (
                   <div className="flex-1 aspect-[16/10] sm:aspect-auto relative bg-gray-150 w-full min-h-[140px]">
                     {hasImgLarge3 ? (
-                      <img src={image_large_3} alt="Interior Small 2" className="w-full h-full object-cover" />
+                      <img src={image_large_3} alt="Interior Small 2" className="w-full h-full object-cover" loading="lazy" />
                     ) : (
                       <div className="w-full h-full bg-gray-50 border border-dashed border-gray-300 flex items-center justify-center text-xs text-gray-400">
                         Chưa chọn ảnh phụ 2
@@ -1818,7 +1820,7 @@ function FeaturesGridBlock({ blockIndex, data, vehicle, isEditMode, onChangeData
           {(hasSplitImg || isEditMode) && (
             <div className="flex-1 min-h-[350px] relative rounded-t-[12px] lg:rounded-t-none lg:rounded-l-[12px] overflow-hidden bg-gray-150 shadow-xs">
               {hasSplitImg ? (
-                <img src={split_image} alt="Split Detail" className="w-full h-full object-cover" />
+                <img src={split_image} alt="Split Detail" className="w-full h-full object-cover" loading="lazy" />
               ) : (
                 <div className="w-full h-full bg-gray-50 border border-dashed border-gray-300 flex items-center justify-center text-xs text-gray-400">
                   Chưa chọn ảnh công nghệ
@@ -2003,6 +2005,7 @@ function VersionsGridBlock({ data, vehicle, isEditMode, onChangeData, anchorId, 
                       src={imgUrl}
                       alt={ver.name}
                       className="w-full h-full object-contain object-center p-2 transition-transform duration-500 group-hover:scale-105 pointer-events-none"
+                      loading="lazy"
                     />
                   </div>
 
@@ -2090,6 +2093,7 @@ function BookingBannerBlock({ blockIndex, data, vehicle, isEditMode, onChangeDat
         src={carImage}
         alt="Ford Lifestyle Banner"
         className="absolute inset-0 w-full h-full object-cover object-center z-0"
+        loading="lazy"
       />
       {/* Overlay to darken image slightly for better contrast on the card's backdrop */}
       <div className="absolute inset-0 bg-black/25 z-0" />
