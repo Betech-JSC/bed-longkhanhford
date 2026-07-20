@@ -421,7 +421,7 @@ function ContactFormContent() {
       <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full mb-20">
         <div className="w-full h-[450px] rounded-[24px] overflow-hidden border border-gray-200 shadow-sm relative">
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d9639.97148545994!2d106.86767807583985!3d10.948647055991795!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3174dfa7287e67b7%3A0xe69044f2892be499!2zxJDhu5NuZyBOYWkgRm9yZA!5e1!3m2!1svi!2s!4v1782375726740!5m2!1svi!2s"
+            src={siteAssets.googleMapsEmbed}
             width="100%"
             height="100%"
             style={{ border: 0 }}
