@@ -242,8 +242,8 @@ export default function ComparePage() {
                 return {
                   id: String(ver.id),
                   name: ver.name,
-                  image_url: ver.image_url || resolveImageUrl(ver.image) || "",
-                  image_thumbnail_url: ver.image_thumbnail_url || resolveImageUrl(ver.image_thumbnail) || "",
+                  image_url: ver.image_url || (ver.image ? resolveImageUrl(ver.image) : ""),
+                  image_thumbnail_url: ver.image_thumbnail_url || (ver.image_thumbnail ? resolveImageUrl(ver.image_thumbnail) : ""),
                   price: typeof ver.price === 'string' ? parseFloat(ver.price) : (ver.price || 0),
                   rawSpecs: ver.specs,
                   specs: {
