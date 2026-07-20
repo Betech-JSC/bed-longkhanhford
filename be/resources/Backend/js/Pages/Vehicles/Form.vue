@@ -92,7 +92,7 @@
                         <div v-if="!form.versions || form.versions.length === 0" class="text-center py-8 bg-gray-50 rounded-xl border border-dashed border-gray-300">
                             <span class="text-3xl">⚙️</span>
                             <p class="text-sm text-gray-500 mt-2 font-medium">Chưa có phiên bản nào cho dòng xe này</p>
-                            <button type="button" class="mt-4 btn btn-indigo btn-sm" @click="addVersion">
+                            <button type="button" class="mt-4 btn btn-indigo btn-sm" @click="addVersion(form)">
                                 + Thêm phiên bản xe đầu tiên
                             </button>
                         </div>
@@ -140,7 +140,7 @@
                                                 <button 
                                                     type="button" 
                                                     class="text-indigo-600 hover:text-indigo-800 text-xs bg-indigo-50 hover:bg-indigo-100 w-5 h-5 flex items-center justify-center rounded-md border-0 cursor-pointer shrink-0 transition"
-                                                    @click.stop="duplicateVersion(index)"
+                                                    @click.stop="duplicateVersion(form, index)"
                                                     title="Nhân bản phiên bản này"
                                                 >
                                                     📋
@@ -148,7 +148,7 @@
                                                 <button 
                                                     type="button" 
                                                     class="text-red-500 hover:text-red-700 text-xs bg-red-50 hover:bg-red-100 w-5 h-5 flex items-center justify-center rounded-md border-0 cursor-pointer shrink-0 transition"
-                                                    @click.stop="removeVersion(index)"
+                                                    @click.stop="removeVersion(form, index)"
                                                     title="Xóa phiên bản"
                                                 >
                                                     ✕
@@ -158,7 +158,7 @@
                                     </template>
                                 </Draggable>
 
-                                <button type="button" class="btn btn-secondary btn-sm mt-2 w-full justify-center" @click="addVersion">
+                                <button type="button" class="btn btn-secondary btn-sm mt-2 w-full justify-center" @click="addVersion(form)">
                                     + Thêm phiên bản xe
                                 </button>
                             </div>
@@ -172,7 +172,7 @@
                                             Cấu hình: {{ form.versions[activeVersionIndex].vi?.name || 'Phiên bản chưa đặt tên' }}
                                         </h4>
                                     </div>
-                                    <button type="button" class="text-red-600 hover:text-red-800 font-bold text-xs bg-red-50 hover:bg-red-100 border border-red-200 px-3 py-1.5 rounded-lg transition cursor-pointer" @click="removeVersion(activeVersionIndex)">
+                                    <button type="button" class="text-red-600 hover:text-red-800 font-bold text-xs bg-red-50 hover:bg-red-100 border border-red-200 px-3 py-1.5 rounded-lg transition cursor-pointer" @click="removeVersion(form, activeVersionIndex)">
                                         ✕ Xóa phiên bản này
                                     </button>
                                 </div>
@@ -195,7 +195,7 @@
                                     <!-- Clone Colors from other version -->
                                     <select 
                                         v-if="form.versions && form.versions.length > 1" 
-                                        @change="handleCloneColorsFromVersion($event)" 
+                                        @change="handleCloneColorsFromVersion(form, $event)" 
                                         class="bg-white border border-gray-300 rounded-lg px-2.5 py-1.5 text-xs font-bold text-gray-750 cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500"
                                     >
                                         <option value="">🎨 Sao chép màu từ phiên bản khác...</option>
@@ -207,7 +207,7 @@
                                     <!-- Clone Specs from other version -->
                                     <select 
                                         v-if="form.versions && form.versions.length > 1" 
-                                        @change="handleCloneSpecsFromVersion($event)" 
+                                        @change="handleCloneSpecsFromVersion(form, $event)" 
                                         class="bg-white border border-gray-300 rounded-lg px-2.5 py-1.5 text-xs font-bold text-gray-750 cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500"
                                     >
                                         <option value="">📋 Sao chép specs từ phiên bản khác...</option>
@@ -230,7 +230,7 @@
                                         placeholder="Vận hành&#10;Động cơ: Xăng EcoBoost 1.5L&#10;Công suất cực đại: 160 mã lực&#10;&#10;Ngoại thất&#10;Đèn pha: LED Matrix&#10;Mâm xe: Hợp kim 18 inch"
                                     ></textarea>
                                     <div class="flex justify-end gap-2">
-                                        <button type="button" @click="executeSpecsImport" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-lg cursor-pointer transition border-0">Xử lý & Nhập thông số</button>
+                                        <button type="button" @click="executeSpecsImport(form)" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-lg cursor-pointer transition border-0">Xử lý & Nhập thông số</button>
                                     </div>
                                 </div>
 
@@ -305,7 +305,7 @@
                                             <span>Màu sắc riêng của phiên bản này (Colors)</span>
                                             <span class="text-gray-400 text-xs font-normal normal-case ml-1">{{ showColorsSection ? '▼' : '►' }}</span>
                                         </p>
-                                        <button v-show="showColorsSection" type="button" class="text-xs text-emerald-600 hover:text-emerald-800 font-bold bg-transparent border-0 cursor-pointer" @click="addVersionColor(activeVersionIndex)">
+                                        <button v-show="showColorsSection" type="button" class="text-xs text-emerald-600 hover:text-emerald-800 font-bold bg-transparent border-0 cursor-pointer" @click="addVersionColor(form, activeVersionIndex)">
                                             ＋ Thêm màu mới cho phiên bản
                                         </button>
                                     </div>
@@ -315,7 +315,7 @@
                                             <button 
                                                 type="button" 
                                                 class="absolute top-3 right-3 text-red-500 hover:text-red-700 font-bold text-xs bg-red-50 hover:bg-red-100 border border-red-200 w-8 h-8 flex items-center justify-center rounded-lg cursor-pointer transition" 
-                                                @click="removeVersionColor(activeVersionIndex, cIdx)"
+                                                @click="removeVersionColor(form, activeVersionIndex, cIdx)"
                                                 title="Xóa màu này"
                                             >
                                                 ✕
@@ -405,7 +405,7 @@
                                             <span>Nhóm thông số kỹ thuật chi tiết (Specs)</span>
                                             <span class="text-gray-400 text-xs font-normal normal-case ml-1">{{ showSpecsSection ? '▼' : '►' }}</span>
                                         </p>
-                                        <button v-show="showSpecsSection" type="button" class="text-xs text-indigo-650 hover:text-indigo-850 font-bold bg-transparent border-0 cursor-pointer" @click="addCustomSpec(activeVersionIndex)">
+                                        <button v-show="showSpecsSection" type="button" class="text-xs text-indigo-650 hover:text-indigo-850 font-bold bg-transparent border-0 cursor-pointer" @click="addCustomSpec(form, activeVersionIndex)">
                                             ＋ Thêm nhóm thông số mới
                                         </button>
                                     </div>
@@ -415,7 +415,7 @@
                                             <button 
                                                 type="button" 
                                                 class="absolute top-3 right-3 text-red-500 hover:text-red-700 font-bold text-xs bg-red-50 hover:bg-red-100 border border-red-200 w-8 h-8 flex items-center justify-center rounded-lg cursor-pointer transition" 
-                                                @click="removeCustomSpec(activeVersionIndex, sIdx)"
+                                                @click="removeCustomSpec(form, activeVersionIndex, sIdx)"
                                                 title="Xóa nhóm thông số này"
                                             >
                                                 ✕
@@ -1528,8 +1528,8 @@ export default {
 
 
 
-        addVersion() {
-            if (!this.formData.versions) this.formData.versions = []
+        addVersion(form) {
+            if (!form.versions) form.versions = []
             
             const defaultSpecs = [
                 { title: 'Vận hành', content: '' },
@@ -1540,10 +1540,10 @@ export default {
                 { title: 'Hỗ trợ Người Lái & An toàn', content: '' }
             ];
 
-            this.formData.versions.push({
+            form.versions.push({
                 price: 0,
                 status: 'ACTIVE',
-                sort_order: this.formData.versions.length + 1,
+                sort_order: form.versions.length + 1,
                 image: null,
                 image_thumbnail: null,
                 showSpecs: true,
@@ -1552,20 +1552,20 @@ export default {
                 vi: { name: '' },
                 en: { name: '' }
             })
-            this.activeVersionIndex = this.formData.versions.length - 1
+            this.activeVersionIndex = form.versions.length - 1
         },
 
-        removeVersion(index) {
-            if (this.formData.versions) {
-                this.formData.versions.splice(index, 1)
-                if (this.activeVersionIndex >= this.formData.versions.length) {
-                    this.activeVersionIndex = Math.max(0, this.formData.versions.length - 1)
+        removeVersion(form, index) {
+            if (form.versions) {
+                form.versions.splice(index, 1)
+                if (this.activeVersionIndex >= form.versions.length) {
+                    this.activeVersionIndex = Math.max(0, form.versions.length - 1)
                 }
             }
         },
 
-        duplicateVersion(index) {
-            const ver = this.formData.versions[index];
+        duplicateVersion(form, index) {
+            const ver = form.versions[index];
             if (!ver) return;
 
             const cloneObject = (obj) => {
@@ -1592,18 +1592,18 @@ export default {
                 clonedVersion.en.name = `${clonedVersion.en.name} (Copy)`;
             }
             clonedVersion.id = undefined; // Force backend to treat it as a new version
-            clonedVersion.sort_order = this.formData.versions.length + 1;
+            clonedVersion.sort_order = form.versions.length + 1;
 
-            this.formData.versions.push(clonedVersion);
-            this.activeVersionIndex = this.formData.versions.length - 1;
+            form.versions.push(clonedVersion);
+            this.activeVersionIndex = form.versions.length - 1;
         },
 
-        handleCloneColorsFromVersion(event) {
+        handleCloneColorsFromVersion(form, event) {
             const sourceIndex = event.target.value;
             if (sourceIndex === "" || sourceIndex === undefined || sourceIndex === null) return;
             
-            const sourceVer = this.formData.versions[sourceIndex];
-            const targetVer = this.formData.versions[this.activeVersionIndex];
+            const sourceVer = form.versions[sourceIndex];
+            const targetVer = form.versions[this.activeVersionIndex];
             
             if (sourceVer && targetVer && sourceVer.colors && sourceVer.colors.length > 0) {
                 if (confirm(`Bạn có chắc chắn muốn sao chép toàn bộ bảng màu từ phiên bản "${sourceVer.vi?.name || 'này'}" không? Bảng màu cũ của phiên bản hiện tại sẽ bị xóa.`)) {
@@ -1628,12 +1628,12 @@ export default {
             event.target.value = "";
         },
 
-        handleCloneSpecsFromVersion(event) {
+        handleCloneSpecsFromVersion(form, event) {
             const sourceIndex = event.target.value;
             if (sourceIndex === "" || sourceIndex === undefined || sourceIndex === null) return;
             
-            const sourceVer = this.formData.versions[sourceIndex];
-            const targetVer = this.formData.versions[this.activeVersionIndex];
+            const sourceVer = form.versions[sourceIndex];
+            const targetVer = form.versions[this.activeVersionIndex];
             
             if (sourceVer && targetVer && sourceVer.customSpecs && sourceVer.customSpecs.length > 0) {
                 if (confirm(`Bạn có chắc chắn muốn sao chép thông số kỹ thuật từ phiên bản "${sourceVer.vi?.name || 'này'}" không? Thông số cũ của phiên bản hiện tại sẽ bị ghi đè.`)) {
@@ -1658,7 +1658,7 @@ export default {
             event.target.value = "";
         },
 
-        executeSpecsImport() {
+        executeSpecsImport(form) {
             if (!this.specsImportText || !this.specsImportText.trim()) {
                 alert("Vui lòng dán nội dung thông số kỹ thuật trước khi bấm xử lý.");
                 return;
@@ -1697,7 +1697,7 @@ export default {
                 }
             });
 
-            const ver = this.formData.versions[this.activeVersionIndex];
+            const ver = form.versions[this.activeVersionIndex];
             if (!ver.customSpecs) ver.customSpecs = [];
 
             parsedGroups.forEach(g => {
@@ -1729,27 +1729,27 @@ export default {
             alert("Đã nhập thông số thành công!");
         },
 
-        addCustomSpec(versionIndex) {
-            const ver = this.formData.versions[versionIndex];
+        addCustomSpec(form, versionIndex) {
+            const ver = form.versions[versionIndex];
             if (!ver.customSpecs) {
                 ver.customSpecs = [];
             }
-            ver.customSpecs.push({ title: '', content: '' });
+            form.versions[versionIndex].customSpecs.push({ title: '', content: '' });
         },
 
-        removeCustomSpec(versionIndex, specIndex) {
-            const ver = this.formData.versions[versionIndex];
+        removeCustomSpec(form, versionIndex, specIndex) {
+            const ver = form.versions[versionIndex];
             if (ver.customSpecs) {
-                ver.customSpecs.splice(specIndex, 1);
+                form.versions[versionIndex].customSpecs.splice(specIndex, 1);
             }
         },
 
-        addVersionColor(versionIndex) {
-            const ver = this.formData.versions[versionIndex];
+        addVersionColor(form, versionIndex) {
+            const ver = form.versions[versionIndex];
             if (!ver.colors) {
-                ver.colors = [];
+                form.versions[versionIndex].colors = [];
             }
-            ver.colors.push({
+            form.versions[versionIndex].colors.push({
                 name: '',
                 color_code: '#cbd5e1',
                 images_360: [],
@@ -1758,10 +1758,10 @@ export default {
             });
         },
 
-        removeVersionColor(versionIndex, colorIndex) {
-            const ver = this.formData.versions[versionIndex];
+        removeVersionColor(form, versionIndex, colorIndex) {
+            const ver = form.versions[versionIndex];
             if (ver && ver.colors) {
-                ver.colors.splice(colorIndex, 1);
+                form.versions[versionIndex].colors.splice(colorIndex, 1);
             }
         },
 
