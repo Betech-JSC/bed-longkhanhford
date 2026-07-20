@@ -535,8 +535,16 @@ function parseSpecs(specs: any, vehicleName: string): any[] {
   return [];
 }
 
-function VersionSpecsAccordion({ specs }: { specs: any[] }) {
-  const [openIndex, setOpenIndex] = React.useState<number | null>(0);
+function VersionSpecsAccordion({ 
+  specs, 
+  openSectionTitles, 
+  onToggleSection 
+}: { 
+  specs: any[]; 
+  openSectionTitles?: string[]; 
+  onToggleSection?: (title: string) => void; 
+}) {
+  const [localOpenIndex, setLocalOpenIndex] = React.useState<number | null>(0);
 
   if (!specs || specs.length === 0) {
     return <div className="p-4 text-xs text-gray-400 italic text-center w-full">Chưa có thông số kỹ thuật.</div>;
@@ -545,11 +553,22 @@ function VersionSpecsAccordion({ specs }: { specs: any[] }) {
   return (
     <div className="w-full flex flex-col bg-white border-t border-gray-100">
       {specs.map((item: any, idx: number) => {
-        const isOpen = openIndex === idx;
+        const isOpen = openSectionTitles && onToggleSection
+          ? openSectionTitles.includes(item.title)
+          : localOpenIndex === idx;
+
+        const handleToggle = () => {
+          if (openSectionTitles && onToggleSection) {
+            onToggleSection(item.title);
+          } else {
+            setLocalOpenIndex(localOpenIndex === idx ? null : idx);
+          }
+        };
+
         return (
           <div key={idx} className="border-b border-gray-100 w-full">
             <button
-              onClick={() => setOpenIndex(isOpen ? null : idx)}
+              onClick={handleToggle}
               className="w-full py-4 px-4 flex items-center justify-between text-left font-semibold text-[#00095b] hover:text-[#0562d2] transition-colors duration-200 focus:outline-none cursor-pointer bg-white"
             >
               <span className="text-[14px] leading-tight font-medium">{item.title}</span>
@@ -558,8 +577,7 @@ function VersionSpecsAccordion({ specs }: { specs: any[] }) {
               </span>
             </button>
             <div
-              className={`transition-all duration-300 overflow-hidden ${isOpen ? 'max-h-[800px] opacity-100 pb-4' : 'max-h-0 opacity-0'
-                }`}
+              className={`transition-all duration-300 overflow-hidden ${isOpen ? 'max-h-[800px] opacity-100 pb-4' : 'max-h-0 opacity-0'}`}
             >
               <div
                 className="px-4 text-[13px] text-gray-600 leading-relaxed font-normal whitespace-pre-line prose prose-sm max-w-none [&_p]:mb-1 [&_strong]:text-black"
@@ -582,6 +600,17 @@ function SpecsGridBlock({ data, vehicle, isEditMode, onChangeData, openQuoteDraw
     // Select first 3 versions by default, or all if less than 3
     return versions.slice(0, 3).map((ver: any) => String(ver.id));
   });
+
+  const [openSectionTitles, setOpenSectionTitles] = React.useState<string[]>(["Thông số chung"]);
+
+  const handleToggleSection = (title: string) => {
+    const titleStr = String(title);
+    setOpenSectionTitles(prev =>
+      prev.includes(titleStr)
+        ? prev.filter(t => t !== titleStr)
+        : [...prev, titleStr]
+    );
+  };
 
   const formatPrice = (price: any) => {
     const num = typeof price === 'string' ? parseFloat(price) : (price || 0);
@@ -714,6 +743,11 @@ function SpecsGridBlock({ data, vehicle, isEditMode, onChangeData, openQuoteDraw
           </div>
         </div>
 
+        {/* mobile scroll swipe helper */}
+        <div className="block lg:hidden text-center text-[11px] font-semibold text-gray-400 select-none pointer-events-none pb-2 font-antenna uppercase tracking-wider animate-pulse">
+          ← Vuốt ngang để xem thêm phiên bản →
+        </div>
+
         <div
           ref={scrollContainerRef}
           className={`flex flex-row gap-6 justify-start ${justifyClass} items-stretch w-full overflow-x-auto pb-4 scroll-smooth snap-x snap-mandatory scrollbar-none`}
@@ -721,10 +755,11 @@ function SpecsGridBlock({ data, vehicle, isEditMode, onChangeData, openQuoteDraw
           {activeCompareItems.map((item: any) => (
             <div
               key={item.id}
-              className="bg-white border border-gray-200/60 drop-shadow-[0px_4px_4px_rgba(16,24,40,0.06)] flex flex-col items-stretch relative w-[280px] sm:w-[320px] md:w-[368px] shrink-0 rounded-[12px] overflow-hidden transition-all duration-300 hover:scale-[1.01] hover:shadow-lg snap-start"
+              className="bg-white border border-gray-200/60 drop-shadow-[0px_4px_4px_rgba(16,24,40,0.06)] flex flex-col items-stretch relative w-[280px] sm:w-[320px] md:w-[368px] shrink-0 rounded-[12px] transition-all duration-300 hover:scale-[1.01] hover:shadow-lg snap-start overflow-visible"
             >
-              <div className="content-stretch flex flex-col items-start relative shrink-0 w-full">
-                <div className="aspect-[800/550] relative shrink-0 w-full bg-gray-50 overflow-hidden">
+              {/* Sticky Top Header of Card */}
+              <div className="sticky top-[72px] lg:top-[80px] bg-white z-10 border-b border-gray-100 flex flex-col items-start relative shrink-0 w-full rounded-t-[12px] shadow-sm">
+                <div className="aspect-[800/550] relative shrink-0 w-full bg-gray-50 overflow-hidden rounded-t-[12px]">
                   <Image
                     src={item.image}
                     alt={item.name}
@@ -733,17 +768,22 @@ function SpecsGridBlock({ data, vehicle, isEditMode, onChangeData, openQuoteDraw
                     className="object-cover transition-transform duration-500 hover:scale-105 pointer-events-none"
                   />
                 </div>
-                <div className="content-stretch flex items-center justify-between p-[16px] relative shrink-0 w-full border-b border-gray-100 bg-white">
-                  <div className="[word-break:break-word] flex flex-[1_0_0] flex-col font-['Ford_Antenna',sans-serif] font-semibold justify-center leading-[1.3] text-[#0562d2] text-[18px] tracking-[0.18px]">
-                    <p>{item.name}</p>
+                <div className="content-stretch flex items-center justify-between p-[16px] relative shrink-0 w-full bg-white">
+                  <div className="[word-break:break-word] flex flex-[1_0_0] flex-col font-['Ford_Antenna',sans-serif] font-semibold justify-center leading-[1.3] text-[#0562d2] text-[16px] sm:text-[18px] tracking-[0.18px]">
+                    <p className="line-clamp-2">{item.name}</p>
+                    <p className="text-[12px] text-gray-500 font-medium mt-1">{formatPrice(item.price)}</p>
                   </div>
                 </div>
               </div>
 
               {/* specs */}
-              <VersionSpecsAccordion specs={parseSpecs(item.specs, vehicle.name)} />
+              <VersionSpecsAccordion 
+                specs={parseSpecs(item.specs, vehicle.name)} 
+                openSectionTitles={openSectionTitles}
+                onToggleSection={handleToggleSection}
+              />
 
-              <div className="p-4 bg-white flex flex-col items-center justify-center shrink-0 w-full border-t border-gray-100/50">
+              <div className="p-4 bg-white flex flex-col items-center justify-center shrink-0 w-full border-t border-gray-100/50 rounded-b-[12px] mt-auto">
                 <button
                   onClick={() => openQuoteDrawer(vehicle.id, item.id)}
                   className="bg-[#0562d2] hover:bg-[#044ea7] border border-[#0562d2] border-solid flex gap-[8px] items-center justify-center overflow-clip px-[24px] py-[10px] rounded-[800px] text-white text-[16px] font-semibold transition-all cursor-pointer shadow-xs w-full"

@@ -80,6 +80,7 @@ export default function VehicleVersionDetailClient() {
   // 360 preloading states
   const [isPreloaded, setIsPreloaded] = useState(false);
   const [preloadProgress, setPreloadProgress] = useState(0);
+  const [showDragHint, setShowDragHint] = useState(true);
 
   const getDetailedSpecs = () => {
     let rawSpecs = selectedVersion?.specs;
@@ -231,6 +232,16 @@ export default function VehicleVersionDetailClient() {
       isCancelled = true;
     };
   }, [is360Active, isImageSequence, images360]);
+
+  useEffect(() => {
+    if (is360Active && isPreloaded) {
+      setShowDragHint(true);
+      const timer = setTimeout(() => {
+        setShowDragHint(false);
+      }, 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [is360Active, isPreloaded]);
 
   const fallbackImageSrc = useMemo(() => {
     if (viewType === "interior") {
@@ -617,6 +628,16 @@ export default function VehicleVersionDetailClient() {
                       </svg>
                     </button>
                   )}
+                </div>
+              )}
+
+              {/* Drag instruction overlay (fades out after 4 seconds) */}
+              {is360Active && isPreloaded && showDragHint && (
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur-xs text-white text-[10px] sm:text-[11px] font-bold px-4 py-1.5 rounded-full flex items-center gap-2 pointer-events-none select-none z-20 transition-opacity duration-1000 ease-in-out font-antenna uppercase tracking-wider shadow-md">
+                  <svg className="w-4 h-4 text-white animate-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <path d="M7 16l-4-4 4-4M17 8l4 4-4 4M3 12h18" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  Kéo chuột hoặc vuốt màn hình để xoay 360°
                 </div>
               )}
 
