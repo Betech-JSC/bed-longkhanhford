@@ -175,7 +175,7 @@ export default function Home() {
   const [homeArticles, setHomeArticles] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [vehiclesList, setVehiclesList] = useState<any[]>([]);
-  const [brandItems, setBrandItems] = useState<any[]>(INITIAL_BRAND_ITEMS);
+  const [brandItems, setBrandItems] = useState<any[]>([]);
   const [servicesList, setServicesList] = useState<any[]>([]);
   const [customerHandovers, setCustomerHandovers] = useState<any[]>([]);
   const [isVehiclesLoading, setIsVehiclesLoading] = useState(true);
@@ -418,24 +418,16 @@ export default function Home() {
         if (Array.isArray(vehiclesItems) && vehiclesItems.length > 0) {
           setVehiclesList(vehiclesItems);
           
-          // Map dynamic vehicle thumbnail image to brandItems
-          setBrandItems(prevItems => prevItems.map(item => {
-            const matchedVehicle = vehiclesItems.find(v => 
-              v.title.toLowerCase().replace(/\s+/g, '') === item.title.toLowerCase().replace(/\s+/g, '') ||
-              v.title.toLowerCase().replace(/\s+/g, '').includes(item.title.toLowerCase().replace(/\s+/g, '')) ||
-              item.title.toLowerCase().replace(/\s+/g, '').includes(v.title.toLowerCase().replace(/\s+/g, ''))
-            );
-            if (matchedVehicle) {
-              return {
-                ...item,
-                image: matchedVehicle.image_thumbnail_url || matchedVehicle.image_url || item.image,
-                slogan: matchedVehicle.tagline || item.slogan,
-                description: matchedVehicle.description || item.description,
-                link: `/dong-xe/${matchedVehicle.slug}`
-              };
-            }
-            return item;
+          // Map dynamic vehicles from CMS directly to brandItems
+          const dynamicBrandItems = vehiclesItems.map((v: any) => ({
+            title: v.title,
+            category: v.title.toUpperCase().includes("FORD") ? v.title : `FORD ${v.title.toUpperCase()} MỚI`,
+            slogan: v.tagline || "Mạnh mẽ. Thông minh.",
+            description: v.description || "",
+            image: v.image_featured_url || v.image_url || v.image_thumbnail_url || "",
+            link: `/dong-xe/${v.slug}`
           }));
+          setBrandItems(dynamicBrandItems);
         }
 
         const servicesItems = (servicesData as any)?.services || (servicesData as any)?.data || servicesData;
@@ -961,128 +953,130 @@ export default function Home() {
       </section>
 
       {/* 5. BRAND SHOWCASE SECTION */}
-      <section id="brand-showcase" className="bg-white py-16 md:py-24 border-t border-[#e5e5e5] w-full relative overflow-x-clip">
-        <div className="max-w-[1152px] mx-auto w-full px-6 xl:px-0">
-          {/* Title Block */}
-          <div className="mb-10 text-left">
-            <span className="text-xs font-semibold text-neutral-500 block mb-2 font-sans">
-              Toàn Bộ Xe
-            </span>
-            <h2 className="text-3xl lg:text-[40px] font-bold text-black tracking-tight leading-tight font-sans">
-              Khám Phá Các Dòng Xe Ford
-            </h2>
-          </div>
+      {brandItems.length > 0 && (
+        <section id="brand-showcase" className="bg-white py-16 md:py-24 border-t border-[#e5e5e5] w-full relative overflow-x-clip">
+          <div className="max-w-[1152px] mx-auto w-full px-6 xl:px-0">
+            {/* Title Block */}
+            <div className="mb-10 text-left">
+              <span className="text-xs font-semibold text-neutral-500 block mb-2 font-sans">
+                Toàn Bộ Xe
+              </span>
+              <h2 className="text-3xl lg:text-[40px] font-bold text-black tracking-tight leading-tight font-sans">
+                Khám Phá Các Dòng Xe Ford
+              </h2>
+            </div>
 
-          <div className="w-full relative group/carousel">
-            {/* Overflow wrapper to prevent horizontal scrollbars on page */}
-            <div className="overflow-hidden -mx-6 xl:-mx-[calc((100vw-1152px)/2)]">
-              <div 
-                ref={brandCarouselRef}
-                onTouchStart={handleTouchStart}
-                onTouchMove={handleTouchMove}
-                onTouchEnd={handleTouchEnd}
-                onMouseDown={handleMouseDown}
-                onMouseMove={handleMouseMove}
-                onMouseUp={handleMouseUp}
-                onMouseLeave={handleMouseLeave}
-                onClickCapture={(e) => {
-                  if (hasMoved) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                  }
-                }}
-                className={`flex gap-6 pb-8 px-6 xl:px-[calc((100vw-1152px)/2)] will-change-transform select-none ${isDragging ? "transition-none" : "transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"}`}
-                style={{ 
-                  transform: `translateX(-${translateX + dragOffset}px)`,
-                  cursor: isDragging ? 'grabbing' : 'grab'
-                }}
-              >
-                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                {brandItems.map((item: any, idx) => (
-                  <div 
-                    key={idx}
-                    className={`flex-shrink-0 w-[85vw] md:w-[75vw] lg:w-[70vw] xl:w-[1120px] aspect-[16/8] h-auto transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform backface-hidden ${idx === activeBrandIndex ? "opacity-100 scale-100" : "opacity-50 scale-[0.98]"}`}
-                  >
-                    <Link 
-                       href={item.link}
-                       onClick={(e) => {
-                         if (hasMoved) {
-                           e.preventDefault();
-                           e.stopPropagation();
-                         }
-                       }}
-                       className="relative w-full h-full overflow-hidden border border-neutral-200/80 group block bg-neutral-100 rounded-[8px] aspect-[16/8] select-none"
+            <div className="w-full relative group/carousel">
+              {/* Overflow wrapper to prevent horizontal scrollbars on page */}
+              <div className="overflow-hidden -mx-6 xl:-mx-[calc((100vw-1152px)/2)]">
+                <div 
+                  ref={brandCarouselRef}
+                  onTouchStart={handleTouchStart}
+                  onTouchMove={handleTouchMove}
+                  onTouchEnd={handleTouchEnd}
+                  onMouseDown={handleMouseDown}
+                  onMouseMove={handleMouseMove}
+                  onMouseUp={handleMouseUp}
+                  onMouseLeave={handleMouseLeave}
+                  onClickCapture={(e) => {
+                    if (hasMoved) {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }
+                  }}
+                  className={`flex gap-6 pb-8 px-6 xl:px-[calc((100vw-1152px)/2)] will-change-transform select-none ${isDragging ? "transition-none" : "transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"}`}
+                  style={{ 
+                    transform: `translateX(-${translateX + dragOffset}px)`,
+                    cursor: isDragging ? 'grabbing' : 'grab'
+                  }}
+                >
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                  {brandItems.map((item: any, idx) => (
+                    <div 
+                      key={idx}
+                      className={`flex-shrink-0 w-[85vw] md:w-[75vw] lg:w-[70vw] xl:w-[1120px] aspect-[16/8] h-auto transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform backface-hidden ${idx === activeBrandIndex ? "opacity-100 scale-100" : "opacity-50 scale-[0.98]"}`}
                     >
-                      <SafeImage
-                        src={item.image}
-                        alt={item.title}
-                        fill
-                        sizes="(max-width: 1024px) 100vw, 1120px"
-                        className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform group-hover:[--img-scale:1.12] backface-hidden"
-                        style={{
-                          transform: `scale(var(--img-scale, 1.08)) translateX(${(idx - activeBrandIndex) * 3.5}%)`
-                        }}
-                      />
-                      
-                      {/* Subtle bottom gradient overlay for readability */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10" />
-                      
-                      {/* Content aligned at the bottom-left */}
-                      <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-20 flex flex-col justify-end text-left select-none gap-3">
-                        <div className="space-y-1">
-                          <span className="text-xs font-semibold text-white/90 block uppercase tracking-wider">
-                            {item.category}
-                          </span>
-                          <h3 className="text-2xl md:text-3xl font-bold text-white tracking-tight leading-tight">
-                            {item.slogan}
-                          </h3>
-                        </div>
+                      <Link 
+                         href={item.link}
+                         onClick={(e) => {
+                           if (hasMoved) {
+                             e.preventDefault();
+                             e.stopPropagation();
+                           }
+                         }}
+                         className="relative w-full h-full overflow-hidden border border-neutral-200/80 group block bg-neutral-100 rounded-[8px] aspect-[16/8] select-none"
+                      >
+                        <SafeImage
+                          src={item.image}
+                          alt={item.title}
+                          fill
+                          sizes="(max-width: 1024px) 100vw, 1120px"
+                          className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform group-hover:[--img-scale:1.12] backface-hidden"
+                          style={{
+                            transform: `scale(var(--img-scale, 1.08)) translateX(${(idx - activeBrandIndex) * 3.5}%)`
+                          }}
+                        />
                         
-                        {/* Pill Buttons */}
-                        <div className="flex gap-3 items-center mt-2">
-                          <Button
-                            variant="white"
-                            size="sm"
-                          >
-                            Xem Thêm
-                          </Button>
-                          <Button
-                            variant="white-outline"
-                            size="sm"
-                          >
-                            Báo Giá
-                          </Button>
+                        {/* Subtle bottom gradient overlay for readability */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10" />
+                        
+                        {/* Content aligned at the bottom-left */}
+                        <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-20 flex flex-col justify-end text-left select-none gap-3">
+                          <div className="space-y-1">
+                            <span className="text-xs font-semibold text-white/90 block uppercase tracking-wider">
+                              {item.category}
+                            </span>
+                            <h3 className="text-2xl md:text-3xl font-bold text-white tracking-tight leading-tight">
+                              {item.slogan}
+                            </h3>
+                          </div>
+                          
+                          {/* Pill Buttons */}
+                          <div className="flex gap-3 items-center mt-2">
+                            <Button
+                              variant="white"
+                              size="sm"
+                            >
+                              Xem Thêm
+                            </Button>
+                            <Button
+                              variant="white-outline"
+                              size="sm"
+                            >
+                              Báo Giá
+                            </Button>
+                          </div>
                         </div>
-                      </div>
-                    </Link>
-                  </div>
-                ))}
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Navigation arrows (relative to the 1152px parent container) */}
+              <div className="absolute inset-y-0 left-0 right-0 pointer-events-none z-30 hidden xl:block">
+                {/* Left arrow */}
+                <button
+                  onClick={() => scrollBrandCarousel("left")}
+                  className={`absolute left-[-24px] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white text-black flex items-center justify-center shadow-lg transition-all border border-neutral-200 cursor-pointer hover:scale-105 active:scale-95 pointer-events-auto duration-300 ${activeBrandIndex === 0 ? "opacity-0 scale-90 pointer-events-none" : "opacity-0 scale-100 group-hover/carousel:opacity-100"}`}
+                  aria-label="Scroll left"
+                >
+                  <ChevronLeft className="w-6 h-6" />
+                </button>
+
+                {/* Right arrow */}
+                <button
+                  onClick={() => scrollBrandCarousel("right")}
+                  className={`absolute left-[1096px] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white text-black flex items-center justify-center shadow-lg transition-all border border-neutral-200 cursor-pointer hover:scale-105 active:scale-95 pointer-events-auto duration-300 ${activeBrandIndex === brandItems.length - 1 ? "opacity-0 scale-90 pointer-events-none" : "opacity-0 scale-100 group-hover/carousel:opacity-100"}`}
+                  aria-label="Scroll right"
+                >
+                  <ChevronRight className="w-6 h-6" />
+                </button>
               </div>
             </div>
-
-            {/* Navigation arrows (relative to the 1152px parent container) */}
-            <div className="absolute inset-y-0 left-0 right-0 pointer-events-none z-30 hidden xl:block">
-              {/* Left arrow */}
-              <button
-                onClick={() => scrollBrandCarousel("left")}
-                className={`absolute left-[-24px] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white text-black flex items-center justify-center shadow-lg transition-all border border-neutral-200 cursor-pointer hover:scale-105 active:scale-95 pointer-events-auto duration-300 ${activeBrandIndex === 0 ? "opacity-0 scale-90 pointer-events-none" : "opacity-0 scale-100 group-hover/carousel:opacity-100"}`}
-                aria-label="Scroll left"
-              >
-                <ChevronLeft className="w-6 h-6" />
-              </button>
-
-              {/* Right arrow */}
-              <button
-                onClick={() => scrollBrandCarousel("right")}
-                className={`absolute left-[1096px] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white text-black flex items-center justify-center shadow-lg transition-all border border-neutral-200 cursor-pointer hover:scale-105 active:scale-95 pointer-events-auto duration-300 ${activeBrandIndex === brandItems.length - 1 ? "opacity-0 scale-90 pointer-events-none" : "opacity-0 scale-100 group-hover/carousel:opacity-100"}`}
-                aria-label="Scroll right"
-              >
-                <ChevronRight className="w-6 h-6" />
-              </button>
-            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* 6. FORD NEWS SECTION (SPLIT GRID CARDS LAYOUT) */}
       <section id="news" className="w-full bg-[#F8F8F8] py-16 md:py-24">
