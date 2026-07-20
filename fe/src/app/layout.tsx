@@ -6,7 +6,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { settingsAPI } from "@/lib/api";
 // import AIChatWidget from "@/components/shared/AIChatWidget";
-import CompareDrawer from "@/components/shared/CompareDrawer";
+// import CompareDrawer from "@/components/shared/CompareDrawer";
 import QuickAccessToolbar from "@/components/shared/QuickAccessToolbar";
 import PageTransitionLoader from "@/components/shared/PageTransitionLoader";
 import CookieConsent from "@/components/shared/CookieConsent";
@@ -161,7 +161,7 @@ export default async function RootLayout({
         <main className="flex-1 flex flex-col">{children}</main>
         <Footer />
         {/* <AIChatWidget /> */}
-        <CompareDrawer />
+        {/* <CompareDrawer /> */}
         <QuickAccessToolbar />
         <CookieConsent />
         {/* Dynamic Body End Inject Code from CMS */}
