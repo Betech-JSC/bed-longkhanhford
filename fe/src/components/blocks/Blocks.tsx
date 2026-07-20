@@ -578,6 +578,32 @@ function SpecsGridBlock({ data, vehicle, isEditMode, onChangeData, openQuoteDraw
 
   if (versions.length === 0) return null;
 
+  const [selectedVersionIds, setSelectedVersionIds] = React.useState<string[]>(() => {
+    // Select first 3 versions by default, or all if less than 3
+    return versions.slice(0, 3).map((ver: any) => String(ver.id));
+  });
+
+  const formatPrice = (price: any) => {
+    const num = typeof price === 'string' ? parseFloat(price) : (price || 0);
+    if (num <= 0) return "Liên hệ";
+    return new Intl.NumberFormat("vi-VN").format(num) + " VNĐ";
+  };
+
+  const handleToggleVersion = (verId: string) => {
+    const idStr = String(verId);
+    if (selectedVersionIds.includes(idStr)) {
+      if (selectedVersionIds.length <= 2) {
+        return;
+      }
+      setSelectedVersionIds(prev => prev.filter(id => id !== idStr));
+    } else {
+      if (selectedVersionIds.length >= 4) {
+        return;
+      }
+      setSelectedVersionIds(prev => [...prev, idStr]);
+    }
+  };
+
   const compareItems = versions.map((ver: any, idx: number) => ({
     id: ver.id,
     name: ver.name,
@@ -591,6 +617,10 @@ function SpecsGridBlock({ data, vehicle, isEditMode, onChangeData, openQuoteDraw
     isExternal: false
   }));
 
+  const activeCompareItems = React.useMemo(() => {
+    return compareItems.filter((item: any) => selectedVersionIds.includes(String(item.id)));
+  }, [compareItems, selectedVersionIds]);
+
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
 
   const scroll = (direction: 'left' | 'right') => {
@@ -600,7 +630,7 @@ function SpecsGridBlock({ data, vehicle, isEditMode, onChangeData, openQuoteDraw
     }
   };
 
-  const justifyClass = compareItems.length <= 3 ? 'lg:justify-center' : 'lg:justify-start';
+  const justifyClass = activeCompareItems.length <= 3 ? 'lg:justify-center' : 'lg:justify-start';
 
   return (
     <section id={anchorId || undefined} className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full pt-16 pb-12">
@@ -615,7 +645,7 @@ function SpecsGridBlock({ data, vehicle, isEditMode, onChangeData, openQuoteDraw
               Bảng đối chiếu thông số kỹ thuật và trang bị trực quan giữa các phiên bản xe
             </p>
           </div>
-          {compareItems.length > 3 && (
+          {activeCompareItems.length > 3 && (
             <div className="flex gap-2 self-start sm:self-auto shrink-0">
               <button
                 type="button"
@@ -637,11 +667,58 @@ function SpecsGridBlock({ data, vehicle, isEditMode, onChangeData, openQuoteDraw
           )}
         </div>
 
+        {/* Bộ chọn phiên bản (Checkbox list) */}
+        <div className="bg-[#f8f8f8] border border-gray-200/85 rounded-[16px] p-6 text-left w-full flex flex-col gap-4 shadow-xs">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-gray-200/50 pb-3">
+            <div>
+              <span className="text-[13px] font-bold text-gray-800 font-antenna uppercase tracking-wider block">Chọn phiên bản so sánh</span>
+              <span className="text-[11px] text-gray-500 block mt-0.5">Tích chọn từ 2 đến 4 phiên bản để so sánh thông số kỹ thuật</span>
+            </div>
+            <div className="self-start sm:self-auto bg-white border border-[#0562d2]/20 px-3 py-1.5 rounded-full text-xs font-bold text-[#0562d2] tracking-wider font-antenna uppercase shadow-xs">
+              Đã chọn: {selectedVersionIds.length} / 4
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {versions.map((ver: any) => {
+              const idStr = String(ver.id);
+              const isChecked = selectedVersionIds.includes(idStr);
+              const isDisableCheck = !isChecked && selectedVersionIds.length >= 4;
+              const isDisableUncheck = isChecked && selectedVersionIds.length <= 2;
+              const isDisabled = isDisableCheck || isDisableUncheck;
+
+              return (
+                <label
+                  key={ver.id}
+                  className={`flex items-start gap-3 p-4 rounded-xl border-2 transition-all select-none relative ${
+                    isChecked 
+                      ? "border-[#0562d2] bg-[#0562d2]/5 shadow-xs" 
+                      : "border-gray-200 bg-white hover:border-gray-300"
+                  } ${isDisabled ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
+                >
+                  <div className="flex items-center h-5 mt-0.5">
+                    <input
+                      type="checkbox"
+                      checked={isChecked}
+                      disabled={isDisabled}
+                      onChange={() => handleToggleVersion(ver.id)}
+                      className="w-4.5 h-4.5 text-[#0562d2] border-gray-300 rounded focus:ring-[#0562d2] focus:ring-2 cursor-pointer disabled:cursor-not-allowed"
+                    />
+                  </div>
+                  <div className="flex flex-col text-left">
+                    <span className="text-[13px] font-bold text-gray-800 font-antenna leading-tight">{ver.name}</span>
+                    <span className="text-[11px] text-gray-500 font-medium mt-1">{formatPrice(ver.price)}</span>
+                  </div>
+                </label>
+              );
+            })}
+          </div>
+        </div>
+
         <div
           ref={scrollContainerRef}
           className={`flex flex-row gap-6 justify-start ${justifyClass} items-stretch w-full overflow-x-auto pb-4 scroll-smooth snap-x snap-mandatory scrollbar-none`}
         >
-          {compareItems.map((item: any) => (
+          {activeCompareItems.map((item: any) => (
             <div
               key={item.id}
               className="bg-white border border-gray-200/60 drop-shadow-[0px_4px_4px_rgba(16,24,40,0.06)] flex flex-col items-stretch relative w-[280px] sm:w-[320px] md:w-[368px] shrink-0 rounded-[12px] overflow-hidden transition-all duration-300 hover:scale-[1.01] hover:shadow-lg snap-start"
