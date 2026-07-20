@@ -46,11 +46,8 @@ export const popularVehicleImages: Record<string, string> = {
 };
 
 export function getPopularVehicleImage(vehicleId: string, fallback?: string) {
-  return (
-    popularVehicleImages[vehicleId] ??
-    (fallback && fallback !== "" ? fallback : undefined) ??
-    siteAssets.carPlaceholder
-  );
+  if (fallback && fallback !== "") return fallback;
+  return popularVehicleImages[vehicleId] ?? siteAssets.carPlaceholder;
 }
 
 export const imageFallbackSvg = "/images/ford_placeholder.png";
