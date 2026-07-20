@@ -2,119 +2,9 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, X, Briefcase } from "lucide-react";
 import { aboutAssets, handleImageError } from "@/lib/site-assets";
 import { jobsAPI } from "@/lib/api";
-
-// Recruitment position data
-interface JobPosition {
-  title: string;
-  department: string;
-  location: string;
-  shortDesc: string;
-  description: string;
-  requirements: string[];
-  benefits: string[];
-}
-
-const jobPositions: JobPosition[] = [
-  {
-    title: "Chuyên viên Tư bán Bán hàng (Sales)",
-    department: "Phòng Kinh doanh",
-    location: "Showroom Amata, Biên Hòa, Đồng Nai",
-    shortDesc: "Đam mê ngành ô tô, giao tiếp tốt, có kỹ năng tư vấn và chăm sóc khách hàng.",
-    description: "Chúng tôi tìm kiếm những cộng sự đam mê ngành ô tô, năng động và mong muốn bứt phá thu nhập, đại diện cho hình ảnh chuyên nghiệp của Long Khánh Ford.",
-    requirements: [
-      "Tốt nghiệp Cao đẳng trở lên các ngành Quản trị kinh doanh, Marketing, Kỹ thuật ô tô...",
-      "Yêu thích kinh doanh, giao tiếp tốt, tác phong lịch sự, chuyên nghiệp.",
-      "Có kỹ năng tư vấn, thuyết phục và chăm sóc khách hàng.",
-      "Ưu tiên ứng viên có kinh nghiệm bán hàng ô tô hoặc có bằng lái xe hạng B2."
-    ],
-    benefits: [
-      "Thu nhập hấp dẫn: Lương cơ bản + Hoa hồng doanh số vượt trội (không giới hạn).",
-      "Được đào tạo bài bản quy trình bán hàng tiêu chuẩn toàn cầu của Ford.",
-      "Chế độ bảo hiểm xã hội, bảo hiểm y tế đầy đủ theo quy định.",
-      "Cơ hội thăng tiến lên Trưởng nhóm, Trưởng phòng kinh doanh."
-    ]
-  },
-  {
-    title: "Kỹ thuật viên Sửa chữa Chung (Máy - Gầm - Điện)",
-    department: "Xưởng Dịch vụ",
-    location: "Xưởng dịch vụ Long Khánh Ford, Biên Hòa",
-    shortDesc: "Đảm nhận công việc chẩn đoán, sửa chữa và bảo dưỡng các dòng xe Ford theo tiêu chuẩn.",
-    description: "Đảm nhận công việc chẩn đoán, sửa chữa và bảo dưỡng các dòng xe Ford theo tiêu chuẩn kỹ thuật nghiêm ngặt nhằm mang đến sự an toàn tuyệt đối cho khách hàng.",
-    requirements: [
-      "Tốt nghiệp Trung cấp/Cao đẳng chuyên ngành Công nghệ kỹ thuật Ô tô hoặc tương đương.",
-      "Có ít nhất 1 năm kinh nghiệm sửa chữa máy gầm điện ô tô.",
-      "Sử dụng thành thạo các thiết bị chẩn đoán, đo đạc chuyên dụng.",
-      "Chăm chỉ, trung thực, có tinh thần trách nhiệm cao."
-    ],
-    benefits: [
-      "Thu nhập cạnh tranh theo năng suất và tay nghề.",
-      "Môi trường làm việc chuyên nghiệp, trang bị công nghệ chẩn đoán hiện đại bậc nhất.",
-      "Được đào tạo và thi chứng chỉ kỹ thuật viên cấp độ của Ford Việt Nam.",
-      "Hỗ trợ cơm trưa, đồng phục và bảo hộ lao động đầy đủ."
-    ]
-  },
-  {
-    title: "Nhân viên Cố vấn Dịch vụ",
-    department: "Phòng Dịch vụ",
-    location: "Xưởng dịch vụ Long Khánh Ford, Biên Hòa",
-    shortDesc: "Đại diện tiếp đón khách hàng, tiếp nhận yêu cầu, tư vấn dịch vụ và bàn giao xe.",
-    description: "Đại diện đại lý tiếp đón khách hàng, tiếp nhận yêu cầu sửa chữa, tư vấn dịch vụ kỹ thuật tối ưu và bàn giao xe chu đáo.",
-    requirements: [
-      "Tốt nghiệp Cao đẳng/Đại học chuyên ngành Công nghệ Ô tô hoặc Cơ khí động lực.",
-      "Giao tiếp tự tin, khéo léo, khả năng giải quyết tình huống tốt.",
-      "Am hiểu về kỹ thuật ô tô và quy trình dịch vụ sau bán hàng.",
-      "Có bằng lái xe B2 là một lợi thế lớn."
-    ],
-    benefits: [
-      "Lương cứng + Thưởng hiệu quả công việc phòng Dịch vụ.",
-      "Tham gia các khóa đào tạo nâng cao nghiệp vụ Cố vấn dịch vụ do Ford Việt Nam tổ chức.",
-      "Lộ trình thăng tiến rõ ràng trong hệ thống đại lý.",
-      "Chế độ nghỉ mát, khám sức khỏe định kỳ hàng năm."
-    ]
-  },
-  {
-    title: "Chuyên viên Marketing & Chăm sóc Khách hàng",
-    department: "Phòng Hành chính - CS",
-    location: "Showroom Amata, Biên Hòa, Đồng Nai",
-    shortDesc: "Lên kế hoạch, thực hiện chiến dịch truyền thông quảng cáo và quản trị trải nghiệm khách hàng.",
-    description: "Lên kế hoạch, thực hiện các chiến dịch truyền thông quảng cáo trực tuyến, chăm sóc thương hiệu và nâng cao trải nghiệm khách hàng.",
-    requirements: [
-      "Tốt nghiệp Đại học chuyên ngành Marketing, Quan hệ công chúng hoặc Quản trị kinh doanh.",
-      "Có tối thiểu 1 năm kinh nghiệm làm Digital Marketing hoặc chăm sóc khách hàng chăm sóc thương hiệu.",
-      "Kỹ năng viết content tốt, sử dụng cơ bản các công cụ thiết kế/video.",
-      "Nhiệt tình, chu đáo, có kỹ năng lắng nghe và giải quyết khiếu nại."
-    ],
-    benefits: [
-      "Lương thỏa thuận theo năng lực + Thưởng KPI chiến dịch.",
-      "Môi trường trẻ trung, sáng tạo, thỏa sức thực hiện các ý tưởng mới.",
-      "Hưởng đầy đủ phúc lợi BHXH, BHYT và thưởng các dịp Lễ, Tết.",
-      "Được tham gia các sự kiện ra mắt xe hoành tráng của Ford."
-    ]
-  },
-  {
-    title: "Nhân viên Kế toán Tổng hợp",
-    department: "Phòng Tài chính - Kế toán",
-    location: "Showroom Amata, Biên Hòa, Đồng Nai",
-    shortDesc: "Kiểm tra chứng từ, hạch toán doanh thu, lập báo cáo thuế và báo cáo tài chính nội bộ.",
-    description: "Kiểm tra chứng từ, hạch toán doanh thu chi phí, lập báo cáo thuế và báo cáo tài chính nội bộ định kỳ đảm bảo tính chính xác và minh bạch tài chính.",
-    requirements: [
-      "Tốt nghiệp Đại học chuyên ngành Kế toán, Kiểm toán hoặc Tài chính doanh nghiệp.",
-      "Có ít nhất 2 năm kinh nghiệm làm kế toán tổng hợp, ưu tiên lĩnh vực thương mại dịch vụ ô tô.",
-      "Sử dụng thành thạo phần mềm kế toán (Misa, Fast...) và Excel nâng cao.",
-      "Cẩn thận, tỉ mỉ, trung thực và có trách nhiệm cao trong công việc."
-    ],
-    benefits: [
-      "Thu nhập ổn định và xứng đáng với năng lực.",
-      "Chế độ tăng lương định kỳ hàng năm theo đánh giá công việc.",
-      "Làm việc giờ hành chính từ thứ Hai đến thứ Bảy (nghỉ Chủ Nhật).",
-      "Được đóng bảo hiểm đầy đủ ngay sau khi kết thúc thử việc."
-    ]
-  }
-];
-
 interface TeamCard {
   id: string;
   name: string;
@@ -417,10 +307,21 @@ export default function AboutPage() {
           </div>
 
           {/* Grid of flat cards: 3 cols layout */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full mt-8">
-            {(() => {
-              const displayJobs = jobs.length > 0 ? jobs : jobPositions;
-              return displayJobs.map((job, idx) => (
+          {jobs.length === 0 ? (
+            <div className="text-center py-16 bg-white border border-[#e5e5e5] max-w-xl mx-auto w-full p-8 mt-8 flex flex-col items-center justify-center gap-4">
+              <div className="w-12 h-12 rounded-full bg-neutral-50 flex items-center justify-center text-gray-300">
+                <Briefcase className="w-6 h-6" />
+              </div>
+              <h3 className="text-sm font-bold text-[#01095c] font-antenna uppercase tracking-tight">
+                Không có vị trí tuyển dụng
+              </h3>
+              <p className="text-xs text-gray-400 font-antenna leading-relaxed max-w-sm">
+                Hiện tại chúng tôi chưa có tin tuyển dụng mới. Vui lòng quay lại sau hoặc liên hệ trực tiếp để biết thêm chi tiết.
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full mt-8">
+              {jobs.map((job, idx) => (
                 <div
                   key={idx}
                   onClick={() => handleJobClick(job)}
@@ -442,7 +343,7 @@ export default function AboutPage() {
                       
                       {/* Small department tag */}
                       <span className="text-[10px] font-bold text-gray-400 tracking-wider uppercase font-antenna bg-gray-50 border border-gray-100 px-2.5 py-1">
-                        {job.department ? job.department.replace("Phòng ", "").replace("Xưởng ", "") : "Tuyển dụng"}
+                        {job.working_position ? job.working_position.replace("Phòng ", "").replace("Xưởng ", "") : "Tuyển dụng"}
                       </span>
                     </div>
 
@@ -452,15 +353,15 @@ export default function AboutPage() {
                         {job.title}
                       </h3>
                       <p className="text-sm font-normal leading-[1.6] text-gray-500 font-antenna line-clamp-3">
-                        {job.description || job.shortDesc}
+                        {job.description}
                       </p>
                     </div>
                   </div>
 
                   {/* Footer Row: Location & CTA Toggle button */}
                   <div className="flex items-center justify-between border-t border-gray-100 pt-6 mt-8">
-                    <span className="text-xs text-gray-400 font-antenna truncate max-w-[170px]" title={job.location}>
-                      {job.location ? job.location.split(",")[0] : "Biên Hòa"}
+                    <span className="text-xs text-gray-400 font-antenna truncate max-w-[170px]" title={job.work_address || job.location}>
+                      {job.work_address ? job.work_address.split(",")[0] : job.location ? job.location.split(",")[0] : "Biên Hòa"}
                     </span>
                     
                     {/* Interactive square toggle button */}
@@ -469,9 +370,9 @@ export default function AboutPage() {
                     </div>
                   </div>
                 </div>
-              ));
-            })()}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
