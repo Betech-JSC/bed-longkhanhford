@@ -8,6 +8,8 @@ import { postsAPI } from "@/lib/api";
 interface VideoItem {
   id: string;
   tiktokId: string;
+  platform: "tiktok" | "facebook" | "youtube" | "unknown";
+  embedUrl: string;
   title: string;
   description: string;
   url: string;
@@ -46,22 +48,59 @@ const SkeletonCard = () => (
   </div>
 );
 
-function getTikTokId(urlOrId: string): string {
-  if (!urlOrId) return "";
+function parseVideoUrl(urlOrId: string) {
+  if (!urlOrId) return { platform: "unknown" as const, id: "", embedUrl: "" };
   const trimmed = urlOrId.trim();
-  
-  // If it's already just digits, it's the video ID
+
+  // 1. TikTok Check
   if (/^\d+$/.test(trimmed)) {
-    return trimmed;
+    return {
+      platform: "tiktok" as const,
+      id: trimmed,
+      embedUrl: `https://www.tiktok.com/embed/v2/${trimmed}`
+    };
   }
-  
-  // Match standard link: https://www.tiktok.com/@username/video/731234567890 or photo/731234567890
-  const match = trimmed.match(/\/(video|photo)\/(\d+)/);
-  if (match && match[2]) {
-    return match[2];
+  if (trimmed.includes("tiktok.com")) {
+    const match = trimmed.match(/\/(video|photo)\/(\d+)/);
+    const id = match && match[2] ? match[2] : "";
+    return {
+      platform: "tiktok" as const,
+      id: id,
+      embedUrl: id ? `https://www.tiktok.com/embed/v2/${id}` : ""
+    };
   }
-  
-  return "";
+
+  // 2. YouTube Check
+  if (trimmed.includes("youtube.com") || trimmed.includes("youtu.be") || trimmed.includes("youtube-nocookie.com")) {
+    let id = "";
+    if (trimmed.includes("/shorts/")) {
+      const match = trimmed.match(/\/shorts\/([^?#/]+)/);
+      if (match) id = match[1];
+    } else if (trimmed.includes("youtu.be/")) {
+      const match = trimmed.match(/youtu\.be\/([^?#/]+)/);
+      if (match) id = match[1];
+    } else {
+      const match = trimmed.match(/[?&]v=([^&#]+)/);
+      if (match) id = match[1];
+    }
+    return {
+      platform: "youtube" as const,
+      id: id,
+      embedUrl: id ? `https://www.youtube.com/embed/${id}` : ""
+    };
+  }
+
+  // 3. Facebook Check
+  if (trimmed.includes("facebook.com") || trimmed.includes("fb.watch") || trimmed.includes("fb.com")) {
+    const id = trimmed.split("/").filter(Boolean).pop() || "facebook-video";
+    return {
+      platform: "facebook" as const,
+      id: id,
+      embedUrl: `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(trimmed)}&show_text=0&width=325`
+    };
+  }
+
+  return { platform: "unknown" as const, id: "", embedUrl: "" };
 }
 
 const TikTokCard = ({ video }: { video: VideoItem }) => {
@@ -195,6 +234,89 @@ const TikTokCard = ({ video }: { video: VideoItem }) => {
   );
 };
 
+const FacebookCard = ({ video }: { video: VideoItem }) => {
+  const [iframeLoaded, setIframeLoaded] = useState(false);
+
+  return (
+    <div
+      className="w-full max-w-[325px] h-[580px] relative rounded-2xl border border-gray-200/60 shadow-sm bg-white overflow-hidden flex flex-col justify-between p-4 transition-all duration-300 hover:shadow-md hover:border-gray-300/80 group"
+    >
+      <div className="flex-1 bg-black rounded-xl overflow-hidden relative">
+        <iframe
+          src={video.embedUrl}
+          className="w-full h-full border-0 absolute inset-0 rounded-xl"
+          scrolling="no"
+          frameBorder="0"
+          allowFullScreen={true}
+          allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+          onLoad={() => setIframeLoaded(true)}
+        />
+        {!iframeLoaded && (
+          <div className="absolute inset-0 bg-gray-900 flex items-center justify-center rounded-xl">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white/60" />
+          </div>
+        )}
+      </div>
+      <div className="mt-4 flex flex-col gap-1.5">
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] font-bold text-white bg-blue-600 px-2 py-0.5 rounded-full uppercase tracking-wider">
+            Facebook Reel
+          </span>
+        </div>
+        <h3 className="font-['Ford_Antenna',sans-serif] font-bold text-sm text-[#00095b] line-clamp-1 group-hover:text-[#0562d2] transition-colors">
+          {video.title || "Video ngắn"}
+        </h3>
+        {video.description && (
+          <p className="text-xs text-gray-500 line-clamp-2 leading-relaxed">
+            {video.description}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const YouTubeCard = ({ video }: { video: VideoItem }) => {
+  const [iframeLoaded, setIframeLoaded] = useState(false);
+
+  return (
+    <div
+      className="w-full max-w-[325px] h-[580px] relative rounded-2xl border border-gray-200/60 shadow-sm bg-white overflow-hidden flex flex-col justify-between p-4 transition-all duration-300 hover:shadow-md hover:border-gray-300/80 group"
+    >
+      <div className="flex-1 bg-black rounded-xl overflow-hidden relative">
+        <iframe
+          src={video.embedUrl}
+          className="w-full h-full border-0 absolute inset-0 rounded-xl"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen={true}
+          onLoad={() => setIframeLoaded(true)}
+        />
+        {!iframeLoaded && (
+          <div className="absolute inset-0 bg-gray-900 flex items-center justify-center rounded-xl">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white/60" />
+          </div>
+        )}
+      </div>
+      <div className="mt-4 flex flex-col gap-1.5">
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] font-bold text-white bg-red-600 px-2 py-0.5 rounded-full uppercase tracking-wider">
+            YouTube Short
+          </span>
+        </div>
+        <h3 className="font-['Ford_Antenna',sans-serif] font-bold text-sm text-[#00095b] line-clamp-1 group-hover:text-[#0562d2] transition-colors">
+          {video.title || "Video ngắn"}
+        </h3>
+        {video.description && (
+          <p className="text-xs text-gray-500 line-clamp-2 leading-relaxed">
+            {video.description}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+};
+
 function MediaPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -245,15 +367,21 @@ function MediaPageContent() {
         const items = res?.posts?.data || res?.posts || res?.data || res;
 
         if (Array.isArray(items) && items.length > 0) {
-          const mappedVideos: VideoItem[] = items.map((post: any) => ({
-            id: post.slug || String(post.id),
-            tiktokId: getTikTokId(post.author || ""),
-            title: post.title || "",
-            description: post.description || "",
-            url: post.author || ""
-          }));
-          // Only show videos that have a valid TikTok ID
-          setVideos(mappedVideos.filter(v => v.tiktokId));
+          const mappedVideos: VideoItem[] = items.map((post: any) => {
+            const url = post.author || "";
+            const parsed = parseVideoUrl(url);
+            return {
+              id: post.slug || String(post.id),
+              tiktokId: parsed.id,
+              platform: parsed.platform,
+              embedUrl: parsed.embedUrl,
+              title: post.title || "",
+              description: post.description || "",
+              url: url
+            };
+          });
+          // Only show videos that have a valid platform and embed URL
+          setVideos(mappedVideos.filter(v => v.platform !== "unknown" && v.embedUrl));
           setTotalPages(res?.posts?.last_page || 1);
         } else {
           setVideos([]);
@@ -272,7 +400,8 @@ function MediaPageContent() {
 
   // Dynamically load/trigger official TikTok Embed Script with polling fallback for client-side navigation
   useEffect(() => {
-    if (videos.length > 0) {
+    const hasTikTok = videos.some(v => v.platform === "tiktok");
+    if (hasTikTok) {
       const triggerRender = () => {
         if ((window as any).tiktokEmbed) {
           try {
@@ -328,11 +457,11 @@ function MediaPageContent() {
             <Video className="w-4 h-4" /> Thư viện Media
           </span>
           <h1 className="font-['Ford_Antenna',sans-serif] font-bold text-3xl md:text-5xl leading-tight text-[#00095b] tracking-tight uppercase">
-            Video Ngắn TikTok
+            Video Ngắn & Reels
           </h1>
           <div className="font-sans text-sm md:text-base leading-relaxed text-gray-600 mt-2 space-y-4 max-w-2xl mx-auto">
             <p>
-              Khám phá chuỗi video ngắn chia sẻ kinh nghiệm, lái thử xe và các mẹo sử dụng xe Ford hữu ích từ đội ngũ chuyên gia tại Long Khánh Ford.
+              Khám phá chuỗi video ngắn chia sẻ kinh nghiệm, lái thử xe và các mẹo sử dụng xe Ford hữu ích từ TikTok, Facebook Reels và YouTube.
             </p>
           </div>
         </div>
@@ -347,9 +476,18 @@ function MediaPageContent() {
         ) : videos.length > 0 ? (
           <div className="flex flex-col gap-8 w-full">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full max-w-[1000px] mx-auto justify-items-center items-start">
-              {videos.map((video) => (
-                <TikTokCard key={video.id} video={video} />
-              ))}
+              {videos.map((video) => {
+                if (video.platform === "tiktok") {
+                  return <TikTokCard key={video.id} video={video} />;
+                }
+                if (video.platform === "facebook") {
+                  return <FacebookCard key={video.id} video={video} />;
+                }
+                if (video.platform === "youtube") {
+                  return <YouTubeCard key={video.id} video={video} />;
+                }
+                return null;
+              })}
             </div>
 
             {/* Pagination Controls */}
@@ -419,7 +557,7 @@ function MediaPageContent() {
         ) : (
           <div className="flex flex-col items-center gap-3 py-20 text-gray-500">
             <AlertCircle className="w-8 h-8 text-gray-400" />
-            <p className="text-sm">Chưa có video TikTok nào được đăng tải.</p>
+            <p className="text-sm">Chưa có video nào được đăng tải.</p>
           </div>
         )}
       </div>
