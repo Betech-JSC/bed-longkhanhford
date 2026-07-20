@@ -50,7 +50,7 @@ const jsonLd = {
     "Đại lý ủy quyền chính thức của Ford Việt Nam tại Long Khánh, Đồng Nai. Cung cấp các dòng xe Ford chính hãng, dịch vụ bảo dưỡng, sửa chữa, phụ kiện.",
   url: "https://longkhanhford.com.vn",
   telephone: "+84812868622",
-  email: "Marketing@longkhanhford.com.vn",
+  email: "marketing@longkhanhford.com.vn",
   address: {
     "@type": "PostalAddress",
     streetAddress:

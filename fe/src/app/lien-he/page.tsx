@@ -254,7 +254,7 @@ function ContactFormContent() {
                   Hòm thư điện tử
                 </span>
                 <p className="font-antenna text-xs lg:text-sm text-gray-800 font-bold">
-                  Marketing@longkhanhford.com.vn
+                  marketing@longkhanhford.com.vn
                 </p>
               </div>
             </div>

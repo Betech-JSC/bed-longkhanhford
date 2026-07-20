@@ -1363,7 +1363,7 @@ export default function Home() {
                   </div>
                   <p className="text-sm md:text-base text-neutral-700 leading-relaxed font-normal pt-1.5">
                     <strong className="text-black font-bold mr-1">Email:</strong>
-                    Marketing@longkhanhford.com.vn
+                    marketing@longkhanhford.com.vn
                   </p>
                 </div>
               </div>

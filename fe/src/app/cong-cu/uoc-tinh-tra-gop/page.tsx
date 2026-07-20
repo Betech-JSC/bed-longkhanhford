@@ -311,7 +311,7 @@ export default function InstallmentCalculatorPage() {
             <p className="text-xs text-gray-500 mt-1">
               Địa chỉ: Đường 21/4, Tổ 1, Khu phố Cẩm Tân, Phường Hàng Gòn, Thành phố Đồng Nai, Việt Nam
             </p>
-            <p className="text-xs text-gray-500">Hotline KD: 0812 86 86 22 | Email: Marketing@longkhanhford.com.vn</p>
+            <p className="text-xs text-gray-500">Hotline KD: 0812 86 86 22 | Email: marketing@longkhanhford.com.vn</p>
           </div>
           <div className="text-right">
             <h2 className="text-lg font-bold text-gray-800">BẢNG ƯỚC TÍNH CHI PHÍ TRẢ GÓP</h2>

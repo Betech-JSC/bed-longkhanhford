@@ -60,7 +60,7 @@ export default function Footer() {
               <strong className="text-neutral-800 font-bold">Hotline Dv:</strong> 1900 888 992 – 02513 646 998
             </p>
             <p>
-              <strong className="text-neutral-800 font-bold">Email:</strong> Marketing@longkhanhford.com.vn
+              <strong className="text-neutral-800 font-bold">Email:</strong> marketing@longkhanhford.com.vn
             </p>
             <p>
               <strong className="text-neutral-800 font-bold">Website:</strong> longkhanhford.com.vn
