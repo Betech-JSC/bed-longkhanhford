@@ -348,15 +348,6 @@ export default function ComparePage() {
     }
   }, []);
 
-  // Default fallback when options are loaded and selectedIds is empty
-  useEffect(() => {
-    if (allCompareOptions.length > 0 && selectedIds.length === 0 && !hasClearedAll) {
-      setSelectedIds([
-        allCompareOptions[0]?.key || "",
-        allCompareOptions[1]?.key || "",
-      ].filter(Boolean));
-    }
-  }, [allCompareOptions, selectedIds, hasClearedAll]);
 
   // Sync URL query params with selectedIds
   useEffect(() => {
