@@ -275,7 +275,9 @@ export default function ComparePage() {
                   vehicleName: v.name,
                   versionName: ver.name,
                   typeName: v.typeName,
-                  image: ver.image_thumbnail_url || ver.image_url || v.image_thumbnail_url || v.image_url || v.images?.[0] || "",
+                  image: (ver.image_thumbnail_url && !ver.image_thumbnail_url.includes("uploads/vehicles/")) ? ver.image_thumbnail_url :
+                         (ver.image_url && !ver.image_url.includes("uploads/vehicles/")) ? ver.image_url :
+                         getPopularVehicleImage(v.id, (v.image_thumbnail_url && !v.image_thumbnail_url.includes("uploads/vehicles/")) ? v.image_thumbnail_url : (v.image_url && !v.image_url.includes("uploads/vehicles/")) ? v.image_url : ""),
                   basePrice: ver.price || v.basePrice,
                   specs: ver.specs,
                   rawSpecs: ver.rawSpecs,
@@ -292,7 +294,7 @@ export default function ComparePage() {
                 vehicleName: v.name,
                 versionName: "",
                 typeName: v.typeName,
-                image: v.image_thumbnail_url || v.image_url || v.images?.[0] || "",
+                image: getPopularVehicleImage(v.id, (v.image_thumbnail_url && !v.image_thumbnail_url.includes("uploads/vehicles/")) ? v.image_thumbnail_url : (v.image_url && !v.image_url.includes("uploads/vehicles/")) ? v.image_url : ""),
                 basePrice: v.basePrice,
                 specs: {
                   engine: parsedSpecs.engine || v.specs?.engine || v.specs?.engine_type || '',
@@ -380,6 +382,11 @@ export default function ComparePage() {
 
     const resolved = selectedIds.map((id) => {
       let found = allCompareOptions.find((opt) => opt.key === id);
+      if (found) return found;
+
+      // Fallback: Support single and double underscore mismatch in URL/state
+      const normId = id.replace(/_+/g, '_');
+      found = allCompareOptions.find((opt) => opt.key.replace(/_+/g, '_') === normId);
       if (found) return found;
 
       // Fallback for vehicle ID

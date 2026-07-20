@@ -168,7 +168,7 @@ export default function CompareDrawer() {
               <div className="relative w-16 h-10 flex-shrink-0 bg-black/20 rounded-lg overflow-hidden">
                 <Image
                   src={
-                    vehicle.images?.[0]?.startsWith("http") || vehicle.images?.[0]?.startsWith("/")
+                    vehicle.images?.[0] && !vehicle.images[0].includes("uploads/vehicles/") && (vehicle.images[0].startsWith("http") || vehicle.images[0].startsWith("/"))
                       ? vehicle.images[0]
                       : getPopularVehicleImage(vehicle.id, vehicle.images?.[0] || "")
                   }
