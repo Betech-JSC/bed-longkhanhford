@@ -122,8 +122,17 @@ export default function InstallmentCalculatorPage() {
 
           setVehicleList(mappedVehicles);
           
-          // Pre-select first vehicle and version from the API list to ensure clean bindings
-          const defaultCar = mappedVehicles[0];
+          // Pre-select vehicle based on URL query parameter if available, else default to first vehicle
+          const searchParams = new URLSearchParams(window.location.search);
+          const carParam = searchParams.get("car");
+          
+          let defaultCar = mappedVehicles[0];
+          if (carParam) {
+            const found = mappedVehicles.find(v => v.id === carParam || v.id.toLowerCase() === carParam.toLowerCase());
+            if (found) {
+              defaultCar = found;
+            }
+          }
           setSelectedVehicle(defaultCar);
           
           const defaultVersion = defaultCar.versions[0];

@@ -739,7 +739,7 @@ export function VehicleTabBar() {
     { label: "So sánh", path: `/[id]/so-sanh`, actualPath: `/${id}/so-sanh` },
     { label: "Phụ kiện", path: `/[id]/phu-kien`, actualPath: `/${id}/phu-kien` },
     { label: "Dự toán lăn bánh", path: `/[id]/du-toan-lan-banh`, actualPath: `/${id}/du-toan-lan-banh` },
-    { label: "Tính trả góp", path: `/[id]/uoc-tinh-tra-gop`, actualPath: `/${id}/uoc-tinh-tra-gop` }
+    { label: "Tính trả góp", path: `/cong-cu/uoc-tinh-tra-gop?car=${id}`, actualPath: `/cong-cu/uoc-tinh-tra-gop?car=${id}` }
   ], [id, firstVersionSlug]);
 
   return (
@@ -763,13 +763,12 @@ export function VehicleTabBar() {
               const isCompareActive = pathname === `/san-pham/${id}/so-sanh` || pathname === `/${id}/so-sanh`;
               const isAccessoriesActive = pathname.startsWith(`/san-pham/${id}/phu-kien`) || pathname.startsWith(`/${id}/phu-kien`);
               const isCalculatorActive = pathname.startsWith(`/san-pham/${id}/du-toan-lan-banh`) || pathname.startsWith(`/${id}/du-toan-lan-banh`);
-              const isInstallmentActive = pathname.startsWith(`/san-pham/${id}/uoc-tinh-tra-gop`) || pathname.startsWith(`/${id}/uoc-tinh-tra-gop`);
 
               let isActive = false;
               if (tab.label === "Tổng quan") {
                 isActive = isOverviewActive;
               } else if (tab.label === "Phiên bản") {
-                isActive = !isOverviewActive && !isFeaturesActive && !isCompareActive && !isAccessoriesActive && !isCalculatorActive && !isInstallmentActive;
+                isActive = !isOverviewActive && !isFeaturesActive && !isCompareActive && !isAccessoriesActive && !isCalculatorActive;
               } else {
                 isActive = pathname === targetPath;
               }
