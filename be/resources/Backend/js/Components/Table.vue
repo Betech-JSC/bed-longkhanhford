@@ -78,11 +78,11 @@
                         <button
                             v-if="selectedItems && selectedItems.length > 0 && currentResource === 'posts'"
                             type="button"
-                            class="p-button btn-outline-secondary ml-2 flex items-center gap-1 cursor-pointer bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
+                            class="p-button btn-outline-primary ml-2 flex items-center gap-1 cursor-pointer"
                             @click="hideSelected"
                         >
                             <heroicons-outline:eye-off class="w-4 h-4" />
-                            <span>Ẩn đã chọn ({{ selectedItems.length }})</span>
+                            <span>ẨN TẤT CẢ ({{ selectedItems.length }})</span>
                         </button>
                     </div>
                     <span v-if="sortByDate" class="w-1/2">
