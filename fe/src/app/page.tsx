@@ -996,14 +996,7 @@ export default function Home() {
                       key={idx}
                       className={`flex-shrink-0 w-[85vw] md:w-[75vw] lg:w-[70vw] xl:w-[1120px] aspect-[16/8] h-auto transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform backface-hidden ${idx === activeBrandIndex ? "opacity-100 scale-100" : "opacity-50 scale-[0.98]"}`}
                     >
-                      <Link 
-                         href={item.link}
-                         onClick={(e) => {
-                           if (hasMoved) {
-                             e.preventDefault();
-                             e.stopPropagation();
-                           }
-                         }}
+                      <div 
                          className="relative w-full h-full overflow-hidden border border-neutral-200/80 group block bg-neutral-100 rounded-[8px] aspect-[16/8] select-none"
                       >
                         <SafeImage
@@ -1020,8 +1013,21 @@ export default function Home() {
                         {/* Subtle bottom gradient overlay for readability */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10" />
                         
+                        {/* Main clickable area for the card body */}
+                        <Link
+                          href={item.link}
+                          onClick={(e) => {
+                            if (hasMoved) {
+                              e.preventDefault();
+                              e.stopPropagation();
+                            }
+                          }}
+                          className="absolute inset-0 z-20"
+                          aria-label={item.title}
+                        />
+
                         {/* Content aligned at the bottom-left */}
-                        <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-20 flex flex-col justify-end text-left select-none gap-3">
+                        <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-30 flex flex-col justify-end text-left select-none gap-3 pointer-events-none">
                           <div className="space-y-1">
                             <span className="text-xs font-semibold text-white/90 block uppercase tracking-wider">
                               {item.category}
@@ -1032,22 +1038,36 @@ export default function Home() {
                           </div>
                           
                           {/* Pill Buttons */}
-                          <div className="flex gap-3 items-center mt-2">
+                          <div className="flex gap-3 items-center mt-2 pointer-events-auto">
                             <Button
                               variant="white"
                               size="sm"
+                              href={item.link}
+                              onClick={(e) => {
+                                if (hasMoved) {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                }
+                              }}
                             >
                               Xem Thêm
                             </Button>
                             <Button
                               variant="white-outline"
                               size="sm"
+                              href={`/lien-he?reason=Báo giá&vehicle=${encodeURIComponent(item.title)}`}
+                              onClick={(e) => {
+                                if (hasMoved) {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                }
+                              }}
                             >
                               Báo Giá
                             </Button>
                           </div>
                         </div>
-                      </Link>
+                      </div>
                     </div>
                   ))}
                 </div>

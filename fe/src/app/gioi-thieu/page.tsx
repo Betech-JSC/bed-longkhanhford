@@ -21,7 +21,7 @@ const row1Cards: TeamCard[] = [
 
 const row2Cards: TeamCard[] = [
   { id: "r2-1", name: "Hệ Thống Showroom Hiện Đại", image: "/images/about/image-introduce.jpg", link: "/lien-he" },
-  { id: "r2-2", name: "Xưởng Dịch Vụ Đạt Chuẩn Brand@Retail", image: "/images/about/image-about-1.jpg", link: "/lien-he" },
+  { id: "r2-2", name: "Xưởng Dịch Vụ Đạt Chuẩn Brand@Retail", image: "/images/about/showroom-entrance.jpg", link: "/lien-he" },
   { id: "r2-3", name: "Trang Thiết Bị Sửa Chữa Chuyên Dụng", image: "/images/about/image-about-2.jpg", link: "/lien-he" },
   { id: "r2-4", name: "Không Gian Trưng Bày Xe Cao Cấp", image: "/images/about/image-vision-1.jpg", link: "/lien-he" },
 ];
@@ -166,10 +166,11 @@ export default function AboutPage() {
             {/* Right Block: Image */}
             <div className="lg:col-span-5 aspect-[4/5] relative rounded-none overflow-hidden border border-[#e5e5e5]">
               <img
-                src="/images/about/image-about-1.jpg"
+                src="/images/about/showroom-entrance.jpg"
                 alt="Showroom Long Khánh Ford"
                 className="w-full h-full object-cover object-center"
               />
+
             </div>
           </div>
         </div>
