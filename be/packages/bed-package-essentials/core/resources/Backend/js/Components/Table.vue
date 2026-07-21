@@ -1,15 +1,15 @@
 <template>
     <DataTable
-        :value="items"
-        :lazy="true"
+        :value="showingOnlySelected ? selectedItems : items"
+        :lazy="!showingOnlySelected"
         :paginator="true"
-        :rows="parseInt(lazyParams.per_page || 20)"
-        :first="firstItem"
-        :last="lastItem"
+        :rows="showingOnlySelected ? (selectedItems?.length || 20) : parseInt(lazyParams.per_page || 20)"
+        :first="showingOnlySelected ? 0 : firstItem"
+        :last="showingOnlySelected ? (selectedItems?.length || 0) : lastItem"
         v-model:filters="lazyParams.filters"
         ref="data-table"
         dataKey="id"
-        :totalRecords="totalItems"
+        :totalRecords="showingOnlySelected ? (selectedItems?.length || 0) : totalItems"
         :loading="loading"
         @page="onPage($event)"
         @sort="onSort($event)"
@@ -23,7 +23,7 @@
         @row-unselect="onRowUnselect"
         :rowHover="true"
         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-        :rowsPerPageOptions="[10, 20, 50, 100]"
+        :rowsPerPageOptions="[10, 20, 50, 100, 500]"
         :currentPageReportTemplate="reportPageValue"
         :globalFilterFields="displayColumns.map((x) => x.field)"
     >
@@ -74,6 +74,16 @@
                         >
                             <heroicons-outline:trash class="w-4 h-4" />
                             <span>{{ tt('models.table.delete_selected') }} ({{ selectedItems.length }})</span>
+                        </button>
+                        <button
+                            v-if="selectedItems && selectedItems.length > 0"
+                            type="button"
+                            class="p-button ml-2 flex items-center gap-1 cursor-pointer transition-colors"
+                            :class="showingOnlySelected ? 'btn-primary' : 'btn-outline-primary'"
+                            @click="toggleShowOnlySelected"
+                        >
+                            <heroicons-outline:eye class="w-4 h-4" />
+                            <span>{{ showingOnlySelected ? 'HIỂN THỊ TẤT CẢ' : `HIỂN THỊ ĐÃ CHỌN (${selectedItems.length})` }}</span>
                         </button>
                     </div>
                     <span v-if="sortByDate" class="w-1/2">
@@ -218,6 +228,7 @@ export default {
             selectedItems: null,
             selectedIds: [],
             selectAll: false,
+            showingOnlySelected: false,
 
             mergedColumns: this.mergeColumns(),
             filter_begin_time: null,
@@ -280,6 +291,12 @@ export default {
     },
     watch: {
         selectedItems(value) {
+            if (!Array.isArray(value)) return
+
+            if (value.length === 0) {
+                this.showingOnlySelected = false
+            }
+
             this.sellectIds = this.selectedIds = value
                 .map(function (item) {
                     return item.id
@@ -363,24 +380,41 @@ export default {
         },
         onSort(event) {},
         onFilter(event) {},
+        toggleShowOnlySelected() {
+            if (!this.selectedItems || this.selectedItems.length === 0) {
+                this.showingOnlySelected = false
+                return
+            }
+            this.showingOnlySelected = !this.showingOnlySelected
+        },
         onSelectAllChange(event) {
             const selectAll = event.checked
 
             if (selectAll) {
+                this.loading = true
                 this.$axios
                     .get(
                         this.route(`admin.${this.currentResource}.index`, {
                             ...this.lazyParams,
-                            page: this.lazyParams.page + 1,
+                            per_page: 9999,
+                            page: 1,
                         })
                     )
                     .then((res) => {
+                        this.loading = false
                         this.selectAll = true
-                        this.selectedItems = res.data.data
+                        const allData = res.data?.data || res.data || []
+                        this.selectedItems = Array.isArray(allData) ? allData : Object.values(allData)
+                    })
+                    .catch(() => {
+                        this.loading = false
+                        this.selectAll = true
+                        this.selectedItems = [...(this.items || [])]
                     })
             } else {
                 this.selectAll = false
                 this.selectedItems = []
+                this.showingOnlySelected = false
             }
         },
         onRowSelect() {
