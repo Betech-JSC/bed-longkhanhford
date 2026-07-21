@@ -18,6 +18,7 @@ export const siteAssets = {
   testDriveBg: "/assets/test-drive-bg.png",
   googleMapsEmbed:
     "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.269457792476!2d107.22851607480749!3d10.925769689283734!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3174f9d504505f59%3A0x6e2b1b3b1b3b1b3b!2sLong%20Kh%C3%A1nh%20Ford!5e0!3m2!1svi!2s!4v1721464860000!5m2!1svi!2s",
+  googleMapsUrl: "https://maps.app.goo.gl/4Edf7CwNdArgsXu26",
 } as const;
 
 export const aboutAssets = {

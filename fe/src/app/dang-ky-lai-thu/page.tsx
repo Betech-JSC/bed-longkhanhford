@@ -219,9 +219,14 @@ function TestDriveFormContent() {
                 <h4 className="font-['Ford_Antenna',sans-serif] font-semibold text-sm uppercase tracking-wider text-[#0562d2]">
                   Địa điểm lái thử
                 </h4>
-                <p className="font-['Ford_Antenna',sans-serif] text-sm text-[#1a1a1a] leading-relaxed">
+                <a
+                  href={siteAssets.googleMapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-['Ford_Antenna',sans-serif] text-sm text-[#1a1a1a] leading-relaxed hover:text-[#0562d2] transition-colors"
+                >
                   Đường 21/4, Tổ 1, Khu phố Cẩm Tân, Phường Hàng Gòn, Thành phố Đồng Nai, Việt Nam
-                </p>
+                </a>
               </div>
             </div>
 

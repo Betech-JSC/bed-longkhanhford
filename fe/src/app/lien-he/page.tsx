@@ -212,9 +212,14 @@ function ContactFormContent() {
                 <span className="font-antenna font-extrabold text-[10px] uppercase tracking-wider text-[#066fef]">
                   Địa chỉ Showroom
                 </span>
-                <p className="font-antenna text-xs lg:text-sm text-gray-800 leading-relaxed font-semibold">
+                <a
+                  href={siteAssets.googleMapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-antenna text-xs lg:text-sm text-gray-800 leading-relaxed font-semibold hover:text-[#066fef] transition-colors"
+                >
                   Đường 21/4, Tổ 1, Khu phố Cẩm Tân, Phường Hàng Gòn, Thành phố Đồng Nai, Việt Nam
-                </p>
+                </a>
               </div>
             </div>
 

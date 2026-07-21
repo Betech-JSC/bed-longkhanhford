@@ -1416,7 +1416,14 @@ export default function Home() {
                   </div>
                   <p className="text-sm md:text-base text-neutral-700 leading-relaxed font-normal pt-1.5">
                     <strong className="text-black font-bold mr-1">Địa chỉ:</strong>
-                    Đường 21/4, Tổ 1, Khu phố Cẩm Tân, Phường Hàng Gòn, Thành phố Đồng Nai, Việt Nam
+                    <a
+                      href={siteAssets.googleMapsUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-[#066FEF] transition-colors"
+                    >
+                      Đường 21/4, Tổ 1, Khu phố Cẩm Tân, Phường Hàng Gòn, Thành phố Đồng Nai, Việt Nam
+                    </a>
                   </p>
                 </div>
 
