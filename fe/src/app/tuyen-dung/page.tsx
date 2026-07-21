@@ -131,7 +131,7 @@ export default function JobsPage() {
           <img
             src="/images-dynamic/recruitment-banner.png"
             alt="Tuyển dụng Ford Long Khánh"
-            className="w-full h-full object-cover object-center"
+            className="w-full h-full object-cover object-[center_40%]"
           />
         </div>
       </section>
