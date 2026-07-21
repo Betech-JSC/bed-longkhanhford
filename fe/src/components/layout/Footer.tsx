@@ -259,7 +259,7 @@ export default function Footer() {
             </a>
             {/* Zalo */}
             <a 
-              href="https://zalo.me/4149231651356573695"
+              href="https://zalo.me/0812868622"
               target="_blank"
               rel="noopener noreferrer"
               className="w-8 h-8 rounded-full bg-neutral-200/60 hover:bg-[#0068ff] transition-colors flex items-center justify-center text-neutral-700 hover:text-white"

@@ -107,7 +107,7 @@ export default function QuickAccessToolbar() {
     {
       label: "Kết nối Zalo",
       icon: <MessageCircle className="w-[18px] h-[18px] stroke-[1.5]" />,
-      href: "https://zalo.me/4149231651356573695",
+      href: "https://zalo.me/0812868622",
       target: "_blank",
     },
   ];
@@ -134,7 +134,7 @@ export default function QuickAccessToolbar() {
     {
       label: "Zalo",
       icon: <ZaloIcon />,
-      href: "https://zalo.me/4149231651356573695",
+      href: "https://zalo.me/0812868622",
       target: "_blank",
       colorClass: "text-[#0068ff]",
       rippleClass: "animate-quick-ripple-zalo",
