@@ -232,13 +232,9 @@ function ContactFormContent() {
                     <span className="text-gray-400 font-medium">Bộ phận Dịch vụ:</span>
                     <span className="font-bold text-[#002F6C]">1900 888 992 – 02513 646 998</span>
                   </p>
-                  <p className="flex items-center justify-between border-b border-gray-100 pb-1.5">
+                  <p className="flex items-center justify-between">
                     <span className="text-gray-400 font-medium">Phòng Kinh doanh:</span>
                     <span className="font-bold text-[#002F6C]">0812 86 86 22</span>
-                  </p>
-                  <p className="flex items-center justify-between">
-                    <span className="text-gray-400 font-medium">Điện thoại bàn:</span>
-                    <span className="font-semibold text-gray-700">(0251) 3857 130</span>
                   </p>
                 </div>
               </div>
