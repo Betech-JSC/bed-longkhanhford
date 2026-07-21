@@ -41,7 +41,7 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "cms.dongnaiford.com.vn",
+        hostname: "cms.longkhanhford.com.vn",
         port: "",
         pathname: "/**",
       },

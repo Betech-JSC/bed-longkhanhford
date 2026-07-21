@@ -19,7 +19,7 @@ class ServiceAgencyJobSeeder extends Seeder
 
         $services = [
             [
-                'email' => 'sales@dongnaiford.com.vn',
+                'email' => 'sales@longkhanhford.com.vn',
                 'image' => ['path' => 'uploads/services/service_support_customer.png'],
                 'benefit_image' => ['path' => 'uploads/services/service_support_customer.png'],
                 'sliders' => [['path' => 'uploads/services/service_support_customer.png']],

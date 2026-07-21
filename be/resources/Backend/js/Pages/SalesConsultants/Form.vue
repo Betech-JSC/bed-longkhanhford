@@ -186,7 +186,7 @@
                             type: 'text',
                             name: 'email',
                             label: 'Email công việc',
-                            placeholder: 'vd: example@dongnaiford.com.vn',
+                            placeholder: 'vd: example@longkhanhford.com.vn',
                         }"
                     />
 

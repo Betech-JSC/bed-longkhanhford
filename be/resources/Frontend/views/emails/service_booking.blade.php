@@ -39,7 +39,7 @@
 
     <div style="margin-top: 30px; border-top: 1px solid #eeeeee; padding-top: 15px; color: #777777; font-size: 12px; line-height: 1.4;">
         --<br>
-        Đây là email yêu cầu dịch vụ từ Dongnaiford.com.vn
+        Đây là email yêu cầu dịch vụ từ Longkhanhford.com.vn
     </div>
 </body>
 </html>

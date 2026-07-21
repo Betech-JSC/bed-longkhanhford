@@ -116,8 +116,8 @@ Tại tab **Environment Variables** của ứng dụng trên Coolify, hãy khai 
 | `APP_ENV` | `production` | Môi trường chạy dự án |
 | `APP_DEBUG` | `false` | Tắt chế độ debug hiển thị lỗi bảo mật |
 | `APP_KEY` | `base64:xxxx...` | Khóa mã hóa Laravel (Hãy sinh bằng `php artisan key:generate` trên máy cá nhân rồi dán vào) |
-| `APP_URL` | `https://dongnaiford.domain.com` | Tên miền chính thức của dự án |
-| `NEXT_PUBLIC_API_URL` | `https://dongnaiford.domain.com/api` | Đường dẫn gọi API (Đóng gói vào Next.js lúc build) |
+| `APP_URL` | `https://longkhanhford.domain.com` | Tên miền chính thức của dự án |
+| `NEXT_PUBLIC_API_URL` | `https://longkhanhford.domain.com/api` | Đường dẫn gọi API (Đóng gói vào Next.js lúc build) |
 | `PORT_WEBSERVER` | `8080` (Hoặc cổng trống bất kỳ) | Tránh xung đột cổng `80` hệ thống VPS đang chạy Traefik của Coolify |
 | `DB_CONNECTION` | `mysql` | Loại cơ sở dữ liệu |
 | `DB_HOST` | `db` (Hoặc endpoint DB nếu dùng DB rời) | Tên service database trong docker-compose |
@@ -132,7 +132,7 @@ Tại tab **Environment Variables** của ứng dụng trên Coolify, hãy khai 
 
 ### Bước 4: Cấu hình Domain & Port routing trên Coolify
 1. Trong giao diện cấu hình ứng dụng trên Coolify, tại phần cấu hình **Domains**:
-   * Nhập tên miền của bạn (ví dụ: `https://dongnaiford.domain.com`).
+   * Nhập tên miền của bạn (ví dụ: `https://longkhanhford.domain.com`).
 2. Tại phần **Port / Destination Service**:
    * Chọn dịch vụ đích là: `webserver` (Đây là Nginx Gateway container).
    * Điền cổng đích là: `80` (Cổng Nginx lắng nghe bên trong Docker Network).
