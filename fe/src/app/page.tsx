@@ -1523,10 +1523,10 @@ export default function Home() {
               {/* Right Column: Dynamic Tab Image */}
               <div className="lg:col-span-7 relative h-[320px] sm:h-[400px] lg:h-auto min-h-[350px] w-full rounded-[12px] overflow-hidden border border-neutral-200/80 shadow-sm bg-gray-100">
                 {[
-                  "/service-fixed-car.webp",
-                  "/service-delivery.webp",
-                  "/service-support-customer.webp"
-                ].map((imgSrc, idx) => {
+                  { src: "/service-fixed-car.webp", pos: "object-center" },
+                  { src: "/service-delivery.webp", pos: "object-top" },
+                  { src: "/service-support-customer.webp", pos: "object-center" }
+                ].map((img, idx) => {
                   const isActive = activeServiceTab === idx;
                   return (
                     <div
@@ -1537,12 +1537,12 @@ export default function Home() {
                     >
                       {(isActive || idx === 0) && (
                         <Image
-                          src={imgSrc}
+                          src={img.src}
                           alt="Dịch vụ và chăm sóc khách hàng Long Khánh Ford"
                           fill
                           priority={idx === 0}
                           sizes="(max-width: 1024px) 100vw, 700px"
-                          className="object-cover"
+                          className={`object-cover ${img.pos}`}
                         />
                       )}
                     </div>
