@@ -621,9 +621,6 @@ function SpecsGridBlock({ data, vehicle, isEditMode, onChangeData, openQuoteDraw
   const handleToggleVersion = (verId: string) => {
     const idStr = String(verId);
     if (selectedVersionIds.includes(idStr)) {
-      if (selectedVersionIds.length <= 2) {
-        return;
-      }
       setSelectedVersionIds(prev => prev.filter(id => id !== idStr));
     } else {
       if (selectedVersionIds.length >= 4) {
@@ -712,8 +709,7 @@ function SpecsGridBlock({ data, vehicle, isEditMode, onChangeData, openQuoteDraw
               const idStr = String(ver.id);
               const isChecked = selectedVersionIds.includes(idStr);
               const isDisableCheck = !isChecked && selectedVersionIds.length >= 4;
-              const isDisableUncheck = isChecked && selectedVersionIds.length <= 2;
-              const isDisabled = isDisableCheck || isDisableUncheck;
+              const isDisabled = isDisableCheck;
 
               return (
                 <label
@@ -752,47 +748,55 @@ function SpecsGridBlock({ data, vehicle, isEditMode, onChangeData, openQuoteDraw
           ref={scrollContainerRef}
           className={`flex flex-row gap-6 justify-start ${justifyClass} items-stretch w-full overflow-x-auto pb-4 scroll-smooth snap-x snap-mandatory scrollbar-none`}
         >
-          {activeCompareItems.map((item: any) => (
-            <div
-              key={item.id}
-              className="bg-white border border-gray-200/60 drop-shadow-[0px_4px_4px_rgba(16,24,40,0.06)] flex flex-col items-stretch relative w-[280px] sm:w-[320px] md:w-[368px] shrink-0 rounded-[12px] transition-all duration-300 hover:scale-[1.01] hover:shadow-lg snap-start overflow-visible"
-            >
-              {/* Sticky Top Header of Card */}
-              <div className="sticky top-[72px] lg:top-[80px] bg-white z-10 border-b border-gray-100 flex flex-col items-start relative shrink-0 w-full rounded-t-[12px] shadow-sm">
-                <div className="aspect-[800/550] relative shrink-0 w-full bg-gray-50 overflow-hidden rounded-t-[12px]">
-                  <Image
-                    src={item.image}
-                    alt={item.name}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 368px"
-                    className="object-cover transition-transform duration-500 hover:scale-105 pointer-events-none"
-                  />
-                </div>
-                <div className="content-stretch flex items-center justify-between p-[16px] relative shrink-0 w-full bg-white">
-                  <div className="[word-break:break-word] flex flex-[1_0_0] flex-col font-['Ford_Antenna',sans-serif] font-semibold justify-center leading-[1.3] text-[#0562d2] text-[16px] sm:text-[18px] tracking-[0.18px]">
-                    <p className="line-clamp-2">{item.name}</p>
-                    <p className="text-[12px] text-gray-500 font-medium mt-1">{formatPrice(item.price)}</p>
+          {activeCompareItems.length < 2 ? (
+            <div className="w-full py-16 px-4 bg-white border border-dashed border-gray-200 rounded-[12px] flex flex-col items-center justify-center gap-3 text-center">
+              <span className="text-gray-400 text-sm font-antenna font-semibold uppercase tracking-wider">
+                Vui lòng chọn ít nhất 2 phiên bản để so sánh thông số kỹ thuật
+              </span>
+            </div>
+          ) : (
+            activeCompareItems.map((item: any) => (
+              <div
+                key={item.id}
+                className="bg-white border border-gray-200/60 drop-shadow-[0px_4px_4px_rgba(16,24,40,0.06)] flex flex-col items-stretch relative w-[280px] sm:w-[320px] md:w-[368px] shrink-0 rounded-[12px] transition-all duration-300 hover:scale-[1.01] hover:shadow-lg snap-start overflow-visible"
+              >
+                {/* Sticky Top Header of Card */}
+                <div className="sticky top-[72px] lg:top-[80px] bg-white z-10 border-b border-gray-100 flex flex-col items-start relative shrink-0 w-full rounded-t-[12px] shadow-sm">
+                  <div className="aspect-[800/550] relative shrink-0 w-full bg-gray-50 overflow-hidden rounded-t-[12px]">
+                    <Image
+                      src={item.image}
+                      alt={item.name}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 368px"
+                      className="object-cover transition-transform duration-500 hover:scale-105 pointer-events-none"
+                    />
+                  </div>
+                  <div className="content-stretch flex items-center justify-between p-[16px] relative shrink-0 w-full bg-white">
+                    <div className="[word-break:break-word] flex flex-[1_0_0] flex-col font-['Ford_Antenna',sans-serif] font-semibold justify-center leading-[1.3] text-[#0562d2] text-[16px] sm:text-[18px] tracking-[0.18px]">
+                      <p className="line-clamp-2">{item.name}</p>
+                      <p className="text-[12px] text-gray-500 font-medium mt-1">{formatPrice(item.price)}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* specs */}
-              <VersionSpecsAccordion 
-                specs={parseSpecs(item.specs, vehicle.name)} 
-                openSectionTitles={openSectionTitles}
-                onToggleSection={handleToggleSection}
-              />
+                {/* specs */}
+                <VersionSpecsAccordion 
+                  specs={parseSpecs(item.specs, vehicle.name)} 
+                  openSectionTitles={openSectionTitles}
+                  onToggleSection={handleToggleSection}
+                />
 
-              <div className="p-4 bg-white flex flex-col items-center justify-center shrink-0 w-full border-t border-gray-100/50 rounded-b-[12px] mt-auto">
-                <button
-                  onClick={() => openQuoteDrawer(vehicle.id, item.id)}
-                  className="bg-[#0562d2] hover:bg-[#044ea7] border border-[#0562d2] border-solid flex gap-[8px] items-center justify-center overflow-clip px-[24px] py-[10px] rounded-[800px] text-white text-[16px] font-semibold transition-all cursor-pointer shadow-xs w-full"
-                >
-                  Báo giá
-                </button>
+                <div className="p-4 bg-white flex flex-col items-center justify-center shrink-0 w-full border-t border-gray-100/50 rounded-b-[12px] mt-auto">
+                  <button
+                    onClick={() => openQuoteDrawer(vehicle.id, item.id)}
+                    className="bg-[#0562d2] hover:bg-[#044ea7] border border-[#0562d2] border-solid flex gap-[8px] items-center justify-center overflow-clip px-[24px] py-[10px] rounded-[800px] text-white text-[16px] font-semibold transition-all cursor-pointer shadow-xs w-full"
+                  >
+                    Báo giá
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
     </section>
