@@ -18,7 +18,9 @@ import {
   Plus,
   Minus,
   MapPin,
-  Mail
+  Mail,
+  MessageSquare,
+  ArrowRight
 } from "lucide-react";
 import { vehicles, Vehicle } from "@/data/vehicles";
 import { getPopularVehicleImage, siteAssets, handleImageError } from "@/lib/site-assets";
@@ -180,10 +182,10 @@ export default function Home() {
   const [customerHandovers, setCustomerHandovers] = useState<any[]>([]);
   const [isVehiclesLoading, setIsVehiclesLoading] = useState(true);
 
-  // Showroom Filter State
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [activeCarIndex, setActiveCarIndex] = useState(0);
   const [isFading, setIsFading] = useState(false);
+  const [activeServiceTab, setActiveServiceTab] = useState(0);
 
   useEffect(() => {
     setIsFading(true);
@@ -1333,6 +1335,218 @@ export default function Home() {
           </div>
         </section>
       )}
+
+      {/* 9.5 READY TO BUY / OWNERSHIP EXPERIENCE */}
+      <section className="w-full bg-white py-16 md:py-24 border-t border-gray-100">
+        <div className="max-w-[1440px] mx-auto w-full">
+          <div className="max-w-[1152px] mx-auto w-full px-6 xl:px-0 space-y-12">
+            {/* Title Area */}
+            <div className="text-left space-y-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#066FEF] block font-sans">Mua xe Ford</span>
+              <h2 className="text-3xl lg:text-[40px] font-bold text-black tracking-tight uppercase font-sans">
+                Sẵn sàng cho trải nghiệm sở hữu tuyệt vời
+              </h2>
+            </div>
+
+            {/* Banner block */}
+            <div className="relative w-full rounded-[12px] bg-gradient-to-r from-[#0060df] via-[#004bb4] to-[#002f6c] p-8 md:p-12 text-white overflow-hidden flex flex-col items-start justify-center min-h-[220px] shadow-sm group">
+              {/* Animated/Interactive background overlay */}
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-white/15 via-transparent to-transparent opacity-70 transition-opacity duration-500 group-hover:opacity-90 pointer-events-none" />
+              {/* Subtle background abstract curves */}
+              <div className="absolute -right-16 -bottom-16 w-96 h-96 rounded-full bg-white/5 blur-3xl pointer-events-none transition-transform duration-700 group-hover:scale-110" />
+              
+              <div className="relative z-10 space-y-4 max-w-lg text-left">
+                <span className="text-[#9fc9ff] text-xs font-semibold uppercase tracking-wider block font-sans">
+                  Cá nhân hóa chiếc xe mà bạn mong muốn.
+                </span>
+                <h3 className="text-2xl md:text-3xl font-extrabold font-sans uppercase tracking-tight leading-tight">
+                  Bắt đầu mua xe
+                </h3>
+                <Link
+                  href="/san-pham"
+                  className="inline-flex items-center justify-center bg-white text-black font-sans text-xs font-bold uppercase tracking-wider px-6 py-2.5 rounded-[4px] hover:bg-neutral-100 transition-colors shadow-sm cursor-pointer"
+                >
+                  Bắt đầu
+                </Link>
+              </div>
+            </div>
+
+            {/* Three cards below banner */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Card 1: Tìm Đại lý */}
+              <a
+                href={siteAssets.googleMapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group bg-gray-50 hover:bg-white border border-gray-200/80 hover:border-[#066FEF]/40 p-8 rounded-[12px] flex flex-col justify-between items-start text-left min-h-[220px] transition-all duration-300 shadow-xs hover:shadow-md cursor-pointer"
+              >
+                <div className="space-y-4 w-full">
+                  <div className="w-12 h-12 bg-white text-[#066FEF] group-hover:bg-[#066FEF] group-hover:text-white rounded-[8px] border border-gray-200/60 flex items-center justify-center transition-all duration-300 shadow-xs">
+                    <MapPin className="w-6 h-6" />
+                  </div>
+                  <div className="space-y-2">
+                    <h4 className="font-sans font-extrabold text-lg text-black uppercase tracking-tight">
+                      Tìm Đại lý
+                    </h4>
+                    <p className="text-xs text-neutral-500 leading-relaxed font-normal">
+                      Tìm đại lý Ford chính hãng gần nhất.
+                    </p>
+                  </div>
+                </div>
+                <div className="w-full flex justify-end mt-4">
+                  <ArrowRight className="w-5 h-5 text-neutral-400 group-hover:text-[#066FEF] group-hover:translate-x-1.5 transition-all duration-300" />
+                </div>
+              </a>
+
+              {/* Card 2: Báo giá */}
+              <Link
+                href="/lien-he"
+                className="group bg-gray-50 hover:bg-white border border-gray-200/80 hover:border-[#066FEF]/40 p-8 rounded-[12px] flex flex-col justify-between items-start text-left min-h-[220px] transition-all duration-300 shadow-xs hover:shadow-md cursor-pointer"
+              >
+                <div className="space-y-4 w-full">
+                  <div className="w-12 h-12 bg-white text-[#066FEF] group-hover:bg-[#066FEF] group-hover:text-white rounded-[8px] border border-gray-200/60 flex items-center justify-center transition-all duration-300 shadow-xs">
+                    <MessageSquare className="w-6 h-6" />
+                  </div>
+                  <div className="space-y-2">
+                    <h4 className="font-sans font-extrabold text-lg text-black uppercase tracking-tight">
+                      Báo giá
+                    </h4>
+                    <p className="text-xs text-neutral-500 leading-relaxed font-normal">
+                      Nhận thêm thông tin về giá và các chương trình khuyến mãi mới nhất.
+                    </p>
+                  </div>
+                </div>
+                <div className="w-full flex justify-end mt-4">
+                  <ArrowRight className="w-5 h-5 text-neutral-400 group-hover:text-[#066FEF] group-hover:translate-x-1.5 transition-all duration-300" />
+                </div>
+              </Link>
+
+              {/* Card 3: Đăng ký lái thử */}
+              <Link
+                href="/dang-ky-lai-thu"
+                className="group bg-gray-50 hover:bg-white border border-gray-200/80 hover:border-[#066FEF]/40 p-8 rounded-[12px] flex flex-col justify-between items-start text-left min-h-[220px] transition-all duration-300 shadow-xs hover:shadow-md cursor-pointer"
+              >
+                <div className="space-y-4 w-full">
+                  <div className="w-12 h-12 bg-white text-[#066FEF] group-hover:bg-[#066FEF] group-hover:text-white rounded-[8px] border border-gray-200/60 flex items-center justify-center transition-all duration-300 shadow-xs">
+                    <Calendar className="w-6 h-6" />
+                  </div>
+                  <div className="space-y-2">
+                    <h4 className="font-sans font-extrabold text-lg text-black uppercase tracking-tight">
+                      Đăng ký lái thử
+                    </h4>
+                    <p className="text-xs text-neutral-500 leading-relaxed font-normal">
+                      Khám phá ngay sự mạnh mẽ và tiện nghi vượt trội trên từng dòng xe.
+                    </p>
+                  </div>
+                </div>
+                <div className="w-full flex justify-end mt-4">
+                  <ArrowRight className="w-5 h-5 text-neutral-400 group-hover:text-[#066FEF] group-hover:translate-x-1.5 transition-all duration-300" />
+                </div>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 9.6 CUSTOMER SERVICE & CARE TABBED SECTION */}
+      <section className="w-full bg-[#F8F8F8] py-16 md:py-24 border-t border-gray-100">
+        <div className="max-w-[1440px] mx-auto w-full">
+          <div className="max-w-[1152px] mx-auto w-full px-6 xl:px-0 space-y-12">
+            {/* Title */}
+            <div className="text-left">
+              <h2 className="text-3xl lg:text-[40px] font-bold text-black tracking-tight uppercase font-sans">
+                Dịch vụ và Chăm sóc khách hàng
+              </h2>
+            </div>
+
+            {/* Grid Container */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch">
+              {/* Left Column: Interactive Tabs Selector */}
+              <div className="lg:col-span-5 flex flex-col justify-start gap-4">
+                {[
+                  {
+                    title: "Dịch vụ & Bảo dưỡng",
+                    desc: "Đảm bảo chiếc xe của bạn luôn hoàn hảo, giúp bạn tiết kiệm chi phí sử dụng và gia tăng giá trị bán lại của xe.",
+                    href: "/dich-vu"
+                  },
+                  {
+                    title: "Đặt lịch Dịch vụ Trực tuyến",
+                    desc: "Đặt lịch hẹn bảo dưỡng trực tuyến nhanh chóng, thuận tiện và chủ động thời gian của bạn.",
+                    href: "/dich-vu"
+                  },
+                  {
+                    title: "Trò Chuyện Cùng Chuyên Gia",
+                    desc: "Tư vấn trực tiếp 24/7 với các chuyên gia kỹ thuật và chăm sóc khách hàng của Ford Long Khánh.",
+                    href: "/lien-he"
+                  }
+                ].map((tab, idx) => {
+                  const isActive = activeServiceTab === idx;
+                  return (
+                    <div
+                      key={idx}
+                      onClick={() => setActiveServiceTab(idx)}
+                      className={`text-left p-6 border-l-[3px] transition-all duration-300 cursor-pointer ${
+                        isActive
+                          ? "border-[#066FEF] bg-white shadow-xs"
+                          : "border-transparent hover:border-gray-300 hover:bg-white/50"
+                      }`}
+                    >
+                      <h3
+                        className={`text-lg font-bold font-sans transition-colors duration-300 ${
+                          isActive ? "text-[#066FEF]" : "text-neutral-700 hover:text-black"
+                        }`}
+                      >
+                        {tab.title}
+                      </h3>
+                      
+                      {/* Animated expandable description */}
+                      <div className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out ${
+                        isActive ? "grid-rows-[1fr] opacity-100 mt-3" : "grid-rows-[0fr] opacity-0"
+                      }`}>
+                        <div className="overflow-hidden space-y-3">
+                          <p className="text-xs text-neutral-500 leading-relaxed font-normal">
+                            {tab.desc}
+                          </p>
+                          <Link
+                            href={tab.href}
+                            className="inline-flex items-center text-xs font-bold text-[#066FEF] hover:text-[#00095b] transition-colors gap-1 uppercase tracking-wider font-sans"
+                          >
+                            Xem thêm <ChevronRight className="w-3.5 h-3.5" />
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Right Column: Dynamic Tab Image */}
+              <div className="lg:col-span-7 relative h-[320px] sm:h-[400px] lg:h-auto min-h-[350px] w-full rounded-[12px] overflow-hidden border border-neutral-200/80 shadow-sm bg-gray-100">
+                {[
+                  "/service-fixed-car.jpg",
+                  "/service-delivery.png",
+                  "/service-support-customer.jpg"
+                ].map((imgSrc, idx) => (
+                  <div
+                    key={idx}
+                    className={`absolute inset-0 w-full h-full transition-opacity duration-500 ease-in-out ${
+                      activeServiceTab === idx ? "opacity-100 z-10" : "opacity-0 z-0"
+                    }`}
+                  >
+                    <Image
+                      src={imgSrc}
+                      alt="Dịch vụ và chăm sóc khách hàng Long Khánh Ford"
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 700px"
+                      className="object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* 10. FAQ & QUICK ACTIONS SECTION (MERGED & MINIMALIST) */}
       <section className="w-full bg-[#F8F8F8] py-16 md:py-24">
