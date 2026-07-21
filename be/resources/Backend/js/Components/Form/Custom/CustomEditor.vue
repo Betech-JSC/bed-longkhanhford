@@ -71,15 +71,27 @@ export default {
                 images_upload_handler(blobInfo, progress) {
                     const data = new FormData()
                     const file = new File([blobInfo.blob()], blobInfo.filename())
-                    data.append('files[]', file)
+                    data.append('files[0]', file)
+                    data.append('path', '/')
 
-                    // Upload file lên server
-                    return fetch('/upload', {
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
+
+                    return fetch('/admin/files/store', {
                         method: 'POST',
                         body: data,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            ...(csrfToken ? { 'X-CSRF-TOKEN': csrfToken } : {})
+                        }
                     })
-                        .then((response) => response.json())
-                        .then((result) => result.url) // Trả về URL hình ảnh
+                        .then((response) => {
+                            if (!response.ok) throw new Error('Upload failed')
+                            return response.json()
+                        })
+                        .then((result) => {
+                            let path = result.successFiles?.[0] || ''
+                            return path.startsWith('/static/') ? path : '/static/' + path.replace(/^\//, '')
+                        })
                 },
                 setup: function (editor) {
                     // Thêm nút File Manager

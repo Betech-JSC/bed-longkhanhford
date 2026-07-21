@@ -27,11 +27,23 @@ class File
     public function __construct($path = '/', $disk = null)
     {
         $this->disk = $disk ?? 'uploads';
-        if ($this->disk === 'uploads') {
+        if ($this->disk === 'uploads' && is_string($path)) {
             $cleanedPath = ltrim($path, '/');
-            if (str_starts_with($cleanedPath, 'uploads/')) {
-                $path = substr($cleanedPath, 8);
+            while (
+                str_starts_with($cleanedPath, 'static/') ||
+                str_starts_with($cleanedPath, 'uploads/') ||
+                str_starts_with($cleanedPath, 'storage/')
+            ) {
+                if (str_starts_with($cleanedPath, 'static/')) {
+                    $cleanedPath = substr($cleanedPath, 7);
+                } elseif (str_starts_with($cleanedPath, 'uploads/')) {
+                    $cleanedPath = substr($cleanedPath, 8);
+                } elseif (str_starts_with($cleanedPath, 'storage/')) {
+                    $cleanedPath = substr($cleanedPath, 8);
+                }
+                $cleanedPath = ltrim($cleanedPath, '/');
             }
+            $path = $cleanedPath === '' ? '/' : $cleanedPath;
         }
         $this->path = $path;
         $this->storage = Storage::disk($this->disk);

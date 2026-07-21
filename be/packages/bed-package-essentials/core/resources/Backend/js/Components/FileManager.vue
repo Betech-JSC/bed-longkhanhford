@@ -674,8 +674,26 @@ export default {
         submitToParentIframe() {
             let htmlImages = ''
             this.selectedFiles.forEach((file) => {
-                let src = '/static' + new URL(file.static_url).pathname
-                src = src.replace('/static/static/', '/static/')
+                let src = ''
+                if (file.static_url) {
+                    src = file.static_url
+                } else if (file.path) {
+                    src = file.path
+                }
+
+                if (typeof src === 'string') {
+                    if (src.startsWith('http://') || src.startsWith('https://') || src.startsWith('//')) {
+                        try {
+                            const u = new URL(src, window.location.origin)
+                            src = u.pathname
+                        } catch (e) {}
+                    }
+                    let cleanPath = src.replace(/^\/(storage\/uploads|storage|uploads|static)\//g, '')
+                    cleanPath = cleanPath.replace(/^(storage\/uploads|storage|uploads|static)\//g, '')
+                    cleanPath = cleanPath.replace(/^\//, '')
+                    src = '/static/' + cleanPath
+                }
+
                 htmlImages += `<img src="${src}">`
             })
 

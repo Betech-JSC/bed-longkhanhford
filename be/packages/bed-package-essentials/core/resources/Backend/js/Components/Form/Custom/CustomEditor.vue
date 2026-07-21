@@ -88,15 +88,27 @@ export default {
                 images_upload_handler(blobInfo, progress) {
                     const data = new FormData()
                     const file = new File([blobInfo.blob()], blobInfo.filename())
-                    data.append('files[]', file)
-                    data.append('folder', window.location.pathname.split('/')[1])
+                    data.append('files[0]', file)
+                    data.append('path', '/')
 
-                    return $axios.post(route('admin.files.store'), data).then((response) => {
-                        if (response.status === 200) {
-                            let path = response.data.successFiles[0]
-                            return path.includes('/static/') ? path : '/static' + path
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
+
+                    return fetch('/admin/files/store', {
+                        method: 'POST',
+                        body: data,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            ...(csrfToken ? { 'X-CSRF-TOKEN': csrfToken } : {})
                         }
                     })
+                        .then((response) => {
+                            if (!response.ok) throw new Error('Upload failed')
+                            return response.json()
+                        })
+                        .then((result) => {
+                            let path = result.successFiles?.[0] || ''
+                            return path.startsWith('/static/') ? path : '/static/' + path.replace(/^\//, '')
+                        })
                 },
 
                 setup: function (editor) {
