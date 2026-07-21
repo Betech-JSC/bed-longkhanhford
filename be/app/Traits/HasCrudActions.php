@@ -546,6 +546,88 @@ trait HasCrudActions
         }
     }
 
+    public function duplicate($id)
+    {
+        $this->checkAuthorize();
+
+        try {
+            DB::beginTransaction();
+
+            $relations = [];
+            $tempModel = $this->model();
+            if (method_exists($tempModel, 'translations')) {
+                $relations[] = 'translations';
+            }
+            if (method_exists($tempModel, 'categories')) {
+                $relations[] = 'categories';
+            }
+            if (method_exists($tempModel, 'tags')) {
+                $relations[] = 'tags';
+            }
+
+            $resource = $this->model::with($relations)->findOrFail($id);
+
+            // Replicate the main resource
+            $newResource = $resource->replicate();
+            
+            // Set basic values
+            if (in_array('status', $resource->getFillable())) {
+                $newResource->status = $resource->statusDraft ?? 'INACTIVE';
+            }
+            if (in_array('created_by', $resource->getFillable())) {
+                $newResource->created_by = current_admin_id();
+            }
+            if (in_array('updated_by', $resource->getFillable())) {
+                $newResource->updated_by = current_admin_id();
+            }
+            if (in_array('published_at', $resource->getFillable())) {
+                $newResource->published_at = now();
+            }
+            $newResource->save();
+
+            // Replicate translations if they exist
+            if (method_exists($resource, 'translations') && $resource->translations->count() > 0) {
+                foreach ($resource->translations as $translation) {
+                    $newTranslation = $translation->replicate();
+                    
+                    // Set foreign key
+                    $foreignKey = $translation->getForeignKey();
+                    $newTranslation->$foreignKey = $newResource->id;
+
+                    if (isset($translation->title) && $translation->title) {
+                        $newTranslation->title = $translation->title . ' (Copy)';
+                    } elseif (isset($translation->name) && $translation->name) {
+                        $newTranslation->name = $translation->name . ' (Copy)';
+                    }
+
+                    if (isset($translation->slug) && $translation->slug) {
+                        $newTranslation->slug = $translation->slug . '-copy-' . time();
+                    }
+                    if (isset($translation->seo_slug) && $translation->seo_slug) {
+                        $newTranslation->seo_slug = $translation->seo_slug . '-copy-' . time();
+                    }
+                    
+                    $newTranslation->save();
+                }
+            }
+
+            // Sync categories and tags if they exist
+            if (method_exists($resource, 'categories') && $resource->categories->count() > 0) {
+                $newResource->categories()->sync($resource->categories->pluck('id'));
+            }
+            if (method_exists($resource, 'tags') && $resource->tags->count() > 0) {
+                $newResource->tags()->sync($resource->tags->pluck('id'));
+            }
+
+            DB::commit();
+
+            return $this->redirectBack('Nhân bản bản ghi thành công!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
+        }
+    }
+
     public function updateModel($id, $data)
     {
         $resource = $this->model::query();

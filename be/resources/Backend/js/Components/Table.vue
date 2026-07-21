@@ -175,7 +175,7 @@
                 </template>
             </Column>
         </template>
-        <Column header="Thao tác" headerStyle="width: 8rem; text-align: center" bodyStyle="text-align: center" v-if="canCreate || canDestroy">
+        <Column header="Thao tác" headerStyle="width: 10rem; text-align: center" bodyStyle="text-align: center" v-if="canCreate || canDestroy || hasDuplicateRoute">
             <template #body="{ data }">
                 <div class="flex items-center justify-center space-x-3">
                     <Link
@@ -186,6 +186,15 @@
                     >
                         <heroicons-outline:pencil class="w-5 h-5" />
                     </Link>
+                    <button
+                        v-if="hasDuplicateRoute"
+                        type="button"
+                        class="text-green-500 hover:text-green-750 transition bg-transparent border-0 cursor-pointer p-0 inline-flex items-center"
+                        @click="duplicateSingle(data.id)"
+                        title="Nhân bản (Copy)"
+                    >
+                        <heroicons-outline:document-duplicate class="w-5 h-5" />
+                    </button>
                     <button
                         v-if="canDestroy"
                         type="button"
@@ -280,6 +289,13 @@ export default {
         canCreate() {
             return this.config.canCreate ?? this.can('admin.' + this.currentResource + '.form')
         },
+        hasDuplicateRoute() {
+            try {
+                return this.route().has(`admin.${this.currentResource}.duplicate`)
+            } catch (e) {
+                return false;
+            }
+        },
         canExport() {
             let routeName = this.getCurrentLocale() + '.admin.' + this.currentResource + '.export'
             return (
@@ -317,6 +333,22 @@ export default {
         this.loadLazyData()
     },
     methods: {
+        duplicateSingle(id) {
+            if (confirm("Bạn có chắc chắn muốn nhân bản (copy) bản ghi này không?")) {
+                this.$inertia.post(
+                    this.route(`admin.${this.currentResource}.duplicate`, { id: id }),
+                    {},
+                    {
+                        preserveScroll: true,
+                        onSuccess: () => {
+                            this.selectedItems = [];
+                            this.selectedIds = '';
+                            this.loadLazyData();
+                        }
+                    }
+                );
+            }
+        },
         deleteSingle(id) {
             if (confirm(this.tt("models.form.confirm_destroy") || "Bạn chắc chắn muốn xoá đối tượng này?")) {
                 this.$inertia.post(

@@ -57,7 +57,7 @@ class MacroServiceProvider extends BaseServiceProvider
     private function registerMacroRoute()
     {
         Router::macro('module', function ($controller, array $options = []) {
-            $actions = ['index', 'form', 'store', 'destroy', 'restore'];
+            $actions = ['index', 'form', 'store', 'destroy', 'restore', 'duplicate'];
 
             if (isset($options['only'])) {
                 $actions = array_intersect($actions, (array) $options['only']);
@@ -87,6 +87,10 @@ class MacroServiceProvider extends BaseServiceProvider
 
             if (in_array('restore', $actions)) {
                 Route::post("$resource/restore/{id}", [$controller, 'restore'])->name("$resource.restore");
+            }
+
+            if (in_array('duplicate', $actions)) {
+                Route::post("$resource/duplicate/{id}", [$controller, 'duplicate'])->name("$resource.duplicate");
             }
 
             if (isset($options['appends'])) {
