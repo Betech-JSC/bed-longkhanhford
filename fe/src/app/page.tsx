@@ -716,29 +716,35 @@ export default function Home() {
           <div className="max-w-[1440px] mx-auto w-full relative z-10 mt-auto pt-20 pb-[100px] md:pb-[60px]">
             <div className="max-w-[1152px] mx-auto w-full px-6 xl:px-0 flex flex-col items-start justify-end text-left">
               {/* Slide Text Block */}
-              <div key={activeHeroIndex} className="max-w-2xl flex flex-col items-start text-left animate-fade-in w-full">
-              <h2 className="text-3xl sm:text-5xl lg:text-[48px] font-bold tracking-tight leading-[1.15] text-white uppercase font-sans">
-                {heroSlides[activeHeroIndex]?.title || ""}
-              </h2>
+              <motion.div
+                key={activeHeroIndex}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                className="max-w-2xl flex flex-col items-start text-left w-full"
+              >
+                <h2 className="text-3xl sm:text-5xl lg:text-[48px] font-bold tracking-tight leading-[1.15] text-white uppercase font-sans">
+                  {heroSlides[activeHeroIndex]?.title || ""}
+                </h2>
 
-              {/* CTAs - Dark Background Hover styles */}
-              <div className="flex flex-col sm:flex-row justify-start gap-4 pt-6 md:pt-8 w-full sm:w-auto">
-                <Button
-                  variant="primary"
-                  onClick={() => triggerQuickAction("Đăng ký lái thử", "Tôi đặt lịch hẹn đăng ký lái thử xe Ford.")}
-                  className="w-full sm:w-auto"
-                >
-                  Đăng ký lái thử
-                </Button>
-                <Button
-                  variant="white-outline"
-                  onClick={() => router.push("/lien-he")}
-                  className="w-full sm:w-auto"
-                >
-                  Khám phá ngay
-                </Button>
-              </div>
-            </div>
+                {/* CTAs - Dark Background Hover styles */}
+                <div className="flex flex-col sm:flex-row justify-start gap-4 pt-6 md:pt-8 w-full sm:w-auto">
+                  <Button
+                    variant="primary"
+                    onClick={() => triggerQuickAction("Đăng ký lái thử", "Tôi đặt lịch hẹn đăng ký lái thử xe Ford.")}
+                    className="w-full sm:w-auto"
+                  >
+                    Đăng ký lái thử
+                  </Button>
+                  <Button
+                    variant="white-outline"
+                    onClick={() => router.push("/lien-he")}
+                    className="w-full sm:w-auto"
+                  >
+                    Khám phá ngay
+                  </Button>
+                </div>
+              </motion.div>
           </div>
         </div>
 
@@ -781,14 +787,20 @@ export default function Home() {
         <div className="max-w-[1440px] mx-auto w-full">
           <div className="max-w-[1152px] mx-auto w-full px-6 xl:px-0">
             {/* Header title block */}
-            <div className="mb-10 text-center max-w-3xl mx-auto font-sans">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="mb-10 text-center max-w-3xl mx-auto font-sans"
+            >
               <h2 className="text-3xl md:text-[32px] font-bold text-[#00095B] tracking-tight uppercase leading-snug">
                 Dòng xe Ford Long Khánh
               </h2>
               <p className="text-xs md:text-sm text-neutral-500 font-medium leading-relaxed mt-3">
                 Đa dạng lựa chọn từ SUV, bán tải đến xe thương mại — tất cả đều có sẵn tại showroom Long Khánh.
               </p>
-            </div>
+            </motion.div>
 
             {/* Tab Navigation centered */}
             <div className="flex justify-center border-b border-neutral-200 pb-4 mb-10">
@@ -849,41 +861,49 @@ export default function Home() {
                 return (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
                     {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                    {filteredVehicles.map((vehicle: any) => {
+                    {filteredVehicles.map((vehicle: any, idx: number) => {
                       const vehicleId = vehicle.slug || vehicle.id;
                       const vehicleName = vehicle.title || vehicle.name;
                       const vehicleCardImage = vehicle.image_thumbnail_url || vehicle.image_url || vehicle.images?.[0] || getPopularVehicleImage(vehicleId);
                       const vehiclePrice = vehicle.base_price || vehicle.basePrice || 0;
 
                       return (
-                        <Link
+                        <motion.div
                           key={vehicleId}
-                          href={`/${vehicleId}`}
-                          className="bg-white border border-gray-100 hover:border-gray-200 rounded-2xl p-6 flex flex-col hover:shadow-md transition-all duration-300 group text-left"
+                          initial={{ opacity: 0, y: 30 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.5, delay: idx * 0.05, ease: "easeOut" }}
+                          className="w-full flex"
                         >
-                          {/* Image */}
-                          <div className="relative aspect-[16/10] w-full bg-white overflow-hidden mb-6 flex items-center justify-center">
-                            <SafeImage
-                              src={vehicleCardImage}
-                              alt={vehicleName}
-                              fill
-                              sizes="(max-width: 768px) 100vw, 350px"
-                              className="object-contain object-center scale-[1.05] group-hover:scale-[1.08] transition-transform duration-500 pointer-events-none"
-                              unoptimized={true}
-                            />
-                          </div>
+                          <Link
+                            href={`/${vehicleId}`}
+                            className="w-full bg-white border border-gray-100 hover:border-gray-200 rounded-2xl p-6 flex flex-col hover:shadow-md transition-all duration-300 group text-left"
+                          >
+                            {/* Image */}
+                            <div className="relative aspect-[16/10] w-full bg-white overflow-hidden mb-6 flex items-center justify-center">
+                              <SafeImage
+                                src={vehicleCardImage}
+                                alt={vehicleName}
+                                fill
+                                sizes="(max-width: 768px) 100vw, 350px"
+                                className="object-contain object-center scale-[1.05] group-hover:scale-[1.08] transition-transform duration-500 pointer-events-none"
+                                unoptimized={true}
+                              />
+                            </div>
 
-                          {/* Info */}
-                          <h3 className="text-base sm:text-lg font-bold tracking-tight uppercase text-black mb-1 group-hover:text-[#066FEF] transition-colors font-sans">
-                            {vehicleName}
-                          </h3>
-                          <p className="text-xs sm:text-sm text-neutral-500 font-medium font-sans">
-                            Giá khởi điểm:{" "}
-                            <span className="text-[#066FEF] font-bold">
-                              {formatPrice(vehiclePrice)}
-                            </span>
-                          </p>
-                        </Link>
+                            {/* Info */}
+                            <h3 className="text-base sm:text-lg font-bold tracking-tight uppercase text-black mb-1 group-hover:text-[#066FEF] transition-colors font-sans">
+                              {vehicleName}
+                            </h3>
+                            <p className="text-xs sm:text-sm text-neutral-500 font-medium font-sans">
+                              Giá khởi điểm:{" "}
+                              <span className="text-[#066FEF] font-bold">
+                                {formatPrice(vehiclePrice)}
+                              </span>
+                            </p>
+                          </Link>
+                        </motion.div>
                       );
                     })}
                   </div>
@@ -900,19 +920,32 @@ export default function Home() {
         <div className="max-w-[1440px] mx-auto w-full">
           <div className="max-w-[1152px] mx-auto w-full px-6 xl:px-0">
             {/* Title Block */}
-            <div className="flex flex-col gap-4 text-left mb-10 md:mb-12 max-w-[900px]">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="flex flex-col gap-4 text-left mb-10 md:mb-12 max-w-[900px]"
+            >
               <h2 className="text-4xl md:text-[48px] font-extrabold text-black tracking-tight font-antenna leading-none">
                 <span className="text-[#066FEF]">Công nghệ</span> trên xe Ford
               </h2>
               <p className="text-base md:text-lg text-neutral-600 font-medium leading-relaxed font-antenna">
                 Khám phá các trang bị công nghệ hiện đại hàng đầu phân khúc trên các dòng xe Ford thế hệ mới giúp hành trình của bạn an toàn, kết nối liền mạch và tràn đầy cảm hứng.
               </p>
-            </div>
+            </motion.div>
 
             {/* Grid layout - 3 columns */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 w-full mt-12">
               {techItems.map((card, idx) => (
-                <div key={idx} className="flex flex-col gap-5 text-left group">
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: idx * 0.05, ease: "easeOut" }}
+                  className="flex flex-col gap-5 text-left group"
+                >
                   {/* Card Image container with rounded corners */}
                   <div className="relative aspect-[16/10] overflow-hidden rounded-[20px] border border-neutral-200/60 w-full bg-neutral-50 shadow-xs">
                     <SafeImage
@@ -945,7 +978,7 @@ export default function Home() {
                       </Button>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -1103,7 +1136,13 @@ export default function Home() {
         <div className="max-w-[1440px] mx-auto w-full">
           <div className="max-w-[1152px] mx-auto w-full px-6 xl:px-0">
             {/* Header Block */}
-            <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 md:mb-12 gap-6 text-left">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="flex flex-col md:flex-row md:items-end justify-between mb-10 md:mb-12 gap-6 text-left"
+            >
               <div className="space-y-4">
                 <span className="text-xs font-bold text-[#066FEF] uppercase tracking-[0.2em] block">
                   Tin tức & Chương Trình
@@ -1122,52 +1161,68 @@ export default function Home() {
               >
                 Xem thêm tin tức
               </Button>
-            </div>
+            </motion.div>
 
             {homeArticles.length > 0 ? (
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
                 {/* Left: Large featured article (66% width) */}
                 {homeArticles[0] && (
-                  <Link
-                    href={`/tin-tuc/${homeArticles[0].id}`}
-                    className="lg:col-span-8 relative aspect-[16/10] overflow-hidden rounded-[8px] border border-neutral-200/80 group block"
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, ease: "easeOut" }}
+                    className="lg:col-span-8 flex"
                   >
-                    <img
-                      src={homeArticles[0].image}
-                      alt={homeArticles[0].title}
-                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
-                      onError={handleImageError}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
-                    <div className="absolute bottom-8 left-8 right-8 text-left text-white">
-                      <h3 className="text-xl md:text-2xl font-bold uppercase tracking-wide font-sans line-clamp-2 drop-shadow-md">
-                        {homeArticles[0].title}
-                      </h3>
-                    </div>
-                  </Link>
-                )}
-
-                {/* Right: Stacked smaller articles (33% width) */}
-                <div className="lg:col-span-4 flex flex-col justify-between gap-4">
-                  {homeArticles.slice(1, 3).map((art) => (
                     <Link
-                      key={art.id}
-                      href={`/tin-tuc/${art.id}`}
-                      className="relative flex-1 min-h-[190px] overflow-hidden rounded-[8px] border border-neutral-200/80 group block"
+                      href={`/tin-tuc/${homeArticles[0].id}`}
+                      className="w-full relative aspect-[16/10] overflow-hidden rounded-[8px] border border-neutral-200/80 group block animate-fade-in"
                     >
                       <img
-                        src={art.image}
-                        alt={art.title}
+                        src={homeArticles[0].image}
+                        alt={homeArticles[0].title}
                         className="absolute inset-0 w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
                         onError={handleImageError}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
-                      <div className="absolute bottom-6 left-6 right-6 text-left text-white space-y-2">
-                        <h3 className="text-sm font-bold uppercase tracking-wide font-sans line-clamp-2 leading-snug drop-shadow-md">
-                          {art.title}
+                      <div className="absolute bottom-8 left-8 right-8 text-left text-white">
+                        <h3 className="text-xl md:text-2xl font-bold uppercase tracking-wide font-sans line-clamp-2 drop-shadow-md">
+                          {homeArticles[0].title}
                         </h3>
                       </div>
                     </Link>
+                  </motion.div>
+                )}
+
+                {/* Right: Stacked smaller articles (33% width) */}
+                <div className="lg:col-span-4 flex flex-col justify-between gap-4">
+                  {homeArticles.slice(1, 3).map((art, idx) => (
+                    <motion.div
+                      key={art.id}
+                      initial={{ opacity: 0, y: 30 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: (idx + 1) * 0.1, ease: "easeOut" }}
+                      className="flex-1 flex animate-fade-in"
+                    >
+                      <Link
+                        href={`/tin-tuc/${art.id}`}
+                        className="w-full relative flex-1 min-h-[190px] overflow-hidden rounded-[8px] border border-neutral-200/80 group block"
+                      >
+                        <img
+                          src={art.image}
+                          alt={art.title}
+                          className="absolute inset-0 w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
+                          onError={handleImageError}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
+                        <div className="absolute bottom-6 left-6 right-6 text-left text-white space-y-2">
+                          <h3 className="text-sm font-bold uppercase tracking-wide font-sans line-clamp-2 leading-snug drop-shadow-md">
+                            {art.title}
+                          </h3>
+                        </div>
+                      </Link>
+                    </motion.div>
                   ))}
                 </div>
               </div>
@@ -1193,7 +1248,13 @@ export default function Home() {
           sizes="100vw"
           className="object-cover object-center"
         />
-        <div className="absolute inset-0 bg-black/45 flex flex-col items-center justify-center text-center p-6">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="absolute inset-0 bg-black/45 flex flex-col items-center justify-center text-center p-6"
+        >
           <h2 className="text-2xl md:text-4xl lg:text-[42px] font-extrabold text-white uppercase tracking-wider font-sans mb-6 max-w-4xl leading-tight drop-shadow-md">
             Khám Phá Hành Trình Mới Cùng Ford
           </h2>
@@ -1205,7 +1266,7 @@ export default function Home() {
           >
             Đăng ký lái thử ngay
           </Button>
-        </div>
+        </motion.div>
       </section>
 
 
