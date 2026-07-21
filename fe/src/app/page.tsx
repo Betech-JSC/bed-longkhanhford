@@ -1015,7 +1015,7 @@ export default function Home() {
                         
                         {/* Main clickable area for the card body */}
                         <Link
-                          href={item.link}
+                          href="/san-pham"
                           onClick={(e) => {
                             if (hasMoved) {
                               e.preventDefault();
@@ -1042,7 +1042,7 @@ export default function Home() {
                             <Button
                               variant="white"
                               size="sm"
-                              href={item.link}
+                              href="/san-pham"
                               onClick={(e) => {
                                 if (hasMoved) {
                                   e.preventDefault();
