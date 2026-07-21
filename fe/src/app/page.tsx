@@ -1524,7 +1524,7 @@ export default function Home() {
               <div className="lg:col-span-7 relative h-[320px] sm:h-[400px] lg:h-auto min-h-[350px] w-full rounded-[12px] overflow-hidden border border-neutral-200/80 shadow-sm bg-gray-100">
                 {[
                   { src: "/service-fixed-car.webp", pos: "object-center" },
-                  { src: "/service-delivery.webp", pos: "object-top" },
+                  { src: "/service-delivery.webp", pos: "object-center" },
                   { src: "/service-support-customer.webp", pos: "object-center" }
                 ].map((img, idx) => {
                   const isActive = activeServiceTab === idx;
