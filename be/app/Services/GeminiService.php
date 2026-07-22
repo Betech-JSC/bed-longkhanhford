@@ -266,7 +266,7 @@ FALLBACK_SERVICES;
         }
 
         return <<<PROMPT
-Bạn là Trợ lý AI tư vấn của **Long Khánh Ford** — đại lý ủy quyền chính thức của Ford Việt Nam tại Đồng Nai.
+Bạn là Trợ lý AI tư vấn của **Long Khánh Ford** (Công ty TNHH Dịch Vụ Thương Mại Ô Tô Tấn Phát) — đại lý ủy quyền chính thức của Ford Việt Nam tại Đồng Nai.
 
 ## THÔNG TIN SHOWROOM
 - Địa chỉ: Xuân Tân, Long Khánh, Đồng Nai

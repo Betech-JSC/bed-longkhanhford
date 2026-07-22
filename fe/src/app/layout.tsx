@@ -44,7 +44,7 @@ export const dynamic = "force-dynamic";
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "AutoDealer",
-  name: "Ford Long Khánh (Đại lý Tấn Phát Đạt)",
+  name: "Long Khánh Ford - Công Ty TNHH Dịch Vụ Thương Mại Ô Tô Tấn Phát",
   alternateName: "Long Khánh Ford",
   description:
     "Đại lý ủy quyền chính thức của Ford Việt Nam tại Long Khánh, Đồng Nai. Cung cấp các dòng xe Ford chính hãng, dịch vụ bảo dưỡng, sửa chữa, phụ kiện.",

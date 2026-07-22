@@ -43,12 +43,17 @@ export default function Footer() {
         
         {/* Column 1: Company Profile Info (spans 3) */}
         <div className="space-y-4 lg:col-span-3">
-          <h3 className="text-[20px] font-extrabold tracking-tight text-[#002f6c] uppercase font-display leading-[1.3]">
-            LONG KHÁNH FORD (ĐẠI LÝ TẤN PHÁT ĐẠT)
-          </h3>
+          <div className="space-y-1">
+            <h3 className="text-[20px] font-extrabold tracking-tight text-[#002f6c] font-display leading-[1.3]">
+              Long Khánh Ford
+            </h3>
+            <p className="text-xs font-bold text-[#002f6c] font-display leading-snug">
+              Công Ty TNHH Dịch Vụ Thương Mại Ô Tô Tấn Phát
+            </p>
+          </div>
           <div className="text-xs text-neutral-600 space-y-2.5 font-normal">
             <p>
-              <strong className="text-neutral-800 font-bold">Mã số thuế:</strong> 3600843328
+              <strong className="text-neutral-800 font-bold">Mã số thuế:</strong> 3603892309
             </p>
             <p>
               <strong className="text-neutral-800 font-bold">Địa chỉ:</strong> Đường 21/4, Tổ 1, Khu phố Cẩm Tân, Phường Hàng Gòn, Thành phố Đồng Nai, Việt Nam
