@@ -151,9 +151,34 @@ class VehicleController extends Controller
             ]);
         }
 
+        // Pre-clean categories and category_ids
+        if ($request->has('category_ids') || $request->has('categories')) {
+            $rawCat = $request->input('category_ids', $request->input('categories', []));
+            if (is_string($rawCat)) {
+                $rawCat = json_decode($rawCat, true) ?? [];
+            }
+            if (is_array($rawCat)) {
+                $cleanCatIds = collect($rawCat)->map(function ($item) {
+                    if (is_array($item)) return $item['id'] ?? $item['vehicle_category_id'] ?? null;
+                    if (is_object($item)) return $item->id ?? $item->vehicle_category_id ?? null;
+                    return is_numeric($item) ? (int)$item : null;
+                })->filter()->values()->toArray();
+
+                $request->merge([
+                    'category_ids' => $cleanCatIds,
+                    'categories'   => $cleanCatIds,
+                ]);
+            }
+        }
+
+        if (!$request->input('type')) {
+            $request->merge(['type' => 'suv']);
+        }
+
         // List of all keys that must be validated as arrays
         $arrayKeys = [
             'category_ids',
+            'categories',
             'images',
             'colors',
             'images_360_external',

@@ -1382,7 +1382,15 @@ export default {
                 accessories: [],
                 ...item,
             }
-            data.category_ids = data.category_ids || (data.category_id ? [data.category_id] : [])
+            if (Array.isArray(data.categories) && data.categories.length > 0) {
+                data.category_ids = data.categories.map(c => (typeof c === 'object' ? c.id : c)).filter(Boolean);
+            } else if (Array.isArray(data.category_ids) && data.category_ids.length > 0) {
+                data.category_ids = data.category_ids.map(c => (typeof c === 'object' ? c.id : c)).filter(Boolean);
+            } else if (data.category_id) {
+                data.category_ids = [data.category_id];
+            } else {
+                data.category_ids = [];
+            }
             data.images_360_external = data.images_360_external || []
             data.images_360_internal = data.images_360_internal || []
             data.layout_blocks = data.layout_blocks || []
