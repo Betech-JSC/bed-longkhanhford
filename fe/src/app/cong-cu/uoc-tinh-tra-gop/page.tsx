@@ -309,7 +309,7 @@ export default function InstallmentCalculatorPage() {
           <div>
             <h1 className="text-2xl font-bold text-[#00095B] uppercase tracking-tight">LONG KHÁNH FORD</h1>
             <p className="text-xs text-gray-500 mt-1">
-              Địa chỉ: Đường 21/4, Tổ 1, Khu phố Cẩm Tân, Phường Hàng Gòn, Thành phố Đồng Nai, Việt Nam
+              Địa chỉ: Đường 21/4, Tổ 1, Khu phố Cẩm Tân, Phường Xuân Tân, Thành phố Long Khánh, Tỉnh Đồng Nai, Việt Nam
             </p>
             <p className="text-xs text-gray-500">Hotline KD: 0812 86 86 22 | Email: marketing@longkhanhford.com.vn</p>
           </div>

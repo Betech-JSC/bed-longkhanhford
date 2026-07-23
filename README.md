@@ -1,6 +1,6 @@
-# 🚗 Ford Đồng Nai - Monorepo (Next.js + Laravel CMS)
+# 🚗 Long Khánh Ford - Monorepo (Next.js + Laravel CMS)
 
-Dự án website chính thức của **Đồng Nai Ford**, bao gồm trang giới thiệu sản phẩm & tin tức dành cho khách hàng (Frontend) và hệ quản trị nội dung CMS (Backend) tích hợp chuẩn SEO.
+Dự án website chính thức của **Long Khánh Ford**, bao gồm trang giới thiệu sản phẩm & tin tức dành cho khách hàng (Frontend) và hệ quản trị nội dung CMS (Backend) tích hợp chuẩn SEO.
 
 Dự án được tổ chức theo mô hình **Monorepo** được ảo hóa và quản lý bởi **Docker & Nginx Gateway**.
 

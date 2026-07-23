@@ -99,7 +99,7 @@ class GeminiService
     }
 
     /**
-     * System Prompt chuyên biệt cho Ford Đồng Nai (Dữ liệu động)
+     * System Prompt chuyên biệt cho Long Khánh Ford (Dữ liệu động)
      */
     private function getSystemPrompt(): string
     {
@@ -361,7 +361,7 @@ PROMPT;
         $keywords = $params['keywords'] ?? '';
         $outline = $params['outline'] ?? '';
 
-        $prompt = "Bạn là chuyên gia marketing chuyên viết bài blog và tin tức chuẩn SEO cho thương hiệu xe hơi Ford Đồng Nai.\n";
+        $prompt = "Bạn là chuyên gia marketing chuyên viết bài blog và tin tức chuẩn SEO cho thương hiệu xe hơi Long Khánh Ford.\n";
         $prompt .= "Hãy viết một bài viết hoàn chỉnh và chất lượng cao bằng tiếng " . ($language === 'vi' ? 'Việt' : 'Anh') . " về chủ đề: \"{$topic}\".\n";
         $prompt .= "Giọng điệu bài viết: {$tone}.\n";
         if (!empty($keywords)) {
@@ -454,7 +454,7 @@ PROMPT;
         $fieldType = $params['field_type'] ?? '';
         $userPrompt = $params['user_prompt'] ?? '';
 
-        $prompt = "Bạn là chuyên gia marketing chuyên viết nội dung quảng cáo xe hơi cho thương hiệu Ford Đồng Nai.\n";
+        $prompt = "Bạn là chuyên gia marketing chuyên viết nội dung quảng cáo xe hơi cho thương hiệu Long Khánh Ford.\n";
         $prompt .= "Hãy viết nội dung cho trường \"{$fieldType}\" thuộc phần \"{$sectionType}\" của xe \"{$vehicleTitle}\".\n";
         if (!empty($userPrompt)) {
             $prompt .= "Yêu cầu đặc biệt từ khách hàng: \"{$userPrompt}\".\n";

@@ -1,7 +1,7 @@
-# Product Requirement Document (PRD) - Website Ford Đồng Nai (DNF)
+# Product Requirement Document (PRD) - Website Long Khánh Ford (LKF)
 
 ## 1. Document Control
-*   **Dự án**: Website Ford Đồng Nai (DNF)
+*   **Dự án**: Website Long Khánh Ford (LKF)
 *   **Khách hàng**: Công ty TNHH Dịch vụ - Thương mại Tấn Phát Đạt
 *   **Đối tác triển khai**: Công ty TNHH Dịch vụ Giải pháp số Betech
 *   **Trạng thái**: Bản thảo (Draft)
@@ -13,7 +13,7 @@
 ## 2. Project Overview & Goals (Tổng quan & Mục tiêu Dự án)
 
 ### 2.1. Bối cảnh
-Website hiện tại của Ford Đồng Nai đang sử dụng nền tảng WordPress cũ với nhiều plugin dư thừa, gây ảnh hưởng tiêu cực tới hiệu suất:
+Website hiện tại của Long Khánh Ford đang sử dụng nền tảng WordPress cũ với nhiều plugin dư thừa, gây ảnh hưởng tiêu cực tới hiệu suất:
 *   Tốc độ tải trang chậm, làm tăng tỷ lệ thoát trang (Bounce rate).
 *   Chưa hỗ trợ công nghệ xem xe 360 độ (360° View) trực quan, hạn chế trải nghiệm khách hàng.
 *   Cấu trúc SEO chưa tối ưu theo các cập nhật thuật toán mới nhất của Google.
@@ -32,7 +32,7 @@ Website hiện tại của Ford Đồng Nai đang sử dụng nền tảng WordP
 ### 3.1. Các Trang Frontend Yêu Cầu
 Website bao gồm các trang chính và trang con sau:
 1.  **Trang chủ (Homepage)**: Hiển thị Banner Hero, Fleet xe nổi bật, Dịch vụ nổi bật, Testimonials, Tin tức, CTA đăng ký lái thử.
-2.  **Giới thiệu (Về chúng tôi)**: Lịch sử, tầm nhìn, sứ mệnh của Ford Đồng Nai (Tấn Phát Đạt).
+2.  **Giới thiệu (Về chúng tôi)**: Lịch sử, tầm nhìn, sứ mệnh của Long Khánh Ford (Tấn Phát Đạt).
 3.  **Danh mục Sản phẩm (Product Catalog)**: Hiển thị các dòng xe Ford (SUV, Pickup, EV...).
 4.  **Chi tiết Sản phẩm (Product Details)**:
     *   Thông tin thông số kỹ thuật, hình ảnh, thư viện video.

@@ -225,7 +225,7 @@ function TestDriveFormContent() {
                   rel="noopener noreferrer"
                   className="font-['Ford_Antenna',sans-serif] text-sm text-[#1a1a1a] leading-relaxed hover:text-[#0562d2] transition-colors"
                 >
-                  Đường 21/4, Tổ 1, Khu phố Cẩm Tân, Phường Hàng Gòn, Thành phố Đồng Nai, Việt Nam
+                  Đường 21/4, Tổ 1, Khu phố Cẩm Tân, Phường Xuân Tân, Thành phố Long Khánh, Tỉnh Đồng Nai, Việt Nam
                 </a>
               </div>
             </div>

@@ -12,7 +12,7 @@ cleanup() {
 # Đăng ký hàm bẫy (trap) khi nhận tín hiệu kết thúc (Ctrl+C)
 trap cleanup INT TERM
 
-echo "🚀 Bắt đầu khởi động các server phát triển dự án Ford Đồng Nai..."
+echo "🚀 Bắt đầu khởi động các server phát triển dự án Long Khánh Ford..."
 echo "--------------------------------------------------------"
 
 # 1. Khởi động Laravel Backend server (php artisan serve)

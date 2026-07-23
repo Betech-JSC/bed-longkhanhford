@@ -1642,7 +1642,7 @@ export default function Home() {
                       rel="noopener noreferrer"
                       className="hover:text-[#066FEF] transition-colors"
                     >
-                      Đường 21/4, Tổ 1, Khu phố Cẩm Tân, Phường Hàng Gòn, Thành phố Đồng Nai, Việt Nam
+                      Đường 21/4, Tổ 1, Khu phố Cẩm Tân, Phường Xuân Tân, Thành phố Long Khánh, Tỉnh Đồng Nai, Việt Nam
                     </a>
                   </p>
                 </div>

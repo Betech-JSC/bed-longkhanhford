@@ -218,7 +218,7 @@ function ContactFormContent() {
                   rel="noopener noreferrer"
                   className="font-antenna text-xs lg:text-sm text-gray-800 leading-relaxed font-semibold hover:text-[#066fef] transition-colors"
                 >
-                  Đường 21/4, Tổ 1, Khu phố Cẩm Tân, Phường Hàng Gòn, Thành phố Đồng Nai, Việt Nam
+                  Đường 21/4, Tổ 1, Khu phố Cẩm Tân, Phường Xuân Tân, Thành phố Long Khánh, Tỉnh Đồng Nai, Việt Nam
                 </a>
               </div>
             </div>
