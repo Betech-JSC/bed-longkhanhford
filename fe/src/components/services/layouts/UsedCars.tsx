@@ -76,7 +76,7 @@ export default function UsedCarsLayout({ service }: { service?: any }) {
         <div className="text-center max-w-3xl mx-auto mb-12">
           <span className="text-[#066fef] font-bold text-xs uppercase tracking-widest block mb-2">Cam Kết An Tâm</span>
           <h2 className="text-2xl md:text-3.5xl font-bold text-gray-900 uppercase tracking-tight">
-            4 LÝ DO CHỌN MUA VÀ ĐỔI XE TẠI FORD ASSURED
+            4 LÝ DO CHỌN MUA VÀ ĐỔI XE TẠI LONG KHÁNH FORD
           </h2>
         </div>
 
