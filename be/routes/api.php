@@ -95,7 +95,7 @@ Route::localized(function () {
 
     // Lấy cấu hình chung và mã inject code cho frontend (GA4, Tag Manager...)
     Route::get('settings/general', function () {
-        $generalSettings = settings()->group('general')->all();
+        $generalSettings = settings()->group('general')->all(true);
         $aboutTeamImages = $generalSettings['about_team_images'] ?? [];
         if (is_string($aboutTeamImages)) {
             $aboutTeamImages = json_decode($aboutTeamImages, true) ?? [];

@@ -72,7 +72,7 @@ export default function AboutPage() {
             const formatted: TeamCard[] = rawImages
               .map((imgItem: any, idx: number) => {
                 let imgUrl = "";
-                let title = `Đội Ngũ Long Khánh Ford ${idx + 1}`;
+                let title = `Đội Ngũ Long Khánh Ford`;
 
                 if (typeof imgItem === "string") {
                   imgUrl = imgItem;
@@ -83,16 +83,21 @@ export default function AboutPage() {
                     imgItem.file ||
                     imgItem.image ||
                     "";
-                  if (imgItem.name || imgItem.title) {
-                    title = imgItem.name || imgItem.title;
+                  if (imgItem.title || imgItem.alt || imgItem.name) {
+                    title = imgItem.title || imgItem.alt || imgItem.name;
                   }
                 }
 
-                if (imgUrl && !imgUrl.startsWith("http") && !imgUrl.startsWith("/")) {
-                  imgUrl = "/" + imgUrl;
-                }
-                if (imgUrl && imgUrl.startsWith("/storage")) {
-                  imgUrl = `${apiBase}${imgUrl}`;
+                if (imgUrl) {
+                  if (imgUrl.includes("localhost") || imgUrl.includes("127.0.0.1")) {
+                    imgUrl = imgUrl.replace(/^https?:\/\/[^\/]+/, apiBase);
+                  }
+                  if (!imgUrl.startsWith("http") && !imgUrl.startsWith("/")) {
+                    imgUrl = "/" + imgUrl;
+                  }
+                  if (imgUrl.startsWith("/storage")) {
+                    imgUrl = `${apiBase}${imgUrl}`;
+                  }
                 }
 
                 return {
@@ -105,12 +110,14 @@ export default function AboutPage() {
               .filter((card) => Boolean(card.image));
 
             if (formatted.length > 0) {
-              const half = Math.ceil(formatted.length / 2);
-              const r1 = formatted.slice(0, half);
-              const r2 = formatted.slice(half);
+              let pool = [...formatted];
+              while (pool.length < 8) {
+                pool = [...pool, ...formatted];
+              }
 
-              setTeamRow1(r1.length > 0 ? r1 : formatted);
-              setTeamRow2(r2.length > 0 ? r2 : formatted);
+              const half = Math.ceil(pool.length / 2);
+              setTeamRow1(pool.slice(0, half));
+              setTeamRow2(pool.slice(half));
             }
           }
         }
