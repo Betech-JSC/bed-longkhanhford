@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, X, Briefcase } from "lucide-react";
+import { ArrowLeft, ArrowRight, X, Briefcase, ChevronLeft, ChevronRight, ZoomIn } from "lucide-react";
 import { aboutAssets, handleImageError } from "@/lib/site-assets";
 import { jobsAPI, settingsAPI } from "@/lib/api";
 interface TeamCard {
@@ -104,6 +104,87 @@ export default function AboutPage() {
   // Team Cards State (Dynamic from CMS)
   const [teamRow1, setTeamRow1] = useState<TeamCard[]>(row1Cards);
   const [teamRow2, setTeamRow2] = useState<TeamCard[]>(row2Cards);
+
+  // Lightbox State for Image Zoom & Slide
+  const [lightbox, setLightbox] = useState<{
+    isOpen: boolean;
+    currentIndex: number;
+    images: Array<{ src: string; title: string }>;
+  }>({
+    isOpen: false,
+    currentIndex: 0,
+    images: [],
+  });
+
+  const openLightbox = (images: Array<{ src: string; title: string }>, index: number) => {
+    setLightbox({
+      isOpen: true,
+      currentIndex: index,
+      images,
+    });
+  };
+
+  const closeLightbox = () => {
+    setLightbox((prev) => ({ ...prev, isOpen: false }));
+  };
+
+  const nextImage = useCallback(() => {
+    setLightbox((prev) => ({
+      ...prev,
+      currentIndex: (prev.currentIndex + 1) % prev.images.length,
+    }));
+  }, []);
+
+  const prevImage = useCallback(() => {
+    setLightbox((prev) => ({
+      ...prev,
+      currentIndex: (prev.currentIndex - 1 + prev.images.length) % prev.images.length,
+    }));
+  }, []);
+
+  // Keyboard controls for Lightbox
+  useEffect(() => {
+    if (!lightbox.isOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeLightbox();
+      else if (e.key === "ArrowLeft") prevImage();
+      else if (e.key === "ArrowRight") nextImage();
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "";
+    };
+  }, [lightbox.isOpen, nextImage, prevImage]);
+
+  const getPageGalleryImages = useCallback(() => {
+    const staticList = [
+      { src: "/images/about/image-introduce.jpg", title: "Tập thể đội ngũ & Ban lãnh đạo Long Khánh Ford" },
+      { src: "/images/about/showroom-entrance.jpg", title: "Showroom trưng bày xe Long Khánh Ford" },
+      { src: "/images/about/image-about-2.jpg", title: "Khoang xưởng dịch vụ sửa chữa Brand@Retail" },
+      { src: "/images/about/image-vision-1.jpg", title: "Đội ngũ nhân sự Long Khánh Ford" },
+      { src: "/images/about/image-vision-2.jpg", title: "Lễ tân & Đón tiếp khách hàng" },
+      { src: "/images/about/image-vision-3.jpg", title: "Tư vấn sản phẩm chuyên nghiệp" },
+      { src: "/images/about/image-vision-4.jpg", title: "Sự kiện tri ân khách hàng" },
+    ];
+
+    const teamList = [...teamRow1, ...teamRow2].map((card) => ({
+      src: card.image,
+      title: card.name,
+    }));
+
+    const combined = [...staticList, ...teamList];
+    return combined.filter((item, pos, self) => self.findIndex((i) => i.src === item.src) === pos);
+  }, [teamRow1, teamRow2]);
+
+  const handleImageClick = (imageSrc: string) => {
+    const images = getPageGalleryImages();
+    const idx = images.findIndex((img) => img.src === imageSrc);
+    openLightbox(images, idx !== -1 ? idx : 0);
+  };
 
   // Fetch CMS General Settings for Team Images & Jobs
   useEffect(() => {
@@ -294,15 +375,21 @@ export default function AboutPage() {
 
               {/* Showroom Image */}
               <ScrollReveal delay={200}>
-                <div className="relative w-full aspect-[16/9] rounded-none overflow-hidden border border-[#e5e5e5] group cursor-pointer">
+                <div
+                  onClick={() => handleImageClick("/images/about/image-introduce.jpg")}
+                  className="relative w-full aspect-[16/9] rounded-none overflow-hidden border border-[#e5e5e5] group cursor-pointer"
+                >
                   <img
                     src="/images/about/image-introduce.jpg"
                     alt="Showroom Long Khánh Ford"
                     className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-between p-6">
                     <span className="text-xs font-bold text-white tracking-widest uppercase font-antenna">
                       TẬP THỂ ĐỘI NGŨ & BAN LÃNH ĐẠO LONG KHÁNH FORD
+                    </span>
+                    <span className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white backdrop-blur-xs">
+                      <ZoomIn className="w-4 h-4" />
                     </span>
                   </div>
                 </div>
@@ -350,15 +437,21 @@ export default function AboutPage() {
             {/* Right Block: Image */}
             <div className="lg:col-span-5 flex">
               <ScrollReveal direction="left" delay={200} className="w-full">
-                <div className="w-full aspect-[4/5] relative rounded-none overflow-hidden border border-[#e5e5e5] group cursor-pointer">
+                <div
+                  onClick={() => handleImageClick("/images/about/showroom-entrance.jpg")}
+                  className="w-full aspect-[4/5] relative rounded-none overflow-hidden border border-[#e5e5e5] group cursor-pointer"
+                >
                   <img
                     src="/images/about/showroom-entrance.jpg"
                     alt="Showroom Long Khánh Ford"
                     className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-between p-6">
                     <span className="text-xs font-bold text-white tracking-widest uppercase font-antenna">
                       KHÔNG GIAN TRƯNG BÀY XE SANG TRỌNG
+                    </span>
+                    <span className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white backdrop-blur-xs">
+                      <ZoomIn className="w-4 h-4" />
                     </span>
                   </div>
                 </div>
@@ -375,15 +468,21 @@ export default function AboutPage() {
             {/* Left Block: Image */}
             <div className="lg:col-span-5 flex">
               <ScrollReveal direction="right" delay={100} className="w-full">
-                <div className="w-full aspect-[4/5] relative rounded-none overflow-hidden border border-[#e5e5e5] group cursor-pointer">
+                <div
+                  onClick={() => handleImageClick("/images/about/image-about-2.jpg")}
+                  className="w-full aspect-[4/5] relative rounded-none overflow-hidden border border-[#e5e5e5] group cursor-pointer"
+                >
                   <img
                     src="/images/about/image-about-2.jpg"
                     alt="Xưởng dịch vụ Long Khánh Ford"
                     className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-between p-6">
                     <span className="text-xs font-bold text-white tracking-widest uppercase font-antenna">
                       XƯỞNG DỊCH VỤ BRAND@RETAIL ĐẠT CHUẨN
+                    </span>
+                    <span className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white backdrop-blur-xs">
+                      <ZoomIn className="w-4 h-4" />
                     </span>
                   </div>
                 </div>
@@ -456,15 +555,21 @@ export default function AboutPage() {
             <div className="lg:col-span-8 flex flex-col md:flex-row gap-3 items-stretch">
               {/* Primary tall card */}
               <ScrollReveal delay={100} className="w-full md:w-[45%]">
-                <div className="w-full aspect-[3/4] relative rounded-none overflow-hidden border border-[#e5e5e5] bg-gray-100 group cursor-pointer h-full">
+                <div
+                  onClick={() => handleImageClick("/images/about/image-vision-1.jpg")}
+                  className="w-full aspect-[3/4] relative rounded-none overflow-hidden border border-[#e5e5e5] bg-gray-100 group cursor-pointer h-full"
+                >
                   <img
                     src="/images/about/image-vision-1.jpg"
                     alt="Vision Gallery Left"
                     className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-between p-4">
                     <span className="text-[11px] font-bold text-white tracking-wider uppercase font-antenna">
                       ĐỘI NGŨ NHÂN SỰ & SHOWROOM
+                    </span>
+                    <span className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center text-white backdrop-blur-xs">
+                      <ZoomIn className="w-3.5 h-3.5" />
                     </span>
                   </div>
                 </div>
@@ -474,15 +579,21 @@ export default function AboutPage() {
               <div className="flex-1 flex flex-col justify-between gap-3">
                 {/* Horizontal image */}
                 <ScrollReveal delay={200}>
-                  <div className="w-full aspect-[2/1] relative rounded-none overflow-hidden border border-[#e5e5e5] bg-gray-100 group cursor-pointer">
+                  <div
+                    onClick={() => handleImageClick("/images/about/image-vision-2.jpg")}
+                    className="w-full aspect-[2/1] relative rounded-none overflow-hidden border border-[#e5e5e5] bg-gray-100 group cursor-pointer"
+                  >
                     <img
                       src="/images/about/image-vision-2.jpg"
                       alt="Vision Gallery Top Right"
                       className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-between p-4">
                       <span className="text-[11px] font-bold text-white tracking-wider uppercase font-antenna">
                         LỄ TÂN & ĐÓN TIẾP KHÁCH HÀNG
+                      </span>
+                      <span className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center text-white backdrop-blur-xs">
+                        <ZoomIn className="w-3.5 h-3.5" />
                       </span>
                     </div>
                   </div>
@@ -491,30 +602,42 @@ export default function AboutPage() {
                 {/* Staggered double column */}
                 <div className="grid grid-cols-2 gap-3 flex-1">
                   <ScrollReveal delay={300} className="h-full">
-                    <div className="relative rounded-none overflow-hidden border border-[#e5e5e5] bg-gray-100 h-full min-h-[140px] group cursor-pointer">
+                    <div
+                      onClick={() => handleImageClick("/images/about/image-vision-3.jpg")}
+                      className="relative rounded-none overflow-hidden border border-[#e5e5e5] bg-gray-100 h-full min-h-[140px] group cursor-pointer"
+                    >
                       <img
                         src="/images/about/image-vision-3.jpg"
                         alt="Vision Gallery Bottom Left"
                         className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-between p-3">
                         <span className="text-[10px] font-bold text-white tracking-wider uppercase font-antenna line-clamp-1">
                           TƯ VẤN SẢN PHẨM
+                        </span>
+                        <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-white backdrop-blur-xs flex-shrink-0">
+                          <ZoomIn className="w-3 h-3" />
                         </span>
                       </div>
                     </div>
                   </ScrollReveal>
 
                   <ScrollReveal delay={400} className="h-full">
-                    <div className="relative rounded-none overflow-hidden border border-[#e5e5e5] bg-gray-100 h-full min-h-[140px] group cursor-pointer">
+                    <div
+                      onClick={() => handleImageClick("/images/about/image-vision-4.jpg")}
+                      className="relative rounded-none overflow-hidden border border-[#e5e5e5] bg-gray-100 h-full min-h-[140px] group cursor-pointer"
+                    >
                       <img
                         src="/images/about/image-vision-4.jpg"
                         alt="Vision Gallery Bottom Right"
                         className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-between p-3">
                         <span className="text-[10px] font-bold text-white tracking-wider uppercase font-antenna line-clamp-1">
                           SỰ KIỆN TRI ÂN
+                        </span>
+                        <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-white backdrop-blur-xs flex-shrink-0">
+                          <ZoomIn className="w-3 h-3" />
                         </span>
                       </div>
                     </div>
@@ -666,9 +789,9 @@ export default function AboutPage() {
           <div className="w-full overflow-hidden">
             <div className="animate-marquee-l gap-6">
               {[...teamRow1, ...teamRow1].map((card, idx) => (
-                <Link
+                <div
                   key={`r1-${card.id}-${idx}`}
-                  href={card.link}
+                  onClick={() => handleImageClick(card.image)}
                   className="w-[320px] md:w-[420px] h-[220px] md:h-[280px] relative flex-shrink-0 rounded-none overflow-hidden group cursor-pointer block border border-[#e5e5e5] bg-gray-50"
                 >
                   <img
@@ -678,7 +801,7 @@ export default function AboutPage() {
                     loading="lazy"
                   />
                   {/* Subtle info on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent flex items-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent flex items-end justify-between p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
                     <div className="flex flex-col gap-1">
                       <span className="text-[9px] font-extrabold text-[#066fef] tracking-widest uppercase">
                         SỰ KIỆN & ĐỘI NGŨ
@@ -687,8 +810,11 @@ export default function AboutPage() {
                         {card.name}
                       </span>
                     </div>
+                    <span className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white backdrop-blur-xs flex-shrink-0">
+                      <ZoomIn className="w-4 h-4" />
+                    </span>
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
           </div>
@@ -697,9 +823,9 @@ export default function AboutPage() {
           <div className="w-full overflow-hidden">
             <div className="animate-marquee-r gap-6">
               {[...teamRow2, ...teamRow2].map((card, idx) => (
-                <Link
+                <div
                   key={`r2-${card.id}-${idx}`}
-                  href={card.link}
+                  onClick={() => handleImageClick(card.image)}
                   className="w-[320px] md:w-[420px] h-[220px] md:h-[280px] relative flex-shrink-0 rounded-none overflow-hidden group cursor-pointer block border border-[#e5e5e5] bg-gray-50"
                 >
                   <img
@@ -709,7 +835,7 @@ export default function AboutPage() {
                     loading="lazy"
                   />
                   {/* Subtle info on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent flex items-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent flex items-end justify-between p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
                     <div className="flex flex-col gap-1">
                       <span className="text-[9px] font-extrabold text-[#066fef] tracking-widest uppercase">
                         CƠ SỞ VẬT CHẤT & ĐỘI NGŨ
@@ -718,8 +844,11 @@ export default function AboutPage() {
                         {card.name}
                       </span>
                     </div>
+                    <span className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white backdrop-blur-xs flex-shrink-0">
+                      <ZoomIn className="w-4 h-4" />
+                    </span>
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
           </div>
@@ -823,6 +952,82 @@ export default function AboutPage() {
               >
                 Nộp đơn ứng tuyển
               </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* IMAGE LIGHTBOX MODAL */}
+      {lightbox.isOpen && lightbox.images.length > 0 && (
+        <div className="fixed inset-0 bg-black/95 z-50 flex flex-col justify-between p-4 md:p-8 backdrop-blur-md select-none animate-fadeIn">
+          {/* Top Bar */}
+          <div className="flex items-center justify-between text-white z-10">
+            <div className="flex items-center gap-3">
+              <span className="text-xs font-bold text-[#066fef] tracking-widest uppercase font-antenna bg-white/10 px-3 py-1 border border-white/10">
+                LONG KHÁNH FORD GALLERY
+              </span>
+              <span className="text-xs text-gray-300 font-antenna">
+                {lightbox.currentIndex + 1} / {lightbox.images.length}
+              </span>
+            </div>
+
+            <button
+              onClick={closeLightbox}
+              className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors focus:outline-none"
+              aria-label="Close"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
+
+          {/* Main Image Viewport with Nav Arrows */}
+          <div className="relative flex-1 flex items-center justify-center overflow-hidden my-4">
+            <button
+              onClick={prevImage}
+              className="absolute left-2 md:left-6 z-20 w-12 h-12 rounded-full bg-black/60 hover:bg-[#066fef] border border-white/20 flex items-center justify-center text-white transition-all transform hover:scale-110 focus:outline-none shadow-2xl"
+              aria-label="Previous image"
+            >
+              <ChevronLeft className="w-7 h-7" />
+            </button>
+
+            <div className="relative max-w-full max-h-full flex items-center justify-center">
+              <img
+                src={lightbox.images[lightbox.currentIndex]?.src}
+                alt={lightbox.images[lightbox.currentIndex]?.title || "Gallery photo"}
+                className="max-w-[90vw] max-h-[75vh] object-contain shadow-2xl border border-white/10 transition-all duration-300"
+              />
+            </div>
+
+            <button
+              onClick={nextImage}
+              className="absolute right-2 md:right-6 z-20 w-12 h-12 rounded-full bg-black/60 hover:bg-[#066fef] border border-white/20 flex items-center justify-center text-white transition-all transform hover:scale-110 focus:outline-none shadow-2xl"
+              aria-label="Next image"
+            >
+              <ChevronRight className="w-7 h-7" />
+            </button>
+          </div>
+
+          {/* Footer Info & Thumbnails */}
+          <div className="flex flex-col items-center gap-3 text-center z-10 max-w-3xl mx-auto w-full">
+            <div className="text-sm md:text-base font-bold text-white font-antenna tracking-wide uppercase truncate max-w-full">
+              {lightbox.images[lightbox.currentIndex]?.title}
+            </div>
+
+            {/* Thumbnail Strip */}
+            <div className="flex items-center gap-2 overflow-x-auto max-w-full px-4 py-1.5 scrollbar-none">
+              {lightbox.images.map((img, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setLightbox((prev) => ({ ...prev, currentIndex: idx }))}
+                  className={`w-12 h-8 relative flex-shrink-0 border transition-all ${
+                    idx === lightbox.currentIndex
+                      ? "border-[#066fef] opacity-100 scale-110 shadow-lg"
+                      : "border-transparent opacity-40 hover:opacity-80"
+                  }`}
+                >
+                  <img src={img.src} alt="" className="w-full h-full object-cover" />
+                </button>
+              ))}
             </div>
           </div>
         </div>
