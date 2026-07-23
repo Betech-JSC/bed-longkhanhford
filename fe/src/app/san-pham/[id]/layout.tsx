@@ -143,15 +143,10 @@ export default async function VehicleDetailLayout({
   let rawAllVehicles = [];
 
   try {
-    const [detailRes, allRes] = await Promise.all([
-      vehiclesAPI.getBySlug(id).catch(() => null),
-      vehiclesAPI.getAll({ with_versions: true }).catch(() => null),
-    ]) as [any, any];
-
+    const detailRes = await vehiclesAPI.getBySlug(id).catch(() => null);
     if (detailRes && detailRes.data) {
       apiVehicle = detailRes.data;
     }
-    rawAllVehicles = allRes?.data || allRes || [];
   } catch (err) {
     console.error("Error loading vehicle details on server layout:", err);
   }

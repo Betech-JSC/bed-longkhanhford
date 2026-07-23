@@ -57,6 +57,8 @@ async function fetchAPI<T = any>(endpoint: string, options?: RequestInit): Promi
   }
 }
 
+import { cache } from 'react';
+
 /**
  * Vehicles API
  */
@@ -73,8 +75,8 @@ export const vehiclesAPI = {
   // Get best sellers
   getBestSellers: (params?: Record<string, any>) => fetchAPI('/vehicles/featured'),
   
-  // Get vehicle by slug
-  getBySlug: (slug: string) => fetchAPI(`/vehicles/${slug}`),
+  // Get vehicle by slug (deduplicated per request via React cache)
+  getBySlug: cache((slug: string) => fetchAPI<any>(`/vehicles/${slug}`)),
   
   // Get vehicle categories
   getCategories: () => fetchAPI('/vehicles/categories'),
