@@ -26,6 +26,74 @@ const row2Cards: TeamCard[] = [
   { id: "r2-4", name: "Không Gian Trưng Bày Xe Cao Cấp", image: "/images/about/image-vision-1.jpg", link: "/lien-he" },
 ];
 
+function ScrollReveal({
+  children,
+  className = "",
+  delay = 0,
+  direction = "up",
+}: {
+  children: React.ReactNode;
+  className?: string;
+  delay?: number;
+  direction?: "up" | "down" | "left" | "right" | "none";
+}) {
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          if (ref.current) observer.unobserve(ref.current);
+        }
+      },
+      { threshold: 0.08, rootMargin: "0px 0px -40px 0px" }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => {
+      if (ref.current) observer.unobserve(ref.current);
+    };
+  }, []);
+
+  const getTransform = () => {
+    if (!isVisible) {
+      switch (direction) {
+        case "up":
+          return "translateY(32px)";
+        case "down":
+          return "translateY(-32px)";
+        case "left":
+          return "translateX(32px)";
+        case "right":
+          return "translateX(-32px)";
+        default:
+          return "none";
+      }
+    }
+    return "none";
+  };
+
+  return (
+    <div
+      ref={ref}
+      className={className}
+      style={{
+        opacity: isVisible ? 1 : 0,
+        transform: getTransform(),
+        transition: `opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
+        willChange: "opacity, transform",
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
 export default function AboutPage() {
   // Modal State for recruitment details
   const [selectedJob, setSelectedJob] = useState<any | null>(null);
@@ -184,13 +252,20 @@ export default function AboutPage() {
 
   return (
     <div className="bg-white flex-1 min-h-screen text-[#1a1a1a]">
-      {/* SECTION 1: HERO BANNER (Full-width image only) */}
-      <section className="relative w-full h-[400px] md:h-[600px] lg:h-[680px] bg-gray-100 overflow-hidden border-b border-[#e5e5e5]">
+      {/* SECTION 1: HERO BANNER (Full-width image only with slow zoom & badge overlay) */}
+      <section className="relative w-full h-[400px] md:h-[600px] lg:h-[680px] bg-gray-100 overflow-hidden border-b border-[#e5e5e5] group">
         <img
           src="/images/about/banner.jpg"
           alt="Long Khánh Ford Showroom"
-          className="w-full h-full object-cover object-center"
+          className="w-full h-full object-cover object-center group-hover:scale-[1.03] transition-transform duration-1000 ease-out"
         />
+        {/* Floating Glassmorphic Brand Badge */}
+        <div className="absolute bottom-8 left-4 xl:left-[80px] z-10 bg-black/60 backdrop-blur-md border border-white/20 px-5 py-3 text-white flex items-center gap-3 shadow-2xl">
+          <span className="w-2.5 h-2.5 rounded-full bg-[#066fef] animate-pulse flex-shrink-0" />
+          <span className="text-xs font-bold font-antenna tracking-[0.2em] uppercase">
+            LONG KHÁNH FORD &bull; ĐẠI LÝ 3S CHÍNH THỨC
+          </span>
+        </div>
         {/* Clean bottom border strip */}
         <div className="absolute bottom-0 left-0 right-0 h-1 bg-[#066fef]" />
       </section>
@@ -201,26 +276,37 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
             {/* Left label */}
             <div className="lg:col-span-3">
-              <h2 className="text-sm md:text-base font-bold text-[#01095c] uppercase tracking-[0.2em] sticky top-28 font-antenna">
-                Lịch sử hình thành
-              </h2>
+              <ScrollReveal direction="right">
+                <h2 className="text-sm md:text-base font-bold text-[#01095c] uppercase tracking-[0.2em] sticky top-28 font-antenna">
+                  Lịch sử hình thành
+                </h2>
+              </ScrollReveal>
             </div>
 
             {/* Right content flow */}
             <div className="lg:col-span-9 flex flex-col gap-16">
               {/* Massive Intro Paragraph */}
-              <p className="text-[28px] md:text-[34px] font-light leading-[1.5] text-[#1a1a1a] font-antenna max-w-[900px]">
-                Được thành lập với mục tiêu mang lại những giá trị di chuyển đích thực, Long Khánh Ford tự hào là đại lý ủy quyền chính thức đạt tiêu chuẩn 3S toàn cầu của Ford Việt Nam. Chúng tôi không ngừng nỗ lực để cung cấp các dòng xe chất lượng cao và dịch vụ hậu mãi hoàn hảo nhất cho khách hàng.
-              </p>
+              <ScrollReveal delay={100}>
+                <p className="text-[28px] md:text-[34px] font-light leading-[1.5] text-[#1a1a1a] font-antenna max-w-[900px]">
+                  Được thành lập với mục tiêu mang lại những giá trị di chuyển đích thực, Long Khánh Ford tự hào là đại lý ủy quyền chính thức đạt tiêu chuẩn 3S toàn cầu của Ford Việt Nam. Chúng tôi không ngừng nỗ lực để cung cấp các dòng xe chất lượng cao và dịch vụ hậu mãi hoàn hảo nhất cho khách hàng.
+                </p>
+              </ScrollReveal>
 
               {/* Showroom Image */}
-              <div className="relative w-full aspect-[16/9] rounded-none overflow-hidden border border-[#e5e5e5]">
-                <img
-                  src="/images/about/image-introduce.jpg"
-                  alt="Showroom Long Khánh Ford"
-                  className="w-full h-full object-cover object-center"
-                />
-              </div>
+              <ScrollReveal delay={200}>
+                <div className="relative w-full aspect-[16/9] rounded-none overflow-hidden border border-[#e5e5e5] group cursor-pointer">
+                  <img
+                    src="/images/about/image-introduce.jpg"
+                    alt="Showroom Long Khánh Ford"
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                    <span className="text-xs font-bold text-white tracking-widest uppercase font-antenna">
+                      TẬP THỂ ĐỘI NGŨ & BAN LÃNH ĐẠO LONG KHÁNH FORD
+                    </span>
+                  </div>
+                </div>
+              </ScrollReveal>
             </div>
           </div>
         </div>
@@ -232,39 +318,51 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-stretch">
             {/* Left Block: Title & Story */}
             <div className="lg:col-span-7 flex flex-col justify-between py-2">
-              <div className="flex flex-col gap-6">
-                <h3 className="text-[36px] font-bold leading-tight text-[#01095c] font-antenna uppercase max-w-[500px]">
-                  LONG KHÁNH FORD
-                  <span className="block text-xs font-semibold text-gray-400 tracking-wider mt-1 normal-case font-antenna">
-                    Đại lý uỷ quyền của Ford Việt Nam
-                  </span>
-                </h3>
-                <p className="text-sm text-gray-600 leading-[1.8] font-antenna text-justify max-w-[640px]">
-                  Công ty TNHH Dịch vụ – Thương mại ô tô Tấn Phát có tên giao dịch là LONG KHÁNH FORD, thuộc địa phận Xuân Tân, Long Khánh, Đồng Nai. Khuôn viên của Long Khánh Ford có tổng diện tích trên 3200m² bao gồm hệ thống phòng trưng bày và xưởng dịch vụ hiện đại đạt tiêu chuẩn Brand@Retail của Ford toàn cầu.
-                </p>
-              </div>
+              <ScrollReveal direction="up">
+                <div className="flex flex-col gap-6">
+                  <h3 className="text-[36px] font-bold leading-tight text-[#01095c] font-antenna uppercase max-w-[500px]">
+                    LONG KHÁNH FORD
+                    <span className="block text-xs font-semibold text-gray-400 tracking-wider mt-1 normal-case font-antenna">
+                      Đại lý uỷ quyền của Ford Việt Nam
+                    </span>
+                  </h3>
+                  <p className="text-sm text-gray-600 leading-[1.8] font-antenna text-justify max-w-[640px]">
+                    Công ty TNHH Dịch vụ – Thương mại ô tô Tấn Phát có tên giao dịch là LONG KHÁNH FORD, thuộc địa phận Xuân Tân, Long Khánh, Đồng Nai. Khuôn viên của Long Khánh Ford có tổng diện tích trên 3200m² bao gồm hệ thống phòng trưng bày và xưởng dịch vụ hiện đại đạt tiêu chuẩn Brand@Retail của Ford toàn cầu.
+                  </p>
+                </div>
+              </ScrollReveal>
               
-              {/* Highlight statistics block */}
-              <div className="border-t border-[#e5e5e5] pt-8 mt-12 grid grid-cols-2 gap-6 max-w-[500px]">
-                <div>
-                  <div className="text-3xl font-bold text-[#01095c] font-antenna">3200m²</div>
-                  <div className="text-xs text-gray-400 font-antenna mt-1">Tổng diện tích mặt sàn</div>
+              {/* Highlight statistics block with interactive cards */}
+              <ScrollReveal delay={150}>
+                <div className="border-t border-[#e5e5e5] pt-8 mt-12 grid grid-cols-2 gap-6 max-w-[500px]">
+                  <div className="p-4 bg-gray-50 border border-gray-100 hover:border-[#066fef] hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group/stat">
+                    <div className="text-3xl font-bold text-[#01095c] font-antenna group-hover/stat:text-[#066fef] transition-colors">3200m²</div>
+                    <div className="text-xs text-gray-500 font-antenna mt-1">Tổng diện tích mặt sàn</div>
+                  </div>
+                  <div className="p-4 bg-gray-50 border border-gray-100 hover:border-[#066fef] hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group/stat">
+                    <div className="text-3xl font-bold text-[#01095c] font-antenna group-hover/stat:text-[#066fef] transition-colors">Global 3S</div>
+                    <div className="text-xs text-gray-500 font-antenna mt-1">Tiêu chuẩn Ford toàn cầu</div>
+                  </div>
                 </div>
-                <div>
-                  <div className="text-3xl font-bold text-[#01095c] font-antenna">Global 3S</div>
-                  <div className="text-xs text-gray-400 font-antenna mt-1">Tiêu chuẩn Ford toàn cầu</div>
-                </div>
-              </div>
+              </ScrollReveal>
             </div>
 
             {/* Right Block: Image */}
-            <div className="lg:col-span-5 aspect-[4/5] relative rounded-none overflow-hidden border border-[#e5e5e5]">
-              <img
-                src="/images/about/showroom-entrance.jpg"
-                alt="Showroom Long Khánh Ford"
-                className="w-full h-full object-cover object-center"
-              />
-
+            <div className="lg:col-span-5 flex">
+              <ScrollReveal direction="left" delay={200} className="w-full">
+                <div className="w-full aspect-[4/5] relative rounded-none overflow-hidden border border-[#e5e5e5] group cursor-pointer">
+                  <img
+                    src="/images/about/showroom-entrance.jpg"
+                    alt="Showroom Long Khánh Ford"
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                    <span className="text-xs font-bold text-white tracking-widest uppercase font-antenna">
+                      KHÔNG GIAN TRƯNG BÀY XE SANG TRỌNG
+                    </span>
+                  </div>
+                </div>
+              </ScrollReveal>
             </div>
           </div>
         </div>
@@ -275,48 +373,61 @@ export default function AboutPage() {
         <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-stretch">
             {/* Left Block: Image */}
-            <div className="lg:col-span-5 aspect-[4/5] relative rounded-none overflow-hidden border border-[#e5e5e5]">
-              <img
-                src="/images/about/image-about-2.jpg"
-                alt="Xưởng dịch vụ Long Khánh Ford"
-                className="w-full h-full object-cover object-center"
-              />
+            <div className="lg:col-span-5 flex">
+              <ScrollReveal direction="right" delay={100} className="w-full">
+                <div className="w-full aspect-[4/5] relative rounded-none overflow-hidden border border-[#e5e5e5] group cursor-pointer">
+                  <img
+                    src="/images/about/image-about-2.jpg"
+                    alt="Xưởng dịch vụ Long Khánh Ford"
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                    <span className="text-xs font-bold text-white tracking-widest uppercase font-antenna">
+                      XƯỞNG DỊCH VỤ BRAND@RETAIL ĐẠT CHUẨN
+                    </span>
+                  </div>
+                </div>
+              </ScrollReveal>
             </div>
 
             {/* Right Block: Title & Facilities details */}
             <div className="lg:col-span-7 flex flex-col justify-between py-2">
-              <div className="flex flex-col gap-6">
-                <h3 className="text-[36px] font-bold leading-tight text-[#01095c] font-antenna uppercase max-w-[500px]">
-                  TRANG THIẾT BỊ HIỆN ĐẠI
-                  <span className="block text-xs font-semibold text-gray-400 tracking-wider mt-1 normal-case font-antenna">
-                    Quy trình sửa chữa tiêu chuẩn toàn cầu
-                  </span>
-                </h3>
-                <div className="text-sm text-gray-600 leading-[1.8] font-antenna space-y-6 text-justify max-w-[640px]">
-                  <p>
-                    Long Khánh Ford được trang bị các dụng cụ, thiết bị hiện đại và hoàn hảo nhất, chúng tôi tự hào là nơi cung cấp các dòng xe Ford chất lượng cao, các dịch vụ sửa chữa, bảo dưỡng tin cậy, phụ tùng phụ kiện chính hãng cũng như các chương trình ưu đãi hấp dẫn cho khách hàng.
-                  </p>
-                  <p>
-                    Với phương châm <strong className="text-[#01095c] font-semibold">“Vui lòng khách đến, hài lòng khách đi”</strong>, Long Khánh Ford luôn trân trọng và lắng nghe tất cả các ý kiến đóng góp của Quý Khách Hàng, mong mang lại cho Khách Hàng sự hài lòng cao nhất.
-                  </p>
+              <ScrollReveal direction="up" delay={150}>
+                <div className="flex flex-col gap-6">
+                  <h3 className="text-[36px] font-bold leading-tight text-[#01095c] font-antenna uppercase max-w-[500px]">
+                    TRANG THIẾT BỊ HIỆN ĐẠI
+                    <span className="block text-xs font-semibold text-gray-400 tracking-wider mt-1 normal-case font-antenna">
+                      Quy trình sửa chữa tiêu chuẩn toàn cầu
+                    </span>
+                  </h3>
+                  <div className="text-sm text-gray-600 leading-[1.8] font-antenna space-y-6 text-justify max-w-[640px]">
+                    <p>
+                      Long Khánh Ford được trang bị các dụng cụ, thiết bị hiện đại và hoàn hảo nhất, chúng tôi tự hào là nơi cung cấp các dòng xe Ford chất lượng cao, các dịch vụ sửa chữa, bảo dưỡng tin cậy, phụ tùng phụ kiện chính hãng cũng như các chương trình ưu đãi hấp dẫn cho khách hàng.
+                    </p>
+                    <p>
+                      Với phương châm <strong className="text-[#01095c] font-semibold">“Vui lòng khách đến, hài lòng khách đi”</strong>, Long Khánh Ford luôn trân trọng và lắng nghe tất cả các ý kiến đóng góp của Quý Khách Hàng, mong mang lại cho Khách Hàng sự hài lòng cao nhất.
+                    </p>
+                  </div>
                 </div>
-              </div>
+              </ScrollReveal>
 
-              {/* Sub-features or visual bullet cards */}
-              <div className="border-t border-[#e5e5e5] pt-8 mt-12 grid grid-cols-3 gap-4">
-                <div className="flex flex-col gap-1">
-                  <span className="text-xs font-bold text-[#01095c] tracking-widest font-antenna uppercase">01. BẢO DƯỠNG</span>
-                  <span className="text-[11px] text-gray-400 font-antenna">Dịch vụ sửa chữa chung</span>
+              {/* Sub-features interactive cards */}
+              <ScrollReveal delay={250}>
+                <div className="border-t border-[#e5e5e5] pt-8 mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="p-4 bg-white border border-gray-100 hover:border-[#066fef] hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col gap-1 group/feat">
+                    <span className="text-xs font-bold text-[#01095c] group-hover/feat:text-[#066fef] transition-colors tracking-widest font-antenna uppercase">01. BẢO DƯỠNG</span>
+                    <span className="text-[11px] text-gray-500 font-antenna">Dịch vụ sửa chữa chung</span>
+                  </div>
+                  <div className="p-4 bg-white border border-gray-100 hover:border-[#066fef] hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col gap-1 group/feat">
+                    <span className="text-xs font-bold text-[#01095c] group-hover/feat:text-[#066fef] transition-colors tracking-widest font-antenna uppercase">02. SƠN SỬA</span>
+                    <span className="text-[11px] text-gray-500 font-antenna">Đồng sơn sấy hồng ngoại</span>
+                  </div>
+                  <div className="p-4 bg-white border border-gray-100 hover:border-[#066fef] hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col gap-1 group/feat">
+                    <span className="text-xs font-bold text-[#01095c] group-hover/feat:text-[#066fef] transition-colors tracking-widest font-antenna uppercase">03. PHỤ TÙNG</span>
+                    <span className="text-[11px] text-gray-500 font-antenna">Nhập khẩu chính hãng Ford</span>
+                  </div>
                 </div>
-                <div className="flex flex-col gap-1">
-                  <span className="text-xs font-bold text-[#01095c] tracking-widest font-antenna uppercase">02. SƠN SỬA</span>
-                  <span className="text-[11px] text-gray-400 font-antenna">Đồng sơn sấy hồng ngoại</span>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="text-xs font-bold text-[#01095c] tracking-widest font-antenna uppercase">03. PHỤ TÙNG</span>
-                  <span className="text-[11px] text-gray-400 font-antenna">Nhập khẩu chính hãng Ford</span>
-                </div>
-              </div>
+              </ScrollReveal>
             </div>
           </div>
         </div>
@@ -328,55 +439,86 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
             {/* Vision Title & Subtitle */}
             <div className="lg:col-span-4 flex flex-col gap-6">
-              <div className="text-xs font-bold text-[#066fef] uppercase tracking-[0.2em] font-antenna">
-                Tầm nhìn & Sứ mệnh
-              </div>
-              <h2 className="text-[36px] md:text-[44px] font-bold leading-[1.2] text-[#01095c] font-antenna uppercase">
-                TẦM NHÌN DẪN ĐẦU DỊCH VỤ TẠI FORD
-              </h2>
-              <p className="text-sm text-gray-500 leading-relaxed font-antenna text-justify">
-                Mỗi quyết định, cải tiến và hành động của chúng tôi đều hướng đến một mục tiêu duy nhất: kiến tạo trải nghiệm di chuyển an toàn, tiện nghi và trọn vẹn nhất cho mọi gia đình trên mỗi hành trình.
-              </p>
+              <ScrollReveal direction="up">
+                <div className="text-xs font-bold text-[#066fef] uppercase tracking-[0.2em] font-antenna">
+                  Tầm nhìn & Sứ mệnh
+                </div>
+                <h2 className="text-[36px] md:text-[44px] font-bold leading-[1.2] text-[#01095c] font-antenna uppercase mt-2">
+                  TẦM NHÌN DẪN ĐẦU DỊCH VỤ TẠI FORD
+                </h2>
+                <p className="text-sm text-gray-500 leading-relaxed font-antenna text-justify mt-4">
+                  Mỗi quyết định, cải tiến và hành động của chúng tôi đều hướng đến một mục tiêu duy nhất: kiến tạo trải nghiệm di chuyển an toàn, tiện nghi và trọn vẹn nhất cho mọi gia đình trên mỗi hành trình.
+                </p>
+              </ScrollReveal>
             </div>
 
             {/* Asymmetric Overlapping Photo Stack */}
             <div className="lg:col-span-8 flex flex-col md:flex-row gap-6 items-stretch">
               {/* Primary tall card */}
-              <div className="w-full md:w-[45%] aspect-[3/4] relative rounded-none overflow-hidden border border-[#e5e5e5] bg-gray-100">
-                <img
-                  src="/images/about/image-vision-1.jpg"
-                  alt="Vision Gallery Left"
-                  className="w-full h-full object-cover object-center"
-                />
-              </div>
+              <ScrollReveal delay={100} className="w-full md:w-[45%]">
+                <div className="w-full aspect-[3/4] relative rounded-none overflow-hidden border border-[#e5e5e5] bg-gray-100 group cursor-pointer h-full">
+                  <img
+                    src="/images/about/image-vision-1.jpg"
+                    alt="Vision Gallery Left"
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
+                    <span className="text-[11px] font-bold text-white tracking-wider uppercase font-antenna">
+                      ĐỘI NGŨ NHÂN SỰ & SHOWROOM
+                    </span>
+                  </div>
+                </div>
+              </ScrollReveal>
 
               {/* Stacked sub-grid (staggered depth) */}
               <div className="flex-1 flex flex-col justify-between gap-6">
                 {/* Horizontal image */}
-                <div className="w-full aspect-[2/1] relative rounded-none overflow-hidden border border-[#e5e5e5] bg-gray-100">
-                  <img
-                    src="/images/about/image-vision-2.jpg"
-                    alt="Vision Gallery Top Right"
-                    className="w-full h-full object-cover object-center"
-                  />
-                </div>
+                <ScrollReveal delay={200}>
+                  <div className="w-full aspect-[2/1] relative rounded-none overflow-hidden border border-[#e5e5e5] bg-gray-100 group cursor-pointer">
+                    <img
+                      src="/images/about/image-vision-2.jpg"
+                      alt="Vision Gallery Top Right"
+                      className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                      <span className="text-[11px] font-bold text-white tracking-wider uppercase font-antenna">
+                        LỄ TÂN & ĐÓN TIẾP KHÁCH HÀNG
+                      </span>
+                    </div>
+                  </div>
+                </ScrollReveal>
 
                 {/* Staggered double column */}
                 <div className="grid grid-cols-2 gap-6 flex-1">
-                  <div className="relative rounded-none overflow-hidden border border-[#e5e5e5] bg-gray-100 h-full min-h-[140px]">
-                    <img
-                      src="/images/about/image-vision-3.jpg"
-                      alt="Vision Gallery Bottom Left"
-                      className="w-full h-full object-cover object-center"
-                    />
-                  </div>
-                  <div className="relative rounded-none overflow-hidden border border-[#e5e5e5] bg-gray-100 h-full min-h-[140px]">
-                    <img
-                      src="/images/about/image-vision-4.jpg"
-                      alt="Vision Gallery Bottom Right"
-                      className="w-full h-full object-cover object-center"
-                    />
-                  </div>
+                  <ScrollReveal delay={300} className="h-full">
+                    <div className="relative rounded-none overflow-hidden border border-[#e5e5e5] bg-gray-100 h-full min-h-[140px] group cursor-pointer">
+                      <img
+                        src="/images/about/image-vision-3.jpg"
+                        alt="Vision Gallery Bottom Left"
+                        className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
+                        <span className="text-[10px] font-bold text-white tracking-wider uppercase font-antenna line-clamp-1">
+                          TƯ VẤN SẢN PHẨM
+                        </span>
+                      </div>
+                    </div>
+                  </ScrollReveal>
+
+                  <ScrollReveal delay={400} className="h-full">
+                    <div className="relative rounded-none overflow-hidden border border-[#e5e5e5] bg-gray-100 h-full min-h-[140px] group cursor-pointer">
+                      <img
+                        src="/images/about/image-vision-4.jpg"
+                        alt="Vision Gallery Bottom Right"
+                        className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
+                        <span className="text-[10px] font-bold text-white tracking-wider uppercase font-antenna line-clamp-1">
+                          SỰ KIỆN TRI ÂN
+                        </span>
+                      </div>
+                    </div>
+                  </ScrollReveal>
                 </div>
               </div>
             </div>
@@ -387,84 +529,89 @@ export default function AboutPage() {
       {/* SECTION 6: TUYỂN DỤNG NHÂN SỰ (Clean Table Layout) */}
       <section id="recruitment" className="bg-[#f8f8f8] py-20 border-b border-[#e5e5e5] scroll-mt-20">
         <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full">
-          <div className="flex flex-col items-center text-center gap-4 mb-12 max-w-[800px] mx-auto">
-            <div>
-              <div className="text-xs font-bold text-[#066fef] uppercase tracking-[0.2em] font-antenna mb-3">
-                Cơ hội nghề nghiệp
+          <ScrollReveal direction="up">
+            <div className="flex flex-col items-center text-center gap-4 mb-12 max-w-[800px] mx-auto">
+              <div>
+                <div className="text-xs font-bold text-[#066fef] uppercase tracking-[0.2em] font-antenna mb-3">
+                  Cơ hội nghề nghiệp
+                </div>
+                <h2 className="text-[36px] font-bold leading-tight text-[#01095c] font-antenna uppercase">
+                  TUYỂN DỤNG NHÂN SỰ
+                </h2>
               </div>
-              <h2 className="text-[36px] font-bold leading-tight text-[#01095c] font-antenna uppercase">
-                TUYỂN DỤNG NHÂN SỰ
-              </h2>
+              <p className="text-sm text-gray-500 max-w-[600px] leading-relaxed font-antenna">
+                Gia nhập đội ngũ Long Khánh Ford để cùng phát triển sự nghiệp trong môi trường chuyên nghiệp, năng động toàn cầu.
+              </p>
             </div>
-            <p className="text-sm text-gray-500 max-w-[600px] leading-relaxed font-antenna">
-              Gia nhập đội ngũ Long Khánh Ford để cùng phát triển sự nghiệp trong môi trường chuyên nghiệp, năng động toàn cầu.
-            </p>
-          </div>
+          </ScrollReveal>
 
           {/* Grid of flat cards: 3 cols layout */}
           {jobs.length === 0 ? (
-            <div className="text-center py-16 bg-white border border-[#e5e5e5] max-w-xl mx-auto w-full p-8 mt-8 flex flex-col items-center justify-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-neutral-50 flex items-center justify-center text-gray-300">
-                <Briefcase className="w-6 h-6" />
+            <ScrollReveal delay={150}>
+              <div className="text-center py-16 bg-white border border-[#e5e5e5] max-w-xl mx-auto w-full p-8 mt-8 flex flex-col items-center justify-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-neutral-50 flex items-center justify-center text-gray-300">
+                  <Briefcase className="w-6 h-6" />
+                </div>
+                <h3 className="text-sm font-bold text-[#01095c] font-antenna uppercase tracking-tight">
+                  Không có vị trí tuyển dụng
+                </h3>
+                <p className="text-xs text-gray-400 font-antenna leading-relaxed max-w-sm">
+                  Hiện tại chúng tôi chưa có tin tuyển dụng mới. Vui lòng quay lại sau hoặc liên hệ trực tiếp để biết thêm chi tiết.
+                </p>
               </div>
-              <h3 className="text-sm font-bold text-[#01095c] font-antenna uppercase tracking-tight">
-                Không có vị trí tuyển dụng
-              </h3>
-              <p className="text-xs text-gray-400 font-antenna leading-relaxed max-w-sm">
-                Hiện tại chúng tôi chưa có tin tuyển dụng mới. Vui lòng quay lại sau hoặc liên hệ trực tiếp để biết thêm chi tiết.
-              </p>
-            </div>
+            </ScrollReveal>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full mt-8">
               {jobs.map((job, idx) => (
-                <div
-                  key={idx}
-                  onClick={() => handleJobClick(job)}
-                  className="bg-white rounded-none p-6 md:p-8 flex flex-col justify-between border border-[#e5e5e5] hover:border-[#066fef] hover:shadow-md transition-all duration-300 group cursor-pointer h-full"
-                >
-                  <div className="flex flex-col gap-5">
-                    {/* Top Row: Logo & Department Badge */}
-                    <div className="flex items-center justify-between gap-4">
-                      {/* Logo Ford Oval */}
-                      <div className="w-[85.3px] h-8 relative flex-shrink-0 flex items-center">
-                        <img
-                          src="/ford_logo.svg"
-                          alt="Ford Logo"
-                          width={85}
-                          height={32}
-                          className="w-[85.3px] h-8 object-contain block"
-                        />
+                <ScrollReveal key={idx} delay={idx * 100} className="h-full">
+                  <div
+                    onClick={() => handleJobClick(job)}
+                    className="bg-white rounded-none p-6 md:p-8 flex flex-col justify-between border border-[#e5e5e5] hover:border-[#066fef] hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 group cursor-pointer h-full"
+                  >
+                    <div className="flex flex-col gap-5">
+                      {/* Top Row: Logo & Department Badge */}
+                      <div className="flex items-center justify-between gap-4">
+                        {/* Logo Ford Oval */}
+                        <div className="w-[85.3px] h-8 relative flex-shrink-0 flex items-center">
+                          <img
+                            src="/ford_logo.svg"
+                            alt="Ford Logo"
+                            width={85}
+                            height={32}
+                            className="w-[85.3px] h-8 object-contain block"
+                          />
+                        </div>
+                        
+                        {/* Small department tag */}
+                        <span className="text-[10px] font-bold text-gray-400 tracking-wider uppercase font-antenna bg-gray-50 border border-gray-100 px-2.5 py-1">
+                          {job.working_position ? job.working_position.replace("Phòng ", "").replace("Xưởng ", "") : "Tuyển dụng"}
+                        </span>
                       </div>
-                      
-                      {/* Small department tag */}
-                      <span className="text-[10px] font-bold text-gray-400 tracking-wider uppercase font-antenna bg-gray-50 border border-gray-100 px-2.5 py-1">
-                        {job.working_position ? job.working_position.replace("Phòng ", "").replace("Xưởng ", "") : "Tuyển dụng"}
+
+                      {/* Content Section */}
+                      <div className="flex flex-col gap-2 mt-2">
+                        <h3 className="text-base font-bold leading-snug text-[#01095c] font-antenna group-hover:text-[#066fef] transition-colors line-clamp-2">
+                          {job.title}
+                        </h3>
+                        <p className="text-sm font-normal leading-[1.6] text-gray-500 font-antenna line-clamp-3">
+                          {job.description}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Footer Row: Location & CTA Toggle button */}
+                    <div className="flex items-center justify-between border-t border-gray-100 pt-6 mt-8">
+                      <span className="text-xs text-gray-400 font-antenna truncate max-w-[170px]" title={job.work_address || job.location}>
+                        {job.work_address ? job.work_address.split(",")[0] : job.location ? job.location.split(",")[0] : "Biên Hòa"}
                       </span>
-                    </div>
-
-                    {/* Content Section */}
-                    <div className="flex flex-col gap-2 mt-2">
-                      <h3 className="text-base font-bold leading-snug text-[#01095c] font-antenna group-hover:text-[#066fef] transition-colors line-clamp-2">
-                        {job.title}
-                      </h3>
-                      <p className="text-sm font-normal leading-[1.6] text-gray-500 font-antenna line-clamp-3">
-                        {job.description}
-                      </p>
+                      
+                      {/* Interactive square toggle button */}
+                      <div className="w-10 h-10 rounded-[4px] flex items-center justify-center border border-gray-200 transition-all duration-300 flex-shrink-0 bg-white group-hover:bg-[#066fef] group-hover:border-[#066fef] text-[#066fef] group-hover:text-white shadow-sm">
+                        <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                      </div>
                     </div>
                   </div>
-
-                  {/* Footer Row: Location & CTA Toggle button */}
-                  <div className="flex items-center justify-between border-t border-gray-100 pt-6 mt-8">
-                    <span className="text-xs text-gray-400 font-antenna truncate max-w-[170px]" title={job.work_address || job.location}>
-                      {job.work_address ? job.work_address.split(",")[0] : job.location ? job.location.split(",")[0] : "Biên Hòa"}
-                    </span>
-                    
-                    {/* Interactive square toggle button */}
-                    <div className="w-10 h-10 rounded-[4px] flex items-center justify-center border border-gray-200 transition-all duration-300 flex-shrink-0 bg-white group-hover:bg-[#066fef] group-hover:border-[#066fef] text-[#066fef] group-hover:text-white">
-                      <ArrowRight className="w-5 h-5" />
-                    </div>
-                  </div>
-                </div>
+                </ScrollReveal>
               ))}
             </div>
           )}
@@ -499,15 +646,17 @@ export default function AboutPage() {
         `}</style>
 
         <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full mb-12">
-          {/* Header Row */}
-          <div className="text-center max-w-[800px] mx-auto">
-            <div className="text-xs font-bold text-[#066fef] uppercase tracking-[0.2em] font-antenna mb-3">
-              Đồng hành phát triển
+          <ScrollReveal direction="up">
+            {/* Header Row */}
+            <div className="text-center max-w-[800px] mx-auto">
+              <div className="text-xs font-bold text-[#066fef] uppercase tracking-[0.2em] font-antenna mb-3">
+                Đồng hành phát triển
+              </div>
+              <h2 className="text-[36px] md:text-[44px] font-bold text-[#01095c] leading-tight font-antenna uppercase">
+                ĐỘI NGŨ LONG KHÁNH FORD
+              </h2>
             </div>
-            <h2 className="text-[36px] md:text-[44px] font-bold text-[#01095c] leading-tight font-antenna uppercase">
-              ĐỘI NGŨ LONG KHÁNH FORD
-            </h2>
-          </div>
+          </ScrollReveal>
         </div>
 
         {/* Carousel rows container */}
