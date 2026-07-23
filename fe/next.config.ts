@@ -2,11 +2,16 @@ import type { NextConfig } from "next";
 
 const nextConfig = {
   output: "standalone",
+  compress: true,
   typescript: {
     ignoreBuildErrors: true,
   },
+  experimental: {
+    optimizePackageImports: ["lucide-react", "motion"],
+  },
   images: {
-    unoptimized: true,
+    formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 86400,
     dangerouslyAllowLocalIP: true,
     remotePatterns: [
       {

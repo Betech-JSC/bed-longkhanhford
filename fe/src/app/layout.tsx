@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   },
 };
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -115,6 +115,10 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        <link rel="preconnect" href="https://cms.dnf.betech-digital.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://cms.dnf.betech-digital.com" />
+        <link rel="preconnect" href="https://cms.longkhanhford.com.vn" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://cms.longkhanhford.com.vn" />
         <script
           suppressHydrationWarning
           type="application/ld+json"

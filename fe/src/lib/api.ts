@@ -18,17 +18,24 @@ function getApiBaseUrl(): string {
  */
 async function fetchAPI<T = any>(endpoint: string, options?: RequestInit): Promise<T> {
   const url = `${getApiBaseUrl()}${endpoint}`;
+  const isGet = !options?.method || options.method.toUpperCase() === 'GET';
+  
+  // Use 60-second ISR revalidation for GET requests unless explicit cache option provided
+  const fetchOptions: RequestInit = {
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      ...options?.headers,
+    },
+    ...options,
+  };
+
+  if (isGet && !options?.cache && !options?.next) {
+    (fetchOptions as any).next = { revalidate: 60 };
+  }
   
   try {
-    const response = await fetch(url, {
-      ...options,
-      cache: 'no-store',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        ...options?.headers,
-      },
-    });
+    const response = await fetch(url, fetchOptions);
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => null);
