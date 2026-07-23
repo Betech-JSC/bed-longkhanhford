@@ -200,6 +200,7 @@ export const settingsAPI = {
       general_company_tax_code: string;
       general_company_working_hours: string;
       general_company_copyright: string;
+      about_team_images?: any[];
     };
   }>('/settings/general'),
 };

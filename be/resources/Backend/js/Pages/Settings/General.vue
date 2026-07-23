@@ -168,7 +168,23 @@
                             }"
                         />
                     </div>
+                <div class="card">
+                    <div class="card-header">Hình ảnh Đội ngũ (Trang giới thiệu)</div>
+                    <div class="card-body">
+                        <Field
+                            v-model="form.about_team_images"
+                            :field="{
+                                name: 'about_team_images',
+                                label: 'Danh sách hình ảnh đội ngũ',
+                                type: 'file_upload',
+                                multiple: true,
+                                accept: 'image/*',
+                                help: 'Tải lên danh sách hình ảnh đội ngũ/sự kiện để hiển thị ở trang Giới thiệu',
+                            }"
+                        />
+                    </div>
                 </div>
+
                 <SeoFields
                     :modelValue="form"
                     @update:modelValue="form = $event"
@@ -193,6 +209,7 @@ export default {
                 general_logo: null,
                 general_logo_footer: null,
                 general_favicon: null,
+                about_team_images: [],
                 ...this.item
             },
         }

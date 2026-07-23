@@ -40,6 +40,8 @@ class Setting extends Model
                 'homepage_introduce_image' => 'nullable',
                 'homepage_introduce_video' => 'nullable',
 
+                'about_team_images' => 'nullable',
+
                 'seo_title_separator' => 'nullable',
                 'seo_meta_title' => 'nullable|max:170',
                 'seo_meta_description' => 'nullable|max:255',

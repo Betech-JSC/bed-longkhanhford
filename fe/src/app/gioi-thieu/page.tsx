@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, X, Briefcase } from "lucide-react";
 import { aboutAssets, handleImageError } from "@/lib/site-assets";
-import { jobsAPI } from "@/lib/api";
+import { jobsAPI, settingsAPI } from "@/lib/api";
 interface TeamCard {
   id: string;
   name: string;
@@ -33,21 +33,93 @@ export default function AboutPage() {
   // API Jobs State
   const [jobs, setJobs] = useState<any[]>([]);
 
-  // Fetch jobs from API
+  // Team Cards State (Dynamic from CMS)
+  const [teamRow1, setTeamRow1] = useState<TeamCard[]>(row1Cards);
+  const [teamRow2, setTeamRow2] = useState<TeamCard[]>(row2Cards);
+
+  // Fetch CMS General Settings for Team Images & Jobs
   useEffect(() => {
     let active = true;
-    const fetchJobs = async () => {
+
+    const fetchCMSData = async () => {
       try {
-        const res = await jobsAPI.getAll() as any;
-        const items = res?.jobs || res?.data || res;
-        if (active && Array.isArray(items) && items.length > 0) {
-          setJobs(items);
+        const [jobsRes, settingsRes] = await Promise.allSettled([
+          jobsAPI.getAll(),
+          settingsAPI.getGeneral(),
+        ]);
+
+        if (!active) return;
+
+        // Process Jobs
+        if (jobsRes.status === "fulfilled" && jobsRes.value) {
+          const res: any = jobsRes.value;
+          const items = res?.jobs || res?.data || res;
+          if (Array.isArray(items) && items.length > 0) {
+            setJobs(items);
+          }
+        }
+
+        // Process Team Images from CMS Settings
+        if (settingsRes.status === "fulfilled" && settingsRes.value) {
+          const res = settingsRes.value;
+          const rawImages = res?.data?.about_team_images;
+
+          if (Array.isArray(rawImages) && rawImages.length > 0) {
+            const apiBase = process.env.NEXT_PUBLIC_API_URL
+              ? process.env.NEXT_PUBLIC_API_URL.replace(/\/api\/?$/, "")
+              : "";
+
+            const formatted: TeamCard[] = rawImages
+              .map((imgItem: any, idx: number) => {
+                let imgUrl = "";
+                let title = `Đội Ngũ Long Khánh Ford ${idx + 1}`;
+
+                if (typeof imgItem === "string") {
+                  imgUrl = imgItem;
+                } else if (imgItem && typeof imgItem === "object") {
+                  imgUrl =
+                    imgItem.url ||
+                    imgItem.path ||
+                    imgItem.file ||
+                    imgItem.image ||
+                    "";
+                  if (imgItem.name || imgItem.title) {
+                    title = imgItem.name || imgItem.title;
+                  }
+                }
+
+                if (imgUrl && !imgUrl.startsWith("http") && !imgUrl.startsWith("/")) {
+                  imgUrl = "/" + imgUrl;
+                }
+                if (imgUrl && imgUrl.startsWith("/storage")) {
+                  imgUrl = `${apiBase}${imgUrl}`;
+                }
+
+                return {
+                  id: `cms-team-${idx}`,
+                  name: title,
+                  image: imgUrl,
+                  link: "/lien-he",
+                };
+              })
+              .filter((card) => Boolean(card.image));
+
+            if (formatted.length > 0) {
+              const half = Math.ceil(formatted.length / 2);
+              const r1 = formatted.slice(0, half);
+              const r2 = formatted.slice(half);
+
+              setTeamRow1(r1.length > 0 ? r1 : formatted);
+              setTeamRow2(r2.length > 0 ? r2 : formatted);
+            }
+          }
         }
       } catch (error) {
-        console.error("Error fetching jobs in AboutPage:", error);
+        console.error("Error fetching CMS data in AboutPage:", error);
       }
     };
-    fetchJobs();
+
+    fetchCMSData();
     return () => {
       active = false;
     };
@@ -422,7 +494,7 @@ export default function AboutPage() {
           {/* Row 1: Sliding Left */}
           <div className="w-full overflow-hidden">
             <div className="animate-marquee-l gap-6">
-              {[...row1Cards, ...row1Cards].map((card, idx) => (
+              {[...teamRow1, ...teamRow1].map((card, idx) => (
                 <Link
                   key={`r1-${card.id}-${idx}`}
                   href={card.link}
@@ -453,7 +525,7 @@ export default function AboutPage() {
           {/* Row 2: Sliding Right */}
           <div className="w-full overflow-hidden">
             <div className="animate-marquee-r gap-6">
-              {[...row2Cards, ...row2Cards].map((card, idx) => (
+              {[...teamRow2, ...teamRow2].map((card, idx) => (
                 <Link
                   key={`r2-${card.id}-${idx}`}
                   href={card.link}
@@ -469,7 +541,7 @@ export default function AboutPage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent flex items-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
                     <div className="flex flex-col gap-1">
                       <span className="text-[9px] font-extrabold text-[#066fef] tracking-widest uppercase">
-                        CƠ SỞ VẬT CHẤT
+                        CƠ SỞ VẬT CHẤT & ĐỘI NGŨ
                       </span>
                       <span className="text-sm font-bold text-white font-antenna uppercase truncate max-w-full">
                         {card.name}

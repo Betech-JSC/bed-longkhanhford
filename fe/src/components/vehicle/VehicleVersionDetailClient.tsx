@@ -218,7 +218,7 @@ export default function VehicleVersionDetailClient() {
     const runBatches = async () => {
       for (let i = 0; i < total; i += batchSize) {
         if (isCancelled) break;
-        const batch = images360.slice(i, i + batchSize).map(url => preloadImage(url));
+        const batch = images360.slice(i, i + batchSize).map((url: string) => preloadImage(url));
         await Promise.all(batch);
       }
       if (!isCancelled) {
