@@ -52,7 +52,7 @@ class ChatController extends Controller
 
                 if ($recentMessages->count() >= 20) {
                     return $this->success([
-                        'reply' => 'Bạn đang gửi quá nhiều tin nhắn. Vui lòng chờ một chút hoặc gọi trực tiếp Hotline 0918 90 90 60 nhé!',
+                        'reply' => 'Bạn đang gửi quá nhiều tin nhắn. Vui lòng chờ một chút hoặc gọi trực tiếp Hotline 0812 86 86 22 nhé!',
                         'session_id' => $sessionId,
                     ]);
                 }

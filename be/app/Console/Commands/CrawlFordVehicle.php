@@ -493,7 +493,7 @@ class CrawlFordVehicle extends Command
                         'type' => 'BookingBanner',
                         'data' => [
                             'title' => "Bắt đầu cuộc sống hiện đại cùng {$title}",
-                            'phone' => '0918 90 90 60',
+                            'phone' => '0812 86 86 22',
                             'btn_text' => 'Nhận báo giá chi tiết',
                             'btn_link' => "/lien-he?vehicle={$slug}&reason=Nhận báo giá",
                             'car_image' => $mainImage ? ['path' => $mainImage['path']] : null

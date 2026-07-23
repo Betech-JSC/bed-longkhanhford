@@ -8,6 +8,7 @@ import BookingBanner from "@/components/services/BookingBanner";
 import FaqAccordion from "@/components/services/FaqAccordion";
 import ServicePageBanner from "@/components/services/ServicePageBanner";
 import ScrollReveal from "@/components/common/ScrollReveal";
+import CountUpNumber from "@/components/common/CountUpNumber";
 import { siteAssets } from "@/lib/site-assets";
 
 // Gold Hour Slots
@@ -31,14 +32,16 @@ export default function ExpressMaintenanceLayout({ service }: { service?: any })
         <div className="max-w-[1440px] mx-auto px-4 lg:px-[80px]">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             {[
-              { value: "60 Phút", label: "Tổng Thời Gian Làm Việc" },
-              { value: "2 Thợ", label: "Thi Công Đồng Thời" },
-              { value: "0 Phút", label: "Thời Gian Chờ Đợi Khi Đặt Hẹn" },
-              { value: "100%", label: "Đầy Đủ Hạng Mục Bảo Dưỡng" },
+              { target: 60, suffix: " Phút", label: "Tổng Thời Gian Làm Việc" },
+              { target: 2, suffix: " KTV", label: "Thi Công Đồng Thời" },
+              { target: 0, suffix: " Phút", label: "Chờ Đợi Khi Đặt Hẹn Trước" },
+              { target: 100, suffix: "%", label: "Đầy Đủ Hạng Mục Bảo Dưỡng" },
             ].map((metric, i) => (
               <ScrollReveal key={i} direction="up" delay={i * 100}>
                 <div className="p-2 border-r border-white/10 last:border-0">
-                  <div className="text-3xl md:text-4xl font-bold text-[#066fef] mb-1">{metric.value}</div>
+                  <div className="text-3xl md:text-4xl font-bold text-[#38bdf8] mb-1">
+                    <CountUpNumber target={metric.target} suffix={metric.suffix} />
+                  </div>
                   <div className="text-xs text-white/80 uppercase tracking-wider font-medium">{metric.label}</div>
                 </div>
               </ScrollReveal>

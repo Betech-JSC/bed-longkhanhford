@@ -7,6 +7,7 @@ import BookingBanner from "@/components/services/BookingBanner";
 import FaqAccordion from "@/components/services/FaqAccordion";
 import ServicePageBanner from "@/components/services/ServicePageBanner";
 import ScrollReveal from "@/components/common/ScrollReveal";
+import CountUpNumber from "@/components/common/CountUpNumber";
 import { siteAssets } from "@/lib/site-assets";
 
 const assuredPledges = [
@@ -43,19 +44,27 @@ export default function UsedCarsLayout({ service }: { service?: any }) {
         <div className="max-w-[1440px] mx-auto px-4 lg:px-[80px]">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             <div className="border-r border-white/10 last:border-0 p-2">
-              <div className="text-3xl md:text-4xl font-bold text-[#066fef] mb-1">167 Điểm</div>
+              <div className="text-3xl md:text-4xl font-bold text-[#38bdf8] mb-1">
+                <CountUpNumber target={167} suffix=" Điểm" />
+              </div>
               <div className="text-xs text-white/80 uppercase tracking-wider font-medium">Kiểm Tra Chất Lượng</div>
             </div>
             <div className="border-r border-white/10 last:border-0 p-2">
-              <div className="text-3xl md:text-4xl font-bold text-[#066fef] mb-1">100%</div>
-              <div className="text-xs text-white/80 uppercase tracking-wider font-medium">Không Đâm Đụng & Thủy Kích</div>
+              <div className="text-3xl md:text-4xl font-bold text-[#38bdf8] mb-1">
+                <CountUpNumber target={100} suffix="%" />
+              </div>
+              <div className="text-xs text-white/80 uppercase tracking-wider font-medium">Không Đâm Đụng &amp; Thủy Kích</div>
             </div>
             <div className="border-r border-white/10 last:border-0 p-2">
-              <div className="text-3xl md:text-4xl font-bold text-[#066fef] mb-1">12 Tháng</div>
+              <div className="text-3xl md:text-4xl font-bold text-[#38bdf8] mb-1">
+                <CountUpNumber target={12} suffix=" Tháng" />
+              </div>
               <div className="text-xs text-white/80 uppercase tracking-wider font-medium">Bảo Hành Mở Rộng Hãng</div>
             </div>
             <div className="p-2">
-              <div className="text-3xl md:text-4xl font-bold text-[#066fef] mb-1">30 Phút</div>
+              <div className="text-3xl md:text-4xl font-bold text-[#38bdf8] mb-1">
+                <CountUpNumber target={30} suffix=" Phút" />
+              </div>
               <div className="text-xs text-white/80 uppercase tracking-wider font-medium">Định Giá Nhanh Chóng</div>
             </div>
           </div>

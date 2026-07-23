@@ -206,7 +206,7 @@ class VehicleTestSeeder extends Seeder
                         'type' => 'BookingBanner',
                         'data' => [
                             'title' => 'Bắt đầu cuộc sống hiện đại cùng Ford Territory',
-                            'phone' => '0918 90 90 60',
+                            'phone' => '0812 86 86 22',
                             'btn_text' => 'Nhận báo giá chi tiết',
                             'btn_link' => '/lien-he?vehicle=ford-territory',
                             'car_image' => 'territory_hero.png'
@@ -402,7 +402,7 @@ class VehicleTestSeeder extends Seeder
                         'type' => 'BookingBanner',
                         'data' => [
                             'title' => 'Kiến tạo hành trình tuyệt vời cùng Ford Everest',
-                            'phone' => '0918 90 90 60',
+                            'phone' => '0812 86 86 22',
                             'btn_text' => 'Đăng ký nhận báo giá lăn bánh',
                             'btn_link' => '/lien-he?vehicle=ford-everest',
                             'car_image' => 'everest_hero.png'
@@ -578,7 +578,7 @@ class VehicleTestSeeder extends Seeder
                         'type' => 'BookingBanner',
                         'data' => [
                             'title' => 'Khởi đầu hành trình mới cùng Ford Ranger',
-                            'phone' => '0918 90 90 60',
+                            'phone' => '0812 86 86 22',
                             'btn_text' => 'Liên hệ đặt lái thử',
                             'btn_link' => '/lien-he?vehicle=ford-ranger',
                             'car_image' => 'ranger_hero.png'
@@ -723,7 +723,7 @@ class VehicleTestSeeder extends Seeder
                         'type' => 'BookingBanner',
                         'data' => [
                             'title' => 'Tối ưu hóa lợi nhuận kinh doanh cùng Ford Transit',
-                            'phone' => '0918 90 90 60',
+                            'phone' => '0812 86 86 22',
                             'btn_text' => 'Yêu cầu báo giá lô dự án',
                             'btn_link' => '/lien-he?vehicle=ford-transit-2024',
                             'car_image' => 'transit_hero.png'
@@ -923,7 +923,7 @@ class VehicleTestSeeder extends Seeder
                         'type' => 'BookingBanner',
                         'data' => [
                             'title' => 'Khẳng định phong cách riêng cùng Ford Mustang',
-                            'phone' => '0918 90 90 60',
+                            'phone' => '0812 86 86 22',
                             'btn_text' => 'Liên hệ tư vấn VIP',
                             'btn_link' => '/lien-he?vehicle=mustang-fastback',
                             'car_image' => 'mustang_hero.png'
@@ -1040,7 +1040,7 @@ class VehicleTestSeeder extends Seeder
                         'type' => 'BookingBanner',
                         'data' => [
                             'title' => 'Chinh phục kỷ nguyên điện cùng Mustang Mach-E',
-                            'phone' => '0918 90 90 60',
+                            'phone' => '0812 86 86 22',
                             'btn_text' => 'Đặt lịch lái thử xe điện',
                             'btn_link' => '/lien-he?vehicle=new-mustang-mach-e',
                             'car_image' => 'mach_e_hero.png'

@@ -46,24 +46,34 @@ export default function RoadsideAssistanceLayout({ service }: { service?: any })
       {/* Brand Hero Banner */}
       <ServicePageBanner title={service?.title || "Dịch Vụ Cứu Hộ Giao Thông & Ứng Cứu Khẩn Cấp 24/7"} backgroundImage={service?.banner_image?.url || siteAssets.serviceBanners.roadside} />
 
-      {/* Direct Call Banner - Ford Navy Theme */}
-      <section className="w-full bg-[#002F6C] text-white py-8 border-b border-[#066fef]/30 font-antenna">
-        <div className="max-w-[1440px] mx-auto px-4 lg:px-[80px] flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-[#066fef] text-white rounded-[4px] flex items-center justify-center shrink-0 shadow-md">
-              <PhoneCall className="w-6 h-6 animate-bounce" />
+      {/* Direct Call Banner - Refined Theme */}
+      <section className="w-full bg-white py-8 border-b border-gray-200 font-antenna">
+        <div className="max-w-[1440px] mx-auto px-4 lg:px-[80px]">
+          <div className="bg-[#002F6C] text-white p-6 lg:p-8 rounded-none shadow-md flex flex-col md:flex-row items-center justify-between gap-6 border-l-4 border-[#066fef]">
+            <div className="flex items-center gap-5">
+              <div className="w-12 h-12 bg-white/10 text-white rounded-[4px] flex items-center justify-center shrink-0 border border-white/20">
+                <PhoneCall className="w-6 h-6 text-[#38bdf8] animate-pulse" />
+              </div>
+              <div>
+                <span className="text-[11px] font-extrabold text-[#38bdf8] uppercase tracking-widest block mb-1">
+                  Ứng Cứu Khẩn Cấp 24/7
+                </span>
+                <h3 className="text-xl md:text-2xl font-bold uppercase tracking-tight text-white">
+                  XE GẶP SỰ CỐ TRÊN ĐƯỜNG?
+                </h3>
+                <p className="text-xs md:text-sm text-gray-300 mt-1">
+                  Bấm nút gọi ngay để kết nối trực tiếp tới Tổng đài trưởng Cứu hộ Long Khánh Ford.
+                </p>
+              </div>
             </div>
-            <div>
-              <h3 className="text-xl md:text-2xl font-bold uppercase tracking-tight">XE GẶP SỰ CỐ TRÊN ĐƯỜNG?</h3>
-              <p className="text-xs md:text-sm text-white/80">Bấm nút gọi ngay để kết nối trực tiếp tới Tổng đài trưởng Cứu hộ Long Khánh Ford.</p>
-            </div>
+            <a
+              href="tel:0879276699"
+              className="bg-[#066fef] hover:bg-white hover:text-[#002F6C] text-white text-xs font-bold uppercase px-7 py-3.5 rounded-[4px] transition-all duration-300 shrink-0 tracking-wider shadow-sm flex items-center gap-2"
+            >
+              <PhoneCall className="w-4 h-4" />
+              <span>Hotline Cứu Hộ: 0879 276 699</span>
+            </a>
           </div>
-          <a
-            href="tel:0879276699"
-            className="bg-[#066fef] hover:bg-white hover:text-[#00095B] text-white font-bold px-8 py-3.5 rounded-[4px] text-xs uppercase tracking-wider shadow-md shrink-0 transition-colors"
-          >
-            Hotline Cứu Hộ: 0879 276 699
-          </a>
         </div>
       </section>
 

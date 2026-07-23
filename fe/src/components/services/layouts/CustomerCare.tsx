@@ -40,24 +40,31 @@ export default function CustomerCareLayout({ service }: { service?: any }) {
       <ServicePageBanner title={service?.title || "Dịch Vụ Chăm Sóc Khách Hàng & Cứu Hộ 24/7"} backgroundImage={service?.banner_image?.url || siteAssets.serviceBanners.customerCare} />
 
       {/* Emergency Roadside Assistance Callout Banner */}
-      <section className="w-full bg-[#00095B] text-white py-10 border-b border-[#066fef]/30 font-antenna">
+      <section className="w-full bg-white py-8 border-b border-gray-200 font-antenna">
         <div className="max-w-[1440px] mx-auto px-4 lg:px-[80px]">
-          <div className="bg-[#002F6C] border border-white/10 p-8 rounded-none flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="bg-[#002F6C] text-white p-6 lg:p-8 rounded-none shadow-md flex flex-col md:flex-row items-center justify-between gap-6 border-l-4 border-[#066fef]">
             <div className="flex items-center gap-5">
-              <div className="w-14 h-14 bg-[#066fef] text-white rounded-[4px] flex items-center justify-center shrink-0 shadow-md">
-                <PhoneCall className="w-7 h-7" />
+              <div className="w-12 h-12 bg-white/10 text-white rounded-[4px] flex items-center justify-center shrink-0 border border-white/20">
+                <PhoneCall className="w-6 h-6 text-[#38bdf8]" />
               </div>
               <div>
-                <span className="text-xs font-bold text-[#066fef] uppercase tracking-widest block mb-1">Hỗ Trợ Sự Cố Đường Bộ 24/7</span>
-                <h3 className="text-xl md:text-2xl font-bold uppercase tracking-tight">ĐỘI CỨU HỘ GIAO THÔNG LONG KHÁNH FORD</h3>
-                <p className="text-xs md:text-sm text-white/80 mt-1">Cứu hộ xe chết máy, kích bình ắc quy, kéo xe gặp sự cố về xưởng 3S an toàn.</p>
+                <span className="text-[11px] font-extrabold text-[#38bdf8] uppercase tracking-widest block mb-1">
+                  Hỗ Trợ Sự Cố Đường Bộ 24/7
+                </span>
+                <h3 className="text-xl md:text-2xl font-bold uppercase tracking-tight text-white">
+                  ĐỘI CỨU HỘ GIAO THÔNG LONG KHÁNH FORD
+                </h3>
+                <p className="text-xs md:text-sm text-gray-300 mt-1">
+                  Cứu hộ xe chết máy, kích bình ắc quy, kéo xe gặp sự cố về xưởng 3S an toàn.
+                </p>
               </div>
             </div>
             <a
               href="tel:0879276699"
-              className="bg-[#066fef] hover:bg-white hover:text-[#00095B] text-white text-xs font-bold uppercase px-8 py-4 rounded-[4px] transition-colors shrink-0 tracking-wider shadow-lg"
+              className="bg-[#066fef] hover:bg-white hover:text-[#002F6C] text-white text-xs font-bold uppercase px-7 py-3.5 rounded-[4px] transition-all duration-300 shrink-0 tracking-wider shadow-sm flex items-center gap-2"
             >
-              Gọi Cứu Hộ: 0879 276 699
+              <PhoneCall className="w-4 h-4" />
+              <span>Gọi Cứu Hộ: 0879 276 699</span>
             </a>
           </div>
         </div>

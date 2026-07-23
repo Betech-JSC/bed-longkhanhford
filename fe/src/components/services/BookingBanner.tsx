@@ -9,7 +9,7 @@ export default function BookingBanner() {
   const bannerBg = "/images-dynamic/image-hero-1.jpg";
 
   return (
-    <div className="w-full relative h-[420px] md:h-[480px] flex items-center overflow-hidden">
+    <div className="w-full relative min-h-[440px] md:min-h-[480px] py-8 md:py-12 flex items-center overflow-hidden">
       {/* Background Image */}
       <Image
         src={bannerBg}
@@ -19,39 +19,39 @@ export default function BookingBanner() {
         priority
       />
       {/* Overlay to darken image slightly for better text contrast on the card's backdrop */}
-      <div className="absolute inset-0 bg-black/25 z-0" />
+      <div className="absolute inset-0 bg-black/30 z-0" />
 
       {/* Main Content Area */}
-      <div className="max-w-[1440px] w-full mx-auto px-4 xl:px-[80px] relative z-10 flex items-center h-full">
+      <div className="max-w-[1440px] w-full mx-auto px-4 xl:px-[80px] relative z-10 flex items-center">
         {/* Floating White Card */}
-        <div className="bg-white p-8 md:p-10 rounded-[20px] shadow-2xl max-w-[480px] w-full flex flex-col gap-5 text-gray-900 border border-gray-100">
+        <div className="bg-white p-6 sm:p-8 rounded-[24px] shadow-2xl max-w-[520px] w-full flex flex-col gap-4 text-gray-900 border border-gray-100 my-auto">
           {/* Badge */}
           <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-widest text-[#002F6C] bg-[#002F6C]/10 px-3 py-1 rounded-full w-fit font-antenna">
             Tư vấn &amp; Hỗ trợ 24/7
           </span>
 
-          <h3 className="text-2xl md:text-3xl font-bold font-display leading-tight text-[#00095B] tracking-tight">
+          <h3 className="text-xl sm:text-2xl md:text-3xl font-bold font-display leading-tight text-[#00095B] tracking-tight">
             Kết nối ngay với chuyên viên <span className="text-[#0562d2]">Long Khánh Ford</span>
           </h3>
 
-          <p className="text-xs md:text-sm text-gray-500 font-medium font-antenna leading-relaxed">
+          <p className="text-xs sm:text-sm text-gray-500 font-medium font-antenna leading-relaxed">
             Hãy để chúng tôi đồng hành cùng bạn. Đội ngũ chuyên viên tư vấn giàu kinh nghiệm luôn sẵn sàng giải đáp thắc mắc, gửi báo giá tốt nhất và đăng ký lịch lái thử xe nhanh chóng.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 mt-1 w-full">
             <a
               href="tel:0812868622"
-              className="flex items-center justify-center gap-2.5 bg-[#002F6C] hover:bg-[#001D4A] text-white font-bold px-6 py-3.5 rounded-full text-xs md:text-sm transition-all duration-300 shadow-sm active:scale-95 cursor-pointer shrink-0 font-antenna uppercase tracking-wider flex-1"
+              className="flex items-center justify-center gap-2 bg-[#002F6C] hover:bg-[#001D4A] text-white font-bold px-4 sm:px-5 py-3 rounded-full text-xs sm:text-sm transition-all duration-300 shadow-sm active:scale-95 cursor-pointer shrink-0 font-antenna uppercase tracking-wider flex-1 whitespace-nowrap"
             >
-              <Phone className="w-4 h-4" />
-              <span>0812 86 86 22</span>
+              <Phone className="w-4 h-4 shrink-0" />
+              <span className="whitespace-nowrap">0812 86 86 22</span>
             </a>
             <Link
               href="/lien-he"
-              className="flex items-center justify-center gap-2.5 bg-transparent hover:bg-gray-50 border border-gray-300 text-gray-700 hover:text-black font-bold px-6 py-3.5 rounded-full text-xs md:text-sm transition-all duration-300 active:scale-95 cursor-pointer shrink-0 font-antenna uppercase tracking-wider flex-1"
+              className="flex items-center justify-center gap-2 bg-transparent hover:bg-gray-50 border border-gray-300 text-gray-700 hover:text-black font-bold px-4 sm:px-5 py-3 rounded-full text-xs sm:text-sm transition-all duration-300 active:scale-95 cursor-pointer shrink-0 font-antenna uppercase tracking-wider flex-1 whitespace-nowrap"
             >
-              <Bookmark className="w-4 h-4" />
-              <span>Đặt lịch hẹn</span>
+              <Bookmark className="w-4 h-4 shrink-0" />
+              <span className="whitespace-nowrap">Đặt lịch hẹn</span>
             </Link>
           </div>
         </div>

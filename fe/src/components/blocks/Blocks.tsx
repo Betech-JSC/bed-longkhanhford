@@ -2208,7 +2208,7 @@ function BookingBannerBlock({ blockIndex, data, vehicle, isEditMode, onChangeDat
       : 'justify-start';
 
   return (
-    <section id={anchorId || undefined} className="w-full relative h-[420px] md:h-[480px] flex items-center overflow-hidden border-t border-gray-100">
+    <section id={anchorId || undefined} className="w-full relative min-h-[440px] md:min-h-[480px] py-8 md:py-12 flex items-center overflow-hidden border-t border-gray-100 font-antenna">
       {/* Background Image */}
       <img
         src={carImage}
@@ -2217,14 +2217,14 @@ function BookingBannerBlock({ blockIndex, data, vehicle, isEditMode, onChangeDat
         loading="lazy"
       />
       {/* Overlay to darken image slightly for better contrast on the card's backdrop */}
-      <div className="absolute inset-0 bg-black/25 z-0" />
+      <div className="absolute inset-0 bg-black/30 z-0" />
 
       {/* Main Content Area */}
-      <div className="max-w-[1440px] w-full mx-auto px-4 xl:px-[80px] relative z-10 flex items-center h-full">
+      <div className="max-w-[1440px] w-full mx-auto px-4 xl:px-[80px] relative z-10 flex items-center">
         {/* Floating White Card */}
-        <div className={`bg-white p-8 md:p-10 rounded-[20px] shadow-2xl max-w-[480px] w-full flex flex-col gap-5 text-gray-900 border border-gray-100 ${alignClass}`}>
+        <div className={`bg-white p-6 sm:p-8 rounded-[24px] shadow-2xl max-w-[520px] w-full flex flex-col gap-4 text-gray-900 border border-gray-100 my-auto ${alignClass}`}>
           {/* Badge */}
-          <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-widest text-[#002F6C] bg-[#002F6C]/10 px-3 py-1.5 rounded-full w-fit font-antenna">
+          <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-widest text-[#002F6C] bg-[#002F6C]/10 px-3 py-1 rounded-full w-fit font-antenna">
             Tư vấn &amp; Hỗ trợ 24/7
           </span>
 
@@ -2241,25 +2241,25 @@ function BookingBannerBlock({ blockIndex, data, vehicle, isEditMode, onChangeDat
             ) : title}
           </h3>
 
-          <p className="text-xs md:text-sm text-gray-500 font-medium font-antenna leading-relaxed">
+          <p className="text-xs sm:text-sm text-gray-500 font-medium font-antenna leading-relaxed">
             Hãy để chúng tôi đồng hành cùng bạn. Đội ngũ chuyên viên tư vấn giàu kinh nghiệm luôn sẵn sàng giải đáp thắc mắc, gửi báo giá tốt nhất và đăng ký lịch lái thử xe nhanh chóng.
           </p>
 
           <div className={`flex flex-col sm:flex-row gap-3 w-full ${btnAlignClass} mt-1`}>
             <a
               href={`tel:${phone.replace(/\s+/g, "")}`}
-              className={`flex items-center justify-center gap-2.5 bg-[#002F6C] hover:bg-[#001D4A] text-white font-bold px-6 py-3.5 rounded-full text-xs md:text-sm transition-all duration-300 shadow-sm active:scale-95 cursor-pointer shrink-0 font-antenna uppercase tracking-wider flex-1
+              className={`flex items-center justify-center gap-2 bg-[#002F6C] hover:bg-[#001D4A] text-white font-bold px-4 sm:px-5 py-3 rounded-full text-xs sm:text-sm transition-all duration-300 shadow-sm active:scale-95 cursor-pointer shrink-0 font-antenna uppercase tracking-wider flex-1 whitespace-nowrap
                   ${isEditMode ? 'outline-[1px] outline-dashed outline-gray-300 hover:outline-gray-400 outline-offset-2 cursor-pointer transition-all' : ''}`}
             >
-              <Phone className="w-4 h-4" />
-              <span>{phone}</span>
+              <Phone className="w-4 h-4 shrink-0" />
+              <span className="whitespace-nowrap">{phone}</span>
             </a>
             <a
               href={btnLink}
-              className="flex items-center justify-center gap-2.5 bg-transparent hover:bg-gray-50 border border-gray-300 text-gray-700 hover:text-black font-bold px-6 py-3.5 rounded-full text-xs md:text-sm transition-all duration-300 active:scale-95 cursor-pointer shrink-0 font-antenna uppercase tracking-wider flex-1"
+              className="flex items-center justify-center gap-2 bg-transparent hover:bg-gray-50 border border-gray-300 text-gray-700 hover:text-black font-bold px-4 sm:px-5 py-3 rounded-full text-xs sm:text-sm transition-all duration-300 active:scale-95 cursor-pointer shrink-0 font-antenna uppercase tracking-wider flex-1 whitespace-nowrap"
             >
-              <Bookmark className="w-4 h-4" />
-              <span>{btnText}</span>
+              <Bookmark className="w-4 h-4 shrink-0" />
+              <span className="whitespace-nowrap">{btnText}</span>
             </a>
           </div>
         </div>

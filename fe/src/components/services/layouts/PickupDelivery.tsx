@@ -7,6 +7,8 @@ import { ShieldCheck, MapPin, PhoneCall, Car, CheckCircle2, ChevronRight, Sparkl
 import BookingBanner from "@/components/services/BookingBanner";
 import FaqAccordion from "@/components/services/FaqAccordion";
 import ServicePageBanner from "@/components/services/ServicePageBanner";
+import ScrollReveal from "@/components/common/ScrollReveal";
+import CountUpNumber from "@/components/common/CountUpNumber";
 import { siteAssets } from "@/lib/site-assets";
 
 type StepItem = {
@@ -78,6 +80,29 @@ export default function PickupDeliveryLayout({ service }: { service?: any }) {
     <div className="w-full bg-[#F8F8F8] min-h-screen flex flex-col items-center">
       {/* Concierge VIP Banner */}
       <ServicePageBanner title={service?.title || "Dịch Vụ Nhận & Giao Xe Tận Nơi Đẳng Cấp Concierge"} backgroundImage={service?.banner_image?.url || siteAssets.serviceBanners.delivery} />
+
+      {/* Pickup & Delivery Metrics Banner */}
+      <section className="w-full bg-[#002F6C] text-white py-8 border-b border-[#066fef]/30 font-antenna">
+        <div className="max-w-[1440px] mx-auto px-4 lg:px-[80px]">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            {[
+              { target: 0, suffix: " VNĐ", label: "Phí Giao Nhận Nội Thành" },
+              { target: 100, suffix: "%", label: "Bảo Hiểm Trách Nhiệm" },
+              { target: 15, suffix: " Phút", label: "Phản Hồi Xác Nhận" },
+              { target: 360, suffix: "°", label: "Kiểm Kê Xe Điện Tử" },
+            ].map((metric, i) => (
+              <ScrollReveal key={i} direction="up" delay={i * 100}>
+                <div className="p-2 border-r border-white/10 last:border-0">
+                  <div className="text-3xl md:text-4xl font-bold text-[#38bdf8] mb-1">
+                    <CountUpNumber target={metric.target} suffix={metric.suffix} />
+                  </div>
+                  <div className="text-xs text-white/80 uppercase tracking-wider font-medium">{metric.label}</div>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* 3-Layer Security Guarantees Banner */}
       <section className="max-w-[1440px] w-full mx-auto px-4 lg:px-[80px] pt-16 pb-12 font-antenna">
