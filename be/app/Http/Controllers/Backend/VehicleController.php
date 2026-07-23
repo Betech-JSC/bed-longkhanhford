@@ -114,8 +114,51 @@ class VehicleController extends Controller
                 ->get()
                 ->map(fn($b) => ['id' => $b->id, 'title' => $b->title]);
 
+            $data['vehicles_list'] = Vehicle::query()
+                ->select('id')
+                ->with('translations:id,vehicle_id,title,locale')
+                ->get()
+                ->map(fn($v) => [
+                    'id'    => $v->id,
+                    'title' => $v->title,
+                ]);
+
             return $data;
         });
+    }
+
+    public function getAccessoriesIds($id)
+    {
+        $vehicle = Vehicle::find($id);
+        if (!$vehicle) {
+            return response()->json(['accessory_ids' => []]);
+        }
+        $accessoryIds = $vehicle->accessories()->pluck('accessories.id')->toArray();
+        return response()->json([
+            'accessory_ids' => $accessoryIds,
+            'title' => $vehicle->title,
+        ]);
+    }
+
+    public function getFeatures($id)
+    {
+        $vehicle = Vehicle::find($id);
+        if (!$vehicle) {
+            return response()->json(['features' => [], 'title' => '']);
+        }
+
+        $layoutBlocks = $vehicle->layout_blocks ?? [];
+        if (is_string($layoutBlocks)) {
+            $layoutBlocks = json_decode($layoutBlocks, true) ?? [];
+        }
+
+        $featuresBlock = collect($layoutBlocks)->firstWhere('type', 'FeaturesList');
+        $features = $featuresBlock['data']['features'] ?? [];
+
+        return response()->json([
+            'features' => $features,
+            'title'    => $vehicle->title,
+        ]);
     }
 
     private function afterForm($item)

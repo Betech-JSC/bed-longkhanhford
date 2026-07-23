@@ -62,6 +62,8 @@ Route::localized(function () {
         Route::module(BannerController::class);
         Route::module(VehicleCategoryController::class);
         Route::module(VehicleController::class);
+        Route::get('vehicles/{id}/accessories-ids', [VehicleController::class, 'getAccessoriesIds'])->name('vehicles.accessories-ids');
+        Route::get('vehicles/{id}/features', [VehicleController::class, 'getFeatures'])->name('vehicles.features');
         Route::module(UsedVehicleController::class);
         Route::module(CustomerReviewController::class);
         Route::module(PartnerController::class);
