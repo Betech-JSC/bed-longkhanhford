@@ -62,11 +62,18 @@ export default function AboutPage() {
         // Process Team Images from CMS Settings
         if (settingsRes.status === "fulfilled" && settingsRes.value) {
           const res = settingsRes.value;
-          const rawImages = res?.data?.about_team_images;
+          let rawImages = res?.data?.about_team_images;
+          if (typeof rawImages === "string") {
+            try {
+              rawImages = JSON.parse(rawImages);
+            } catch (e) {}
+          }
 
           if (Array.isArray(rawImages) && rawImages.length > 0) {
             const apiBase = process.env.NEXT_PUBLIC_API_URL
               ? process.env.NEXT_PUBLIC_API_URL.replace(/\/api\/?$/, "")
+              : typeof window !== "undefined"
+              ? window.location.origin
               : "";
 
             const formatted: TeamCard[] = rawImages

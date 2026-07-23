@@ -97,8 +97,16 @@ Route::localized(function () {
     Route::get('settings/general', function () {
         $generalSettings = settings()->group('general')->all(true);
         $aboutTeamImages = $generalSettings['about_team_images'] ?? [];
-        if (is_string($aboutTeamImages)) {
-            $aboutTeamImages = json_decode($aboutTeamImages, true) ?? [];
+        while (is_string($aboutTeamImages)) {
+            $decoded = json_decode($aboutTeamImages, true);
+            if (json_last_error() === JSON_ERROR_NONE && $decoded !== null) {
+                $aboutTeamImages = $decoded;
+            } else {
+                break;
+            }
+        }
+        if (!is_array($aboutTeamImages)) {
+            $aboutTeamImages = [];
         }
 
         return response()->json([

@@ -3,13 +3,21 @@
  * Base URL should be configured via environment variable
  */
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+function getApiBaseUrl(): string {
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    return process.env.NEXT_PUBLIC_API_URL;
+  }
+  if (typeof window !== 'undefined') {
+    return `${window.location.origin}/api`;
+  }
+  return 'http://localhost:8000/api';
+}
 
 /**
  * Generic fetch wrapper with error handling
  */
 async function fetchAPI<T = any>(endpoint: string, options?: RequestInit): Promise<T> {
-  const url = `${API_BASE_URL}${endpoint}`;
+  const url = `${getApiBaseUrl()}${endpoint}`;
   
   try {
     const response = await fetch(url, {
@@ -253,7 +261,7 @@ export const mediaAPI = {
     const formData = new FormData();
     formData.append('file', file);
 
-    const url = `${API_BASE_URL}/upload`;
+    const url = `${getApiBaseUrl()}/upload`;
     const response = await fetch(url, {
       method: 'POST',
       body: formData,
