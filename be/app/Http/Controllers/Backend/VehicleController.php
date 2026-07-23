@@ -237,9 +237,24 @@ class VehicleController extends Controller
         \Illuminate\Support\Facades\Cache::forget('vehicle_form_meta_data');
 
         DB::transaction(function () use ($request, $resource) {
-            // Sync categories
-            $categoryIds = $request->input('category_ids', []);
-            if (is_array($categoryIds)) {
+            // Sync categories safely by extracting integer IDs
+            $rawCategories = $request->input('categories', $request->input('category_ids', []));
+            if (is_array($rawCategories)) {
+                $categoryIds = collect($rawCategories)
+                    ->map(function ($item) {
+                        if (is_array($item)) {
+                            return $item['id'] ?? $item['vehicle_category_id'] ?? null;
+                        }
+                        if (is_object($item)) {
+                            return $item->id ?? $item->vehicle_category_id ?? null;
+                        }
+                        return is_numeric($item) ? (int) $item : null;
+                    })
+                    ->filter()
+                    ->unique()
+                    ->values()
+                    ->toArray();
+
                 $resource->categories()->sync($categoryIds);
             }
 
@@ -290,11 +305,25 @@ class VehicleController extends Controller
             $resource->versions()->whereNotIn('id', $keepIds)->delete();
 
             // Sync accessories Many-to-Many
-            $selectedIds = $request->input('accessories', []);
-            if (!is_array($selectedIds)) {
-                $selectedIds = [];
+            $selectedAccessories = $request->input('accessories', []);
+            if (is_array($selectedAccessories)) {
+                $accessoryIds = collect($selectedAccessories)
+                    ->map(function ($item) {
+                        if (is_array($item)) {
+                            return $item['id'] ?? null;
+                        }
+                        if (is_object($item)) {
+                            return $item->id ?? null;
+                        }
+                        return is_numeric($item) ? (int) $item : null;
+                    })
+                    ->filter()
+                    ->unique()
+                    ->values()
+                    ->toArray();
+
+                $resource->accessories()->sync($accessoryIds);
             }
-            $resource->accessories()->sync($selectedIds);
         });
     }
 

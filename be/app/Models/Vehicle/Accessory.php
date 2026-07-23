@@ -97,13 +97,35 @@ class Accessory extends BaseModel
 
     public function saveCategories($model)
     {
-        $categories = array_column(request()->input('categories', []), 'id');
+        $rawCategories = request()->input('categories', []);
+        $categories = collect($rawCategories)
+            ->map(function ($item) {
+                if (is_array($item)) return $item['id'] ?? null;
+                if (is_object($item)) return $item->id ?? null;
+                return is_numeric($item) ? (int) $item : null;
+            })
+            ->filter()
+            ->unique()
+            ->values()
+            ->toArray();
+
         $model->categories()->sync($categories);
     }
 
     public function saveVehicles($model)
     {
-        $vehicles = array_column(request()->input('vehicles', []), 'id');
+        $rawVehicles = request()->input('vehicles', []);
+        $vehicles = collect($rawVehicles)
+            ->map(function ($item) {
+                if (is_array($item)) return $item['id'] ?? null;
+                if (is_object($item)) return $item->id ?? null;
+                return is_numeric($item) ? (int) $item : null;
+            })
+            ->filter()
+            ->unique()
+            ->values()
+            ->toArray();
+
         $model->vehicles()->sync($vehicles);
     }
 
