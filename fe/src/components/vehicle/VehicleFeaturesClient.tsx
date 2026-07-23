@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useVehicle, VehicleTabBar } from "./VehicleLayoutClient";
 import BookingBanner from "@/components/services/BookingBanner";
+import ScrollReveal from "@/components/common/ScrollReveal";
 import { Calendar, Calculator, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface FeatureItem {
@@ -440,12 +441,13 @@ export default function VehicleFeaturesClient() {
       <VehicleTabBar />
 
       {/* 3. Feature Sections Content (Slider/Carousel) */}
-      {sections.map((sec) => (
-        <FeatureSectionSlider
-          key={sec.id}
-          sec={sec}
-          openDriveDrawer={openDriveDrawer}
-        />
+      {sections.map((sec, i) => (
+        <ScrollReveal key={sec.id} direction="up" delay={Math.min(i * 100, 300)}>
+          <FeatureSectionSlider
+            sec={sec}
+            openDriveDrawer={openDriveDrawer}
+          />
+        </ScrollReveal>
       ))}
 
       {/* 4. Shared Booking Call To Action Banner */}

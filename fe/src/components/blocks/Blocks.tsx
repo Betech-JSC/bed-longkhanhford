@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import ScrollReveal from "@/components/common/ScrollReveal";
 import { Plus, Minus, ChevronDown, Phone, Bookmark, ChevronLeft, ChevronRight } from "lucide-react";
 import { mediaAPI } from "@/lib/api";
 
@@ -310,9 +311,9 @@ export default function Blocks({
         }
 
         return (
-          <div key={block.id || `wrapper-${index}`}>
+          <ScrollReveal key={block.id || `wrapper-${index}`} direction="up" delay={Math.min(index * 60, 240)}>
             {blockComponent}
-          </div>
+          </ScrollReveal>
         );
       })}
     </div>

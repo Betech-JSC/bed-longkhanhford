@@ -5,6 +5,7 @@ import { useVehicle, VehicleTabBar } from "./VehicleLayoutClient";
 import { useParams, useRouter } from "next/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { resolveImageUrl } from "@/components/blocks/Blocks";
+import ScrollReveal from "@/components/common/ScrollReveal";
 
 // Vietnamese-accent-safe URL slug generator
 const getVersionSlug = (verName: string) => {
@@ -774,40 +775,31 @@ export default function VehicleVersionDetailClient() {
       )}
 
       {/* 4. Detailed Technical Specifications Section */}
-      <section className="bg-white py-16 md:py-24 border-t border-[#e5e5e5]">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full flex flex-col gap-8 md:gap-10">
-          <div className="space-y-1 text-left font-antenna">
-            <h2 className="font-display font-bold text-2xl md:text-[32px] text-[#066fef] leading-tight tracking-tight uppercase tracking-wide">
-              Thông số kỹ thuật của {vehicle.name === "Ford Mustang Mach-E" ? "Mach-E" : vehicle.name} {getVersionDisplayName(selectedVersion?.name || "", vehicle.name)}
-            </h2>
-          </div>
+      <ScrollReveal direction="up" delay={150}>
+        <section id="specs" className="w-full bg-[#f8f9fa] py-16 border-t border-[#e5e5e5]">
+          <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px]">
+            <div className="mb-10 text-left">
+              <span className="text-xs font-bold uppercase tracking-widest text-[#066fef] block mb-2 font-antenna">Chi Tiết Kỹ Thuật</span>
+              <h2 className="font-display font-bold text-2xl md:text-[32px] text-[#066fef] leading-tight tracking-tight uppercase tracking-wide">
+                Thông số kỹ thuật của {vehicle.name === "Ford Mustang Mach-E" ? "Mach-E" : vehicle.name} {getVersionDisplayName(selectedVersion?.name || "", vehicle.name)}
+              </h2>
+            </div>
 
-          <div className="flex flex-col w-full border-t border-[#e5e5e5]">
-            {getDetailedSpecs().map((catGroup: any) => {
-              const isOpen = openSpecsGroup === catGroup.category;
-              return (
-                <div key={catGroup.category} className="border-b border-[#e5e5e5] w-full">
-                  <button
-                    onClick={() => setOpenSpecsGroup(isOpen ? null : catGroup.category)}
-                    className={`flex justify-between items-center w-full text-left font-display font-bold text-base md:text-[18px] py-6 transition-colors cursor-pointer bg-transparent border-0 p-0 focus:outline-none uppercase tracking-wider ${isOpen ? "text-[#066fef]" : "text-[#424242] hover:text-[#066fef]"
-                      }`}
-                  >
-                    <span>{catGroup.category}</span>
-                    <span className="text-xl font-medium leading-none text-[#0562d2]">{isOpen ? "−" : "+"}</span>
-                  </button>
+            <div className="flex flex-col w-full border-t border-[#e5e5e5]">
+              {getDetailedSpecs().map((catGroup: any) => {
+                const isOpen = openSpecsGroup === catGroup.category;
+                return (
+                  <div key={catGroup.category} className="border-b border-[#e5e5e5] w-full">
+                    <button
+                      onClick={() => setOpenSpecsGroup(isOpen ? null : catGroup.category)}
+                      className={`flex justify-between items-center w-full text-left font-display font-bold text-base md:text-[18px] py-6 transition-colors cursor-pointer bg-transparent border-0 p-0 focus:outline-none uppercase tracking-wider ${isOpen ? "text-[#066fef]" : "text-[#424242] hover:text-[#066fef]"
+                        }`}
+                    >
+                      <span>{catGroup.category}</span>
+                      <span className="text-xl font-medium leading-none text-[#0562d2]">{isOpen ? "−" : "+"}</span>
+                    </button>
 
-                  <div
-                    className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? "max-h-[1200px] opacity-100" : "max-h-0 opacity-0"
-                      }`}
-                  >
                     <div
-                      className="px-0 pr-4 pb-8 text-[14px] md:text-[15px] text-[#424242] leading-relaxed font-normal whitespace-pre-line prose prose-sm max-w-none [&_ul]:list-disc [&_ul]:pl-4 [&_ul]:space-y-1 [&_p]:mb-1 [&_strong]:text-black"
-                      dangerouslySetInnerHTML={{ __html: catGroup.content }}
-                    />
-                  </div>
-                </div>
-              );
-            })}
           </div>
         </div>
       </section>
