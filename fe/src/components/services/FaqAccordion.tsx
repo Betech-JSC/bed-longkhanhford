@@ -11,7 +11,7 @@ type FaqItem = {
 const defaultFaqs: FaqItem[] = [
   {
     question: "Điều gì tạo nên sự nổi bật thương hiệu Long Khánh Ford?",
-    answer: "Showroom được đầu tư khá quy mô về trang thiết bị hiện đại, cơ sở hạ tầng khang trang, rộng rãi, đội ngũ kỹ thuật viên đông đảo, tay nghề cao, nhiệt tình, nhiều năm kinh nghiệm, được đào tạo chuyên nghiệp."
+    answer: "Showroom được đầu tư quy mô với trang thiết bị hiện đại, cơ sở hạ tầng khang trang, rộng rãi. Đội ngũ kỹ thuật viên giàu kinh nghiệm, được đào tạo bài bản và chuyên nghiệp theo tiêu chuẩn Ford toàn cầu."
   },
   {
     question: "Sự sáng tạo trong thiết kế sản phẩm",
@@ -26,8 +26,8 @@ const defaultFaqs: FaqItem[] = [
     answer: "Ford cam kết phát triển các dòng xe thân thiện với môi trường, sử dụng các vật liệu tái chế và công nghệ động cơ tiết kiệm nhiên liệu."
   },
   {
-    question: "Chiến lược marketing hiệu quả",
-    answer: "Chúng tôi tập trung vào việc đem lại giá trị thực tế cho khách hàng, minh bạch về thông tin và chính sách giá trị dịch vụ."
+    question: "Minh bạch giá thành & Phụ tùng Ford chính hãng 100%",
+    answer: "Tất cả chi phí dịch vụ và phụ tùng thay thế tại Long Khánh Ford đều được niêm yết giá rõ ràng, cam kết 100% chính hãng Ford Motorcraft cùng chế độ bảo hành nhà máy minh bạch."
   },
   {
     question: "Đội ngũ nhân viên chuyên nghiệp và tận tâm",
