@@ -25,7 +25,7 @@ class GeminiService
     {
         if (empty($this->apiKey)) {
             return [
-                'reply' => 'Xin lỗi, hệ thống trợ lý AI đang được cấu hình. Vui lòng liên hệ Hotline 0918 90 90 60 để được tư vấn trực tiếp.',
+                'reply' => 'Xin lỗi, hệ thống trợ lý AI đang được cấu hình. Vui lòng liên hệ Hotline 0812 86 86 22 để được tư vấn trực tiếp.',
                 'lead_data' => null,
             ];
         }
@@ -67,7 +67,7 @@ class GeminiService
                     'body' => $response->body(),
                 ]);
                 return [
-                    'reply' => 'Xin lỗi, tôi đang gặp sự cố kỹ thuật. Bạn có thể gọi trực tiếp Hotline 0918 90 90 60 để được hỗ trợ nhanh nhất!',
+                    'reply' => 'Xin lỗi, tôi đang gặp sự cố kỹ thuật. Bạn có thể gọi trực tiếp Hotline 0812 86 86 22 để được hỗ trợ nhanh nhất!',
                     'lead_data' => null,
                 ];
             }
@@ -92,7 +92,7 @@ class GeminiService
             ]);
 
             return [
-                'reply' => 'Xin lỗi, tôi đang gặp sự cố. Bạn vui lòng gọi Hotline 0918 90 90 60 hoặc chat qua Zalo để được hỗ trợ nhé!',
+                'reply' => 'Xin lỗi, tôi đang gặp sự cố. Bạn vui lòng gọi Hotline 0812 86 86 22 hoặc chat qua Zalo để được hỗ trợ nhé!',
                 'lead_data' => null,
             ];
         }
@@ -281,7 +281,7 @@ Bạn là Trợ lý AI tư vấn của **Long Khánh Ford** (Công ty TNHH Dịc
 {$servicesText}
 ## CHÍNH SÁCH CHUNG
 - Bảo hành chính hãng 3 năm hoặc 100.000km
-- Cứu hộ 24/7: 0938 229 994
+- Cứu hộ 24/7: 0879 276 699
 - Hỗ trợ đăng ký, đăng kiểm, bảo hiểm trọn gói
 
 ## QUY TẮC TƯ VẤN
@@ -295,7 +295,7 @@ Bạn là Trợ lý AI tư vấn của **Long Khánh Ford** (Công ty TNHH Dịc
 5. Khi khách hàng có nhu cầu đặt lịch bảo dưỡng định kỳ, sửa chữa xe -> Hãy giới thiệu về dịch vụ bảo dưỡng và đính kèm form đặt lịch:
    [SHOW_SERVICE_FORM]{"step":"request"}[/SHOW_SERVICE_FORM]
 6. KHÔNG tự bịa thông tin không có trong dữ liệu xe hoặc đại lý ở trên.
-7. Nếu không trả lời được, gợi ý liên hệ Hotline 0918 90 90 60.
+7. Nếu không trả lời được, gợi ý liên hệ Hotline 0812 86 86 22.
 
 ## NHẬN DIỆN LEAD (RẤT QUAN TRỌNG)
 Ở cuối mỗi phản hồi, nếu khách hàng đã cung cấp thông tin liên hệ (Tên, SĐT) trong cuộc hội thoại hoặc vừa gửi form, bạn BẮT BUỘC phải đính kèm thẻ nhận diện lead dạng ẩn ở cuối cùng:

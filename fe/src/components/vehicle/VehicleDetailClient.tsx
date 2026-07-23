@@ -162,7 +162,7 @@ export default function VehicleDetailClient() {
             type: "BookingBanner",
             data: {
               title: "Kết nối ngay với chuyên viên Long Khánh Ford",
-              phone: "1800 55 68 58",
+              phone: "0812 86 86 22",
               btn_text: "Đặt lịch hẹn",
               btn_link: "/lien-he",
               car_image: vehicle.image_url
@@ -207,7 +207,7 @@ export default function VehicleDetailClient() {
     } else if (type === "FAQs") {
       newBlock.data = { title: "Giải đáp thắc mắc", faqs: [{ q: "Câu hỏi mẫu?", a: "Câu trả lời mẫu." }] };
     } else if (type === "BookingBanner") {
-      newBlock.data = { title: "Tư vấn trực tiếp", phone: "1800 55 68 58", btn_text: "Đăng ký lái thử", car_image: vehicle?.image_url };
+      newBlock.data = { title: "Tư vấn trực tiếp", phone: "0812 86 86 22", btn_text: "Đăng ký lái thử", car_image: vehicle?.image_url };
     }
 
     setCurrentBlocks([...currentBlocks, newBlock]);

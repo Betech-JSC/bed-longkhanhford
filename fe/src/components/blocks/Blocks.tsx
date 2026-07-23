@@ -2168,7 +2168,7 @@ function VersionsGridBlock({ data, vehicle, isEditMode, onChangeData, anchorId, 
    ========================================================================== */
 function BookingBannerBlock({ blockIndex, data, vehicle, isEditMode, onChangeData, anchorId }: any) {
   const title = data.title || "Kết nối ngay với chuyên viên Long Khánh Ford";
-  const phone = data.phone || "1800 55 68 58";
+  const phone = data.phone || "0812 86 86 22";
   const btnText = data.btn_text || "Đặt lịch hẹn";
   const btnLink = data.btn_link || "/lien-he";
   const hasCarImage = hasImageField(data.car_image) || vehicle?.image_url;

@@ -1132,7 +1132,7 @@ export default {
                 newBlock.data = {
                     align: 'left',
                     title: 'Kết nối ngay với chuyên viên Long Khánh Ford',
-                    phone: '1800 55 68 58',
+                    phone: '0812 86 86 22',
                     btn_text: 'Đặt lịch hẹn',
                     btn_link: '/lien-he?reason=Đặt hẹn dịch vụ',
                     car_image: null,

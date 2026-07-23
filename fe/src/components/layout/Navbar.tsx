@@ -599,19 +599,19 @@ export default function Navbar() {
         <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] flex justify-between items-center font-medium">
           <div className="flex items-center gap-6">
             <button 
-              onClick={() => { window.location.href = "tel:1800556858"; }}
+              onClick={() => { window.location.href = "tel:0812868622"; }}
               className="flex items-center gap-1.5 text-white hover:text-white/85 transition-colors cursor-pointer bg-transparent border-0 p-0 font-medium text-xs"
             >
               <Phone className="w-3.5 h-3.5 text-white/90 flex-shrink-0" />
-              <span>Tổng đài &amp; CSKH: 1800 55 68 58</span>
+              <span>Tổng đài &amp; CSKH: 0812 86 86 22</span>
             </button>
             <span className="text-white/30">|</span>
             <button 
-              onClick={() => { window.location.href = "tel:0938229994"; }}
+              onClick={() => { window.location.href = "tel:0879276699"; }}
               className="flex items-center gap-1.5 text-white hover:text-white/85 transition-colors cursor-pointer bg-transparent border-0 p-0 font-medium text-xs"
             >
               <Phone className="w-3.5 h-3.5 text-red-400 flex-shrink-0 animate-pulse" />
-              <span>Cứu hộ 24/7: 0938 229 994</span>
+              <span>Cứu hộ 24/7: 0879 276 699</span>
             </button>
           </div>
           <div className="flex items-center gap-6">
@@ -1242,10 +1242,10 @@ export default function Navbar() {
               <p className="text-[#424242]">
                 📞 Tổng đài &amp; CSKH:{" "}
                 <button
-                  onClick={() => { window.location.href = "tel:1800556858"; }}
+                  onClick={() => { window.location.href = "tel:0812868622"; }}
                   className="font-bold text-[#066fef] bg-transparent border-0 p-0 cursor-pointer text-xs"
                 >
-                  1800 55 68 58
+                  0812 86 86 22
                 </button>
               </p>
               <p className="text-[#424242]">
@@ -1260,10 +1260,10 @@ export default function Navbar() {
               <p className="text-[#424242]">
                 🚨 Cứu hộ 24/7:{" "}
                 <button
-                  onClick={() => { window.location.href = "tel:0938229994"; }}
+                  onClick={() => { window.location.href = "tel:0879276699"; }}
                   className="font-bold text-red-500 bg-transparent border-0 p-0 cursor-pointer text-xs"
                 >
-                  0938 229 994
+                  0879 276 699
                 </button>
               </p>
             </div>

@@ -40,11 +40,11 @@ export default function BookingBanner() {
 
           <div className="flex flex-col sm:flex-row gap-3 mt-1 w-full">
             <a
-              href="tel:1800556858"
+              href="tel:0812868622"
               className="flex items-center justify-center gap-2.5 bg-[#002F6C] hover:bg-[#001D4A] text-white font-bold px-6 py-3.5 rounded-full text-xs md:text-sm transition-all duration-300 shadow-sm active:scale-95 cursor-pointer shrink-0 font-antenna uppercase tracking-wider flex-1"
             >
               <Phone className="w-4 h-4" />
-              <span>1800 55 68 58</span>
+              <span>0812 86 86 22</span>
             </a>
             <Link
               href="/lien-he"
