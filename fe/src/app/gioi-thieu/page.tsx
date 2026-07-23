@@ -453,7 +453,7 @@ export default function AboutPage() {
             </div>
 
             {/* Asymmetric Overlapping Photo Stack */}
-            <div className="lg:col-span-8 flex flex-col md:flex-row gap-6 items-stretch">
+            <div className="lg:col-span-8 flex flex-col md:flex-row gap-3 items-stretch">
               {/* Primary tall card */}
               <ScrollReveal delay={100} className="w-full md:w-[45%]">
                 <div className="w-full aspect-[3/4] relative rounded-none overflow-hidden border border-[#e5e5e5] bg-gray-100 group cursor-pointer h-full">
@@ -462,7 +462,7 @@ export default function AboutPage() {
                     alt="Vision Gallery Left"
                     className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
                     <span className="text-[11px] font-bold text-white tracking-wider uppercase font-antenna">
                       ĐỘI NGŨ NHÂN SỰ & SHOWROOM
                     </span>
@@ -471,7 +471,7 @@ export default function AboutPage() {
               </ScrollReveal>
 
               {/* Stacked sub-grid (staggered depth) */}
-              <div className="flex-1 flex flex-col justify-between gap-6">
+              <div className="flex-1 flex flex-col justify-between gap-3">
                 {/* Horizontal image */}
                 <ScrollReveal delay={200}>
                   <div className="w-full aspect-[2/1] relative rounded-none overflow-hidden border border-[#e5e5e5] bg-gray-100 group cursor-pointer">
@@ -489,7 +489,7 @@ export default function AboutPage() {
                 </ScrollReveal>
 
                 {/* Staggered double column */}
-                <div className="grid grid-cols-2 gap-6 flex-1">
+                <div className="grid grid-cols-2 gap-3 flex-1">
                   <ScrollReveal delay={300} className="h-full">
                     <div className="relative rounded-none overflow-hidden border border-[#e5e5e5] bg-gray-100 h-full min-h-[140px] group cursor-pointer">
                       <img
