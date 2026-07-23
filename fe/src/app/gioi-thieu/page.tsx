@@ -85,6 +85,7 @@ export default function AboutPage() {
                   imgUrl = imgItem;
                 } else if (imgItem && typeof imgItem === "object") {
                   imgUrl =
+                    imgItem.static_url ||
                     imgItem.url ||
                     imgItem.path ||
                     imgItem.file ||
@@ -97,13 +98,20 @@ export default function AboutPage() {
 
                 if (imgUrl) {
                   if (imgUrl.includes("localhost") || imgUrl.includes("127.0.0.1")) {
-                    imgUrl = imgUrl.replace(/^https?:\/\/[^\/]+/, apiBase);
+                    imgUrl = imgUrl.replace(/^https?:\/\/[^\/]+/, "");
                   }
-                  if (!imgUrl.startsWith("http") && !imgUrl.startsWith("/")) {
-                    imgUrl = "/" + imgUrl;
-                  }
-                  if (imgUrl.startsWith("/storage")) {
-                    imgUrl = `${apiBase}${imgUrl}`;
+
+                  if (imgUrl.startsWith("http://") || imgUrl.startsWith("https://")) {
+                    // Full URL already
+                  } else {
+                    let cleaned = imgUrl.replace(/^\/+/, "");
+                    if (cleaned.startsWith("uploads/")) {
+                      cleaned = cleaned.substring(8);
+                    }
+                    if (!cleaned.startsWith("storage/") && !cleaned.startsWith("static/")) {
+                      cleaned = "storage/" + cleaned;
+                    }
+                    imgUrl = apiBase ? `${apiBase}/${cleaned}` : `/${cleaned}`;
                   }
                 }
 
