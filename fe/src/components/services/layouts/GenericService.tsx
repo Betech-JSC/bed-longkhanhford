@@ -52,22 +52,7 @@ export default function GenericServiceLayout({ service }: { service: ServiceDeta
 
   return (
     <div className="w-full bg-[#F8F8F8] min-h-screen flex flex-col items-center">
-      <ServicePageBanner title={service.title} backgroundImage={service.banner_image?.url}>
-        <div className="flex flex-wrap gap-4 justify-center font-antenna">
-          <Link
-            href="/lien-he"
-            className="bg-[#066fef] hover:bg-[#01095c] border border-[#066fef] transition-colors text-white font-bold px-6 py-3 rounded-[4px] text-xs uppercase tracking-wider shadow-xs"
-          >
-            Đặt hẹn dịch vụ
-          </Link>
-          <a
-            href="tel:1900888992"
-            className="border border-white hover:bg-white/10 transition-colors text-white font-bold px-6 py-3 rounded-[4px] text-xs uppercase tracking-wider shadow-xs"
-          >
-            Liên hệ hỗ trợ
-          </a>
-        </div>
-      </ServicePageBanner>
+      <ServicePageBanner title={service.title} backgroundImage={service.banner_image?.url} />
 
       {/* Description */}
       {service.description && (

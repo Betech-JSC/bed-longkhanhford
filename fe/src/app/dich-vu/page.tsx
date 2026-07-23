@@ -239,10 +239,10 @@ export default async function ServicesPage() {
                 Đặt hẹn dịch vụ
               </Link>
               <a
-                href="tel:1900888992"
+                href="tel:0879276699"
                 className="bg-white/10 hover:bg-white/15 text-white border border-white/20 font-bold text-center px-8 py-4 rounded-[4px] transition-all text-sm uppercase tracking-wider text-[11px]"
               >
-                Hotline hỗ trợ kỹ thuật
+                Hotline Cứu Hộ &amp; Kỹ Thuật: 0879 276 699
               </a>
             </div>
           </div>

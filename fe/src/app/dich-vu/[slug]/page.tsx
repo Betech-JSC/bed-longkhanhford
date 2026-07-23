@@ -4,6 +4,10 @@ import PeriodicMaintenanceLayout from "@/components/services/layouts/PeriodicMai
 import ExpressMaintenanceLayout from "@/components/services/layouts/ExpressMaintenance";
 import PickupDeliveryLayout from "@/components/services/layouts/PickupDelivery";
 import CustomerCareLayout from "@/components/services/layouts/CustomerCare";
+import GeneralRepairLayout from "@/components/services/layouts/GeneralRepair";
+import RoadsideAssistanceLayout from "@/components/services/layouts/RoadsideAssistance";
+import UsedCarsLayout from "@/components/services/layouts/UsedCars";
+import VehicleUpgradeLayout from "@/components/services/layouts/VehicleUpgrade";
 import GenericServiceLayout from "@/components/services/layouts/GenericService";
 
 type Props = {
@@ -53,7 +57,31 @@ export default async function ServiceSlugPage({ params }: Props) {
   }
 
   if (!serviceData) {
-    notFound();
+    const titleMap: Record<string, string> = {
+      "bao-duong-dinh-ky": "Dịch vụ bảo dưỡng xe ô tô định kỳ tiêu chuẩn Ford",
+      "dich-vu-bao-duong": "Dịch vụ bảo dưỡng xe ô tô định kỳ tiêu chuẩn Ford",
+      "bao-duong-nhanh": "Dịch vụ bảo dưỡng nhanh 60 phút",
+      "dich-vu-bao-duong-nhanh": "Dịch vụ bảo dưỡng nhanh 60 phút",
+      "giao-nhan-xe-tan-noi": "Dịch vụ nhận và giao xe tận nơi",
+      "dich-vu-giao-nhan-xe-tan-noi": "Dịch vụ nhận và giao xe tận nơi",
+      "nhan-va-giao-xe-tan-noi": "Dịch vụ nhận và giao xe tận nơi",
+      "cham-soc-khach-hang": "Dịch vụ chăm sóc khách hàng & Detailing",
+      "dich-vu-cham-soc-xe": "Dịch vụ chăm sóc khách hàng & Detailing",
+      "dich-vu-sua-chua": "Dịch vụ sửa chữa chẩn đoán & Đồng sơn 3S",
+      "sua-chua-xe": "Dịch vụ sửa chữa chẩn đoán & Đồng sơn 3S",
+      "dich-vu-cuu-ho-247": "Dịch vụ cứu hộ giao thông 24/7",
+      "cuu-ho-247": "Dịch vụ cứu hộ giao thông 24/7",
+      "dich-vu-xe-da-qua-su-dung": "Dịch vụ mua bán xe Ford đã qua sử dụng (Ford Assured)",
+      "xe-da-qua-su-dung": "Dịch vụ mua bán xe Ford đã qua sử dụng (Ford Assured)",
+      "dich-vu-nang-cap-xe": "Dịch vụ nâng cấp phụ kiện & Đồ chơi xe Ford",
+      "nang-cap-xe": "Dịch vụ nâng cấp phụ kiện & Đồ chơi xe Ford"
+    };
+
+    serviceData = {
+      title: titleMap[slug] || "Dịch vụ chăm sóc xe Ford chính hãng",
+      slug: slug,
+      description: "Xưởng dịch vụ lớn nhất khu vực Đồng Nai của đại lý Long Khánh Ford. Cung cấp các gói bảo dưỡng định kỳ, bảo dưỡng nhanh 60 phút, sửa chữa chung và giao nhận xe tận nhà."
+    };
   }
 
   // 1. Periodic Maintenance Layout Switcher
@@ -80,7 +108,7 @@ export default async function ServiceSlugPage({ params }: Props) {
   }
 
   // 3. Pickup & Delivery Layout Switcher
-  if (slug === "giao-nhan-xe-tan-noi" || slug === "dich-vu-giao-nhan-xe-tan-noi") {
+  if (slug === "giao-nhan-xe-tan-noi" || slug === "dich-vu-giao-nhan-xe-tan-noi" || slug === "nhan-va-giao-xe-tan-noi") {
     return <PickupDeliveryLayout service={serviceData} />;
   }
 
@@ -89,6 +117,26 @@ export default async function ServiceSlugPage({ params }: Props) {
     return <CustomerCareLayout service={serviceData} />;
   }
 
-  // 5. Default Fallback layout (Dynamic CMS Layout)
+  // 5. General Repair & Body Paint Layout Switcher
+  if (slug === "dich-vu-sua-chua" || slug === "sua-chua-xe") {
+    return <GeneralRepairLayout service={serviceData} />;
+  }
+
+  // 6. Roadside Assistance 24/7 Rescue Layout Switcher
+  if (slug === "dich-vu-cuu-ho-247" || slug === "cuu-ho-247" || slug === "cuu-ho-giao-thong") {
+    return <RoadsideAssistanceLayout service={serviceData} />;
+  }
+
+  // 7. Ford Assured Certified Pre-Owned Used Cars Layout Switcher
+  if (slug === "dich-vu-xe-da-qua-su-dung" || slug === "xe-da-qua-su-dung") {
+    return <UsedCarsLayout service={serviceData} />;
+  }
+
+  // 8. Vehicle Accessories Upgrade Layout Switcher
+  if (slug === "dich-vu-nang-cap-xe" || slug === "nang-cap-xe" || slug === "phu-kien-nang-cap") {
+    return <VehicleUpgradeLayout service={serviceData} />;
+  }
+
+  // 9. Default Fallback layout (Dynamic CMS Layout)
   return <GenericServiceLayout service={serviceData} />;
 }
