@@ -176,12 +176,12 @@ const nextConfig = {
       },
       // Chuyển hướng chuẩn từ /san-pham/[slug-dung] sang /[slug-dung]
       {
-        source: "/san-pham/:slug(ford-ranger|ford-everest|ford-territory|ford-explorer|ford-transit|ford-mustang-mach-e)",
+        source: "/san-pham/:slug(ford-[^/]+)",
         destination: "/:slug",
         permanent: true,
       },
       {
-        source: "/san-pham/:slug(ford-ranger|ford-everest|ford-territory|ford-explorer|ford-transit|ford-mustang-mach-e)/:subpath*",
+        source: "/san-pham/:slug(ford-[^/]+)/:subpath*",
         destination: "/:slug/:subpath*",
         permanent: true,
       },
@@ -201,13 +201,13 @@ const nextConfig = {
   },
   async rewrites() {
     return [
-      // Chuyển hướng nội bộ cho các dòng xe Ford (rút ngắn URL)
+      // Chuyển hướng nội bộ cho tất cả các dòng xe Ford (rút ngắn URL)
       {
-        source: "/:slug(ford-ranger|ford-everest|ford-territory|ford-transit|ford-mustang-mach-e|ford-explorer)",
+        source: "/:slug(ford-[^/]+)",
         destination: "/san-pham/:slug",
       },
       {
-        source: "/:slug(ford-ranger|ford-everest|ford-territory|ford-transit|ford-mustang-mach-e|ford-explorer)/:subpath*",
+        source: "/:slug(ford-[^/]+)/:subpath*",
         destination: "/san-pham/:slug/:subpath*",
       },
       // Chuyển hướng nội bộ đường dẫn /khuyen-mai sang trang /tin-tuc
