@@ -614,15 +614,16 @@ export default function Navbar() {
 
           {/* Hover Dropdown Menu */}
           <div className="absolute top-full left-1/2 -translate-x-1/2 w-64 bg-white shadow-[0px_4px_4px_rgba(16,24,40,0.1),0px_2px_2px_rgba(16,24,40,0.06)] py-0 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 z-50 before:absolute before:-top-3 before:left-0 before:right-0 before:h-3 before:content-[''] rounded-b-[12px] rounded-t-none">
-            {link.dropdownItems?.map((subItem) => {
+            {link.dropdownItems?.map((subItem, index) => {
+              const isLast = index === (link.dropdownItems?.length ?? 0) - 1;
               if (subItem.subItems && subItem.subItems.length > 0) {
                 return (
-                  <div key={subItem.name} className="relative group/sub">
-                    <div className="w-full flex items-center justify-between px-5 py-3 text-sm font-['Ford_Antenna',sans-serif] font-medium text-[#333333] hover:bg-[#f0f0f0] hover:text-gray-900 transition-colors cursor-pointer">
+                  <div key={subItem.name} className={`relative group/sub ${isLast ? "rounded-b-[12px]" : ""}`}>
+                    <div className={`w-full flex items-center justify-between px-5 py-3 text-sm font-['Ford_Antenna',sans-serif] font-medium text-[#333333] hover:bg-[#f0f0f0] hover:text-gray-900 transition-colors cursor-pointer ${isLast ? "rounded-b-[12px]" : ""}`}>
                       <span>{subItem.name}</span>
                       <ChevronRight className="w-4 h-4 opacity-60" />
                     </div>
-                    <div className="absolute top-0 left-full w-64 bg-white shadow-[0px_4px_4px_rgba(16,24,40,0.1),0px_2px_2px_rgba(16,24,40,0.06)] py-0 opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-300 transform translate-x-2 group-hover/sub:translate-x-0 z-50 rounded-[12px] border border-gray-100">
+                    <div className="absolute top-0 left-full w-64 bg-white shadow-[0px_4px_4px_rgba(16,24,40,0.1),0px_2px_2px_rgba(16,24,40,0.06)] py-0 opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-300 transform translate-x-2 group-hover/sub:translate-x-0 z-50 rounded-[12px] border border-gray-100 overflow-hidden">
                       {subItem.subItems.map((nestedItem) => (
                         <Link
                           key={nestedItem.name}
@@ -641,7 +642,7 @@ export default function Navbar() {
                 <Link
                   key={subItem.name}
                   href={subItem.href}
-                  className="block px-5 py-3 text-sm font-['Ford_Antenna',sans-serif] font-medium text-[#333333] hover:bg-[#f0f0f0] hover:text-gray-900 transition-colors first:rounded-t-none last:rounded-b-[12px]"
+                  className={`block px-5 py-3 text-sm font-['Ford_Antenna',sans-serif] font-medium text-[#333333] hover:bg-[#f0f0f0] hover:text-gray-900 transition-colors first:rounded-t-none ${isLast ? "rounded-b-[12px]" : ""}`}
                 >
                   {subItem.name}
                 </Link>

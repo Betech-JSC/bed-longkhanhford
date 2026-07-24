@@ -55,7 +55,7 @@ export default function ExpressMaintenanceLayout({ service }: { service?: any })
         <div className="text-center max-w-3xl mx-auto mb-12">
           <span className="text-[#066fef] font-bold text-xs uppercase tracking-widest block mb-2">Bí Quyết Tiết Kiệm 50% Thời Gian</span>
           <h2 className="text-2xl md:text-3.5xl font-bold text-gray-900 uppercase tracking-tight">
-            MÔ HÌNH BẢO DƯỠNG KÉP (DUAL-TECHNICIAN)
+            MÔ HÌNH BẢO DƯỠNG KÉP
           </h2>
           <p className="text-gray-600 text-sm mt-3">
             Hai kỹ thuật viên chứng chỉ Ford phối hợp nhịp nhàng theo quy trình phân công chuẩn hóa quốc tế.
