@@ -262,6 +262,23 @@ export default function Navbar() {
             }
           });
 
+          // Ensure the 4 default sub-services are always present in otherItems for staging/production
+          const defaultSubServices = [
+            { name: "Nhận & Giao xe tận nơi miễn phí", href: "/dich-vu/nhan-giao-xe-mien-phi", slugs: ["nhan-giao-xe-mien-phi", "nhan-giao-xe-tan-noi-mien-phi"] },
+            { name: "FORD SYNC", href: "/dich-vu/ford-sync", slugs: ["ford-sync"] },
+            { name: "Ứng dụng Ford", href: "/dich-vu/ung-dung-ford", slugs: ["ung-dung-ford", "fordpass"] },
+            { name: "Ford Ensure", href: "/dich-vu/ford-ensure", slugs: ["ford-ensure", "ensure"] }
+          ];
+
+          defaultSubServices.forEach(defaultSrv => {
+            const exists = otherItems.some(item => 
+              defaultSrv.slugs.some(s => item.href.includes(s))
+            );
+            if (!exists) {
+              otherItems.push({ name: defaultSrv.name, href: defaultSrv.href });
+            }
+          });
+
           if (otherItems.length > 0) {
             mainItems.push({
               name: "Các Dịch Vụ Khác",
