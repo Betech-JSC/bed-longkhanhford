@@ -69,6 +69,7 @@ export default async function ServiceSlugPage({ params }: Props) {
       "dich-vu-giao-nhan-xe-tan-noi": "Dịch vụ nhận và giao xe tận nơi",
       "nhan-va-giao-xe-tan-noi": "Dịch vụ nhận và giao xe tận nơi",
       "nhan-giao-xe-mien-phi": "Dịch vụ nhận & giao xe tận nơi miễn phí",
+      "nhan-giao-xe-tan-noi-mien-phi": "Dịch vụ nhận & giao xe tận nơi miễn phí",
       "dich-vu-nhan-giao-xe-mien-phi": "Dịch vụ nhận & giao xe tận nơi miễn phí",
       "cham-soc-khach-hang": "Dịch vụ chăm sóc khách hàng & Detailing",
       "dich-vu-cham-soc-xe": "Dịch vụ chăm sóc khách hàng & Detailing",
@@ -117,7 +118,7 @@ export default async function ServiceSlugPage({ params }: Props) {
   }
 
   // 3. Pickup & Delivery Layout Switcher
-  if (slug === "giao-nhan-xe-tan-noi" || slug === "dich-vu-giao-nhan-xe-tan-noi" || slug === "nhan-va-giao-xe-tan-noi" || slug === "nhan-giao-xe-mien-phi" || slug === "dich-vu-nhan-giao-xe-mien-phi") {
+  if (slug === "giao-nhan-xe-tan-noi" || slug === "dich-vu-giao-nhan-xe-tan-noi" || slug === "nhan-va-giao-xe-tan-noi" || slug === "nhan-giao-xe-mien-phi" || slug === "dich-vu-nhan-giao-xe-mien-phi" || slug === "nhan-giao-xe-tan-noi-mien-phi") {
     return <PickupDeliveryLayout service={serviceData} />;
   }
 

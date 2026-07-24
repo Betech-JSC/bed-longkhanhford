@@ -140,6 +140,7 @@ class ServiceAgencyJobSeeder extends Seeder
                 'vi' => [
                     'title' => 'Nhận & Giao xe tận nơi miễn phí',
                     'slug' => 'nhan-giao-xe-mien-phi',
+                    'seo_slug' => 'nhan-giao-xe-mien-phi',
                     'description' => 'Dịch vụ nhận và giao xe tận nơi miễn phí chuyên nghiệp chuẩn VIP từ Long Khánh Ford.',
                 ]
             ],
@@ -153,6 +154,7 @@ class ServiceAgencyJobSeeder extends Seeder
                 'vi' => [
                     'title' => 'FORD SYNC',
                     'slug' => 'ford-sync',
+                    'seo_slug' => 'ford-sync',
                     'description' => 'Hệ thống thông tin giải trí và điều khiển bằng giọng nói thông minh Ford SYNC.',
                 ]
             ],
@@ -166,6 +168,7 @@ class ServiceAgencyJobSeeder extends Seeder
                 'vi' => [
                     'title' => 'Ứng dụng Ford',
                     'slug' => 'ung-dung-ford',
+                    'seo_slug' => 'ung-dung-ford',
                     'description' => 'Ứng dụng kết nối thông minh FordPass - quản lý chiếc xe của bạn mọi lúc mọi nơi.',
                 ]
             ],
@@ -179,6 +182,7 @@ class ServiceAgencyJobSeeder extends Seeder
                 'vi' => [
                     'title' => 'Ford Ensure',
                     'slug' => 'ford-ensure',
+                    'seo_slug' => 'ford-ensure',
                     'description' => 'Chương trình bảo hiểm và gia hạn bảo hành chính hãng toàn diện Ford Ensure.',
                 ]
             ],

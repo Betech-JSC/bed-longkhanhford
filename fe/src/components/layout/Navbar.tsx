@@ -232,6 +232,7 @@ export default function Navbar() {
         if (Array.isArray(services) && services.length > 0) {
           const subServiceSlugs = [
             "nhan-giao-xe-mien-phi",
+            "nhan-giao-xe-tan-noi-mien-phi",
             "giao-nhan-xe-tan-noi",
             "dich-vu-giao-nhan-xe-tan-noi",
             "nhan-va-giao-xe-tan-noi-mien-phi",
