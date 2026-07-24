@@ -616,7 +616,7 @@ function SpecsGridBlock({ data, vehicle, isEditMode, onChangeData, openQuoteDraw
   const formatPrice = (price: any) => {
     const num = typeof price === 'string' ? parseFloat(price) : (price || 0);
     if (num <= 0) return "Liên hệ";
-    return new Intl.NumberFormat("vi-VN").format(num) + " VNĐ";
+    return new Intl.NumberFormat("vi-VN").format(num) + " đ";
   };
 
   const handleToggleVersion = (verId: string) => {
@@ -2047,7 +2047,7 @@ function VersionsGridBlock({ data, vehicle, isEditMode, onChangeData, anchorId, 
   };
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("vi-VN").format(price) + " VNĐ";
+    return new Intl.NumberFormat("vi-VN").format(price) + " đ";
   };
 
   const scroll = (direction: 'left' | 'right') => {

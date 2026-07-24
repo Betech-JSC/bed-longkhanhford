@@ -4,12 +4,13 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { MapPin, Mail, Phone, Search, ChevronDown, ChevronRight, X } from "lucide-react";
+import { MapPin, Mail, Phone, Search, ChevronDown, ChevronRight, X, Download, FileText } from "lucide-react";
 import { vehiclesAPI, accessoriesAPI, servicesAPI, usedVehiclesAPI } from "@/lib/api";
 
 type DropdownItem = {
   name: string;
   href: string;
+  subItems?: DropdownItem[];
 };
 
 type NavLink = {
@@ -48,12 +49,25 @@ export default function Navbar() {
   const [accessoriesList, setAccessoriesList] = useState<any[]>([]);
   const [usedVehiclesList, setUsedVehiclesList] = useState<any[]>([]);
   const [servicesMenuList, setServicesMenuList] = useState<DropdownItem[]>([
-    { name: "Chăm sóc khách hàng", href: "/dich-vu/cham-soc-khach-hang" },
-    { name: "Bảo dưỡng nhanh 60 phút", href: "/dich-vu/bao-duong-nhanh" },
     { name: "Bảo dưỡng định kỳ", href: "/dich-vu/bao-duong-dinh-ky" },
-    { name: "Nhận & Giao xe tận nơi", href: "/dich-vu/giao-nhan-xe-tan-noi" },
+    { name: "Bảo dưỡng nhanh 60 phút", href: "/dich-vu/bao-duong-nhanh" },
+    { name: "Dịch vụ sửa chữa chung", href: "/dich-vu/dich-vu-sua-chua" },
+    { name: "Cứu hộ giao thông 24/7", href: "/dich-vu/dich-vu-cuu-ho-247" },
+    { name: "Dịch vụ nâng cấp xe", href: "/dich-vu/dich-vu-nang-cap-xe" },
+    { name: "Chăm sóc khách hàng", href: "/dich-vu/cham-soc-khach-hang" },
+    {
+      name: "Các Dịch Vụ Khác",
+      href: "#",
+      subItems: [
+        { name: "Nhận & Giao xe tận nơi miễn phí", href: "/dich-vu/nhan-giao-xe-mien-phi" },
+        { name: "Công nghệ Ford SYNC®", href: "/dich-vu/ford-sync" },
+        { name: "Ứng dụng FordPass™", href: "/dich-vu/ung-dung-ford" },
+        { name: "Bảo hiểm Ford Ensure", href: "/dich-vu/ford-ensure" },
+      ]
+    }
   ]);
   const [loading, setLoading] = useState(true);
+  const [isBrochureModalOpen, setIsBrochureModalOpen] = useState(false);
 
   // Compute suggestions based on searchQuery
   const suggestions = useMemo(() => {
@@ -216,15 +230,46 @@ export default function Navbar() {
           setUsedVehiclesList(usedVehs);
         }
         if (Array.isArray(services) && services.length > 0) {
-          setServicesMenuList(services.map((srv: any) => {
+          const subServiceSlugs = [
+            "nhan-giao-xe-mien-phi",
+            "giao-nhan-xe-tan-noi",
+            "dich-vu-giao-nhan-xe-tan-noi",
+            "nhan-va-giao-xe-tan-noi-mien-phi",
+            "ford-sync",
+            "ung-dung-ford",
+            "fordpass",
+            "ford-ensure",
+            "ensure"
+          ];
+
+          const mainItems: DropdownItem[] = [];
+          const otherItems: DropdownItem[] = [];
+
+          services.forEach((srv: any) => {
+            const slug = srv.slug;
             const href = (srv.custom_link && srv.custom_link.startsWith('/dich-vu/'))
               ? srv.custom_link
-              : `/dich-vu/${srv.slug}`;
-            return {
-              name: srv.title || srv.name || "",
-              href: href,
-            };
-          }));
+              : `/dich-vu/${slug}`;
+            
+            const name = srv.title || srv.name || "";
+            const item = { name, href };
+
+            if (subServiceSlugs.includes(slug)) {
+              otherItems.push(item);
+            } else {
+              mainItems.push(item);
+            }
+          });
+
+          if (otherItems.length > 0) {
+            mainItems.push({
+              name: "Các Dịch Vụ Khác",
+              href: "#",
+              subItems: otherItems
+            });
+          }
+
+          setServicesMenuList(mainItems);
         }
       } catch (err) {
         console.error("Error fetching menu categories/vehicles/accessories/services:", err);
@@ -248,7 +293,7 @@ export default function Navbar() {
   const formatPrice = (price: number | string) => {
     const numericPrice = typeof price === "string" ? parseFloat(price) : price;
     if (!numericPrice || numericPrice <= 0) return "Liên hệ";
-    return new Intl.NumberFormat("en-US").format(numericPrice) + "đ";
+    return new Intl.NumberFormat("vi-VN").format(numericPrice) + " đ";
   };
 
   // Helper to resolve banner styling & content for any category slug/title
@@ -551,15 +596,39 @@ export default function Navbar() {
 
           {/* Hover Dropdown Menu */}
           <div className="absolute top-full left-1/2 -translate-x-1/2 w-64 bg-white shadow-[0px_4px_4px_rgba(16,24,40,0.1),0px_2px_2px_rgba(16,24,40,0.06)] py-0 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 z-50 before:absolute before:-top-3 before:left-0 before:right-0 before:h-3 before:content-[''] rounded-b-[12px] rounded-t-none">
-            {link.dropdownItems?.map((subItem) => (
-              <Link
-                key={subItem.name}
-                href={subItem.href}
-                className="block px-5 py-3 text-sm font-['Ford_Antenna',sans-serif] font-medium text-[#333333] hover:bg-[#f0f0f0] hover:text-gray-900 transition-colors first:rounded-t-none last:rounded-b-[12px]"
-              >
-                {subItem.name}
-              </Link>
-            ))}
+            {link.dropdownItems?.map((subItem) => {
+              if (subItem.subItems && subItem.subItems.length > 0) {
+                return (
+                  <div key={subItem.name} className="relative group/sub">
+                    <div className="w-full flex items-center justify-between px-5 py-3 text-sm font-['Ford_Antenna',sans-serif] font-medium text-[#333333] hover:bg-[#f0f0f0] hover:text-gray-900 transition-colors cursor-pointer">
+                      <span>{subItem.name}</span>
+                      <ChevronRight className="w-4 h-4 opacity-60" />
+                    </div>
+                    <div className="absolute top-0 left-full w-64 bg-white shadow-[0px_4px_4px_rgba(16,24,40,0.1),0px_2px_2px_rgba(16,24,40,0.06)] py-0 opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-300 transform translate-x-2 group-hover/sub:translate-x-0 z-50 rounded-[12px] border border-gray-100">
+                      {subItem.subItems.map((nestedItem) => (
+                        <Link
+                          key={nestedItem.name}
+                          href={nestedItem.href}
+                          className="block px-5 py-3 text-sm font-['Ford_Antenna',sans-serif] font-medium text-[#333333] hover:bg-[#f0f0f0] hover:text-gray-900 transition-colors first:rounded-t-[12px] last:rounded-b-[12px]"
+                        >
+                          {nestedItem.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                );
+              }
+
+              return (
+                <Link
+                  key={subItem.name}
+                  href={subItem.href}
+                  className="block px-5 py-3 text-sm font-['Ford_Antenna',sans-serif] font-medium text-[#333333] hover:bg-[#f0f0f0] hover:text-gray-900 transition-colors first:rounded-t-none last:rounded-b-[12px]"
+                >
+                  {subItem.name}
+                </Link>
+              );
+            })}
           </div>
         </div>
       );
@@ -591,7 +660,8 @@ export default function Navbar() {
       }`;
 
   return (
-    <header ref={headerRef} className={headerClass}>
+    <>
+      <header ref={headerRef} className={headerClass}>
       {/* Top Header Utility Bar */}
       <div className={`hidden lg:block text-xs py-2 transition-all duration-300 ${
         isTransparent ? "bg-black/20 text-white border-b border-white/10" : "bg-[#00095b] text-white"
@@ -936,13 +1006,16 @@ export default function Navbar() {
               >
                 Xem tất cả dòng xe
               </Link>
-              <Link
-                href="/thu-vien-media"
-                onClick={handleMouseLeaveImmediate}
-                className="w-full flex items-center justify-center text-[12px] py-2 px-3 border border-neutral-300 rounded-[4px] hover:border-[#066fef] hover:text-[#066fef] text-neutral-800 bg-white transition-all font-semibold uppercase tracking-wider text-center"
+              <button
+                type="button"
+                onClick={() => {
+                  handleMouseLeaveImmediate();
+                  setIsBrochureModalOpen(true);
+                }}
+                className="w-full flex items-center justify-center text-[12px] py-2 px-3 border border-neutral-300 rounded-[4px] hover:border-[#066fef] hover:text-[#066fef] text-neutral-800 bg-white transition-all font-semibold uppercase tracking-wider text-center cursor-pointer"
               >
                 Tải Catalogue
-              </Link>
+              </button>
               <Link
                 href="/cong-cu/so-sanh-xe"
                 onClick={handleMouseLeaveImmediate}
@@ -1204,6 +1277,20 @@ export default function Navbar() {
                       </Link>
                       
                       <div className="h-px bg-gray-100 my-1" />
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsOpen(false);
+                          setIsMobileProductOpen(false);
+                          setIsBrochureModalOpen(true);
+                        }}
+                        className="w-full block px-2 py-1.5 text-sm font-semibold text-gray-700 hover:text-[#066fef] hover:bg-gray-50 rounded text-left cursor-pointer border-0 bg-transparent"
+                      >
+                        Tải Catalogue
+                      </button>
+                      
+                      <div className="h-px bg-gray-100 my-1" />
                       
                       {/* Accessories Collapsible Menu on Mobile Drawer hidden */}
                   </div>
@@ -1222,16 +1309,39 @@ export default function Navbar() {
                 </Link>
                 {link.dropdownItems && (
                   <div className="pl-6 border-l border-gray-100 flex flex-col gap-1.5 py-1">
-                    {link.dropdownItems.map((subItem) => (
-                      <Link
-                        key={subItem.name}
-                        href={subItem.href}
-                        onClick={() => setIsOpen(false)}
-                        className="text-sm font-medium text-gray-550 hover:text-[#066fef] py-1 block"
-                      >
-                        {subItem.name}
-                      </Link>
-                    ))}
+                    {link.dropdownItems.map((subItem) => {
+                      if (subItem.subItems && subItem.subItems.length > 0) {
+                        return (
+                          <div key={subItem.name} className="space-y-1">
+                            <span className="text-xs font-bold text-gray-400 uppercase px-3 py-1 block mt-2">
+                              {subItem.name}
+                            </span>
+                            <div className="pl-3 border-l border-gray-150 flex flex-col gap-1 py-1">
+                              {subItem.subItems.map((nestedItem) => (
+                                <Link
+                                  key={nestedItem.name}
+                                  href={nestedItem.href}
+                                  onClick={() => setIsOpen(false)}
+                                  className="text-sm font-medium text-gray-550 hover:text-[#066fef] py-1 block"
+                                >
+                                  {nestedItem.name}
+                                </Link>
+                              ))}
+                            </div>
+                          </div>
+                        );
+                      }
+                      return (
+                        <Link
+                          key={subItem.name}
+                          href={subItem.href}
+                          onClick={() => setIsOpen(false)}
+                          className="text-sm font-medium text-gray-550 hover:text-[#066fef] py-1 block"
+                        >
+                          {subItem.name}
+                        </Link>
+                      );
+                    })}
                   </div>
                 )}
               </div>
@@ -1269,6 +1379,156 @@ export default function Navbar() {
             </div>
           </div>
         </div>
-    </header>
+      </header>
+
+      {/* Brochure/Catalogue Download Modal */}
+      {isBrochureModalOpen && (
+        <div 
+          className="fixed inset-0 z-[150] flex items-center justify-center bg-black/40 p-4 animate-modal-fade"
+          onClick={() => setIsBrochureModalOpen(false)}
+        >
+          <style>{`
+            @keyframes modalFadeIn {
+              from { opacity: 0; }
+              to { opacity: 1; }
+            }
+            @keyframes modalScaleUp {
+              from { opacity: 0; transform: scale(0.96) translateY(8px); }
+              to { opacity: 1; transform: scale(1) translateY(0); }
+            }
+            .animate-modal-fade {
+              animation: modalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            }
+            .animate-modal-scale {
+              animation: modalScaleUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            }
+          `}</style>
+          
+          <div 
+            className="bg-white w-full max-w-2xl rounded-2xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.3)] flex flex-col max-h-[80vh] overflow-hidden border border-neutral-200/50 animate-modal-scale"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header with Blue Gradient */}
+            <div className="flex items-center justify-between px-6 py-5 border-b border-neutral-100 bg-gradient-to-r from-[#00095B] to-[#003478] text-white">
+              <div className="text-left">
+                <h3 className="font-['Ford_Antenna',sans-serif] font-bold text-lg md:text-xl uppercase tracking-wider text-white">
+                  Tải Catalogue xe Ford
+                </h3>
+                <p className="text-xs text-white/80 font-medium mt-1">
+                  Chọn dòng xe để tải xuống tài liệu Brochure PDF chính thức
+                </p>
+              </div>
+              <button
+                onClick={() => setIsBrochureModalOpen(false)}
+                className="p-2 hover:bg-white/10 rounded-full text-white/80 hover:text-white transition-colors cursor-pointer border-0 bg-transparent flex items-center justify-center"
+                aria-label="Đóng"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="flex-1 overflow-y-auto p-6 space-y-4">
+              {vehiclesList.length === 0 ? (
+                <div className="py-12 text-center text-neutral-450 text-sm italic font-medium">
+                  Đang tải danh sách xe...
+                </div>
+              ) : (
+                <div className="divide-y divide-neutral-100">
+                  {vehiclesList.map((vehicle: any) => {
+                    const brochureLink = (vehicle.brochure_file && typeof vehicle.brochure_file === 'string' && vehicle.brochure_file.trim() !== '') 
+                      ? vehicle.brochure_file 
+                      : (vehicle.brochure_url && typeof vehicle.brochure_url === 'string' && vehicle.brochure_url.trim() !== '') 
+                        ? vehicle.brochure_url 
+                        : null;
+                    
+                    const getTypeName = (type: string) => {
+                      const types: Record<string, string> = {
+                        suv: "SUV",
+                        pickup: "Bán tải",
+                        commercial: "Thương mại",
+                      };
+                      return types[type] || type;
+                    };
+
+                    const getVehicleImage = () => {
+                      return vehicle.image_thumbnail_url || vehicle.image_url || "/assets/img-gradient-1.png";
+                    };
+
+                    return (
+                      <div 
+                        key={vehicle.id} 
+                        className="py-4 flex items-center justify-between gap-4 first:pt-0 last:pb-0 text-left hover:bg-neutral-50/60 rounded-xl px-2 transition-all duration-200"
+                      >
+                        {/* Left: Thumbnail & Name */}
+                        <div className="flex items-center gap-4">
+                          <div className="relative w-20 h-14 bg-white rounded-lg border border-neutral-100 p-1 flex-shrink-0 flex items-center justify-center overflow-hidden shadow-sm">
+                            <Image
+                              src={getVehicleImage()}
+                              alt={vehicle.title || vehicle.name}
+                              fill
+                              sizes="80px"
+                              className="object-contain p-1"
+                              onError={(e: any) => {
+                                e.target.src = "/assets/img-gradient-1.png";
+                              }}
+                            />
+                          </div>
+                          <div>
+                            <h4 className="font-['Ford_Antenna',sans-serif] font-bold text-sm md:text-base text-neutral-900 uppercase leading-snug tracking-wider">
+                              {vehicle.title || vehicle.name}
+                            </h4>
+                            <span className="text-[10px] font-bold text-[#066fef] bg-[#066fef]/8 px-2.5 py-0.5 rounded-full uppercase mt-1.5 inline-block">
+                              {getTypeName(vehicle.type || "")}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Right: Actions */}
+                        <div>
+                          {brochureLink ? (
+                            <a
+                              href={brochureLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-gradient-to-r from-[#0562d2] to-[#066fef] hover:from-[#044ea7] hover:to-[#0562d2] hover:shadow-md hover:shadow-blue-500/10 px-4 py-2 rounded-lg transition-all uppercase tracking-wider font-antenna border border-transparent flex-shrink-0"
+                            >
+                              <Download className="w-3.5 h-3.5" />
+                              Tải về
+                            </a>
+                          ) : (
+                            <Link
+                              href={`/lien-he?reason=Tải Catalogue: ${vehicle.title || vehicle.name}`}
+                              onClick={() => setIsBrochureModalOpen(false)}
+                              className="inline-flex items-center gap-1.5 text-xs font-bold text-neutral-600 hover:text-[#0562d2] bg-neutral-100 hover:bg-[#0562d2]/10 hover:border-[#0562d2]/20 border border-neutral-200 px-4 py-2 rounded-lg transition-all uppercase tracking-wider font-antenna flex-shrink-0"
+                            >
+                              <FileText className="w-3.5 h-3.5" />
+                              Yêu cầu
+                            </Link>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+            
+            {/* Modal Footer */}
+            <div className="px-6 py-4 border-t border-neutral-100 bg-neutral-50 flex items-center justify-between">
+              <span className="text-[11px] text-neutral-400 font-medium">
+                © Long Khánh Ford
+              </span>
+              <button
+                onClick={() => setIsBrochureModalOpen(false)}
+                className="px-4 py-2 text-xs font-bold text-neutral-600 hover:text-[#00095B] uppercase tracking-wider hover:bg-neutral-100 rounded-lg transition-colors cursor-pointer border border-neutral-350 bg-white"
+              >
+                Đóng
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

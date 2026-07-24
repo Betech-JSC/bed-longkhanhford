@@ -247,7 +247,7 @@
                                     <Field v-model="form.versions[activeVersionIndex].price" :field="{
                                         type: 'money',
                                         name: 'version_price_' + activeVersionIndex,
-                                        label: 'Giá bán (VNĐ)',
+                                        label: 'Giá bán (đ)',
                                     }" />
                                 </div>
 
@@ -662,7 +662,7 @@
 
                                     <!-- Price -->
                                     <div>
-                                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Giá bán (VNĐ)</label>
+                                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Giá bán (đ)</label>
                                         <Field v-model="newAccessoryForm.price" :field="{
                                             type: 'money',
                                             name: 'new_accessory_price',
@@ -883,6 +883,32 @@
                         </div>
                     </div>
 
+                    <!-- Selection Mode Toggle -->
+                    <div class="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-gray-150 pb-3">
+                        <div class="flex items-center gap-2">
+                            <button
+                                type="button"
+                                @click="showSelectedOnly = true"
+                                :class="showSelectedOnly ? 'bg-indigo-600 text-white font-bold' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'"
+                                class="text-xs py-1.5 px-3 rounded-md transition shadow-xs cursor-pointer border-0"
+                            >
+                                🎒 Phụ kiện đã liên kết ({{ (formData.accessories || []).length }})
+                            </button>
+                            <button
+                                type="button"
+                                @click="showSelectedOnly = false"
+                                :class="!showSelectedOnly ? 'bg-indigo-600 text-white font-bold' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'"
+                                class="text-xs py-1.5 px-3 rounded-md transition shadow-xs cursor-pointer border-0"
+                            >
+                                🌐 Tất cả phụ kiện trong hệ thống ({{ (data?.accessories || []).length }})
+                            </button>
+                        </div>
+                        
+                        <div class="flex items-center gap-1.5 text-xs text-gray-500 font-semibold">
+                            <span>Mẹo: Click checkbox để liên kết/hủy liên kết, nhấn icon 👁️ để ẩn/hiện ngoài website.</span>
+                        </div>
+                    </div>
+
                     <!-- Accessories Grid -->
                     <div v-if="filteredAccessoriesList.length === 0" class="flex flex-col items-center justify-center py-12 border-2 border-dashed border-gray-200 rounded-lg">
                         <svg class="h-10 w-10 text-gray-400 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -895,7 +921,8 @@
                         <div 
                             v-for="acc in filteredAccessoriesList" 
                             :key="acc.id"
-                            class="relative border border-gray-200 bg-white rounded-lg p-3 select-none flex gap-3 items-start"
+                            :class="isAccessorySelected(acc.id) ? 'border-indigo-500 ring-2 ring-indigo-500/10' : 'border-gray-200'"
+                            class="relative border bg-white rounded-lg p-3 select-none flex gap-3 items-start transition-all duration-200"
                         >
                             <!-- Accessory Image -->
                             <div class="w-16 h-16 rounded-md overflow-hidden bg-gray-50 border border-gray-150 flex-shrink-0 relative">
@@ -917,7 +944,33 @@
                                         <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block truncate">
                                             {{ acc.code || 'N/A' }}
                                         </span>
-                                        <div class="flex items-center gap-1">
+                                        <div class="flex items-center gap-1.5">
+                                            <!-- Checkbox selection -->
+                                            <input 
+                                                type="checkbox"
+                                                :checked="isAccessorySelected(acc.id)"
+                                                @change="toggleAccessorySelection(acc.id)"
+                                                class="w-3.5 h-3.5 rounded text-indigo-600 border-gray-300 focus:ring-indigo-500 cursor-pointer"
+                                                title="Liên kết phụ kiện với dòng xe này"
+                                            />
+
+                                            <!-- Quick Web Visibility Status (Eye Toggle) -->
+                                            <button 
+                                                type="button"
+                                                @click="toggleAccessoryWebStatus(acc)"
+                                                class="w-5 h-5 rounded-full flex items-center justify-center transition-all duration-200 border border-transparent cursor-pointer focus:outline-none flex-shrink-0"
+                                                :class="acc.status === 'ACTIVE' ? 'bg-emerald-50 hover:bg-emerald-100 text-emerald-600' : 'bg-rose-50 hover:bg-rose-100 text-rose-600'"
+                                                :title="acc.status === 'ACTIVE' ? 'Đang hiển thị trên web (Nhấn để ẩn)' : 'Đang ẩn trên web (Nhấn để hiển thị)'"
+                                            >
+                                                <svg v-if="acc.status === 'ACTIVE'" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                </svg>
+                                                <svg v-else class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />
+                                                </svg>
+                                            </button>
+
                                             <!-- Edit Button -->
                                             <button 
                                                 type="button"
@@ -927,17 +980,6 @@
                                             >
                                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                                                </svg>
-                                            </button>
-                                            <!-- Remove/Detach Button -->
-                                            <button 
-                                                type="button"
-                                                @click="toggleAccessorySelection(acc.id)"
-                                                class="w-5 h-5 rounded-full flex items-center justify-center transition-all duration-200 border border-transparent hover:border-red-200 bg-gray-55 hover:bg-red-50 text-gray-400 hover:text-red-650 cursor-pointer focus:outline-none flex-shrink-0"
-                                                title="Gỡ phụ kiện khỏi xe này"
-                                            >
-                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                                 </svg>
                                             </button>
                                         </div>
@@ -1251,7 +1293,7 @@
                     <Field v-model="form.base_price" :field="{
                         type: 'money',
                         name: 'base_price',
-                        label: 'Giá niêm yết (VNĐ)',
+                        label: 'Giá niêm yết (đ)',
                     }" />
 
                     <Field v-model="form.is_best_seller" :field="{
@@ -1300,6 +1342,7 @@ export default {
             activeFeatureIndex: 0,
             accessorySearch: '',
             accessoryFilterCategory: 'all',
+            showSelectedOnly: true,
             copySourceVehicleId: '',
             isCopyingAccessories: false,
             copySourceVehicleIdForFeatures: '',
@@ -1390,9 +1433,10 @@ export default {
             const category = this.accessoryFilterCategory || 'all';
 
             return list.filter(acc => {
-                // Chỉ hiển thị phụ kiện đã gán cho xe hiện tại (so sánh an toàn kiểu dữ liệu)
-                const isSelected = (this.formData.accessories || []).some(id => String(id) === String(acc.id));
-                if (!isSelected) return false;
+                if (this.showSelectedOnly) {
+                    const isSelected = (this.formData.accessories || []).some(id => String(id) === String(acc.id));
+                    if (!isSelected) return false;
+                }
 
                 const matchesSearch = !search || 
                     (acc.title && acc.title.toLowerCase().includes(search)) || 
@@ -1878,6 +1922,46 @@ export default {
                 this.formData.accessories.splice(idx, 1);
             } else {
                 this.formData.accessories.push(id);
+            }
+        },
+
+        async toggleAccessoryWebStatus(acc) {
+            const newStatus = acc.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
+            try {
+                const payload = {
+                    ...acc,
+                    status: newStatus,
+                    categories: (acc.categories || []).map(c => c.id),
+                    vehicles: (acc.vehicles || []).map(v => v.id),
+                    vi: {
+                        title: acc.title || '',
+                        description: acc.description || '',
+                        compatibility_text: acc.compatibility_text || '',
+                        safety_text: acc.safety_text || '',
+                        product_desc_text: acc.product_desc_text || ''
+                    }
+                };
+                if (acc.brand) {
+                    payload.brand_id = acc.brand.id;
+                }
+                
+                await this.$axios.post(this.route('admin.accessories.store', { id: acc.id }), payload);
+                acc.status = newStatus;
+                
+                if (window.Swal) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Đã cập nhật!',
+                        text: `Đã chuyển trạng thái phụ kiện thành: ${newStatus === 'ACTIVE' ? 'Hiển thị' : 'Ẩn'}.`,
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+                }
+            } catch (e) {
+                console.error('Error toggling accessory status:', e);
+                if (window.Swal) {
+                    Swal.fire('Lỗi', 'Không thể cập nhật trạng thái hiển thị của phụ kiện này.', 'error');
+                }
             }
         },
 

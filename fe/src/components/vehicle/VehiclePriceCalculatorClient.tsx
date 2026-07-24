@@ -92,7 +92,7 @@ export default function VehiclePriceCalculatorClient() {
       };
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("vi-VN").format(price) + " VNĐ";
+    return new Intl.NumberFormat("vi-VN").format(price) + " đ";
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

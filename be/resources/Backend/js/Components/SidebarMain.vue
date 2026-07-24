@@ -109,6 +109,13 @@
         <span v-if="newContact" class="badge badge-danger ml-auto">{{ newContact }}</span>
     </Link>
 
+    <Link v-if="can('admin.repair-quotes.index')" :href="route('admin.repair-quotes.index')"
+        :class="{ active: isUrl('admin.repair-quotes.*') }" class="item">
+        <ph:clipboard-text-light />
+        <span>Báo giá sửa chữa</span>
+        <span v-if="newRepairQuote" class="badge badge-danger ml-auto">{{ newRepairQuote }}</span>
+    </Link>
+
     <Link v-if="can('admin.service-bookings.index')" :href="route('admin.service-bookings.index')"
         :class="{ active: isUrl('admin.service-bookings.*') }" class="item">
         <ph:calendar-blank-light />
@@ -188,6 +195,9 @@ export default {
     computed: {
         newContact() {
             return this.$page.props.data.new_contact_count
+        },
+        newRepairQuote() {
+            return this.$page.props.data.new_repair_quote_count
         },
         newServiceBooking() {
             return this.$page.props.data.new_service_booking_count

@@ -139,7 +139,7 @@ export default function ProductsPage({ initialCategory }: { initialCategory?: st
   const categories = apiCategories.length > 0 ? apiCategories : staticCategories;
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("vi-VN").format(price) + " VNĐ";
+    return new Intl.NumberFormat("vi-VN").format(price) + " đ";
   };
 
   // Helper to extend vehicle data with specs and properties for filtering

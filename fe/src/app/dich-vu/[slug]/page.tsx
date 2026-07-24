@@ -8,6 +8,9 @@ import GeneralRepairLayout from "@/components/services/layouts/GeneralRepair";
 import RoadsideAssistanceLayout from "@/components/services/layouts/RoadsideAssistance";
 import UsedCarsLayout from "@/components/services/layouts/UsedCars";
 import VehicleUpgradeLayout from "@/components/services/layouts/VehicleUpgrade";
+import FordSyncLayout from "@/components/services/layouts/FordSync";
+import FordAppLayout from "@/components/services/layouts/FordApp";
+import FordEnsureLayout from "@/components/services/layouts/FordEnsure";
 import GenericServiceLayout from "@/components/services/layouts/GenericService";
 
 type Props = {
@@ -65,6 +68,8 @@ export default async function ServiceSlugPage({ params }: Props) {
       "giao-nhan-xe-tan-noi": "Dịch vụ nhận và giao xe tận nơi",
       "dich-vu-giao-nhan-xe-tan-noi": "Dịch vụ nhận và giao xe tận nơi",
       "nhan-va-giao-xe-tan-noi": "Dịch vụ nhận và giao xe tận nơi",
+      "nhan-giao-xe-mien-phi": "Dịch vụ nhận & giao xe tận nơi miễn phí",
+      "dich-vu-nhan-giao-xe-mien-phi": "Dịch vụ nhận & giao xe tận nơi miễn phí",
       "cham-soc-khach-hang": "Dịch vụ chăm sóc khách hàng & Detailing",
       "dich-vu-cham-soc-xe": "Dịch vụ chăm sóc khách hàng & Detailing",
       "dich-vu-sua-chua": "Dịch vụ sửa chữa chẩn đoán & Đồng sơn 3S",
@@ -74,7 +79,11 @@ export default async function ServiceSlugPage({ params }: Props) {
       "dich-vu-xe-da-qua-su-dung": "Dịch vụ mua bán xe Ford đã qua sử dụng (Ford Assured)",
       "xe-da-qua-su-dung": "Dịch vụ mua bán xe Ford đã qua sử dụng (Ford Assured)",
       "dich-vu-nang-cap-xe": "Dịch vụ nâng cấp phụ kiện & Đồ chơi xe Ford",
-      "nang-cap-xe": "Dịch vụ nâng cấp phụ kiện & Đồ chơi xe Ford"
+      "nang-cap-xe": "Dịch vụ nâng cấp phụ kiện & Đồ chơi xe Ford",
+      "ford-sync": "Công nghệ kết nối thông minh Ford SYNC®",
+      "ung-dung-ford": "Ứng dụng kết nối thông minh FordPass™",
+      "fordpass": "Ứng dụng kết nối thông minh FordPass™",
+      "ford-ensure": "Chương trình bảo hiểm & bảo hành mở rộng Ford Ensure"
     };
 
     serviceData = {
@@ -108,7 +117,7 @@ export default async function ServiceSlugPage({ params }: Props) {
   }
 
   // 3. Pickup & Delivery Layout Switcher
-  if (slug === "giao-nhan-xe-tan-noi" || slug === "dich-vu-giao-nhan-xe-tan-noi" || slug === "nhan-va-giao-xe-tan-noi") {
+  if (slug === "giao-nhan-xe-tan-noi" || slug === "dich-vu-giao-nhan-xe-tan-noi" || slug === "nhan-va-giao-xe-tan-noi" || slug === "nhan-giao-xe-mien-phi" || slug === "dich-vu-nhan-giao-xe-mien-phi") {
     return <PickupDeliveryLayout service={serviceData} />;
   }
 
@@ -137,6 +146,22 @@ export default async function ServiceSlugPage({ params }: Props) {
     return <VehicleUpgradeLayout service={serviceData} />;
   }
 
-  // 9. Default Fallback layout (Dynamic CMS Layout)
+  // 9. Ford SYNC Technology Layout Switcher
+  if (slug === "ford-sync" || slug === "sync") {
+    return <FordSyncLayout service={serviceData} />;
+  }
+
+  // 10. FordPass App Layout Switcher
+  if (slug === "ung-dung-ford" || slug === "fordpass") {
+    return <FordAppLayout service={serviceData} />;
+  }
+
+  // 11. Ford Ensure Program Layout Switcher
+  if (slug === "ford-ensure" || slug === "ensure") {
+    return <FordEnsureLayout service={serviceData} />;
+  }
+
+  // 12. Default Fallback layout (Dynamic CMS Layout)
   return <GenericServiceLayout service={serviceData} />;
 }
+

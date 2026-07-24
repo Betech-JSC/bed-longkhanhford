@@ -40,7 +40,7 @@
                         :field="{
                             type: 'money',
                             name: 'shipping_price',
-                            label: 'Phí vận chuyển (VNĐ)',
+                            label: 'Phí vận chuyển (đ)',
                         }"
                     />
                     <Field

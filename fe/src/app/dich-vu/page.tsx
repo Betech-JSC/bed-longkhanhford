@@ -61,7 +61,9 @@ export default async function ServicesPage() {
           slug: item.slug || "",
           description: item.description || "",
           image: item.image?.url || fallback?.image || siteAssets.showroomBg,
-          href: `/dich-vu/${item.slug}`,
+          href: (item.custom_link && item.custom_link.startsWith('/dich-vu/'))
+            ? item.custom_link
+            : `/dich-vu/${item.slug}`,
           badge: fallback?.badge || "Dịch vụ Ford"
         };
       });

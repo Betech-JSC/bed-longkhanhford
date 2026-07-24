@@ -108,24 +108,29 @@ class VehicleController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $query = Vehicle::query()
-            ->with('categories')
-            ->where('status', Vehicle::STATUS_ACTIVE)
-            ->sortByPosition();
+        $cacheKey = 'api_vehicles_index_' . md5(json_encode($request->all()));
 
-        if ($request->has('with_versions')) {
-            $query->with(['categories', 'versions' => fn($q) => $q->where('status', 'ACTIVE')->sortByPosition()]);
-        }
+        $vehicles = \Illuminate\Support\Facades\Cache::remember($cacheKey, 3600, function() use ($request) {
+            $query = Vehicle::query()
+                ->with('categories')
+                ->where('status', Vehicle::STATUS_ACTIVE)
+                ->sortByPosition();
 
-        if ($categorySlug = $request->query('category')) {
-            $query->whereHas('categories', function ($q) use ($categorySlug) {
-                $q->whereSlug($categorySlug)
-                    ->where('status', VehicleCategory::STATUS_ACTIVE);
-            });
-        }
+            if ($request->has('with_versions')) {
+                $query->with(['categories', 'versions' => fn($q) => $q->where('status', 'ACTIVE')->sortByPosition()]);
+            }
 
-        $vehicles = $query->get()
-            ->map(fn($v) => $this->formatList($v));
+            if ($categorySlug = $request->query('category')) {
+                $query->whereHas('categories', function ($q) use ($categorySlug) {
+                    $q->whereSlug($categorySlug)
+                        ->where('status', VehicleCategory::STATUS_ACTIVE);
+                });
+            }
+
+            return $query->get()
+                ->map(fn($v) => $this->formatList($v))
+                ->toArray();
+        });
 
         return $this->success($vehicles);
     }
@@ -135,13 +140,16 @@ class VehicleController extends Controller
      */
     public function featured(): JsonResponse
     {
-        $vehicles = Vehicle::query()
-            ->with('categories')
-            ->where('status', Vehicle::STATUS_ACTIVE)
-            ->where('is_best_seller', true)
-            ->sortByPosition()
-            ->get()
-            ->map(fn($v) => $this->formatList($v));
+        $vehicles = \Illuminate\Support\Facades\Cache::remember('api_vehicles_featured', 3600, function() {
+            return Vehicle::query()
+                ->with('categories')
+                ->where('status', Vehicle::STATUS_ACTIVE)
+                ->where('is_best_seller', true)
+                ->sortByPosition()
+                ->get()
+                ->map(fn($v) => $this->formatList($v))
+                ->toArray();
+        });
 
         return $this->success($vehicles);
     }
@@ -151,83 +159,37 @@ class VehicleController extends Controller
      */
     public function show(string $slug): JsonResponse
     {
-        $vehicle = Vehicle::query()
-            ->where('status', Vehicle::STATUS_ACTIVE)
-            ->whereSlug($slug)
-            ->with([
-                'categories',
-                'versions' => fn($q) => $q->where('status', 'ACTIVE')->sortByPosition()
-            ])
-            ->first();
+        $cacheKey = 'api_vehicles_show_' . $slug;
 
-        if (!$vehicle) {
-            return $this->failure(__('Không tìm thấy xe'), 404);
-        }
+        $data = \Illuminate\Support\Facades\Cache::remember($cacheKey, 3600, function() use ($slug) {
+            $vehicle = Vehicle::query()
+                ->where('status', Vehicle::STATUS_ACTIVE)
+                ->whereSlug($slug)
+                ->with([
+                    'categories',
+                    'versions' => fn($q) => $q->where('status', 'ACTIVE')->sortByPosition()
+                ])
+                ->first();
 
-        return $this->success([
-            'id'                     => $vehicle->id,
-            'category_id'            => $vehicle->category_id,
-            'category_ids'           => $vehicle->category_ids,
-            'title'                  => $vehicle->title,
-            'slug'                   => $vehicle->slug,
-            'tagline'                => $vehicle->tagline,
-            'description'            => $vehicle->description,
-            'image_url'              => $vehicle->image_url,
-            'video_url'              => $vehicle->video_url,
-            'video'                  => $this->resolveFileUrl($vehicle->video),
-            'brochure_url'           => $vehicle->brochure_url,
-            'brochure_file'          => $this->resolveFileUrl($vehicle->brochure_file),
-            'images'                 => collect($vehicle->images)->map(fn($img) => isset($img['path']) ? static_url($img['path']) : $img),
-            'colors'                 => collect($vehicle->colors)->map(function ($color) {
-                $imagePath = null;
-                if (isset($color['image_path'])) {
-                    $imagePath = static_url($color['image_path']);
-                } elseif (isset($color['image'])) {
-                    $imagePath = $this->resolveFileUrl($color['image']);
-                }
+            if (!$vehicle) {
+                return null;
+            }
 
-                $images360 = [];
-                if (isset($color['images_360']) && is_array($color['images_360'])) {
-                    $images360 = collect($color['images_360'])->map(function($img) {
-                        return $this->resolveFileUrl($img);
-                    })->filter()->values()->toArray();
-                }
-
-                $image360Internal = null;
-                if (isset($color['image_360_internal'])) {
-                    $image360Internal = $this->resolveFileUrl($color['image_360_internal']);
-                }
-
-                $images360Internal = [];
-                if (isset($color['images_360_internal']) && is_array($color['images_360_internal'])) {
-                    $images360Internal = collect($color['images_360_internal'])->map(function($img) {
-                        return $this->resolveFileUrl($img);
-                    })->filter()->values()->toArray();
-                }
-
-                return [
-                    'name'                => $color['name'] ?? ($color['color_name'] ?? ''),
-                    'hex'                 => $color['hex'] ?? ($color['color_code'] ?? ''),
-                    'image_path'          => $imagePath,
-                    'images_360'          => $images360,
-                    'image_360_internal'  => $image360Internal,
-                    'images_360_internal' => $images360Internal,
-                ];
-            })->toArray(),
-            'images_360_external'    => collect($vehicle->images_360_external ?? [])->map(fn($img) => $this->resolveFileUrl($img))->filter()->values()->toArray(),
-            'images_360_internal'    => collect($vehicle->images_360_internal ?? [])->map(fn($img) => $this->resolveFileUrl($img))->filter()->values()->toArray(),
-            'image_360_internal_url' => $this->resolveFileUrl($vehicle->image_360_internal_url),
-            'type'                   => $vehicle->type,
-            'base_price'             => $vehicle->base_price,
-            'versions'               => $vehicle->versions->map(fn($v) => [
-                'id'                  => $v->id,
-                'name'                => $v->name,
-                'price'               => $v->price,
-                'image_url'           => $v->image_url,
-                'image_thumbnail_url' => $v->image_thumbnail_url,
-                'specs'               => $v->specs ?? [],
-                'sort_order'          => $v->sort_order,
-                'colors'     => collect($v->colors ?? [])->map(function ($color) {
+            return [
+                'id'                     => $vehicle->id,
+                'category_id'            => $vehicle->category_id,
+                'category_ids'           => $vehicle->category_ids,
+                'title'                  => $vehicle->title,
+                'slug'                   => $vehicle->slug,
+                'tagline'                => $vehicle->tagline,
+                'description'            => $vehicle->description,
+                'image_url'              => $vehicle->image_url,
+                'video_url'              => $vehicle->video_url,
+                'video'                  => $this->resolveFileUrl($vehicle->video),
+                'brochure_url'           => $vehicle->brochure_url,
+                'brochure_file'          => $this->resolveFileUrl($vehicle->brochure_file),
+                'images'                 => collect($vehicle->images)->map(fn($img) => isset($img['path']) ? static_url($img['path']) : $img),
+                'colors'                 => collect($vehicle->colors)->map(function ($color) {
                     $imagePath = null;
                     if (isset($color['image_path'])) {
                         $imagePath = static_url($color['image_path']);
@@ -263,9 +225,65 @@ class VehicleController extends Controller
                         'images_360_internal' => $images360Internal,
                     ];
                 })->toArray(),
-            ]),
-            'layout_blocks'          => $this->resolveLayoutBlocksUrls($vehicle->layout_blocks),
-        ]);
+                'images_360_external'    => collect($vehicle->images_360_external ?? [])->map(fn($img) => $this->resolveFileUrl($img))->filter()->values()->toArray(),
+                'images_360_internal'    => collect($vehicle->images_360_internal ?? [])->map(fn($img) => $this->resolveFileUrl($img))->filter()->values()->toArray(),
+                'image_360_internal_url' => $this->resolveFileUrl($vehicle->image_360_internal_url),
+                'type'                   => $vehicle->type,
+                'base_price'             => $vehicle->base_price,
+                'versions'               => $vehicle->versions->map(fn($v) => [
+                    'id'                  => $v->id,
+                    'name'                => $v->name,
+                    'price'               => $v->price,
+                    'image_url'           => $v->image_url,
+                    'image_thumbnail_url' => $v->image_thumbnail_url,
+                    'specs'               => $v->specs ?? [],
+                    'sort_order'          => $v->sort_order,
+                    'colors'     => collect($v->colors ?? [])->map(function ($color) {
+                        $imagePath = null;
+                        if (isset($color['image_path'])) {
+                            $imagePath = static_url($color['image_path']);
+                        } elseif (isset($color['image'])) {
+                            $imagePath = $this->resolveFileUrl($color['image']);
+                        }
+
+                        $images360 = [];
+                        if (isset($color['images_360']) && is_array($color['images_360'])) {
+                            $images360 = collect($color['images_360'])->map(function($img) {
+                                return $this->resolveFileUrl($img);
+                            })->filter()->values()->toArray();
+                        }
+
+                        $image360Internal = null;
+                        if (isset($color['image_360_internal'])) {
+                            $image360Internal = $this->resolveFileUrl($color['image_360_internal']);
+                        }
+
+                        $images360Internal = [];
+                        if (isset($color['images_360_internal']) && is_array($color['images_360_internal'])) {
+                            $images360Internal = collect($color['images_360_internal'])->map(function($img) {
+                                return $this->resolveFileUrl($img);
+                            })->filter()->values()->toArray();
+                        }
+
+                        return [
+                            'name'                => $color['name'] ?? ($color['color_name'] ?? ''),
+                            'hex'                 => $color['hex'] ?? ($color['color_code'] ?? ''),
+                            'image_path'          => $imagePath,
+                            'images_360'          => $images360,
+                            'image_360_internal'  => $image360Internal,
+                            'images_360_internal' => $images360Internal,
+                        ];
+                    })->toArray(),
+                ]),
+                'layout_blocks'          => $this->resolveLayoutBlocksUrls($vehicle->layout_blocks),
+            ];
+        });
+
+        if (!$data) {
+            return $this->failure(__('Không tìm thấy xe'), 404);
+        }
+
+        return $this->success($data);
     }
 
     private function resolveLayoutBlocksUrls($blocks)

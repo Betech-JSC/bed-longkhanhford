@@ -10,14 +10,19 @@ trait ResponseCache
 
     public static function bootResponseCache()
     {
-        if (config('cache.default') === 'redis') {
-            static::saved(function ($model) {
+        static::saved(function ($model) {
+            if (config('cache.default') === 'redis') {
                 clear_cache($model->cacheKey($model));
-            });
-            static::deleted(function ($model) {
+            }
+            \Illuminate\Support\Facades\Cache::flush();
+        });
+
+        static::deleted(function ($model) {
+            if (config('cache.default') === 'redis') {
                 clear_cache($model->cacheKey($model));
-            });
-        }
+            }
+            \Illuminate\Support\Facades\Cache::flush();
+        });
     }
 
     private function cacheKey($model)

@@ -51,6 +51,8 @@ return [
         'service-bookings' => 'Service Bookings',
         'service_bookings' => 'Service Bookings',
         'ServiceBookings' => 'Service Bookings',
+        'repair-quotes' => 'Repair Quotes',
+        'RepairQuotes' => 'Repair Quotes',
     ],
     'chat-sessions' => [
         'id' => 'ID',

@@ -106,7 +106,7 @@ export default function AccessoryDetailClient({
   const formatPrice = (price: number | string) => {
     const numericPrice = typeof price === "string" ? parseFloat(price) : price;
     if (!numericPrice || numericPrice <= 0) return "Liên hệ";
-    return new Intl.NumberFormat("vi-VN").format(numericPrice) + " VNĐ";
+    return new Intl.NumberFormat("vi-VN").format(numericPrice) + " đ";
   };
 
   // Booking Form States
@@ -380,7 +380,7 @@ export default function AccessoryDetailClient({
                 <div className="flex gap-[8px] items-start w-full">
                   <Check className="w-[20px] h-[20px] text-[#066fef] shrink-0 mt-0.5" />
                   <p className="font-antenna font-normal text-[14px] text-[#1d2939] leading-[1.4]">
-                    Tặng kèm quà nhỏ cho mỗi đơn hàng trên 1.000.000 VNĐ.
+                    Tặng kèm quà nhỏ cho mỗi đơn hàng trên 1.000.000 đ.
                   </p>
                 </div>
               </div>

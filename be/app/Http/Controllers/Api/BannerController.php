@@ -18,28 +18,33 @@ class BannerController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $query = Banner::query()
-            ->where('status', Banner::STATUS_ACTIVE)
-            ->sortByPosition();
+        $cacheKey = 'api_banners_index_' . md5(json_encode($request->all()));
 
-        if ($location = $request->query('location')) {
-            $query->whereJsonContains('location', $location);
-        }
+        $banners = \Illuminate\Support\Facades\Cache::remember($cacheKey, 3600, function() use ($request) {
+            $query = Banner::query()
+                ->where('status', Banner::STATUS_ACTIVE)
+                ->sortByPosition();
 
-        $banners = $query->get(['id', 'title', 'subtitle', 'image', 'image_mobile', 'video', 'location', 'button_text', 'button_link'])
-            ->map(function ($b) {
-                return [
-                    'id'               => $b->id,
-                    'title'            => $b->title,
-                    'subtitle'         => $b->subtitle,
-                    'image_url'        => $b->image_url,
-                    'image_mobile_url' => $b->image_mobile_url,
-                    'video_url'        => $b->video_url,
-                    'location'         => $b->location ?? [],
-                    'button_text'      => $b->button_text,
-                    'button_link'      => $b->button_link,
-                ];
-            });
+            if ($location = $request->query('location')) {
+                $query->whereJsonContains('location', $location);
+            }
+
+            return $query->get(['id', 'title', 'subtitle', 'image', 'image_mobile', 'video', 'location', 'button_text', 'button_link'])
+                ->map(function ($b) {
+                    return [
+                        'id'               => $b->id,
+                        'title'            => $b->title,
+                        'subtitle'         => $b->subtitle,
+                        'image_url'        => $b->image_url,
+                        'image_mobile_url' => $b->image_mobile_url,
+                        'video_url'        => $b->video_url,
+                        'location'         => $b->location ?? [],
+                        'button_text'      => $b->button_text,
+                        'button_link'      => $b->button_link,
+                    ];
+                })
+                ->toArray();
+        });
 
         return $this->success($banners);
     }

@@ -697,6 +697,9 @@ export default function Home() {
               <img
                 src={slide.image}
                 alt={slide.title}
+                loading={idx === 0 ? "eager" : "lazy"}
+                fetchPriority={idx === 0 ? "high" : "low"}
+                decoding="async"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = "/images-dynamic/image-hero-1.jpg";
                 }}
@@ -706,6 +709,9 @@ export default function Home() {
               <img
                 src={slide.imageMobile || slide.image}
                 alt={slide.title}
+                loading={idx === 0 ? "eager" : "lazy"}
+                fetchPriority={idx === 0 ? "high" : "low"}
+                decoding="async"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = "/images-dynamic/image-hero-1.jpg";
                 }}
@@ -1642,7 +1648,7 @@ export default function Home() {
                       rel="noopener noreferrer"
                       className="hover:text-[#066FEF] transition-colors"
                     >
-                      Đường 21/4, Tổ 1, Khu phố Cẩm Tân, Phường Xuân Tân, Thành phố Long Khánh, Tỉnh Đồng Nai, Việt Nam
+                      Đường 21/4, Tổ 1, Khu phố Cẩm Tân, Phường Hàng Gòn, Thành phố Long Khánh, Tỉnh Đồng Nai, Việt Nam
                     </a>
                   </p>
                 </div>

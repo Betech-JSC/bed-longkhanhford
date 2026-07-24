@@ -104,6 +104,33 @@ return [
             ],
             'route' => 'service-bookings',
         ],
+        'REPAIR_QUOTE_FORM' => [
+            'title' => 'Báo giá sửa chữa',
+            'columns' => [
+                'Phone',
+            ],
+            'all_columns' => [
+                'Phone',
+                'Email',
+                'Product' => [
+                    'column' => 'product_url',
+                    'route' => [
+                        'name' => 'api.vehicles.show',
+                        'params' => [
+                            'slug',
+                        ],
+                    ],
+                ],
+            ],
+            'rules' => [
+                'Phone' => 'required|regex:/(0)[0-9]/|not_regex:/[a-z]/|min:9|max:12',
+                'Name' => 'required',
+                'Product.id' => 'required',
+                'Product.slug' => 'required',
+                'Product.title' => 'required',
+            ],
+            'route' => 'repair-quotes',
+        ],
     ],
     'message' => [
         'new_contact' => 'Bạn nhận được liên hệ mới',

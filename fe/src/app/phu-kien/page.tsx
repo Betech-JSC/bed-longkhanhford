@@ -260,7 +260,7 @@ export default function AccessoriesPage() {
   const formatPrice = (price: number | string) => {
     const numericPrice = typeof price === "string" ? parseFloat(price) : price;
     if (!numericPrice || numericPrice <= 0) return "Liên hệ";
-    return "₫" + new Intl.NumberFormat("vi-VN").format(numericPrice);
+    return new Intl.NumberFormat("vi-VN").format(numericPrice) + " đ";
   };
 
   const scrollCategoryRight = () => {

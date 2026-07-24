@@ -47,6 +47,8 @@ return [
         'agencies' => 'Chi nhánh',
         'contacts' => 'Liên hệ',
         'FormContacts' => 'Liên hệ',
+        'repair-quotes' => 'Báo giá sửa chữa',
+        'RepairQuotes' => 'Báo giá sửa chữa',
         'applies' => 'Ứng tuyển',
         'Applies' => 'Ứng tuyển',
         'sliders' => 'Banner',

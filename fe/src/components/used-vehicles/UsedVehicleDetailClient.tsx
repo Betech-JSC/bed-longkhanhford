@@ -67,7 +67,7 @@ export default function UsedVehicleDetailClient({ vehicle }: { vehicle: any }) {
 
   const formatPrice = (price: number) => {
     if (!price || price === 0) return "Liên hệ";
-    return new Intl.NumberFormat("vi-VN").format(price) + " VNĐ";
+    return new Intl.NumberFormat("vi-VN").format(price) + " đ";
   };
 
   const handleBookingSubmit = async (e: React.FormEvent) => {

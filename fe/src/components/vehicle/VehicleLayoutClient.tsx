@@ -319,7 +319,7 @@ export default function VehicleLayoutClient({
   };
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("vi-VN").format(price) + " VNĐ";
+    return new Intl.NumberFormat("vi-VN").format(price) + " đ";
   };
 
   const activeVersion = initialVehicle?.versions?.[activeVersionIndex] || initialVehicle?.versions?.[0];

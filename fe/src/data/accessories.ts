@@ -45,7 +45,7 @@ export const accessoriesData: AccessoryItem[] = [
     features: [
       "Khách hàng thân thiết nhận thêm 10% giảm giá cho lần mua tiếp theo.",
       "Đổi trả sản phẩm trong vòng 30 ngày nếu không hài lòng.",
-      "Tặng kèm quà nhỏ cho mỗi đơn hàng trên 1.000.000 VNĐ."
+      "Tặng kèm quà nhỏ cho mỗi đơn hàng trên 1.000.000 đ."
     ],
     compatibilityText: "Tương thích hoàn toàn với dòng xe Ford Focus Estate phiên bản từ năm 2018 đến 2026. Lắp đặt trực tiếp vào hệ thống đường ray dọc có sẵn trên nóc xe mà không cần khoan đục.",
     safetyText: "Sản phẩm được kiểm định nghiêm ngặt về độ chịu tải và sức cản gió lên đến tốc độ 120km/h. Tải trọng khuyến nghị tối đa 75kg. Lưu ý: không mở cửa sổ trời toàn cảnh khi đang tải hành lý trên thanh ngang.",

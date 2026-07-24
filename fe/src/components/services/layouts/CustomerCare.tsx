@@ -157,28 +157,6 @@ export default function CustomerCareLayout({ service }: { service?: any }) {
         </div>
       </section>
 
-      {/* PDF Checklist Download Callout Section */}
-      <section className="max-w-[1440px] w-full mx-auto px-4 lg:px-[80px] pb-20 font-antenna">
-        <div className="bg-white border border-gray-200 p-8 lg:p-10 rounded-none shadow-xs flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-5">
-            <div className="w-12 h-12 bg-[#002F6C] text-white rounded-[4px] flex items-center justify-center shrink-0">
-              <Download className="w-6 h-6" />
-            </div>
-            <div>
-              <h3 className="font-bold text-lg text-gray-900 uppercase">PHIẾU KIỂM TRA TÌNH TRẠNG XE CHÍNH THỨC</h3>
-              <p className="text-xs text-gray-600 mt-1">Tải về bản mẫu phiếu kiểm tra 83 điểm tiêu chuẩn của kỹ thuật viên Ford.</p>
-            </div>
-          </div>
-          <a
-            href="/assets/express-maintenance-flow.png"
-            download
-            className="bg-[#066fef] hover:bg-[#00095B] text-white text-xs font-bold uppercase px-6 py-3.5 rounded-[4px] transition-colors inline-flex items-center gap-2 shrink-0 tracking-wider shadow-sm"
-          >
-            <Download className="w-4 h-4" />
-            <span>Tải Mẫu Phiếu PDF</span>
-          </a>
-        </div>
-      </section>
 
       <BookingBanner />
       <FaqAccordion />

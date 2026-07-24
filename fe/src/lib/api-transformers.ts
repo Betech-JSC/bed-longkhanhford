@@ -199,9 +199,6 @@ function getInitials(name: string): string {
  */
 export function formatPrice(price: number | string): string {
   const numPrice = typeof price === 'string' ? parseFloat(price) : price;
-  return new Intl.NumberFormat('vi-VN', {
-    style: 'currency',
-    currency: 'VND',
-    minimumFractionDigits: 0,
-  }).format(numPrice);
+  if (isNaN(numPrice)) return 'Liên hệ';
+  return new Intl.NumberFormat('vi-VN').format(numPrice) + ' đ';
 }

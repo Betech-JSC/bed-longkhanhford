@@ -287,7 +287,7 @@ function SearchPageContent() {
   }, [activeTab, currentPage, vehiclesList, accessoriesList, articlesList]);
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("vi-VN").format(price) + " VNĐ";
+    return new Intl.NumberFormat("vi-VN").format(price) + " đ";
   };
 
   // Best seller vehicles to suggest when no results are found

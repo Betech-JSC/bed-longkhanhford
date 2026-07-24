@@ -376,7 +376,7 @@ trait HasCrudActions
         return RuleGenerator::getRules($this->model(), null, null, $id);
     }
 
-    private function folder()
+    protected function folder()
     {
         return Str::studly($this->getTable());
     }

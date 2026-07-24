@@ -173,7 +173,7 @@
                     <Field v-model="form.price" :field="{
                         type: 'money',
                         name: 'price',
-                        label: 'Giá (VNĐ)',
+                        label: 'Giá (đ)',
                     }" />
 
                     <Field v-model="form.status" :field="{

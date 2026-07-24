@@ -309,7 +309,7 @@ export default function InstallmentCalculatorPage() {
           <div>
             <h1 className="text-2xl font-bold text-[#00095B] uppercase tracking-tight">LONG KHÁNH FORD</h1>
             <p className="text-xs text-gray-500 mt-1">
-              Địa chỉ: Đường 21/4, Tổ 1, Khu phố Cẩm Tân, Phường Xuân Tân, Thành phố Long Khánh, Tỉnh Đồng Nai, Việt Nam
+              Địa chỉ: Đường 21/4, Tổ 1, Khu phố Cẩm Tân, Phường Hàng Gòn, Thành phố Long Khánh, Tỉnh Đồng Nai, Việt Nam
             </p>
             <p className="text-xs text-gray-500">Hotline KD: 0812 86 86 22 | Email: marketing@longkhanhford.com.vn</p>
           </div>
@@ -406,7 +406,7 @@ export default function InstallmentCalculatorPage() {
             {/* Input Field: Giá niêm yết */}
             <div className="w-full">
               <label className="block text-[14px] font-medium text-[#424242] mb-[6px] text-left">
-                Giá niêm yết (VNĐ)
+                Giá niêm yết (đ)
               </label>
               <div className="relative rounded-[8px] bg-white border border-[#d6d6d6] shadow-[0px_1px_2px_rgba(16,24,40,0.05)] overflow-hidden w-full flex items-center px-[14px] py-[10px]">
                 <input
@@ -422,7 +422,7 @@ export default function InstallmentCalculatorPage() {
             {/* Input Field: Khoản trả trước */}
             <div className="w-full">
               <label className="block text-[14px] font-medium text-[#424242] mb-[6px] text-left flex justify-between">
-                <span>Khoản trả trước (VNĐ)</span>
+                <span>Khoản trả trước (đ)</span>
                 <span className="text-vivid font-bold text-xs bg-blue-50 px-2 py-0.5 rounded">
                   {prepaidPercentage}%
                 </span>

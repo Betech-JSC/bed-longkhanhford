@@ -86,7 +86,7 @@ export default function PickupDeliveryLayout({ service }: { service?: any }) {
         <div className="max-w-[1440px] mx-auto px-4 lg:px-[80px]">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             {[
-              { target: 0, suffix: " VNĐ", label: "Phí Giao Nhận Nội Thành" },
+              { target: 0, suffix: " đ", label: "Phí Giao Nhận Nội Thành" },
               { target: 100, suffix: "%", label: "Bảo Hiểm Trách Nhiệm" },
               { target: 15, suffix: " Phút", label: "Phản Hồi Xác Nhận" },
               { target: 360, suffix: "°", label: "Kiểm Kê Xe Điện Tử" },

@@ -86,7 +86,7 @@
                         :field="{
                             type: 'number',
                             name: 'price',
-                            label: 'Giá bán (VNĐ)',
+                            label: 'Giá bán (đ)',
                             placeholder: 'vd: 750000000',
                         }"
                     />

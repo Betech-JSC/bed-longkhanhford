@@ -18,7 +18,9 @@
             {
                 field: 'Loại liên hệ',
                 transform: (data) => {
-                    return data.type === 'ADVISE_FORM' ? 'Tư vấn sản phẩm' : 'Liên hệ';
+                    return data.type === 'ADVISE_FORM' 
+                        ? 'Tư vấn sản phẩm' 
+                        : (data.type === 'REPAIR_QUOTE_FORM' ? 'Báo giá sửa chữa' : 'Liên hệ');
                 }
             },
             'status',

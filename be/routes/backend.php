@@ -7,6 +7,7 @@ use App\Http\Controllers\Backend\PostCategoryController;
 use App\Http\Controllers\Backend\TagController;
 use App\Http\Controllers\Backend\AgencyController;
 use App\Http\Controllers\Backend\ContactController;
+use App\Http\Controllers\Backend\RepairQuoteController;
 use App\Http\Controllers\Backend\ApplyController;
 use App\Http\Controllers\Backend\CertificateController;
 use App\Http\Controllers\Backend\SliderController;
@@ -50,6 +51,7 @@ Route::localized(function () {
         Route::module(PolicyController::class);
         Route::module(AgencyController::class);
         Route::module(ContactController::class);
+        Route::module(RepairQuoteController::class);
         Route::module(SliderController::class);
         Route::module(HistoryController::class);
         Route::module(JobController::class);

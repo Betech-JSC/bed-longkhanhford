@@ -153,26 +153,23 @@ createInertiaApp({
                     },
                     toMoney: function (value) {
                         const { default: locale } = this.$inertia.page.props.locale;
-                        let options = {};
                         if (locale === 'vi') {
-                            options = {
+                            const formatter = new Intl.NumberFormat('vi-VN', {
                                 minimumFractionDigits: 0,
-                                style: 'currency',
-                                currency: 'VND',
-                            };
-                        } else if (locale === 'en') {
-                            options = {
-                                minimumFractionDigits: 0,
-                                style: 'currency',
-                                currency: 'USD',
-                            };
+                            });
+                            return formatter.format(value ?? 0) + ' đ';
+                        } else {
+                            let options = {};
+                            if (locale === 'en') {
+                                options = {
+                                    minimumFractionDigits: 0,
+                                    style: 'currency',
+                                    currency: 'USD',
+                                };
+                            }
+                            const formatter = new Intl.NumberFormat(locale, options);
+                            return formatter.format(value ?? 0).trim();
                         }
-
-                        const formatter = new Intl.NumberFormat(locale, options);
-                        let formattedValue = formatter.format(value ?? 0);
-
-
-                        return formattedValue.trim();
                     },
                     toNumber: function (value) {
                         return new Intl.NumberFormat('vi-VN', {

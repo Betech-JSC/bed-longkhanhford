@@ -24,31 +24,31 @@
                     <Field v-model="form.license_plate_fee" :field="{
                         type: 'number',
                         name: 'license_plate_fee',
-                        label: 'Lệ phí biển số (VNĐ)',
+                        label: 'Lệ phí biển số (đ)',
                     }" />
 
                     <Field v-model="form.inspection_fee" :field="{
                         type: 'number',
                         name: 'inspection_fee',
-                        label: 'Phí đăng kiểm (VNĐ)',
+                        label: 'Phí đăng kiểm (đ)',
                     }" />
 
                     <Field v-model="form.road_maintenance_fee" :field="{
                         type: 'number',
                         name: 'road_maintenance_fee',
-                        label: 'Phí bảo trì đường bộ (12 tháng) (VNĐ)',
+                        label: 'Phí bảo trì đường bộ (12 tháng) (đ)',
                     }" />
 
                     <Field v-model="form.civil_insurance_fee" :field="{
                         type: 'number',
                         name: 'civil_insurance_fee',
-                        label: 'Phí bảo hiểm TNDS bắt buộc (12 tháng) (VNĐ)',
+                        label: 'Phí bảo hiểm TNDS bắt buộc (12 tháng) (đ)',
                     }" />
 
                     <Field v-model="form.service_fee" :field="{
                         type: 'number',
                         name: 'service_fee',
-                        label: 'Phí dịch vụ đăng ký (VNĐ)',
+                        label: 'Phí dịch vụ đăng ký (đ)',
                     }" />
                 </div>
             </div>

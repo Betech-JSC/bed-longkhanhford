@@ -362,7 +362,7 @@ export default function VehicleVersionDetailClient() {
   // Format Prices
   const formatPrice = (price: any) => {
     const num = typeof price === 'string' ? parseFloat(price) : (price || 0);
-    return new Intl.NumberFormat("vi-VN").format(num) + " VNĐ";
+    return new Intl.NumberFormat("vi-VN").format(num) + " đ";
   };
 
   // Render Exterior Sequence
@@ -800,9 +800,21 @@ export default function VehicleVersionDetailClient() {
                     </button>
 
                     <div
+                      className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? "max-h-[1200px] opacity-100" : "max-h-0 opacity-0"
+                        }`}
+                    >
+                      <div
+                        className="px-0 pr-4 pb-8 text-[14px] md:text-[15px] text-[#424242] leading-relaxed font-normal whitespace-pre-line prose prose-sm max-w-none [&_ul]:list-disc [&_ul]:pl-4 [&_ul]:space-y-1 [&_p]:mb-1 [&_strong]:text-black"
+                        dangerouslySetInnerHTML={{ __html: catGroup.content }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </ScrollReveal>
     </div>
   );
 }

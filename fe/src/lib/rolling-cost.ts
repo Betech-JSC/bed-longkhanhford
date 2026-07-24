@@ -182,14 +182,14 @@ export function calculateRollingCost(
  * Format giá tiền VNĐ
  */
 export function formatVND(price: number): string {
-  return new Intl.NumberFormat("vi-VN").format(price) + " VNĐ";
+  return new Intl.NumberFormat("vi-VN").format(price) + " đ";
 }
 
 /**
  * Format giá ngắn gọn (cho bảng giá)
  */
 export function formatPriceShort(price: number): string {
-  return new Intl.NumberFormat("en-US").format(price) + "đ";
+  return new Intl.NumberFormat("vi-VN").format(price) + " đ";
 }
 
 /**

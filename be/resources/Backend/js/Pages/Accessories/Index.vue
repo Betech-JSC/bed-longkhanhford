@@ -30,7 +30,7 @@ export default {
                 },
                 {
                     field: 'price',
-                    label: 'Giá (VNĐ)',
+                    label: 'Giá (đ)',
                     transform: (data) => {
                         return this.toMoney(data.price)
                     }
