@@ -84,7 +84,7 @@ export default function VehicleVersionDetailClient() {
   const [showDragHint, setShowDragHint] = useState(true);
 
   const getDetailedSpecs = () => {
-    let rawSpecs = selectedVersion?.specs;
+    let rawSpecs = selectedVersion?.specs || vehicle?.specs;
     if (typeof rawSpecs === 'string') {
       try {
         rawSpecs = JSON.parse(rawSpecs);

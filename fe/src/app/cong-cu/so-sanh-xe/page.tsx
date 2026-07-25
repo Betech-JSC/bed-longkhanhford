@@ -238,14 +238,14 @@ export default function ComparePage() {
               images: [image],
               typeName: v.type_name || v.typeName || (v.type === 'suv' ? 'SUV' : v.type === 'pickup' ? 'Bán tải' : 'Thương mại'),
               versions: v.versions ? v.versions.map((ver: any) => {
-                const parsedSpecs = parseSpecsArray(ver.specs);
+                const parsedSpecs = parseSpecsArray(ver.specs || v.specs);
                 return {
                   id: String(ver.id),
                   name: ver.name,
                   image_url: ver.image_url || (ver.image ? resolveImageUrl(ver.image) : ""),
                   image_thumbnail_url: ver.image_thumbnail_url || (ver.image_thumbnail ? resolveImageUrl(ver.image_thumbnail) : ""),
                   price: typeof ver.price === 'string' ? parseFloat(ver.price) : (ver.price || 0),
-                  rawSpecs: ver.specs,
+                  rawSpecs: ver.specs || v.specs,
                   specs: {
                     engine: parsedSpecs.engine || ver.specs?.engine || ver.specs?.engine_type || '',
                     power: parsedSpecs.power || ver.specs?.power || '',
