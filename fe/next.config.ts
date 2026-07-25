@@ -191,15 +191,10 @@ const nextConfig = {
         destination: "/ford-mustang-mach-e/:subpath*",
         permanent: true,
       },
-      // Chuyển hướng chuẩn từ /san-pham/[slug-dung] sang /[slug-dung]
+      // Chuyển hướng chuẩn từ /san-pham/* sang /* ở cấp gốc
       {
-        source: "/san-pham/:slug(ford-[^/]+)",
-        destination: "/:slug",
-        permanent: true,
-      },
-      {
-        source: "/san-pham/:slug(ford-[^/]+)/:subpath*",
-        destination: "/:slug/:subpath*",
+        source: "/san-pham/:path*",
+        destination: "/:path*",
         permanent: true,
       },
       // Tự động Redirect 301 từ URL cũ có .html sang URL mới không có .html
@@ -218,15 +213,6 @@ const nextConfig = {
   },
   async rewrites() {
     return [
-      // Chuyển hướng nội bộ cho tất cả các dòng xe Ford (rút ngắn URL)
-      {
-        source: "/:slug(ford-[^/]+)",
-        destination: "/san-pham/:slug",
-      },
-      {
-        source: "/:slug(ford-[^/]+)/:subpath*",
-        destination: "/san-pham/:slug/:subpath*",
-      },
       // Chuyển hướng nội bộ đường dẫn /khuyen-mai sang trang /tin-tuc
       {
         source: "/khuyen-mai",
@@ -236,11 +222,6 @@ const nextConfig = {
       {
         source: "/chuyen-muc/:slug",
         destination: "/tin-tuc",
-      },
-      // Định tuyến chung cho các bài viết không có /tin-tuc (loại trừ các đường dẫn tĩnh hệ thống)
-      {
-        source: "/:slug((?!tin-tuc$|khuyen-mai$|chuyen-muc$|category$|san-pham$|admin$|api$|lien-he$|gioi-thieu$|bang-gia$|dang-ky-lai-thu$|tim-kiem$|thu-vien-media$|xe-da-qua-su-dung$|phu-kien$|tuyen-dung$|dich-vu$)[^/]+)",
-        destination: "/tin-tuc/:slug",
       },
     ];
   },
