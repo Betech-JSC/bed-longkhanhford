@@ -1429,7 +1429,9 @@ function ThreeSixtyViewerBlock({ data, vehicle, isEditMode, onChangeData, threeS
   } = threeSixtyProps;
 
   const activeVersion = vehicle?.versions?.[activeVersionIndex];
-  const colors = (activeVersion?.colors && activeVersion.colors.length > 0) ? activeVersion.colors : [];
+  const colors = (activeVersion?.colors && activeVersion.colors.length > 0) 
+    ? activeVersion.colors 
+    : (vehicle?.colors && vehicle.colors.length > 0 ? vehicle.colors : []);
   const currentColor = colors.length > 0 ? colors[selectedColorIndex] : null;
   const hasInteriorSequence = (currentColor && currentColor.images_360_internal && currentColor.images_360_internal.length > 0)
     || (vehicle && (vehicle as any).images_360_internal && (vehicle as any).images_360_internal.length > 0);

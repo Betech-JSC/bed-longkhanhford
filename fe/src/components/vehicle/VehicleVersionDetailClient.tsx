@@ -157,7 +157,9 @@ export default function VehicleVersionDetailClient() {
     return [];
   };
 
-  const colors = (selectedVersion?.colors && selectedVersion.colors.length > 0) ? selectedVersion.colors : [];
+  const colors = (selectedVersion?.colors && selectedVersion.colors.length > 0)
+    ? selectedVersion.colors
+    : (vehicle?.colors && vehicle.colors.length > 0 ? vehicle.colors : []);
   const currentColor = (selectedColorIndex !== null && colors.length > 0) ? colors[selectedColorIndex] : null;
 
   // Detect if external or internal image sequence exists

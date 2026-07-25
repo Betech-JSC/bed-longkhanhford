@@ -63,7 +63,7 @@ class VehicleController extends Controller
                 'image_thumbnail_url' => $ver->image_thumbnail_url,
                 'specs'               => $this->hasNonEmptySpecs($ver->specs) ? (is_string($ver->specs) ? json_decode($ver->specs, true) : $ver->specs) : $fallbackSpecs,
                 'sort_order'          => $ver->sort_order,
-                'colors'              => collect($ver->colors ?? [])->map(function ($color) {
+                'colors'              => collect(!empty($ver->colors) ? $ver->colors : ($v->colors ?? []))->map(function ($color) {
                     $imagePath = null;
                     if (isset($color['image_path'])) {
                         $imagePath = static_url($color['image_path']);

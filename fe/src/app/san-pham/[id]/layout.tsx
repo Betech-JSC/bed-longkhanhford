@@ -188,14 +188,23 @@ export default async function VehicleDetailLayout({
         price: typeof v.price === 'string' ? parseFloat(v.price) : v.price,
         image_url: v.image_url || resolveFileUrl(v.image) || null,
         image_thumbnail_url: v.image_thumbnail_url || resolveFileUrl(v.image_thumbnail) || null,
-        colors: v.colors ? safeArray(v.colors).map((c: any) => ({
-          name: c.name || c.color_name || '',
-          hex: c.hex || c.color_code || '',
-          image: resolveFileUrl(c.image_path || c.image),
-          images_360: safeArray(c.images_360).map((img: any) => resolveFileUrl(img)).filter(Boolean),
-          image_360_internal: resolveFileUrl(c.image_360_internal) || null,
-          images_360_internal: safeArray(c.images_360_internal).map((img: any) => resolveFileUrl(img)).filter(Boolean)
-        })) : [],
+        colors: (v.colors && safeArray(v.colors).length > 0)
+          ? safeArray(v.colors).map((c: any) => ({
+              name: c.name || c.color_name || '',
+              hex: c.hex || c.color_code || '',
+              image: resolveFileUrl(c.image_path || c.image),
+              images_360: safeArray(c.images_360).map((img: any) => resolveFileUrl(img)).filter(Boolean),
+              image_360_internal: resolveFileUrl(c.image_360_internal) || null,
+              images_360_internal: safeArray(c.images_360_internal).map((img: any) => resolveFileUrl(img)).filter(Boolean)
+            }))
+          : (apiVehicle.colors ? safeArray(apiVehicle.colors).map((c: any) => ({
+              name: c.name || c.color_name || '',
+              hex: c.hex || c.color_code || '',
+              image: resolveFileUrl(c.image_path || c.image),
+              images_360: safeArray(c.images_360).map((img: any) => resolveFileUrl(img)).filter(Boolean),
+              image_360_internal: resolveFileUrl(c.image_360_internal) || null,
+              images_360_internal: safeArray(c.images_360_internal).map((img: any) => resolveFileUrl(img)).filter(Boolean)
+            })) : []),
         specs: {
           detailed_specs: Array.isArray(v.specs) ? v.specs : [],
           engine: parsedSpecs.engine || v.specs?.engine || '',
