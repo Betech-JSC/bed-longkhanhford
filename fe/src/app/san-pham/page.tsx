@@ -825,6 +825,7 @@ export default function ProductsPage({ initialCategory }: { initialCategory?: st
                           src={vehicleImage}
                           alt={vehicleName}
                           fill
+                          unoptimized
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           className="object-contain object-center group-hover:scale-105 transition-transform duration-500 pointer-events-none"
                           onError={handleImageError}
