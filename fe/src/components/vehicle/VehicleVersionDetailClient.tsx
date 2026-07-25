@@ -596,7 +596,7 @@ export default function VehicleVersionDetailClient() {
               onTouchStart={is360Active && isImageSequence ? handleTouchStart : undefined}
               onTouchMove={is360Active && isImageSequence ? handleTouchMove : undefined}
               onTouchEnd={is360Active && isImageSequence ? handleMouseUpOrLeave : undefined}
-              className={`w-full aspect-[16/10] bg-[#f8f8f8] rounded-none border border-gray-200 relative overflow-hidden flex items-center justify-center transition-all ${is360Active ? "cursor-grab active:cursor-grabbing shadow-inner" : "shadow-xs"
+              className={`w-full aspect-[16/10] bg-transparent rounded-none relative overflow-hidden flex items-center justify-center transition-all ${is360Active ? "cursor-grab active:cursor-grabbing shadow-inner" : ""
                 }`}
             >
               {is360Active ? (
@@ -614,7 +614,7 @@ export default function VehicleVersionDetailClient() {
                   <img
                     src={resolveImageUrl(fallbackImageSrc)}
                     alt={currentColor?.name || selectedVersion?.name || vehicle.name}
-                    className="w-full h-full object-cover select-none pointer-events-none"
+                    className="w-full h-full object-contain select-none pointer-events-none"
                   />
                   {isImageSequence && (
                     <button
