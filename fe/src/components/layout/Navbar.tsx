@@ -1190,6 +1190,7 @@ export default function Navbar() {
                               src={carData.image}
                               alt={car.displayName}
                               fill
+                              unoptimized
                               sizes="(max-width: 1024px) 30vw, 20vw"
                               className="object-contain object-center group-hover:scale-[1.03] transition-transform duration-500"
                               onError={handleImageError}

@@ -36,40 +36,45 @@ export const resolveImageUrl = (img: any): string => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://cms.longkhanhford.betech-digital.com/api";
   const baseDomain = apiUrl.replace(/\/api$/, "");
 
+  let fullUrl = "";
+
   // 2. If path contains /static/ (handles legacy domains like cms.dnf.betech-digital.com/static/...)
   if (path.includes("/static/")) {
     const relativeStatic = path.split("/static/").slice(1).join("/static/").replace(/^\//, "");
-    return `${baseDomain}/static/${relativeStatic}`;
+    fullUrl = `${baseDomain}/static/${relativeStatic}`;
   }
-
   // 3. If path contains /uploads/ (handles legacy domains like cms.dnf.betech-digital.com/uploads/...)
-  if (path.includes("/uploads/")) {
+  else if (path.includes("/uploads/")) {
     const relativeUpload = path.split("/uploads/").slice(1).join("/uploads/").replace(/^\//, "");
-    return `${baseDomain}/uploads/${relativeUpload}`;
+    fullUrl = `${baseDomain}/uploads/${relativeUpload}`;
   }
-
-  // 4. Clean corrupted URLs from old static_url bug where fake https:// was prepended to filenames like https://file.webp
-  if (path.startsWith("http://") || path.startsWith("https://")) {
+  // 4. Clean corrupted URLs from old static_url bug where fake https:// was prepended to filenames
+  else if (path.startsWith("http://") || path.startsWith("https://")) {
     try {
       const parsed = new URL(path);
       const isCorruptedFilenameDomain = /\.(webp|png|jpg|jpeg|gif|svg)$/i.test(parsed.hostname);
       if (isCorruptedFilenameDomain && (parsed.pathname === "/" || parsed.pathname === "")) {
         path = parsed.hostname; // Strip out the fake https:// and recover the raw filename
+        fullUrl = `${baseDomain}/static/${path.replace(/^\//, "")}`;
       } else {
-        return path;
+        fullUrl = path;
       }
     } catch (e) {
       path = path.replace(/^https?:\/\//i, "");
+      fullUrl = `${baseDomain}/static/${path.replace(/^\//, "")}`;
     }
+  } else if (path.startsWith("//")) {
+    fullUrl = path;
+  } else {
+    const cleanPath = path.replace(/^\//, "");
+    fullUrl = `${baseDomain}/static/${cleanPath}`;
   }
 
-  if (path.startsWith("//")) {
-    return path;
+  try {
+    return encodeURI(decodeURI(fullUrl));
+  } catch (e) {
+    return encodeURI(fullUrl);
   }
-
-  const cleanPath = path.replace(/^\//, "");
-
-  return `${baseDomain}/static/${cleanPath}`;
 };
 
 export const hasImageField = (img: any): boolean => {
