@@ -34,12 +34,22 @@ class RoleController extends Controller
     private function afterStore($request, $item)
     {
         $permissions = [];
-        foreach ($request->input('permissions') as $actions) {
-            $permissions = array_merge(
-                $permissions,
-                collect($actions)->filter(fn($action) => $action)->keys()->toArray()
-            );
+        if ($request->has('permissions') && is_array($request->input('permissions'))) {
+            foreach ($request->input('permissions') as $actions) {
+                $permissions = array_merge(
+                    $permissions,
+                    collect($actions)->filter(fn($action) => $action)->keys()->toArray()
+                );
+            }
         }
+
+        foreach ($permissions as $permissionName) {
+            \Spatie\Permission\Models\Permission::firstOrCreate([
+                'name' => $permissionName,
+                'guard_name' => 'admin',
+            ]);
+        }
+
         $item->syncPermissions($permissions);
     }
 }

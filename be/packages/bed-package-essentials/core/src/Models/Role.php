@@ -47,7 +47,15 @@ class Role extends SpatieRole
                 !str_contains($action['controller'], 'Controllers\Auth')
             ) {
                 $fullAction = str_replace("$locale.admin.", "admin.", $name);
-                $tables = explode('.', $fullAction)[1];
+                $parts = explode('.', $fullAction);
+                if (count($parts) < 2) continue;
+                $tables = $parts[1];
+
+                // Auto-create permission in DB if it does not exist
+                \Spatie\Permission\Models\Permission::firstOrCreate([
+                    'name' => $fullAction,
+                    'guard_name' => 'admin',
+                ]);
 
                 $permissions[$tables][$fullAction] = in_array($fullAction, $rolePermissions);
             }
