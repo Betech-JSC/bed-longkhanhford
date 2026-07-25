@@ -133,7 +133,10 @@ function SearchPageContent() {
       
       let typeName = "SUV";
       const titleLower = name.toLowerCase();
-      if (titleLower.includes("territory")) {
+      const slugLower = (id || "").toLowerCase();
+      if (titleLower.includes("raptor") || slugLower.includes("raptor")) {
+        typeName = "Bán Tải Hiệu Suất Cao";
+      } else if (titleLower.includes("territory")) {
         typeName = "SUV 5 Chỗ";
       } else if (titleLower.includes("everest")) {
         typeName = "SUV 7 Chỗ";
@@ -141,7 +144,7 @@ function SearchPageContent() {
         typeName = "SUV điện 5 Chỗ";
       } else if (titleLower.includes("mustang")) {
         typeName = "Xe thể thao 4 Chỗ";
-      } else if (titleLower.includes("ranger") || titleLower.includes("raptor")) {
+      } else if (titleLower.includes("ranger")) {
         typeName = "Bán tải 5 Chỗ";
       } else if (titleLower.includes("transit")) {
         typeName = "Thương mại 16 Chỗ";

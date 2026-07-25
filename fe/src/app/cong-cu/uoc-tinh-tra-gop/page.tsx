@@ -101,11 +101,13 @@ export default function InstallmentCalculatorPage() {
               id: apiCar.slug,
               name: apiCar.title,
               type: apiCar.type || 'suv',
-              typeName: apiCar.type === 'suv' 
-                ? (apiCar.title?.toLowerCase().includes('everest') ? 'SUV 7 Chỗ' : apiCar.title?.toLowerCase().includes('territory') ? 'SUV 5 Chỗ' : 'SUV')
-                : apiCar.type === 'pickup' 
-                  ? 'Bán tải' 
-                  : (apiCar.title?.toLowerCase().includes('transit') ? 'Xe Thương Mại 16 Chỗ' : apiCar.title?.toLowerCase().includes('tourneo') ? 'Thương Mại 7 Chỗ' : 'Thương mại'),
+              typeName: (apiCar.title?.toLowerCase().includes('raptor') || apiCar.slug?.toLowerCase().includes('raptor'))
+                ? 'Bán Tải Hiệu Suất Cao'
+                : (apiCar.type === 'suv' 
+                  ? (apiCar.title?.toLowerCase().includes('everest') ? 'SUV 7 Chỗ' : apiCar.title?.toLowerCase().includes('territory') ? 'SUV 5 Chỗ' : 'SUV')
+                  : apiCar.type === 'pickup' 
+                    ? 'Bán tải 5 Chỗ' 
+                    : (apiCar.title?.toLowerCase().includes('transit') ? 'Xe Thương Mại 16 Chỗ' : apiCar.title?.toLowerCase().includes('tourneo') ? 'Thương Mại 7 Chỗ' : 'Thương mại')),
               isBestSeller: apiCar.is_best_seller,
               basePrice: typeof apiCar.base_price === 'string' ? parseFloat(apiCar.base_price) : apiCar.base_price,
               tagline: apiCar.tagline || '',

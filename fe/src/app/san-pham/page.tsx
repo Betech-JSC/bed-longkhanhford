@@ -323,7 +323,9 @@ export default function ProductsPage({ initialCategory }: { initialCategory?: st
       seatsCount,
       fuel,
       transmission,
-      typeName: v.type_name || v.typeName || (seatsCount === "16" ? "Xe 16 Chỗ" : `${categorySlug === "ban-tai" ? "Bán tải" : "SUV"} ${seatsCount} Chỗ`),
+      typeName: (name.toLowerCase().includes("raptor") || id.toLowerCase().includes("raptor"))
+        ? "Bán Tải Hiệu Suất Cao"
+        : (v.type_name || v.typeName || (seatsCount === "16" ? "Xe 16 Chỗ" : `${categorySlug === "ban-tai" ? "Bán tải" : "SUV"} ${seatsCount} Chỗ`)),
       engine,
       transText: transmission,
       drivetrain

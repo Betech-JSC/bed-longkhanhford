@@ -65,7 +65,9 @@ export default function CompareDrawer() {
               id,
               name,
               type: (v.type === 'suv' || v.type === 'pickup' || v.type === 'commercial' ? v.type : 'suv') as "suv" | "pickup" | "commercial",
-              typeName: v.type_name || v.typeName || (v.type === 'suv' ? 'SUV' : v.type === 'pickup' ? 'Bán tải' : 'Thương mại'),
+              typeName: (name.toLowerCase().includes('raptor') || id.toLowerCase().includes('raptor'))
+                ? 'Bán Tải Hiệu Suất Cao'
+                : (v.type_name || v.typeName || (v.type === 'suv' ? 'SUV' : v.type === 'pickup' ? 'Bán tải' : 'Thương mại')),
               basePrice: price,
               tagline: (v as any).tagline || "",
               description: (v as any).description || "",

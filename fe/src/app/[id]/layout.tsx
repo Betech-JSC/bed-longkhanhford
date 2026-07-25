@@ -172,13 +172,15 @@ export default async function VehicleDetailLayout({
     ...apiVehicle,
     id: apiVehicle.slug || String(apiVehicle.id),
     name: apiVehicle.title,
-    typeName: apiVehicle.type_name || apiVehicle.typeName || (
-      apiVehicle.type === 'suv'
-        ? (apiVehicle.title?.toLowerCase().includes('everest') ? 'SUV 7 Chỗ' : apiVehicle.title?.toLowerCase().includes('territory') ? 'SUV 5 Chỗ' : 'SUV')
-        : apiVehicle.type === 'pickup'
-          ? 'Bán tải'
-          : (apiVehicle.title?.toLowerCase().includes('transit') ? 'Xe Thương Mại 16 Chỗ' : apiVehicle.title?.toLowerCase().includes('tourneo') ? 'Thương Mại 7 Chỗ' : 'Thương mại')
-    ),
+    typeName: (apiVehicle.title?.toLowerCase().includes('raptor') || apiVehicle.slug?.toLowerCase().includes('raptor'))
+      ? 'Bán Tải Hiệu Suất Cao'
+      : (apiVehicle.type_name || apiVehicle.typeName || (
+          apiVehicle.type === 'suv'
+            ? (apiVehicle.title?.toLowerCase().includes('everest') ? 'SUV 7 Chỗ' : apiVehicle.title?.toLowerCase().includes('territory') ? 'SUV 5 Chỗ' : 'SUV')
+            : apiVehicle.type === 'pickup'
+              ? 'Bán tải 5 Chỗ'
+              : (apiVehicle.title?.toLowerCase().includes('transit') ? 'Xe Thương Mại 16 Chỗ' : apiVehicle.title?.toLowerCase().includes('tourneo') ? 'Thương Mại 7 Chỗ' : 'Thương mại')
+        )),
     basePrice: typeof apiVehicle.base_price === 'string' ? parseFloat(apiVehicle.base_price) : apiVehicle.base_price,
     image_url: apiVehicle.image_url || resolveFileUrl(apiVehicle.image),
     colors: apiVehicle.colors ? safeArray(apiVehicle.colors).map((c: any) => ({

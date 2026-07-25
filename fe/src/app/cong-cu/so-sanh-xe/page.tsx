@@ -236,7 +236,9 @@ export default function ComparePage() {
               name,
               basePrice: price,
               images: [image],
-              typeName: v.type_name || v.typeName || (v.type === 'suv' ? 'SUV' : v.type === 'pickup' ? 'Bán tải' : 'Thương mại'),
+              typeName: (name.toLowerCase().includes('raptor') || id.toLowerCase().includes('raptor'))
+                ? 'Bán Tải Hiệu Suất Cao'
+                : (v.type_name || v.typeName || (v.type === 'suv' ? 'SUV' : v.type === 'pickup' ? 'Bán tải' : 'Thương mại')),
               versions: v.versions ? v.versions.map((ver: any) => {
                 const parsedSpecs = parseSpecsArray(ver.specs || v.specs);
                 return {

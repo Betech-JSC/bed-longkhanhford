@@ -26,7 +26,11 @@ function groupVehiclesBySeries(apiVehicles: any[]) {
     let typeName = "";
     
     const titleLower = vehicle.title.toLowerCase();
-    if (titleLower.includes("territory")) {
+    if (titleLower.includes("raptor") || (vehicle.slug && vehicle.slug.toLowerCase().includes("raptor"))) {
+      seriesKey = "ford-ranger-raptor";
+      seriesName = "FORD RANGER RAPTOR";
+      typeName = "Bán Tải Hiệu Suất Cao";
+    } else if (titleLower.includes("territory")) {
       seriesKey = "ford-territory";
       seriesName = "FORD TERRITORY";
       typeName = "SUV 5 Chỗ";
@@ -34,7 +38,7 @@ function groupVehiclesBySeries(apiVehicles: any[]) {
       seriesKey = "ford-everest";
       seriesName = "FORD EVEREST";
       typeName = "SUV 7 Chỗ";
-    } else if (titleLower.includes("ranger") || titleLower.includes("raptor")) {
+    } else if (titleLower.includes("ranger")) {
       seriesKey = "ford-ranger";
       seriesName = "FORD RANGER";
       typeName = "Bán tải 5 Chỗ";
