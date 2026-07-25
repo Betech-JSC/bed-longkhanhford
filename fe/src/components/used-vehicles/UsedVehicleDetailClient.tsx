@@ -16,6 +16,8 @@ import {
   X,
 } from "lucide-react";
 import { contactsAPI } from "@/lib/api";
+import { resolveImageUrl } from "@/components/blocks/Blocks";
+import { handleImageError } from "@/lib/site-assets";
 
 export default function UsedVehicleDetailClient({ vehicle }: { vehicle: any }) {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -44,11 +46,17 @@ export default function UsedVehicleDetailClient({ vehicle }: { vehicle: any }) {
   const [scrollLeft, setScrollLeft] = useState(0);
   const hasDraggedRef = useRef(false);
 
-  const displayThumbnails = vehicle && Array.isArray(vehicle.images_urls) 
-    ? vehicle.images_urls.filter(Boolean) 
-    : [];
+  const rawThumbnails = (vehicle && Array.isArray(vehicle.images_urls) && vehicle.images_urls.length > 0)
+    ? vehicle.images_urls
+    : (vehicle && Array.isArray(vehicle.images) && vehicle.images.length > 0
+        ? vehicle.images
+        : (vehicle && (vehicle.image_url || vehicle.image) ? [vehicle.image_url || vehicle.image] : []));
 
-  const activeImage = displayThumbnails[activeIndex] || (vehicle ? vehicle.image_url : "") || "/assets/images/placeholder_car.png";
+  const displayThumbnails = rawThumbnails
+    .map((img: any) => resolveImageUrl(img))
+    .filter(Boolean);
+
+  const activeImage = displayThumbnails[activeIndex] || resolveImageUrl(vehicle?.image_url || vehicle?.image) || "/assets/images/placeholder_car.png";
 
   useEffect(() => {
     if (!showLightbox) return;
@@ -249,8 +257,10 @@ export default function UsedVehicleDetailClient({ vehicle }: { vehicle: any }) {
                 alt={vehicle.title}
                 fill
                 priority
+                unoptimized
                 sizes="(max-width: 1024px) 100vw, 60vw"
                 className="object-contain p-4 group-hover:scale-[1.02] transition-transform duration-500 pointer-events-none select-none"
+                onError={handleImageError}
               />
 
               {/* Navigation Arrows overlay on hover */}
@@ -300,8 +310,10 @@ export default function UsedVehicleDetailClient({ vehicle }: { vehicle: any }) {
                       src={thumb}
                       alt={`Thumbnail ${idx + 1}`}
                       fill
+                      unoptimized
                       sizes="96px"
                       className="object-cover pointer-events-none select-none"
+                      onError={handleImageError}
                     />
                   </button>
                 ))}
@@ -544,8 +556,10 @@ export default function UsedVehicleDetailClient({ vehicle }: { vehicle: any }) {
                 alt={vehicle.title}
                 fill
                 priority
+                unoptimized
                 sizes="90vw"
                 className="object-contain pointer-events-none select-none"
+                onError={handleImageError}
               />
             </div>
           </div>
@@ -568,8 +582,10 @@ export default function UsedVehicleDetailClient({ vehicle }: { vehicle: any }) {
                     src={thumb}
                     alt={`Lightbox Thumbnail ${idx + 1}`}
                     fill
+                    unoptimized
                     sizes="80px"
                     className="object-cover pointer-events-none select-none"
+                    onError={handleImageError}
                   />
                 </button>
               ))}

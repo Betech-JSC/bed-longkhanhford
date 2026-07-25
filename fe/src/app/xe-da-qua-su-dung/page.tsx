@@ -15,6 +15,8 @@ import {
   PhoneCall
 } from "lucide-react";
 import { usedVehiclesAPI } from "@/lib/api";
+import { resolveImageUrl } from "@/components/blocks/Blocks";
+import { handleImageError } from "@/lib/site-assets";
 
 export default function UsedVehiclesPage() {
   const [vehicles, setVehicles] = useState<any[]>([]);
@@ -260,11 +262,13 @@ export default function UsedVehiclesPage() {
                     {/* Image Area */}
                     <div className="relative h-[220px] bg-white overflow-hidden flex items-center justify-center border-b border-gray-150">
                       <Image 
-                        src={vehicle.image_url || "/assets/images/placeholder_car.png"} 
+                        src={resolveImageUrl(vehicle.image_url || vehicle.image) || "/assets/images/placeholder_car.png"} 
                         alt={vehicle.title}
                         fill
+                        unoptimized
                         className="object-contain p-3 group-hover:scale-105 transition-all duration-500"
-                        sizes="(max-width: 768px) 100vw, (max-w-1200px) 50vw, 33vw"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        onError={handleImageError}
                       />
                       
                       {/* Assured Badge */}
