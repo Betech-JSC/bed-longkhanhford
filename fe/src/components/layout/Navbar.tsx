@@ -7,6 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { MapPin, Mail, Phone, Search, ChevronDown, ChevronRight, X, Download, FileText } from "lucide-react";
 import { vehiclesAPI, accessoriesAPI, servicesAPI, usedVehiclesAPI } from "@/lib/api";
 import { resolveImageUrl } from "@/components/blocks/Blocks";
+import { getPopularVehicleImage, handleImageError } from "@/lib/site-assets";
 
 type DropdownItem = {
   name: string;
@@ -410,14 +411,15 @@ export default function Navbar() {
     if (!vehicle) {
       return {
         price: "Đang cập nhật",
-        image: "",
+        image: getPopularVehicleImage(car.id),
       };
     }
     const price = typeof vehicle.base_price === 'string' ? parseFloat(vehicle.base_price) : (vehicle.base_price || vehicle.basePrice || 0);
-    const image = resolveImageUrl(vehicle.image_thumbnail_url || vehicle.image_url || vehicle.images?.[0] || "");
+    const rawImage = vehicle.image_thumbnail_url || vehicle.image_url || vehicle.images?.[0] || getPopularVehicleImage(car.id);
+    const image = resolveImageUrl(rawImage);
     return {
       price: price > 0 ? formatPrice(price) : "Liên hệ",
-      image: image,
+      image: image || getPopularVehicleImage(car.id),
     };
   };
 
@@ -1188,6 +1190,7 @@ export default function Navbar() {
                               fill
                               sizes="(max-width: 1024px) 30vw, 20vw"
                               className="object-contain object-center group-hover:scale-[1.03] transition-transform duration-500"
+                              onError={handleImageError}
                             />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center bg-gray-50 rounded-lg text-xs text-gray-400">
