@@ -50,6 +50,10 @@ export const popularVehicleImages: Record<string, string> = {
   "new-mustang-mach-e": "/assets/mach-e-hero.png",
   "ford-mustang-mach-e": "/assets/mach-e-hero.png",
   "ford-ranger": "/assets/ranger_wildtrak.png",
+  "ford-ranger-2026": "/assets/ranger_wildtrak.png",
+  "ford-ranger-raptor": "/assets/ranger_raptor.png",
+  "ford-ranger-raptor-2026": "/assets/ranger_raptor.png",
+  "ford-range-raptor-2026": "/assets/ranger_raptor.png",
   "ford-transit-2024": "/assets/transit_premium.png",
   "ford-transit": "/assets/transit_premium.png",
   "mustang-fastback": "/assets/mustang_dark_horse.png",
@@ -58,6 +62,14 @@ export const popularVehicleImages: Record<string, string> = {
 
 export function getPopularVehicleImage(vehicleId: string, fallback?: string) {
   if (fallback && fallback !== "") return fallback;
+  const key = vehicleId?.toLowerCase() || "";
+  if (key.includes("raptor")) return popularVehicleImages["ford-ranger-raptor"];
+  if (key.includes("ranger")) return popularVehicleImages["ford-ranger"];
+  if (key.includes("everest")) return popularVehicleImages["ford-everest"];
+  if (key.includes("territory")) return popularVehicleImages["ford-territory"];
+  if (key.includes("transit")) return popularVehicleImages["ford-transit"];
+  if (key.includes("mach-e") || key.includes("mustang")) return popularVehicleImages["ford-mustang"];
+
   return popularVehicleImages[vehicleId] ?? siteAssets.carPlaceholder;
 }
 
@@ -66,6 +78,20 @@ export const imageFallbackSvg = "/images/ford_placeholder.png";
 export function handleImageError(e: React.SyntheticEvent<HTMLImageElement, Event>) {
   e.currentTarget.onerror = null;
   e.currentTarget.srcset = "";
-  e.currentTarget.src = imageFallbackSvg;
+  const alt = (e.currentTarget.alt || "").toLowerCase();
+  const src = (e.currentTarget.src || "").toLowerCase();
+  if (alt.includes("raptor") || src.includes("raptor")) {
+    e.currentTarget.src = "/assets/ranger_raptor.png";
+  } else if (alt.includes("ranger") || src.includes("ranger") || src.includes("wildtrak")) {
+    e.currentTarget.src = "/assets/ranger_wildtrak.png";
+  } else if (alt.includes("everest") || src.includes("everest")) {
+    e.currentTarget.src = "/assets/everest_platinum.png";
+  } else if (alt.includes("territory") || src.includes("territory")) {
+    e.currentTarget.src = "/assets/territory-hero.png";
+  } else if (alt.includes("transit") || src.includes("transit")) {
+    e.currentTarget.src = "/assets/transit_premium.png";
+  } else {
+    e.currentTarget.src = imageFallbackSvg;
+  }
 }
 
