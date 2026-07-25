@@ -28,8 +28,22 @@ export const resolveImageUrl = (img: any): string => {
   }
   if (!path) return "/assets/img-gradient-1.png";
 
-  // If already absolute URL starting with http://, https://, or //
-  if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("//")) {
+  // Clean corrupted URLs from old static_url bug where https:// was prepended to filenames like https://file.webp
+  if (path.startsWith("http://") || path.startsWith("https://")) {
+    try {
+      const parsed = new URL(path);
+      const isCorruptedFilenameDomain = /\.(webp|png|jpg|jpeg|gif|svg)$/i.test(parsed.hostname);
+      if (isCorruptedFilenameDomain && (parsed.pathname === "/" || parsed.pathname === "")) {
+        path = parsed.hostname; // Strip out the fake https:// and recover the raw filename
+      } else {
+        return path;
+      }
+    } catch (e) {
+      path = path.replace(/^https?:\/\//i, "");
+    }
+  }
+
+  if (path.startsWith("//")) {
     return path;
   }
 
