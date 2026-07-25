@@ -1,5 +1,10 @@
-import VehicleDetailClient from "@/components/vehicle/VehicleDetailClient";
+import { redirect } from "next/navigation";
 
-export default function Page() {
-  return <VehicleDetailClient />;
+type Props = {
+  params: Promise<{ id: string }>;
+};
+
+export default async function LegacySanPhamPage({ params }: Props) {
+  const { id } = await params;
+  redirect(`/${id}`);
 }

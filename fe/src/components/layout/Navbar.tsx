@@ -80,7 +80,7 @@ export default function Navbar() {
       return {
         vehicles: vehiclesList.slice(0, 3).map(v => ({
           name: v.title || v.name,
-          href: `/san-pham/${v.slug || v.id}`,
+          href: `/${v.slug || v.seo_slug || v.id}`,
         })),
         popular: [
           { name: "Bảng giá xe Ford mới nhất", href: "/bang-gia" },
@@ -96,7 +96,7 @@ export default function Navbar() {
       .filter(v => (v.title || v.name || "").toLowerCase().includes(q))
       .map(v => ({
         name: v.title || v.name,
-        href: `/san-pham/${v.slug || v.id}`,
+        href: `/${v.slug || v.seo_slug || v.id}`,
       }))
       .slice(0, 4);
 

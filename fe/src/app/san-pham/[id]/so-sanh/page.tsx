@@ -1,58 +1,10 @@
-import { notFound } from "next/navigation";
-import { vehiclesAPI } from "@/lib/api";
-import VehicleCompareClient from "@/components/vehicle/VehicleCompareClient";
+import { redirect } from "next/navigation";
 
 type Props = {
-  params: Promise<{
-    id: string; // The URL slug of the vehicle
-  }>;
+  params: Promise<{ id: string }>;
 };
 
-export async function generateMetadata({ params }: Props) {
-  try {
-    const { id } = await params;
-    const res = await vehiclesAPI.getBySlug(id).catch(() => null);
-    const vehicle = res?.data || (res?.id ? res : null);
-
-    if (!vehicle) return {};
-
-    const title = `Thông số kỹ thuật & So sánh xe Ford ${vehicle.title} | Long Khánh Ford`;
-    const description = `Chi tiết bảng thông số kỹ thuật xe Ford ${vehicle.title}, so sánh trang bị giữa các phiên bản. Nhận báo giá lăn bánh mới nhất tại Long Khánh Ford.`;
-
-    return {
-      title,
-      description,
-      alternates: {
-        canonical: `/${id}/so-sanh`,
-      },
-      openGraph: {
-        title,
-        description,
-        type: "website",
-        locale: "vi_VN",
-        images: vehicle.image_url ? [{ url: vehicle.image_url }] : [],
-      },
-    };
-  } catch (error) {
-    console.error("Error generating metadata for comparison page:", error);
-    return {};
-  }
-}
-
-export default async function Page({ params }: Props) {
+export default async function LegacyComparePage({ params }: Props) {
   const { id } = await params;
-  let vehicle = null;
-
-  try {
-    const res = await vehiclesAPI.getBySlug(id).catch(() => null);
-    vehicle = res?.data || (res?.id ? res : null);
-  } catch (error) {
-    console.error("Error loading vehicle in server comparison page:", error);
-  }
-
-  if (!vehicle) {
-    notFound();
-  }
-
-  return <VehicleCompareClient />;
+  redirect(`/${id}/so-sanh`);
 }
