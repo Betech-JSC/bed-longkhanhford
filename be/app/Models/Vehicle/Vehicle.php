@@ -274,7 +274,7 @@ class Vehicle extends BaseModel
 
     public function versions()
     {
-        return $this->hasMany(VehicleVersion::class, 'vehicle_id');
+        return $this->hasMany(VehicleVersion::class, 'vehicle_id')->sortByPosition();
     }
 
     public function reviews()

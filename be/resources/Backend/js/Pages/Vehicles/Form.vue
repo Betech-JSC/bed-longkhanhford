@@ -1409,7 +1409,11 @@ export default {
             deep: true,
             handler(newVersions) {
                 if (!newVersions) return;
-                newVersions.forEach(ver => {
+                newVersions.forEach((ver, idx) => {
+                    ver.sort_order = idx + 1;
+                    if (!ver._tempId) {
+                        ver._tempId = ver.id ? `ver_${ver.id}` : `temp_${Math.random().toString(36).substr(2, 9)}`;
+                    }
                     if (ver.customSpecs && Array.isArray(ver.customSpecs)) {
                         const mappedSpecs = ver.customSpecs.map(s => ({
                             title: s.title ?? '',
