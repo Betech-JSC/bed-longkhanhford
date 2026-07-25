@@ -122,9 +122,23 @@ export default {
         },
         hasDuplicateRoute() {
             try {
-                return !!this.form?.id && this.route().has(`admin.${this.currentResource}.duplicate`);
+                if (!this.form?.id) return false;
+                const resource = this.currentResource;
+                if (!resource) return false;
+                const locale = (typeof this.getCurrentLocale === 'function') ? this.getCurrentLocale() : 'vi';
+                const routes = this.route()?.t?.routes || {};
+                const keys = Object.keys(routes);
+                const targetNames = [
+                    `admin.${resource}.duplicate`,
+                    `${locale}.admin.${resource}.duplicate`,
+                    `vi.admin.${resource}.duplicate`,
+                    `en.admin.${resource}.duplicate`,
+                ];
+                const hasRoute = targetNames.some(name => keys.includes(name) || (typeof this.route().has === 'function' && this.route().has(name)));
+                const canPerm = this.can('admin.' + resource + '.duplicate') || this.can('admin.' + resource + '.form') || this.can('admin.' + resource + '.store');
+                return hasRoute && canPerm;
             } catch (e) {
-                return false;
+                return !!this.form?.id;
             }
         },
     },
