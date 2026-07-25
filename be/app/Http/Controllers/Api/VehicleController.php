@@ -157,12 +157,27 @@ class VehicleController extends Controller
     {
         $vehicle = Vehicle::query()
             ->where('status', Vehicle::STATUS_ACTIVE)
-            ->whereSlug($slug)
+            ->where(function ($query) use ($slug) {
+                $query->whereTranslation('slug', $slug)
+                    ->orWhere('id', $slug);
+            })
             ->with([
                 'categories',
                 'versions' => fn($q) => $q->where('status', 'ACTIVE')->sortByPosition()
             ])
             ->first();
+
+        if (!$vehicle) {
+            $allVehicles = Vehicle::where('status', Vehicle::STATUS_ACTIVE)
+                ->with([
+                    'categories',
+                    'versions' => fn($q) => $q->where('status', 'ACTIVE')->sortByPosition()
+                ])
+                ->get();
+            $vehicle = $allVehicles->first(function ($v) use ($slug) {
+                return \Illuminate\Support\Str::slug($v->title) === $slug;
+            });
+        }
 
         if (!$vehicle) {
             return $this->failure(__('Không tìm thấy xe'), 404);

@@ -17,11 +17,14 @@ trait Sluggable
 
     public function setUniqueSlug($value = null)
     {
-        if (is_null($value)) {
-            $value = $this->getAttribute($this->slugAttribute);
+        $slugAttr = $this->slugAttribute ?? 'title';
+        if (is_null($value) || $this->isDirty($slugAttr) || empty($this->attributes['slug'])) {
+            $value = $this->getAttribute($slugAttr);
         }
 
-        $this->attributes['slug'] = $this->generateSlug($value);
+        if (!empty($value)) {
+            $this->attributes['slug'] = $this->generateSlug($value);
+        }
     }
 
     private function generateSlug($value, $loop = 0)

@@ -146,6 +146,16 @@ export default async function VehicleDetailLayout({
     const detailRes = await vehiclesAPI.getBySlug(id).catch(() => null);
     if (detailRes && detailRes.data) {
       apiVehicle = detailRes.data;
+    } else {
+      const allRes = await vehiclesAPI.getAll({ with_versions: true }).catch(() => null);
+      const items = (allRes as any)?.data || allRes;
+      if (Array.isArray(items)) {
+        apiVehicle = items.find((v: any) => 
+          (v.slug && v.slug === id) || 
+          String(v.id) === id || 
+          v.title?.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") === id.toLowerCase()
+        ) || null;
+      }
     }
   } catch (err) {
     console.error("Error loading vehicle details on server layout:", err);
