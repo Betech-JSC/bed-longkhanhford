@@ -191,12 +191,6 @@ const nextConfig = {
         destination: "/ford-mustang-mach-e/:subpath*",
         permanent: true,
       },
-      // Chuyển hướng chuẩn từ /san-pham/:path+ sang /:path+ ở cấp gốc (giữ nguyên /san-pham cho trang danh sách sản phẩm)
-      {
-        source: "/san-pham/:path+",
-        destination: "/:path+",
-        permanent: true,
-      },
       // Tự động Redirect 301 từ URL cũ có .html sang URL mới không có .html
       {
         source: "/:slug.html",
