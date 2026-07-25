@@ -28,11 +28,6 @@ export const resolveImageUrl = (img: any): string => {
   }
   if (!path) return "/assets/img-gradient-1.png";
 
-  // Filter out non-cutout full-scene photos like ChatGPT desert background images
-  if (path.includes("ChatGPT") || path.includes("ChatGPT%20Image")) {
-    return "";
-  }
-
   // 1. Local frontend assets in Next.js public directory
   if (path.startsWith("/assets/") || path.startsWith("/images/") || path.startsWith("/placeholder")) {
     return path;
