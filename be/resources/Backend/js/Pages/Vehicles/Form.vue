@@ -409,6 +409,10 @@
                                             ＋ Thêm nhóm thông số mới
                                         </button>
                                     </div>
+
+                                    <p v-show="showSpecsSection" class="text-[11px] text-gray-500 italic mb-3 bg-indigo-50/50 p-2 rounded-lg border border-indigo-100">
+                                        💡 <strong>Lưu ý:</strong> Bạn có thể nhập thông số kỹ thuật riêng cho phiên bản này. Nếu không nhập (hoặc để trống), hệ thống sẽ tự động sử dụng thông số kỹ thuật chung của dòng xe làm fallback khi hiển thị ở trang chi tiết.
+                                    </p>
                                     
                                     <div v-show="showSpecsSection" class="space-y-4">
                                         <div v-for="(spec, sIdx) in form.versions[activeVersionIndex].customSpecs" :key="sIdx" class="bg-gray-50 border border-gray-200 p-4 rounded-xl hover:shadow-xs transition duration-150 relative">

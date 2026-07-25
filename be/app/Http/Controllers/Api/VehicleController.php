@@ -53,13 +53,15 @@ class VehicleController extends Controller
         ];
 
         if ($v->relationLoaded('versions')) {
+            $fallbackSpecs = $this->resolveFallbackSpecs($v->versions);
+            $data['specs'] = $fallbackSpecs;
             $data['versions'] = $v->versions->map(fn($ver) => [
                 'id'                  => $ver->id,
                 'name'                => $ver->name,
                 'price'               => $ver->price,
                 'image_url'           => $ver->image_url,
                 'image_thumbnail_url' => $ver->image_thumbnail_url,
-                'specs'               => $ver->specs ?? [],
+                'specs'               => $this->hasNonEmptySpecs($ver->specs) ? (is_string($ver->specs) ? json_decode($ver->specs, true) : $ver->specs) : $fallbackSpecs,
                 'sort_order'          => $ver->sort_order,
                 'colors'              => collect($ver->colors ?? [])->map(function ($color) {
                     $imagePath = null;
@@ -166,6 +168,8 @@ class VehicleController extends Controller
             return $this->failure(__('Không tìm thấy xe'), 404);
         }
 
+        $fallbackSpecs = $this->resolveFallbackSpecs($vehicle->versions);
+
         $data = [
             'id'                     => $vehicle->id,
             'category_id'            => $vehicle->category_id,
@@ -221,13 +225,14 @@ class VehicleController extends Controller
             'image_360_internal_url' => $this->resolveFileUrl($vehicle->image_360_internal_url),
             'type'                   => $vehicle->type,
             'base_price'             => $vehicle->base_price,
+            'specs'                  => $fallbackSpecs,
             'versions'               => $vehicle->versions->map(fn($v) => [
                 'id'                  => $v->id,
                 'name'                => $v->name,
                 'price'               => $v->price,
                 'image_url'           => $v->image_url,
                 'image_thumbnail_url' => $v->image_thumbnail_url,
-                'specs'               => $v->specs ?? [],
+                'specs'               => $this->hasNonEmptySpecs($v->specs) ? (is_string($v->specs) ? json_decode($v->specs, true) : $v->specs) : $fallbackSpecs,
                 'sort_order'          => $v->sort_order,
                 'colors'     => collect($v->colors ?? [])->map(function ($color) {
                     $imagePath = null;
@@ -270,6 +275,50 @@ class VehicleController extends Controller
         ];
 
         return $this->success($data);
+    }
+
+    private function resolveFallbackSpecs($versions)
+    {
+        if (!$versions || count($versions) === 0) {
+            return [];
+        }
+
+        foreach ($versions as $ver) {
+            if ($this->hasNonEmptySpecs($ver->specs)) {
+                return is_string($ver->specs) ? json_decode($ver->specs, true) : $ver->specs;
+            }
+        }
+
+        return [];
+    }
+
+    private function hasNonEmptySpecs($specs): bool
+    {
+        if (empty($specs)) return false;
+        if (is_string($specs)) {
+            $specs = json_decode($specs, true);
+        }
+        if (!is_array($specs) || count($specs) === 0) return false;
+
+        foreach ($specs as $item) {
+            if (is_array($item)) {
+                if (!empty($item['content']) && trim(strip_tags($item['content'])) !== '') {
+                    return true;
+                }
+                if (!empty($item['items']) && is_array($item['items']) && count($item['items']) > 0) {
+                    return true;
+                }
+                foreach ($item as $k => $v) {
+                    if (!in_array($k, ['title', 'category', 'name']) && !empty($v) && is_string($v) && trim(strip_tags($v)) !== '') {
+                        return true;
+                    }
+                }
+            } elseif (is_string($item) && trim(strip_tags($item)) !== '') {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function resolveLayoutBlocksUrls($blocks)
