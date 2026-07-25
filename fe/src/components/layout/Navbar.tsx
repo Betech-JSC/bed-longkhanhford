@@ -6,6 +6,7 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { MapPin, Mail, Phone, Search, ChevronDown, ChevronRight, X, Download, FileText } from "lucide-react";
 import { vehiclesAPI, accessoriesAPI, servicesAPI, usedVehiclesAPI } from "@/lib/api";
+import { resolveImageUrl } from "@/components/blocks/Blocks";
 
 type DropdownItem = {
   name: string;
@@ -382,7 +383,7 @@ export default function Navbar() {
         id: v.slug || v.id,
         displayName: v.title || v.name,
         price: formatPrice(typeof v.base_price === 'string' ? parseFloat(v.base_price) : (v.base_price || v.basePrice || 0)),
-        image: v.image_thumbnail_url || v.image_url || v.images?.[0] || "",
+        image: resolveImageUrl(v.image_thumbnail_url || v.image_url || v.images?.[0] || ""),
       }));
 
     return {
@@ -401,7 +402,7 @@ export default function Navbar() {
     if (car.price && car.image) {
       return {
         price: car.price,
-        image: car.image,
+        image: resolveImageUrl(car.image),
       };
     }
     // Fallback search in vehiclesList (loaded dynamically from CMS API)
@@ -413,7 +414,7 @@ export default function Navbar() {
       };
     }
     const price = typeof vehicle.base_price === 'string' ? parseFloat(vehicle.base_price) : (vehicle.base_price || vehicle.basePrice || 0);
-    const image = vehicle.image_thumbnail_url || vehicle.image_url || vehicle.images?.[0] || "";
+    const image = resolveImageUrl(vehicle.image_thumbnail_url || vehicle.image_url || vehicle.images?.[0] || "");
     return {
       price: price > 0 ? formatPrice(price) : "Liên hệ",
       image: image,
@@ -1064,7 +1065,7 @@ export default function Navbar() {
                       const id = car.slug || car.id;
                       const name = car.title || car.name;
                       const price = car.price || 0;
-                      const image = car.image_url || car.image?.[0]?.url || car.image?.[0] || "";
+                      const image = resolveImageUrl(car.image_url || car.image?.[0]?.url || car.image?.[0] || "");
                       
                       return (
                         <Link
@@ -1121,7 +1122,7 @@ export default function Navbar() {
                       const id = acc.slug || acc.id;
                       const name = acc.title || acc.name;
                       const price = acc.price || 0;
-                      const image = acc.image?.url || acc.images?.[0]?.url || acc.image_url || "";
+                      const image = resolveImageUrl(acc.image?.url || acc.images?.[0]?.url || acc.image_url || "");
                       
                       return (
                         <Link
@@ -1471,7 +1472,7 @@ export default function Navbar() {
                     };
 
                     const getVehicleImage = () => {
-                      return vehicle.image_thumbnail_url || vehicle.image_url || "/assets/img-gradient-1.png";
+                      return resolveImageUrl(vehicle.image_thumbnail_url || vehicle.image_url || "/assets/img-gradient-1.png");
                     };
 
                     return (
