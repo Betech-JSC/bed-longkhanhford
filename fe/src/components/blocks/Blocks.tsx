@@ -29,7 +29,7 @@ export const resolveImageUrl = (img: any): string => {
   if (!path) return "";
 
   // 1. Local frontend assets in Next.js public directory
-  if (path.startsWith("/assets/") || path.startsWith("/images/") || path.startsWith("/placeholder")) {
+  if (path.startsWith("/")) {
     return path;
   }
 
