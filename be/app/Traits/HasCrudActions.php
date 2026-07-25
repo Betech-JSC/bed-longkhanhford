@@ -593,7 +593,7 @@ trait HasCrudActions
 
                 // Set basic values
                 if (in_array('status', $resource->getFillable())) {
-                    $newResource->status = $resource->statusDraft ?? 'INACTIVE';
+                    $newResource->status = $resource->statusDraft ?? ($resource->status ?? 'INACTIVE');
                 }
                 if (in_array('created_by', $resource->getFillable())) {
                     $newResource->created_by = current_admin_id();
@@ -609,10 +609,10 @@ trait HasCrudActions
 
                 // Replicate translations if they exist
                 if (method_exists($resource, 'translations') && $resource->translations->count() > 0) {
+                    $translationForeignKey = $resource->translationForeignKey ?? (\Illuminate\Support\Str::snake(class_basename($resource)) . '_id');
                     foreach ($resource->translations as $translation) {
                         $newTranslation = $translation->replicate();
-                        $foreignKey = $translation->getForeignKey();
-                        $newTranslation->$foreignKey = $newResource->id;
+                        $newTranslation->$translationForeignKey = $newResource->id;
 
                         if (isset($translation->title) && $translation->title) {
                             $newTranslation->title = $translation->title . ' (Copy)';
@@ -651,10 +651,10 @@ trait HasCrudActions
                         $newVersion->save();
 
                         if (method_exists($version, 'translations') && $version->translations->count() > 0) {
+                            $verTranslationForeignKey = $version->translationForeignKey ?? 'vehicle_version_id';
                             foreach ($version->translations as $vTrans) {
                                 $newVTrans = $vTrans->replicate();
-                                $vForeignKey = $vTrans->getForeignKey();
-                                $newVTrans->$vForeignKey = $newVersion->id;
+                                $newVTrans->$verTranslationForeignKey = $newVersion->id;
                                 $newVTrans->save();
                             }
                         }
@@ -671,7 +671,8 @@ trait HasCrudActions
             return $this->redirectBack('Nhân bản bản ghi thành công!');
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
+            \Illuminate\Support\Facades\Log::error('Duplicate error: ' . $e->getMessage(), ['exception' => $e]);
+            return back()->with('error', 'Có lỗi xảy ra khi nhân bản: ' . $e->getMessage());
         }
     }
 
