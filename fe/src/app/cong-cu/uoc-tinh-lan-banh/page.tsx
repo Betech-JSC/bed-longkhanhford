@@ -10,7 +10,7 @@ import {
   formatVND,
   type RollingCostBreakdown,
 } from "@/lib/rolling-cost";
-import { getPopularVehicleImage, handleImageError } from "@/lib/site-assets";
+import { getPopularVehicleImage, handleImageError, resolveImageUrl } from "@/lib/site-assets";
 import BookingBanner from "@/components/services/BookingBanner";
 import { vehiclesAPI, regionsAPI, registrationFeesAPI } from "@/lib/api";
 import AnimatedNumber from "@/components/shared/AnimatedNumber";
@@ -52,12 +52,15 @@ function groupVehiclesBySeries(apiVehicles: any[]) {
     }
 
     if (!groups[seriesKey]) {
+      const rawImg = vehicle.image_thumbnail_url || vehicle.image_url || vehicle.image || "";
+      const resolvedImg = resolveImageUrl(rawImg) || getPopularVehicleImage(seriesKey, getPopularVehicleImage(seriesName));
+
       groups[seriesKey] = {
         id: seriesKey,
         name: seriesName,
         type: vehicle.type || "suv",
         typeName: typeName,
-        image_url: vehicle.image_thumbnail_url || vehicle.image_url || vehicle.image || "",
+        image_url: resolvedImg,
         versions: []
       };
     }
@@ -346,11 +349,12 @@ function RollingCostContent() {
                       <div className="relative w-full h-[120px]">
                         <Image
                           src={
-                            currentVehicle.image_url ||
-                            getPopularVehicleImage(currentVehicle.id)
+                            resolveImageUrl(currentVehicle.image_url) ||
+                            getPopularVehicleImage(currentVehicle.id, getPopularVehicleImage(currentVehicle.name))
                           }
                           alt={currentVehicle.name}
                           fill
+                          unoptimized
                           sizes="300px"
                           className="object-contain"
                           onError={handleImageError}

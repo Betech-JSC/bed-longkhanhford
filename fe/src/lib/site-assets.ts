@@ -79,6 +79,7 @@ export const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event
   const target = e.currentTarget;
   if (!target.dataset.failed) {
     target.dataset.failed = "true";
+    target.srcset = "";
     target.src = siteAssets.carPlaceholder;
   }
 };

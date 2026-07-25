@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { vehiclesAPI } from "@/lib/api";
 import { formatVND, formatPriceShort } from "@/lib/rolling-cost";
-import { getPopularVehicleImage, handleImageError } from "@/lib/site-assets";
+import { getPopularVehicleImage, handleImageError, resolveImageUrl } from "@/lib/site-assets";
 import { ChevronRight, Calculator, FileText } from "lucide-react";
 import BookingBanner from "@/components/services/BookingBanner";
 
@@ -46,12 +46,15 @@ function groupVehiclesBySeries(apiVehicles: any[]) {
     }
 
     if (!groups[seriesKey]) {
+      const rawImg = vehicle.image_thumbnail_url || vehicle.image_url || vehicle.image || "";
+      const resolvedImg = resolveImageUrl(rawImg) || getPopularVehicleImage(seriesKey, getPopularVehicleImage(seriesName));
+
       groups[seriesKey] = {
         id: seriesKey,
         name: seriesName,
         type: vehicle.type || "suv",
         typeName: typeName,
-        image_url: vehicle.image_thumbnail_url || vehicle.image_url || vehicle.image || "",
+        image_url: resolvedImg,
         versions: []
       };
     }
@@ -178,11 +181,12 @@ export default function PriceListPage() {
                               <div className="relative w-[72px] h-[48px]">
                                 <Image
                                   src={
-                                    vehicle.image_url ||
-                                    getPopularVehicleImage(vehicle.id)
+                                    resolveImageUrl(vehicle.image_url) ||
+                                    getPopularVehicleImage(vehicle.id, getPopularVehicleImage(vehicle.name))
                                   }
                                   alt={vehicle.name}
                                   fill
+                                  unoptimized
                                   sizes="72px"
                                   className="object-contain"
                                   onError={handleImageError}
