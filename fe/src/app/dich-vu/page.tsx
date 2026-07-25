@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Metadata } from "next";
 import { servicesAPI } from "@/lib/api";
 import { siteAssets } from "@/lib/site-assets";
+import { resolveImageUrl } from "@/components/blocks/Blocks";
 
 export const metadata: Metadata = {
   title: "Dịch vụ Bảo hành, Sửa chữa & Chăm sóc xe chính hãng | Long Khánh Ford",
@@ -60,7 +61,7 @@ export default async function ServicesPage() {
           title: item.title || "",
           slug: item.slug || "",
           description: item.description || "",
-          image: item.image?.url || fallback?.image || siteAssets.showroomBg,
+          image: resolveImageUrl(item.image?.url || item.image || fallback?.image || siteAssets.showroomBg),
           href: (item.custom_link && item.custom_link.startsWith('/dich-vu/'))
             ? item.custom_link
             : `/dich-vu/${item.slug}`,
@@ -70,6 +71,7 @@ export default async function ServicesPage() {
     } else {
       displayServices = fallbackServices.map(item => ({
         ...item,
+        image: resolveImageUrl(item.image),
         href: `/dich-vu/${item.slug}`
       }));
     }
@@ -77,6 +79,7 @@ export default async function ServicesPage() {
     console.error("Failed to load services from CMS API, using fallbacks:", error);
     displayServices = fallbackServices.map(item => ({
       ...item,
+      image: resolveImageUrl(item.image),
       href: `/dich-vu/${item.slug}`
     }));
   }
@@ -103,11 +106,12 @@ export default async function ServicesPage() {
       "latitude": "10.948647",
       "longitude": "106.867678"
     },
-    "areaServed": ["Đồng Nai", "Biên Hòa", "Bình Dương", "Vũng Tàu"]
+    "areaServed": ["Đồng Nai", "Biên Hòa", "Bình Dương", "Vũng Tàu"],
+    "url": "https://longkhanhford.com.vn/dich-vu"
   };
 
   return (
-    <div className="bg-[#fafafa] min-h-screen font-sans">
+    <div className="min-h-screen bg-gray-50/50 font-antenna text-left">
       {/* Schema Injection */}
       <script
         type="application/ld+json"
@@ -115,24 +119,27 @@ export default async function ServicesPage() {
       />
 
       {/* Hero Section */}
-      <section className="relative w-full bg-gradient-to-br from-neutral-900 to-[#01095c] text-white pt-28 pb-16 md:pb-20 overflow-hidden">
-        <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] relative z-10">
+      <section className="relative bg-[#002F6C] text-white pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#001D45] via-[#002F6C] to-[#004088] opacity-95"></div>
+        <div className="absolute -right-20 -bottom-20 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+        
+        <div className="relative max-w-[1440px] mx-auto px-4 xl:px-[80px]">
           {/* Breadcrumb inside Hero */}
-          <div className="text-xs text-white/60 font-medium flex items-center gap-1.5 mb-6 justify-center">
+          <div className="text-xs text-white/50 font-bold flex items-center gap-1.5 mb-6 justify-center uppercase tracking-widest font-antenna">
             <Link href="/" className="hover:text-white transition-colors">
               Trang chủ
             </Link>
             <span>/</span>
-            <span className="text-white">Dịch vụ chính hãng</span>
+            <span className="text-white/90">Dịch vụ chính hãng</span>
           </div>
-          <div className="text-center">
-            <span className="bg-white/15 text-white/95 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-[4px] border border-white/10 mb-4 inline-block">
+          <div className="text-center font-antenna max-w-3xl mx-auto">
+            <span className="inline-block text-[#066fef] bg-white/10 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-4 border border-white/10">
               Xưởng Dịch Vụ Chuẩn 3S Lớn Nhất Đồng Nai
             </span>
-            <h1 className="text-3xl md:text-5xl font-bold tracking-tight uppercase leading-tight mb-4 mt-2 font-antenna">
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight uppercase leading-[1.15] mb-6">
               Dịch vụ chăm sóc xe chuyên nghiệp
             </h1>
-            <p className="text-white/80 text-base md:text-lg max-w-2xl mx-auto font-antenna">
+            <p className="text-white/80 text-sm md:text-base max-w-2xl mx-auto leading-relaxed font-medium">
               Hạ tầng kỹ thuật hiện đại, thiết bị chuẩn đoán độc quyền và đội ngũ kỹ thuật viên tay nghề cao giúp xế cưng của bạn luôn an toàn trên mọi hành trình.
             </p>
           </div>
@@ -187,6 +194,7 @@ export default async function ServicesPage() {
                     src={service.image}
                     alt={service.title}
                     fill
+                    unoptimized
                     sizes="(max-w-768px) 100vw, (max-w-1200px) 50vw, 33vw"
                     className="object-cover object-center w-full h-full transition-transform duration-500 group-hover:scale-105"
                   />
