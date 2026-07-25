@@ -152,6 +152,7 @@ export default async function VehicleDetailLayout({
       if (Array.isArray(items)) {
         apiVehicle = items.find((v: any) => 
           (v.slug && v.slug === id) || 
+          (v.seo_slug && v.seo_slug === id) || 
           String(v.id) === id || 
           v.title?.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") === id.toLowerCase()
         ) || null;

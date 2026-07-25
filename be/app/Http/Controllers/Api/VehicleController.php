@@ -159,6 +159,7 @@ class VehicleController extends Controller
             ->where('status', Vehicle::STATUS_ACTIVE)
             ->where(function ($query) use ($slug) {
                 $query->whereTranslation('slug', $slug)
+                    ->orWhereTranslation('seo_slug', $slug)
                     ->orWhere('id', $slug);
             })
             ->with([
@@ -175,7 +176,7 @@ class VehicleController extends Controller
                 ])
                 ->get();
             $vehicle = $allVehicles->first(function ($v) use ($slug) {
-                return \Illuminate\Support\Str::slug($v->title) === $slug;
+                return $v->slug === $slug || $v->seo_slug === $slug || \Illuminate\Support\Str::slug($v->title) === $slug;
             });
         }
 

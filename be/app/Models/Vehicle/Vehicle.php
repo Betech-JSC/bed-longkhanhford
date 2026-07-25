@@ -308,9 +308,9 @@ class Vehicle extends BaseModel
                 } else {
                     $slug = $translation->seo_slug ?? $translation->slug;
                     if ($translation->locale === 'vi') {
-                        $urls['VI'] = '/' . $slug;
+                        $urls['VI'] = '/san-pham/' . $slug;
                     } else {
-                        $urls[strtoupper($translation->locale)] = '/en/' . $slug;
+                        $urls[strtoupper($translation->locale)] = '/en/san-pham/' . $slug;
                     }
                 }
             }
