@@ -22,20 +22,31 @@ export const resolveImageUrl = (img: any): string => {
   if (!img) return "/assets/img-gradient-1.png";
   let path = "";
   if (typeof img === "string") {
-    path = img;
+    path = img.trim();
   } else if (typeof img === "object") {
     path = img.url || img.path || "";
   }
   if (!path) return "/assets/img-gradient-1.png";
-  if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("/") || path.startsWith("//")) {
+
+  // If already absolute URL starting with http://, https://, or //
+  if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("//")) {
     return path;
   }
-  if (/^([a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}|localhost)(:[0-9]+)?\//.test(path)) {
-    return `https://${path}`;
+
+  // Local frontend assets
+  if (path.startsWith("/assets/") || path.startsWith("/images/") || path.startsWith("/placeholder")) {
+    return path;
   }
-  const cleanPath = path.startsWith("uploads/") ? path.replace("uploads/", "") : path;
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://cms.longkhanhford.betech-digital.com/api";
   const baseDomain = apiUrl.replace(/\/api$/, "");
+
+  const cleanPath = path.replace(/^\//, "");
+  
+  if (cleanPath.startsWith("static/") || cleanPath.startsWith("uploads/")) {
+    return `${baseDomain}/${cleanPath}`;
+  }
+
   return `${baseDomain}/static/${cleanPath}`;
 };
 

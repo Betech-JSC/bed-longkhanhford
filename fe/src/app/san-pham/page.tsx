@@ -21,7 +21,7 @@ import {
 import { vehiclesAPI } from "@/lib/api";
 import { getPopularVehicleImage, handleImageError } from "@/lib/site-assets";
 import { formatPriceShort } from "@/lib/rolling-cost";
-import BookingBanner from "@/components/services/BookingBanner";
+import { resolveImageUrl } from "@/components/blocks/Blocks";
 
 const staticCategories = [
   { slug: "suv", title: "SUV" },
@@ -147,7 +147,8 @@ export default function ProductsPage({ initialCategory }: { initialCategory?: st
     const price = typeof v.base_price === 'string' ? parseFloat(v.base_price) : (v.base_price || v.basePrice || 0);
     const id = v.slug || v.id;
     const name = v.title || v.name || "";
-    const image = v.image_thumbnail_url || v.image_url || v.images?.[0] || getPopularVehicleImage(id);
+    const rawImage = v.image_thumbnail_url || v.image_url || v.images?.[0] || getPopularVehicleImage(id);
+    const image = resolveImageUrl(rawImage);
     
     let categorySlugs: string[] = [];
     if (v.category_ids && Array.isArray(v.category_ids)) {

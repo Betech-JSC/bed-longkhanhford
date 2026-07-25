@@ -10,7 +10,7 @@ if (!function_exists('package_path')) {
 if (!function_exists('static_url')) {
     function static_url($path, $parameters = [], $absolute = true)
     {
-        if (!$path || str_contains($path, 'http') || str_starts_with($path, '//') || preg_match('/^([a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}|localhost)(:[0-9]+)?\//', $path)) return $path;
+        if (!$path || str_contains($path, 'http') || str_starts_with($path, '//')) return $path;
 
         $path = ltrim($path, '/');
 
