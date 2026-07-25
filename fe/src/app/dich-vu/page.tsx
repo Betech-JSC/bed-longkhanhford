@@ -2,8 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Metadata } from "next";
 import { servicesAPI } from "@/lib/api";
-import { siteAssets } from "@/lib/site-assets";
-import { resolveImageUrl } from "@/components/blocks/Blocks";
+import { siteAssets, resolveImageUrl } from "@/lib/site-assets";
 
 export const metadata: Metadata = {
   title: "Dịch vụ Bảo hành, Sửa chữa & Chăm sóc xe chính hãng | Long Khánh Ford",

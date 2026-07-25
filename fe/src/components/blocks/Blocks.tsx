@@ -5,6 +5,8 @@ import Image from "next/image";
 import ScrollReveal from "@/components/common/ScrollReveal";
 import { Plus, Minus, ChevronDown, Phone, Bookmark, ChevronLeft, ChevronRight } from "lucide-react";
 import { mediaAPI } from "@/lib/api";
+import { resolveImageUrl } from "@/lib/site-assets";
+export { resolveImageUrl };
 
 const formatUploadError = (err: any): string => {
   if (typeof err === "string") return err;
@@ -16,70 +18,6 @@ const formatUploadError = (err: any): string => {
     if (err.statusText) return `${err.statusText} (${err.status})`;
   }
   return "Đã xảy ra lỗi không xác định";
-};
-
-export const resolveImageUrl = (img: any): string => {
-  if (!img) return "";
-  let path = "";
-  if (typeof img === "string") {
-    path = img.trim();
-  } else if (typeof img === "object") {
-    path = img.url || img.path || img.static_url || "";
-  }
-  if (!path) return "";
-
-  // 1. Local frontend assets in Next.js public directory
-  if (path.startsWith("/")) {
-    return path;
-  }
-
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://cms.longkhanhford.betech-digital.com/api";
-  const baseDomain = apiUrl.replace(/\/api$/, "");
-
-  let fullUrl = "";
-
-  if (path.startsWith("http://") || path.startsWith("https://")) {
-    if (path.includes("/static/")) {
-      const parts = path.split("/static/");
-      const relativeStatic = parts[parts.length - 1].replace(/^\//, "");
-      fullUrl = `${baseDomain}/static/${relativeStatic}`;
-    } else if (path.includes("/uploads/")) {
-      const parts = path.split("/uploads/");
-      const relativeUpload = parts[parts.length - 1].replace(/^\//, "");
-      fullUrl = `${baseDomain}/uploads/${relativeUpload}`;
-    } else {
-      try {
-        const parsed = new URL(path);
-        const isCorruptedFilenameDomain = /\.(webp|png|jpg|jpeg|gif|svg)$/i.test(parsed.hostname);
-        if (isCorruptedFilenameDomain && (parsed.pathname === "/" || parsed.pathname === "")) {
-          fullUrl = `${baseDomain}/static/${parsed.hostname}`;
-        } else {
-          fullUrl = path;
-        }
-      } catch (e) {
-        fullUrl = path;
-      }
-    }
-  } else if (path.includes("/static/")) {
-    const parts = path.split("/static/");
-    const relativeStatic = parts[parts.length - 1].replace(/^\//, "");
-    fullUrl = `${baseDomain}/static/${relativeStatic}`;
-  } else if (path.includes("/uploads/")) {
-    const parts = path.split("/uploads/");
-    const relativeUpload = parts[parts.length - 1].replace(/^\//, "");
-    fullUrl = `${baseDomain}/uploads/${relativeUpload}`;
-  } else if (path.startsWith("//")) {
-    fullUrl = `https:${path}`;
-  } else {
-    const cleanPath = path.replace(/^\//, "");
-    fullUrl = `${baseDomain}/static/${cleanPath}`;
-  }
-
-  try {
-    return encodeURI(decodeURI(fullUrl));
-  } catch (e) {
-    return encodeURI(fullUrl);
-  }
 };
 
 export const hasImageField = (img: any): boolean => {

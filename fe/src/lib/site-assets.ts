@@ -75,9 +75,74 @@ export function getPopularVehicleImage(vehicleId: string, fallback?: string) {
 
 export const imageFallbackSvg = "/images/ford_placeholder.png";
 
-export function handleImageError(e: React.SyntheticEvent<HTMLImageElement, Event>) {
-  e.currentTarget.onerror = null;
-  e.currentTarget.srcset = "";
-  e.currentTarget.src = imageFallbackSvg;
-}
+export const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+  const target = e.currentTarget;
+  if (!target.dataset.failed) {
+    target.dataset.failed = "true";
+    target.src = siteAssets.carPlaceholder;
+  }
+};
 
+export const resolveImageUrl = (img: any): string => {
+  if (!img) return "";
+  let path = "";
+  if (typeof img === "string") {
+    path = img.trim();
+  } else if (typeof img === "object") {
+    path = img.url || img.path || img.static_url || "";
+  }
+  if (!path) return "";
+
+  // 1. Local frontend assets in Next.js public directory
+  if (path.startsWith("/")) {
+    return path;
+  }
+
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://cms.longkhanhford.betech-digital.com/api";
+  const baseDomain = apiUrl.replace(/\/api$/, "");
+
+  let fullUrl = "";
+
+  if (path.startsWith("http://") || path.startsWith("https://")) {
+    if (path.includes("/static/")) {
+      const parts = path.split("/static/");
+      const relativeStatic = parts[parts.length - 1].replace(/^\//, "");
+      fullUrl = `${baseDomain}/static/${relativeStatic}`;
+    } else if (path.includes("/uploads/")) {
+      const parts = path.split("/uploads/");
+      const relativeUpload = parts[parts.length - 1].replace(/^\//, "");
+      fullUrl = `${baseDomain}/uploads/${relativeUpload}`;
+    } else {
+      try {
+        const parsed = new URL(path);
+        const isCorruptedFilenameDomain = /\.(webp|png|jpg|jpeg|gif|svg)$/i.test(parsed.hostname);
+        if (isCorruptedFilenameDomain && (parsed.pathname === "/" || parsed.pathname === "")) {
+          fullUrl = `${baseDomain}/static/${parsed.hostname}`;
+        } else {
+          fullUrl = path;
+        }
+      } catch (e) {
+        fullUrl = path;
+      }
+    }
+  } else if (path.includes("/static/")) {
+    const parts = path.split("/static/");
+    const relativeStatic = parts[parts.length - 1].replace(/^\//, "");
+    fullUrl = `${baseDomain}/static/${relativeStatic}`;
+  } else if (path.includes("/uploads/")) {
+    const parts = path.split("/uploads/");
+    const relativeUpload = parts[parts.length - 1].replace(/^\//, "");
+    fullUrl = `${baseDomain}/uploads/${relativeUpload}`;
+  } else if (path.startsWith("//")) {
+    fullUrl = `https:${path}`;
+  } else {
+    const cleanPath = path.replace(/^\//, "");
+    fullUrl = `${baseDomain}/static/${cleanPath}`;
+  }
+
+  try {
+    return encodeURI(decodeURI(fullUrl));
+  } catch (e) {
+    return encodeURI(fullUrl);
+  }
+};
