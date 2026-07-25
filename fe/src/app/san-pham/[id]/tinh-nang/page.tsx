@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: Props) {
   try {
     const { id } = await params;
     const res = await vehiclesAPI.getBySlug(id).catch(() => null);
-    const vehicle = res?.data;
+    const vehicle = res?.data || (res?.id ? res : null);
 
     if (!vehicle) return {};
 
@@ -45,7 +45,7 @@ export default async function Page({ params }: Props) {
 
   try {
     const res = await vehiclesAPI.getBySlug(id).catch(() => null);
-    vehicle = res?.data;
+    vehicle = res?.data || (res?.id ? res : null);
   } catch (error) {
     console.error("Error loading vehicle in server features page:", error);
   }

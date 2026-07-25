@@ -107,7 +107,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   try {
     const { id } = await params;
     const res = await vehiclesAPI.getBySlug(id).catch(() => null);
-    const apiVehicle = res?.data;
+    const apiVehicle = res?.data || (res?.id ? res : null);
 
     if (!apiVehicle) return {};
 
@@ -144,11 +144,12 @@ export default async function VehicleDetailLayout({
 
   try {
     const detailRes = await vehiclesAPI.getBySlug(id).catch(() => null);
-    if (detailRes && detailRes.data) {
-      apiVehicle = detailRes.data;
+    const vehicleObj = detailRes?.data || (detailRes?.id ? detailRes : null);
+    if (vehicleObj) {
+      apiVehicle = vehicleObj;
     } else {
       const allRes = await vehiclesAPI.getAll({ with_versions: true }).catch(() => null);
-      const items = (allRes as any)?.data || allRes;
+      const items = (allRes as any)?.data || (Array.isArray(allRes) ? allRes : []);
       if (Array.isArray(items)) {
         apiVehicle = items.find((v: any) => 
           (v.slug && v.slug === id) || 
