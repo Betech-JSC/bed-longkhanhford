@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { X, GitCompare, Trash2, ArrowRight } from "lucide-react";
 import { type Vehicle } from "@/data/vehicles";
-import { getPopularVehicleImage, handleImageError } from "@/lib/site-assets";
+import { getPopularVehicleImage, handleImageError, resolveImageUrl } from "@/lib/site-assets";
 import { formatPriceShort } from "@/lib/rolling-cost";
 import { vehiclesAPI } from "@/lib/api";
 
@@ -169,13 +169,10 @@ export default function CompareDrawer() {
               {/* Image Preview */}
               <div className="relative w-16 h-10 flex-shrink-0 bg-black/20 rounded-lg overflow-hidden">
                 <Image
-                  src={
-                    vehicle.images?.[0] && !vehicle.images[0].includes("uploads/vehicles/") && (vehicle.images[0].startsWith("http") || vehicle.images[0].startsWith("/"))
-                      ? vehicle.images[0]
-                      : getPopularVehicleImage(vehicle.id, vehicle.images?.[0] || "")
-                  }
+                  src={resolveImageUrl((vehicle as any).image_url || (vehicle as any).image_thumbnail_url || vehicle.images?.[0] || getPopularVehicleImage(vehicle.id))}
                   alt={vehicle.name}
                   fill
+                  unoptimized
                   sizes="64px"
                   className="object-contain"
                   onError={handleImageError}

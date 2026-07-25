@@ -5,11 +5,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { ChevronDown, X, Plus, ArrowRight, Trash2, GitCompare } from "lucide-react";
 import { type Vehicle, type Specs } from "@/data/vehicles";
-import { getPopularVehicleImage, handleImageError } from "@/lib/site-assets";
+import { getPopularVehicleImage, handleImageError, resolveImageUrl } from "@/lib/site-assets";
 import { formatPriceShort } from "@/lib/rolling-cost";
 import BookingBanner from "@/components/services/BookingBanner";
 import { vehiclesAPI } from "@/lib/api";
-import { resolveImageUrl } from "@/components/blocks/Blocks";
+import { resolveImageUrl as resolveImageUrlBlock } from "@/components/blocks/Blocks";
 
 const mapSpecKey = (key: string, val: string, result: Record<string, string>) => {
   const k = key.trim().toLowerCase();
@@ -269,6 +269,7 @@ export default function ComparePage() {
           mapped.forEach((v: any) => {
             if (v.versions && v.versions.length > 0) {
               v.versions.forEach((ver: any) => {
+                const img = ver.image_thumbnail_url || ver.image_url || ver.image || v.image_thumbnail_url || v.image_url || v.image || getPopularVehicleImage(v.id);
                 options.push({
                   key: `${v.id}__${ver.id}`,
                   vehicleId: v.id,
@@ -277,9 +278,7 @@ export default function ComparePage() {
                   vehicleName: v.name,
                   versionName: ver.name,
                   typeName: v.typeName,
-                  image: (ver.image_thumbnail_url && !ver.image_thumbnail_url.includes("uploads/vehicles/")) ? ver.image_thumbnail_url :
-                         (ver.image_url && !ver.image_url.includes("uploads/vehicles/")) ? ver.image_url :
-                         getPopularVehicleImage(v.id, (v.image_thumbnail_url && !v.image_thumbnail_url.includes("uploads/vehicles/")) ? v.image_thumbnail_url : (v.image_url && !v.image_url.includes("uploads/vehicles/")) ? v.image_url : ""),
+                  image: img,
                   basePrice: ver.price || v.basePrice,
                   specs: ver.specs,
                   rawSpecs: ver.rawSpecs,
@@ -288,6 +287,7 @@ export default function ComparePage() {
               });
             } else {
               const parsedSpecs = parseSpecsArray(v.specs || {});
+              const img = v.image_thumbnail_url || v.image_url || v.image || getPopularVehicleImage(v.id);
               options.push({
                 key: v.id,
                 vehicleId: v.id,
@@ -296,7 +296,7 @@ export default function ComparePage() {
                 vehicleName: v.name,
                 versionName: "",
                 typeName: v.typeName,
-                image: getPopularVehicleImage(v.id, (v.image_thumbnail_url && !v.image_thumbnail_url.includes("uploads/vehicles/")) ? v.image_thumbnail_url : (v.image_url && !v.image_url.includes("uploads/vehicles/")) ? v.image_url : ""),
+                image: img,
                 basePrice: v.basePrice,
                 specs: {
                   engine: parsedSpecs.engine || v.specs?.engine || v.specs?.engine_type || '',
@@ -628,13 +628,10 @@ export default function ComparePage() {
                               src={resolveImageUrl(opt.image)}
                               alt={opt.displayName}
                               fill
+                              unoptimized
                               sizes="300px"
                               className="object-contain animate-fade-in"
-                              onError={(e) => {
-                                e.currentTarget.onerror = null;
-                                e.currentTarget.srcset = "";
-                                e.currentTarget.src = getPopularVehicleImage(opt.vehicleId);
-                              }}
+                              onError={handleImageError}
                             />
                           </div>
                           <div className="text-center">
