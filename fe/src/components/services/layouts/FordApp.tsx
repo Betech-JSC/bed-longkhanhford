@@ -175,7 +175,7 @@ export default function FordAppLayout({ service }: { service?: any }) {
         {/* Call to action buttons to download */}
         <div className="w-full flex flex-col sm:flex-row items-center justify-center gap-4 mt-12">
           <a
-            href="https://apps.apple.com/vn/app/fordpass/id1113063544"
+            href="https://apps.apple.com/us/app/ford/id1095418609"
             target="_blank"
             rel="noopener noreferrer"
             className="bg-[#002F6C] hover:bg-[#066fef] text-white text-xs font-bold uppercase px-8 py-3.5 rounded-none transition-colors tracking-wider"
