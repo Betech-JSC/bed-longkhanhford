@@ -6,9 +6,8 @@ import { Sparkles, ShieldCheck, Wrench, Flame, Sun, ChevronRight, CheckCircle2, 
 import BookingBanner from "@/components/services/BookingBanner";
 import FaqAccordion from "@/components/services/FaqAccordion";
 import ServicePageBanner from "@/components/services/ServicePageBanner";
-import { siteAssets } from "@/lib/site-assets";
+import { siteAssets, resolveImageUrl } from "@/lib/site-assets";
 import { accessoriesAPI } from "@/lib/api";
-import { resolveImageUrl } from "@/components/blocks/Blocks";
 
 const fallbackAccessories = [
   {

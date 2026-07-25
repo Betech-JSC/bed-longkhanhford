@@ -3,9 +3,8 @@
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { MapPin, Phone, Mail, CheckCircle, X, Calendar, User, FileText, ChevronRight, Wrench, Gauge, Car } from "lucide-react";
-import { siteAssets } from "@/lib/site-assets";
+import { siteAssets, resolveImageUrl } from "@/lib/site-assets";
 import { contactsAPI, vehiclesAPI } from "@/lib/api";
-import { resolveImageUrl } from "@/components/blocks/Blocks";
 import Link from "next/link";
 
 function ContactFormContent() {

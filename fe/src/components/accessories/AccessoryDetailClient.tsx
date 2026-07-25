@@ -13,8 +13,7 @@ import {
   Copy
 } from "lucide-react";
 import { AccessoryItem } from "@/data/accessories";
-import { handleImageError } from "@/lib/site-assets";
-import { resolveImageUrl } from "@/components/blocks/Blocks";
+import { handleImageError, resolveImageUrl } from "@/lib/site-assets";
 import { contactsAPI } from "@/lib/api";
 
 const mapAPIAccessoryToItem = (apiAcc: any): AccessoryItem => {

@@ -4,9 +4,8 @@ import { useState, useEffect, useMemo, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Search, Car, Wrench, FileText, ChevronRight, HelpCircle, X } from "lucide-react";
-import { handleImageError } from "@/lib/site-assets";
+import { handleImageError, resolveImageUrl } from "@/lib/site-assets";
 import { vehiclesAPI, accessoriesAPI, postsAPI } from "@/lib/api";
-import { resolveImageUrl } from "@/components/blocks/Blocks";
 
 // Helper function to remove Vietnamese accents for fuzzy searching
 function removeAccents(str: string): string {

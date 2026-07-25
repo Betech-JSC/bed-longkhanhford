@@ -5,10 +5,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { Search, ChevronRight, ChevronLeft, Plus, Minus, Loader2 } from "lucide-react";
 import { AccessoryItem } from "@/data/accessories";
-import { handleImageError } from "@/lib/site-assets";
+import { handleImageError, resolveImageUrl } from "@/lib/site-assets";
 import { accessoriesAPI } from "@/lib/api";
-
-import { resolveImageUrl } from "@/components/blocks/Blocks";
 
 const getCategorySlugUnified = (slugOrId: string | number): string => {
   const str = String(slugOrId).toLowerCase();

@@ -19,9 +19,8 @@ import {
   GitCompare
 } from "lucide-react";
 import { vehiclesAPI } from "@/lib/api";
-import { getPopularVehicleImage, handleImageError } from "@/lib/site-assets";
 import { formatPriceShort } from "@/lib/rolling-cost";
-import { resolveImageUrl } from "@/components/blocks/Blocks";
+import { getPopularVehicleImage, handleImageError, resolveImageUrl } from "@/lib/site-assets";
 import BookingBanner from "@/components/services/BookingBanner";
 
 const staticCategories = [

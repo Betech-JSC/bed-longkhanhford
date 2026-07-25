@@ -23,8 +23,7 @@ import {
   ArrowRight
 } from "lucide-react";
 import { vehicles, Vehicle } from "@/data/vehicles";
-import { getPopularVehicleImage, siteAssets, handleImageError } from "@/lib/site-assets";
-import { resolveImageUrl } from "@/components/blocks/Blocks";
+import { getPopularVehicleImage, siteAssets, handleImageError, resolveImageUrl } from "@/lib/site-assets";
 import { bannersAPI, postsAPI, vehiclesAPI, servicesAPI, customerHandoversAPI } from "@/lib/api";
 import { motion } from "motion/react";
 import SafeImage from "@/components/shared/SafeImage";

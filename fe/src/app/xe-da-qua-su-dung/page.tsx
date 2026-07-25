@@ -15,8 +15,7 @@ import {
   PhoneCall
 } from "lucide-react";
 import { usedVehiclesAPI } from "@/lib/api";
-import { resolveImageUrl } from "@/components/blocks/Blocks";
-import { handleImageError } from "@/lib/site-assets";
+import { resolveImageUrl, handleImageError } from "@/lib/site-assets";
 
 export default function UsedVehiclesPage() {
   const [vehicles, setVehicles] = useState<any[]>([]);

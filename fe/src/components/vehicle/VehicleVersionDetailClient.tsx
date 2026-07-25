@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import { useVehicle, VehicleTabBar } from "./VehicleLayoutClient";
 import { useParams, useRouter } from "next/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { resolveImageUrl } from "@/components/blocks/Blocks";
+import { resolveImageUrl } from "@/lib/site-assets";
 import ScrollReveal from "@/components/common/ScrollReveal";
 
 // Vietnamese-accent-safe URL slug generator

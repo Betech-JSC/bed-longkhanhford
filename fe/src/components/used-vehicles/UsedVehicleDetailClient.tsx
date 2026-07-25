@@ -16,8 +16,7 @@ import {
   X,
 } from "lucide-react";
 import { contactsAPI } from "@/lib/api";
-import { resolveImageUrl } from "@/components/blocks/Blocks";
-import { handleImageError } from "@/lib/site-assets";
+import { resolveImageUrl, handleImageError } from "@/lib/site-assets";
 
 export default function UsedVehicleDetailClient({ vehicle }: { vehicle: any }) {
   const [activeIndex, setActiveIndex] = useState(0);

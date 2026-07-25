@@ -9,7 +9,6 @@ import { getPopularVehicleImage, handleImageError, resolveImageUrl } from "@/lib
 import { formatPriceShort } from "@/lib/rolling-cost";
 import BookingBanner from "@/components/services/BookingBanner";
 import { vehiclesAPI } from "@/lib/api";
-import { resolveImageUrl as resolveImageUrlBlock } from "@/components/blocks/Blocks";
 
 const mapSpecKey = (key: string, val: string, result: Record<string, string>) => {
   const k = key.trim().toLowerCase();
