@@ -19,14 +19,14 @@ const formatUploadError = (err: any): string => {
 };
 
 export const resolveImageUrl = (img: any): string => {
-  if (!img) return "/assets/img-gradient-1.png";
+  if (!img) return "";
   let path = "";
   if (typeof img === "string") {
     path = img.trim();
   } else if (typeof img === "object") {
     path = img.url || img.path || img.static_url || "";
   }
-  if (!path) return "/assets/img-gradient-1.png";
+  if (!path) return "";
 
   // 1. Local frontend assets in Next.js public directory
   if (path.startsWith("/assets/") || path.startsWith("/images/") || path.startsWith("/placeholder")) {

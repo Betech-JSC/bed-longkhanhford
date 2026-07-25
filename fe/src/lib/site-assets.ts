@@ -78,20 +78,6 @@ export const imageFallbackSvg = "/images/ford_placeholder.png";
 export function handleImageError(e: React.SyntheticEvent<HTMLImageElement, Event>) {
   e.currentTarget.onerror = null;
   e.currentTarget.srcset = "";
-  const alt = (e.currentTarget.alt || "").toLowerCase();
-  const src = (e.currentTarget.src || "").toLowerCase();
-  if (alt.includes("raptor") || src.includes("raptor")) {
-    e.currentTarget.src = "/assets/ranger_raptor.png";
-  } else if (alt.includes("ranger") || src.includes("ranger") || src.includes("wildtrak")) {
-    e.currentTarget.src = "/assets/ranger_wildtrak.png";
-  } else if (alt.includes("everest") || src.includes("everest")) {
-    e.currentTarget.src = "/assets/everest_platinum.png";
-  } else if (alt.includes("territory") || src.includes("territory")) {
-    e.currentTarget.src = "/assets/territory-hero.png";
-  } else if (alt.includes("transit") || src.includes("transit")) {
-    e.currentTarget.src = "/assets/transit_premium.png";
-  } else {
-    e.currentTarget.src = imageFallbackSvg;
-  }
+  e.currentTarget.src = imageFallbackSvg;
 }
 
