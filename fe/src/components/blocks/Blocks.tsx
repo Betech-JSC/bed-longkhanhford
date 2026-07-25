@@ -38,33 +38,38 @@ export const resolveImageUrl = (img: any): string => {
 
   let fullUrl = "";
 
-  // 2. If path contains /static/ (handles legacy domains like cms.dnf.betech-digital.com/static/...)
-  if (path.includes("/static/")) {
-    const relativeStatic = path.split("/static/").slice(1).join("/static/").replace(/^\//, "");
-    fullUrl = `${baseDomain}/static/${relativeStatic}`;
-  }
-  // 3. If path contains /uploads/ (handles legacy domains like cms.dnf.betech-digital.com/uploads/...)
-  else if (path.includes("/uploads/")) {
-    const relativeUpload = path.split("/uploads/").slice(1).join("/uploads/").replace(/^\//, "");
-    fullUrl = `${baseDomain}/uploads/${relativeUpload}`;
-  }
-  // 4. Clean corrupted URLs from old static_url bug where fake https:// was prepended to filenames
-  else if (path.startsWith("http://") || path.startsWith("https://")) {
-    try {
-      const parsed = new URL(path);
-      const isCorruptedFilenameDomain = /\.(webp|png|jpg|jpeg|gif|svg)$/i.test(parsed.hostname);
-      if (isCorruptedFilenameDomain && (parsed.pathname === "/" || parsed.pathname === "")) {
-        path = parsed.hostname; // Strip out the fake https:// and recover the raw filename
-        fullUrl = `${baseDomain}/static/${path.replace(/^\//, "")}`;
-      } else {
+  if (path.startsWith("http://") || path.startsWith("https://")) {
+    if (path.includes("/static/")) {
+      const parts = path.split("/static/");
+      const relativeStatic = parts[parts.length - 1].replace(/^\//, "");
+      fullUrl = `${baseDomain}/static/${relativeStatic}`;
+    } else if (path.includes("/uploads/")) {
+      const parts = path.split("/uploads/");
+      const relativeUpload = parts[parts.length - 1].replace(/^\//, "");
+      fullUrl = `${baseDomain}/uploads/${relativeUpload}`;
+    } else {
+      try {
+        const parsed = new URL(path);
+        const isCorruptedFilenameDomain = /\.(webp|png|jpg|jpeg|gif|svg)$/i.test(parsed.hostname);
+        if (isCorruptedFilenameDomain && (parsed.pathname === "/" || parsed.pathname === "")) {
+          fullUrl = `${baseDomain}/static/${parsed.hostname}`;
+        } else {
+          fullUrl = path;
+        }
+      } catch (e) {
         fullUrl = path;
       }
-    } catch (e) {
-      path = path.replace(/^https?:\/\//i, "");
-      fullUrl = `${baseDomain}/static/${path.replace(/^\//, "")}`;
     }
+  } else if (path.includes("/static/")) {
+    const parts = path.split("/static/");
+    const relativeStatic = parts[parts.length - 1].replace(/^\//, "");
+    fullUrl = `${baseDomain}/static/${relativeStatic}`;
+  } else if (path.includes("/uploads/")) {
+    const parts = path.split("/uploads/");
+    const relativeUpload = parts[parts.length - 1].replace(/^\//, "");
+    fullUrl = `${baseDomain}/uploads/${relativeUpload}`;
   } else if (path.startsWith("//")) {
-    fullUrl = path;
+    fullUrl = `https:${path}`;
   } else {
     const cleanPath = path.replace(/^\//, "");
     fullUrl = `${baseDomain}/static/${cleanPath}`;
