@@ -195,7 +195,7 @@ export default async function ServicesPage() {
                     alt={service.title}
                     fill
                     unoptimized
-                    sizes="(max-w-768px) 100vw, (max-w-1200px) 50vw, 33vw"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover object-center w-full h-full transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute top-4 left-4">
