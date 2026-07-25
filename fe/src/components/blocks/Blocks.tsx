@@ -24,11 +24,31 @@ export const resolveImageUrl = (img: any): string => {
   if (typeof img === "string") {
     path = img.trim();
   } else if (typeof img === "object") {
-    path = img.url || img.path || "";
+    path = img.url || img.path || img.static_url || "";
   }
   if (!path) return "/assets/img-gradient-1.png";
 
-  // Clean corrupted URLs from old static_url bug where https:// was prepended to filenames like https://file.webp
+  // 1. Local frontend assets in Next.js public directory
+  if (path.startsWith("/assets/") || path.startsWith("/images/") || path.startsWith("/placeholder")) {
+    return path;
+  }
+
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://cms.longkhanhford.betech-digital.com/api";
+  const baseDomain = apiUrl.replace(/\/api$/, "");
+
+  // 2. If path contains /static/ (handles legacy domains like cms.dnf.betech-digital.com/static/...)
+  if (path.includes("/static/")) {
+    const relativeStatic = path.split("/static/").slice(1).join("/static/").replace(/^\//, "");
+    return `${baseDomain}/static/${relativeStatic}`;
+  }
+
+  // 3. If path contains /uploads/ (handles legacy domains like cms.dnf.betech-digital.com/uploads/...)
+  if (path.includes("/uploads/")) {
+    const relativeUpload = path.split("/uploads/").slice(1).join("/uploads/").replace(/^\//, "");
+    return `${baseDomain}/uploads/${relativeUpload}`;
+  }
+
+  // 4. Clean corrupted URLs from old static_url bug where fake https:// was prepended to filenames like https://file.webp
   if (path.startsWith("http://") || path.startsWith("https://")) {
     try {
       const parsed = new URL(path);
@@ -47,19 +67,7 @@ export const resolveImageUrl = (img: any): string => {
     return path;
   }
 
-  // Local frontend assets
-  if (path.startsWith("/assets/") || path.startsWith("/images/") || path.startsWith("/placeholder")) {
-    return path;
-  }
-
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://cms.longkhanhford.betech-digital.com/api";
-  const baseDomain = apiUrl.replace(/\/api$/, "");
-
   const cleanPath = path.replace(/^\//, "");
-  
-  if (cleanPath.startsWith("static/") || cleanPath.startsWith("uploads/")) {
-    return `${baseDomain}/${cleanPath}`;
-  }
 
   return `${baseDomain}/static/${cleanPath}`;
 };
