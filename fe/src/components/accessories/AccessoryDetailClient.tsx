@@ -246,6 +246,7 @@ export default function AccessoryDetailClient({
                       src={thumb}
                       alt={`Thumbnail ${idx + 1}`}
                       fill
+                      unoptimized
                       sizes="80px"
                       className="object-cover"
                       onError={handleImageError}
@@ -261,6 +262,7 @@ export default function AccessoryDetailClient({
                 alt={accessory.name}
                 fill
                 priority
+                unoptimized
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover"
                 onError={handleImageError}
@@ -444,6 +446,7 @@ export default function AccessoryDetailClient({
                     src={item.images[0] || "/assets/images/placeholder_car.png"}
                     alt={item.name}
                     fill
+                    unoptimized
                     sizes="(max-width: 768px) 100vw, 20vw"
                     className="object-cover group-hover:scale-[1.03] transition-transform duration-500"
                     onError={handleImageError}

@@ -442,6 +442,7 @@ export default function AccessoriesPage() {
                         src={item.images[0]}
                         alt={item.name}
                         fill
+                        unoptimized
                         sizes="(max-width: 768px) 100vw, 30vw"
                         className="object-cover group-hover:scale-[1.03] transition-transform duration-500"
                         onError={handleImageError}
