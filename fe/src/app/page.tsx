@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { vehicles, Vehicle } from "@/data/vehicles";
 import { getPopularVehicleImage, siteAssets, handleImageError } from "@/lib/site-assets";
+import { resolveImageUrl } from "@/components/blocks/Blocks";
 import { bannersAPI, postsAPI, vehiclesAPI, servicesAPI, customerHandoversAPI } from "@/lib/api";
 import { motion } from "motion/react";
 import SafeImage from "@/components/shared/SafeImage";
@@ -426,7 +427,7 @@ export default function Home() {
             category: v.title.toUpperCase().includes("FORD") ? v.title : `FORD ${v.title.toUpperCase()} MỚI`,
             slogan: v.tagline || "Mạnh mẽ. Thông minh.",
             description: v.description || "",
-            image: v.image_featured_url || "",
+            image: resolveImageUrl(v.image_thumbnail_url || v.image_url || v.image_featured_url || v.image || getPopularVehicleImage(v.slug || String(v.id))),
             link: `/dong-xe/${v.slug}`
           }));
           setBrandItems(dynamicBrandItems);

@@ -415,7 +415,7 @@ export default function Navbar() {
       };
     }
     const price = typeof vehicle.base_price === 'string' ? parseFloat(vehicle.base_price) : (vehicle.base_price || vehicle.basePrice || 0);
-    const rawImage = vehicle.image_thumbnail_url || vehicle.image_url || vehicle.images?.[0] || getPopularVehicleImage(car.id);
+    const rawImage = vehicle.image_thumbnail_url || vehicle.image_url || vehicle.image_featured_url || (Array.isArray(vehicle.images) ? vehicle.images[0] : vehicle.images) || vehicle.image || getPopularVehicleImage(car.id);
     const image = resolveImageUrl(rawImage);
     return {
       price: price > 0 ? formatPrice(price) : "Liên hệ",
