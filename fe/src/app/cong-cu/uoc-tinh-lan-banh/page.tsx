@@ -27,43 +27,27 @@ function groupVehiclesBySeries(apiVehicles: any[]) {
   }} = {};
 
   apiVehicles.forEach((vehicle) => {
-    let seriesKey = "";
-    let seriesName = "";
-    let typeName = "";
+    // Use unique vehicle slug/id as series key so distinct CMS vehicles remain separate
+    const seriesKey = vehicle.slug || `vehicle-${vehicle.id}`;
+    const seriesName = (vehicle.title || "").toUpperCase();
     
-    const titleLower = vehicle.title.toLowerCase();
-    if (titleLower.includes("raptor") || (vehicle.slug && vehicle.slug.toLowerCase().includes("raptor"))) {
-      seriesKey = "ford-ranger-raptor";
-      seriesName = "FORD RANGER RAPTOR";
+    let typeName = vehicle.type_name || vehicle.typeName;
+    const titleLower = (vehicle.title || "").toLowerCase();
+    const slugLower = (vehicle.slug || "").toLowerCase();
+
+    if (titleLower.includes("raptor") || slugLower.includes("raptor")) {
       typeName = "Bán Tải Hiệu Suất Cao";
     } else if (titleLower.includes("territory")) {
-      seriesKey = "ford-territory";
-      seriesName = "FORD TERRITORY";
       typeName = "SUV 5 Chỗ";
     } else if (titleLower.includes("everest")) {
-      seriesKey = "ford-everest";
-      seriesName = "FORD EVEREST";
       typeName = "SUV 7 Chỗ";
-    } else if (titleLower.includes("ranger")) {
-      seriesKey = "ford-ranger";
-      seriesName = "FORD RANGER";
-      typeName = "Bán tải 5 Chỗ";
     } else if (titleLower.includes("transit")) {
-      seriesKey = "ford-transit-2024";
-      seriesName = "FORD TRANSIT";
       typeName = "Thương mại 16 Chỗ";
     } else if (titleLower.includes("tourneo")) {
-      seriesKey = "new-tourneo";
-      seriesName = "FORD TOURNEO";
       typeName = "MPV 7 Chỗ";
-    } else {
-      seriesKey = vehicle.slug || `vehicle-${vehicle.id}`;
-      seriesName = vehicle.title;
-      seriesKey = seriesKey === "ranger-wildtrak" ? "ford-ranger" : seriesKey;
-      seriesKey = seriesKey === "everest-titanium-plus" ? "ford-everest" : seriesKey;
-      seriesKey = seriesKey === "territory-titanium-x" ? "ford-territory" : seriesKey;
-      seriesKey = seriesKey === "transit-premium" ? "ford-transit-2024" : seriesKey;
-      seriesName = vehicle.title;
+    } else if (titleLower.includes("ranger")) {
+      typeName = "Bán tải 5 Chỗ";
+    } else if (!typeName) {
       typeName = vehicle.type === "suv" ? "SUV" : vehicle.type === "pickup" ? "Bán tải" : "Thương mại";
     }
 
@@ -73,7 +57,7 @@ function groupVehiclesBySeries(apiVehicles: any[]) {
         name: seriesName,
         type: vehicle.type || "suv",
         typeName: typeName,
-        image_url: vehicle.image_thumbnail_url || vehicle.image_url || "",
+        image_url: vehicle.image_thumbnail_url || vehicle.image_url || vehicle.image || "",
         versions: []
       };
     }
@@ -88,16 +72,25 @@ function groupVehiclesBySeries(apiVehicles: any[]) {
         }];
 
     vehicleVersions.forEach((v: any) => {
-      groups[seriesKey].versions.push({
-        id: v.slug || v.id || `v-${v.name}`,
-        name: v.name || v.title || vehicle.title,
-        price: typeof v.price === 'string' ? parseFloat(v.price) : (v.price || 0),
-        specs: v.specs || {}
-      });
+      const vName = (v.name || v.title || vehicle.title).trim();
+      const existing = groups[seriesKey].versions.find((item: any) => item.name.toLowerCase() === vName.toLowerCase());
+      if (!existing) {
+        groups[seriesKey].versions.push({
+          id: v.slug || v.id || `v-${vName}`,
+          name: vName,
+          price: typeof v.price === 'string' ? parseFloat(v.price) : (v.price || 0),
+          specs: v.specs || {}
+        });
+      }
     });
   });
 
-  return Object.values(groups);
+  const seriesList = Object.values(groups);
+  seriesList.forEach((group) => {
+    group.versions.sort((a, b) => b.price - a.price);
+  });
+
+  return seriesList;
 }
 
 function RollingCostContent() {
