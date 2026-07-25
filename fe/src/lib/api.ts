@@ -31,7 +31,7 @@ async function fetchAPI<T = any>(endpoint: string, options?: RequestInit): Promi
   };
 
   if (isGet && !options?.cache && !options?.next) {
-    (fetchOptions as any).next = { revalidate: 60 };
+    (fetchOptions as any).cache = 'no-store';
   }
   
   try {

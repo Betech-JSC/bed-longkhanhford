@@ -39,7 +39,8 @@ export const metadata: Metadata = {
   },
 };
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 const jsonLd = {
   "@context": "https://schema.org",
