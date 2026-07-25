@@ -164,7 +164,7 @@ export default async function VehicleDetailLayout({
   }
 
   if (!apiVehicle) {
-    notFound();
+    return <>{children}</>;
   }
 
   // Normalize initial vehicle
