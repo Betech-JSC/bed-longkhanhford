@@ -149,7 +149,8 @@ export default function ProductsPage({ initialCategory }: { initialCategory?: st
     const id = v.slug || v.id;
     const name = v.title || v.name || "";
     const rawImage = v.image_thumbnail_url || v.image_url || v.images?.[0] || getPopularVehicleImage(id);
-    const image = resolveImageUrl(rawImage);
+    const resolved = resolveImageUrl(rawImage);
+    const image = (resolved && resolved !== "/assets/img-gradient-1.png") ? resolved : getPopularVehicleImage(id);
     
     let categorySlugs: string[] = [];
     if (v.category_ids && Array.isArray(v.category_ids)) {
