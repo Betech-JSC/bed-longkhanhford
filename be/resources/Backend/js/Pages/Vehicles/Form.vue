@@ -108,9 +108,10 @@
 
                                 <Draggable
                                     v-model="form.versions"
-                                    item-key="id"
+                                    item-key="_tempId"
                                     handle=".version-drag-handle"
                                     :animation="200"
+                                    @end="updateVersionSortOrders(form)"
                                     class="space-y-2 max-h-[500px] overflow-y-auto pr-1"
                                 >
                                     <template #item="{ element, index }">
@@ -1639,6 +1640,7 @@ export default {
                 }
 
                 const verData = {
+                    _tempId: ver.id ? `ver_${ver.id}` : `temp_${Math.random().toString(36).substr(2, 9)}`,
                     id: ver.id,
                     price: ver.price ?? 0,
                     status: ver.status ?? 'ACTIVE',
@@ -1679,6 +1681,14 @@ export default {
         },
 
 
+
+        updateVersionSortOrders(form) {
+            if (form && form.versions && Array.isArray(form.versions)) {
+                form.versions.forEach((ver, index) => {
+                    ver.sort_order = index + 1;
+                });
+            }
+        },
 
         addVersion(form) {
             if (!form.versions) form.versions = []

@@ -335,7 +335,7 @@ class VehicleController extends Controller
                 $versionPayload = [
                     'price'           => $data['price'] ?? 0,
                     'status'          => $data['status'] ?? 'ACTIVE',
-                    'sort_order'      => $data['sort_order'] ?? ($index + 1),
+                    'sort_order'      => $index + 1,
                     'specs'           => $data['specs'] ?? null,
                     'image'           => $data['image'] ?? null,
                     'image_thumbnail' => $data['image_thumbnail'] ?? null,
