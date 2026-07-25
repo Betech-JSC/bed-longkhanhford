@@ -384,7 +384,7 @@ export default function Navbar() {
         id: v.slug || v.id,
         displayName: v.title || v.name,
         price: formatPrice(typeof v.base_price === 'string' ? parseFloat(v.base_price) : (v.base_price || v.basePrice || 0)),
-        image: resolveImageUrl(v.image_thumbnail_url || v.image_url || v.images?.[0] || ""),
+        image: resolveImageUrl(v.image_thumbnail_url || v.image_url || v.image_featured_url || (Array.isArray(v.images) ? v.images[0] : v.images) || v.image || ""),
       }));
 
     return {
@@ -400,26 +400,28 @@ export default function Navbar() {
   const finalCategories = dynamicCategories.length > 0 ? dynamicCategories : staticCategories;
 
   const getCarDisplayData = (car: { id: string; displayName: string; price?: string; image?: string }) => {
+    // 1. Search in live vehiclesList from CMS API first
+    const vehicle = vehiclesList.find((v) => (v.slug || String(v.id)) === car.id || String(v.id) === car.id);
+    if (vehicle) {
+      const price = typeof vehicle.base_price === 'string' ? parseFloat(vehicle.base_price) : (vehicle.base_price || vehicle.basePrice || 0);
+      const rawImage = vehicle.image_thumbnail_url || vehicle.image_url || vehicle.image_featured_url || (Array.isArray(vehicle.images) ? vehicle.images[0] : vehicle.images) || vehicle.image || "";
+      const image = resolveImageUrl(rawImage);
+      return {
+        price: price > 0 ? formatPrice(price) : "Liên hệ",
+        image: image || (car.image ? resolveImageUrl(car.image) : ""),
+      };
+    }
+
     if (car.price && car.image) {
       return {
         price: car.price,
         image: resolveImageUrl(car.image),
       };
     }
-    // Fallback search in vehiclesList (loaded dynamically from CMS API)
-    const vehicle = vehiclesList.find((v) => (v.slug || String(v.id)) === car.id);
-    if (!vehicle) {
-      return {
-        price: "Đang cập nhật",
-        image: "",
-      };
-    }
-    const price = typeof vehicle.base_price === 'string' ? parseFloat(vehicle.base_price) : (vehicle.base_price || vehicle.basePrice || 0);
-    const rawImage = vehicle.image_thumbnail_url || vehicle.image_url || vehicle.image_featured_url || (Array.isArray(vehicle.images) ? vehicle.images[0] : vehicle.images) || vehicle.image || "";
-    const image = resolveImageUrl(rawImage);
+
     return {
-      price: price > 0 ? formatPrice(price) : "Liên hệ",
-      image: image,
+      price: car.price || "Đang cập nhật",
+      image: car.image ? resolveImageUrl(car.image) : "",
     };
   };
 
