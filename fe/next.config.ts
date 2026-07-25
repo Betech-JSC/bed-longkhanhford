@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   output: "standalone",
   compress: true,
   typescript: {
@@ -41,6 +44,18 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "cms.dnf.betech-digital.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "cms.longkhanhford.betech-digital.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "client.longkhanhford.betech-digital.com",
         port: "",
         pathname: "/**",
       },

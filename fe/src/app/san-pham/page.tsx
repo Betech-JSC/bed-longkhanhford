@@ -22,6 +22,7 @@ import { vehiclesAPI } from "@/lib/api";
 import { getPopularVehicleImage, handleImageError } from "@/lib/site-assets";
 import { formatPriceShort } from "@/lib/rolling-cost";
 import { resolveImageUrl } from "@/components/blocks/Blocks";
+import BookingBanner from "@/components/services/BookingBanner";
 
 const staticCategories = [
   { slug: "suv", title: "SUV" },

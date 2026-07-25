@@ -140,7 +140,7 @@ export default async function VehicleDetailLayout({
 }: Props) {
   const { id } = await params;
   let apiVehicle = null;
-  let rawAllVehicles = [];
+  let rawAllVehicles: any[] = [];
 
   try {
     const detailRes = await vehiclesAPI.getBySlug(id).catch(() => null);
