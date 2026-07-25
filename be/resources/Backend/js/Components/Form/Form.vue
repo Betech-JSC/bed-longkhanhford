@@ -14,6 +14,8 @@
                 :loading="octaneReloading" />
             <div class="flex items-center ml-auto space-x-2">
                 <slot name="buttons"></slot>
+                <Button v-if="hasDuplicateRoute" label="Nhân bản (Copy)" type="button" @click="duplicate"
+                    class="btn-white" :loading="isLoading" />
                 <Button v-if="canStoreDraft" :label="tt('models.form.store_draft')" @click="storeDraft"
                     class="btn-white" :loading="form.processing" />
                 <Button v-if="canStore" :label="tt('models.form.save')" type="submit" :loading="form.processing" />
@@ -34,6 +36,8 @@
                     :loading="octaneReloading" />
                 <div class="flex items-center ml-auto space-x-2">
                     <slot name="buttons"></slot>
+                    <Button v-if="hasDuplicateRoute" label="Nhân bản (Copy)" type="button" @click="duplicate"
+                        class="btn-white" :loading="isLoading" />
                     <Button v-if="canStoreDraft" :label="tt('models.form.store_draft')" @click="storeDraft"
                         class="btn-white" :loading="form.processing" />
                     <Button v-if="canStore" :label="tt('models.form.save')" type="submit" :loading="form.processing" />
@@ -115,6 +119,13 @@ export default {
                     flash.error !== null ||
                     Object.keys(errors).length > 0)
             );
+        },
+        hasDuplicateRoute() {
+            try {
+                return !!this.form?.id && this.route().has(`admin.${this.currentResource}.duplicate`);
+            } catch (e) {
+                return false;
+            }
         },
     },
     created() {
@@ -208,6 +219,24 @@ export default {
                 }
             );
             this.isLoading = false
+        },
+
+        duplicate() {
+            if (confirm("Bạn có chắc chắn muốn nhân bản (copy) bản ghi này không?")) {
+                this.isLoading = true;
+                this.$inertia.post(
+                    this.route(`admin.${this.currentResource}.duplicate`, {
+                        id: this.form.id,
+                        redirect_to_form: 1
+                    }),
+                    {},
+                    {
+                        onFinish: () => {
+                            this.isLoading = false;
+                        }
+                    }
+                );
+            }
         },
 
         destroy() {

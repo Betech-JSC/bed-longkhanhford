@@ -533,7 +533,136 @@ trait HasCrudActions
         $routeName = str_replace(current_locale() . '.', '', request()->route()->getName());
 
         if (!current_admin()->hasPermissionTo($routeName)) {
+            // Fallback authorization check for duplicate action
+            if (str_contains($routeName, '.duplicate')) {
+                $formRoute = str_replace('.duplicate', '.form', $routeName);
+                $storeRoute = str_replace('.duplicate', '.store', $routeName);
+                if (current_admin()->hasPermissionTo($formRoute) || current_admin()->hasPermissionTo($storeRoute)) {
+                    return;
+                }
+            }
             return abort(403);
+        }
+    }
+
+    public function duplicate($id)
+    {
+        $this->checkAuthorize();
+
+        try {
+            DB::beginTransaction();
+
+            $ids = is_array($id) ? $id : explode(',', $id);
+            $lastNewResourceId = null;
+
+            foreach ($ids as $singleId) {
+                $singleId = trim($singleId);
+                if (empty($singleId)) continue;
+
+                $relations = [];
+                $tempModel = $this->model();
+                if (method_exists($tempModel, 'translations')) {
+                    $relations[] = 'translations';
+                }
+                if (method_exists($tempModel, 'categories')) {
+                    $relations[] = 'categories';
+                }
+                if (method_exists($tempModel, 'tags')) {
+                    $relations[] = 'tags';
+                }
+                if (method_exists($tempModel, 'accessories')) {
+                    $relations[] = 'accessories';
+                }
+                if (method_exists($tempModel, 'versions')) {
+                    $relations[] = 'versions';
+                }
+
+                $resource = $this->model::with($relations)->findOrFail($singleId);
+
+                // Replicate the main resource
+                $newResource = $resource->replicate();
+
+                // Set basic values
+                if (in_array('status', $resource->getFillable())) {
+                    $newResource->status = $resource->statusDraft ?? 'INACTIVE';
+                }
+                if (in_array('created_by', $resource->getFillable())) {
+                    $newResource->created_by = current_admin_id();
+                }
+                if (in_array('updated_by', $resource->getFillable())) {
+                    $newResource->updated_by = current_admin_id();
+                }
+                if (in_array('published_at', $resource->getFillable())) {
+                    $newResource->published_at = now();
+                }
+                $newResource->save();
+                $lastNewResourceId = $newResource->id;
+
+                // Replicate translations if they exist
+                if (method_exists($resource, 'translations') && $resource->translations->count() > 0) {
+                    foreach ($resource->translations as $translation) {
+                        $newTranslation = $translation->replicate();
+                        $foreignKey = $translation->getForeignKey();
+                        $newTranslation->$foreignKey = $newResource->id;
+
+                        if (isset($translation->title) && $translation->title) {
+                            $newTranslation->title = $translation->title . ' (Copy)';
+                        } elseif (isset($translation->name) && $translation->name) {
+                            $newTranslation->name = $translation->name . ' (Copy)';
+                        }
+
+                        $uniqueSuffix = '-copy-' . time() . '-' . rand(100, 999);
+                        if (isset($translation->slug) && $translation->slug) {
+                            $newTranslation->slug = $translation->slug . $uniqueSuffix;
+                        }
+                        if (isset($translation->seo_slug) && $translation->seo_slug) {
+                            $newTranslation->seo_slug = $translation->seo_slug . $uniqueSuffix;
+                        }
+
+                        $newTranslation->save();
+                    }
+                }
+
+                // Sync categories, tags, and accessories if they exist
+                if (method_exists($resource, 'categories') && $resource->categories->count() > 0) {
+                    $newResource->categories()->sync($resource->categories->pluck('id'));
+                }
+                if (method_exists($resource, 'tags') && $resource->tags->count() > 0) {
+                    $newResource->tags()->sync($resource->tags->pluck('id'));
+                }
+                if (method_exists($resource, 'accessories') && $resource->accessories->count() > 0) {
+                    $newResource->accessories()->sync($resource->accessories->pluck('id'));
+                }
+
+                // Replicate versions (e.g. for Vehicle versions)
+                if (method_exists($resource, 'versions') && $resource->versions->count() > 0) {
+                    foreach ($resource->versions as $version) {
+                        $newVersion = $version->replicate();
+                        $newVersion->vehicle_id = $newResource->id;
+                        $newVersion->save();
+
+                        if (method_exists($version, 'translations') && $version->translations->count() > 0) {
+                            foreach ($version->translations as $vTrans) {
+                                $newVTrans = $vTrans->replicate();
+                                $vForeignKey = $vTrans->getForeignKey();
+                                $newVTrans->$vForeignKey = $newVersion->id;
+                                $newVTrans->save();
+                            }
+                        }
+                    }
+                }
+            }
+
+            DB::commit();
+
+            if ((request()->input('redirect_to_form') || request()->header('X-Redirect-To-Form')) && $lastNewResourceId) {
+                return $this->redirectToForm($lastNewResourceId, 'Nhân bản bản ghi thành công!');
+            }
+
+            return $this->redirectBack('Nhân bản bản ghi thành công!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
         }
     }
 

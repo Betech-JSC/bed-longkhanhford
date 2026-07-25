@@ -76,6 +76,15 @@
                             <span>{{ tt('models.table.delete_selected') }} ({{ selectedItems.length }})</span>
                         </button>
                         <button
+                            v-if="selectedItems && selectedItems.length > 0 && hasDuplicateRoute"
+                            type="button"
+                            class="p-button btn-outline-primary ml-2 flex items-center gap-1 cursor-pointer"
+                            @click="duplicateSelected"
+                        >
+                            <heroicons-outline:document-duplicate class="w-4 h-4" />
+                            <span>NHÂN BẢN ({{ selectedItems.length }})</span>
+                        </button>
+                        <button
                             v-if="selectedItems && selectedItems.length > 0 && currentResource === 'posts'"
                             type="button"
                             class="p-button btn-outline-primary ml-2 flex items-center gap-1 cursor-pointer"
@@ -337,6 +346,22 @@ export default {
             if (confirm("Bạn có chắc chắn muốn nhân bản (copy) bản ghi này không?")) {
                 this.$inertia.post(
                     this.route(`admin.${this.currentResource}.duplicate`, { id: id }),
+                    {},
+                    {
+                        preserveScroll: true,
+                        onSuccess: () => {
+                            this.selectedItems = [];
+                            this.selectedIds = '';
+                            this.loadLazyData();
+                        }
+                    }
+                );
+            }
+        },
+        duplicateSelected() {
+            if (confirm(`Bạn có chắc chắn muốn nhân bản (${this.selectedItems?.length || 0}) bản ghi đã chọn không?`)) {
+                this.$inertia.post(
+                    this.route(`admin.${this.currentResource}.duplicate`, { id: this.selectedIds }),
                     {},
                     {
                         preserveScroll: true,
