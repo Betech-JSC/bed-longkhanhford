@@ -751,6 +751,7 @@ function SpecsGridBlock({ data, vehicle, isEditMode, onChangeData, openQuoteDraw
                       fill
                       sizes="(max-width: 768px) 100vw, 368px"
                       className="object-cover transition-transform duration-500 hover:scale-105 pointer-events-none"
+                      unoptimized
                     />
                   </div>
                   <div className="content-stretch flex items-center justify-between p-[16px] relative shrink-0 w-full bg-white">
@@ -968,6 +969,7 @@ function FeaturesListBlock({ blockIndex, data, vehicle, isEditMode, onChangeData
                           fill
                           sizes="(max-width: 768px) 100vw, 25vw"
                           className="object-cover group-hover:scale-105 transition-transform duration-500 pointer-events-none"
+                          unoptimized
                         />
                       ) : (
                         <div className="w-full h-full bg-gray-100 border border-dashed border-gray-300 flex items-center justify-center text-xs text-gray-400">
