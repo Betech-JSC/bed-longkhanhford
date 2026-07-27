@@ -56,13 +56,16 @@ export default function Footer() {
               <strong className="text-neutral-800 font-bold">Mã số thuế:</strong> 3603892309
             </p>
             <p>
-              <strong className="text-neutral-800 font-bold">Địa chỉ:</strong> Đường 21/4, Tổ 1, Khu phố Cẩm Tân, Phường Hàng Gòn, Thành phố Long Khánh, Tỉnh Đồng Nai, Việt Nam
+              <strong className="text-neutral-800 font-bold">Địa chỉ:</strong> Đường 21/4, Tổ 1, Khu phố Cẩm Tân, Phường Hàng Gòn, Thành phố Đồng Nai, Việt Nam
             </p>
             <p>
               <strong className="text-neutral-800 font-bold">Hotline KD:</strong> 0812 86 86 22
             </p>
             <p>
               <strong className="text-neutral-800 font-bold">Hotline Dv:</strong> 1900 888 992 – 02513 646 998
+            </p>
+            <p>
+              <strong className="text-neutral-800 font-bold">Hotline Cứu hộ:</strong> 0879 27 66 99
             </p>
             <p>
               <strong className="text-neutral-800 font-bold">Email:</strong> marketing@longkhanhford.com.vn

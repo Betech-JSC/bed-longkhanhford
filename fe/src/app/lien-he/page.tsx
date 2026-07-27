@@ -297,7 +297,7 @@ function ContactFormContent() {
                   rel="noopener noreferrer"
                   className="font-antenna text-xs lg:text-sm text-gray-800 leading-relaxed font-semibold hover:text-[#066fef] transition-colors"
                 >
-                  Đường 21/4, Tổ 1, Khu phố Cẩm Tân, Phường Hàng Gòn, Thành phố Long Khánh, Tỉnh Đồng Nai, Việt Nam
+                  Đường 21/4, Tổ 1, Khu phố Cẩm Tân, Phường Hàng Gòn, Thành phố Đồng Nai, Việt Nam
                 </a>
               </div>
             </div>
@@ -315,6 +315,10 @@ function ContactFormContent() {
                   <p className="flex items-center justify-between border-b border-gray-100 pb-1.5">
                     <span className="text-gray-400 font-medium">Bộ phận Dịch vụ:</span>
                     <span className="font-bold text-[#002F6C]">1900 888 992 – 02513 646 998</span>
+                  </p>
+                  <p className="flex items-center justify-between border-b border-gray-100 pb-1.5">
+                    <span className="text-gray-400 font-medium">Bộ phận Cứu hộ:</span>
+                    <span className="font-bold text-[#002F6C]">0879 27 66 99</span>
                   </p>
                   <p className="flex items-center justify-between">
                     <span className="text-gray-400 font-medium">Phòng Kinh doanh:</span>

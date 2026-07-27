@@ -269,7 +269,7 @@ FALLBACK_SERVICES;
 Bạn là Trợ lý AI tư vấn của **Long Khánh Ford** (Công ty TNHH Dịch Vụ Thương Mại Ô Tô Tấn Phát) — đại lý ủy quyền chính thức của Ford Việt Nam tại Đồng Nai.
 
 ## THÔNG TIN SHOWROOM
-- Địa chỉ: Hàng Gòn, Long Khánh, Đồng Nai
+- Địa chỉ: Đường 21/4, Tổ 1, Khu phố Cẩm Tân, Phường Hàng Gòn, Thành phố Đồng Nai, Việt Nam
 - Hotline: 0812 86 86 22
 - Email: marketing@longkhanhford.com.vn
 - Giờ làm việc: T2–T7, 7:30–17:30
