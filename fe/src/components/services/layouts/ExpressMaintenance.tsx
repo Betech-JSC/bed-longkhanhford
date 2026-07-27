@@ -146,6 +146,7 @@ export default function ExpressMaintenanceLayout({ service }: { service?: { titl
             fill
             sizes="100vw"
             className="object-cover object-center"
+            unoptimized
           />
         </div>
       </section>

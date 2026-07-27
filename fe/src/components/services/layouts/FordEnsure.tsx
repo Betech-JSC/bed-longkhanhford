@@ -76,6 +76,7 @@ export default function FordEnsureLayout({ service }: { service?: any }) {
                 fill
                 sizes="(max-width: 768px) 100vw, 380px"
                 className="object-contain"
+                unoptimized
               />
             </div>
           </ScrollReveal>

@@ -233,6 +233,7 @@ export default function PeriodicMaintenanceLayout({
                   fill
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                   className="object-contain p-2 group-hover:scale-105 transition-transform duration-300"
+                  unoptimized
                 />
               </div>
 

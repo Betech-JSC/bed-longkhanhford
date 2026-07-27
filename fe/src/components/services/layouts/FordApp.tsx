@@ -99,6 +99,7 @@ export default function FordAppLayout({ service }: { service?: any }) {
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover opacity-60"
+                unoptimized
               />
               <div className="absolute inset-0 bg-[#001c40]/40 flex flex-col items-center justify-center p-6 text-center text-white space-y-4">
                 <Smartphone className="w-16 h-16 text-[#38bdf8] drop-shadow-md" />

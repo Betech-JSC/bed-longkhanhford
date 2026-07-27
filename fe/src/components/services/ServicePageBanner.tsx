@@ -24,6 +24,7 @@ export default function ServicePageBanner({
           sizes="100vw"
           priority
           className="object-cover object-center"
+          unoptimized
         />
         {!backgroundImage && (
           <Image
@@ -34,6 +35,7 @@ export default function ServicePageBanner({
             priority
             aria-hidden
             className="object-cover object-center"
+            unoptimized
           />
         )}
         <div className="absolute inset-0 bg-black/45" />

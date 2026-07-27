@@ -116,6 +116,7 @@ export default function GenericServiceLayout({ service }: { service: ServiceDeta
               fill
               sizes="100vw"
               className="object-cover"
+              unoptimized
             />
             {sliders.length > 1 && (
               <>
@@ -175,6 +176,7 @@ export default function GenericServiceLayout({ service }: { service: ServiceDeta
                   fill
                   sizes="(max-width: 1024px) 100vw, 40vw"
                   className="object-cover"
+                  unoptimized
                 />
               </div>
             )}

@@ -99,6 +99,7 @@ export default function FordSyncLayout({ service }: { service?: any }) {
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover"
+                unoptimized
               />
               <div className="absolute inset-0 bg-black/35 flex items-center justify-center">
                 <span className="text-white font-bold text-lg uppercase tracking-wider bg-black/60 px-4 py-2 border border-white/20">
