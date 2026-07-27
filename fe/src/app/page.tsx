@@ -497,18 +497,48 @@ export default function Home() {
     }
   };
 
-  // Load posts dynamically on mount (Lấy bài viết có type POST)
+  // Load posts dynamically on mount (Lấy bài viết có type POST, loại trừ danh mục Khuyến Mãi)
   useEffect(() => {
     const fetchTabPosts = async () => {
       try {
         const postsData = await postsAPI.getAll({ type: "POST" });
-        // Ưu tiên top_posts (bài nổi bật từ CMS), sau đó mới fallback sang posts.data
-        const topPosts = (postsData as any)?.top_posts;
-        const postsItems = (postsData as any)?.posts?.data || (postsData as any)?.data || postsData;
-        const sourceItems = (Array.isArray(topPosts) && topPosts.length > 0) ? topPosts : postsItems;
-        if (Array.isArray(sourceItems) && sourceItems.length > 0) {
-          const postOnlyItems = sourceItems.filter((item: any) => !item.type || item.type === "POST");
-          const formatted = postOnlyItems.slice(0, 5).map((item: any) => ({
+        const topPosts = (postsData as any)?.top_posts || [];
+        const postsItems = (postsData as any)?.posts?.data || (postsData as any)?.data || (Array.isArray(postsData) ? postsData : []);
+        
+        // Gộp tất cả các bài viết thu thập được để lọc bài viết Tin tức thuần túy
+        const allItems = [...(Array.isArray(topPosts) ? topPosts : []), ...(Array.isArray(postsItems) ? postsItems : [])];
+        
+        const isPromotion = (item: any) => {
+          const catSlug = String(item.category?.slug || item.category_slug || "").toLowerCase();
+          const catTitle = String(item.category?.title || item.category_name || "").toLowerCase();
+          const categoriesList = Array.isArray(item.categories) ? item.categories : [];
+          
+          if (catSlug.includes("khuyen-mai") || catSlug.includes("u-dai") || catTitle.includes("khuyến mãi") || catTitle.includes("ưu đãi")) {
+            return true;
+          }
+          return categoriesList.some((c: any) => {
+            const slug = String(c.slug || "").toLowerCase();
+            const title = String(c.title || "").toLowerCase();
+            return slug.includes("khuyen-mai") || slug.includes("u-dai") || title.includes("khuyến mãi") || title.includes("ưu đãi");
+          });
+        };
+
+        const filteredItems: any[] = [];
+        const seenIds = new Set();
+        
+        for (const item of allItems) {
+          const itemId = item.id || item.slug;
+          if (seenIds.has(itemId)) continue;
+          
+          const isPostType = !item.type || item.type === "POST";
+          if (isPostType && !isPromotion(item)) {
+            seenIds.add(itemId);
+            filteredItems.push(item);
+          }
+        }
+
+        if (filteredItems.length > 0) {
+          const formatted = filteredItems.slice(0, 5).map((item: any) => ({
             id: item.slug || item.id || String(Math.random()),
             title: item.title || "",
             image: resolveImageUrl(item.image_url || item.image?.url || item.image || "/assets/mach-e-hero.png"),
@@ -517,12 +547,9 @@ export default function Home() {
             description: item.description || "",
           }));
           setHomeArticles(formatted);
-        } else {
-          // API trả rỗng, không hiển thị section tin tức
         }
       } catch (error) {
         console.error("Error fetching tab posts, using fallbacks:", error);
-        // API lỗi, không hiển thị section tin tức
       }
     };
     fetchTabPosts();
