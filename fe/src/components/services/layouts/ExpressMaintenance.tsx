@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Zap, Clock, Users, Coffee, ShieldCheck, CheckCircle2, ChevronRight, Sparkles, Wrench, Cpu } from "lucide-react";
+import { Clock, Users, Coffee, CheckCircle2, ChevronRight, Sparkles, Wrench, Cpu } from "lucide-react";
 import BookingBanner from "@/components/services/BookingBanner";
 import FaqAccordion from "@/components/services/FaqAccordion";
 import ServicePageBanner from "@/components/services/ServicePageBanner";
@@ -19,7 +19,7 @@ const availableSlots = [
   { time: "16:00 - 17:00", label: "Buổi chiều - Cuối ngày", status: "Ưu tiên" }
 ];
 
-export default function ExpressMaintenanceLayout({ service }: { service?: any }) {
+export default function ExpressMaintenanceLayout({ service }: { service?: { title?: string; banner_image?: { url: string } } | null }) {
   const [selectedSlot, setSelectedSlot] = useState(0);
 
   return (
@@ -150,40 +150,80 @@ export default function ExpressMaintenanceLayout({ service }: { service?: any })
         </div>
       </section>
 
-      {/* 5-Star VIP Lounge Experience Grid */}
+      {/* 2-Column Advantages & Lounge Experience */}
       <section className="max-w-[1440px] w-full mx-auto px-4 lg:px-[80px] py-16 font-antenna">
-        <div className="bg-white border border-gray-200 p-8 lg:p-12 shadow-xs">
-          <div className="text-center max-w-3xl mx-auto mb-10">
-            <span className="text-[#066fef] font-bold text-xs uppercase tracking-widest block mb-2">Trải Nghiệm Đẳng Cấp</span>
-            <h2 className="text-2xl md:text-3.5xl font-bold text-gray-900 uppercase tracking-tight">
-              PHÒNG CHỜ VIP 5 SAO TRONG KHI THƯ GIÃN
-            </h2>
-            <p className="text-gray-600 text-sm mt-2">
-              Trong 60 phút ngắn ngủi, Quý khách thoải mái làm việc hoặc thư giãn tại không gian sang trọng của Long Khánh Ford.
-            </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          
+          {/* Key Advantages Column */}
+          <div className="bg-white border border-gray-200 shadow-xs flex flex-col group hover:border-[#066fef]/40 transition-all duration-300">
+            <div className="relative aspect-[16/7] w-full overflow-hidden">
+              <Image
+                src="/service-fixed-car.webp"
+                alt="Ưu Điểm Chính"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover group-hover:scale-102 transition-transform duration-500"
+              />
+            </div>
+            <div className="p-8 lg:p-10 flex-1 flex flex-col justify-center items-center">
+              <h3 className="font-['Ford_Antenna',sans-serif] font-bold text-xl md:text-2xl text-[#00095B] uppercase tracking-tight text-center mb-6">
+                Ưu Điểm Chính
+              </h3>
+              <ul className="space-y-4 text-xs md:text-sm text-gray-600 text-center max-w-md leading-relaxed font-medium">
+                <li>• Sử dụng các dụng cụ bảo dưỡng tiêu chuẩn, các trang thiết bị hiện đại</li>
+                <li>• Phụ tùng bảo dưỡng chính hãng luôn được chuẩn bị sẵn sàng</li>
+                <li>• Đội ngũ kỹ thuật viên được đào tạo chuyên sâu về bảo dưỡng nhanh các dòng xe Ford.</li>
+                <li>• Toàn bộ công đoạn bảo dưỡng nhanh chỉ diễn ra trong 60 phút với đầy đủ các quy trình và công đoạn như bảo dưỡng thông thường</li>
+                <li>• Giảm thiểu thời gian chờ đợi bảo dưỡng xe Ford của khách hàng</li>
+              </ul>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="bg-[#F8F8F8] p-6 border border-gray-150 rounded-none text-center">
-              <Coffee className="w-8 h-8 text-[#066fef] mx-auto mb-3" />
-              <h4 className="font-bold text-base text-gray-900 mb-1 uppercase">Cà Phê Ý & Đồ Uống Miễn Phí</h4>
-              <p className="text-xs text-gray-500">Phục vụ menu đồ uống đa dạng từ Barista chuyên nghiệp.</p>
+          {/* VIP Lounge Experience Column */}
+          <div className="bg-white border border-gray-200 shadow-xs flex flex-col group hover:border-[#066fef]/40 transition-all duration-300">
+            <div className="relative aspect-[16/7] w-full overflow-hidden">
+              <Image
+                src="/service-support-customer.webp"
+                alt="Phòng chờ VIP"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover group-hover:scale-102 transition-transform duration-500"
+              />
             </div>
-            <div className="bg-[#F8F8F8] p-6 border border-gray-150 rounded-none text-center">
-              <Sparkles className="w-8 h-8 text-[#066fef] mx-auto mb-3" />
-              <h4 className="font-bold text-base text-gray-900 mb-1 uppercase">Ghế Massage Thư Giãn</h4>
-              <p className="text-xs text-gray-500">Thả lỏng cơ thể với hệ thống ghế massage cao cấp.</p>
+            <div className="p-8 lg:p-10 flex-1 flex flex-col justify-center items-center">
+              <span className="text-[#066fef] font-bold text-xs uppercase tracking-widest block mb-2 text-center">Trải Nghiệm Đẳng Cấp</span>
+              <h3 className="font-['Ford_Antenna',sans-serif] font-bold text-xl md:text-2xl text-[#00095B] uppercase tracking-tight text-center mb-4">
+                PHÒNG CHỜ VIP 5 SAO TRONG KHI THƯ GIÃN
+              </h3>
+              <p className="text-xs md:text-sm text-gray-600 text-center max-w-sm leading-relaxed font-medium">
+                Trong 60 phút ngắn ngủi, Quý khách thoải mái làm việc hoặc thư giãn tại không gian sang trọng của Long Khánh Ford.
+              </p>
             </div>
-            <div className="bg-[#F8F8F8] p-6 border border-gray-150 rounded-none text-center">
-              <Clock className="w-8 h-8 text-[#066fef] mx-auto mb-3" />
-              <h4 className="font-bold text-base text-gray-900 mb-1 uppercase">WiFi Tốc Độ Cao & Workstation</h4>
-              <p className="text-xs text-gray-500">Góc làm việc riêng tư, đầy đủ ổ cắm điện & kết nối ổn định.</p>
-            </div>
-            <div className="bg-[#F8F8F8] p-6 border border-gray-150 rounded-none text-center">
-              <Users className="w-8 h-8 text-[#066fef] mx-auto mb-3" />
-              <h4 className="font-bold text-base text-gray-900 mb-1 uppercase">Vách Kính Quan Sát Trực Tiếp</h4>
-              <p className="text-xs text-gray-500">Theo dõi trực tiếp xưởng dịch vụ làm việc trên xe của bạn.</p>
-            </div>
+          </div>
+
+        </div>
+
+        {/* 4 Lounge Facilities Cards below the columns */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
+          <div className="bg-white p-6 border border-gray-200 rounded-none text-center shadow-xs hover:border-[#066fef]/30 transition-all">
+            <Coffee className="w-8 h-8 text-[#066fef] mx-auto mb-3" />
+            <h4 className="font-bold text-sm text-gray-900 mb-1 uppercase">Cà Phê Ý &amp; Đồ Uống Miễn Phí</h4>
+            <p className="text-xs text-gray-500">Phục vụ menu đồ uống đa dạng từ Barista chuyên nghiệp.</p>
+          </div>
+          <div className="bg-white p-6 border border-gray-200 rounded-none text-center shadow-xs hover:border-[#066fef]/30 transition-all">
+            <Sparkles className="w-8 h-8 text-[#066fef] mx-auto mb-3" />
+            <h4 className="font-bold text-sm text-gray-900 mb-1 uppercase">Ghế Massage Thư Giãn</h4>
+            <p className="text-xs text-gray-500">Thả lỏng cơ thể với hệ thống ghế massage cao cấp.</p>
+          </div>
+          <div className="bg-white p-6 border border-gray-200 rounded-none text-center shadow-xs hover:border-[#066fef]/30 transition-all">
+            <Clock className="w-8 h-8 text-[#066fef] mx-auto mb-3" />
+            <h4 className="font-bold text-sm text-gray-900 mb-1 uppercase">WiFi Tốc Độ Cao &amp; Workstation</h4>
+            <p className="text-xs text-gray-500">Góc làm việc riêng tư, đầy đủ ổ cắm điện &amp; kết nối ổn định.</p>
+          </div>
+          <div className="bg-white p-6 border border-gray-200 rounded-none text-center shadow-xs hover:border-[#066fef]/30 transition-all">
+            <Users className="w-8 h-8 text-[#066fef] mx-auto mb-3" />
+            <h4 className="font-bold text-sm text-gray-900 mb-1 uppercase">Vách Kính Quan Sát Trực Tiếp</h4>
+            <p className="text-xs text-gray-500">Theo dõi trực tiếp xưởng dịch vụ làm việc trên xe của bạn.</p>
           </div>
         </div>
       </section>
