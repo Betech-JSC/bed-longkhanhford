@@ -84,7 +84,7 @@ export const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event
   }
 };
 
-export const resolveImageUrl = (img: any): string => {
+export const resolveImageUrl = (img: string | { url?: string; path?: string; static_url?: string } | null | undefined): string => {
   if (!img) return "";
   let path = "";
   if (typeof img === "string") {
@@ -122,18 +122,18 @@ export const resolveImageUrl = (img: any): string => {
         } else {
           fullUrl = path;
         }
-      } catch (e) {
+      } catch {
         fullUrl = path;
       }
     }
-  } else if (path.includes("/static/")) {
-    const parts = path.split("/static/");
-    const relativeStatic = parts[parts.length - 1].replace(/^\//, "");
-    fullUrl = `${baseDomain}/static/${relativeStatic}`;
-  } else if (path.includes("/uploads/")) {
-    const parts = path.split("/uploads/");
+  } else if (path.includes("uploads/")) {
+    const parts = path.split("uploads/");
     const relativeUpload = parts[parts.length - 1].replace(/^\//, "");
     fullUrl = `${baseDomain}/uploads/${relativeUpload}`;
+  } else if (path.includes("static/")) {
+    const parts = path.split("static/");
+    const relativeStatic = parts[parts.length - 1].replace(/^\//, "");
+    fullUrl = `${baseDomain}/static/${relativeStatic}`;
   } else if (path.startsWith("//")) {
     fullUrl = `https:${path}`;
   } else {
@@ -143,7 +143,7 @@ export const resolveImageUrl = (img: any): string => {
 
   try {
     return encodeURI(decodeURI(fullUrl));
-  } catch (e) {
+  } catch {
     return encodeURI(fullUrl);
   }
 };
