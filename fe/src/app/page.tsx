@@ -441,7 +441,11 @@ export default function Home() {
 
         const handoversItems = (handoversData as any)?.data || handoversData;
         if (Array.isArray(handoversItems) && handoversItems.length > 0) {
-          setCustomerHandovers(handoversItems);
+          const formattedHandovers = handoversItems.map((item: any) => ({
+            ...item,
+            image_url: resolveImageUrl(item.image_url || item.image?.url || item.image || "/images/team/team_1.png")
+          }));
+          setCustomerHandovers(formattedHandovers);
         } else {
           // API trả rỗng, không hiển thị section bàn giao
         }
@@ -493,20 +497,21 @@ export default function Home() {
     }
   };
 
-  // Load posts dynamically on mount
+  // Load posts dynamically on mount (Lấy bài viết có type POST)
   useEffect(() => {
     const fetchTabPosts = async () => {
       try {
-        const postsData = await postsAPI.getAll();
+        const postsData = await postsAPI.getAll({ type: "POST" });
         // Ưu tiên top_posts (bài nổi bật từ CMS), sau đó mới fallback sang posts.data
         const topPosts = (postsData as any)?.top_posts;
         const postsItems = (postsData as any)?.posts?.data || (postsData as any)?.data || postsData;
         const sourceItems = (Array.isArray(topPosts) && topPosts.length > 0) ? topPosts : postsItems;
         if (Array.isArray(sourceItems) && sourceItems.length > 0) {
-          const formatted = sourceItems.slice(0, 5).map((item: any) => ({
+          const postOnlyItems = sourceItems.filter((item: any) => !item.type || item.type === "POST");
+          const formatted = postOnlyItems.slice(0, 5).map((item: any) => ({
             id: item.slug || item.id || String(Math.random()),
             title: item.title || "",
-            image: item.image?.url || "/assets/mach-e-hero.png",
+            image: resolveImageUrl(item.image_url || item.image?.url || item.image || "/assets/mach-e-hero.png"),
             published_at: item.published_at || "",
             category: item.category ? { title: item.category.title } : { title: "Tin tức" },
             description: item.description || "",
@@ -1319,12 +1324,13 @@ export default function Home() {
                       }}
                     >
                       <Image
-                        src={item.image_url}
+                        src={resolveImageUrl(item.image_url)}
                         alt={item.title || "Tri ân khách hàng"}
                         fill
                         sizes="(max-width: 768px) 280px, 360px"
                         className="object-cover transition-transform duration-500 rounded-[8px]"
                         onError={handleImageError}
+                        unoptimized
                       />
 
                       {/* Premium gradient overlay */}
