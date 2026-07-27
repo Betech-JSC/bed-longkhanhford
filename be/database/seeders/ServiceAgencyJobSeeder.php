@@ -164,6 +164,20 @@ class ServiceAgencyJobSeeder extends Seeder
                     'description' => 'Chương trình bảo hiểm và gia hạn bảo hành chính hãng toàn diện Ford Ensure.',
                 ]
             ],
+            [
+                'email' => null,
+                'image' => null,
+                'benefit_image' => null,
+                'sliders' => null,
+                'position' => 14,
+                'custom_link' => '/dich-vu/intelligent-oil-life-monitor',
+                'vi' => [
+                    'title' => 'Cảnh báo thay dầu thông minh IOLM',
+                    'slug' => 'intelligent-oil-life-monitor',
+                    'seo_slug' => 'intelligent-oil-life-monitor',
+                    'description' => 'Hệ thống đo lường hiệu suất dầu nhớt động cơ tự động theo thói quen lái xe của bạn.',
+                ]
+            ],
         ];
 
         foreach ($services as $serviceData) {

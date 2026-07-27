@@ -42,6 +42,13 @@ const fallbackServices = [
     description: "Chính sách hậu mãi chu đáo, hỗ trợ tư vấn kỹ thuật và dịch vụ cứu hộ giao thông 24/7 bảo vệ bạn trên mọi nẻo đường.",
     image: siteAssets.serviceCustomerCare,
     badge: "Hỗ trợ 24/7"
+  },
+  {
+    title: "Cảnh báo thay dầu thông minh IOLM",
+    slug: "intelligent-oil-life-monitor",
+    description: "Hệ thống đo lường hiệu suất dầu nhớt động cơ tự động theo thói quen lái xe và điều kiện vận hành thực tế của bạn.",
+    image: siteAssets.serviceMaintenance,
+    badge: "Công nghệ Ford"
   }
 ];
 

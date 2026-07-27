@@ -11,6 +11,7 @@ import VehicleUpgradeLayout from "@/components/services/layouts/VehicleUpgrade";
 import FordSyncLayout from "@/components/services/layouts/FordSync";
 import FordAppLayout from "@/components/services/layouts/FordApp";
 import FordEnsureLayout from "@/components/services/layouts/FordEnsure";
+import IntelligentOilLifeMonitorLayout from "@/components/services/layouts/IntelligentOilLifeMonitor";
 import GenericServiceLayout from "@/components/services/layouts/GenericService";
 
 type Props = {
@@ -84,7 +85,10 @@ export default async function ServiceSlugPage({ params }: Props) {
       "ford-sync": "Công nghệ kết nối thông minh Ford SYNC®",
       "ung-dung-ford": "Ứng dụng kết nối thông minh FordPass™",
       "fordpass": "Ứng dụng kết nối thông minh FordPass™",
-      "ford-ensure": "Chương trình bảo hiểm & bảo hành mở rộng Ford Ensure"
+      "ford-ensure": "Chương trình bảo hiểm & bảo hành mở rộng Ford Ensure",
+      "intelligent-oil-life-monitor": "Hệ thống Cảnh báo Thay dầu Thông minh (IOLM)",
+      "intelligent-oil-life-monitoring": "Hệ thống Cảnh báo Thay dầu Thông minh (IOLM)",
+      "canh-bao-thay-dau-iolm": "Hệ thống Cảnh báo Thay dầu Thông minh (IOLM)"
     };
 
     serviceData = {
@@ -160,6 +164,11 @@ export default async function ServiceSlugPage({ params }: Props) {
   // 11. Ford Ensure Program Layout Switcher
   if (slug === "ford-ensure" || slug === "ensure") {
     return <FordEnsureLayout service={serviceData} />;
+  }
+
+  // 11.2. Intelligent Oil Life Monitor Layout Switcher
+  if (slug === "intelligent-oil-life-monitor" || slug === "intelligent-oil-life-monitoring" || slug === "canh-bao-thay-dau-iolm") {
+    return <IntelligentOilLifeMonitorLayout service={serviceData} />;
   }
 
   // 12. Default Fallback layout (Dynamic CMS Layout)

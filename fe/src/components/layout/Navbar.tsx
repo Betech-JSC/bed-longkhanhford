@@ -64,6 +64,7 @@ export default function Navbar() {
         { name: "Công nghệ Ford SYNC®", href: "/dich-vu/ford-sync" },
         { name: "Ứng dụng FordPass™", href: "/dich-vu/ung-dung-ford" },
         { name: "Bảo hiểm Ford Ensure", href: "/dich-vu/ford-ensure" },
+        { name: "Cảnh báo thay dầu (IOLM)", href: "/dich-vu/intelligent-oil-life-monitor" },
       ]
     }
   ]);
@@ -241,7 +242,10 @@ export default function Navbar() {
             "ung-dung-ford",
             "fordpass",
             "ford-ensure",
-            "ensure"
+            "ensure",
+            "intelligent-oil-life-monitor",
+            "intelligent-oil-life-monitoring",
+            "canh-bao-thay-dau-iolm"
           ];
 
           const mainItems: DropdownItem[] = [];
@@ -263,12 +267,13 @@ export default function Navbar() {
             }
           });
 
-          // Ensure the 4 default sub-services are always present in otherItems for staging/production
+          // Ensure the 5 default sub-services are always present in otherItems for staging/production
           const defaultSubServices = [
             { name: "Nhận & Giao xe tận nơi miễn phí", href: "/dich-vu/nhan-giao-xe-mien-phi", slugs: ["nhan-giao-xe-mien-phi", "nhan-giao-xe-tan-noi-mien-phi"] },
             { name: "FORD SYNC", href: "/dich-vu/ford-sync", slugs: ["ford-sync"] },
             { name: "Ứng dụng Ford", href: "/dich-vu/ung-dung-ford", slugs: ["ung-dung-ford", "fordpass"] },
-            { name: "Ford Ensure", href: "/dich-vu/ford-ensure", slugs: ["ford-ensure", "ensure"] }
+            { name: "Ford Ensure", href: "/dich-vu/ford-ensure", slugs: ["ford-ensure", "ensure"] },
+            { name: "Cảnh báo thay dầu (IOLM)", href: "/dich-vu/intelligent-oil-life-monitor", slugs: ["intelligent-oil-life-monitor", "intelligent-oil-life-monitoring", "canh-bao-thay-dau-iolm"] }
           ];
 
           defaultSubServices.forEach(defaultSrv => {
