@@ -159,11 +159,12 @@ export default function ExpressMaintenanceLayout({ service }: { service?: { titl
           <div className="bg-white border border-gray-200 shadow-xs flex flex-col group hover:border-[#066fef]/40 transition-all duration-300">
             <div className="relative aspect-[16/7] w-full overflow-hidden">
               <Image
-                src="/service-fixed-car.webp"
+                src={siteAssets.serviceMaintenance}
                 alt="Ưu Điểm Chính"
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover group-hover:scale-102 transition-transform duration-500"
+                unoptimized
               />
             </div>
             <div className="p-8 lg:p-10 flex-1 flex flex-col justify-center items-center">
@@ -184,11 +185,12 @@ export default function ExpressMaintenanceLayout({ service }: { service?: { titl
           <div className="bg-white border border-gray-200 shadow-xs flex flex-col group hover:border-[#066fef]/40 transition-all duration-300">
             <div className="relative aspect-[16/7] w-full overflow-hidden">
               <Image
-                src="/service-support-customer.webp"
+                src={siteAssets.serviceCustomerCare}
                 alt="Phòng chờ VIP"
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover group-hover:scale-102 transition-transform duration-500"
+                unoptimized
               />
             </div>
             <div className="p-8 lg:p-10 flex-1 flex flex-col justify-center items-center">
