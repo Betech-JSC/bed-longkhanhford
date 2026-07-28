@@ -209,7 +209,7 @@ export default function ArticleDetailClient({
                 {relatedArticles.map((art) => (
                   <div key={art.id} className="min-w-[280px] sm:min-w-[320px] md:min-w-[360px] max-w-[360px] flex-shrink-0 snap-start">
                     <Link
-                      href={`/${art.slug}`}
+                      href={`/tin-tuc/${art.slug || art.id}`}
                       className="bg-white rounded-none overflow-hidden border border-gray-200 shadow-xs hover:shadow-sm transition-premium group flex flex-col h-full no-underline"
                     >
                       <div className="aspect-[600/400] relative overflow-hidden w-full bg-gray-100">

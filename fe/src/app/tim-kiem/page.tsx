@@ -613,7 +613,7 @@ function SearchPageContent() {
                   {paginatedArticles.map((art) => (
                     <Link
                       key={art.id}
-                      href={`/${art.id}`}
+                      href={`/tin-tuc/${art.id}`}
                       className="bg-white rounded-lg overflow-hidden border border-[#e5e5e5] shadow-xs hover:shadow-md transition-premium group flex flex-col h-full"
                     >
                       <div className="aspect-[16/10] relative overflow-hidden w-full bg-gray-100">

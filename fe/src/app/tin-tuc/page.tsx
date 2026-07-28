@@ -297,7 +297,7 @@ function NewsListPageContent() {
             {topPosts.slice(0, 2).map((art) => (
               <Link
                 key={`featured-${art.id}`}
-                href={`/${art.slug}`}
+                href={`/tin-tuc/${art.slug || art.id}`}
                 className="bg-white rounded-none overflow-hidden border border-[#e5e5e5] hover:shadow-sm transition-premium group flex flex-col"
               >
                 {/* Image Container */}
@@ -399,7 +399,7 @@ function NewsListPageContent() {
               {posts.map((art) => (
                 <Link
                   key={art.id}
-                  href={`/${art.slug}`}
+                  href={`/tin-tuc/${art.slug || art.id}`}
                   className="bg-white rounded-none overflow-hidden border border-[#e5e5e5] hover:shadow-xs transition-premium group flex flex-col h-full"
                 >
                   <div className="aspect-[600/400] relative overflow-hidden w-full bg-gray-100">

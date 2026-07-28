@@ -212,6 +212,10 @@ const nextConfig = {
         source: "/khuyen-mai",
         destination: "/tin-tuc",
       },
+      {
+        source: "/khuyen-mai/:slug*",
+        destination: "/tin-tuc/:slug*",
+      },
       // Giữ nguyên cấu trúc danh mục bài viết từ WordPress cũ
       {
         source: "/chuyen-muc/:slug",
