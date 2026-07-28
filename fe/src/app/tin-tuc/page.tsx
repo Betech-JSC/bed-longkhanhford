@@ -301,15 +301,15 @@ function NewsListPageContent() {
                 className="bg-white rounded-none overflow-hidden border border-[#e5e5e5] hover:shadow-sm transition-premium group flex flex-col"
               >
                 {/* Image Container */}
-                <div className="aspect-[600/380] relative overflow-hidden w-full bg-gray-100">
+                <div className="aspect-[600/380] relative overflow-hidden w-full bg-gray-100 flex items-center justify-center p-4">
                   <img
                     src={art.image?.url || "/placeholder-news.jpg"}
                     alt={art.title}
-                    className="absolute inset-0 object-cover w-full h-full group-hover:scale-[1.03] transition-transform duration-500"
+                    className="w-full h-full object-contain group-hover:scale-[1.03] transition-transform duration-500"
                     onError={handleImageError}
                   />
                   {art.category && (
-                    <div className="absolute top-4 left-4 bg-[#066fef] text-white text-xs font-semibold px-3 py-1 rounded-[4px] uppercase tracking-wider">
+                    <div className="absolute top-4 left-4 bg-[#066fef] text-white text-xs font-semibold px-3 py-1 rounded-[4px] uppercase tracking-wider z-10">
                       {art.category.title}
                     </div>
                   )}
@@ -402,15 +402,15 @@ function NewsListPageContent() {
                   href={`/tin-tuc/${art.slug || art.id}`}
                   className="bg-white rounded-none overflow-hidden border border-[#e5e5e5] hover:shadow-xs transition-premium group flex flex-col h-full"
                 >
-                  <div className="aspect-[600/400] relative overflow-hidden w-full bg-gray-100">
+                  <div className="aspect-[600/400] relative overflow-hidden w-full bg-gray-100 flex items-center justify-center p-4">
                     <img
                       src={art.image?.url || "/placeholder-news.jpg"}
                       alt={art.title}
-                      className="absolute inset-0 object-cover w-full h-full group-hover:scale-[1.03] transition-transform duration-500"
+                      className="w-full h-full object-contain group-hover:scale-[1.03] transition-transform duration-500"
                       onError={handleImageError}
                     />
                     {art.category && (
-                      <div className="absolute top-4 left-4 bg-[#066fef] text-white text-xs font-semibold px-3 py-1 rounded-[4px] uppercase tracking-wider">
+                      <div className="absolute top-4 left-4 bg-[#066fef] text-white text-xs font-semibold px-3 py-1 rounded-[4px] uppercase tracking-wider z-10">
                         {art.category.title}
                       </div>
                     )}

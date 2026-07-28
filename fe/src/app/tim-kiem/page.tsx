@@ -616,14 +616,14 @@ function SearchPageContent() {
                       href={`/tin-tuc/${art.id}`}
                       className="bg-white rounded-lg overflow-hidden border border-[#e5e5e5] shadow-xs hover:shadow-md transition-premium group flex flex-col h-full"
                     >
-                      <div className="aspect-[16/10] relative overflow-hidden w-full bg-gray-100">
+                      <div className="aspect-[16/10] relative overflow-hidden w-full bg-gray-100 flex items-center justify-center p-4">
                         <img
                           src={art.image}
                           alt={art.title}
-                          className="absolute inset-0 object-cover w-full h-full group-hover:scale-[1.03] transition-transform duration-500"
+                          className="w-full h-full object-contain group-hover:scale-[1.03] transition-transform duration-500"
                           onError={handleImageError}
                         />
-                        <div className="absolute top-3 left-3 bg-[#0562D2] text-white text-[10px] font-bold px-2.5 py-0.5 rounded-sm uppercase tracking-wider">
+                        <div className="absolute top-3 left-3 bg-[#0562D2] text-white text-[10px] font-bold px-2.5 py-0.5 rounded-sm uppercase tracking-wider z-10">
                           {art.category}
                         </div>
                       </div>
