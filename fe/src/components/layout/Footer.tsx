@@ -251,8 +251,8 @@ export default function Footer() {
             
             {/* Header with avatar & page title */}
             <div className="relative z-10 flex items-center gap-3">
-              <div className="w-12 h-12 rounded-lg bg-white p-2 shadow-sm flex items-center justify-center shrink-0 border border-white/20">
-                <img src="/ford_logo.svg" alt="Long Khánh Ford" className="w-full h-auto object-contain" />
+              <div className="h-10 w-16 rounded-lg bg-white px-2 py-1 shadow-sm flex items-center justify-center shrink-0 border border-white/20 overflow-hidden">
+                <img src="/ford_logo.svg" alt="Long Khánh Ford" className="h-full w-full object-contain block" />
               </div>
               <div className="min-w-0">
                 <h5 className="font-bold text-sm text-white flex items-center gap-1.5 font-sans group-hover:text-blue-200 transition-colors">
@@ -267,17 +267,17 @@ export default function Footer() {
               </div>
             </div>
 
-            {/* Bottom CTA */}
-            <div className="relative z-10 flex items-center justify-between pt-2 border-t border-white/10">
-              <span className="text-xs text-white/90 font-medium font-sans flex items-center gap-1.5 group-hover:text-white">
-                <svg className="w-4 h-4 text-[#1877f2]" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                </svg>
-                Theo dõi trên Facebook
-              </span>
-              <span className="text-[11px] bg-[#066fef] hover:bg-[#055ecb] px-3 py-1.5 rounded-md text-white font-semibold transition-all duration-200">
-                Ghé thăm Fanpage &rarr;
-              </span>
+            {/* Description subtext */}
+            <p className="relative z-10 text-[11px] text-white/80 font-sans line-clamp-2 leading-relaxed">
+              Cập nhật ưu đãi giá xe &amp; sự kiện mới nhất từ đại lý chính thức.
+            </p>
+
+            {/* Full-width CTA Button */}
+            <div className="relative z-10 w-full bg-[#1877f2] group-hover:bg-[#0562d2] text-white text-xs font-semibold py-2 px-3 rounded-lg flex items-center justify-center gap-2 transition-all duration-200 shadow-sm">
+              <svg className="w-4 h-4 text-white shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+              </svg>
+              <span>Ghé thăm Fanpage Facebook &rarr;</span>
             </div>
           </a>
 
