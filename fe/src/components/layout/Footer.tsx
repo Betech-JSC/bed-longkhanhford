@@ -241,7 +241,7 @@ export default function Footer() {
             href="https://www.facebook.com/longkhanhfordofficial/"
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative w-full h-[180px] overflow-hidden rounded-xl border border-neutral-200/80 shadow-xs flex flex-col justify-between p-4 bg-gradient-to-br from-neutral-900 via-[#002f6c] to-[#01095c] text-white transition-all duration-300 hover:shadow-md hover:border-[#066fef]/40 block"
+            className="group relative w-full h-[140px] overflow-hidden rounded-xl border border-neutral-200/80 shadow-xs flex flex-col justify-between p-4 bg-gradient-to-br from-neutral-900 via-[#002f6c] to-[#01095c] text-white transition-all duration-300 hover:shadow-md hover:border-[#066fef]/40 block"
           >
             {/* Background image */}
             <div 
@@ -262,22 +262,17 @@ export default function Footer() {
                   </svg>
                 </h5>
                 <p className="text-[11px] text-white/70 truncate font-sans">
-                  Đại lý 3S Ủy Quyền Ford Việt Nam
+                  Đại lý 3S Chính Thức
                 </p>
               </div>
             </div>
 
-            {/* Description subtext */}
-            <p className="relative z-10 text-[11px] text-white/80 font-sans line-clamp-2 leading-relaxed">
-              Cập nhật ưu đãi giá xe &amp; sự kiện mới nhất từ đại lý chính thức.
-            </p>
-
             {/* Full-width CTA Button */}
-            <div className="relative z-10 w-full bg-[#1877f2] group-hover:bg-[#0562d2] text-white text-xs font-semibold py-2 px-3 rounded-lg flex items-center justify-center gap-2 transition-all duration-200 shadow-sm">
+            <div className="relative z-10 w-full bg-[#1877f2] group-hover:bg-[#0562d2] text-white text-xs font-semibold py-2 px-3 rounded-lg flex items-center justify-center gap-2 transition-all duration-200 shadow-sm whitespace-nowrap">
               <svg className="w-4 h-4 text-white shrink-0" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
               </svg>
-              <span>Ghé thăm Fanpage Facebook &rarr;</span>
+              <span>Ghé thăm Fanpage &rarr;</span>
             </div>
           </a>
 
