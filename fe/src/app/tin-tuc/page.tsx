@@ -301,7 +301,7 @@ function NewsListPageContent() {
                 className="bg-white rounded-none overflow-hidden border border-[#e5e5e5] hover:shadow-sm transition-premium group flex flex-col"
               >
                 {/* Image Container */}
-                <div className="aspect-[600/380] relative overflow-hidden w-full bg-gray-100 flex items-center justify-center p-4">
+                <div className="aspect-[600/380] relative overflow-hidden w-full bg-white flex items-center justify-center p-4">
                   <img
                     src={art.image?.url || "/placeholder-news.jpg"}
                     alt={art.title}
@@ -402,7 +402,7 @@ function NewsListPageContent() {
                   href={`/tin-tuc/${art.slug || art.id}`}
                   className="bg-white rounded-none overflow-hidden border border-[#e5e5e5] hover:shadow-xs transition-premium group flex flex-col h-full"
                 >
-                  <div className="aspect-[600/400] relative overflow-hidden w-full bg-gray-100 flex items-center justify-center p-4">
+                  <div className="aspect-[600/400] relative overflow-hidden w-full bg-white flex items-center justify-center p-4">
                     <img
                       src={art.image?.url || "/placeholder-news.jpg"}
                       alt={art.title}
