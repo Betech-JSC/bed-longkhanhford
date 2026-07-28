@@ -35,7 +35,6 @@ export default function SafeImage({
       )}
       
       <Image
-        unoptimized
         {...props}
         src={imgSrc}
         alt={alt || "Hình ảnh"}

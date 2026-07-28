@@ -80,9 +80,7 @@ export const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event
   if (!target.dataset.failed) {
     target.dataset.failed = "true";
     target.srcset = "";
-    const vehicleKey = target.alt || target.dataset.vehicle || "";
-    const smartFallback = getPopularVehicleImage(vehicleKey);
-    target.src = (smartFallback && smartFallback !== siteAssets.carPlaceholder) ? smartFallback : siteAssets.carPlaceholder;
+    target.src = siteAssets.carPlaceholder;
   }
 };
 
@@ -114,37 +112,26 @@ export const resolveImageUrl = (img: string | { url?: string; path?: string; sta
   let fullUrl = "";
 
   if (path.startsWith("http://") || path.startsWith("https://")) {
-    if (path.includes("/static/")) {
-      const parts = path.split("/static/");
-      const relativeStatic = parts[parts.length - 1].replace(/^\//, "");
-      fullUrl = `${baseDomain}/static/${relativeStatic}`;
-    } else if (path.includes("/uploads/")) {
-      const parts = path.split("/uploads/");
-      const relativeUpload = parts[parts.length - 1].replace(/^\//, "");
-      fullUrl = `${baseDomain}/uploads/${relativeUpload}`;
-    } else {
-      try {
-        const parsed = new URL(path);
-        const isCorruptedFilenameDomain = /\.(webp|png|jpg|jpeg|gif|svg)$/i.test(parsed.hostname);
-        if (isCorruptedFilenameDomain && (parsed.pathname === "/" || parsed.pathname === "")) {
-          fullUrl = `${baseDomain}/static/${parsed.hostname}`;
-        } else {
-          fullUrl = path;
-        }
-      } catch {
+    try {
+      const parsed = new URL(path);
+      // Check if domain is corrupted (filename as hostname, e.g. http://ford-ranger.webp)
+      const isCorruptedFilenameDomain = /\.(webp|png|jpg|jpeg|gif|svg)$/i.test(parsed.hostname);
+      if (isCorruptedFilenameDomain && (parsed.pathname === "/" || parsed.pathname === "")) {
+        fullUrl = `${baseDomain}/static/${parsed.hostname}`;
+      } else if (parsed.pathname.startsWith("/static/") || parsed.pathname.startsWith("/uploads/")) {
+        fullUrl = `${baseDomain}${parsed.pathname}${parsed.search}`;
+      } else {
         fullUrl = path;
       }
+    } catch {
+      fullUrl = path;
     }
-  } else if (path.includes("uploads/")) {
-    const parts = path.split("uploads/");
-    const relativeUpload = parts[parts.length - 1].replace(/^\//, "");
-    fullUrl = `${baseDomain}/uploads/${relativeUpload}`;
-  } else if (path.includes("static/")) {
-    const parts = path.split("static/");
-    const relativeStatic = parts[parts.length - 1].replace(/^\//, "");
-    fullUrl = `${baseDomain}/static/${relativeStatic}`;
   } else if (path.startsWith("//")) {
     fullUrl = `https:${path}`;
+  } else if (path.startsWith("/static/") || path.startsWith("/uploads/") || path.startsWith("/storage/")) {
+    fullUrl = `${baseDomain}${path}`;
+  } else if (path.startsWith("static/") || path.startsWith("uploads/") || path.startsWith("storage/")) {
+    fullUrl = `${baseDomain}/${path}`;
   } else {
     const cleanPath = path.replace(/^\//, "");
     fullUrl = `${baseDomain}/static/${cleanPath}`;
