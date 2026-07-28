@@ -164,21 +164,17 @@ class Vehicle extends BaseModel
         }
 
         if (is_array($file)) {
-            if (isset($file[0]) && is_array($file[0])) {
+            if (array_key_exists(0, $file)) {
                 $file = $file[0];
             }
+        }
+
+        if (is_array($file)) {
             if (!empty($file['url'])) {
                 return $file['url'];
             }
             if (!empty($file['path'])) {
-                $path = $file['path'];
-                if (str_starts_with($path, 'uploads/')) {
-                    $path = substr($path, 8);
-                }
-                if (str_starts_with($path, 'static/')) {
-                    $path = substr($path, 7);
-                }
-                return static_url($path);
+                $file = $file['path'];
             }
         }
 
@@ -187,13 +183,21 @@ class Vehicle extends BaseModel
                 return $file;
             }
             $path = ltrim($file, '/');
-            if (str_starts_with($path, 'uploads/')) {
-                $path = substr($path, 8);
+            while (
+                str_starts_with($path, 'static/') ||
+                str_starts_with($path, 'uploads/') ||
+                str_starts_with($path, 'storage/')
+            ) {
+                if (str_starts_with($path, 'static/')) {
+                    $path = substr($path, 7);
+                } elseif (str_starts_with($path, 'uploads/')) {
+                    $path = substr($path, 8);
+                } elseif (str_starts_with($path, 'storage/')) {
+                    $path = substr($path, 8);
+                }
+                $path = ltrim($path, '/');
             }
-            if (str_starts_with($path, 'static/')) {
-                $path = substr($path, 7);
-            }
-            return static_url($path);
+            return $path !== '' ? static_url($path) : null;
         }
 
         return null;

@@ -80,7 +80,9 @@ export const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event
   if (!target.dataset.failed) {
     target.dataset.failed = "true";
     target.srcset = "";
-    target.src = siteAssets.carPlaceholder;
+    const vehicleKey = target.alt || target.dataset.vehicle || "";
+    const smartFallback = getPopularVehicleImage(vehicleKey);
+    target.src = (smartFallback && smartFallback !== siteAssets.carPlaceholder) ? smartFallback : siteAssets.carPlaceholder;
   }
 };
 

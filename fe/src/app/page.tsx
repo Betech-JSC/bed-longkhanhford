@@ -426,7 +426,7 @@ export default function Home() {
             category: v.title.toUpperCase().includes("FORD") ? v.title : `FORD ${v.title.toUpperCase()} MỚI`,
             slogan: v.tagline || "Mạnh mẽ. Thông minh.",
             description: v.description || "",
-            image: resolveImageUrl(v.image_featured_url || v.image_thumbnail_url || v.image_url || v.image || ""),
+            image: resolveImageUrl(v.image_featured_url || v.image_thumbnail_url || v.image_url || v.image_featured || v.image_thumbnail || v.image || "") || getPopularVehicleImage(v.slug || v.title),
             link: `/dong-xe/${v.slug}`
           }));
           setBrandItems(dynamicBrandItems);
