@@ -538,15 +538,19 @@ export default function Home() {
         const isPromotion = (item: any) => {
           const catSlug = String(item.category?.slug || item.category_slug || "").toLowerCase();
           const catTitle = String(item.category?.title || item.category_name || "").toLowerCase();
+          const title = String(item.title || "").toLowerCase();
           const categoriesList = Array.isArray(item.categories) ? item.categories : [];
           
-          if (catSlug.includes("khuyen-mai") || catSlug.includes("u-dai") || catTitle.includes("khuyến mãi") || catTitle.includes("ưu đãi")) {
+          const promoKeywords = ["khuyen-mai", "khuyen mai", "khuyến mãi", "khuyến mại", "u-dai", "u dai", "ưu đãi", "lãi suất", "lai suat", "đặc quyền sạc", "quà tặng", "qua tang"];
+
+          if (promoKeywords.some(kw => catSlug.includes(kw) || catTitle.includes(kw) || title.includes(kw))) {
             return true;
           }
+
           return categoriesList.some((c: any) => {
             const slug = String(c.slug || "").toLowerCase();
-            const title = String(c.title || "").toLowerCase();
-            return slug.includes("khuyen-mai") || slug.includes("u-dai") || title.includes("khuyến mãi") || title.includes("ưu đãi");
+            const cTitle = String(c.title || "").toLowerCase();
+            return promoKeywords.some(kw => slug.includes(kw) || cTitle.includes(kw));
           });
         };
 
@@ -564,7 +568,7 @@ export default function Home() {
           }
         }
 
-        const targetItems = filteredItems.length > 0 ? filteredItems : allItems;
+        const targetItems = filteredItems.length > 0 ? filteredItems : defaultHomeArticles;
 
         if (targetItems.length > 0) {
           const formatted = targetItems.slice(0, 5).map((item: any) => {
