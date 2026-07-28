@@ -236,20 +236,50 @@ export default function Footer() {
 
         {/* Column 5: Facebook widget & Social Media (spans 3) */}
         <div className="space-y-6 lg:col-span-3">
-          {/* Facebook Fanpage Embed */}
-          <div className="w-full overflow-hidden rounded-lg bg-white border border-neutral-200 shadow-sm" style={{ height: "180px" }}>
-            <iframe
-              src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Flongkhanhfordofficial%2F&tabs&width=500&height=180&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=false&appId"
-              width="100%"
-              height="180"
-              style={{ border: "none", overflow: "hidden" }}
-              scrolling="no"
-              frameBorder="0"
-              allowFullScreen={true}
-              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-              title="Facebook Fanpage Long Khánh Ford"
-            ></iframe>
-          </div>
+          {/* Facebook Fanpage Card */}
+          <a
+            href="https://www.facebook.com/longkhanhfordofficial/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative w-full h-[180px] overflow-hidden rounded-xl border border-neutral-200/80 shadow-xs flex flex-col justify-between p-4 bg-gradient-to-br from-neutral-900 via-[#002f6c] to-[#01095c] text-white transition-all duration-300 hover:shadow-md hover:border-[#066fef]/40 block"
+          >
+            {/* Background image */}
+            <div 
+              className="absolute inset-0 opacity-20 bg-cover bg-center transition-transform duration-500 group-hover:scale-105 pointer-events-none"
+              style={{ backgroundImage: "url('/showroom_bg.png')" }}
+            />
+            
+            {/* Header with avatar & page title */}
+            <div className="relative z-10 flex items-center gap-3">
+              <div className="w-12 h-12 rounded-lg bg-white p-2 shadow-sm flex items-center justify-center shrink-0 border border-white/20">
+                <img src="/ford_logo.svg" alt="Long Khánh Ford" className="w-full h-auto object-contain" />
+              </div>
+              <div className="min-w-0">
+                <h5 className="font-bold text-sm text-white flex items-center gap-1.5 font-sans group-hover:text-blue-200 transition-colors">
+                  Long Khánh Ford
+                  <svg className="w-4 h-4 text-[#066fef] shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                </h5>
+                <p className="text-[11px] text-white/70 truncate font-sans">
+                  Đại lý 3S Ủy Quyền Ford Việt Nam
+                </p>
+              </div>
+            </div>
+
+            {/* Bottom CTA */}
+            <div className="relative z-10 flex items-center justify-between pt-2 border-t border-white/10">
+              <span className="text-xs text-white/90 font-medium font-sans flex items-center gap-1.5 group-hover:text-white">
+                <svg className="w-4 h-4 text-[#1877f2]" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+                Theo dõi trên Facebook
+              </span>
+              <span className="text-[11px] bg-[#066fef] hover:bg-[#055ecb] px-3 py-1.5 rounded-md text-white font-semibold transition-all duration-200">
+                Ghé thăm Fanpage &rarr;
+              </span>
+            </div>
+          </a>
 
           {/* Social Icons (Facebook, Zalo, YouTube, TikTok) */}
           <div className="flex gap-4 pt-2">
