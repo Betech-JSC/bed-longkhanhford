@@ -182,7 +182,7 @@ const defaultHomeArticles = [
   {
     id: "ford-everest-platinum",
     title: "Ford Everest Platinum - Đẳng cấp SUV đa dụng mới",
-    image: "/assets/ford-everest-platinum-desktop.webp",
+    image: "/assets/everest_platinum.png",
     published_at: "2026-07-28",
     category: { title: "Tin tức" },
     description: "Sức mạnh động cơ V6 cùng trang bị nội thất đỉnh cao cho mọi chuyến hành trình.",

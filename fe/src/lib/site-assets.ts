@@ -23,7 +23,7 @@ export const siteAssets = {
   bookingCar: "/assets/booking-car.png",
   qualityCareBadge: "/assets/quality-care-circle.png",
   expressFlow: "/assets/express-maintenance-flow.png",
-  carPlaceholder: "/assets/car-mach-e.png",
+  carPlaceholder: "/assets/mach-e-hero.png",
   ourStoryBanner: "/showroom_bg.png",
   testDriveBg: "/assets/test-drive-bg.png",
   googleMapsEmbed:
