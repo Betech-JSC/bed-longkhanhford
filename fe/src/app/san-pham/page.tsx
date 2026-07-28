@@ -506,11 +506,12 @@ export default function ProductsPage({ initialCategory }: { initialCategory?: st
             <span>/</span>
             <span className="text-white/90">Sản phẩm</span>
           </div>
-          <div className="text-center font-antenna max-w-3xl mx-auto">
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight uppercase leading-[1.1] mb-6 font-antenna">
-              Dòng xe Ford thế hệ mới
+          <div className="text-center font-antenna max-w-4xl mx-auto px-2">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[56px] font-bold tracking-tight uppercase leading-[1.15] mb-5 font-antenna text-white">
+              <span className="inline-block">Dòng xe Ford</span>{" "}
+              <span className="inline-block text-[#066fef]">thế hệ mới</span>
             </h1>
-            <p className="text-white/70 text-sm md:text-base max-w-xl mx-auto leading-relaxed font-antenna font-medium">
+            <p className="text-white/80 text-sm md:text-base max-w-2xl mx-auto leading-relaxed font-antenna font-medium">
               Khám phá sức mạnh, công nghệ thông minh và sự đa dụng vượt trội của các dòng xe Ford chính hãng tại showroom Long Khánh Ford.
             </p>
           </div>
