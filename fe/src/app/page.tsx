@@ -170,11 +170,38 @@ const INITIAL_BRAND_ITEMS = [
 
 
 
+const defaultHomeArticles = [
+  {
+    id: "ford-territory-2026",
+    title: "Ford Territory 2026: Đi tới trải nghiệm mới với công nghệ đột phá",
+    image: "/assets/ford-ranger-raptor-desktop.webp",
+    published_at: "2026-07-28",
+    category: { title: "Tin tức" },
+    description: "Khám phá mẫu SUV thông minh mới với không gian sang trọng và công nghệ hỗ trợ lái hàng đầu.",
+  },
+  {
+    id: "ford-everest-platinum",
+    title: "Ford Everest Platinum - Đẳng cấp SUV đa dụng mới",
+    image: "/assets/ford-everest-platinum-desktop.webp",
+    published_at: "2026-07-28",
+    category: { title: "Tin tức" },
+    description: "Sức mạnh động cơ V6 cùng trang bị nội thất đỉnh cao cho mọi chuyến hành trình.",
+  },
+  {
+    id: "ford-ranger-stormtrak",
+    title: "Ford Ranger Stormtrak: Đột phá phong cách bán tải cao cấp",
+    image: "/assets/ford-ranger-raptor-desktop.webp",
+    published_at: "2026-07-28",
+    category: { title: "Tin tức" },
+    description: "Phiên bản đặc biệt kết hợp hoàn hảo giữa tính năng vận hành vượt trội và vẻ ngoài thể thao.",
+  },
+];
+
 export default function Home() {
   const router = useRouter();
 
   const [heroSlides, setHeroSlides] = useState<any[]>([]);
-  const [homeArticles, setHomeArticles] = useState<any[]>([]);
+  const [homeArticles, setHomeArticles] = useState<any[]>(defaultHomeArticles);
   const [categories, setCategories] = useState<any[]>([]);
   const [vehiclesList, setVehiclesList] = useState<any[]>([]);
   const [brandItems, setBrandItems] = useState<any[]>([]);
@@ -537,19 +564,27 @@ export default function Home() {
           }
         }
 
-        if (filteredItems.length > 0) {
-          const formatted = filteredItems.slice(0, 5).map((item: any) => ({
-            id: item.slug || item.id || String(Math.random()),
-            title: item.title || "",
-            image: resolveImageUrl(item.image_url || item.image?.url || item.image || "/assets/mach-e-hero.png"),
-            published_at: item.published_at || "",
-            category: item.category ? { title: item.category.title } : { title: "Tin tức" },
-            description: item.description || "",
-          }));
+        const targetItems = filteredItems.length > 0 ? filteredItems : allItems;
+
+        if (targetItems.length > 0) {
+          const formatted = targetItems.slice(0, 5).map((item: any) => {
+            const rawImg = item.image_url || item.image_thumbnail_url || item.image?.url || item.image || item.image_thumbnail;
+            return {
+              id: item.slug || item.id || String(Math.random()),
+              title: item.title || "",
+              image: resolveImageUrl(rawImg) || "/assets/ford-ranger-raptor-desktop.webp",
+              published_at: item.published_at || "",
+              category: item.category ? { title: item.category.title } : { title: "Tin tức" },
+              description: item.description || "",
+            };
+          });
           setHomeArticles(formatted);
+        } else {
+          setHomeArticles(defaultHomeArticles);
         }
       } catch (error) {
         console.error("Error fetching tab posts, using fallbacks:", error);
+        setHomeArticles(defaultHomeArticles);
       }
     };
     fetchTabPosts();
