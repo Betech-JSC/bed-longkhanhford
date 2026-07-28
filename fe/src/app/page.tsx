@@ -111,25 +111,25 @@ const quickActions = [
 
 const techItems = [
   {
-    title: "Kết nối thông minh FordPass™",
+    title: "FordPass™",
     description: "Kết nối điện thoại của bạn với xe Ford thế hệ mới để khởi động từ xa, định vị xe, kiểm tra áp suất lốp và mức nhiên liệu trực quan ngay trên ứng dụng di động.",
     image: "/assets/tech_fordpass.png",
     buttonText: "Khám phá ứng dụng",
-    link: "/lien-he"
+    link: "/dich-vu/fordpass"
   },
   {
-    title: "An toàn chủ động Co-Pilot360™",
+    title: "Ford Co-Pilot360",
     description: "Hệ thống hỗ trợ người lái tiên tiến trên các dòng xe Ford mới giúp bạn tự tin di chuyển nhờ cảnh báo va chạm, giữ làn đường và hỗ trợ đỗ xe chủ động.",
     image: "/assets/tech_copilot360.png",
     buttonText: "Đăng ký lái thử",
     link: "/dang-ky-lai-thu"
   },
   {
-    title: "Khoang lái hiện đại SYNC® 4",
+    title: "SYNC® 4",
     description: "Màn hình cảm ứng cỡ lớn tích hợp bản đồ dẫn đường thông minh, kết nối không dây Apple CarPlay / Android Auto cùng tính năng ra lệnh giọng nói tiện lợi.",
     image: "/assets/territory-tech-split.png",
-    buttonText: "Nhận báo giá xe",
-    link: "/lien-he"
+    buttonText: "Khám phá Ford SYNC®",
+    link: "/dich-vu/ford-sync"
   }
 ];
 
@@ -968,10 +968,10 @@ export default function Home() {
               className="flex flex-col gap-4 text-left mb-10 md:mb-12 max-w-[900px]"
             >
               <h2 className="text-4xl md:text-[48px] font-extrabold text-black tracking-tight font-antenna leading-none">
-                <span className="text-[#066FEF]">Công nghệ</span> trên xe Ford
+                Công nghệ trên xe <span className="text-[#066FEF]">Ford</span>
               </h2>
               <p className="text-base md:text-lg text-neutral-600 font-medium leading-relaxed font-antenna">
-                Khám phá các trang bị công nghệ hiện đại hàng đầu phân khúc trên các dòng xe Ford thế hệ mới giúp hành trình của bạn an toàn, kết nối liền mạch và tràn đầy cảm hứng.
+                Khám phá các trang bị công nghệ hàng đầu phân khúc, giúp mỗi hành trình cùng Ford thêm an toàn, kết nối liền mạch và tràn đầy cảm hứng.
               </p>
             </motion.div>
 

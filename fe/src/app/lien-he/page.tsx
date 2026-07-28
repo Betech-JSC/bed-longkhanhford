@@ -32,8 +32,13 @@ function ContactFormContent() {
   const [selectedPackageType, setSelectedPackageType] = useState<"maintenance" | "repair">("maintenance");
   const [selectedMaintenanceKm, setSelectedMaintenanceKm] = useState("5.000 km");
 
+  // New Car Quote Form States
+  const [formPurchaseMethod, setFormPurchaseMethod] = useState<"Trả góp" | "Tiền mặt">("Trả góp");
+  const [formCity, setFormCity] = useState("Đồng Nai");
+
   const isRepairQuoteForm = reasonParam === "Tư vấn báo giá sửa chữa" || reasonParam === "Yêu cầu sửa chữa xe";
-  const isServiceBooking = !isRepairQuoteForm && (!reasonParam || (!reasonParam.includes("Catalogue") && !reasonParam.includes("Báo giá") && !reasonParam.includes("Tư vấn")));
+  const isNewCarQuoteForm = reasonParam === "Báo giá xe mới" || reasonParam === "Báo giá xe" || (!!reasonParam && reasonParam.includes("Báo giá") && !isRepairQuoteForm);
+  const isServiceBooking = !isRepairQuoteForm && !isNewCarQuoteForm && (!reasonParam || (!reasonParam.includes("Catalogue") && !reasonParam.includes("Báo giá") && !reasonParam.includes("Tư vấn")));
 
   const getVehicleName = (vId: string, vehicleList: any[]) => {
     const found = vehicleList.find((v) => v.id === vId || v.slug === vId);
@@ -112,7 +117,7 @@ function ContactFormContent() {
       }
     }
     
-    if (!isRepairQuoteForm && !formServiceContent) {
+    if (!isRepairQuoteForm && !isNewCarQuoteForm && !formServiceContent) {
       setToastMessage("Vui lòng điền nội dung yêu cầu!");
       setShowToast(true);
       return;
@@ -145,6 +150,24 @@ function ContactFormContent() {
                 type: "vehicle" as const
               },
               "Nội dung cần hỗ trợ": fullNote
+            }
+          }
+        };
+      } else if (isNewCarQuoteForm) {
+        const selectedVehicleObj = allVehicles.find((v) => v.id === selectedVehicle);
+        const vehicleTitle = selectedVehicleObj ? selectedVehicleObj.name : (vehicleParam ? getVehicleName(vehicleParam, allVehicles) : selectedVehicle || "Xe Ford mới");
+
+        payload = {
+          contact: {
+            type: "NEW_CAR_QUOTE_FORM" as const,
+            data: {
+              "Họ và tên": formName,
+              "Số điện thoại": formPhone,
+              "E-mail": formEmail || undefined,
+              "Dòng xe quan tâm": vehicleTitle,
+              "Hình thức mua xe": formPurchaseMethod,
+              "Tỉnh / Thành phố": formCity || "Đồng Nai",
+              "Nội dung yêu cầu": formServiceContent || `Nhận báo giá xe ${vehicleTitle}`
             }
           }
         };
@@ -354,16 +377,20 @@ function ContactFormContent() {
             <h3 className="font-display font-bold text-2xl text-[#00095B] tracking-tight">
               {isRepairQuoteForm 
                 ? "Tư vấn & Báo giá sửa chữa xe" 
-                : isServiceBooking 
-                  ? "Đặt hẹn dịch vụ trực tuyến" 
-                  : (reasonParam || "Đăng ký tư vấn")}
+                : isNewCarQuoteForm
+                  ? "Yêu cầu báo giá xe mới"
+                  : isServiceBooking 
+                    ? "Đặt hẹn dịch vụ trực tuyến" 
+                    : (reasonParam || "Đăng ký tư vấn")}
             </h3>
             <p className="text-xs text-gray-400 font-medium font-antenna">
               {isRepairQuoteForm
                 ? "Vui lòng điền thông tin chi tiết dưới đây, Cố vấn dịch vụ Long Khánh Ford sẽ liên hệ báo giá nhanh nhất."
-                : isServiceBooking 
-                  ? "Vui lòng điền thông tin dưới đây để được hỗ trợ nhanh chóng nhất."
-                  : "Vui lòng điền thông tin dưới đây để nhận tài liệu / tư vấn sớm nhất."}
+                : isNewCarQuoteForm
+                  ? "Vui lòng để lại thông tin, Chuyên viên kinh doanh Long Khánh Ford sẽ gửi báo giá lăn bánh & ưu đãi mới nhất."
+                  : isServiceBooking 
+                    ? "Vui lòng điền thông tin dưới đây để được hỗ trợ nhanh chóng nhất."
+                    : "Vui lòng điền thông tin dưới đây để nhận tài liệu / tư vấn sớm nhất."}
             </p>
           </div>
 
@@ -451,13 +478,11 @@ function ContactFormContent() {
                         required
                         value={selectedVehicle}
                         onChange={(e) => setSelectedVehicle(e.target.value)}
-                        className="w-full bg-gray-50/30 hover:bg-gray-100/30 focus:bg-white border border-gray-200 focus:border-[#066fef] focus:ring-4 focus:ring-[#066fef]/10 rounded-xl py-3 pl-10 pr-10 text-xs font-semibold font-antenna transition-all outline-none text-gray-700 appearance-none"
+                        className="w-full bg-gray-50/30 hover:bg-gray-100/30 focus:bg-white border border-gray-200 focus:border-[#066fef] focus:ring-4 focus:ring-[#066fef]/10 rounded-xl py-3 pl-10 pr-10 text-xs font-semibold font-antenna transition-all outline-none appearance-none text-gray-700"
                       >
-                        <option value="">Chọn dòng xe của bạn</option>
-                        {allVehicles.map((car) => (
-                          <option key={car.id} value={car.id}>
-                            {car.name}
-                          </option>
+                        <option value="">-- Chọn dòng xe Ford --</option>
+                        {allVehicles.map((v) => (
+                          <option key={v.id} value={v.id}>{v.name}</option>
                         ))}
                       </select>
                       <Car className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -481,12 +506,12 @@ function ContactFormContent() {
                   </div>
                 </div>
 
-                {/* Tư vấn báo giá gói */}
-                <div className="flex flex-col gap-2">
+                {/* Loại gói yêu cầu */}
+                <div className="flex flex-col gap-1.5">
                   <label className="font-antenna font-extrabold text-[10px] text-gray-450 uppercase tracking-wider ml-1">
-                    Gói yêu cầu tư vấn báo giá <span className="text-[#f97066]">*</span>
+                    Gói dịch vụ yêu cầu <span className="text-[#f97066]">*</span>
                   </label>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-3">
                     <button
                       type="button"
                       onClick={() => setSelectedPackageType("maintenance")}
@@ -496,7 +521,7 @@ function ContactFormContent() {
                           : "bg-gray-50/50 border-gray-200 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
                         }`}
                     >
-                      <Calendar className="w-4 h-4" />
+                      <Wrench className="w-4 h-4" />
                       Gói bảo dưỡng
                     </button>
                     <button
@@ -535,6 +560,124 @@ function ContactFormContent() {
                     </div>
                   </div>
                 )}
+              </>
+            ) : isNewCarQuoteForm ? (
+              <>
+                {/* Họ và tên & Số điện thoại */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="flex flex-col gap-1.5 relative">
+                    <label className="font-antenna font-extrabold text-[10px] text-gray-450 uppercase tracking-wider ml-1">
+                      Họ và tên <span className="text-[#f97066]">*</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        required
+                        value={formName}
+                        onChange={(e) => setFormName(e.target.value)}
+                        placeholder="Nhập họ và tên của bạn"
+                        className="w-full bg-gray-50/30 hover:bg-gray-100/30 focus:bg-white border border-gray-200 focus:border-[#066fef] focus:ring-4 focus:ring-[#066fef]/10 rounded-xl py-3 pl-10 pr-4 text-xs font-semibold font-antenna transition-all outline-none"
+                      />
+                      <User className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <label className="font-antenna font-extrabold text-[10px] text-gray-450 uppercase tracking-wider ml-1">
+                      Số điện thoại <span className="text-[#f97066]">*</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="tel"
+                        required
+                        value={formPhone}
+                        onChange={(e) => setFormPhone(e.target.value)}
+                        placeholder="Nhập số điện thoại liên hệ"
+                        className="w-full bg-gray-50/30 hover:bg-gray-100/30 focus:bg-white border border-gray-200 focus:border-[#066fef] focus:ring-4 focus:ring-[#066fef]/10 rounded-xl py-3 pl-10 pr-4 text-xs font-semibold font-antenna transition-all outline-none"
+                      />
+                      <Phone className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Email & Dòng xe quan tâm */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="flex flex-col gap-1.5">
+                    <label className="font-antenna font-extrabold text-[10px] text-gray-450 uppercase tracking-wider ml-1">
+                      Email
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="email"
+                        value={formEmail}
+                        onChange={(e) => setFormEmail(e.target.value)}
+                        placeholder="example@gmail.com"
+                        className="w-full bg-gray-50/30 hover:bg-gray-100/30 focus:bg-white border border-gray-200 focus:border-[#066fef] focus:ring-4 focus:ring-[#066fef]/10 rounded-xl py-3 pl-10 pr-4 text-xs font-semibold font-antenna transition-all outline-none"
+                      />
+                      <Mail className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-1.5 relative">
+                    <label className="font-antenna font-extrabold text-[10px] text-gray-450 uppercase tracking-wider ml-1">
+                      Dòng xe quan tâm
+                    </label>
+                    <div className="relative">
+                      <select
+                        value={selectedVehicle}
+                        onChange={(e) => setSelectedVehicle(e.target.value)}
+                        className="w-full bg-gray-50/30 hover:bg-gray-100/30 focus:bg-white border border-gray-200 focus:border-[#066fef] focus:ring-4 focus:ring-[#066fef]/10 rounded-xl py-3 pl-10 pr-10 text-xs font-semibold font-antenna transition-all outline-none appearance-none text-gray-700"
+                      >
+                        <option value="">-- Chọn dòng xe Ford --</option>
+                        {allVehicles.map((v) => (
+                          <option key={v.id} value={v.id}>{v.name}</option>
+                        ))}
+                      </select>
+                      <Car className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                      <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 text-xs">▼</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Hình thức mua xe & Tỉnh/Thành phố */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="flex flex-col gap-1.5">
+                    <label className="font-antenna font-extrabold text-[10px] text-gray-450 uppercase tracking-wider ml-1">
+                      Hình thức mua xe
+                    </label>
+                    <div className="flex gap-3">
+                      {(["Trả góp", "Tiền mặt"] as const).map((method) => {
+                        const isSel = formPurchaseMethod === method;
+                        return (
+                          <button
+                            key={method}
+                            type="button"
+                            onClick={() => setFormPurchaseMethod(method)}
+                            className={`py-2.5 rounded-xl border text-xs font-extrabold transition cursor-pointer text-center flex-1
+                              ${isSel 
+                                ? "bg-[#002F6C] border-[#002F6C] text-white shadow-md shadow-blue-900/10" 
+                                : "bg-gray-50/50 border-gray-200 text-gray-500 hover:bg-gray-150 hover:text-gray-700"}`}
+                          >
+                            {method}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <label className="font-antenna font-extrabold text-[10px] text-gray-450 uppercase tracking-wider ml-1">
+                      Tỉnh / Thành phố nhận xe
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={formCity}
+                        onChange={(e) => setFormCity(e.target.value)}
+                        placeholder="VD: Đồng Nai, TP.HCM, Bình Dương..."
+                        className="w-full bg-gray-50/30 hover:bg-gray-100/30 focus:bg-white border border-gray-200 focus:border-[#066fef] focus:ring-4 focus:ring-[#066fef]/10 rounded-xl py-3 pl-10 pr-4 text-xs font-semibold font-antenna transition-all outline-none text-gray-700"
+                      />
+                      <MapPin className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                    </div>
+                  </div>
+                </div>
               </>
             ) : (
               <>
@@ -662,20 +805,24 @@ function ContactFormContent() {
               <label className="font-antenna font-extrabold text-[10px] text-gray-450 uppercase tracking-wider ml-1">
                 {isRepairQuoteForm 
                   ? "Ghi chú thêm (Không bắt buộc)" 
-                  : isServiceBooking 
-                    ? "Nội dung yêu cầu dịch vụ" 
-                    : "Nội dung yêu cầu"}{" "}
-                {!isRepairQuoteForm && <span className="text-[#f97066]">*</span>}
+                  : isNewCarQuoteForm
+                    ? "Ghi chú yêu cầu thêm (Không bắt buộc)"
+                    : isServiceBooking 
+                      ? "Nội dung yêu cầu dịch vụ" 
+                      : "Nội dung yêu cầu"}{" "}
+                {!isRepairQuoteForm && !isNewCarQuoteForm && <span className="text-[#f97066]">*</span>}
               </label>
               <textarea
-                required={!isRepairQuoteForm}
+                required={!isRepairQuoteForm && !isNewCarQuoteForm}
                 value={formServiceContent}
                 onChange={(e) => setFormServiceContent(e.target.value)}
                 placeholder={isRepairQuoteForm 
                   ? "Nhập thêm các ghi chú hoặc mô tả tình trạng hư hỏng của xe (nếu có)..." 
-                  : isServiceBooking 
-                    ? "Vui lòng cung cấp chi tiết yêu cầu dịch vụ của bạn..." 
-                    : "Vui lòng nhập chi tiết yêu cầu của bạn..."}
+                  : isNewCarQuoteForm
+                    ? "Nhập thêm thông tin ưu đãi hoặc quà tặng bạn muốn nhận..."
+                    : isServiceBooking 
+                      ? "Vui lòng cung cấp chi tiết yêu cầu dịch vụ của bạn..." 
+                      : "Vui lòng nhập chi tiết yêu cầu của bạn..."}
                 className="w-full h-[120px] bg-gray-50/30 hover:bg-gray-100/30 focus:bg-white border border-gray-200 focus:border-[#066fef] focus:ring-4 focus:ring-[#066fef]/10 rounded-xl px-3.5 py-3 text-xs font-semibold font-antenna transition-all outline-none resize-none"
               />
             </div>
@@ -687,7 +834,15 @@ function ContactFormContent() {
                 disabled={isSubmitting}
                 className="w-full sm:w-[240px] py-3.5 bg-gradient-to-r from-[#002F6C] to-[#0562D2] hover:from-[#001D4A] hover:to-[#004ea7] disabled:from-gray-300 disabled:to-gray-400 text-white font-extrabold text-xs tracking-wider uppercase rounded-full shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer active:scale-95 text-center font-antenna"
               >
-                {isSubmitting ? "Đang gửi..." : (isRepairQuoteForm ? "Yêu cầu báo giá" : isServiceBooking ? "Đăng ký đặt lịch" : "Gửi thông tin")}
+                {isSubmitting 
+                  ? "Đang gửi..." 
+                  : (isRepairQuoteForm 
+                    ? "Yêu cầu báo giá" 
+                    : isNewCarQuoteForm
+                      ? "Nhận báo giá xe mới"
+                      : isServiceBooking 
+                        ? "Đăng ký đặt lịch" 
+                        : "Gửi thông tin")}
               </button>
             </div>
           </form>
