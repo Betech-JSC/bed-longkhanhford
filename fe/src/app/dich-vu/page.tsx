@@ -249,16 +249,16 @@ export default async function ServicesPage() {
                 Đăng ký đặt lịch hẹn sửa chữa và bảo dưỡng nhanh trực tuyến để nhận ưu tiên làm ngay khi tới xưởng dịch vụ Long Khánh Ford, không mất thời gian chờ đợi.
               </p>
             </div>
-            <div className="flex flex-col sm:flex-row gap-4 shrink-0 w-full sm:w-auto">
+            <div className="flex flex-col sm:flex-row gap-4 shrink-0 w-full sm:w-auto items-center">
               <Link
-                href="/lien-he"
-                className="bg-[#066fef] hover:bg-[#01095c] text-white font-bold text-center px-8 py-4 rounded-[4px] transition-colors text-sm shadow-md uppercase tracking-wider text-[11px]"
+                href="/lien-he?reason=Dịch vụ bảo dưỡng"
+                className="w-full sm:w-auto bg-[#066fef] hover:bg-white hover:text-[#00095B] text-white font-bold text-center px-6 py-3.5 rounded-[4px] transition-all duration-300 text-xs shadow-md uppercase tracking-wider whitespace-nowrap cursor-pointer"
               >
                 Đặt hẹn dịch vụ
               </Link>
               <a
                 href="tel:0879276699"
-                className="bg-white/10 hover:bg-white/15 text-white border border-white/20 font-bold text-center px-8 py-4 rounded-[4px] transition-all text-sm uppercase tracking-wider text-[11px]"
+                className="w-full sm:w-auto border border-white/40 bg-transparent hover:bg-white hover:text-[#00095B] text-white font-bold text-center px-6 py-3.5 rounded-[4px] transition-all duration-300 text-xs uppercase tracking-wider whitespace-nowrap cursor-pointer"
               >
                 Hotline Cứu Hộ &amp; Kỹ Thuật: 0879 276 699
               </a>
