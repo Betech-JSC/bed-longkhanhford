@@ -524,7 +524,7 @@ export default function Home() {
     }
   };
 
-  // Load posts dynamically on mount (Lấy bài viết có type POST, loại trừ danh mục Khuyến Mãi)
+  // Load posts dynamically on mount (Lấy bài viết trực tiếp từ CMS)
   useEffect(() => {
     const fetchTabPosts = async () => {
       try {
@@ -532,63 +532,39 @@ export default function Home() {
         const topPosts = (postsData as any)?.top_posts || [];
         const postsItems = (postsData as any)?.posts?.data || (postsData as any)?.data || (Array.isArray(postsData) ? postsData : []);
         
-        // Gộp tất cả các bài viết thu thập được để lọc bài viết Tin tức thuần túy
+        // Gộp tất cả các bài viết thu thập được từ CMS
         const allItems = [...(Array.isArray(topPosts) ? topPosts : []), ...(Array.isArray(postsItems) ? postsItems : [])];
         
-        const isPromotion = (item: any) => {
-          const catSlug = String(item.category?.slug || item.category_slug || "").toLowerCase();
-          const catTitle = String(item.category?.title || item.category_name || "").toLowerCase();
-          const title = String(item.title || "").toLowerCase();
-          const categoriesList = Array.isArray(item.categories) ? item.categories : [];
-          
-          const promoKeywords = ["khuyen-mai", "khuyen mai", "khuyến mãi", "khuyến mại", "u-dai", "u dai", "ưu đãi", "lãi suất", "lai suat", "đặc quyền sạc", "quà tặng", "qua tang"];
-
-          if (promoKeywords.some(kw => catSlug.includes(kw) || catTitle.includes(kw) || title.includes(kw))) {
-            return true;
-          }
-
-          return categoriesList.some((c: any) => {
-            const slug = String(c.slug || "").toLowerCase();
-            const cTitle = String(c.title || "").toLowerCase();
-            return promoKeywords.some(kw => slug.includes(kw) || cTitle.includes(kw));
-          });
-        };
-
         const filteredItems: any[] = [];
         const seenIds = new Set();
         
         for (const item of allItems) {
+          if (!item) continue;
           const itemId = item.id || item.slug;
-          if (seenIds.has(itemId)) continue;
+          if (!itemId || seenIds.has(itemId)) continue;
           
-          const isPostType = !item.type || item.type === "POST";
-          if (isPostType && !isPromotion(item)) {
-            seenIds.add(itemId);
-            filteredItems.push(item);
-          }
+          seenIds.add(itemId);
+          filteredItems.push(item);
         }
 
         const targetItems = filteredItems.length > 0 ? filteredItems : defaultHomeArticles;
 
         if (targetItems.length > 0) {
-          const formatted = targetItems.slice(0, 5).map((item: any) => {
+          const formatted = targetItems.slice(0, 3).map((item: any) => {
             const rawImg = item.image_url || item.image_thumbnail_url || item.image?.url || item.image || item.image_thumbnail;
             return {
               id: item.slug || item.id || String(Math.random()),
               title: item.title || "",
-              image: resolveImageUrl(rawImg) || "/assets/ford-ranger-raptor-desktop.webp",
+              image: resolveImageUrl(rawImg) || "/assets/everest_platinum.png",
               published_at: item.published_at || "",
               category: item.category ? { title: item.category.title } : { title: "Tin tức" },
-              description: item.description || "",
+              description: item.description || item.excerpt || "",
             };
           });
           setHomeArticles(formatted);
-        } else {
-          setHomeArticles(defaultHomeArticles);
         }
       } catch (error) {
-        console.error("Error fetching tab posts, using fallbacks:", error);
-        setHomeArticles(defaultHomeArticles);
+        console.error("Error fetching CMS posts, using fallbacks:", error);
       }
     };
     fetchTabPosts();
