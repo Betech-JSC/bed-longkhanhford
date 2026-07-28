@@ -161,6 +161,9 @@ function ContactFormContent() {
           contact: {
             type: "NEW_CAR_QUOTE_FORM" as const,
             data: {
+              Name: formName,
+              Phone: formPhone,
+              Email: formEmail || undefined,
               "Họ và tên": formName,
               "Số điện thoại": formPhone,
               "E-mail": formEmail || undefined,
@@ -176,6 +179,9 @@ function ContactFormContent() {
           contact: {
             type: "SERVICE_BOOKING" as const,
             data: {
+              Name: formName,
+              Phone: formPhone,
+              Email: formEmail || undefined,
               "Họ và tên": formName,
               "Số điện thoại": formPhone,
               "E-mail": formEmail || undefined,
@@ -191,6 +197,9 @@ function ContactFormContent() {
           contact: {
             type: "CONTACT_FORM" as const,
             data: {
+              Name: formName,
+              Phone: formPhone,
+              Email: formEmail || undefined,
               "Họ và tên": formName,
               "Số điện thoại": formPhone,
               "E-mail": formEmail || undefined,

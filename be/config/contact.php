@@ -131,6 +131,23 @@ return [
             ],
             'route' => 'repair-quotes',
         ],
+        'NEW_CAR_QUOTE_FORM' => [
+            'title' => 'Báo giá xe mới',
+            'columns' => [
+                'Name',
+                'Phone',
+            ],
+            'all_columns' => [
+                'Name',
+                'Phone',
+                'Email',
+            ],
+            'rules' => [
+                'Phone' => 'required|regex:/(0)[0-9]/|not_regex:/[a-z]/|min:9|max:12',
+                'Name' => 'required',
+            ],
+            'route' => 'contacts',
+        ],
     ],
     'message' => [
         'new_contact' => 'Bạn nhận được liên hệ mới',
