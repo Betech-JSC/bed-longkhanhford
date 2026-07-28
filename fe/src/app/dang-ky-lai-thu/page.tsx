@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { MapPin, Phone, Mail, CheckCircle, X, Car } from "lucide-react";
 import { siteAssets } from "@/lib/site-assets";
 import { contactsAPI, vehiclesAPI } from "@/lib/api";
+import SafeImage from "@/components/shared/SafeImage";
 
 function TestDriveFormContent() {
   const searchParams = useSearchParams();
@@ -185,15 +186,16 @@ function TestDriveFormContent() {
 
       {/* Top Showroom Banner */}
       <div className="h-[384px] relative rounded-[24px] overflow-hidden w-full mb-12 shadow-sm border border-[#e5e5e5]">
-        <Image
+        <SafeImage
           alt="Đăng ký lái thử xe Ford"
-          className="absolute inset-0 object-cover w-full h-full"
-          src={siteAssets.showroomBg}
+          className="object-cover w-full h-full"
+          src={siteAssets.testDriveBg || "/assets/test-drive-bg.png"}
+          fallbackSrc="/images-dynamic/ford_ranger_banner.png"
           fill
           priority
-          sizes="(max-w-1440px) 100vw, 1152px"
+          sizes="(max-width: 1440px) 100vw, 1152px"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent pointer-events-none z-10" />
       </div>
 
       {/* Main Content Grid */}
