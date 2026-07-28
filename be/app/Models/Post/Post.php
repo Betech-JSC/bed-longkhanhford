@@ -313,11 +313,58 @@ class Post extends BaseModel
         return $data;
     }
 
+    private function resolveMediaUrl($file): ?string
+    {
+        if (empty($file)) return null;
+
+        if (is_string($file)) {
+            $decoded = json_decode($file, true);
+            if (json_last_error() === JSON_ERROR_NONE && !is_null($decoded)) {
+                $file = $decoded;
+            }
+        }
+
+        if (is_array($file)) {
+            if (isset($file[0]) && is_array($file[0])) {
+                $file = $file[0];
+            }
+            if (!empty($file['url'])) {
+                return $file['url'];
+            }
+            if (!empty($file['path'])) {
+                $path = $file['path'];
+                if (str_starts_with($path, 'uploads/')) {
+                    $path = substr($path, 8);
+                }
+                if (str_starts_with($path, 'static/')) {
+                    $path = substr($path, 7);
+                }
+                return static_url($path);
+            }
+        }
+
+        if (is_string($file)) {
+            if (str_starts_with($file, 'http://') || str_starts_with($file, 'https://')) {
+                return $file;
+            }
+            $path = ltrim($file, '/');
+            if (str_starts_with($path, 'uploads/')) {
+                $path = substr($path, 8);
+            }
+            if (str_starts_with($path, 'static/')) {
+                $path = substr($path, 7);
+            }
+            return static_url($path);
+        }
+
+        return null;
+    }
+
     public function getImageDetail($image)
     {
         return [
-            'url' => isset($image['path']) ? static_url($image['path']) : null,
-            'alt' => $image['alt'] ?? $this->title,
+            'url' => $this->resolveMediaUrl($image),
+            'alt' => (is_array($image) ? ($image['alt'] ?? null) : null) ?? $this->title,
         ];
     }
 
