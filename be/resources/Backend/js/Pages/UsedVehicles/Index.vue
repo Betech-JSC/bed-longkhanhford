@@ -3,6 +3,7 @@
         :schema="schema"
         :columns="[
             'id',
+            'image',
             'title',
             'price',
             'sort_order',
