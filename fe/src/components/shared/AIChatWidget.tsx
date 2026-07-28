@@ -444,7 +444,7 @@ export default function AIChatWidget() {
     const offset = (isMobile && hasCompareItems) ? 56 : 0;
     setPosition({
       x: 84,
-      y: window.innerHeight - BUBBLE_SIZE - 24 - offset,
+      y: window.innerHeight - BUBBLE_SIZE - 96 - offset,
     });
   }, [hasCompareItems]);
 

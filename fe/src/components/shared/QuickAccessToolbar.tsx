@@ -188,7 +188,7 @@ export default function QuickAccessToolbar() {
       `}</style>
 
       {/* Desktop Version */}
-      <div className="hidden md:flex fixed right-0 top-[65%] -translate-y-1/2 z-50 flex-col items-end gap-1.5 select-none">
+      <div className="hidden md:flex fixed right-0 top-[44%] -translate-y-1/2 z-50 flex-col items-end gap-1.5 select-none">
         {/* Action stack container */}
         <div className="flex flex-col bg-white border-l border-y border-gray-200 shadow-[0_8px_30px_rgba(0,0,0,0.06)] rounded-l-xl overflow-visible w-12">
           {desktopMenuItems.map((item, idx) => {
