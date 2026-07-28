@@ -95,12 +95,19 @@ export const resolveImageUrl = (img: string | { url?: string; path?: string; sta
   if (!path) return "";
 
   // 1. Local frontend assets in Next.js public directory
-  if (path.startsWith("/")) {
+  if (
+    path.startsWith("/assets/") ||
+    path.startsWith("/images/") ||
+    path.startsWith("/placeholder") ||
+    path.startsWith("/showroom_bg") ||
+    path.startsWith("/images-dynamic/") ||
+    path.startsWith("data:")
+  ) {
     return path;
   }
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://cms.longkhanhford.betech-digital.com/api";
-  const baseDomain = apiUrl.replace(/\/api$/, "");
+  const baseDomain = apiUrl.replace(/\/api\/?$/, "");
 
   let fullUrl = "";
 

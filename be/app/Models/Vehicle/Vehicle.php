@@ -152,9 +152,56 @@ class Vehicle extends BaseModel
         return $decoded;
     }
 
+    private function resolveMediaUrl($file): ?string
+    {
+        if (empty($file)) return null;
+
+        if (is_string($file)) {
+            $decoded = json_decode($file, true);
+            if (json_last_error() === JSON_ERROR_NONE && !is_null($decoded)) {
+                $file = $decoded;
+            }
+        }
+
+        if (is_array($file)) {
+            if (isset($file[0]) && is_array($file[0])) {
+                $file = $file[0];
+            }
+            if (!empty($file['url'])) {
+                return $file['url'];
+            }
+            if (!empty($file['path'])) {
+                $path = $file['path'];
+                if (str_starts_with($path, 'uploads/')) {
+                    $path = substr($path, 8);
+                }
+                if (str_starts_with($path, 'static/')) {
+                    $path = substr($path, 7);
+                }
+                return static_url($path);
+            }
+        }
+
+        if (is_string($file)) {
+            if (str_starts_with($file, 'http://') || str_starts_with($file, 'https://')) {
+                return $file;
+            }
+            $path = ltrim($file, '/');
+            if (str_starts_with($path, 'uploads/')) {
+                $path = substr($path, 8);
+            }
+            if (str_starts_with($path, 'static/')) {
+                $path = substr($path, 7);
+            }
+            return static_url($path);
+        }
+
+        return null;
+    }
+
     public function getImageUrlAttribute(): ?string
     {
-        return isset($this->image['path']) ? static_url($this->image['path']) : null;
+        return $this->resolveMediaUrl($this->image);
     }
 
     public function setImageThumbnailAttribute($value): void
@@ -174,7 +221,7 @@ class Vehicle extends BaseModel
 
     public function getImageThumbnailUrlAttribute(): ?string
     {
-        return isset($this->image_thumbnail['path']) ? static_url($this->image_thumbnail['path']) : null;
+        return $this->resolveMediaUrl($this->image_thumbnail);
     }
 
     public function setImageFeaturedAttribute($value): void
@@ -194,7 +241,7 @@ class Vehicle extends BaseModel
 
     public function getImageFeaturedUrlAttribute(): ?string
     {
-        return isset($this->image_featured['path']) ? static_url($this->image_featured['path']) : null;
+        return $this->resolveMediaUrl($this->image_featured);
     }
 
     public function setImagesAttribute($value): void
