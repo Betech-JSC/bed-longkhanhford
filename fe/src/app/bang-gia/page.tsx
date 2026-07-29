@@ -330,7 +330,7 @@ export default function PriceListPage() {
                 lòng sử dụng{" "}
                 <Link
                   href="/cong-cu/uoc-tinh-lan-banh"
-                  className="text-[#066fef] font-semibold underline"
+                  className="text-[#066fef] font-semibold hover:underline"
                 >
                   Công cụ Ước tính Lăn bánh
                 </Link>{" "}
