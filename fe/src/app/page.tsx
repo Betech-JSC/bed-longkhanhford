@@ -831,8 +831,8 @@ export default function Home() {
             </motion.div>
 
             {/* Tab Navigation centered */}
-            <div className="flex justify-center border-b border-neutral-200 pb-4 mb-10">
-              <div className="flex gap-8 overflow-x-auto scrollbar-none justify-center">
+            <div className="w-full flex justify-center border-b border-neutral-200 mb-10 overflow-hidden">
+              <div className="flex gap-6 sm:gap-8 overflow-x-auto scrollbar-none justify-center px-4 max-w-full">
                 {(categories.length > 0
                   ? [{ slug: "all", title: "Tất cả" }, ...categories]
                   : [
@@ -850,10 +850,10 @@ export default function Home() {
                         setSelectedCategory(cat.slug);
                         setActiveCarIndex(0);
                       }}
-                      className={`pb-4 text-xs sm:text-sm font-bold transition-all duration-300 relative cursor-pointer whitespace-nowrap border-0 bg-transparent ${
+                      className={`pb-3 pt-1 text-xs sm:text-sm font-bold transition-all duration-200 relative cursor-pointer whitespace-nowrap border-0 bg-transparent shrink-0 ${
                         isActive
-                          ? "text-[#066FEF] border-b-2 border-[#066FEF] -mb-[18px]"
-                          : "text-neutral-450 hover:text-black border-b-2 border-transparent -mb-[18px]"
+                          ? "text-[#066FEF] border-b-2 border-[#066FEF] -mb-[1px]"
+                          : "text-neutral-500 hover:text-black border-b-2 border-transparent -mb-[1px]"
                       }`}
                     >
                       {cat.title}
