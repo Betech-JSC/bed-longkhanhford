@@ -115,38 +115,59 @@ export const resolveImageUrl = (img: string | { url?: string; path?: string; sta
     }
   }
 
-  let fullUrl = "";
+  let clean = path;
 
-  if (path.startsWith("http://") || path.startsWith("https://")) {
+  // 2. Extract pathname if string starts with protocol
+  if (clean.startsWith("http://") || clean.startsWith("https://")) {
     try {
-      const parsed = new URL(path);
-      // If URL hostname points to localhost or 127.0.0.1 (leftover local paths in DB), rewrite to production CMS domain
-      if (parsed.hostname === "localhost" || parsed.hostname === "127.0.0.1") {
-        fullUrl = `${baseDomain}${parsed.pathname}${parsed.search}`;
+      const parsed = new URL(clean);
+      const host = parsed.hostname.toLowerCase();
+      const isLocalOrCmsHost = host === "localhost" || host === "127.0.0.1" || host.includes("longkhanhford") || host.includes("betech");
+      const hasStaticPath = parsed.pathname.startsWith("/static/") || parsed.pathname.startsWith("/uploads/") || parsed.pathname.startsWith("/storage/");
+
+      // If it's a foreign third-party domain (e.g. Unsplash, Google maps) and not local/cms and no /static/ path:
+      if (!isLocalOrCmsHost && !hasStaticPath && !/\.(webp|png|jpg|jpeg|gif|svg)$/i.test(host)) {
+        return clean;
+      }
+
+      // Check if domain is corrupted (filename as hostname, e.g. http://ford-ranger.webp)
+      const isCorruptedFilenameDomain = /\.(webp|png|jpg|jpeg|gif|svg)$/i.test(host);
+      if (isCorruptedFilenameDomain && (parsed.pathname === "/" || parsed.pathname === "")) {
+        clean = `/static/${host}`;
       } else {
-        // Check if domain is corrupted (filename as hostname, e.g. http://ford-ranger.webp)
-        const isCorruptedFilenameDomain = /\.(webp|png|jpg|jpeg|gif|svg)$/i.test(parsed.hostname);
-        if (isCorruptedFilenameDomain && (parsed.pathname === "/" || parsed.pathname === "")) {
-          fullUrl = `${baseDomain}/static/${parsed.hostname}`;
-        } else if (parsed.pathname.startsWith("/static/") || parsed.pathname.startsWith("/uploads/") || parsed.pathname.startsWith("/storage/")) {
-          fullUrl = `${baseDomain}${parsed.pathname}${parsed.search}`;
-        } else {
-          fullUrl = path;
-        }
+        clean = parsed.pathname + parsed.search;
       }
     } catch {
-      fullUrl = path;
+      // keep clean as is
     }
-  } else if (path.startsWith("//")) {
-    fullUrl = `https:${path}`;
-  } else if (path.startsWith("/static/") || path.startsWith("/uploads/") || path.startsWith("/storage/")) {
-    fullUrl = `${baseDomain}${path}`;
-  } else if (path.startsWith("static/") || path.startsWith("uploads/") || path.startsWith("storage/")) {
-    fullUrl = `${baseDomain}/${path}`;
+  } else if (clean.startsWith("//")) {
+    clean = clean.replace(/^\/\//, "");
+  }
+
+  // 3. Remove embedded domain names from path (e.g. cms.emf.betech-digital.com or cms.longkhanhford.betech-digital.com)
+  clean = clean.replace(/^([a-zA-Z0-9.-]+\.(com|vn|net|org|digital|app|dev)(:\d+)?)\/?/gi, "");
+  clean = clean.replace(/\/([a-zA-Z0-9.-]+\.(com|vn|net|org|digital|app|dev)(:\d+)?)\//gi, "/");
+
+  // 4. Clean duplicated /static/, /uploads/, or /storage/ prefixes
+  clean = clean.replace(/^(\/?static)+/gi, "/static");
+  clean = clean.replace(/^(\/?uploads)+/gi, "/uploads");
+  clean = clean.replace(/^(\/?storage)+/gi, "/storage");
+  clean = clean.replace(/\/static\/static\//gi, "/static/");
+
+  // 5. Build full URL with baseDomain
+  let fullUrl = "";
+  if (clean.startsWith("/static/") || clean.startsWith("/uploads/") || clean.startsWith("/storage/")) {
+    fullUrl = `${baseDomain}${clean}`;
+  } else if (clean.startsWith("static/") || clean.startsWith("uploads/") || clean.startsWith("storage/")) {
+    fullUrl = `${baseDomain}/${clean}`;
   } else {
-    const cleanPath = path.replace(/^\//, "");
+    const cleanPath = clean.replace(/^\//, "");
     fullUrl = `${baseDomain}/static/${cleanPath}`;
   }
+
+  // 6. Final deduplication pass on fullUrl
+  fullUrl = fullUrl.replace(/\/static\/[a-zA-Z0-9.-]+\.(com|vn|net|org|digital|app|dev)(:\d+)?\//gi, "/static/");
+  fullUrl = fullUrl.replace(/\/static\/static\//gi, "/static/");
 
   try {
     return encodeURI(decodeURI(fullUrl));

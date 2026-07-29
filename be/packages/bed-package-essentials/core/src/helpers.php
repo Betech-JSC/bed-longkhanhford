@@ -17,6 +17,14 @@ if (!function_exists('static_url')) {
             $path = $matches[1];
         }
 
+        if (is_string($path)) {
+            // Clean embedded domain names and duplicate static prefixes
+            $path = preg_replace('/^https?:\/\/[^\/]+/i', '', $path);
+            $path = preg_replace('/^[a-zA-Z0-9.-]+\.(com|vn|net|org|digital|app|dev)(:\d+)?\/?/i', '', $path);
+            $path = preg_replace('/\/[a-zA-Z0-9.-]+\.(com|vn|net|org|digital|app|dev)(:\d+)?\//i', '/', $path);
+            $path = preg_replace('/^(\/?static)+/i', '', $path);
+        }
+
         if (str_contains($path, 'http') || str_starts_with($path, '//')) return $path;
 
         $path = ltrim($path, '/');
@@ -34,6 +42,9 @@ if (!function_exists('static_url')) {
         if (config('app.static_url') && !isset(config('app.static_url')['port'])) {
             $url = preg_replace("/static:[0-9]+/", "static", $url);
         }
+
+        $url = preg_replace('/\/static\/[a-zA-Z0-9.-]+\.(com|vn|net|org|digital|app|dev)(:\d+)?\//i', '/static/', $url);
+        $url = preg_replace('/\/static\/static\//i', '/static/', $url);
 
         return $url;
     }
