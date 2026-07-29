@@ -477,6 +477,10 @@
                                                         :field="{
                                                             type: 'file_upload',
                                                             name: 'ver_' + activeVersionIndex + '_color_images_360_internal_' + cIdx,
+                                                            label: 'Bộ ảnh xoay 360° Nội thất cho màu này (Chọn nhiều ảnh theo thứ tự xoay)',
+                                                            multiple: true,
+                                                        }" 
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
