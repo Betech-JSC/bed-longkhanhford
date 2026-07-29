@@ -53,42 +53,42 @@ export default function FaqAccordion({ faqs = defaultFaqs }: { faqs?: FaqItem[] 
         </div>
 
         {/* Right Side Accordion Grid */}
-        <div className="lg:col-span-2 space-y-0 rounded-lg overflow-hidden border border-gray-100 shadow-sm">
+        <div className="lg:col-span-2 space-y-3">
           {faqs.map((faq, index) => {
             const isOpen = openIndex === index;
             return (
               <div
                 key={index}
-                className={`transition-all duration-300 ${
-                  isOpen 
-                    ? "bg-white border-b-2 border-[#0562d2]" 
-                    : "bg-white border-b border-gray-100 hover:bg-gray-50/50"
-                }`}
+                className="transition-all duration-300 rounded-lg overflow-hidden border border-gray-200/80 shadow-xs"
               >
                 {/* Header/Question Trigger */}
                 <button
                   onClick={() => toggle(index)}
-                  className="w-full px-6 py-5 flex items-center justify-between text-left gap-4 font-semibold text-base transition-colors duration-200"
+                  className={`w-full px-6 py-4.5 flex items-center justify-between text-left gap-4 font-bold text-base transition-all duration-200 border-0 cursor-pointer ${
+                    isOpen 
+                      ? "bg-[#00095B] text-white shadow-xs" 
+                      : "bg-white text-gray-900 hover:bg-gray-50 hover:text-[#066fef]"
+                  }`}
                 >
-                  <span className={`${isOpen ? "text-[#0562d2]" : "text-gray-800"}`}>
+                  <span className={isOpen ? "text-white" : "text-gray-900"}>
                     {faq.question}
                   </span>
-                  <div className="shrink-0 text-gray-400">
+                  <div className="shrink-0">
                     {isOpen ? (
-                      <Minus className="w-5 h-5 text-[#0562d2]" />
+                      <Minus className="w-5 h-5 text-white" />
                     ) : (
-                      <Plus className="w-5 h-5 hover:text-[#0562d2] transition-colors" />
+                      <Plus className="w-5 h-5 text-gray-500" />
                     )}
                   </div>
                 </button>
 
                 {/* Content Panel with CSS transition */}
                 <div
-                  className={`overflow-hidden transition-all duration-300 ${
-                    isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+                  className={`overflow-hidden transition-all duration-300 bg-white ${
+                    isOpen ? "max-h-[500px] opacity-100 p-6 border-t border-gray-100" : "max-h-0 opacity-0 p-0"
                   }`}
                 >
-                  <div className="px-6 pb-6 text-sm text-gray-600 leading-relaxed font-normal">
+                  <div className="text-sm text-gray-700 leading-relaxed font-normal">
                     {faq.answer}
                   </div>
                 </div>

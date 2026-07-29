@@ -1594,29 +1594,31 @@ export default function Home() {
             </div>
 
             {/* Accordions list - Flow vertically with max-w-[800px] */}
-            <div className="flex flex-col gap-4 w-full max-w-[800px] mx-auto">
+            <div className="flex flex-col gap-3.5 w-full max-w-[800px] mx-auto">
               {faqs.map((faq, idx) => {
                 const isOpen = openFaqIndex === idx;
                 return (
                   <div
                     key={idx}
-                    className={`relative overflow-hidden border transition-all duration-300 rounded-[8px] p-6 ${
-                      isOpen ? "border-[#066FEF] bg-[#f0f7ff]/20 shadow-xs" : "border-neutral-200 hover:border-neutral-300 bg-white"
-                    }`}
+                    className="relative overflow-hidden border border-gray-200/80 transition-all duration-300 rounded-lg shadow-xs bg-white"
                   >
                     {/* Title Toggle trigger */}
                     <button
                       onClick={() => toggleFaq(idx)}
-                      className="w-full flex items-center justify-between text-left transition-colors cursor-pointer bg-transparent border-0 p-0 gap-4"
+                      className={`w-full flex items-center justify-between text-left transition-all cursor-pointer border-0 px-6 py-4.5 gap-4 ${
+                        isOpen ? "bg-[#00095B] text-white shadow-xs" : "bg-white text-black hover:bg-gray-50"
+                      }`}
                     >
-                      <span className={`text-sm font-bold uppercase tracking-wider transition-colors ${isOpen ? "text-[#066FEF]" : "text-black"}`}>
+                      <span className={`text-sm sm:text-[15px] font-bold uppercase tracking-wider transition-colors ${
+                        isOpen ? "text-white" : "text-black"
+                      }`}>
                         {faq.q}
                       </span>
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 shrink-0 ${
-                        isOpen ? "bg-[#066FEF] text-white" : "bg-[#f0f7ff] text-[#066FEF] hover:bg-[#e0efff]"
+                      <div className={`w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 shrink-0 ${
+                        isOpen ? "bg-white/20 text-white" : "bg-[#f0f7ff] text-[#066FEF]"
                       }`}>
                         {isOpen ? (
-                          <Minus className="w-4 h-4" />
+                          <Minus className="w-4 h-4 text-white" />
                         ) : (
                           <Plus className="w-4 h-4" />
                         )}
@@ -1624,11 +1626,11 @@ export default function Home() {
                     </button>
 
                     {/* Body Content with Smooth Height Transition */}
-                    <div className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out ${
-                      isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                    <div className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out bg-white ${
+                      isOpen ? "grid-rows-[1fr] opacity-100 border-t border-gray-100" : "grid-rows-[0fr] opacity-0"
                     }`}>
                       <div className="overflow-hidden">
-                        <p className="pt-4 text-sm text-neutral-500 leading-relaxed font-normal text-left">
+                        <p className="p-6 text-sm text-neutral-600 leading-relaxed font-normal text-left">
                           {faq.a}
                         </p>
                       </div>

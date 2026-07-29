@@ -813,26 +813,28 @@ export default function VehicleVersionDetailClient() {
               </h2>
             </div>
 
-            <div className="flex flex-col w-full border-t border-[#e5e5e5]">
+            <div className="flex flex-col w-full gap-3">
               {getDetailedSpecs().map((catGroup: any) => {
                 const isOpen = openSpecsGroup === catGroup.category;
                 return (
-                  <div key={catGroup.category} className="border-b border-[#e5e5e5] w-full">
+                  <div key={catGroup.category} className="w-full rounded-lg overflow-hidden border border-gray-200/80 shadow-xs transition-all duration-300">
                     <button
                       onClick={() => setOpenSpecsGroup(isOpen ? null : catGroup.category)}
-                      className={`flex justify-between items-center w-full text-left font-display font-bold text-base md:text-[18px] py-6 transition-colors cursor-pointer bg-transparent border-0 p-0 focus:outline-none uppercase tracking-wider ${isOpen ? "text-[#066fef]" : "text-[#424242] hover:text-[#066fef]"
-                        }`}
+                      className={`flex justify-between items-center w-full text-left font-display font-bold text-base md:text-[17px] px-6 py-4.5 transition-all cursor-pointer border-0 uppercase tracking-wider ${
+                        isOpen ? "bg-[#00095B] text-white shadow-xs" : "bg-white text-[#1a1a1a] hover:bg-gray-50 hover:text-[#066fef]"
+                      }`}
                     >
                       <span>{catGroup.category}</span>
-                      <span className="text-xl font-medium leading-none text-[#0562d2]">{isOpen ? "−" : "+"}</span>
+                      <span className={`text-xl font-bold leading-none ${isOpen ? "text-white" : "text-[#066fef]"}`}>{isOpen ? "−" : "+"}</span>
                     </button>
 
                     <div
-                      className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? "max-h-[1200px] opacity-100" : "max-h-0 opacity-0"
-                        }`}
+                      className={`overflow-hidden transition-all duration-300 ease-in-out bg-white ${
+                        isOpen ? "max-h-[1200px] opacity-100 p-6 border-t border-gray-100" : "max-h-0 opacity-0 p-0"
+                      }`}
                     >
                       <div
-                        className="px-0 pr-4 pb-8 text-[14px] md:text-[15px] text-[#424242] leading-relaxed font-normal whitespace-pre-line prose prose-sm max-w-none [&_ul]:list-disc [&_ul]:pl-4 [&_ul]:space-y-1 [&_p]:mb-1 [&_strong]:text-black"
+                        className="text-[14px] md:text-[15px] text-[#424242] leading-relaxed font-normal whitespace-pre-line prose prose-sm max-w-none [&_ul]:list-disc [&_ul]:pl-4 [&_ul]:space-y-1.5 [&_p]:mb-1.5 [&_strong]:text-black"
                         dangerouslySetInnerHTML={{ __html: catGroup.content }}
                       />
                     </div>

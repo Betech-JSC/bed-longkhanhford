@@ -1116,20 +1116,19 @@ function AccordionFAQsBlock({ data, vehicle, isEditMode, onChangeData, anchorId 
           </p>
         </div>
 
-        <div className="lg:col-span-8 flex flex-col items-start overflow-hidden rounded-[12px] border border-gray-200/50 w-full bg-white shadow-xs">
+        <div className="lg:col-span-8 flex flex-col gap-3 w-full">
           {faqs.map((faq: any, idx: number) => {
             const isExpanded = expandedIndex === idx;
             return (
               <div
                 key={idx}
-                className={`w-full transition-all duration-300 px-[24px] py-[20px] bg-white relative
-                  ${isExpanded ? "border-b-3 border-[#0562d2]" : "border-b border-[#f0f0f0] last:border-b-0"}`}
+                className="w-full transition-all duration-300 rounded-lg overflow-hidden border border-gray-200/80 shadow-xs relative bg-white"
               >
                 {isEditMode && (
                   <button
                     type="button"
                     onClick={() => handleRemoveFaq(idx)}
-                    className="absolute top-2 right-2 z-25 bg-red-100 hover:bg-red-200 text-red-700 text-xs px-2.5 py-1 rounded-full border-0 cursor-pointer font-semibold"
+                    className="absolute top-2.5 right-12 z-25 bg-red-100 hover:bg-red-200 text-red-700 text-xs px-2.5 py-1 rounded-full border-0 cursor-pointer font-semibold"
                   >
                     ✕ Xóa
                   </button>
@@ -1138,22 +1137,26 @@ function AccordionFAQsBlock({ data, vehicle, isEditMode, onChangeData, anchorId 
                 <button
                   type="button"
                   onClick={() => setExpandedIndex(isExpanded ? null : idx)}
-                  className="flex items-center justify-between text-left w-full cursor-pointer border-0 bg-transparent py-1 transition-colors group"
+                  className={`flex items-center justify-between text-left w-full cursor-pointer border-0 px-6 py-4.5 transition-all group ${
+                    isExpanded
+                      ? "bg-[#00095B] text-white shadow-xs"
+                      : "bg-white text-[#1a1a1a] hover:bg-gray-50 hover:text-[#0562d2]"
+                  }`}
                 >
-                  <span className={`font-['Ford_Antenna',sans-serif] font-semibold text-[16px] leading-[1.5]
-                      ${isExpanded ? "text-[#0562d2]" : "text-[#1a1a1a] group-hover:text-[#0562d2]"}
-                      ${isEditMode ? 'outline-[1px] outline-dashed outline-[#008060]/70 hover:outline-[#008060] outline-offset-2 cursor-pointer transition-all' : ''}`}
+                  <span className={`font-['Ford_Antenna',sans-serif] font-bold text-[15px] sm:text-[16px] leading-[1.4] ${
+                    isExpanded ? "text-white" : "text-[#1a1a1a] group-hover:text-[#0562d2]"
+                  } ${isEditMode ? 'outline-[1px] outline-dashed outline-[#008060]/70 hover:outline-[#008060] outline-offset-2 cursor-pointer transition-all' : ''}`}
                   >
                     {faq.q || "Câu hỏi thường gặp?"}
                   </span>
                   {isExpanded ? (
-                    <Minus className="w-[20px] h-[20px] text-[#0562d2] shrink-0 ml-4" />
+                    <Minus className="w-[20px] h-[20px] text-white shrink-0 ml-4" />
                   ) : (
                     <Plus className="w-[20px] h-[20px] text-gray-500 group-hover:text-[#0562d2] shrink-0 ml-4" />
                   )}
                 </button>
                 {isExpanded && (
-                  <div className="pt-4 pb-2 text-sm text-[#424242] leading-relaxed transition-all duration-200 w-full">
+                  <div className="p-6 text-sm text-[#424242] leading-relaxed transition-all duration-200 w-full bg-white border-t border-gray-100">
                     <p className={`font-['Ford_Antenna',sans-serif] font-normal whitespace-pre-line w-full
                       ${isEditMode ? 'outline-[1px] outline-dashed outline-[#008060]/70 hover:outline-[#008060] outline-offset-2 cursor-pointer transition-all' : ''}`}
                     >
