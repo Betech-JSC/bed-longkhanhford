@@ -2036,7 +2036,7 @@ export default {
         },
 
         copy360Exterior(versionIndex, colorIndex) {
-            const color = this.form.versions[versionIndex]?.colors?.[colorIndex];
+            const color = this.formData.versions[versionIndex]?.colors?.[colorIndex];
             const imgs = color?.images_360;
             if (!imgs || (Array.isArray(imgs) && imgs.length === 0)) {
                 alert("Bộ ảnh 360° Ngoại thất của màu này đang trống!");
@@ -2052,14 +2052,14 @@ export default {
                 alert("Chưa có bộ ảnh 360° Ngoại thất nào được sao chép!");
                 return;
             }
-            const color = this.form.versions[versionIndex]?.colors?.[colorIndex];
+            const color = this.formData.versions[versionIndex]?.colors?.[colorIndex];
             if (color) {
                 color.images_360 = this.cloneImageData(this.copied360Exterior);
             }
         },
 
         apply360ExteriorToAllColors(versionIndex, colorIndex) {
-            const ver = this.form.versions[versionIndex];
+            const ver = this.formData.versions[versionIndex];
             const currentColor = ver?.colors?.[colorIndex];
             const imgs = currentColor?.images_360;
             if (!imgs || (Array.isArray(imgs) && imgs.length === 0)) {
@@ -2077,7 +2077,7 @@ export default {
         },
 
         copy360Interior(versionIndex, colorIndex) {
-            const color = this.form.versions[versionIndex]?.colors?.[colorIndex];
+            const color = this.formData.versions[versionIndex]?.colors?.[colorIndex];
             const imgs = color?.images_360_internal;
             if (!imgs || (Array.isArray(imgs) && imgs.length === 0)) {
                 alert("Bộ ảnh 360° Nội thất của màu này đang trống!");
@@ -2093,14 +2093,14 @@ export default {
                 alert("Chưa có bộ ảnh 360° Nội thất nào được sao chép!");
                 return;
             }
-            const color = this.form.versions[versionIndex]?.colors?.[colorIndex];
+            const color = this.formData.versions[versionIndex]?.colors?.[colorIndex];
             if (color) {
                 color.images_360_internal = this.cloneImageData(this.copied360Interior);
             }
         },
 
         apply360InteriorToAllColors(versionIndex, colorIndex) {
-            const ver = this.form.versions[versionIndex];
+            const ver = this.formData.versions[versionIndex];
             const currentColor = ver?.colors?.[colorIndex];
             const imgs = currentColor?.images_360_internal;
             if (!imgs || (Array.isArray(imgs) && imgs.length === 0)) {
@@ -2118,7 +2118,7 @@ export default {
         },
 
         copyAll360ForColor(versionIndex, colorIndex) {
-            const color = this.form.versions[versionIndex]?.colors?.[colorIndex];
+            const color = this.formData.versions[versionIndex]?.colors?.[colorIndex];
             if (!color) return;
             this.copied360ColorBundle = {
                 images_360: this.cloneImageData(color.images_360 || []),
@@ -2135,7 +2135,7 @@ export default {
                 alert("Chưa có dữ liệu ảnh 360° màu sắc nào được sao chép!");
                 return;
             }
-            const color = this.form.versions[versionIndex]?.colors?.[colorIndex];
+            const color = this.formData.versions[versionIndex]?.colors?.[colorIndex];
             if (color) {
                 color.images_360 = this.cloneImageData(this.copied360ColorBundle.images_360);
                 color.images_360_internal = this.cloneImageData(this.copied360ColorBundle.images_360_internal);
@@ -2146,7 +2146,7 @@ export default {
         },
 
         applyAll360ToAllColors(versionIndex, colorIndex) {
-            const ver = this.form.versions[versionIndex];
+            const ver = this.formData.versions[versionIndex];
             const currentColor = ver?.colors?.[colorIndex];
             if (!currentColor) return;
             const extCount = Array.isArray(currentColor.images_360) ? currentColor.images_360.length : (currentColor.images_360 ? 1 : 0);
