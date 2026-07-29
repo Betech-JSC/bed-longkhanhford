@@ -203,7 +203,7 @@ export default function Footer() {
         {/* Column 4: Ford Long Khánh Links (spans 2) */}
         <div className="space-y-4 lg:col-span-2">
           <h4 className="text-sm font-extrabold tracking-wider text-[#002f6c] uppercase font-display border-b border-neutral-200 pb-2">
-            FORD LK
+            LONG KHÁNH FORD
           </h4>
           <ul className="space-y-2.5 text-xs text-neutral-600">
             <li>
