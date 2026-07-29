@@ -578,37 +578,37 @@ export default function VehicleVersionDetailClient() {
               </div>
             </div>
 
-            {/* Action Buttons: Đăng ký lái thử | Ước tính trả góp | Ước tính lăn bánh | Báo giá */}
-            <div className="mt-6 flex items-center gap-2 overflow-x-auto scrollbar-none py-1 max-w-full flex-nowrap">
+            {/* Action Buttons: 2x2 Grid Layout */}
+            <div className="mt-6 grid grid-cols-2 gap-2.5 w-full max-w-md">
               <button
                 onClick={() => openDriveDrawer(activeVersionIndex)}
-                className="bg-[#00095B] hover:bg-[#066fef] transition-all px-3.5 py-2.5 rounded-full text-white text-[11px] xl:text-[12px] font-bold cursor-pointer inline-flex items-center justify-center gap-1.5 border-0 uppercase tracking-tight font-antenna shadow-xs hover:shadow-md shrink-0 whitespace-nowrap"
+                className="bg-[#00095B] hover:bg-[#066fef] transition-all px-3 py-2.5 rounded-full text-white text-[12px] sm:text-[13px] font-bold cursor-pointer inline-flex items-center justify-center gap-2 border-0 uppercase tracking-tight font-antenna shadow-xs hover:shadow-md w-full"
               >
-                <Car className="w-3.5 h-3.5 shrink-0 text-white" />
+                <Car className="w-4 h-4 shrink-0 text-white" />
                 <span>Đăng ký lái thử</span>
               </button>
 
               <Link
                 href={`/cong-cu/uoc-tinh-tra-gop?car=${vehicle.slug || vehicle.id}`}
-                className="bg-[#00095B] hover:bg-[#066fef] transition-all px-3.5 py-2.5 rounded-full text-white text-[11px] xl:text-[12px] font-bold cursor-pointer inline-flex items-center justify-center gap-1.5 border-0 uppercase tracking-tight font-antenna no-underline shadow-xs hover:shadow-md shrink-0 whitespace-nowrap"
+                className="bg-[#00095B] hover:bg-[#066fef] transition-all px-3 py-2.5 rounded-full text-white text-[12px] sm:text-[13px] font-bold cursor-pointer inline-flex items-center justify-center gap-2 border-0 uppercase tracking-tight font-antenna no-underline shadow-xs hover:shadow-md w-full"
               >
-                <Calculator className="w-3.5 h-3.5 shrink-0 text-white" />
+                <Calculator className="w-4 h-4 shrink-0 text-white" />
                 <span>Ước tính trả góp</span>
               </Link>
 
               <Link
                 href={`/${vehicle.slug || vehicle.id}/du-toan-lan-banh`}
-                className="bg-[#00095B] hover:bg-[#066fef] transition-all px-3.5 py-2.5 rounded-full text-white text-[11px] xl:text-[12px] font-bold cursor-pointer inline-flex items-center justify-center gap-1.5 border-0 uppercase tracking-tight font-antenna no-underline shadow-xs hover:shadow-md shrink-0 whitespace-nowrap"
+                className="bg-[#00095B] hover:bg-[#066fef] transition-all px-3 py-2.5 rounded-full text-white text-[12px] sm:text-[13px] font-bold cursor-pointer inline-flex items-center justify-center gap-2 border-0 uppercase tracking-tight font-antenna no-underline shadow-xs hover:shadow-md w-full"
               >
-                <FileText className="w-3.5 h-3.5 shrink-0 text-white" />
+                <FileText className="w-4 h-4 shrink-0 text-white" />
                 <span>Ước tính lăn bánh</span>
               </Link>
 
               <button
                 onClick={() => openQuoteDrawer(vehicle.id, selectedVersion?.id)}
-                className="bg-[#066fef] hover:bg-[#00095B] transition-all px-4 py-2.5 rounded-full text-white text-[11px] xl:text-[12px] font-bold cursor-pointer inline-flex items-center justify-center gap-1.5 border-0 uppercase tracking-tight font-antenna shadow-xs hover:shadow-md shrink-0 whitespace-nowrap"
+                className="bg-[#066fef] hover:bg-[#00095B] transition-all px-3 py-2.5 rounded-full text-white text-[12px] sm:text-[13px] font-bold cursor-pointer inline-flex items-center justify-center gap-2 border-0 uppercase tracking-tight font-antenna shadow-xs hover:shadow-md w-full"
               >
-                <span>Báo giá</span>
+                <span>Nhận báo giá</span>
               </button>
             </div>
           </div>
