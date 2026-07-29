@@ -13,6 +13,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronUp,
+  ChevronDown,
   X,
   Users,
   Plus,
@@ -1605,7 +1606,7 @@ export default function Home() {
                     {/* Title Toggle trigger */}
                     <button
                       onClick={() => toggleFaq(idx)}
-                      className={`w-full flex items-center justify-between text-left transition-all cursor-pointer border-0 px-6 py-4.5 gap-4 ${
+                      className={`w-full flex items-center justify-between text-left transition-all duration-300 cursor-pointer border-0 px-6 py-4.5 gap-4 group ${
                         isOpen ? "bg-[#00095B] text-white shadow-xs" : "bg-white text-black hover:bg-gray-50"
                       }`}
                     >
@@ -1614,15 +1615,9 @@ export default function Home() {
                       }`}>
                         {faq.q}
                       </span>
-                      <div className={`w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 shrink-0 ${
-                        isOpen ? "bg-white/20 text-white" : "bg-[#f0f7ff] text-[#066FEF]"
-                      }`}>
-                        {isOpen ? (
-                          <Minus className="w-4 h-4 text-white" />
-                        ) : (
-                          <Plus className="w-4 h-4" />
-                        )}
-                      </div>
+                      <ChevronDown className={`w-5 h-5 transition-transform duration-300 ease-in-out shrink-0 ${
+                        isOpen ? "rotate-180 text-white" : "rotate-0 text-gray-500 group-hover:text-[#066FEF]"
+                      }`} />
                     </button>
 
                     {/* Body Content with Smooth Height Transition */}

@@ -1137,7 +1137,7 @@ function AccordionFAQsBlock({ data, vehicle, isEditMode, onChangeData, anchorId 
                 <button
                   type="button"
                   onClick={() => setExpandedIndex(isExpanded ? null : idx)}
-                  className={`flex items-center justify-between text-left w-full cursor-pointer border-0 px-6 py-4.5 transition-all group ${
+                  className={`flex items-center justify-between text-left w-full cursor-pointer border-0 px-6 py-4.5 transition-all duration-300 group ${
                     isExpanded
                       ? "bg-[#00095B] text-white shadow-xs"
                       : "bg-white text-[#1a1a1a] hover:bg-gray-50 hover:text-[#0562d2]"
@@ -1149,21 +1149,25 @@ function AccordionFAQsBlock({ data, vehicle, isEditMode, onChangeData, anchorId 
                   >
                     {faq.q || "Câu hỏi thường gặp?"}
                   </span>
-                  {isExpanded ? (
-                    <Minus className="w-[20px] h-[20px] text-white shrink-0 ml-4" />
-                  ) : (
-                    <Plus className="w-[20px] h-[20px] text-gray-500 group-hover:text-[#0562d2] shrink-0 ml-4" />
-                  )}
+                  <ChevronDown className={`w-[20px] h-[20px] transition-transform duration-300 ease-in-out shrink-0 ml-4 ${
+                    isExpanded ? "rotate-180 text-white" : "rotate-0 text-gray-500 group-hover:text-[#0562d2]"
+                  }`} />
                 </button>
-                {isExpanded && (
-                  <div className="p-6 text-sm text-[#424242] leading-relaxed transition-all duration-200 w-full bg-white border-t border-gray-100">
-                    <p className={`font-['Ford_Antenna',sans-serif] font-normal whitespace-pre-line w-full
-                      ${isEditMode ? 'outline-[1px] outline-dashed outline-[#008060]/70 hover:outline-[#008060] outline-offset-2 cursor-pointer transition-all' : ''}`}
-                    >
-                      {faq.a || "Câu trả lời."}
-                    </p>
+                <div
+                  className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out bg-white ${
+                    isExpanded ? "grid-rows-[1fr] opacity-100 border-t border-gray-100" : "grid-rows-[0fr] opacity-0"
+                  }`}
+                >
+                  <div className="overflow-hidden">
+                    <div className="p-6 text-sm text-[#424242] leading-relaxed transition-all duration-200 w-full">
+                      <p className={`font-['Ford_Antenna',sans-serif] font-normal whitespace-pre-line w-full
+                        ${isEditMode ? 'outline-[1px] outline-dashed outline-[#008060]/70 hover:outline-[#008060] outline-offset-2 cursor-pointer transition-all' : ''}`}
+                      >
+                        {faq.a || "Câu trả lời."}
+                      </p>
+                    </div>
                   </div>
-                )}
+                </div>
               </div>
             );
           })}

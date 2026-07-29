@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import { useVehicle, VehicleTabBar } from "./VehicleLayoutClient";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, Car, Calculator, FileText } from "lucide-react";
+import { ChevronLeft, ChevronRight, ChevronDown, Car, Calculator, FileText } from "lucide-react";
 import { resolveImageUrl } from "@/lib/site-assets";
 import ScrollReveal from "@/components/common/ScrollReveal";
 
@@ -820,23 +820,27 @@ export default function VehicleVersionDetailClient() {
                   <div key={catGroup.category} className="w-full rounded-lg overflow-hidden border border-gray-200/80 shadow-xs transition-all duration-300">
                     <button
                       onClick={() => setOpenSpecsGroup(isOpen ? null : catGroup.category)}
-                      className={`flex justify-between items-center w-full text-left font-display font-bold text-base md:text-[17px] px-6 py-4.5 transition-all cursor-pointer border-0 uppercase tracking-wider ${
+                      className={`flex justify-between items-center w-full text-left font-display font-bold text-base md:text-[17px] px-6 py-4.5 transition-all duration-300 cursor-pointer border-0 uppercase tracking-wider group ${
                         isOpen ? "bg-[#00095B] text-white shadow-xs" : "bg-white text-[#1a1a1a] hover:bg-gray-50 hover:text-[#066fef]"
                       }`}
                     >
                       <span>{catGroup.category}</span>
-                      <span className={`text-xl font-bold leading-none ${isOpen ? "text-white" : "text-[#066fef]"}`}>{isOpen ? "−" : "+"}</span>
+                      <ChevronDown className={`w-5 h-5 transition-transform duration-300 ease-in-out shrink-0 ml-4 ${
+                        isOpen ? "rotate-180 text-white" : "rotate-0 text-gray-500 group-hover:text-[#066fef]"
+                      }`} />
                     </button>
 
                     <div
-                      className={`overflow-hidden transition-all duration-300 ease-in-out bg-white ${
-                        isOpen ? "max-h-[1200px] opacity-100 p-6 border-t border-gray-100" : "max-h-0 opacity-0 p-0"
+                      className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out bg-white ${
+                        isOpen ? "grid-rows-[1fr] opacity-100 border-t border-gray-100" : "grid-rows-[0fr] opacity-0"
                       }`}
                     >
-                      <div
-                        className="text-[14px] md:text-[15px] text-[#424242] leading-relaxed font-normal whitespace-pre-line prose prose-sm max-w-none [&_ul]:list-disc [&_ul]:pl-4 [&_ul]:space-y-1.5 [&_p]:mb-1.5 [&_strong]:text-black"
-                        dangerouslySetInnerHTML={{ __html: catGroup.content }}
-                      />
+                      <div className="overflow-hidden">
+                        <div
+                          className="p-6 text-[14px] md:text-[15px] text-[#424242] leading-relaxed font-normal whitespace-pre-line prose prose-sm max-w-none [&_ul]:list-disc [&_ul]:pl-4 [&_ul]:space-y-1.5 [&_p]:mb-1.5 [&_strong]:text-black"
+                          dangerouslySetInnerHTML={{ __html: catGroup.content }}
+                        />
+                      </div>
                     </div>
                   </div>
                 );

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Minus } from "lucide-react";
+import { Plus, Minus, ChevronDown } from "lucide-react";
 
 type FaqItem = {
   question: string;
@@ -64,7 +64,7 @@ export default function FaqAccordion({ faqs = defaultFaqs }: { faqs?: FaqItem[] 
                 {/* Header/Question Trigger */}
                 <button
                   onClick={() => toggle(index)}
-                  className={`w-full px-6 py-4.5 flex items-center justify-between text-left gap-4 font-bold text-base transition-all duration-200 border-0 cursor-pointer ${
+                  className={`w-full px-6 py-4.5 flex items-center justify-between text-left gap-4 font-bold text-base transition-all duration-300 border-0 cursor-pointer group ${
                     isOpen 
                       ? "bg-[#00095B] text-white shadow-xs" 
                       : "bg-white text-gray-900 hover:bg-gray-50 hover:text-[#066fef]"
@@ -73,23 +73,21 @@ export default function FaqAccordion({ faqs = defaultFaqs }: { faqs?: FaqItem[] 
                   <span className={isOpen ? "text-white" : "text-gray-900"}>
                     {faq.question}
                   </span>
-                  <div className="shrink-0">
-                    {isOpen ? (
-                      <Minus className="w-5 h-5 text-white" />
-                    ) : (
-                      <Plus className="w-5 h-5 text-gray-500" />
-                    )}
-                  </div>
+                  <ChevronDown className={`w-5 h-5 transition-transform duration-300 ease-in-out shrink-0 ${
+                    isOpen ? "rotate-180 text-white" : "rotate-0 text-gray-500 group-hover:text-[#066fef]"
+                  }`} />
                 </button>
 
                 {/* Content Panel with CSS transition */}
                 <div
-                  className={`overflow-hidden transition-all duration-300 bg-white ${
-                    isOpen ? "max-h-[500px] opacity-100 p-6 border-t border-gray-100" : "max-h-0 opacity-0 p-0"
+                  className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out bg-white ${
+                    isOpen ? "grid-rows-[1fr] opacity-100 border-t border-gray-100" : "grid-rows-[0fr] opacity-0"
                   }`}
                 >
-                  <div className="text-sm text-gray-700 leading-relaxed font-normal">
-                    {faq.answer}
+                  <div className="overflow-hidden">
+                    <div className="p-6 text-sm text-gray-700 leading-relaxed font-normal">
+                      {faq.answer}
+                    </div>
                   </div>
                 </div>
               </div>
