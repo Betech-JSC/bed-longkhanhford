@@ -3,7 +3,8 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { useVehicle, VehicleTabBar } from "./VehicleLayoutClient";
 import { useParams, useRouter } from "next/navigation";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import Link from "next/link";
+import { ChevronLeft, ChevronRight, Car, Calculator, FileText } from "lucide-react";
 import { resolveImageUrl } from "@/lib/site-assets";
 import ScrollReveal from "@/components/common/ScrollReveal";
 
@@ -30,7 +31,8 @@ const getVersionDisplayName = (verName: string, vehicleName: string) => {
 export default function VehicleVersionDetailClient() {
   const {
     vehicle,
-    openQuoteDrawer
+    openQuoteDrawer,
+    openDriveDrawer
   } = useVehicle();
 
   const { id, versionSlug } = useParams() as { id: string; versionSlug: string };
@@ -576,13 +578,37 @@ export default function VehicleVersionDetailClient() {
               </div>
             </div>
 
-            {/* CTA Button */}
-            <div className="mt-8">
+            {/* Action Buttons: Đăng ký lái thử | Ước tính trả góp | Ước tính lăn bánh | Báo giá */}
+            <div className="mt-8 flex flex-wrap items-center gap-2.5">
+              <button
+                onClick={() => openDriveDrawer(activeVersionIndex)}
+                className="bg-[#00095B] hover:bg-[#066fef] transition-all px-4 py-3 rounded-full text-white text-[12px] sm:text-[13px] font-bold cursor-pointer inline-flex items-center justify-center gap-2 border-0 uppercase tracking-wider font-antenna shadow-xs hover:shadow-md"
+              >
+                <Car className="w-4 h-4 shrink-0 text-white" />
+                <span>Đăng ký lái thử</span>
+              </button>
+
+              <Link
+                href={`/cong-cu/uoc-tinh-tra-gop?car=${vehicle.slug || vehicle.id}`}
+                className="bg-[#00095B] hover:bg-[#066fef] transition-all px-4 py-3 rounded-full text-white text-[12px] sm:text-[13px] font-bold cursor-pointer inline-flex items-center justify-center gap-2 border-0 uppercase tracking-wider font-antenna no-underline shadow-xs hover:shadow-md"
+              >
+                <Calculator className="w-4 h-4 shrink-0 text-white" />
+                <span>Ước tính trả góp</span>
+              </Link>
+
+              <Link
+                href={`/${vehicle.slug || vehicle.id}/du-toan-lan-banh`}
+                className="bg-[#00095B] hover:bg-[#066fef] transition-all px-4 py-3 rounded-full text-white text-[12px] sm:text-[13px] font-bold cursor-pointer inline-flex items-center justify-center gap-2 border-0 uppercase tracking-wider font-antenna no-underline shadow-xs hover:shadow-md"
+              >
+                <FileText className="w-4 h-4 shrink-0 text-white" />
+                <span>Ước tính lăn bánh</span>
+              </Link>
+
               <button
                 onClick={() => openQuoteDrawer(vehicle.id, selectedVersion?.id)}
-                className="bg-[#066fef] hover:bg-[#01095c] transition-colors px-10 py-3 rounded-[4px] text-white text-[13px] font-bold cursor-pointer inline-flex items-center justify-center min-w-[140px] border-0 uppercase tracking-wider font-antenna"
+                className="bg-[#066fef] hover:bg-[#00095B] transition-all px-5 py-3 rounded-full text-white text-[12px] sm:text-[13px] font-bold cursor-pointer inline-flex items-center justify-center gap-2 border-0 uppercase tracking-wider font-antenna shadow-xs hover:shadow-md"
               >
-                Báo giá
+                <span>Báo giá</span>
               </button>
             </div>
           </div>
