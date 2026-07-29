@@ -194,18 +194,26 @@ createInertiaApp({
                     },
                     staticUrl(url) {
                         if (!url) return '';
-                        const urlStr = url.toString();
-                        if (urlStr.includes('http') || urlStr.startsWith('//') || urlStr.startsWith('data:')) {
+                        let urlStr = url.toString().trim();
+                        if (urlStr.startsWith('data:')) {
                             return urlStr;
                         }
                         if (urlStr.includes('assets')) {
                             return window.location.origin + (urlStr.startsWith('/') ? '' : '/') + urlStr;
                         }
-                        if (/^([a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}|localhost)(:[0-9]+)?\//.test(urlStr)) {
-                            return window.location.protocol + '//' + urlStr;
+                        if (urlStr.startsWith('http://') || urlStr.startsWith('https://') || urlStr.startsWith('//')) {
+                            try {
+                                const u = new URL(urlStr, window.location.origin);
+                                urlStr = u.pathname + u.search;
+                            } catch (e) {}
                         }
+                        urlStr = urlStr.replace(/^([a-zA-Z0-9.-]+\.(com|vn|net|org|digital|app|dev)(:\d+)?)\/?/gi, '');
+                        urlStr = urlStr.replace(/\/([a-zA-Z0-9.-]+\.(com|vn|net|org|digital|app|dev)(:\d+)?)\//gi, '/');
+                        urlStr = urlStr.replace(/^(\/?static)+/gi, '');
+                        urlStr = urlStr.replace(/^\//, '');
 
-                        return this.route('files.show') + '/' + urlStr;
+                        const baseUrl = this.route('files.show').replace(/\/+$/, '');
+                        return baseUrl + '/' + urlStr;
                     },
                     isImage(url) {
                         if (!url || !(url.toString().includes('.'))) return false;

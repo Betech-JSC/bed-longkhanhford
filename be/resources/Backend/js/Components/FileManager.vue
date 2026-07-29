@@ -688,8 +688,11 @@ export default {
                             src = u.pathname
                         } catch (e) {}
                     }
-                    let cleanPath = src.replace(/^\/(storage\/uploads|storage|uploads|static)\//g, '')
+                    let cleanPath = src.replace(/^([a-zA-Z0-9.-]+\.(com|vn|net|org|digital|app|dev)(:\d+)?)\/?/gi, '')
+                    cleanPath = cleanPath.replace(/\/([a-zA-Z0-9.-]+\.(com|vn|net|org|digital|app|dev)(:\d+)?)\//gi, '/')
+                    cleanPath = cleanPath.replace(/^\/(storage\/uploads|storage|uploads|static)\//g, '')
                     cleanPath = cleanPath.replace(/^(storage\/uploads|storage|uploads|static)\//g, '')
+                    cleanPath = cleanPath.replace(/^(\/?static)+/gi, '')
                     cleanPath = cleanPath.replace(/^\//, '')
                     src = '/static/' + cleanPath
                 }
