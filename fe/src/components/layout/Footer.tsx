@@ -160,6 +160,26 @@ export default function Footer() {
             </Link>
           </h4>
           <ul className="space-y-2.5 text-xs text-neutral-600">
+            <li>
+              <Link href="/dang-ky-lai-thu" className="hover:text-[#066fef] transition-colors block font-medium">
+                Đăng ký lái thử
+              </Link>
+            </li>
+            <li>
+              <Link href="/lien-he?reason=Đặt hẹn trực tuyến" className="hover:text-[#066fef] transition-colors block font-medium">
+                Đặt hẹn trực tuyến
+              </Link>
+            </li>
+            <li>
+              <Link href="/lien-he?reason=Yêu cầu báo giá xe mới" className="hover:text-[#066fef] transition-colors block font-medium">
+                Yêu cầu báo giá xe mới
+              </Link>
+            </li>
+            <li>
+              <Link href="/lien-he?reason=Yêu cầu báo giá sửa chữa" className="hover:text-[#066fef] transition-colors block font-medium">
+                Yêu cầu báo giá sửa chữa
+              </Link>
+            </li>
             {servicesList.length > 0 ? (
               servicesList.map((srv) => {
                 const href = (srv.custom_link && srv.custom_link.startsWith('/dich-vu/'))
