@@ -351,7 +351,37 @@
                                             </div>
 
                                             <div class="border-t border-gray-200 pt-3 mt-3 space-y-3">
-                                                <p class="text-[11px] font-bold text-indigo-750 uppercase tracking-wider">Hình ảnh 360° phiên bản</p>
+                                                <div class="flex items-center justify-between flex-wrap gap-2">
+                                                    <p class="text-[11px] font-bold text-indigo-750 uppercase tracking-wider">Hình ảnh 360° phiên bản</p>
+                                                    <div class="flex items-center gap-1.5 flex-wrap">
+                                                        <button 
+                                                            type="button" 
+                                                            @click="copyAll360ForColor(activeVersionIndex, cIdx)"
+                                                            class="px-2 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-[11px] font-semibold rounded cursor-pointer border border-indigo-200 flex items-center gap-1 transition shadow-2xs"
+                                                            title="Sao chép tất cả bộ ảnh 360° của màu này"
+                                                        >
+                                                            📋 Copy trọn bộ 360°
+                                                        </button>
+                                                        <button 
+                                                            v-if="copied360ColorBundle"
+                                                            type="button" 
+                                                            @click="pasteAll360ForColor(activeVersionIndex, cIdx)"
+                                                            class="px-2 py-1 bg-purple-50 hover:bg-purple-100 text-purple-700 text-[11px] font-bold rounded cursor-pointer border border-purple-200 flex items-center gap-1 transition shadow-2xs"
+                                                            title="Dán trọn bộ ảnh 360° đã sao chép vào màu này"
+                                                        >
+                                                            📥 Dán trọn bộ 360°
+                                                        </button>
+                                                        <button 
+                                                            v-if="form.versions[activeVersionIndex].colors && form.versions[activeVersionIndex].colors.length > 1"
+                                                            type="button" 
+                                                            @click="applyAll360ToAllColors(activeVersionIndex, cIdx)"
+                                                            class="px-2 py-1 bg-amber-50 hover:bg-amber-100 text-amber-800 text-[11px] font-semibold rounded cursor-pointer border border-amber-300 flex items-center gap-1 transition shadow-2xs"
+                                                            title="Áp dụng tất cả bộ ảnh 360° của màu này cho các màu khác trong phiên bản"
+                                                        >
+                                                            ⚡ Áp dụng bộ 360° cho tất cả màu
+                                                        </button>
+                                                    </div>
+                                                </div>
                                                 
                                                 <div class="bg-white p-3 rounded-lg border border-gray-150">
                                                     <Field 
@@ -365,30 +395,88 @@
                                                     />
                                                 </div>
 
-                                                <div class="bg-white p-3 rounded-lg border border-gray-150">
+                                                <div class="bg-white p-3 rounded-lg border border-gray-150 space-y-2">
+                                                    <div class="flex items-center justify-between flex-wrap gap-1 border-b border-gray-100 pb-2">
+                                                        <span class="text-xs font-bold text-gray-700">1. Bộ ảnh xoay 360° Ngoại thất</span>
+                                                        <div class="flex items-center gap-1.5 flex-wrap">
+                                                            <button 
+                                                                type="button" 
+                                                                @click="copy360Exterior(activeVersionIndex, cIdx)"
+                                                                class="px-2.5 py-1 bg-gray-100 hover:bg-gray-200 text-gray-750 text-[11px] font-semibold rounded-md cursor-pointer border border-gray-300 flex items-center gap-1 transition shadow-2xs"
+                                                                title="Sao chép bộ ảnh 360° ngoại thất này"
+                                                            >
+                                                                📋 Sao chép {{ form.versions[activeVersionIndex].colors[cIdx].images_360?.length ? `(${form.versions[activeVersionIndex].colors[cIdx].images_360.length})` : '' }}
+                                                            </button>
+                                                            <button 
+                                                                v-if="copied360Exterior && copied360Exterior.length > 0"
+                                                                type="button" 
+                                                                @click="paste360Exterior(activeVersionIndex, cIdx)"
+                                                                class="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 text-[11px] font-bold rounded-md cursor-pointer border border-blue-300 flex items-center gap-1 transition shadow-2xs"
+                                                                title="Dán bộ ảnh 360° ngoại thất đã sao chép"
+                                                            >
+                                                                📥 Dán ({{ copied360Exterior.length }} ảnh)
+                                                            </button>
+                                                            <button 
+                                                                v-if="form.versions[activeVersionIndex].colors && form.versions[activeVersionIndex].colors.length > 1 && form.versions[activeVersionIndex].colors[cIdx].images_360?.length > 0"
+                                                                type="button" 
+                                                                @click="apply360ExteriorToAllColors(activeVersionIndex, cIdx)"
+                                                                class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-[11px] font-semibold rounded-md cursor-pointer border border-emerald-300 flex items-center gap-1 transition shadow-2xs"
+                                                                title="Áp dụng bộ ảnh ngoại thất này cho tất cả các màu khác trong phiên bản"
+                                                            >
+                                                                ⚡ Áp dụng cho tất cả màu
+                                                            </button>
+                                                        </div>
+                                                    </div>
                                                     <Field 
                                                         :key="'ver_' + activeVersionIndex + '_color_images_360_' + cIdx"
                                                         v-model="form.versions[activeVersionIndex].colors[cIdx].images_360" 
                                                         :field="{
                                                             type: 'file_upload',
                                                             name: 'ver_' + activeVersionIndex + '_color_images_360_' + cIdx,
-                                                            label: 'Bộ ảnh xoay 360° Ngoại thất cho màu này (Chọn nhiều ảnh theo thứ tự xoay)',
+                                                            label: 'Chọn nhiều ảnh theo thứ tự xoay 360° Ngoại thất',
                                                             multiple: true,
                                                         }" 
                                                     />
                                                 </div>
 
-                                                <div class="bg-white p-3 rounded-lg border border-gray-150">
+                                                <div class="bg-white p-3 rounded-lg border border-gray-150 space-y-2">
+                                                    <div class="flex items-center justify-between flex-wrap gap-1 border-b border-gray-100 pb-2">
+                                                        <span class="text-xs font-bold text-gray-700">2. Bộ ảnh xoay 360° Nội thất</span>
+                                                        <div class="flex items-center gap-1.5 flex-wrap">
+                                                            <button 
+                                                                type="button" 
+                                                                @click="copy360Interior(activeVersionIndex, cIdx)"
+                                                                class="px-2.5 py-1 bg-gray-100 hover:bg-gray-200 text-gray-750 text-[11px] font-semibold rounded-md cursor-pointer border border-gray-300 flex items-center gap-1 transition shadow-2xs"
+                                                                title="Sao chép bộ ảnh 360° nội thất này"
+                                                            >
+                                                                📋 Sao chép {{ form.versions[activeVersionIndex].colors[cIdx].images_360_internal?.length ? `(${form.versions[activeVersionIndex].colors[cIdx].images_360_internal.length})` : '' }}
+                                                            </button>
+                                                            <button 
+                                                                v-if="copied360Interior && copied360Interior.length > 0"
+                                                                type="button" 
+                                                                @click="paste360Interior(activeVersionIndex, cIdx)"
+                                                                class="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 text-[11px] font-bold rounded-md cursor-pointer border border-blue-300 flex items-center gap-1 transition shadow-2xs"
+                                                                title="Dán bộ ảnh 360° nội thất đã sao chép"
+                                                            >
+                                                                📥 Dán ({{ copied360Interior.length }} ảnh)
+                                                            </button>
+                                                            <button 
+                                                                v-if="form.versions[activeVersionIndex].colors && form.versions[activeVersionIndex].colors.length > 1 && form.versions[activeVersionIndex].colors[cIdx].images_360_internal?.length > 0"
+                                                                type="button" 
+                                                                @click="apply360InteriorToAllColors(activeVersionIndex, cIdx)"
+                                                                class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-[11px] font-semibold rounded-md cursor-pointer border border-emerald-300 flex items-center gap-1 transition shadow-2xs"
+                                                                title="Áp dụng bộ ảnh nội thất này cho tất cả các màu khác trong phiên bản"
+                                                            >
+                                                                ⚡ Áp dụng cho tất cả màu
+                                                            </button>
+                                                        </div>
+                                                    </div>
                                                     <Field 
                                                         :key="'ver_' + activeVersionIndex + '_color_images_360_internal_' + cIdx"
                                                         v-model="form.versions[activeVersionIndex].colors[cIdx].images_360_internal" 
                                                         :field="{
                                                             type: 'file_upload',
                                                             name: 'ver_' + activeVersionIndex + '_color_images_360_internal_' + cIdx,
-                                                            label: 'Bộ ảnh xoay 360° Nội thất cho màu này (Chọn nhiều ảnh theo thứ tự xoay)',
-                                                            multiple: true,
-                                                        }" 
-                                                    />
                                                 </div>
                                             </div>
                                         </div>
@@ -1398,6 +1486,9 @@ export default {
             ],
             categories: this.data?.categories ?? [],
             formData: this.initFormData(this.item),
+            copied360Exterior: null,
+            copied360Interior: null,
+            copied360ColorBundle: null,
         }
     },
 
@@ -1928,6 +2019,148 @@ export default {
             const ver = form.versions[versionIndex];
             if (ver && ver.colors) {
                 form.versions[versionIndex].colors.splice(colorIndex, 1);
+            }
+        },
+
+        cloneImageData(data) {
+            if (!data) return [];
+            try {
+                return JSON.parse(JSON.stringify(data));
+            } catch (e) {
+                return Array.isArray(data) ? [...data] : data;
+            }
+        },
+
+        copy360Exterior(versionIndex, colorIndex) {
+            const color = this.form.versions[versionIndex]?.colors?.[colorIndex];
+            const imgs = color?.images_360;
+            if (!imgs || (Array.isArray(imgs) && imgs.length === 0)) {
+                alert("Bộ ảnh 360° Ngoại thất của màu này đang trống!");
+                return;
+            }
+            const count = Array.isArray(imgs) ? imgs.length : 1;
+            this.copied360Exterior = this.cloneImageData(imgs);
+            alert(`Đã sao chép ${count} ảnh 360° Ngoại thất! Bạn có thể chuyển sang màu khác hoặc phiên bản khác để bấm "Dán".`);
+        },
+
+        paste360Exterior(versionIndex, colorIndex) {
+            if (!this.copied360Exterior) {
+                alert("Chưa có bộ ảnh 360° Ngoại thất nào được sao chép!");
+                return;
+            }
+            const color = this.form.versions[versionIndex]?.colors?.[colorIndex];
+            if (color) {
+                color.images_360 = this.cloneImageData(this.copied360Exterior);
+            }
+        },
+
+        apply360ExteriorToAllColors(versionIndex, colorIndex) {
+            const ver = this.form.versions[versionIndex];
+            const currentColor = ver?.colors?.[colorIndex];
+            const imgs = currentColor?.images_360;
+            if (!imgs || (Array.isArray(imgs) && imgs.length === 0)) {
+                alert("Bộ ảnh 360° Ngoại thất của màu này đang trống!");
+                return;
+            }
+            const count = Array.isArray(imgs) ? imgs.length : 1;
+            if (confirm(`Bạn có chắc chắn muốn áp dụng bộ ${count} ảnh 360° Ngoại thất của màu "${currentColor.name || 'này'}" cho TẤT CẢ các màu còn lại trong phiên bản này không?`)) {
+                ver.colors.forEach((col, idx) => {
+                    if (idx !== colorIndex) {
+                        col.images_360 = this.cloneImageData(imgs);
+                    }
+                });
+            }
+        },
+
+        copy360Interior(versionIndex, colorIndex) {
+            const color = this.form.versions[versionIndex]?.colors?.[colorIndex];
+            const imgs = color?.images_360_internal;
+            if (!imgs || (Array.isArray(imgs) && imgs.length === 0)) {
+                alert("Bộ ảnh 360° Nội thất của màu này đang trống!");
+                return;
+            }
+            const count = Array.isArray(imgs) ? imgs.length : 1;
+            this.copied360Interior = this.cloneImageData(imgs);
+            alert(`Đã sao chép ${count} ảnh 360° Nội thất! Bạn có thể chuyển sang màu khác hoặc phiên bản khác để bấm "Dán".`);
+        },
+
+        paste360Interior(versionIndex, colorIndex) {
+            if (!this.copied360Interior) {
+                alert("Chưa có bộ ảnh 360° Nội thất nào được sao chép!");
+                return;
+            }
+            const color = this.form.versions[versionIndex]?.colors?.[colorIndex];
+            if (color) {
+                color.images_360_internal = this.cloneImageData(this.copied360Interior);
+            }
+        },
+
+        apply360InteriorToAllColors(versionIndex, colorIndex) {
+            const ver = this.form.versions[versionIndex];
+            const currentColor = ver?.colors?.[colorIndex];
+            const imgs = currentColor?.images_360_internal;
+            if (!imgs || (Array.isArray(imgs) && imgs.length === 0)) {
+                alert("Bộ ảnh 360° Nội thất của màu này đang trống!");
+                return;
+            }
+            const count = Array.isArray(imgs) ? imgs.length : 1;
+            if (confirm(`Bạn có chắc chắn muốn áp dụng bộ ${count} ảnh 360° Nội thất của màu "${currentColor.name || 'này'}" cho TẤT CẢ các màu còn lại trong phiên bản này không?`)) {
+                ver.colors.forEach((col, idx) => {
+                    if (idx !== colorIndex) {
+                        col.images_360_internal = this.cloneImageData(imgs);
+                    }
+                });
+            }
+        },
+
+        copyAll360ForColor(versionIndex, colorIndex) {
+            const color = this.form.versions[versionIndex]?.colors?.[colorIndex];
+            if (!color) return;
+            this.copied360ColorBundle = {
+                images_360: this.cloneImageData(color.images_360 || []),
+                images_360_internal: this.cloneImageData(color.images_360_internal || []),
+                image_360_internal: this.cloneImageData(color.image_360_internal || null),
+            };
+            const extCount = Array.isArray(this.copied360ColorBundle.images_360) ? this.copied360ColorBundle.images_360.length : (this.copied360ColorBundle.images_360 ? 1 : 0);
+            const intCount = Array.isArray(this.copied360ColorBundle.images_360_internal) ? this.copied360ColorBundle.images_360_internal.length : (this.copied360ColorBundle.images_360_internal ? 1 : 0);
+            alert(`Đã sao chép bộ ảnh 360° (Ngoại thất: ${extCount} ảnh, Nội thất: ${intCount} ảnh) của màu "${color.name || ''}"!`);
+        },
+
+        pasteAll360ForColor(versionIndex, colorIndex) {
+            if (!this.copied360ColorBundle) {
+                alert("Chưa có dữ liệu ảnh 360° màu sắc nào được sao chép!");
+                return;
+            }
+            const color = this.form.versions[versionIndex]?.colors?.[colorIndex];
+            if (color) {
+                color.images_360 = this.cloneImageData(this.copied360ColorBundle.images_360);
+                color.images_360_internal = this.cloneImageData(this.copied360ColorBundle.images_360_internal);
+                if (this.copied360ColorBundle.image_360_internal) {
+                    color.image_360_internal = this.cloneImageData(this.copied360ColorBundle.image_360_internal);
+                }
+            }
+        },
+
+        applyAll360ToAllColors(versionIndex, colorIndex) {
+            const ver = this.form.versions[versionIndex];
+            const currentColor = ver?.colors?.[colorIndex];
+            if (!currentColor) return;
+            const extCount = Array.isArray(currentColor.images_360) ? currentColor.images_360.length : (currentColor.images_360 ? 1 : 0);
+            const intCount = Array.isArray(currentColor.images_360_internal) ? currentColor.images_360_internal.length : (currentColor.images_360_internal ? 1 : 0);
+            if (extCount === 0 && intCount === 0 && !currentColor.image_360_internal) {
+                alert("Màu này chưa có dữ liệu ảnh 360° nào!");
+                return;
+            }
+            if (confirm(`Bạn có chắc chắn muốn áp dụng toàn bộ ảnh 360° (Ngoại thất + Nội thất) của màu "${currentColor.name || 'này'}" cho TẤT CẢ các màu còn lại trong phiên bản này không?`)) {
+                ver.colors.forEach((col, idx) => {
+                    if (idx !== colorIndex) {
+                        col.images_360 = this.cloneImageData(currentColor.images_360 || []);
+                        col.images_360_internal = this.cloneImageData(currentColor.images_360_internal || []);
+                        if (currentColor.image_360_internal) {
+                            col.image_360_internal = this.cloneImageData(currentColor.image_360_internal);
+                        }
+                    }
+                });
             }
         },
 
