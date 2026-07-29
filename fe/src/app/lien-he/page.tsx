@@ -67,8 +67,18 @@ function ContactFormContent() {
   useEffect(() => {
     if (reasonParam) {
       const reasonLower = reasonParam.toLowerCase();
-      if (reasonLower === "tư vấn báo giá sửa chữa" || reasonLower === "yêu cầu sửa chữa xe") {
+      if (
+        reasonLower.includes("sửa chữa") || 
+        reasonLower.includes("repair")
+      ) {
         setFormType("repair-quote");
+      } else if (
+        reasonLower.includes("đặt hẹn") || 
+        reasonLower.includes("đặt lịch") || 
+        reasonLower.includes("dịch vụ") || 
+        reasonLower.includes("bảo dưỡng")
+      ) {
+        setFormType("service-booking");
       } else if (
         reasonLower.includes("báo giá") || 
         reasonLower.includes("tư vấn") || 
@@ -76,15 +86,17 @@ function ContactFormContent() {
         reasonLower.includes("lái thử")
       ) {
         setFormType("new-car");
-      } else if (
-        reasonLower.includes("đặt lịch") || 
-        reasonLower.includes("dịch vụ") || 
-        reasonLower.includes("bảo dưỡng")
-      ) {
-        setFormType("service-booking");
       } else {
         setFormType("general");
       }
+
+      // Smooth scroll directly to form for fast user action
+      setTimeout(() => {
+        const formEl = document.getElementById("contact-form");
+        if (formEl) {
+          formEl.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 250);
     } else {
       setFormType("new-car"); // default is "new-car" (Tư vấn mua xe mới)
     }
@@ -422,7 +434,7 @@ function ContactFormContent() {
         </div>
 
         {/* Right Side: Appointment Booking Form Card (7 cols) */}
-        <div className="lg:col-span-7 relative bg-white border border-gray-200/80 p-8 rounded-[24px] shadow-lg text-gray-900 overflow-hidden">
+        <div id="contact-form" className="lg:col-span-7 relative bg-white border border-gray-200/80 p-8 rounded-[24px] shadow-lg text-gray-900 overflow-hidden">
           {/* Header colorful highlight bar */}
           <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#002F6C] via-[#066fef] to-[#00aaff]" />
 
