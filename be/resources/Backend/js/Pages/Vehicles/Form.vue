@@ -131,10 +131,15 @@
                                                 <span class="w-2.5 h-2.5 rounded-full shrink-0" 
                                                       :class="element.status === 'ACTIVE' ? 'bg-emerald-500' : 'bg-gray-450'">
                                                 </span>
-                                                <!-- Version Name -->
-                                                <span class="text-xs font-bold text-gray-700 truncate">
-                                                    {{ element.vi?.name || 'Phiên bản chưa đặt tên' }}
-                                                </span>
+                                                <div class="flex flex-col min-w-0">
+                                                    <span class="text-xs font-bold text-gray-800 truncate">
+                                                        {{ element.vi?.name || 'Phiên bản chưa đặt tên' }}
+                                                    </span>
+                                                    <div class="flex items-center gap-2 text-[10px] text-gray-500 mt-0.5">
+                                                        <span>🎨 {{ element.colors?.length || 0 }} màu</span>
+                                                        <span>📋 {{ element.customSpecs?.length || 0 }} specs</span>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <!-- Version Actions -->
                                             <div class="flex items-center gap-1 shrink-0">
@@ -165,382 +170,465 @@
                             </div>
 
                             <!-- DETAIL PANE (9/12 cols) -->
-                            <div class="col-span-12 lg:col-span-8 xl:col-span-9 space-y-5 bg-white p-5 rounded-2xl border border-gray-200" v-if="form.versions[activeVersionIndex]">
-                                <div class="flex justify-between items-center pb-3 border-b border-gray-150">
+                            <div class="col-span-12 lg:col-span-8 xl:col-span-9 space-y-4 bg-white p-5 rounded-2xl border border-gray-200" v-if="form.versions[activeVersionIndex]">
+                                <div class="flex justify-between items-center pb-3 border-b border-gray-150 flex-wrap gap-2">
                                     <div class="flex items-center gap-2">
                                         <span class="w-2.5 h-2.5 rounded-full" :class="form.versions[activeVersionIndex].status === 'ACTIVE' ? 'bg-emerald-500' : 'bg-gray-400'"></span>
                                         <h4 class="font-bold text-gray-800 text-sm md:text-base">
                                             Cấu hình: {{ form.versions[activeVersionIndex].vi?.name || 'Phiên bản chưa đặt tên' }}
                                         </h4>
                                     </div>
-                                    <button type="button" class="text-red-600 hover:text-red-800 font-bold text-xs bg-red-50 hover:bg-red-100 border border-red-200 px-3 py-1.5 rounded-lg transition cursor-pointer" @click="removeVersion(form, activeVersionIndex)">
-                                        ✕ Xóa phiên bản này
-                                    </button>
-                                </div>
-
-                                <!-- Quick Tools Panel -->
-                                <div class="flex flex-wrap items-center gap-3 bg-indigo-50/40 p-3.5 rounded-xl border border-indigo-150/60">
-                                    <span class="text-xs font-bold text-indigo-900 flex items-center gap-1">
-                                        <span>⚡</span>
-                                        <span>Công cụ nhanh:</span>
-                                    </span>
-                                    
-                                    <button 
-                                        type="button" 
-                                        @click="showSpecsImportModal = !showSpecsImportModal" 
-                                        class="text-xs bg-white hover:bg-gray-50 text-indigo-700 font-bold px-3 py-1.5 rounded-lg border border-indigo-200 transition cursor-pointer"
-                                    >
-                                        📥 Nhập specs nhanh từ text
-                                    </button>
-
-                                    <!-- Clone Colors from other version -->
-                                    <select 
-                                        v-if="form.versions && form.versions.length > 1" 
-                                        @change="handleCloneColorsFromVersion(form, $event)" 
-                                        class="bg-white border border-gray-300 rounded-lg px-2.5 py-1.5 text-xs font-bold text-gray-750 cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                                    >
-                                        <option value="">🎨 Sao chép màu từ phiên bản khác...</option>
-                                        <option v-for="(v, idx) in form.versions" :key="idx" :value="idx" v-show="idx !== activeVersionIndex">
-                                            {{ v.vi?.name || `Phiên bản #${idx + 1}` }}
-                                        </option>
-                                    </select>
-
-                                    <!-- Clone Specs from other version -->
-                                    <select 
-                                        v-if="form.versions && form.versions.length > 1" 
-                                        @change="handleCloneSpecsFromVersion(form, $event)" 
-                                        class="bg-white border border-gray-300 rounded-lg px-2.5 py-1.5 text-xs font-bold text-gray-750 cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                                    >
-                                        <option value="">📋 Sao chép specs từ phiên bản khác...</option>
-                                        <option v-for="(v, idx) in form.versions" :key="idx" :value="idx" v-show="idx !== activeVersionIndex">
-                                            {{ v.vi?.name || `Phiên bản #${idx + 1}` }}
-                                        </option>
-                                    </select>
-                                </div>
-
-                                <!-- Collapsible Text Importer -->
-                                <div v-if="showSpecsImportModal" class="bg-gray-50 border border-gray-200 p-4 rounded-xl space-y-3">
-                                    <div class="flex justify-between items-center">
-                                        <h5 class="text-xs font-bold text-gray-700">Dán danh sách thông số kỹ thuật (dán trực tiếp từ web/brochure/Excel)</h5>
-                                        <button type="button" @click="showSpecsImportModal = false" class="text-gray-450 hover:text-gray-600 text-xs bg-transparent border-0 cursor-pointer">Đóng</button>
-                                    </div>
-                                    <textarea 
-                                        v-model="specsImportText" 
-                                        rows="8" 
-                                        class="w-full text-xs p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-gray-900 bg-white"
-                                        placeholder="Vận hành&#10;Động cơ: Xăng EcoBoost 1.5L&#10;Công suất cực đại: 160 mã lực&#10;&#10;Ngoại thất&#10;Đèn pha: LED Matrix&#10;Mâm xe: Hợp kim 18 inch"
-                                    ></textarea>
-                                    <div class="flex justify-end gap-2">
-                                        <button type="button" @click="executeSpecsImport(form)" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-lg cursor-pointer transition border-0">Xử lý & Nhập thông số</button>
-                                    </div>
-                                </div>
-
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <!-- Tên phiên bản bằng Tiếng Việt -->
-                                    <Field v-model="form.versions[activeVersionIndex].vi.name" :field="{
-                                        type: 'text',
-                                        name: 'version_name_vi_' + activeVersionIndex,
-                                        label: 'Tên phiên bản',
-                                        placeholder: 'vd: Titanium 1.5L AT',
-                                    }" />
-                                    
-                                    <!-- Giá phiên bản -->
-                                    <Field v-model="form.versions[activeVersionIndex].price" :field="{
-                                        type: 'money',
-                                        name: 'version_price_' + activeVersionIndex,
-                                        label: 'Giá bán (đ)',
-                                    }" />
-                                </div>
-
-                                <div class="mb-4 bg-white p-4 rounded-xl border border-gray-200">
-                                    <!-- Ảnh đặc trưng phiên bản -->
-                                    <Field 
-                                        :key="'version_image_' + activeVersionIndex"
-                                        v-model="form.versions[activeVersionIndex].image" 
-                                        :field="{
-                                            type: 'file_upload',
-                                            name: 'version_image_' + activeVersionIndex,
-                                            label: 'Ảnh đặc trưng của phiên bản (Hiển thị ở trang chi tiết xe)',
-                                        }" 
-                                    />
-                                </div>
-
-                                <div class="mb-4 bg-white p-4 rounded-xl border border-gray-200">
-                                    <!-- Ảnh đại diện phiên bản show ở card sản phẩm xe -->
-                                    <Field 
-                                        :key="'version_image_thumbnail_' + activeVersionIndex"
-                                        v-model="form.versions[activeVersionIndex].image_thumbnail" 
-                                        :field="{
-                                            type: 'file_upload',
-                                            name: 'version_image_thumbnail_' + activeVersionIndex,
-                                            label: 'Ảnh đại diện phiên bản (Hiển thị ở các card dòng sản phẩm xe, không hiển thị trong chi tiết xe)',
-                                        }" 
-                                    />
-                                </div>
-
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                    <!-- Trạng thái hoạt động -->
-                                    <Field v-model="form.versions[activeVersionIndex].status" :field="{
-                                        type: 'radio_list',
-                                        name: 'version_status_' + activeVersionIndex,
-                                        label: 'Trạng thái phiên bản',
-                                        options: [
-                                            { id: 'ACTIVE', label: 'Hoạt động' },
-                                            { id: 'INACTIVE', label: 'Tạm ẩn' },
-                                        ]
-                                    }" />
-
-                                    <!-- Thứ tự sắp xếp -->
-                                    <Field v-model="form.versions[activeVersionIndex].sort_order" :field="{
-                                        type: 'number',
-                                        name: 'version_sort_' + activeVersionIndex,
-                                        label: 'Thứ tự sắp xếp',
-                                    }" />
-                                </div>
-
-                                <!-- Version Colors List -->
-                                <div class="border-t border-gray-150 pt-5 mt-5">
-                                    <div class="flex justify-between items-center mb-3">
-                                        <p class="text-sm font-bold text-emerald-750 uppercase flex items-center gap-1 cursor-pointer select-none" @click="showColorsSection = !showColorsSection">
-                                            <span>🎨</span>
-                                            <span>Màu sắc riêng của phiên bản này (Colors)</span>
-                                            <span class="text-gray-400 text-xs font-normal normal-case ml-1">{{ showColorsSection ? '▼' : '►' }}</span>
-                                        </p>
-                                        <button v-show="showColorsSection" type="button" class="text-xs text-emerald-600 hover:text-emerald-800 font-bold bg-transparent border-0 cursor-pointer" @click="addVersionColor(form, activeVersionIndex)">
-                                            ＋ Thêm màu mới cho phiên bản
+                                    <div class="flex items-center gap-2">
+                                        <button 
+                                            type="button" 
+                                            class="text-indigo-700 hover:text-indigo-900 font-bold text-xs bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 px-3 py-1.5 rounded-lg transition cursor-pointer flex items-center gap-1 shadow-2xs" 
+                                            @click="duplicateVersion(form, activeVersionIndex)"
+                                            title="Tạo bản sao từ phiên bản này"
+                                        >
+                                            📋 Nhân bản phiên bản này
+                                        </button>
+                                        <button type="button" class="text-red-600 hover:text-red-800 font-bold text-xs bg-red-50 hover:bg-red-100 border border-red-200 px-3 py-1.5 rounded-lg transition cursor-pointer shadow-2xs" @click="removeVersion(form, activeVersionIndex)">
+                                            ✕ Xóa phiên bản
                                         </button>
                                     </div>
+                                </div>
 
-                                    <div v-show="showColorsSection" class="space-y-4">
-                                        <div v-for="(color, cIdx) in form.versions[activeVersionIndex].colors" :key="cIdx" class="bg-gray-50 border border-gray-200 p-4 rounded-xl hover:shadow-xs transition duration-150 relative">
-                                            <button 
-                                                type="button" 
-                                                class="absolute top-3 right-3 text-red-500 hover:text-red-700 font-bold text-xs bg-red-50 hover:bg-red-100 border border-red-200 w-8 h-8 flex items-center justify-center rounded-lg cursor-pointer transition" 
-                                                @click="removeVersionColor(form, activeVersionIndex, cIdx)"
-                                                title="Xóa màu này"
+                                <!-- SUB-TABS NAVIGATION BAR -->
+                                <div class="flex items-center gap-1.5 bg-gray-100 p-1.5 rounded-xl border border-gray-200 overflow-x-auto sticky top-0 z-10 shadow-2xs">
+                                    <button 
+                                        type="button" 
+                                        @click="versionSubTab = 'basic'"
+                                        class="flex-1 min-w-[140px] px-3.5 py-2 text-xs font-bold rounded-lg transition-all border-0 cursor-pointer text-center flex items-center justify-center gap-1.5"
+                                        :class="versionSubTab === 'basic' ? 'bg-white text-indigo-700 shadow-xs' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200/60'"
+                                    >
+                                        <span>ℹ️ 1. Thông tin chung & Ảnh</span>
+                                    </button>
+                                    <button 
+                                        type="button" 
+                                        @click="versionSubTab = 'colors'"
+                                        class="flex-1 min-w-[140px] px-3.5 py-2 text-xs font-bold rounded-lg transition-all border-0 cursor-pointer text-center flex items-center justify-center gap-1.5"
+                                        :class="versionSubTab === 'colors' ? 'bg-white text-indigo-700 shadow-xs' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200/60'"
+                                    >
+                                        <span>🎨 2. Bảng màu & 360°</span>
+                                        <span class="px-1.5 py-0.5 text-[10px] rounded-full font-extrabold" :class="versionSubTab === 'colors' ? 'bg-indigo-100 text-indigo-800' : 'bg-gray-200 text-gray-700'">
+                                            {{ form.versions[activeVersionIndex].colors?.length || 0 }}
+                                        </span>
+                                    </button>
+                                    <button 
+                                        type="button" 
+                                        @click="versionSubTab = 'specs'"
+                                        class="flex-1 min-w-[140px] px-3.5 py-2 text-xs font-bold rounded-lg transition-all border-0 cursor-pointer text-center flex items-center justify-center gap-1.5"
+                                        :class="versionSubTab === 'specs' ? 'bg-white text-indigo-700 shadow-xs' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200/60'"
+                                    >
+                                        <span>📋 3. Thông số kỹ thuật (Specs)</span>
+                                        <span class="px-1.5 py-0.5 text-[10px] rounded-full font-extrabold" :class="versionSubTab === 'specs' ? 'bg-indigo-100 text-indigo-800' : 'bg-gray-200 text-gray-700'">
+                                            {{ form.versions[activeVersionIndex].customSpecs?.length || 0 }}
+                                        </span>
+                                    </button>
+                                </div>
+
+                                <!-- SUB-TAB 1: THÔNG TIN CƠ BẢN & ẢNH -->
+                                <div v-show="versionSubTab === 'basic'" class="space-y-4 pt-1">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <!-- Tên phiên bản bằng Tiếng Việt -->
+                                        <Field v-model="form.versions[activeVersionIndex].vi.name" :field="{
+                                            type: 'text',
+                                            name: 'version_name_vi_' + activeVersionIndex,
+                                            label: 'Tên phiên bản',
+                                            placeholder: 'vd: Titanium 1.5L AT',
+                                        }" />
+                                        
+                                        <!-- Giá phiên bản -->
+                                        <Field v-model="form.versions[activeVersionIndex].price" :field="{
+                                            type: 'money',
+                                            name: 'version_price_' + activeVersionIndex,
+                                            label: 'Giá bán (đ)',
+                                        }" />
+                                    </div>
+
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <!-- Trạng thái hoạt động -->
+                                        <Field v-model="form.versions[activeVersionIndex].status" :field="{
+                                            type: 'radio_list',
+                                            name: 'version_status_' + activeVersionIndex,
+                                            label: 'Trạng thái phiên bản',
+                                            options: [
+                                                { id: 'ACTIVE', label: 'Hoạt động' },
+                                                { id: 'INACTIVE', label: 'Tạm ẩn' },
+                                            ]
+                                        }" />
+
+                                        <!-- Thứ tự sắp xếp -->
+                                        <Field v-model="form.versions[activeVersionIndex].sort_order" :field="{
+                                            type: 'number',
+                                            name: 'version_sort_' + activeVersionIndex,
+                                            label: 'Thứ tự sắp xếp',
+                                        }" />
+                                    </div>
+
+                                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                        <!-- Ảnh đặc trưng phiên bản -->
+                                        <Field 
+                                            :key="'version_image_' + activeVersionIndex"
+                                            v-model="form.versions[activeVersionIndex].image" 
+                                            :field="{
+                                                type: 'file_upload',
+                                                name: 'version_image_' + activeVersionIndex,
+                                                label: 'Ảnh đặc trưng của phiên bản (Hiển thị ở trang chi tiết xe)',
+                                            }" 
+                                        />
+                                    </div>
+
+                                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                        <!-- Ảnh đại diện phiên bản show ở card sản phẩm xe -->
+                                        <Field 
+                                            :key="'version_image_thumbnail_' + activeVersionIndex"
+                                            v-model="form.versions[activeVersionIndex].image_thumbnail" 
+                                            :field="{
+                                                type: 'file_upload',
+                                                name: 'version_image_thumbnail_' + activeVersionIndex,
+                                                label: 'Ảnh đại diện phiên bản (Hiển thị ở các card dòng sản phẩm xe)',
+                                            }" 
+                                        />
+                                    </div>
+                                </div>
+
+                                <!-- SUB-TAB 2: BẢNG MÀU SẮC & ẢNH 360° -->
+                                <div v-show="versionSubTab === 'colors'" class="space-y-4 pt-1">
+                                    <div class="flex justify-between items-center flex-wrap gap-2 bg-emerald-50/60 p-3 rounded-xl border border-emerald-200">
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-sm font-bold text-emerald-800 uppercase">🎨 Bảng màu sắc & Bộ ảnh 360°</span>
+                                            <span class="text-xs text-gray-500">({{ form.versions[activeVersionIndex].colors?.length || 0 }} màu)</span>
+                                        </div>
+                                        <div class="flex items-center gap-2 flex-wrap">
+                                            <!-- Clone Colors from other version -->
+                                            <select 
+                                                v-if="form.versions && form.versions.length > 1" 
+                                                @change="handleCloneColorsFromVersion(form, $event)" 
+                                                class="bg-white border border-emerald-300 rounded-lg px-2.5 py-1 text-xs font-bold text-emerald-800 cursor-pointer focus:outline-none focus:ring-1 focus:ring-emerald-500 shadow-2xs"
                                             >
-                                                ✕
+                                                <option value="">🎨 Sao chép bảng màu từ phiên bản khác...</option>
+                                                <option v-for="(v, idx) in form.versions" :key="idx" :value="idx" v-show="idx !== activeVersionIndex">
+                                                    {{ v.vi?.name || `Phiên bản #${idx + 1}` }}
+                                                </option>
+                                            </select>
+
+                                            <button type="button" class="text-xs text-gray-600 hover:text-gray-900 font-semibold bg-white border border-gray-300 px-2.5 py-1 rounded-lg cursor-pointer transition shadow-2xs" @click="expandAllColors()">
+                                                📖 Mở rộng tất cả
+                                            </button>
+                                            <button type="button" class="text-xs text-gray-600 hover:text-gray-900 font-semibold bg-white border border-gray-300 px-2.5 py-1 rounded-lg cursor-pointer transition shadow-2xs" @click="collapseAllColors(activeVersionIndex)">
+                                                📁 Thu gọn tất cả
                                             </button>
 
-                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                <Field v-model="form.versions[activeVersionIndex].colors[cIdx].name" :field="{
-                                                    type: 'text',
-                                                    name: 'ver_' + activeVersionIndex + '_color_name_' + cIdx,
-                                                    label: 'Tên màu sắc',
-                                                    placeholder: 'vd: Trắng Pearl / Đen Panther',
-                                                }" />
-                                                
-                                                <div class="field">
-                                                    <label class="flex items-center label mb-1">
-                                                        <span class="text-xs font-bold text-gray-700">Mã màu Hex & Chọn màu trực quan</span>
-                                                    </label>
-                                                    <div class="flex items-center gap-2">
-                                                        <input 
-                                                            type="color" 
-                                                            v-model="form.versions[activeVersionIndex].colors[cIdx].color_code"
-                                                            class="w-11 h-[38px] p-0.5 rounded-lg border border-gray-300 cursor-pointer bg-white shrink-0"
-                                                        />
-                                                        <InputText 
-                                                            type="text" 
-                                                            v-model="form.versions[activeVersionIndex].colors[cIdx].color_code"
-                                                            placeholder="vd: #ffffff"
-                                                            class="w-full"
-                                                        />
+                                            <button type="button" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1 rounded-lg border-0 cursor-pointer transition shadow-2xs" @click="addVersionColor(form, activeVersionIndex)">
+                                                ＋ Thêm màu mới
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="space-y-4">
+                                        <div v-for="(color, cIdx) in form.versions[activeVersionIndex].colors" :key="cIdx" class="bg-gray-50 border border-gray-200 rounded-xl hover:shadow-xs transition duration-150 overflow-hidden">
+                                            <!-- Color Header Bar (Clickable to Collapse/Expand) -->
+                                            <div 
+                                                class="p-3.5 bg-white border-b border-gray-200 flex items-center justify-between cursor-pointer select-none hover:bg-gray-50/80 transition"
+                                                @click="toggleColorCollapse(cIdx)"
+                                            >
+                                                <div class="flex items-center gap-3 min-w-0">
+                                                    <span class="text-gray-400 font-bold text-xs">{{ isColorCollapsed(cIdx) ? '►' : '▼' }}</span>
+                                                    <span 
+                                                        class="w-5 h-5 rounded-full border border-gray-300 shadow-2xs shrink-0" 
+                                                        :style="{ backgroundColor: color.color_code || '#cbd5e1' }"
+                                                    ></span>
+                                                    <span class="font-bold text-xs md:text-sm text-gray-800 truncate">
+                                                        {{ color.name || `Màu #${cIdx + 1}` }}
+                                                    </span>
+                                                    <span class="text-[11px] font-mono text-gray-400">
+                                                        ({{ color.color_code || 'Chưa chọn mã màu' }})
+                                                    </span>
+
+                                                    <!-- 360 badges summary -->
+                                                    <div class="hidden sm:flex items-center gap-1.5 ml-2">
+                                                        <span v-if="color.images_360?.length" class="px-2 py-0.5 text-[10px] bg-blue-50 text-blue-700 border border-blue-200 rounded font-semibold">
+                                                            Ngoại thất: {{ color.images_360.length }} ảnh 360°
+                                                        </span>
+                                                        <span v-if="color.images_360_internal?.length" class="px-2 py-0.5 text-[10px] bg-indigo-50 text-indigo-700 border border-indigo-200 rounded font-semibold">
+                                                            Nội thất: {{ color.images_360_internal.length }} ảnh 360°
+                                                        </span>
                                                     </div>
+                                                </div>
+
+                                                <div class="flex items-center gap-2 shrink-0">
+                                                    <button 
+                                                        type="button" 
+                                                        class="text-red-500 hover:text-red-700 font-bold text-xs bg-red-50 hover:bg-red-100 border border-red-200 px-2 py-1 rounded-md cursor-pointer transition" 
+                                                        @click.stop="removeVersionColor(form, activeVersionIndex, cIdx)"
+                                                        title="Xóa màu này"
+                                                    >
+                                                        ✕ Xóa
+                                                    </button>
                                                 </div>
                                             </div>
 
-                                            <div class="border-t border-gray-200 pt-3 mt-3 space-y-3">
-                                                <div class="flex items-center justify-between flex-wrap gap-2">
-                                                    <p class="text-[11px] font-bold text-indigo-750 uppercase tracking-wider">Hình ảnh 360° phiên bản</p>
-                                                    <div class="flex items-center gap-1.5 flex-wrap">
-                                                        <button 
-                                                            type="button" 
-                                                            @click="copyAll360ForColor(activeVersionIndex, cIdx)"
-                                                            class="px-2 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-[11px] font-semibold rounded cursor-pointer border border-indigo-200 flex items-center gap-1 transition shadow-2xs"
-                                                            title="Sao chép tất cả bộ ảnh 360° của màu này"
-                                                        >
-                                                            📋 Copy trọn bộ 360°
-                                                        </button>
-                                                        <button 
-                                                            v-if="copied360ColorBundle"
-                                                            type="button" 
-                                                            @click="pasteAll360ForColor(activeVersionIndex, cIdx)"
-                                                            class="px-2 py-1 bg-purple-50 hover:bg-purple-100 text-purple-700 text-[11px] font-bold rounded cursor-pointer border border-purple-200 flex items-center gap-1 transition shadow-2xs"
-                                                            title="Dán trọn bộ ảnh 360° đã sao chép vào màu này"
-                                                        >
-                                                            📥 Dán trọn bộ 360°
-                                                        </button>
-                                                        <button 
-                                                            v-if="form.versions[activeVersionIndex].colors && form.versions[activeVersionIndex].colors.length > 1"
-                                                            type="button" 
-                                                            @click="applyAll360ToAllColors(activeVersionIndex, cIdx)"
-                                                            class="px-2 py-1 bg-amber-50 hover:bg-amber-100 text-amber-800 text-[11px] font-semibold rounded cursor-pointer border border-amber-300 flex items-center gap-1 transition shadow-2xs"
-                                                            title="Áp dụng tất cả bộ ảnh 360° của màu này cho các màu khác trong phiên bản"
-                                                        >
-                                                            ⚡ Áp dụng bộ 360° cho tất cả màu
-                                                        </button>
+                                            <!-- Color Content (Shown when expanded) -->
+                                            <div v-show="!isColorCollapsed(cIdx)" class="p-4 space-y-4">
+                                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    <Field v-model="form.versions[activeVersionIndex].colors[cIdx].name" :field="{
+                                                        type: 'text',
+                                                        name: 'ver_' + activeVersionIndex + '_color_name_' + cIdx,
+                                                        label: 'Tên màu sắc',
+                                                        placeholder: 'vd: Trắng Pearl / Đen Panther',
+                                                    }" />
+                                                    
+                                                    <div class="field">
+                                                        <label class="flex items-center label mb-1">
+                                                            <span class="text-xs font-bold text-gray-700">Mã màu Hex & Chọn màu trực quan</span>
+                                                        </label>
+                                                        <div class="flex items-center gap-2">
+                                                            <input 
+                                                                type="color" 
+                                                                v-model="form.versions[activeVersionIndex].colors[cIdx].color_code"
+                                                                class="w-11 h-[38px] p-0.5 rounded-lg border border-gray-300 cursor-pointer bg-white shrink-0"
+                                                            />
+                                                            <InputText 
+                                                                type="text" 
+                                                                v-model="form.versions[activeVersionIndex].colors[cIdx].color_code"
+                                                                placeholder="vd: #ffffff"
+                                                                class="w-full"
+                                                            />
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                
-                                                <div class="bg-white p-3 rounded-lg border border-gray-150">
-                                                    <Field 
-                                                        :key="'ver_' + activeVersionIndex + '_color_image_360_internal_' + cIdx"
-                                                        v-model="form.versions[activeVersionIndex].colors[cIdx].image_360_internal" 
-                                                        :field="{
-                                                            type: 'file_upload',
-                                                            name: 'ver_' + activeVersionIndex + '_color_image_360_internal_' + cIdx,
-                                                            label: 'Ảnh Panorama 360° (Nội thất)',
-                                                        }" 
-                                                    />
-                                                </div>
 
-                                                <div class="bg-white p-3 rounded-lg border border-gray-150 space-y-2">
-                                                    <div class="flex items-center justify-between flex-wrap gap-1 border-b border-gray-100 pb-2">
-                                                        <span class="text-xs font-bold text-gray-700">1. Bộ ảnh xoay 360° Ngoại thất</span>
+                                                <div class="border-t border-gray-200 pt-3 mt-3 space-y-3">
+                                                    <div class="flex items-center justify-between flex-wrap gap-2">
+                                                        <p class="text-[11px] font-bold text-indigo-750 uppercase tracking-wider">Hình ảnh 360° phiên bản</p>
                                                         <div class="flex items-center gap-1.5 flex-wrap">
                                                             <button 
                                                                 type="button" 
-                                                                @click="copy360Exterior(activeVersionIndex, cIdx)"
-                                                                class="px-2.5 py-1 bg-gray-100 hover:bg-gray-200 text-gray-750 text-[11px] font-semibold rounded-md cursor-pointer border border-gray-300 flex items-center gap-1 transition shadow-2xs"
-                                                                title="Sao chép bộ ảnh 360° ngoại thất này"
+                                                                @click="copyAll360ForColor(activeVersionIndex, cIdx)"
+                                                                class="px-2 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-[11px] font-semibold rounded cursor-pointer border border-indigo-200 flex items-center gap-1 transition shadow-2xs"
+                                                                title="Sao chép tất cả bộ ảnh 360° của màu này"
                                                             >
-                                                                📋 Sao chép {{ form.versions[activeVersionIndex].colors[cIdx].images_360?.length ? `(${form.versions[activeVersionIndex].colors[cIdx].images_360.length})` : '' }}
+                                                                📋 Copy trọn bộ 360°
                                                             </button>
                                                             <button 
-                                                                v-if="copied360Exterior && copied360Exterior.length > 0"
+                                                                v-if="copied360ColorBundle"
                                                                 type="button" 
-                                                                @click="paste360Exterior(activeVersionIndex, cIdx)"
-                                                                class="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 text-[11px] font-bold rounded-md cursor-pointer border border-blue-300 flex items-center gap-1 transition shadow-2xs"
-                                                                title="Dán bộ ảnh 360° ngoại thất đã sao chép"
+                                                                @click="pasteAll360ForColor(activeVersionIndex, cIdx)"
+                                                                class="px-2 py-1 bg-purple-50 hover:bg-purple-100 text-purple-700 text-[11px] font-bold rounded cursor-pointer border border-purple-200 flex items-center gap-1 transition shadow-2xs"
+                                                                title="Dán trọn bộ ảnh 360° đã sao chép vào màu này"
                                                             >
-                                                                📥 Dán ({{ copied360Exterior.length }} ảnh)
+                                                                📥 Dán trọn bộ 360°
                                                             </button>
                                                             <button 
-                                                                v-if="form.versions[activeVersionIndex].colors && form.versions[activeVersionIndex].colors.length > 1 && form.versions[activeVersionIndex].colors[cIdx].images_360?.length > 0"
+                                                                v-if="form.versions[activeVersionIndex].colors && form.versions[activeVersionIndex].colors.length > 1"
                                                                 type="button" 
-                                                                @click="apply360ExteriorToAllColors(activeVersionIndex, cIdx)"
-                                                                class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-[11px] font-semibold rounded-md cursor-pointer border border-emerald-300 flex items-center gap-1 transition shadow-2xs"
-                                                                title="Áp dụng bộ ảnh ngoại thất này cho tất cả các màu khác trong phiên bản"
+                                                                @click="applyAll360ToAllColors(activeVersionIndex, cIdx)"
+                                                                class="px-2 py-1 bg-amber-50 hover:bg-amber-100 text-amber-800 text-[11px] font-semibold rounded cursor-pointer border border-amber-300 flex items-center gap-1 transition shadow-2xs"
+                                                                title="Áp dụng tất cả bộ ảnh 360° của màu này cho các màu khác trong phiên bản"
                                                             >
-                                                                ⚡ Áp dụng cho tất cả màu
+                                                                ⚡ Áp dụng bộ 360° cho tất cả màu
                                                             </button>
                                                         </div>
                                                     </div>
-                                                    <Field 
-                                                        :key="'ver_' + activeVersionIndex + '_color_images_360_' + cIdx"
-                                                        v-model="form.versions[activeVersionIndex].colors[cIdx].images_360" 
-                                                        :field="{
-                                                            type: 'file_upload',
-                                                            name: 'ver_' + activeVersionIndex + '_color_images_360_' + cIdx,
-                                                            label: 'Chọn nhiều ảnh theo thứ tự xoay 360° Ngoại thất',
-                                                            multiple: true,
-                                                        }" 
-                                                    />
-                                                </div>
+                                                    
+                                                    <div class="bg-white p-3 rounded-lg border border-gray-150">
+                                                        <Field 
+                                                            :key="'ver_' + activeVersionIndex + '_color_image_360_internal_' + cIdx"
+                                                            v-model="form.versions[activeVersionIndex].colors[cIdx].image_360_internal" 
+                                                            :field="{
+                                                                type: 'file_upload',
+                                                                name: 'ver_' + activeVersionIndex + '_color_image_360_internal_' + cIdx,
+                                                                label: 'Ảnh Panorama 360° (Nội thất)',
+                                                            }" 
+                                                        />
+                                                    </div>
 
-                                                <div class="bg-white p-3 rounded-lg border border-gray-150 space-y-2">
-                                                    <div class="flex items-center justify-between flex-wrap gap-1 border-b border-gray-100 pb-2">
-                                                        <span class="text-xs font-bold text-gray-700">2. Bộ ảnh xoay 360° Nội thất</span>
-                                                        <div class="flex items-center gap-1.5 flex-wrap">
-                                                            <button 
-                                                                type="button" 
-                                                                @click="copy360Interior(activeVersionIndex, cIdx)"
-                                                                class="px-2.5 py-1 bg-gray-100 hover:bg-gray-200 text-gray-750 text-[11px] font-semibold rounded-md cursor-pointer border border-gray-300 flex items-center gap-1 transition shadow-2xs"
-                                                                title="Sao chép bộ ảnh 360° nội thất này"
-                                                            >
-                                                                📋 Sao chép {{ form.versions[activeVersionIndex].colors[cIdx].images_360_internal?.length ? `(${form.versions[activeVersionIndex].colors[cIdx].images_360_internal.length})` : '' }}
-                                                            </button>
-                                                            <button 
-                                                                v-if="copied360Interior && copied360Interior.length > 0"
-                                                                type="button" 
-                                                                @click="paste360Interior(activeVersionIndex, cIdx)"
-                                                                class="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 text-[11px] font-bold rounded-md cursor-pointer border border-blue-300 flex items-center gap-1 transition shadow-2xs"
-                                                                title="Dán bộ ảnh 360° nội thất đã sao chép"
-                                                            >
-                                                                📥 Dán ({{ copied360Interior.length }} ảnh)
-                                                            </button>
-                                                            <button 
-                                                                v-if="form.versions[activeVersionIndex].colors && form.versions[activeVersionIndex].colors.length > 1 && form.versions[activeVersionIndex].colors[cIdx].images_360_internal?.length > 0"
-                                                                type="button" 
-                                                                @click="apply360InteriorToAllColors(activeVersionIndex, cIdx)"
-                                                                class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-[11px] font-semibold rounded-md cursor-pointer border border-emerald-300 flex items-center gap-1 transition shadow-2xs"
-                                                                title="Áp dụng bộ ảnh nội thất này cho tất cả các màu khác trong phiên bản"
-                                                            >
-                                                                ⚡ Áp dụng cho tất cả màu
-                                                            </button>
+                                                    <div class="bg-white p-3 rounded-lg border border-gray-150 space-y-2">
+                                                        <div class="flex items-center justify-between flex-wrap gap-1 border-b border-gray-100 pb-2">
+                                                            <span class="text-xs font-bold text-gray-700">1. Bộ ảnh xoay 360° Ngoại thất</span>
+                                                            <div class="flex items-center gap-1.5 flex-wrap">
+                                                                <button 
+                                                                    type="button" 
+                                                                    @click="copy360Exterior(activeVersionIndex, cIdx)"
+                                                                    class="px-2.5 py-1 bg-gray-100 hover:bg-gray-200 text-gray-750 text-[11px] font-semibold rounded-md cursor-pointer border border-gray-300 flex items-center gap-1 transition shadow-2xs"
+                                                                    title="Sao chép bộ ảnh 360° ngoại thất này"
+                                                                >
+                                                                    📋 Sao chép {{ form.versions[activeVersionIndex].colors[cIdx].images_360?.length ? `(${form.versions[activeVersionIndex].colors[cIdx].images_360.length})` : '' }}
+                                                                </button>
+                                                                <button 
+                                                                    v-if="copied360Exterior && copied360Exterior.length > 0"
+                                                                    type="button" 
+                                                                    @click="paste360Exterior(activeVersionIndex, cIdx)"
+                                                                    class="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 text-[11px] font-bold rounded-md cursor-pointer border border-blue-300 flex items-center gap-1 transition shadow-2xs"
+                                                                    title="Dán bộ ảnh 360° ngoại thất đã sao chép"
+                                                                >
+                                                                    📥 Dán ({{ copied360Exterior.length }} ảnh)
+                                                                </button>
+                                                                <button 
+                                                                    v-if="form.versions[activeVersionIndex].colors && form.versions[activeVersionIndex].colors.length > 1 && form.versions[activeVersionIndex].colors[cIdx].images_360?.length > 0"
+                                                                    type="button" 
+                                                                    @click="apply360ExteriorToAllColors(activeVersionIndex, cIdx)"
+                                                                    class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-[11px] font-semibold rounded-md cursor-pointer border border-emerald-300 flex items-center gap-1 transition shadow-2xs"
+                                                                    title="Áp dụng bộ ảnh ngoại thất này cho tất cả các màu khác trong phiên bản"
+                                                                >
+                                                                    ⚡ Áp dụng cho tất cả màu
+                                                                </button>
+                                                            </div>
                                                         </div>
+                                                        <Field 
+                                                            :key="'ver_' + activeVersionIndex + '_color_images_360_' + cIdx"
+                                                            v-model="form.versions[activeVersionIndex].colors[cIdx].images_360" 
+                                                            :field="{
+                                                                type: 'file_upload',
+                                                                name: 'ver_' + activeVersionIndex + '_color_images_360_' + cIdx,
+                                                                label: 'Chọn nhiều ảnh theo thứ tự xoay 360° Ngoại thất',
+                                                                multiple: true,
+                                                            }" 
+                                                        />
                                                     </div>
-                                                    <Field 
-                                                        :key="'ver_' + activeVersionIndex + '_color_images_360_internal_' + cIdx"
-                                                        v-model="form.versions[activeVersionIndex].colors[cIdx].images_360_internal" 
-                                                        :field="{
-                                                            type: 'file_upload',
-                                                            name: 'ver_' + activeVersionIndex + '_color_images_360_internal_' + cIdx,
-                                                            label: 'Bộ ảnh xoay 360° Nội thất cho màu này (Chọn nhiều ảnh theo thứ tự xoay)',
-                                                            multiple: true,
-                                                        }" 
-                                                    />
+
+                                                    <div class="bg-white p-3 rounded-lg border border-gray-150 space-y-2">
+                                                        <div class="flex items-center justify-between flex-wrap gap-1 border-b border-gray-100 pb-2">
+                                                            <span class="text-xs font-bold text-gray-700">2. Bộ ảnh xoay 360° Nội thất</span>
+                                                            <div class="flex items-center gap-1.5 flex-wrap">
+                                                                <button 
+                                                                    type="button" 
+                                                                    @click="copy360Interior(activeVersionIndex, cIdx)"
+                                                                    class="px-2.5 py-1 bg-gray-100 hover:bg-gray-200 text-gray-750 text-[11px] font-semibold rounded-md cursor-pointer border border-gray-300 flex items-center gap-1 transition shadow-2xs"
+                                                                    title="Sao chép bộ ảnh 360° nội thất này"
+                                                                >
+                                                                    📋 Sao chép {{ form.versions[activeVersionIndex].colors[cIdx].images_360_internal?.length ? `(${form.versions[activeVersionIndex].colors[cIdx].images_360_internal.length})` : '' }}
+                                                                </button>
+                                                                <button 
+                                                                    v-if="copied360Interior && copied360Interior.length > 0"
+                                                                    type="button" 
+                                                                    @click="paste360Interior(activeVersionIndex, cIdx)"
+                                                                    class="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 text-[11px] font-bold rounded-md cursor-pointer border border-blue-300 flex items-center gap-1 transition shadow-2xs"
+                                                                    title="Dán bộ ảnh 360° nội thất đã sao chép"
+                                                                >
+                                                                    📥 Dán ({{ copied360Interior.length }} ảnh)
+                                                                </button>
+                                                                <button 
+                                                                    v-if="form.versions[activeVersionIndex].colors && form.versions[activeVersionIndex].colors.length > 1 && form.versions[activeVersionIndex].colors[cIdx].images_360_internal?.length > 0"
+                                                                    type="button" 
+                                                                    @click="apply360InteriorToAllColors(activeVersionIndex, cIdx)"
+                                                                    class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-[11px] font-semibold rounded-md cursor-pointer border border-emerald-300 flex items-center gap-1 transition shadow-2xs"
+                                                                    title="Áp dụng bộ ảnh nội thất này cho tất cả các màu khác trong phiên bản"
+                                                                >
+                                                                    ⚡ Áp dụng cho tất cả màu
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        <Field 
+                                                            :key="'ver_' + activeVersionIndex + '_color_images_360_internal_' + cIdx"
+                                                            v-model="form.versions[activeVersionIndex].colors[cIdx].images_360_internal" 
+                                                            :field="{
+                                                                type: 'file_upload',
+                                                                name: 'ver_' + activeVersionIndex + '_color_images_360_internal_' + cIdx,
+                                                                label: 'Bộ ảnh xoay 360° Nội thất cho màu này (Chọn nhiều ảnh theo thứ tự xoay)',
+                                                                multiple: true,
+                                                            }" 
+                                                        />
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div v-if="!form.versions[activeVersionIndex].colors || form.versions[activeVersionIndex].colors.length === 0" class="text-xs text-gray-400 italic py-2">
+
+                                        <div v-if="!form.versions[activeVersionIndex].colors || form.versions[activeVersionIndex].colors.length === 0" class="text-xs text-gray-400 italic py-4 text-center bg-gray-50 rounded-xl border border-dashed border-gray-200">
                                             Chưa cấu hình màu sắc riêng nào cho phiên bản này. Phiên bản này sẽ kế thừa bảng màu chung của dòng xe.
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Dynamic Specifications List -->
-                                <div class="border-t border-gray-150 pt-5 mt-5">
-                                    <div class="flex justify-between items-center mb-3">
-                                        <p class="text-sm font-bold text-indigo-700 uppercase flex items-center gap-1 cursor-pointer select-none" @click="showSpecsSection = !showSpecsSection">
-                                            <span>📋</span>
-                                            <span>Nhóm thông số kỹ thuật chi tiết (Specs)</span>
-                                            <span class="text-gray-400 text-xs font-normal normal-case ml-1">{{ showSpecsSection ? '▼' : '►' }}</span>
-                                        </p>
-                                        <button v-show="showSpecsSection" type="button" class="text-xs text-indigo-650 hover:text-indigo-850 font-bold bg-transparent border-0 cursor-pointer" @click="addCustomSpec(form, activeVersionIndex)">
-                                            ＋ Thêm nhóm thông số mới
-                                        </button>
-                                    </div>
+                                <!-- SUB-TAB 3: THÔNG SỐ KỸ THUẬT (SPECS) -->
+                                <div v-show="versionSubTab === 'specs'" class="space-y-4 pt-1">
+                                    <div class="flex justify-between items-center flex-wrap gap-2 bg-indigo-50/60 p-3 rounded-xl border border-indigo-200">
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-sm font-bold text-indigo-800 uppercase">📋 Nhóm thông số kỹ thuật chi tiết</span>
+                                            <span class="text-xs text-gray-500">({{ form.versions[activeVersionIndex].customSpecs?.length || 0 }} nhóm)</span>
+                                        </div>
 
-                                    <p v-show="showSpecsSection" class="text-[11px] text-gray-500 italic mb-3 bg-indigo-50/50 p-2 rounded-lg border border-indigo-100">
-                                        💡 <strong>Lưu ý:</strong> Bạn có thể nhập thông số kỹ thuật riêng cho phiên bản này. Nếu không nhập (hoặc để trống), hệ thống sẽ tự động sử dụng thông số kỹ thuật chung của dòng xe làm fallback khi hiển thị ở trang chi tiết.
-                                    </p>
-                                    
-                                    <div v-show="showSpecsSection" class="space-y-4">
-                                        <div v-for="(spec, sIdx) in form.versions[activeVersionIndex].customSpecs" :key="sIdx" class="bg-gray-50 border border-gray-200 p-4 rounded-xl hover:shadow-xs transition duration-150 relative">
+                                        <div class="flex items-center gap-2 flex-wrap">
                                             <button 
                                                 type="button" 
-                                                class="absolute top-3 right-3 text-red-500 hover:text-red-700 font-bold text-xs bg-red-50 hover:bg-red-100 border border-red-200 w-8 h-8 flex items-center justify-center rounded-lg cursor-pointer transition" 
-                                                @click="removeCustomSpec(form, activeVersionIndex, sIdx)"
-                                                title="Xóa nhóm thông số này"
+                                                @click="showSpecsImportModal = !showSpecsImportModal" 
+                                                class="text-xs bg-white hover:bg-gray-50 text-indigo-700 font-bold px-3 py-1 rounded-lg border border-indigo-300 transition cursor-pointer shadow-2xs"
                                             >
-                                                ✕
+                                                📥 Nhập specs nhanh từ text
                                             </button>
 
-                                            <div class="grid grid-cols-1 gap-4">
-                                                <div>
-                                                    <label class="block text-xs font-bold text-gray-700 mb-1">Tiêu đề nhóm thông số</label>
-                                                    <input 
-                                                        v-model="spec.title" 
-                                                        type="text" 
-                                                        class="w-full max-w-md bg-white border border-gray-300 rounded-lg px-3 py-2 text-xs font-semibold text-gray-800 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" 
-                                                        placeholder="Tên nhóm (vd: Vận hành, Ngoại thất...)" 
-                                                    />
-                                                </div>
-                                                <div>
-                                                    <label class="block text-xs font-bold text-gray-700 mb-1">Nội dung chi tiết (RichText)</label>
-                                                    <div class="border rounded-lg bg-white overflow-hidden">
-                                                        <CustomEditor 
-                                                            :modelValue="spec.content" 
-                                                            @change="spec.content = $event" 
-                                                        />
-                                                    </div>
-                                                </div>
+                                            <!-- Clone Specs from other version -->
+                                            <select 
+                                                v-if="form.versions && form.versions.length > 1" 
+                                                @change="handleCloneSpecsFromVersion(form, $event)" 
+                                                class="bg-white border border-indigo-300 rounded-lg px-2.5 py-1 text-xs font-bold text-indigo-800 cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-2xs"
+                                            >
+                                                <option value="">📋 Sao chép specs từ phiên bản khác...</option>
+                                                <option v-for="(v, idx) in form.versions" :key="idx" :value="idx" v-show="idx !== activeVersionIndex">
+                                                    {{ v.vi?.name || `Phiên bản #${idx + 1}` }}
+                                                </option>
+                                            </select>
+
+                                            <button type="button" class="text-xs bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-3 py-1 rounded-lg border-0 cursor-pointer transition shadow-2xs" @click="addCustomSpec(form, activeVersionIndex)">
+                                                ＋ Thêm nhóm thông số mới
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Collapsible Text Importer Modal inside Specs tab -->
+                                    <div v-if="showSpecsImportModal" class="bg-white border-2 border-indigo-300 p-4 rounded-xl space-y-3 shadow-md">
+                                        <div class="flex justify-between items-center">
+                                            <h5 class="text-xs font-bold text-indigo-900">Dán danh sách thông số kỹ thuật (dán trực tiếp từ web/brochure/Excel)</h5>
+                                            <button type="button" @click="showSpecsImportModal = false" class="text-gray-450 hover:text-gray-600 text-xs bg-transparent border-0 cursor-pointer">Đóng ✕</button>
+                                        </div>
+                                        <textarea 
+                                            v-model="specsImportText" 
+                                            rows="8" 
+                                            class="w-full text-xs p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-gray-900 bg-white font-mono"
+                                            placeholder="Vận hành&#10;Động cơ: Xăng EcoBoost 1.5L&#10;Công suất cực đại: 160 mã lực&#10;&#10;Ngoại thất&#10;Đèn pha: LED Matrix&#10;Mâm xe: Hợp kim 18 inch"
+                                        ></textarea>
+                                        <div class="flex justify-end gap-2">
+                                            <button type="button" @click="executeSpecsImport(form)" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-lg cursor-pointer transition border-0">Xử lý & Nhập thông số</button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Dynamic Specifications List -->
+                                    <div class="space-y-4">
+                                        <div 
+                                            v-for="(spec, sIdx) in form.versions[activeVersionIndex].customSpecs" 
+                                            :key="sIdx"
+                                            class="bg-gray-50 border border-gray-200 p-4 rounded-xl space-y-3"
+                                        >
+                                            <div class="flex justify-between items-center gap-2">
+                                                <input 
+                                                    type="text" 
+                                                    v-model="spec.title" 
+                                                    placeholder="Tên nhóm (vd: Vận hành, Ngoại thất...)" 
+                                                    class="text-xs font-bold text-indigo-900 bg-white border border-gray-300 rounded-lg px-3 py-1.5 w-full max-w-xs focus:ring-1 focus:ring-indigo-500"
+                                                />
+                                                <button 
+                                                    type="button" 
+                                                    class="text-red-500 hover:text-red-700 text-xs font-semibold bg-red-50 hover:bg-red-100 border border-red-200 px-2.5 py-1 rounded-md transition cursor-pointer"
+                                                    @click="removeCustomSpec(form, activeVersionIndex, sIdx)"
+                                                >
+                                                    ✕ Xóa nhóm
+                                                </button>
+                                            </div>
+
+                                            <div>
+                                                <label class="block text-[11px] font-bold text-gray-600 mb-1">Nội dung chi tiết thông số (hỗ trợ định dạng HTML/Text):</label>
+                                                <textarea 
+                                                    v-model="spec.content" 
+                                                    rows="4" 
+                                                    placeholder="Nhập hoặc dán nội dung thông số..." 
+                                                    class="w-full text-xs p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-gray-900 bg-white"
+                                                ></textarea>
                                             </div>
                                         </div>
-                                        <div v-if="!form.versions[activeVersionIndex].customSpecs || form.versions[activeVersionIndex].customSpecs.length === 0" class="text-xs text-gray-400 italic py-2">
-                                            Chưa cấu hình nhóm thông số nào cho phiên bản này. Hãy bấm "＋ Thêm nhóm thông số mới".
+
+                                        <div v-if="!form.versions[activeVersionIndex].customSpecs || form.versions[activeVersionIndex].customSpecs.length === 0" class="text-xs text-gray-400 italic py-6 text-center bg-gray-50 rounded-xl border border-dashed border-gray-200">
+                                            Chưa có nhóm thông số kỹ thuật nào cho phiên bản này. Hãy bấm "＋ Thêm nhóm thông số mới" hoặc "📥 Nhập specs nhanh từ text".
                                         </div>
                                     </div>
                                 </div>
@@ -1493,6 +1581,8 @@ export default {
             copied360Exterior: null,
             copied360Interior: null,
             copied360ColorBundle: null,
+            versionSubTab: 'basic',
+            collapsedColors: {},
         }
     },
 
@@ -2024,6 +2114,28 @@ export default {
             if (ver && ver.colors) {
                 form.versions[versionIndex].colors.splice(colorIndex, 1);
             }
+        },
+
+        isColorCollapsed(cIdx) {
+            return !!this.collapsedColors[cIdx];
+        },
+
+        toggleColorCollapse(cIdx) {
+            this.collapsedColors = {
+                ...this.collapsedColors,
+                [cIdx]: !this.collapsedColors[cIdx]
+            };
+        },
+
+        expandAllColors() {
+            this.collapsedColors = {};
+        },
+
+        collapseAllColors(versionIndex) {
+            const colors = this.formData.versions[versionIndex]?.colors || [];
+            const map = {};
+            colors.forEach((_, idx) => map[idx] = true);
+            this.collapsedColors = map;
         },
 
         cloneImageData(data) {
