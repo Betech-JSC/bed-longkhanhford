@@ -56,8 +56,15 @@ export default async function ServiceSlugPage({ params }: Props) {
     if (response && response.service) {
       serviceData = response.service;
     }
-  } catch (error) {
-    console.error("Failed to load service from CMS API:", error);
+  } catch (error: any) {
+    if (error && error.status === 404) {
+      console.warn(`[CMS] Service '${slug}' not found in database. Using static frontend fallback.`);
+    } else {
+      console.error(
+        `Failed to load service '${slug}' from CMS API:`,
+        error?.statusText || error?.message || (error && typeof error === 'object' ? JSON.stringify(error) : error)
+      );
+    }
   }
 
   if (!serviceData) {

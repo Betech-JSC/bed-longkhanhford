@@ -96,32 +96,43 @@ export const resolveImageUrl = (img: string | { url?: string; path?: string; sta
 
   // 1. Local frontend assets in Next.js public directory
   if (
-    path.startsWith("/assets/") ||
-    path.startsWith("/images/") ||
-    path.startsWith("/placeholder") ||
-    path.startsWith("/showroom_bg") ||
-    path.startsWith("/images-dynamic/") ||
+    (path.startsWith("/") &&
+      !path.startsWith("/static/") &&
+      !path.startsWith("/uploads/") &&
+      !path.startsWith("/storage/") &&
+      !/^\/(everest|territory|explorer|transit|ranger|mustang)\//i.test(path)) ||
     path.startsWith("data:")
   ) {
     return path;
   }
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://cms.longkhanhford.betech-digital.com/api";
-  const baseDomain = apiUrl.replace(/\/api\/?$/, "");
+  let baseDomain = apiUrl.replace(/\/api\/?$/, "");
+
+  if (!process.env.NEXT_PUBLIC_API_URL && typeof window !== "undefined") {
+    if (window.location.hostname.includes("longkhanhford")) {
+      baseDomain = "https://cms.longkhanhford.betech-digital.com";
+    }
+  }
 
   let fullUrl = "";
 
   if (path.startsWith("http://") || path.startsWith("https://")) {
     try {
       const parsed = new URL(path);
-      // Check if domain is corrupted (filename as hostname, e.g. http://ford-ranger.webp)
-      const isCorruptedFilenameDomain = /\.(webp|png|jpg|jpeg|gif|svg)$/i.test(parsed.hostname);
-      if (isCorruptedFilenameDomain && (parsed.pathname === "/" || parsed.pathname === "")) {
-        fullUrl = `${baseDomain}/static/${parsed.hostname}`;
-      } else if (parsed.pathname.startsWith("/static/") || parsed.pathname.startsWith("/uploads/")) {
+      // If URL hostname points to localhost or 127.0.0.1 (leftover local paths in DB), rewrite to production CMS domain
+      if (parsed.hostname === "localhost" || parsed.hostname === "127.0.0.1") {
         fullUrl = `${baseDomain}${parsed.pathname}${parsed.search}`;
       } else {
-        fullUrl = path;
+        // Check if domain is corrupted (filename as hostname, e.g. http://ford-ranger.webp)
+        const isCorruptedFilenameDomain = /\.(webp|png|jpg|jpeg|gif|svg)$/i.test(parsed.hostname);
+        if (isCorruptedFilenameDomain && (parsed.pathname === "/" || parsed.pathname === "")) {
+          fullUrl = `${baseDomain}/static/${parsed.hostname}`;
+        } else if (parsed.pathname.startsWith("/static/") || parsed.pathname.startsWith("/uploads/") || parsed.pathname.startsWith("/storage/")) {
+          fullUrl = `${baseDomain}${parsed.pathname}${parsed.search}`;
+        } else {
+          fullUrl = path;
+        }
       }
     } catch {
       fullUrl = path;

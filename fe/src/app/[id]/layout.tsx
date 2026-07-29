@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { vehiclesAPI } from "@/lib/api";
 import VehicleLayoutClient from "@/components/vehicle/VehicleLayoutClient";
+import { resolveImageUrl as resolveFileUrl } from "@/lib/site-assets";
 
 // Re-export client parts so children can import them from "../layout"
 export { useVehicle, VehicleTabBar } from "@/components/vehicle/VehicleLayoutClient";
@@ -10,35 +11,6 @@ type Props = {
   params: Promise<{
     id: string; // The URL slug of the vehicle
   }>;
-};
-
-const resolveFileUrl = (file: any): string => {
-  if (!file) return "";
-  if (typeof file === "string") {
-    if (file.startsWith("http://") || file.startsWith("https://") || file.startsWith("/")) {
-      return file;
-    }
-    const cleanPath = file.startsWith("uploads/") ? file.replace("uploads/", "") : file;
-    const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
-    let apiHost = "http://localhost:8000";
-    try {
-      apiHost = new URL(apiBase).origin;
-    } catch (e) { }
-    return `${apiHost}/static/${cleanPath}`;
-  }
-  if (typeof file === "object") {
-    if (file.url) return file.url;
-    if (file.path) {
-      const cleanPath = file.path.startsWith("uploads/") ? file.path.replace("uploads/", "") : file.path;
-      const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
-      let apiHost = "http://localhost:8000";
-      try {
-        apiHost = new URL(apiBase).origin;
-      } catch (e) { }
-      return `${apiHost}/static/${cleanPath}`;
-    }
-  }
-  return "";
 };
 
 const safeArray = (arr: any) => {

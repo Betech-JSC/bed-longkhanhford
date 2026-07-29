@@ -162,7 +162,7 @@ export default function PeriodicMaintenanceLayout({
                 <h3 className="text-xl font-bold text-gray-900 mt-1 uppercase">{mileageData[activeKmIndex].km}</h3>
               </div>
               <Link
-                href="/lien-he"
+                href={`/lien-he?reason=Tư vấn báo giá sửa chữa&note=${encodeURIComponent(`Yêu cầu báo giá gói bảo dưỡng định kỳ mốc ${mileageData[activeKmIndex].km} (${mileageData[activeKmIndex].level})`)}`}
                 className="bg-[#002F6C] hover:bg-[#066fef] text-white text-xs font-bold uppercase px-5 py-2.5 rounded-[4px] transition-colors inline-flex items-center gap-2"
               >
                 <span>Báo Giá Gói Này</span>

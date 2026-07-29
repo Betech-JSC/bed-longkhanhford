@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { MapPin, Phone, Mail, CheckCircle, X, Calendar, User, FileText, ChevronRight, Wrench, Gauge, Car } from "lucide-react";
 import { siteAssets, resolveImageUrl } from "@/lib/site-assets";
@@ -15,6 +15,7 @@ function ContactFormContent() {
   const noteParam = searchParams.get("note");
 
   // Form State
+  const [formType, setFormType] = useState<"new-car" | "service-booking" | "repair-quote" | "general">("new-car");
   const [formName, setFormName] = useState("");
   const [formPhone, setFormPhone] = useState("");
   const [formEmail, setFormEmail] = useState("");
@@ -23,8 +24,24 @@ function ContactFormContent() {
   // Service Booking Form States
   const [formLicensePlate, setFormLicensePlate] = useState("");
   const [formAppointmentTime, setFormAppointmentTime] = useState("");
+  const [displayDate, setDisplayDate] = useState("");
   const [formLocation, setFormLocation] = useState("Tại đại lý");
   const [formServiceContent, setFormServiceContent] = useState("");
+
+  const dateInputRef = useRef<HTMLInputElement>(null);
+
+  // Sync formAppointmentTime to displayDate in dd/mm/yyyy format
+  useEffect(() => {
+    if (formAppointmentTime) {
+      const parts = formAppointmentTime.split("-");
+      if (parts.length === 3) {
+        const [y, m, d] = parts;
+        setDisplayDate(`${d}/${m}/${y}`);
+        return;
+      }
+    }
+    setDisplayDate("");
+  }, [formAppointmentTime]);
 
   // Repair Consultation Form States
   const [selectedVehicle, setSelectedVehicle] = useState("");
@@ -36,15 +53,42 @@ function ContactFormContent() {
   const [formPurchaseMethod, setFormPurchaseMethod] = useState<"Trả góp" | "Tiền mặt">("Trả góp");
   const [formCity, setFormCity] = useState("Đồng Nai");
 
-  const isRepairQuoteForm = reasonParam === "Tư vấn báo giá sửa chữa" || reasonParam === "Yêu cầu sửa chữa xe";
-  const isNewCarQuoteForm = reasonParam === "Báo giá xe mới" || reasonParam === "Báo giá xe" || (!!reasonParam && reasonParam.includes("Báo giá") && !isRepairQuoteForm);
-  const isServiceBooking = !isRepairQuoteForm && !isNewCarQuoteForm && (!reasonParam || (!reasonParam.includes("Catalogue") && !reasonParam.includes("Báo giá") && !reasonParam.includes("Tư vấn")));
+  const isRepairQuoteForm = formType === "repair-quote";
+  const isNewCarQuoteForm = formType === "new-car";
+  const isServiceBooking = formType === "service-booking";
 
   const getVehicleName = (vId: string, vehicleList: any[]) => {
     const found = vehicleList.find((v) => v.id === vId || v.slug === vId);
     if (found) return found.name;
     return vId.split("-").map(w => w.toUpperCase()).join(" ");
   };
+
+  // Set formType dynamically from reasonParam on load
+  useEffect(() => {
+    if (reasonParam) {
+      const reasonLower = reasonParam.toLowerCase();
+      if (reasonLower === "tư vấn báo giá sửa chữa" || reasonLower === "yêu cầu sửa chữa xe") {
+        setFormType("repair-quote");
+      } else if (
+        reasonLower.includes("báo giá") || 
+        reasonLower.includes("tư vấn") || 
+        reasonLower.includes("catalogue") || 
+        reasonLower.includes("lái thử")
+      ) {
+        setFormType("new-car");
+      } else if (
+        reasonLower.includes("đặt lịch") || 
+        reasonLower.includes("dịch vụ") || 
+        reasonLower.includes("bảo dưỡng")
+      ) {
+        setFormType("service-booking");
+      } else {
+        setFormType("general");
+      }
+    } else {
+      setFormType("new-car"); // default is "new-car" (Tư vấn mua xe mới)
+    }
+  }, [reasonParam]);
 
   useEffect(() => {
     const fetchVehicles = async () => {
@@ -390,7 +434,7 @@ function ContactFormContent() {
                   ? "Yêu cầu báo giá xe mới"
                   : isServiceBooking 
                     ? "Đặt hẹn dịch vụ trực tuyến" 
-                    : (reasonParam || "Đăng ký tư vấn")}
+                    : "Liên hệ & Đóng góp ý kiến"}
             </h3>
             <p className="text-xs text-gray-400 font-medium font-antenna">
               {isRepairQuoteForm
@@ -399,8 +443,60 @@ function ContactFormContent() {
                   ? "Vui lòng để lại thông tin, Chuyên viên kinh doanh Long Khánh Ford sẽ gửi báo giá lăn bánh & ưu đãi mới nhất."
                   : isServiceBooking 
                     ? "Vui lòng điền thông tin dưới đây để được hỗ trợ nhanh chóng nhất."
-                    : "Vui lòng điền thông tin dưới đây để nhận tài liệu / tư vấn sớm nhất."}
+                    : "Vui lòng điền thông tin dưới đây để nhận phản hồi sớm nhất."}
             </p>
+          </div>
+
+          {/* Form Type Switcher Tab */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6 p-1 bg-gray-100/70 rounded-2xl">
+            <button
+              type="button"
+              onClick={() => setFormType("new-car")}
+              className={`py-2.5 px-2 rounded-xl text-[11px] md:text-xs font-bold transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer border-0
+                ${isNewCarQuoteForm
+                  ? "bg-[#002F6C] text-white shadow-xs"
+                  : "text-gray-500 hover:text-gray-800 bg-transparent hover:bg-gray-100/30"
+                }`}
+            >
+              <Car className="w-3.5 h-3.5 shrink-0" />
+              <span>Mua xe mới</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setFormType("service-booking")}
+              className={`py-2.5 px-2 rounded-xl text-[11px] md:text-xs font-bold transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer border-0
+                ${isServiceBooking
+                  ? "bg-[#002F6C] text-white shadow-xs"
+                  : "text-gray-500 hover:text-gray-800 bg-transparent hover:bg-gray-100/30"
+                }`}
+            >
+              <Calendar className="w-3.5 h-3.5 shrink-0" />
+              <span>Đặt lịch dịch vụ</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setFormType("repair-quote")}
+              className={`py-2.5 px-2 rounded-xl text-[11px] md:text-xs font-bold transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer border-0
+                ${isRepairQuoteForm
+                  ? "bg-[#002F6C] text-white shadow-xs"
+                  : "text-gray-500 hover:text-gray-800 bg-transparent hover:bg-gray-100/30"
+                }`}
+            >
+              <Wrench className="w-3.5 h-3.5 shrink-0" />
+              <span>Báo giá sửa chữa</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setFormType("general")}
+              className={`py-2.5 px-2 rounded-xl text-[11px] md:text-xs font-bold transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer border-0
+                ${formType === "general"
+                  ? "bg-[#002F6C] text-white shadow-xs"
+                  : "text-gray-500 hover:text-gray-800 bg-transparent hover:bg-gray-100/30"
+                }`}
+            >
+              <Mail className="w-3.5 h-3.5 shrink-0" />
+              <span>Liên hệ khác</span>
+            </button>
           </div>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
@@ -770,10 +866,24 @@ function ContactFormContent() {
                         <div className="relative">
                           <input
                             type="date"
-                            required={isServiceBooking}
+                            ref={dateInputRef}
                             value={formAppointmentTime}
                             onChange={(e) => setFormAppointmentTime(e.target.value)}
-                            className="w-full bg-gray-50/30 hover:bg-gray-100/30 focus:bg-white border border-gray-200 focus:border-[#066fef] focus:ring-4 focus:ring-[#066fef]/10 rounded-xl py-3 pl-10 pr-4 text-xs font-semibold font-antenna transition-all outline-none text-gray-700"
+                            className="absolute inset-0 opacity-0 pointer-events-none w-full h-full"
+                          />
+                          <input
+                            type="text"
+                            readOnly
+                            value={displayDate}
+                            placeholder="dd/mm/yyyy"
+                            onClick={() => {
+                              try {
+                                dateInputRef.current?.showPicker();
+                              } catch {
+                                dateInputRef.current?.click();
+                              }
+                            }}
+                            className="w-full bg-gray-50/30 hover:bg-gray-100/30 focus:bg-white border border-gray-200 focus:border-[#066fef] focus:ring-4 focus:ring-[#066fef]/10 rounded-xl py-3 pl-10 pr-10 text-xs font-semibold font-antenna transition-all outline-none text-gray-700 cursor-pointer"
                           />
                           <Calendar className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                         </div>

@@ -599,11 +599,11 @@ export default function Home() {
   };
 
   const triggerQuickAction = (reason: string, noteText: string) => {
-    router.push("/lien-he");
+    router.push(`/lien-he?reason=${encodeURIComponent(reason)}&note=${encodeURIComponent(noteText)}`);
   };
 
   const triggerGetQuote = (vehicleId: string, vehicleName: string) => {
-    router.push("/lien-he");
+    router.push(`/lien-he?reason=Báo giá xe mới&vehicle=${encodeURIComponent(vehicleId)}`);
   };
 
   // Close toast helper
@@ -955,10 +955,10 @@ export default function Home() {
               transition={{ duration: 0.6, ease: "easeOut" }}
               className="flex flex-col gap-4 text-left mb-10 md:mb-12 max-w-[900px]"
             >
-              <h2 className="text-4xl md:text-[48px] font-extrabold text-black tracking-tight font-antenna leading-none">
-                Công nghệ trên xe <span className="text-[#066FEF]">Ford</span>
+              <h2 className="text-4xl md:text-[48px] font-extrabold text-black tracking-tight font-sans leading-none">
+                Công nghệ trên xe <span className="text-[#00095B] relative inline-block after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:bg-[#00095B] after:transform after:scaleX(0) after:origin-right hover:after:scaleX(1) hover:after:origin-left after:transition-transform after:duration-300 cursor-pointer">Ford</span>
               </h2>
-              <p className="text-base md:text-lg text-neutral-600 font-medium leading-relaxed font-antenna">
+              <p className="text-base md:text-lg text-neutral-600 font-medium leading-relaxed font-sans">
                 Khám phá các trang bị công nghệ hàng đầu phân khúc, giúp mỗi hành trình cùng Ford thêm an toàn, kết nối liền mạch và tràn đầy cảm hứng.
               </p>
             </motion.div>
@@ -972,25 +972,25 @@ export default function Home() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: idx * 0.05, ease: "easeOut" }}
-                  className="flex flex-col gap-5 text-left group"
+                  className="flex flex-col gap-5 text-left group transition-all duration-300 hover:-translate-y-1.5"
                 >
                   {/* Card Image container with rounded corners */}
-                  <div className="relative aspect-[16/10] overflow-hidden rounded-[20px] border border-neutral-200/60 w-full bg-neutral-50 shadow-xs">
+                  <div className="relative aspect-[16/10] overflow-hidden rounded-[24px] border border-neutral-200/60 w-full bg-neutral-50 shadow-xs transition-shadow duration-300 group-hover:shadow-xl group-hover:shadow-[#00095b]/5">
                     <SafeImage
                       src={card.image}
                       alt={card.title}
                       fill
                       sizes="(max-width: 1024px) 100vw, 400px"
-                      className="object-cover group-hover:scale-[1.03] transition-transform duration-700"
+                      className="object-cover group-hover:scale-[1.05] transition-transform duration-700"
                     />
                   </div>
 
                   {/* Card content */}
                   <div className="flex flex-col flex-1 gap-2.5">
-                    <h3 className="text-xl md:text-[22px] font-bold text-[#00095B] tracking-tight leading-snug font-antenna">
+                    <h3 className="text-xl md:text-[22px] font-bold text-[#00095B] tracking-tight leading-snug font-sans group-hover:text-[#066FEF] transition-colors duration-300">
                       {card.title}
                     </h3>
-                    <p className="text-sm text-gray-600 leading-relaxed font-normal font-antenna flex-1">
+                    <p className="text-sm text-gray-600 leading-relaxed font-normal font-sans flex-1">
                       {card.description}
                     </p>
                     

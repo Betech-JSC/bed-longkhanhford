@@ -19,7 +19,7 @@ import { vehicles, Vehicle } from "@/data/vehicles";
 import Link from "next/link";
 
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+  process.env.NEXT_PUBLIC_API_URL || "https://cms.longkhanhford.betech-digital.com/api";
 
 interface Message {
   id: string;

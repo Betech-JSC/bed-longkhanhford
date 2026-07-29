@@ -116,8 +116,8 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/:slug(everest|territory|explorer)/:subpath*",
-        destination: "/ford-:slug/:subpath*",
+        source: "/:slug(everest|territory|explorer)/:subpath(du-toan-lan-banh|phu-kien|so-sanh|tinh-nang)",
+        destination: "/ford-:slug/:subpath",
         permanent: true,
       },
       {
@@ -126,8 +126,8 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/san-pham/:slug(everest|territory|explorer)/:subpath*",
-        destination: "/ford-:slug/:subpath*",
+        source: "/san-pham/:slug(everest|territory|explorer)/:subpath(du-toan-lan-banh|phu-kien|so-sanh|tinh-nang)",
+        destination: "/ford-:slug/:subpath",
         permanent: true,
       },
       // Redirects cho transit alias cũ

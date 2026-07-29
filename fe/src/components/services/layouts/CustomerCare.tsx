@@ -146,7 +146,7 @@ export default function CustomerCareLayout({ service }: { service?: any }) {
                   </p>
                 </div>
                 <Link
-                  href="/lien-he"
+                  href={`/lien-he?reason=Đặt lịch dịch vụ&note=${encodeURIComponent(`Đăng ký tư vấn gói chăm sóc xe (Detailing): ${pkg.title} (${pkg.badge})`)}`}
                   className="text-[#066fef] font-bold text-xs uppercase tracking-wider inline-flex items-center gap-1 hover:gap-2 transition-all border-t border-gray-100 pt-4"
                 >
                   <span>Tư vấn chi tiết</span>

@@ -8,9 +8,12 @@ function getApiBaseUrl(): string {
     return process.env.NEXT_PUBLIC_API_URL;
   }
   if (typeof window !== 'undefined') {
+    if (window.location.hostname.includes('longkhanhford')) {
+      return 'https://cms.longkhanhford.betech-digital.com/api';
+    }
     return `${window.location.origin}/api`;
   }
-  return 'http://localhost:8000/api';
+  return 'https://cms.longkhanhford.betech-digital.com/api';
 }
 
 /**

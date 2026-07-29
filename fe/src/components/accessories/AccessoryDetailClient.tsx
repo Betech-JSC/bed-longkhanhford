@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { 
@@ -116,6 +116,20 @@ export default function AccessoryDetailClient({
     date: "",
     note: ""
   });
+  const [displayDate, setDisplayDate] = useState("");
+  const dateInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (bookingForm.date) {
+      const parts = bookingForm.date.split("-");
+      if (parts.length === 3) {
+        const [y, m, d] = parts;
+        setDisplayDate(`${d}/${m}/${y}`);
+        return;
+      }
+    }
+    setDisplayDate("");
+  }, [bookingForm.date]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -552,15 +566,31 @@ export default function AccessoryDetailClient({
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-xs font-bold text-gray-dark uppercase tracking-wider block">Ngày lắp đặt mong muốn</label>
-                    <input 
-                      type="date" 
-                      name="date"
-                      value={bookingForm.date}
-                      onChange={handleInputChange}
-                      required
-                      className="w-full px-4 py-2.5 rounded-[4px] border border-gray-200 text-xs focus:outline-none focus:border-[#066fef] bg-white text-black"
-                    />
+                    <label className="text-xs font-bold text-gray-dark uppercase tracking-wider block">Ngày lắp đặt mong muốn *</label>
+                    <div className="relative">
+                      <input 
+                        type="date" 
+                        ref={dateInputRef}
+                        name="date"
+                        value={bookingForm.date}
+                        onChange={handleInputChange}
+                        className="absolute inset-0 opacity-0 pointer-events-none w-full h-full"
+                      />
+                      <input
+                        type="text"
+                        readOnly
+                        value={displayDate}
+                        placeholder="dd/mm/yyyy"
+                        onClick={() => {
+                          try {
+                            dateInputRef.current?.showPicker();
+                          } catch {
+                            dateInputRef.current?.click();
+                          }
+                        }}
+                        className="w-full px-4 py-2.5 rounded-[4px] border border-gray-200 text-xs focus:outline-none focus:border-[#066fef] bg-white text-[#1a1a1a] cursor-pointer"
+                      />
+                    </div>
                   </div>
 
                   <div className="space-y-1">

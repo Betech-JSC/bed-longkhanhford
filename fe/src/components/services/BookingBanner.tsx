@@ -47,7 +47,7 @@ export default function BookingBanner() {
               <span className="whitespace-nowrap">0812 86 86 22</span>
             </a>
             <Link
-              href="/lien-he"
+              href="/lien-he?reason=Đặt lịch dịch vụ"
               className="flex items-center justify-center gap-2 bg-transparent hover:bg-gray-50 border border-gray-300 text-gray-700 hover:text-black font-bold px-4 sm:px-5 py-3 rounded-full text-xs sm:text-sm transition-all duration-300 active:scale-95 cursor-pointer shrink-0 font-antenna uppercase tracking-wider flex-1 whitespace-nowrap"
             >
               <Bookmark className="w-4 h-4 shrink-0" />

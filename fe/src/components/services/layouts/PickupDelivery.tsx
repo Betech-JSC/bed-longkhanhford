@@ -184,7 +184,7 @@ export default function PickupDeliveryLayout({ service }: { service?: any }) {
               </h2>
             </div>
             <Link
-              href="/lien-he"
+              href={`/lien-he?reason=Đặt lịch dịch vụ&note=${encodeURIComponent("Đăng ký tư vấn dịch vụ nhận & giao xe bảo dưỡng tận nơi (Pickup & Delivery)")}`}
               className="bg-[#002F6C] hover:bg-[#066fef] text-white text-xs font-bold uppercase px-6 py-3 rounded-[4px] transition-colors inline-flex items-center gap-2"
             >
               <span>Kiểm Tra Địa Chỉ Của Bạn</span>

@@ -265,7 +265,7 @@ export default function ExpressMaintenanceLayout({ service }: { service?: { titl
               </div>
             ))}
             <Link
-              href="/lien-he"
+              href={`/lien-he?reason=Đặt lịch dịch vụ&note=${encodeURIComponent(`Đặt hẹn gói bảo dưỡng nhanh 60 phút mốc giờ: ${availableSlots[selectedSlot].time}`)}`}
               className="mt-2 bg-white text-[#00095B] hover:bg-gray-100 font-bold text-center px-6 py-3.5 rounded-[4px] text-xs uppercase tracking-wider transition-colors inline-flex items-center justify-center gap-2"
             >
               <span>Xác Nhận Đặt Khung Giờ Này</span>
