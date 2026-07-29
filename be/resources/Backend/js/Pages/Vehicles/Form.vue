@@ -429,6 +429,15 @@
                                                             >
                                                                 ⚡ Áp dụng bộ 360° cho tất cả màu
                                                             </button>
+                                                            <button 
+                                                                v-if="form.versions[activeVersionIndex].colors[cIdx].images_360?.length || form.versions[activeVersionIndex].colors[cIdx].images_360_internal?.length || form.versions[activeVersionIndex].colors[cIdx].image_360_internal"
+                                                                type="button" 
+                                                                @click="clearAll360ForColor(activeVersionIndex, cIdx)"
+                                                                class="px-2 py-1 bg-red-50 hover:bg-red-100 text-red-700 text-[11px] font-semibold rounded cursor-pointer border border-red-200 flex items-center gap-1 transition shadow-2xs"
+                                                                title="Xóa toàn bộ dữ liệu ảnh 360° của màu này"
+                                                            >
+                                                                🗑️ Xóa trọn bộ 360°
+                                                            </button>
                                                         </div>
                                                     </div>
                                                     
@@ -474,6 +483,15 @@
                                                                 >
                                                                     ⚡ Áp dụng cho tất cả màu
                                                                 </button>
+                                                                <button 
+                                                                    v-if="form.versions[activeVersionIndex].colors[cIdx].images_360?.length > 0"
+                                                                    type="button" 
+                                                                    @click="clear360Exterior(activeVersionIndex, cIdx)"
+                                                                    class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 text-[11px] font-semibold rounded-md cursor-pointer border border-rose-200 flex items-center gap-1 transition shadow-2xs"
+                                                                    title="Xóa bộ ảnh 360° ngoại thất này"
+                                                                >
+                                                                    🗑️ Xóa
+                                                                </button>
                                                             </div>
                                                         </div>
                                                         <Field 
@@ -517,6 +535,15 @@
                                                                     title="Áp dụng bộ ảnh nội thất này cho tất cả các màu khác trong phiên bản"
                                                                 >
                                                                     ⚡ Áp dụng cho tất cả màu
+                                                                </button>
+                                                                <button 
+                                                                    v-if="form.versions[activeVersionIndex].colors[cIdx].images_360_internal?.length > 0"
+                                                                    type="button" 
+                                                                    @click="clear360Interior(activeVersionIndex, cIdx)"
+                                                                    class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 text-[11px] font-semibold rounded-md cursor-pointer border border-rose-200 flex items-center gap-1 transition shadow-2xs"
+                                                                    title="Xóa bộ ảnh 360° nội thất này"
+                                                                >
+                                                                    🗑️ Xóa
                                                                 </button>
                                                             </div>
                                                         </div>
@@ -2277,6 +2304,48 @@ export default {
                         }
                     }
                 });
+            }
+        },
+
+        clear360Exterior(versionIndex, colorIndex) {
+            const color = this.formData.versions[versionIndex]?.colors?.[colorIndex];
+            const imgs = color?.images_360;
+            if (!imgs || (Array.isArray(imgs) && imgs.length === 0)) {
+                alert("Bộ ảnh 360° Ngoại thất của màu này đã trống!");
+                return;
+            }
+            const count = Array.isArray(imgs) ? imgs.length : 1;
+            if (confirm(`Bạn có chắc chắn muốn xóa tất cả ${count} ảnh 360° Ngoại thất của màu "${color.name || 'này'}" không?`)) {
+                color.images_360 = [];
+            }
+        },
+
+        clear360Interior(versionIndex, colorIndex) {
+            const color = this.formData.versions[versionIndex]?.colors?.[colorIndex];
+            const imgs = color?.images_360_internal;
+            if (!imgs || (Array.isArray(imgs) && imgs.length === 0)) {
+                alert("Bộ ảnh 360° Nội thất của màu này đã trống!");
+                return;
+            }
+            const count = Array.isArray(imgs) ? imgs.length : 1;
+            if (confirm(`Bạn có chắc chắn muốn xóa tất cả ${count} ảnh 360° Nội thất của màu "${color.name || 'này'}" không?`)) {
+                color.images_360_internal = [];
+            }
+        },
+
+        clearAll360ForColor(versionIndex, colorIndex) {
+            const color = this.formData.versions[versionIndex]?.colors?.[colorIndex];
+            if (!color) return;
+            const extCount = Array.isArray(color.images_360) ? color.images_360.length : (color.images_360 ? 1 : 0);
+            const intCount = Array.isArray(color.images_360_internal) ? color.images_360_internal.length : (color.images_360_internal ? 1 : 0);
+            if (extCount === 0 && intCount === 0 && !color.image_360_internal) {
+                alert("Màu này chưa có dữ liệu ảnh 360° nào!");
+                return;
+            }
+            if (confirm(`Bạn có chắc chắn muốn xóa TOÀN BỘ dữ liệu ảnh 360° (Ngoại thất, Nội thất, Panorama) của màu "${color.name || 'này'}" không?`)) {
+                color.images_360 = [];
+                color.images_360_internal = [];
+                color.image_360_internal = null;
             }
         },
 
