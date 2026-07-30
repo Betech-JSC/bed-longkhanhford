@@ -39,6 +39,7 @@ class PostController extends Controller
             $topPosts = Post::query()
                 ->where('type', Post::TYPE_POST)
                 ->active()
+                ->orderBy('is_featured', 'desc')
                 ->orderBy('published_at', 'desc')
                 ->orderBy('id', 'desc')
                 ->take(4)
