@@ -519,8 +519,42 @@ class File
 
     protected function responseImage($options)
     {
-        // Temporarily disable image caching as requested
-        return $this->responseDefault();
+        $pathinfo = pathinfo($this->path);
+        $options = array_merge(['fm' => 'webp'], $options);
+
+        $newFilename = implode('_', $options);
+
+        $cacheFolder = 'cache/' . $pathinfo['dirname'] . '/' . str_replace('.', '_', $pathinfo['basename']);
+        $cacheFilename = $pathinfo['filename'] . '_' . $newFilename . '.' . $options['fm'];
+        $cacheFullPath = $cacheFolder . '/' . $cacheFilename;
+
+        if (!$this->publicStorage->exists($cacheFullPath)) {
+            try {
+                // Create cache folder if it doesn't exist
+                $this->publicStorage->makeDirectory($cacheFolder, 0755, true);
+
+                $imagePath = $this->storage->path($this->path);
+
+                $image = Image::make($imagePath);
+
+                if (isset($options['w'])) {
+                    $image->resize($options['w'], null, function ($constraint) {
+                        $constraint->aspectRatio();
+                    });
+                }
+
+                $image
+                    ->encode($options['fm'], 80)
+                    ->save($this->publicStorage->path($cacheFullPath));
+            } catch (\Exception $e) {
+                logger()->error('Image caching/resize failed, falling back to original: ' . $e->getMessage());
+                return $this->responseDefault();
+            }
+        }
+
+        return redirect(asset('storage/' . $cacheFullPath), 302, [
+            'Cache-Control' => 'public, max-age=86400',
+        ]);
     }
 
 
@@ -528,10 +562,7 @@ class File
     {
         return response()
             ->make($this->getFileData(), 200)
-            ->header('Content-Type', $this->getMimeType())
-            ->header('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0')
-            ->header('Pragma', 'no-cache')
-            ->header('Expires', '0');
+            ->header('Content-Type', $this->getMimeType());
     }
 
     protected function getFullPath(): string
