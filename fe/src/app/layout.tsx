@@ -114,6 +114,9 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        <link rel="preload" href="/assets/hero_everest.jpg" as="image" fetchPriority="high" />
+        <link rel="preload" href="/assets/hero_ranger.jpg" as="image" fetchPriority="high" />
+        <link rel="preload" href="/assets/hero_territory.jpg" as="image" fetchPriority="high" />
         <link rel="preconnect" href="https://cms.dnf.betech-digital.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://cms.dnf.betech-digital.com" />
         <link rel="preconnect" href="https://cms.longkhanhford.com.vn" crossOrigin="anonymous" />
