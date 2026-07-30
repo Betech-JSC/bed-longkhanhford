@@ -667,7 +667,7 @@ export default function Home() {
           100% { transform: scaleX(1); }
         }
         .animate-hero-progress {
-          animation: hero-progress-bar 5s linear forwards;
+          animation: hero-progress-bar 2.5s linear forwards;
           transform-origin: left;
         }
         .text-btn-hover-effect {
@@ -710,23 +710,30 @@ export default function Home() {
                 activeHeroIndex === idx ? "opacity-90 scale-100" : "opacity-0 scale-105"
               }`}
             >
-              {/* Responsive Hero Image using picture tag to prevent dual downloads on mobile */}
-              <picture className="w-full h-full block">
-                {slide.image && (
-                  <source media="(min-width: 768px)" srcSet={slide.image} />
-                )}
-                <img
-                  src={slide.imageMobile || slide.image}
-                  alt={slide.title}
-                  loading={idx === 0 ? "eager" : "lazy"}
-                  fetchPriority={idx === 0 ? "high" : "low"}
-                  decoding="async"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = "/images-dynamic/image-hero-1.jpg";
-                  }}
-                  className="object-cover w-full h-full object-center md:object-top transform transition-transform duration-10000"
-                />
-              </picture>
+              {/* Desktop Image */}
+              <img
+                src={slide.image}
+                alt={slide.title}
+                loading={idx === 0 ? "eager" : "lazy"}
+                fetchPriority={idx === 0 ? "high" : "low"}
+                decoding="async"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = "/images-dynamic/image-hero-1.jpg";
+                }}
+                className="hidden md:block object-cover w-full h-full object-top transform transition-transform duration-10000"
+              />
+              {/* Mobile Image */}
+              <img
+                src={slide.imageMobile || slide.image}
+                alt={slide.title}
+                loading={idx === 0 ? "eager" : "lazy"}
+                fetchPriority={idx === 0 ? "high" : "low"}
+                decoding="async"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = "/images-dynamic/image-hero-1.jpg";
+                }}
+                className="block md:hidden object-cover w-full h-full object-center transform transition-transform duration-10000"
+              />
             </div>
           ))}
 
