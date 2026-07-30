@@ -617,12 +617,12 @@ export default function Home() {
     return new Intl.NumberFormat("en-US").format(price) + "đ";
   };
 
-  // Auto-play hero slides every 2.5 seconds
+  // Auto-play hero slides every 5 seconds
   useEffect(() => {
     if (heroSlides.length <= 1) return;
     const timer = setInterval(() => {
       setActiveHeroIndex((prev) => (prev + 1) % heroSlides.length);
-    }, 2500);
+    }, 5000);
     return () => clearInterval(timer);
   }, [heroSlides.length]);
 
@@ -667,7 +667,7 @@ export default function Home() {
           100% { transform: scaleX(1); }
         }
         .animate-hero-progress {
-          animation: hero-progress-bar 2.5s linear forwards;
+          animation: hero-progress-bar 5s linear forwards;
           transform-origin: left;
         }
         .text-btn-hover-effect {
@@ -718,8 +718,8 @@ export default function Home() {
                 <img
                   src={slide.imageMobile || slide.image}
                   alt={slide.title}
-                  loading={idx === 0 ? "eager" : "lazy"}
-                  fetchPriority={idx === 0 ? "high" : "low"}
+                  loading="eager"
+                  fetchPriority="high"
                   decoding="async"
                   onError={(e) => {
                     (e.target as HTMLImageElement).src = "/images-dynamic/image-hero-1.jpg";
