@@ -341,7 +341,7 @@ class File
 
                     if ($this->fileValidation($file)) {
                         $mimeType = $file->getMimeType();
-                        $isImage = str_contains($mimeType, 'image/') && !str_contains($mimeType, 'svg') && !str_contains($mimeType, 'gif') && !str_contains($mimeType, 'png');
+                        $isImage = str_contains($mimeType, 'image/') && !str_contains($mimeType, 'svg') && !str_contains($mimeType, 'gif');
 
                         if ($isImage) {
                             try {
