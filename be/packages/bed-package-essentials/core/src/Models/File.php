@@ -378,37 +378,8 @@ class File
 
     protected function responseImage($options)
     {
-        $pathinfo = pathinfo($this->path);
-        $options = array_merge(['fm' => 'webp'], $options);
-
-        $newFilename = implode('_', $options);
-
-        $cacheFolder = 'cache/' . $pathinfo['dirname'] . '/' . str_replace('.', '_', $pathinfo['basename']);
-        $cacheFilename = $pathinfo['filename'] . '_' . $newFilename . '.' . $options['fm'];
-        $cacheFullPath = $cacheFolder . '/' . $cacheFilename;
-
-        if (!$this->publicStorage->exists($cacheFullPath)) {
-            // Create cache folder if it doesn't exist
-            $this->publicStorage->makeDirectory($cacheFolder, 0755, true);
-
-            $imagePath = $this->storage->path($this->path);
-
-            $image = Image::make($imagePath);
-
-            if (isset($options['w'])) {
-                $image->resize($options['w'], null, function ($constraint) {
-                    $constraint->aspectRatio();
-                });
-            }
-
-            $image
-                ->encode($options['fm'], 80)
-                ->save($this->publicStorage->path($cacheFullPath));
-        }
-
-        return redirect(asset('storage/' . $cacheFullPath), 302, [
-            'Cache-Control' => 'public, max-age=86400',
-        ]);
+        // Temporarily disable image caching as requested
+        return $this->responseDefault();
     }
 
 
@@ -416,7 +387,10 @@ class File
     {
         return response()
             ->make($this->getFileData(), 200)
-            ->header('Content-Type', $this->getMimeType());
+            ->header('Content-Type', $this->getMimeType())
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', '0');
     }
 
     protected function getFullPath(): string
