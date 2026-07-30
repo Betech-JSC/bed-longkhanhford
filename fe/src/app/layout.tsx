@@ -7,9 +7,8 @@ import Footer from "@/components/layout/Footer";
 import { settingsAPI } from "@/lib/api";
 // import AIChatWidget from "@/components/shared/AIChatWidget";
 // import CompareDrawer from "@/components/shared/CompareDrawer";
-import QuickAccessToolbar from "@/components/shared/QuickAccessToolbar";
+import ClientWidgets from "@/components/shared/ClientWidgets";
 import PageTransitionLoader from "@/components/shared/PageTransitionLoader";
-import CookieConsent from "@/components/shared/CookieConsent";
 import "./globals.css";
 
 const inter = Inter({
@@ -39,8 +38,7 @@ export const metadata: Metadata = {
   },
 };
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -167,8 +165,7 @@ export default async function RootLayout({
         <Footer />
         {/* <AIChatWidget /> */}
         {/* <CompareDrawer /> */}
-        <QuickAccessToolbar />
-        <CookieConsent />
+        <ClientWidgets />
         {/* Dynamic Body End Inject Code from CMS */}
         {injectBodyEnd && (
           <div

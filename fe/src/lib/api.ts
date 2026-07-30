@@ -1,6 +1,11 @@
 /**
- * API utility for fetching data from Laravel backend
- * Base URL should be configured via environment variable
+ * API utility for fetching data from Laravel backend.
+ * 
+ * Caching Strategy (On-Demand ISR):
+ * - All GET requests use `force-cache` with tags by default (server-side).
+ * - When admin updates CMS → Laravel calls /api/revalidate → purges tags → fresh data.
+ * - Client-side fetches (from "use client" pages) bypass server cache naturally.
+ * - Mutations (POST/PUT/DELETE) always use `no-store`.
  */
 
 function getApiBaseUrl(): string {
@@ -17,14 +22,22 @@ function getApiBaseUrl(): string {
 }
 
 /**
- * Generic fetch wrapper with error handling
+ * Generic fetch wrapper with tag-based caching and error handling.
+ * 
+ * @param endpoint - API endpoint path (e.g. '/vehicles')
+ * @param options  - Standard RequestInit options
+ * @param tags     - Next.js cache tags for on-demand revalidation
  */
-async function fetchAPI<T = any>(endpoint: string, options?: RequestInit): Promise<T> {
+async function fetchAPI<T = any>(
+  endpoint: string,
+  options?: RequestInit & { next?: { tags?: string[]; revalidate?: number } },
+  tags?: string[]
+): Promise<T> {
   const url = `${getApiBaseUrl()}${endpoint}`;
   const isGet = !options?.method || options.method.toUpperCase() === 'GET';
-  
-  // Use 60-second ISR revalidation for GET requests unless explicit cache option provided
-  const fetchOptions: RequestInit = {
+  const isServer = typeof window === 'undefined';
+
+  const fetchOptions: RequestInit & { next?: { tags?: string[]; revalidate?: number } } = {
     headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
@@ -33,10 +46,19 @@ async function fetchAPI<T = any>(endpoint: string, options?: RequestInit): Promi
     ...options,
   };
 
+  // Apply caching strategy
   if (isGet && !options?.cache && !options?.next) {
-    (fetchOptions as any).cache = 'no-store';
+    if (isServer && tags && tags.length > 0) {
+      // Server-side: use force-cache with tags for on-demand revalidation
+      fetchOptions.cache = 'force-cache';
+      fetchOptions.next = { tags };
+    } else if (isServer) {
+      // Server-side without tags: short ISR revalidation as fallback
+      fetchOptions.next = { revalidate: 60 };
+    }
+    // Client-side: no special cache config (browser handles it)
   }
-  
+
   try {
     const response = await fetch(url, fetchOptions);
 
@@ -66,25 +88,19 @@ import { cache } from 'react';
  * Vehicles API
  */
 export const vehiclesAPI = {
-  // Get all vehicles
   getAll: (params?: Record<string, any>) => {
     const query = params ? '?' + new URLSearchParams(params as any).toString() : '';
-    return fetchAPI<any>(`/vehicles${query}`);
+    return fetchAPI<any>(`/vehicles${query}`, undefined, ['vehicles']);
   },
-  
-  // Get featured vehicles
-  getFeatured: () => fetchAPI('/vehicles/featured'),
-  
-  // Get best sellers
-  getBestSellers: (params?: Record<string, any>) => fetchAPI('/vehicles/featured'),
-  
-  // Get vehicle by slug (deduplicated per request via React cache)
-  getBySlug: cache((slug: string) => fetchAPI<any>(`/vehicles/${slug}`)),
-  
-  // Get vehicle categories
-  getCategories: () => fetchAPI('/vehicles/categories'),
 
-  // Update layout blocks
+  getFeatured: () => fetchAPI('/vehicles/featured', undefined, ['vehicles', 'homepage']),
+
+  getBestSellers: (params?: Record<string, any>) => fetchAPI('/vehicles/featured', undefined, ['vehicles', 'homepage']),
+
+  getBySlug: cache((slug: string) => fetchAPI<any>(`/vehicles/${slug}`, undefined, ['vehicles', `vehicle-${slug}`])),
+
+  getCategories: () => fetchAPI('/vehicles/categories', undefined, ['vehicles']),
+
   updateLayout: (slug: string, layoutBlocks: any[]) => fetchAPI<any>(`/vehicles/${slug}/layout`, {
     method: 'PUT',
     body: JSON.stringify({ layout_blocks: layoutBlocks }),
@@ -95,51 +111,49 @@ export const vehiclesAPI = {
  * Used Vehicles API
  */
 export const usedVehiclesAPI = {
-  // Get all used vehicles
   getAll: (params?: Record<string, any>) => {
     const query = params ? '?' + new URLSearchParams(params as any).toString() : '';
-    return fetchAPI<any>(`/used-vehicles${query}`);
+    return fetchAPI<any>(`/used-vehicles${query}`, undefined, ['used-vehicles']);
   },
-  
-  // Get used vehicle by slug
-  getBySlug: (slug: string) => fetchAPI<any>(`/used-vehicles/${slug}`),
+
+  getBySlug: (slug: string) => fetchAPI<any>(`/used-vehicles/${slug}`, undefined, ['used-vehicles']),
 };
 
 /**
  * Banners API
  */
 export const bannersAPI = {
-  getAll: () => fetchAPI('/vehicles/banners'),
+  getAll: () => fetchAPI('/vehicles/banners', undefined, ['banners', 'homepage']),
 };
 
 /**
  * Customer Reviews API
  */
 export const reviewsAPI = {
-  getAll: () => fetchAPI('/vehicles/reviews'),
+  getAll: () => fetchAPI('/vehicles/reviews', undefined, ['reviews', 'homepage']),
 };
 
 /**
  * Sales Consultants API
  */
 export const consultantsAPI = {
-  getAll: () => fetchAPI('/vehicles/consultants'),
-  getBySlug: (slug: string) => fetchAPI(`/vehicles/consultants/${slug}`),
+  getAll: () => fetchAPI('/vehicles/consultants', undefined, ['consultants']),
+  getBySlug: (slug: string) => fetchAPI(`/vehicles/consultants/${slug}`, undefined, ['consultants']),
 };
 
 /**
  * Partners API
  */
 export const partnersAPI = {
-  getAll: () => fetchAPI('/vehicles/partners'),
+  getAll: () => fetchAPI('/vehicles/partners', undefined, ['partners', 'homepage']),
 };
 
 /**
  * Products API
  */
 export const productsAPI = {
-  getAll: () => fetchAPI('/products'),
-  getFlashSale: () => fetchAPI('/product-sale'),
+  getAll: () => fetchAPI('/products', undefined, ['products']),
+  getFlashSale: () => fetchAPI('/product-sale', undefined, ['products']),
 };
 
 /**
@@ -148,21 +162,21 @@ export const productsAPI = {
 export const accessoriesAPI = {
   getAll: (params?: Record<string, any>) => {
     const query = params ? '?' + new URLSearchParams(params as any).toString() : '';
-    return fetchAPI<any>(`/accessories${query}`);
+    return fetchAPI<any>(`/accessories${query}`, undefined, ['accessories']);
   },
-  getBySlug: (slug: string) => fetchAPI<any>(`/accessories/${slug}`),
-  getCategories: () => fetchAPI<any>('/accessories/categories'),
+  getBySlug: (slug: string) => fetchAPI<any>(`/accessories/${slug}`, undefined, ['accessories']),
+  getCategories: () => fetchAPI<any>('/accessories/categories', undefined, ['accessories']),
 };
 
 /**
- * Posts/News API (assuming there's a posts endpoint)
+ * Posts/News API
  */
 export const postsAPI = {
   getAll: (params?: Record<string, any>) => {
     const query = params ? '?' + new URLSearchParams(params as any).toString() : '';
-    return fetchAPI(`/posts${query}`);
+    return fetchAPI(`/posts${query}`, undefined, ['posts']);
   },
-  getBySlug: (slug: string) => fetchAPI(`/posts/${slug}`),
+  getBySlug: (slug: string) => fetchAPI(`/posts/${slug}`, undefined, ['posts']),
 };
 
 /**
@@ -171,43 +185,43 @@ export const postsAPI = {
 export const policiesAPI = {
   getAll: (params?: Record<string, any>) => {
     const query = params ? '?' + new URLSearchParams(params as any).toString() : '';
-    return fetchAPI<any>(`/policies${query}`);
+    return fetchAPI<any>(`/policies${query}`, undefined, ['policies']);
   },
   getBySlug: (slug: string, params?: Record<string, any>) => {
     const query = params ? '?' + new URLSearchParams(params as any).toString() : '';
-    return fetchAPI<any>(`/policies/${slug}${query}`);
+    return fetchAPI<any>(`/policies/${slug}${query}`, undefined, ['policies']);
   },
 };
 
 /**
- * Services API (assuming there's a services endpoint)
+ * Services API
  */
 export const servicesAPI = {
-  getAll: () => fetchAPI('/services'),
-  getBySlug: (slug: string) => fetchAPI(`/services/${slug}`),
+  getAll: () => fetchAPI('/services', undefined, ['services']),
+  getBySlug: (slug: string) => fetchAPI(`/services/${slug}`, undefined, ['services']),
 };
 
 /**
- * Jobs API (assuming there's a jobs endpoint)
+ * Jobs API
  */
 export const jobsAPI = {
-  getAll: () => fetchAPI('/jobs'),
-  getBySlug: (slug: string) => fetchAPI(`/jobs/${slug}`),
+  getAll: () => fetchAPI('/jobs', undefined, ['jobs']),
+  getBySlug: (slug: string) => fetchAPI(`/jobs/${slug}`, undefined, ['jobs']),
 };
 
 /**
- * Agencies API (assuming there's an agencies endpoint)
+ * Agencies API
  */
 export const agenciesAPI = {
-  getAll: () => fetchAPI('/agencies'),
-  getBySlug: (slug: string) => fetchAPI(`/agencies/${slug}`),
+  getAll: () => fetchAPI('/agencies', undefined, ['agencies']),
+  getBySlug: (slug: string) => fetchAPI(`/agencies/${slug}`, undefined, ['agencies']),
 };
 
 /**
  * Settings API
  */
 export const settingsAPI = {
-  getInstallmentRates: () => fetchAPI<{ success: boolean; data: { rate_year_1: number; rate_subsequent: number } }>('/settings/installment'),
+  getInstallmentRates: () => fetchAPI<{ success: boolean; data: { rate_year_1: number; rate_subsequent: number } }>('/settings/installment', undefined, ['settings']),
   getGeneral: () => fetchAPI<{
     success: boolean;
     data: {
@@ -222,22 +236,22 @@ export const settingsAPI = {
       general_company_copyright: string;
       about_team_images?: any[];
     };
-  }>('/settings/general'),
+  }>('/settings/general', undefined, ['settings']),
 };
 
 /**
  * Regions API
  */
 export const regionsAPI = {
-  getProvinces: () => fetchAPI<{ success: boolean; data: { id: string; name: string }[] }>('/regions/provinces'),
+  getProvinces: () => fetchAPI<{ success: boolean; data: { id: string; name: string }[] }>('/regions/provinces', undefined, ['regions']),
 };
 
 export const registrationFeesAPI = {
-  getAll: () => fetchAPI<{ success: boolean; data: any[] }>('/regions/registration-fees'),
+  getAll: () => fetchAPI<{ success: boolean; data: any[] }>('/regions/registration-fees', undefined, ['regions']),
 };
 
 /**
- * Contacts API
+ * Contacts API (mutations — no cache)
  */
 export const contactsAPI = {
   submit: (payload: {
@@ -255,18 +269,18 @@ export const contactsAPI = {
  * Maintenance API
  */
 export const maintenanceAPI = {
-  getSchedules: () => fetchAPI<any>('/maintenance-schedules'),
+  getSchedules: () => fetchAPI<any>('/maintenance-schedules', undefined, ['maintenance']),
 };
 
 /**
  * Customer Handovers API (Tri ân khách hàng)
  */
 export const customerHandoversAPI = {
-  getAll: () => fetchAPI<{ success: boolean; data: any[] }>('/customer-handovers'),
+  getAll: () => fetchAPI<{ success: boolean; data: any[] }>('/customer-handovers', undefined, ['handovers', 'homepage']),
 };
 
 /**
- * Media API for uploads
+ * Media API for uploads (mutations — no cache)
  */
 export const mediaAPI = {
   upload: async (file: File): Promise<{ success: boolean; path: string; url: string }> => {

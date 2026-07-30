@@ -58,6 +58,7 @@ return [
     'api_url' => env('API_URL', env('APP_URL') . '/api'),
     'static_url' => env('STATIC_URL', env('APP_URL') . '/static'),
     'frontend_url' => env('FRONTEND_URL', env('APP_URL')),
+    'revalidate_secret' => env('REVALIDATE_SECRET', ''),
     'asset_url' => env('ASSET_URL'),
 
     /*

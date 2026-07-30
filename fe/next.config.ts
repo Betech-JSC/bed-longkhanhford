@@ -10,9 +10,9 @@ const nextConfig = {
     optimizePackageImports: ["lucide-react", "motion"],
   },
   images: {
-    unoptimized: true,
+    unoptimized: false,
     formats: ["image/avif", "image/webp"],
-    minimumCacheTTL: 0,
+    minimumCacheTTL: 2592000,
     dangerouslyAllowLocalIP: true,
     remotePatterns: [
       {
