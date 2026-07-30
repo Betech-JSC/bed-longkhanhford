@@ -174,31 +174,7 @@ const INITIAL_BRAND_ITEMS = [
 export default function Home() {
   const router = useRouter();
 
-  const defaultInitialHeroSlides = [
-    {
-      title: "Ford Everest Thế Hệ Mới",
-      subtitle: "Định hình phong cách sống thượng lưu, nâng tầm vị thế",
-      image: siteAssets.heroSlides?.[0] || "/assets/hero_everest.jpg",
-      imageMobile: siteAssets.heroSlides?.[0] || "/assets/hero_everest_mobile.jpg",
-      linkVehicleId: ""
-    },
-    {
-      title: "Ford Ranger Thế Hệ Mới",
-      subtitle: "Bản lĩnh chinh phục mọi thử thách, thống trị mọi địa hình",
-      image: siteAssets.heroSlides?.[1] || "/assets/hero_ranger.jpg",
-      imageMobile: siteAssets.heroSlides?.[1] || "/assets/hero_ranger_mobile.jpg",
-      linkVehicleId: ""
-    },
-    {
-      title: "Ford Territory Thế Hệ Mới",
-      subtitle: "Không gian thông minh, công nghệ tương lai cho gia đình bạn",
-      image: siteAssets.heroSlides?.[2] || "/assets/hero_territory.jpg",
-      imageMobile: siteAssets.heroSlides?.[2] || "/assets/hero_territory_mobile.jpg",
-      linkVehicleId: ""
-    }
-  ];
-
-  const [heroSlides, setHeroSlides] = useState<any[]>(defaultInitialHeroSlides);
+  const [heroSlides, setHeroSlides] = useState<any[]>([]);
   const [homeArticles, setHomeArticles] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [vehiclesList, setVehiclesList] = useState<any[]>([]);
@@ -641,29 +617,14 @@ export default function Home() {
     return new Intl.NumberFormat("en-US").format(price) + "đ";
   };
 
-  // Auto-play hero slides every 5 seconds
+  // Auto-play hero slides every 2.5 seconds
   useEffect(() => {
     if (heroSlides.length <= 1) return;
     const timer = setInterval(() => {
       setActiveHeroIndex((prev) => (prev + 1) % heroSlides.length);
-    }, 5000);
+    }, 2500);
     return () => clearInterval(timer);
   }, [heroSlides.length]);
-
-  // Preload all hero slide images into browser RAM memory for instant 0ms switching
-  useEffect(() => {
-    if (typeof window === "undefined" || heroSlides.length === 0) return;
-    heroSlides.forEach((slide) => {
-      if (slide.image) {
-        const img = new window.Image();
-        img.src = slide.image;
-      }
-      if (slide.imageMobile) {
-        const imgMobile = new window.Image();
-        imgMobile.src = slide.imageMobile;
-      }
-    });
-  }, [heroSlides]);
 
 
 
@@ -741,40 +702,33 @@ export default function Home() {
           onTouchStart={(e) => handleHeroStart(e.touches[0].clientX)}
           onTouchEnd={(e) => handleHeroEnd(e.changedTouches[0].clientX)}
         >
-          {/* Absolute Background Slides (Zero Black Bleed with Solid Layer Stacking) */}
-          {heroSlides.map((slide, idx) => {
-            const isActive = activeHeroIndex === idx;
-            const isPrev = (activeHeroIndex - 1 + heroSlides.length) % heroSlides.length === idx;
-            
-            // Active slide sits on top (z-10) and fades in smoothly.
-            // Previous slide stays solid underneath (z-5, opacity-100) so container background never bleeds!
-            const layerClass = isActive
-              ? "z-10 opacity-100 pointer-events-auto transition-opacity duration-300 ease-out"
-              : isPrev
-              ? "z-5 opacity-100 pointer-events-none transition-none"
-              : "z-0 opacity-0 pointer-events-none transition-none";
-
-            return (
-              <div key={idx} className={`absolute inset-0 ${layerClass}`}>
-                <picture className="w-full h-full block">
-                  {slide.image && (
-                    <source media="(min-width: 768px)" srcSet={slide.image} />
-                  )}
-                  <img
-                    src={slide.imageMobile || slide.image}
-                    alt={slide.title}
-                    loading="eager"
-                    fetchPriority="high"
-                    decoding="sync"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = "/images-dynamic/image-hero-1.jpg";
-                    }}
-                    className="object-cover w-full h-full object-center md:object-top"
-                  />
-                </picture>
-              </div>
-            );
-          })}
+          {/* Absolute Background Slides (with fade transitions) */}
+          {heroSlides.map((slide, idx) => (
+            <div
+              key={idx}
+              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out pointer-events-none ${
+                activeHeroIndex === idx ? "opacity-90 scale-100" : "opacity-0 scale-105"
+              }`}
+            >
+              {/* Responsive Hero Image using picture tag to prevent dual downloads on mobile */}
+              <picture className="w-full h-full block">
+                {slide.image && (
+                  <source media="(min-width: 768px)" srcSet={slide.image} />
+                )}
+                <img
+                  src={slide.imageMobile || slide.image}
+                  alt={slide.title}
+                  loading={idx === 0 ? "eager" : "lazy"}
+                  fetchPriority={idx === 0 ? "high" : "low"}
+                  decoding="async"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = "/images-dynamic/image-hero-1.jpg";
+                  }}
+                  className="object-cover w-full h-full object-center md:object-top transform transition-transform duration-10000"
+                />
+              </picture>
+            </div>
+          ))}
 
           {/* Main Content Area */}
           <div className="max-w-[1440px] mx-auto w-full relative z-10 mt-auto pt-20 pb-[100px] md:pb-[60px]">
