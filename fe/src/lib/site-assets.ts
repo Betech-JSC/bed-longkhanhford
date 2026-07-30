@@ -94,18 +94,69 @@ export const resolveImageUrl = (img: string | { url?: string; path?: string; sta
   }
   if (!path) return "";
 
-  // 1. Local frontend assets in Next.js public directory
-  if (
-    (path.startsWith("/") &&
-      !path.startsWith("/static/") &&
-      !path.startsWith("/uploads/") &&
-      !path.startsWith("/storage/") &&
-      !/^\/(everest|territory|explorer|transit|ranger|mustang)\//i.test(path)) ||
-    path.startsWith("data:")
-  ) {
+  // 1. Data URLs
+  if (path.startsWith("data:")) {
     return path;
   }
 
+  // 2. Check if path is a known frontend local static asset in Next.js /public/ directory
+  const cleanPathLower = path.toLowerCase();
+  
+  // Direct matches for local frontend vehicle & static assets
+  if (cleanPathLower.includes("territory-hero") || cleanPathLower.includes("territory_hero")) {
+    return "/assets/territory-hero.png";
+  }
+  if (cleanPathLower.includes("everest_platinum") || cleanPathLower.includes("everest-platinum")) {
+    return "/assets/everest_platinum.png";
+  }
+  if (cleanPathLower.includes("ranger_wildtrak") || cleanPathLower.includes("ranger-wildtrak")) {
+    return "/assets/ranger_wildtrak.png";
+  }
+  if (cleanPathLower.includes("ranger_raptor") || cleanPathLower.includes("ranger-raptor")) {
+    return "/assets/ranger_raptor.png";
+  }
+  if (cleanPathLower.includes("transit_premium") || cleanPathLower.includes("transit-premium")) {
+    return "/assets/transit_premium.png";
+  }
+  if (cleanPathLower.includes("mach-e-hero") || cleanPathLower.includes("mach_e_hero")) {
+    return "/assets/mach-e-hero.png";
+  }
+  if (cleanPathLower.includes("mustang_dark_horse") || cleanPathLower.includes("mustang-dark-horse")) {
+    return "/assets/mustang_dark_horse.png";
+  }
+
+  if (
+    cleanPathLower.startsWith("/assets/") ||
+    cleanPathLower.startsWith("assets/") ||
+    cleanPathLower.startsWith("/images/") ||
+    cleanPathLower.startsWith("images/") ||
+    cleanPathLower.startsWith("/images-dynamic/") ||
+    cleanPathLower.startsWith("images-dynamic/") ||
+    cleanPathLower.startsWith("/showroom_bg") ||
+    cleanPathLower.startsWith("/service-")
+  ) {
+    return path.startsWith("/") ? path : `/${path}`;
+  }
+
+  // 3. Foreign absolute URLs (e.g. Unsplash, Google maps, third-party CDN)
+  if (path.startsWith("http://") || path.startsWith("https://")) {
+    try {
+      const parsed = new URL(path);
+      const host = parsed.hostname.toLowerCase();
+      const isCmsHost = host.includes("longkhanhford") || host.includes("betech") || host === "localhost" || host === "127.0.0.1";
+      
+      if (!isCmsHost) {
+        return path;
+      }
+      
+      // If it's from CMS host, extract pathname
+      path = parsed.pathname + parsed.search;
+    } catch {
+      // keep path as is
+    }
+  }
+
+  // 4. CMS Base Domain
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://cms.longkhanhford.betech-digital.com/api";
   let baseDomain = apiUrl.replace(/\/api\/?$/, "");
 
@@ -116,62 +167,18 @@ export const resolveImageUrl = (img: string | { url?: string; path?: string; sta
   }
 
   let clean = path;
-
-  // 2. Extract pathname if string starts with protocol
-  if (clean.startsWith("http://") || clean.startsWith("https://")) {
-    try {
-      const parsed = new URL(clean);
-      const host = parsed.hostname.toLowerCase();
-      const isLocalOrCmsHost = host === "localhost" || host === "127.0.0.1" || host.includes("longkhanhford") || host.includes("betech");
-      const hasStaticPath = parsed.pathname.startsWith("/static/") || parsed.pathname.startsWith("/uploads/") || parsed.pathname.startsWith("/storage/");
-
-      // If it's a foreign third-party domain (e.g. Unsplash, Google maps) and not local/cms and no /static/ path:
-      if (!isLocalOrCmsHost && !hasStaticPath && !/\.(webp|png|jpg|jpeg|gif|svg)$/i.test(host)) {
-        return clean;
-      }
-
-      // Check if domain is corrupted (filename as hostname, e.g. http://ford-ranger.webp)
-      const isCorruptedFilenameDomain = /\.(webp|png|jpg|jpeg|gif|svg)$/i.test(host);
-      if (isCorruptedFilenameDomain && (parsed.pathname === "/" || parsed.pathname === "")) {
-        clean = `/static/${host}`;
-      } else {
-        clean = parsed.pathname + parsed.search;
-      }
-    } catch {
-      // keep clean as is
-    }
-  } else if (clean.startsWith("//")) {
-    clean = clean.replace(/^\/\//, "");
-  }
-
-  // 3. Remove embedded domain names from path (e.g. cms.emf.betech-digital.com or cms.longkhanhford.betech-digital.com)
   clean = clean.replace(/^([a-zA-Z0-9.-]+\.(com|vn|net|org|digital|app|dev)(:\d+)?)\/?/gi, "");
-  clean = clean.replace(/\/([a-zA-Z0-9.-]+\.(com|vn|net|org|digital|app|dev)(:\d+)?)\//gi, "/");
-
-  // 4. Clean duplicated /static/, /uploads/, or /storage/ prefixes
   clean = clean.replace(/^(\/?static)+/gi, "/static");
   clean = clean.replace(/^(\/?uploads)+/gi, "/uploads");
   clean = clean.replace(/^(\/?storage)+/gi, "/storage");
-  clean = clean.replace(/\/static\/static\//gi, "/static/");
 
-  // 5. Build full URL with baseDomain
-  let fullUrl = "";
   if (clean.startsWith("/static/") || clean.startsWith("/uploads/") || clean.startsWith("/storage/")) {
-    fullUrl = `${baseDomain}${clean}`;
-  } else if (clean.startsWith("static/") || clean.startsWith("uploads/") || clean.startsWith("storage/")) {
-    fullUrl = `${baseDomain}/${clean}`;
-  } else {
-    const cleanPath = clean.replace(/^\//, "");
-    fullUrl = `${baseDomain}/static/${cleanPath}`;
+    return `${baseDomain}${clean}`;
+  }
+  if (clean.startsWith("static/") || clean.startsWith("uploads/") || clean.startsWith("storage/")) {
+    return `${baseDomain}/${clean}`;
   }
 
-  // 6. Final deduplication pass on fullUrl
-  fullUrl = fullUrl.replace(/\/static\/[a-zA-Z0-9.-]+\.(com|vn|net|org|digital|app|dev)(:\d+)?\//gi, "/static/");
-  fullUrl = fullUrl.replace(/\/static\/static\//gi, "/static/");
-
-  try {
-    return encodeURI(decodeURI(fullUrl));
-  } catch {
-    return encodeURI(fullUrl);
-  }
+  const cleanPath = clean.replace(/^\//, "");
+  return `${baseDomain}/static/${cleanPath}`;
 };

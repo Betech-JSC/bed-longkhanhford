@@ -5,7 +5,7 @@ import { useVehicle, VehicleTabBar } from "./VehicleLayoutClient";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, ChevronDown, Car, Calculator, FileText, Phone, ShieldCheck, CheckCircle } from "lucide-react";
-import { resolveImageUrl } from "@/lib/site-assets";
+import { resolveImageUrl, handleImageError } from "@/lib/site-assets";
 import ScrollReveal from "@/components/common/ScrollReveal";
 
 // Vietnamese-accent-safe URL slug generator
@@ -642,6 +642,7 @@ export default function VehicleVersionDetailClient() {
                   <img
                     src={resolveImageUrl(fallbackImageSrc)}
                     alt={currentColor?.name || selectedVersion?.name || vehicle.name}
+                    onError={handleImageError}
                     className="w-full h-full object-contain select-none pointer-events-none"
                   />
                   {isImageSequence && (
