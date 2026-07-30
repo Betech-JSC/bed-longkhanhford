@@ -103,6 +103,23 @@ export default function CompareDrawer() {
     };
   }, []);
 
+  // Sync compare-drawer-active class with body for CSS styling of other floating widgets
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      if (selectedIds.length > 0) {
+        document.body.classList.add("compare-drawer-active");
+      } else {
+        document.body.classList.remove("compare-drawer-active");
+      }
+    }
+    return () => {
+      if (typeof document !== "undefined") {
+        document.body.classList.remove("compare-drawer-active");
+      }
+    };
+  }, [selectedIds]);
+
+
   const handleRemove = (id: string) => {
     const updated = selectedIds.filter((item) => item !== id);
     localStorage.setItem("compare-vehicles", JSON.stringify(updated));

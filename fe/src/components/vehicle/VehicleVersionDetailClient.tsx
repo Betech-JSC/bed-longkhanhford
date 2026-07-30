@@ -611,7 +611,7 @@ export default function VehicleVersionDetailClient() {
 
               <button
                 onClick={() => openQuoteDrawer(vehicle.id, selectedVersion?.id)}
-                className="bg-[#066fef] hover:bg-[#00095B] transition-all px-3 py-2.5 rounded-full text-white text-[12px] sm:text-[13px] font-bold cursor-pointer inline-flex items-center justify-center gap-2 border-0 uppercase tracking-tight font-antenna shadow-xs hover:shadow-md w-full"
+                className="bg-[#00095B] hover:bg-[#066fef] transition-all px-3 py-2.5 rounded-full text-white text-[12px] sm:text-[13px] font-bold cursor-pointer inline-flex items-center justify-center gap-2 border-0 uppercase tracking-tight font-antenna shadow-xs hover:shadow-md w-full"
               >
                 <span>Nhận báo giá</span>
               </button>

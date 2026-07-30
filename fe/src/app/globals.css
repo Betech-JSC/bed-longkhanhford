@@ -1161,3 +1161,31 @@ h1, h2, h3, h4, h5, h6 {
     }
   }
 }
+
+/* Zalo chat widget repositioning to prevent overlap with slider and comparison drawer */
+.zalo-chat-widget,
+#zalo-chat-widget,
+[class*="zalo-chat-widget"] {
+  right: 24px !important;
+  left: auto !important;
+  bottom: 100px !important; /* Raised on desktop to clear homepage banner slide indicators */
+  transition: all 0.3s ease-in-out !important;
+}
+
+@media (max-width: 640px) {
+  .zalo-chat-widget,
+  #zalo-chat-widget,
+  [class*="zalo-chat-widget"] {
+    left: 16px !important;
+    right: auto !important;
+    bottom: 80px !important; /* Positioned on the left on mobile to prevent overlapping with QuickAccessToolbar */
+  }
+
+  /* Shift Zalo chat widget up on mobile when compare drawer is visible */
+  body.compare-drawer-active .zalo-chat-widget,
+  body.compare-drawer-active #zalo-chat-widget,
+  body.compare-drawer-active [class*="zalo-chat-widget"] {
+    bottom: 136px !important;
+  }
+}
+

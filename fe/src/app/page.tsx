@@ -13,7 +13,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronUp,
-  ChevronDown,
+  // ChevronDown,
   X,
   Users,
   Plus,
@@ -186,7 +186,7 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [activeCarIndex, setActiveCarIndex] = useState(0);
   const [isFading, setIsFading] = useState(false);
-  const [activeServiceTab, setActiveServiceTab] = useState(0);
+  // const [activeServiceTab, setActiveServiceTab] = useState(0);
 
   useEffect(() => {
     setIsFading(true);
@@ -348,7 +348,7 @@ export default function Home() {
 
 
   // FAQ Accordion Open States (Single active index, null if all closed)
-  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+  // const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
 
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
@@ -591,9 +591,9 @@ export default function Home() {
     setActiveHeroIndex((prev) => (prev + 1) % heroSlides.length);
   };
 
-  const toggleFaq = (index: number) => {
-    setOpenFaqIndex(prev => (prev === index ? null : index));
-  };
+  // const toggleFaq = (index: number) => {
+  //   setOpenFaqIndex(prev => (prev === index ? null : index));
+  // };
 
   const triggerQuickAction = (reason: string, noteText: string) => {
     router.push(`/lien-he?reason=${encodeURIComponent(reason)}&note=${encodeURIComponent(noteText)}`);
@@ -617,12 +617,12 @@ export default function Home() {
     return new Intl.NumberFormat("en-US").format(price) + "đ";
   };
 
-  // Auto-play hero slides every 2.5 seconds
+  // Auto-play hero slides every 7 seconds
   useEffect(() => {
     if (heroSlides.length <= 1) return;
     const timer = setInterval(() => {
       setActiveHeroIndex((prev) => (prev + 1) % heroSlides.length);
-    }, 2500);
+    }, 7000);
     return () => clearInterval(timer);
   }, [heroSlides.length]);
 
@@ -667,7 +667,7 @@ export default function Home() {
           100% { transform: scaleX(1); }
         }
         .animate-hero-progress {
-          animation: hero-progress-bar 2.5s linear forwards;
+          animation: hero-progress-bar 7s linear forwards;
           transform-origin: left;
         }
         .text-btn-hover-effect {
@@ -1286,6 +1286,7 @@ export default function Home() {
       )}
 
       {/* 7. FULL-WIDTH BRAND BANNER */}
+      {/* 
       <section className="relative w-full h-[550px] md:h-[750px] overflow-hidden select-none">
         <Image
           src="/assets/ford-ranger-raptor-desktop.webp"
@@ -1314,6 +1315,7 @@ export default function Home() {
           </Button>
         </motion.div>
       </section>
+      */}
 
 
       {/* 9. CUSTOMER HANDOVER & CONSULTATION SECTION */}
@@ -1494,19 +1496,17 @@ export default function Home() {
       </section>
 
       {/* 9.6 CUSTOMER SERVICE & CARE TABBED SECTION */}
+      {/* 
       <section className="w-full bg-[#F8F8F8] py-16 md:py-24 border-t border-gray-100">
         <div className="max-w-[1440px] mx-auto w-full">
           <div className="max-w-[1152px] mx-auto w-full px-6 xl:px-0 space-y-12">
-            {/* Title */}
             <div className="text-left">
               <h2 className="text-3xl lg:text-[40px] font-bold text-black tracking-tight uppercase font-sans">
                 Dịch vụ và Chăm sóc khách hàng
               </h2>
             </div>
 
-            {/* Grid Container */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch">
-              {/* Left Column: Interactive Tabs Selector */}
               <div className="lg:col-span-5 flex flex-col justify-start gap-4">
                 {[
                   {
@@ -1544,7 +1544,6 @@ export default function Home() {
                         {tab.title}
                       </h3>
                       
-                      {/* Animated expandable description */}
                       <div className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out ${
                         isActive ? "grid-rows-[1fr] opacity-100 mt-3" : "grid-rows-[0fr] opacity-0"
                       }`}>
@@ -1565,7 +1564,6 @@ export default function Home() {
                 })}
               </div>
 
-              {/* Right Column: Dynamic Tab Image */}
               <div className="lg:col-span-7 relative h-[320px] sm:h-[400px] lg:h-auto min-h-[350px] w-full rounded-[12px] overflow-hidden border border-neutral-200/80 shadow-sm bg-gray-100">
                 {[
                   { src: siteAssets.serviceMaintenance, pos: "object-center" },
@@ -1599,19 +1597,19 @@ export default function Home() {
           </div>
         </div>
       </section>
+      */}
 
       {/* 10. FAQ & QUICK ACTIONS SECTION (MERGED & MINIMALIST) */}
+      {/* 
       <section className="w-full bg-[#F8F8F8] py-16 md:py-24">
         <div className="max-w-[1440px] mx-auto w-full">
           <div className="max-w-[1152px] mx-auto w-full px-6 xl:px-0">
-            {/* Title Area - Centered, no subtext */}
             <div className="text-center mb-10 md:mb-12">
               <h2 className="text-3xl lg:text-[40px] font-bold text-black tracking-tight uppercase font-sans">
                 Hỏi đáp dịch vụ
               </h2>
             </div>
 
-            {/* Accordions list - Flow vertically with max-w-[800px] */}
             <div className="flex flex-col gap-3.5 w-full max-w-[800px] mx-auto">
               {faqs.map((faq, idx) => {
                 const isOpen = openFaqIndex === idx;
@@ -1620,7 +1618,6 @@ export default function Home() {
                     key={idx}
                     className="relative overflow-hidden border border-gray-200/80 transition-all duration-300 rounded-lg shadow-xs bg-white"
                   >
-                    {/* Title Toggle trigger */}
                     <button
                       onClick={() => toggleFaq(idx)}
                       className={`w-full flex items-center justify-between text-left transition-all duration-300 cursor-pointer border-0 px-6 py-4.5 gap-4 group ${
@@ -1637,7 +1634,6 @@ export default function Home() {
                       }`} />
                     </button>
 
-                    {/* Body Content with Smooth Height Transition */}
                     <div className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out bg-white ${
                       isOpen ? "grid-rows-[1fr] opacity-100 border-t border-gray-100" : "grid-rows-[0fr] opacity-0"
                     }`}>
@@ -1656,6 +1652,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      */}
 
       <section id="consultation" className="relative py-16 md:py-24 px-0 w-full overflow-hidden bg-gradient-to-br from-white via-[#f0f7ff] to-[#d6e8ff] text-black">
         <div className="max-w-[1440px] mx-auto w-full relative z-10">
