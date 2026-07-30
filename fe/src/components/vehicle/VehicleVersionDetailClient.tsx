@@ -249,6 +249,11 @@ export default function VehicleVersionDetailClient() {
   }, [is360Active, isPreloaded]);
 
   const fallbackImageSrc = useMemo(() => {
+    // If selected version has its own uploaded image and has 0 colors defined in CMS Tab 2, use version's image directly
+    if (selectedVersion?.image_url && (!selectedVersion.colors || selectedVersion.colors.length === 0)) {
+      return selectedVersion.image_url;
+    }
+
     if (viewType === "interior") {
       return (currentColor?.images_360_internal && currentColor.images_360_internal.length > 0)
         ? currentColor.images_360_internal[0]
