@@ -213,6 +213,11 @@ class File
     public function findOrFail($options = [])
     {
         try {
+            if (!$this->storage->exists($this->path)) {
+                return response('File not found in CMS storage', 404)
+                    ->header('Content-Type', 'text/plain');
+            }
+
             if ($this->isVideo()) {
                 return $this->responseStreamingVideo();
             }

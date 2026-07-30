@@ -99,46 +99,21 @@ export const resolveImageUrl = (img: string | { url?: string; path?: string; sta
     return path;
   }
 
-  // 2. Check if path is a known frontend local static asset in Next.js /public/ directory
-  const cleanPathLower = path.toLowerCase();
-  
-  // Direct matches for local frontend vehicle & static assets
-  if (cleanPathLower.includes("territory-hero") || cleanPathLower.includes("territory_hero")) {
-    return "/assets/territory-hero.png";
-  }
-  if (cleanPathLower.includes("everest_platinum") || cleanPathLower.includes("everest-platinum")) {
-    return "/assets/everest_platinum.png";
-  }
-  if (cleanPathLower.includes("ranger_wildtrak") || cleanPathLower.includes("ranger-wildtrak")) {
-    return "/assets/ranger_wildtrak.png";
-  }
-  if (cleanPathLower.includes("ranger_raptor") || cleanPathLower.includes("ranger-raptor")) {
-    return "/assets/ranger_raptor.png";
-  }
-  if (cleanPathLower.includes("transit_premium") || cleanPathLower.includes("transit-premium")) {
-    return "/assets/transit_premium.png";
-  }
-  if (cleanPathLower.includes("mach-e-hero") || cleanPathLower.includes("mach_e_hero")) {
-    return "/assets/mach-e-hero.png";
-  }
-  if (cleanPathLower.includes("mustang_dark_horse") || cleanPathLower.includes("mustang-dark-horse")) {
-    return "/assets/mustang_dark_horse.png";
-  }
-
+  // 2. Local frontend public assets in Next.js /public/ directory
   if (
-    cleanPathLower.startsWith("/assets/") ||
-    cleanPathLower.startsWith("assets/") ||
-    cleanPathLower.startsWith("/images/") ||
-    cleanPathLower.startsWith("images/") ||
-    cleanPathLower.startsWith("/images-dynamic/") ||
-    cleanPathLower.startsWith("images-dynamic/") ||
-    cleanPathLower.startsWith("/showroom_bg") ||
-    cleanPathLower.startsWith("/service-")
+    path.startsWith("/assets/") ||
+    path.startsWith("assets/") ||
+    path.startsWith("/images/") ||
+    path.startsWith("images/") ||
+    path.startsWith("/images-dynamic/") ||
+    path.startsWith("images-dynamic/") ||
+    path.startsWith("/showroom_bg") ||
+    path.startsWith("/service-")
   ) {
     return path.startsWith("/") ? path : `/${path}`;
   }
 
-  // 3. Foreign absolute URLs (e.g. Unsplash, Google maps, third-party CDN)
+  // 3. Absolute URLs (e.g. https://cms.longkhanhford.betech-digital.com/... or third-party URLs)
   if (path.startsWith("http://") || path.startsWith("https://")) {
     try {
       const parsed = new URL(path);
@@ -149,14 +124,14 @@ export const resolveImageUrl = (img: string | { url?: string; path?: string; sta
         return path;
       }
       
-      // If it's from CMS host, extract pathname
-      path = parsed.pathname + parsed.search;
+      // If it's already a full CMS URL, return it directly
+      return path;
     } catch {
       // keep path as is
     }
   }
 
-  // 4. CMS Base Domain
+  // 4. CMS Base Domain for relative paths from CMS API
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://cms.longkhanhford.betech-digital.com/api";
   let baseDomain = apiUrl.replace(/\/api\/?$/, "");
 
@@ -166,8 +141,7 @@ export const resolveImageUrl = (img: string | { url?: string; path?: string; sta
     }
   }
 
-  let clean = path;
-  clean = clean.replace(/^([a-zA-Z0-9.-]+\.(com|vn|net|org|digital|app|dev)(:\d+)?)\/?/gi, "");
+  let clean = path.replace(/^([a-zA-Z0-9.-]+\.(com|vn|net|org|digital|app|dev)(:\d+)?)\/?/gi, "");
   clean = clean.replace(/^(\/?static)+/gi, "/static");
   clean = clean.replace(/^(\/?uploads)+/gi, "/uploads");
   clean = clean.replace(/^(\/?storage)+/gi, "/storage");
