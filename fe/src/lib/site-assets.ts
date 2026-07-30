@@ -80,7 +80,11 @@ export const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event
   if (!target.dataset.failed) {
     target.dataset.failed = "true";
     target.srcset = "";
-    target.src = siteAssets.carPlaceholder;
+    if (target.dataset.fallback) {
+      target.src = target.dataset.fallback;
+    } else {
+      target.src = siteAssets.carPlaceholder;
+    }
   }
 };
 

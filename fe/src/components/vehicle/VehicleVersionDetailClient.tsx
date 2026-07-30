@@ -5,7 +5,7 @@ import { useVehicle, VehicleTabBar } from "./VehicleLayoutClient";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, ChevronDown, Car, Calculator, FileText, Phone, ShieldCheck, CheckCircle } from "lucide-react";
-import { resolveImageUrl, handleImageError } from "@/lib/site-assets";
+import { resolveImageUrl, handleImageError, getPopularVehicleImage } from "@/lib/site-assets";
 import ScrollReveal from "@/components/common/ScrollReveal";
 
 // Vietnamese-accent-safe URL slug generator
@@ -252,11 +252,11 @@ export default function VehicleVersionDetailClient() {
     if (viewType === "interior") {
       return (currentColor?.images_360_internal && currentColor.images_360_internal.length > 0)
         ? currentColor.images_360_internal[0]
-        : (currentColor?.image_360_internal || vehicle?.image_360_internal_url || currentColor?.image || selectedVersion?.image_url || vehicle?.image_url || "");
+        : (currentColor?.image_360_internal || vehicle?.image_360_internal_url || currentColor?.image || currentColor?.image_path || selectedVersion?.image_url || vehicle?.image_url || getPopularVehicleImage(vehicle?.slug || vehicle?.id || ""));
     }
     return (currentColor?.images_360 && currentColor.images_360.length > 0)
       ? currentColor.images_360[0]
-      : (currentColor?.image || selectedVersion?.image_url || vehicle?.image_url || "");
+      : (currentColor?.image || currentColor?.image_path || selectedVersion?.image_url || vehicle?.image_url || getPopularVehicleImage(vehicle?.slug || vehicle?.id || ""));
   }, [viewType, currentColor, selectedVersion, vehicle]);
 
   const hasInteriorPhotos = useMemo(() => {
@@ -642,6 +642,7 @@ export default function VehicleVersionDetailClient() {
                   <img
                     src={resolveImageUrl(fallbackImageSrc)}
                     alt={currentColor?.name || selectedVersion?.name || vehicle.name}
+                    data-fallback={selectedVersion?.image_url || vehicle?.image_url || getPopularVehicleImage(vehicle?.slug || vehicle?.id || "")}
                     onError={handleImageError}
                     className="w-full h-full object-contain select-none pointer-events-none"
                   />
