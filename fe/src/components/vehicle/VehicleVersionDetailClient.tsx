@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import { useVehicle, VehicleTabBar } from "./VehicleLayoutClient";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, ChevronDown, Car, Calculator, FileText } from "lucide-react";
+import { ChevronLeft, ChevronRight, ChevronDown, Car, Calculator, FileText, Phone, ShieldCheck, CheckCircle } from "lucide-react";
 import { resolveImageUrl } from "@/lib/site-assets";
 import ScrollReveal from "@/components/common/ScrollReveal";
 
@@ -845,6 +845,83 @@ export default function VehicleVersionDetailClient() {
                   </div>
                 );
               })}
+            </div>
+          </div>
+        </section>
+      </ScrollReveal>
+
+      {/* 5. High-Converting Ford Brand CTA Banner Section */}
+      <ScrollReveal direction="up" delay={200}>
+        <section className="w-full bg-gradient-to-br from-[#00095B] via-[#02337A] to-[#066fef] text-white py-16 md:py-20 relative overflow-hidden">
+          {/* Subtle Grid Accent Pattern */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.08),transparent_70%)] pointer-events-none" />
+
+          <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] relative z-10">
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-10">
+              {/* Left Title & Description */}
+              <div className="flex flex-col items-start text-left max-w-2xl gap-4 font-antenna">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-white/90 backdrop-blur-xs text-xs font-semibold tracking-wider uppercase border border-white/15">
+                  <ShieldCheck className="w-3.5 h-3.5 text-[#066fef] fill-white" />
+                  <span>Ưu Đãi Chính Hãng Long Khánh Ford</span>
+                </div>
+
+                <h2 className="font-display font-extrabold text-2xl sm:text-3xl md:text-4xl text-white leading-tight uppercase tracking-wide">
+                  Sẵn sàng trải nghiệm {vehicle?.name || "Ford"} {getVersionDisplayName(selectedVersion?.name || "", vehicle?.name || "")}?
+                </h2>
+
+                <p className="text-sm md:text-base text-white/80 leading-relaxed max-w-xl">
+                  Liên hệ ngay với tư vấn bán hàng của Long Khánh Ford để nhận báo giá lăn bánh ưu đãi nhất, tặng gói phụ kiện cao cấp và hỗ trợ lái thử tận nhà hoàn toàn miễn phí.
+                </p>
+
+                {/* Trust Badges */}
+                <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-4 pt-2 text-xs font-medium text-white/90">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span>Hỗ trợ trả góp 80%</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span>Bảo dưỡng nhanh 60 phút</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span>Lái thử tận nhà miễn phí</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span>Đại lý 3S chính hãng</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right CTA Action Card */}
+              <div className="w-full lg:w-auto shrink-0 bg-white/10 backdrop-blur-md border border-white/20 p-6 md:p-8 rounded-xl flex flex-col gap-4 max-w-md shadow-2xl">
+                <button
+                  onClick={openQuoteDrawer}
+                  className="w-full bg-[#066fef] hover:bg-white hover:text-[#00095B] text-white font-bold py-4 px-6 rounded-md uppercase tracking-wider text-xs md:text-sm transition-all duration-300 shadow-lg flex items-center justify-center gap-2.5 cursor-pointer border-0 font-antenna group"
+                >
+                  <Calculator className="w-4.5 h-4.5 group-hover:scale-110 transition-transform" />
+                  <span>Dự Toán Chi Phí Lăn Bánh</span>
+                </button>
+
+                <button
+                  onClick={openDriveDrawer}
+                  className="w-full bg-white/15 hover:bg-white/25 text-white border border-white/30 font-bold py-3.5 px-6 rounded-md uppercase tracking-wider text-xs md:text-sm transition-all duration-300 flex items-center justify-center gap-2.5 cursor-pointer font-antenna"
+                >
+                  <Car className="w-4.5 h-4.5 text-white" />
+                  <span>Đăng Ký Lái Thử Tận Nhà</span>
+                </button>
+
+                <div className="pt-2 border-t border-white/15 text-center">
+                  <a
+                    href="tel:0812868622"
+                    className="inline-flex items-center gap-2 text-white/90 hover:text-white text-xs md:text-sm font-semibold transition-colors no-underline"
+                  >
+                    <Phone className="w-4 h-4 text-emerald-400 animate-pulse" />
+                    <span>Hotline CSKH 24/7: <strong className="text-white underline">0812 86 86 22</strong></span>
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </section>
