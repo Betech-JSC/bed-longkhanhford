@@ -504,15 +504,11 @@ export default function Home() {
       try {
         const postsData = await postsAPI.getAll({ type: "POST" });
         const topPosts = (postsData as any)?.top_posts || [];
-        const postsItems = (postsData as any)?.posts?.data || (postsData as any)?.data || (Array.isArray(postsData) ? postsData : []);
-        
-        // Gộp tất cả các bài viết thu thập được từ CMS
-        const allItems = [...(Array.isArray(topPosts) ? topPosts : []), ...(Array.isArray(postsItems) ? postsItems : [])];
         
         const filteredItems: any[] = [];
         const seenIds = new Set();
         
-        for (const item of allItems) {
+        for (const item of topPosts) {
           if (!item) continue;
           const itemId = item.id || item.slug;
           if (!itemId || seenIds.has(itemId)) continue;
@@ -1161,112 +1157,114 @@ export default function Home() {
       )}
 
       {/* 6. FORD NEWS SECTION (SPLIT GRID CARDS LAYOUT) */}
-      <section id="news" className="w-full bg-[#F8F8F8] py-16 md:py-24">
-        <div className="max-w-[1440px] mx-auto w-full">
-          <div className="max-w-[1152px] mx-auto w-full px-6 xl:px-0">
-            {/* Header Block */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-              className="flex flex-col md:flex-row md:items-end justify-between mb-10 md:mb-12 gap-6 text-left"
-            >
-              <div className="space-y-4">
-                <span className="text-xs font-bold text-[#066FEF] uppercase tracking-[0.2em] block">
-                  Tin tức & Chương Trình
-                </span>
-                <h2 className="text-2xl md:text-[32px] font-bold leading-tight tracking-tight uppercase font-sans text-black">
-                  Tin tức & Sự kiện
-                </h2>
-              </div>
-
-              {/* Right side button */}
-              <Button
-                variant="outline-gray"
-                onClick={() => router.push("/tin-tuc")}
-                className="shrink-0"
-                size="sm"
+      {homeArticles.length > 0 && (
+        <section id="news" className="w-full bg-[#F8F8F8] py-16 md:py-24">
+          <div className="max-w-[1440px] mx-auto w-full">
+            <div className="max-w-[1152px] mx-auto w-full px-6 xl:px-0">
+              {/* Header Block */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                className="flex flex-col md:flex-row md:items-end justify-between mb-10 md:mb-12 gap-6 text-left"
               >
-                Xem thêm tin tức
-              </Button>
-            </motion.div>
+                <div className="space-y-4">
+                  <span className="text-xs font-bold text-[#066FEF] uppercase tracking-[0.2em] block">
+                    Tin tức & Chương Trình
+                  </span>
+                  <h2 className="text-2xl md:text-[32px] font-bold leading-tight tracking-tight uppercase font-sans text-black">
+                    Tin tức & Sự kiện
+                  </h2>
+                </div>
 
-            {homeArticles.length > 0 ? (
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
-                {/* Left: Large featured article (66% width) */}
-                {homeArticles[0] && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, ease: "easeOut" }}
-                    className="lg:col-span-8 flex"
-                  >
-                    <Link
-                      href={`/tin-tuc/${homeArticles[0].id}`}
-                      className="w-full relative aspect-[16/10] overflow-hidden rounded-[8px] border border-neutral-200/80 group block animate-fade-in"
-                    >
-                      <img
-                        src={homeArticles[0].image}
-                        alt={homeArticles[0].title}
-                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
-                        onError={handleImageError}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
-                      <div className="absolute bottom-8 left-8 right-8 text-left text-white">
-                        <h3 className="text-xl md:text-2xl font-bold uppercase tracking-wide font-sans line-clamp-2 drop-shadow-md">
-                          {homeArticles[0].title}
-                        </h3>
-                      </div>
-                    </Link>
-                  </motion.div>
-                )}
+                {/* Right side button */}
+                <Button
+                  variant="outline-gray"
+                  onClick={() => router.push("/tin-tuc")}
+                  className="shrink-0"
+                  size="sm"
+                >
+                  Xem thêm tin tức
+                </Button>
+              </motion.div>
 
-                {/* Right: Stacked smaller articles (33% width) */}
-                <div className="lg:col-span-4 flex flex-col justify-between gap-4">
-                  {homeArticles.slice(1, 3).map((art, idx) => (
+              {homeArticles.length > 0 ? (
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+                  {/* Left: Large featured article (66% width) */}
+                  {homeArticles[0] && (
                     <motion.div
-                      key={art.id}
                       initial={{ opacity: 0, y: 30 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
-                      transition={{ duration: 0.5, delay: (idx + 1) * 0.1, ease: "easeOut" }}
-                      className="flex-1 flex animate-fade-in"
+                      transition={{ duration: 0.6, ease: "easeOut" }}
+                      className="lg:col-span-8 flex"
                     >
                       <Link
-                        href={`/tin-tuc/${art.id}`}
-                        className="w-full relative flex-1 min-h-[190px] overflow-hidden rounded-[8px] border border-neutral-200/80 group block"
+                        href={`/tin-tuc/${homeArticles[0].id}`}
+                        className="w-full relative aspect-[16/10] overflow-hidden rounded-[8px] border border-neutral-200/80 group block animate-fade-in"
                       >
                         <img
-                          src={art.image}
-                          alt={art.title}
+                          src={homeArticles[0].image}
+                          alt={homeArticles[0].title}
                           className="absolute inset-0 w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
                           onError={handleImageError}
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
-                        <div className="absolute bottom-6 left-6 right-6 text-left text-white space-y-2">
-                          <h3 className="text-sm font-bold uppercase tracking-wide font-sans line-clamp-2 leading-snug drop-shadow-md">
-                            {art.title}
+                        <div className="absolute bottom-8 left-8 right-8 text-left text-white">
+                          <h3 className="text-xl md:text-2xl font-bold uppercase tracking-wide font-sans line-clamp-2 drop-shadow-md">
+                            {homeArticles[0].title}
                           </h3>
                         </div>
                       </Link>
                     </motion.div>
-                  ))}
+                  )}
+
+                  {/* Right: Stacked smaller articles (33% width) */}
+                  <div className="lg:col-span-4 flex flex-col justify-between gap-4">
+                    {homeArticles.slice(1, 3).map((art, idx) => (
+                      <motion.div
+                        key={art.id}
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: (idx + 1) * 0.1, ease: "easeOut" }}
+                        className="flex-1 flex animate-fade-in"
+                      >
+                        <Link
+                          href={`/tin-tuc/${art.id}`}
+                          className="w-full relative flex-1 min-h-[190px] overflow-hidden rounded-[8px] border border-neutral-200/80 group block"
+                        >
+                          <img
+                            src={art.image}
+                            alt={art.title}
+                            className="absolute inset-0 w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
+                            onError={handleImageError}
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
+                          <div className="absolute bottom-6 left-6 right-6 text-left text-white space-y-2">
+                            <h3 className="text-sm font-bold uppercase tracking-wide font-sans line-clamp-2 leading-snug drop-shadow-md">
+                              {art.title}
+                            </h3>
+                          </div>
+                        </Link>
+                      </motion.div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 animate-pulse">
-                <div className="lg:col-span-8 aspect-[16/10] bg-neutral-100 rounded-none border border-neutral-200/80" />
-                <div className="lg:col-span-4 flex flex-col gap-6">
-                  <div className="flex-1 min-h-[190px] bg-neutral-100 rounded-none border border-neutral-200/80" />
-                  <div className="flex-1 min-h-[190px] bg-neutral-100 rounded-none border border-neutral-200/80" />
+              ) : (
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 animate-pulse">
+                  <div className="lg:col-span-8 aspect-[16/10] bg-neutral-100 rounded-none border border-neutral-200/80" />
+                  <div className="lg:col-span-4 flex flex-col gap-6">
+                    <div className="flex-1 min-h-[190px] bg-neutral-100 rounded-none border border-neutral-200/80" />
+                    <div className="flex-1 min-h-[190px] bg-neutral-100 rounded-none border border-neutral-200/80" />
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* 7. FULL-WIDTH BRAND BANNER */}
       <section className="relative w-full h-[550px] md:h-[750px] overflow-hidden select-none">
