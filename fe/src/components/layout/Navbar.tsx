@@ -26,16 +26,7 @@ export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
   const searchInputRef = useRef<HTMLInputElement>(null);
   const pathname = usePathname();
-  const isTransparentPage = pathname === "/" || [
-    "/gioi-thieu",
-    "/lien-he",
-    "/bang-gia",
-    "/dich-vu",
-    "/dong-xe",
-    "/xe-da-qua-su-dung",
-    "/tin-tuc",
-    "/san-pham"
-  ].some(path => pathname === path || pathname.startsWith(path + "/"));
+  const isTransparentPage = pathname === "/";
   const router = useRouter();
   const [activeSection, setActiveSection] = useState("");
 

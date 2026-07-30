@@ -222,7 +222,7 @@ export default function AccessoryDetailClient({
     : [];
 
   return (
-    <div className="bg-[#F8F8F8] min-h-screen text-[#1a1a1a] font-sans pb-0 w-full flex flex-col items-center pt-28 md:pt-36">
+    <div className="bg-[#F8F8F8] min-h-screen text-[#1a1a1a] font-sans pb-0 w-full flex flex-col items-center pt-2 md:pt-4">
       {/* Breadcrumbs Section */}
       <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full pt-[32px] pb-[12px] font-antenna">
         <div className="flex flex-wrap items-center gap-[13px] text-[12px] text-gray-500 font-medium">

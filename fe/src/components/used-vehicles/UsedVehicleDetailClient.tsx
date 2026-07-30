@@ -217,7 +217,7 @@ export default function UsedVehicleDetailClient({ vehicle }: { vehicle: any }) {
   const odo = vehicle.odo ? `${new Intl.NumberFormat("vi-VN").format(vehicle.odo)} km` : "Đang cập nhật";
 
   return (
-    <div className="bg-[#F8F8F8] min-h-screen text-[#1a1a1a] font-sans pb-20 w-full pt-28 md:pt-36">
+    <div className="bg-[#F8F8F8] min-h-screen text-[#1a1a1a] font-sans pb-20 w-full pt-2 md:pt-4">
       {/* Breadcrumbs */}
       <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full pt-8 pb-3">
         <div className="flex flex-wrap items-center gap-2 text-xs text-gray-500 font-medium font-antenna">

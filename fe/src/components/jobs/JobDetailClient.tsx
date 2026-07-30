@@ -156,7 +156,7 @@ export default function JobDetailClient({ job }: { job: JobDetail }) {
   };
 
   return (
-    <div className="bg-[#F8F9FA] min-h-screen font-sans text-gray-900 w-full flex flex-col items-center pt-28 md:pt-36">
+    <div className="bg-[#F8F9FA] min-h-screen font-sans text-gray-900 w-full flex flex-col items-center pt-2 md:pt-4">
       
       {/* Premium Breadcrumb bar */}
       <div className="bg-white border-b border-gray-150 py-4.5 w-full flex justify-center font-antenna">
