@@ -626,6 +626,21 @@ export default function Home() {
     return () => clearInterval(timer);
   }, [heroSlides.length]);
 
+  // Preload all hero slide images into browser RAM memory for instant 0ms switching
+  useEffect(() => {
+    if (typeof window === "undefined" || heroSlides.length === 0) return;
+    heroSlides.forEach((slide) => {
+      if (slide.image) {
+        const img = new window.Image();
+        img.src = slide.image;
+      }
+      if (slide.imageMobile) {
+        const imgMobile = new window.Image();
+        imgMobile.src = slide.imageMobile;
+      }
+    });
+  }, [heroSlides]);
+
 
 
   // Body scroll locking when Lightbox is open
@@ -702,12 +717,12 @@ export default function Home() {
           onTouchStart={(e) => handleHeroStart(e.touches[0].clientX)}
           onTouchEnd={(e) => handleHeroEnd(e.changedTouches[0].clientX)}
         >
-          {/* Absolute Background Slides (with fade transitions) */}
+          {/* Absolute Background Slides (Instant & Crisp 100% opacity, no black background bleed) */}
           {heroSlides.map((slide, idx) => (
             <div
               key={idx}
-              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out pointer-events-none ${
-                activeHeroIndex === idx ? "opacity-90 scale-100" : "opacity-0 scale-105"
+              className={`absolute inset-0 transition-opacity duration-500 ease-out pointer-events-none ${
+                activeHeroIndex === idx ? "opacity-100 z-10" : "opacity-0 z-0"
               }`}
             >
               {/* Responsive Hero Image using picture tag to prevent dual downloads on mobile */}
@@ -720,11 +735,11 @@ export default function Home() {
                   alt={slide.title}
                   loading="eager"
                   fetchPriority="high"
-                  decoding="async"
+                  decoding="sync"
                   onError={(e) => {
                     (e.target as HTMLImageElement).src = "/images-dynamic/image-hero-1.jpg";
                   }}
-                  className="object-cover w-full h-full object-center md:object-top transform transition-transform duration-10000"
+                  className="object-cover w-full h-full object-center md:object-top"
                 />
               </picture>
             </div>
