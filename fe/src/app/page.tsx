@@ -756,15 +756,34 @@ export default function Home() {
                 <div className="flex flex-col sm:flex-row justify-start gap-4 pt-6 md:pt-8 w-full sm:w-auto">
                   <Button
                     variant="primary"
-                    onClick={() => triggerQuickAction("Đăng ký lái thử", "Tôi đặt lịch hẹn đăng ký lái thử xe Ford.")}
-                    className="w-full sm:w-auto"
+                    onClick={() => {
+                      const currentSlide = heroSlides[activeHeroIndex];
+                      const linkId = currentSlide?.linkVehicleId || "";
+                      if (linkId) {
+                        router.push(`/dang-ky-lai-thu?vehicle=${encodeURIComponent(linkId)}`);
+                      } else {
+                        router.push("/dang-ky-lai-thu");
+                      }
+                    }}
+                    className="w-full sm:w-auto cursor-pointer"
                   >
                     Đăng ký lái thử
                   </Button>
                   <Button
                     variant="white-outline"
-                    onClick={() => router.push("/lien-he")}
-                    className="w-full sm:w-auto"
+                    onClick={() => {
+                      const currentSlide = heroSlides[activeHeroIndex];
+                      const linkId = currentSlide?.linkVehicleId || "";
+                      if (linkId) {
+                        const targetUrl = linkId.startsWith("/") 
+                          ? linkId 
+                          : (linkId.startsWith("ford-") ? `/${linkId}` : `/ford-${linkId}`);
+                        router.push(targetUrl);
+                      } else {
+                        router.push("/san-pham");
+                      }
+                    }}
+                    className="w-full sm:w-auto cursor-pointer"
                   >
                     Khám phá ngay
                   </Button>

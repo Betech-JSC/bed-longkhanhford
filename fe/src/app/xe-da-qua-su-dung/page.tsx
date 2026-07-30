@@ -256,10 +256,10 @@ export default function UsedVehiclesPage() {
                 return (
                   <div 
                     key={vehicle.id} 
-                    className="group bg-white border border-gray-200 hover:border-[#066fef]/55 rounded-none overflow-hidden shadow-xs hover:shadow-sm transition-all duration-300 flex flex-col h-full"
+                    className="group bg-white border border-gray-100 hover:border-[#066fef]/40 rounded-lg overflow-hidden shadow-xs hover:shadow-md transition-all duration-300 flex flex-col h-full"
                   >
                     {/* Image Area */}
-                    <div className="relative h-[220px] bg-white overflow-hidden flex items-center justify-center border-b border-gray-150">
+                    <div className="relative h-[220px] bg-white overflow-hidden flex items-center justify-center border-b-0">
                       <Image 
                         src={resolveImageUrl(vehicle.image_url || vehicle.image) || "/assets/images/placeholder_car.png"} 
                         alt={vehicle.title}
@@ -305,7 +305,7 @@ export default function UsedVehiclesPage() {
 
                       {/* Bottom Info */}
                       <div>
-                        <div className="border-t border-gray-100 pt-4 flex items-center justify-between">
+                        <div className="pt-4 flex items-center justify-between">
                           <div>
                             <span className="text-[10px] font-bold text-gray-400 uppercase block tracking-wider mb-0.5">Giá ưu đãi</span>
                             <span className="text-lg font-bold text-[#D20000]">

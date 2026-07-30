@@ -237,13 +237,13 @@ export default function UsedVehicleDetailClient({ vehicle }: { vehicle: any }) {
 
       {/* Main Core Showcase Columns */}
       <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full pt-4">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start bg-white rounded-none overflow-hidden p-6 md:p-8 border border-gray-200 shadow-xs">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start bg-white rounded-lg overflow-hidden p-6 md:p-8 border border-gray-100 shadow-sm">
           
           {/* Left Column: Image Showcase */}
           <div className="lg:col-span-7 space-y-4">
             {/* Main Big Image Preview */}
             <div 
-              className="relative aspect-[16/10] w-full overflow-hidden rounded-none border border-gray-150 bg-white shadow-inner group cursor-zoom-in select-none"
+              className="relative aspect-[16/10] w-full overflow-hidden rounded-lg border border-gray-100 bg-white shadow-xs group cursor-zoom-in select-none"
               onClick={() => { if (!hasDraggedRef.current) setShowLightbox(true); }}
               onTouchStart={onTouchStart}
               onTouchMove={onTouchMove}
