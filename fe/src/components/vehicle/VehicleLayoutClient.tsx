@@ -11,6 +11,7 @@ import {
   ChevronDown,
   GitCompare
 } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
 
 interface VehicleContextType {
   vehicle: any;
@@ -345,229 +346,100 @@ export default function VehicleLayoutClient({
         </div>
 
         {/* Drive test modal */}
-        {showDriveModal && (
-          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="bg-white rounded-lg w-full max-w-[500px] max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-200 relative">
-              <div className="bg-[#00095b] text-white p-6 relative">
-                <h3 className="text-lg font-bold uppercase tracking-wide font-display">
-                  Đăng Ký Lái Thử Xe
-                </h3>
-                <p className="text-xs text-white/70 mt-1">
-                  Dòng xe: <span className="text-white font-bold">{initialVehicle.name}{activeVersion ? ` - ${activeVersion.name}` : ""}</span>
-                </p>
-                <button
-                  onClick={() => setShowDriveModal(false)}
-                  className="absolute top-4 right-4 text-white/70 hover:text-white text-lg cursor-pointer bg-transparent border-0"
-                >
-                  ✕
-                </button>
-              </div>
-
-              <div className="p-6">
-                {isSubmitted ? (
-                  <div className="py-12 text-center space-y-4">
-                    <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
-                      <Check className="w-8 h-8" />
-                    </div>
-                    <h4 className="text-base font-bold text-gray-900">Gửi yêu cầu thành công!</h4>
-                    <p className="text-xs text-gray-500">Đội ngũ tư vấn bán hàng sẽ liên hệ lại với bạn trong vòng 15 phút.</p>
-                  </div>
-                ) : (
-                  <form onSubmit={handleSubmit} className="space-y-4">
-                    {errorMessage && (
-                      <div className="bg-red-50 border border-red-200 text-red-600 p-3 rounded-sm text-xs text-center font-semibold">
-                        {errorMessage}
-                      </div>
-                    )}
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold text-gray-700 uppercase tracking-wider block text-left">Họ và tên của bạn *</label>
-                      <input
-                        type="text"
-                        name="fullName"
-                        value={formData.fullName}
-                        onChange={handleInputChange}
-                        required
-                        placeholder="Nguyễn Văn A"
-                        className="w-full px-4 py-2.5 rounded-[4px] border border-gray-200 text-xs focus:outline-none focus:border-[#0562d2] bg-white text-black"
-                      />
-                    </div>
-
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold text-gray-700 uppercase tracking-wider block text-left">Số điện thoại *</label>
-                      <input
-                        type="tel"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        required
-                        placeholder="0918xxxxxx"
-                        className="w-full px-4 py-2.5 rounded-[4px] border border-gray-200 text-xs focus:outline-none focus:border-[#0562d2] bg-white text-black"
-                      />
-                    </div>
-
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold text-gray-700 uppercase tracking-wider block text-left">Địa chỉ Email</label>
-                      <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        placeholder="example@mail.com"
-                        className="w-full px-4 py-2.5 rounded-[4px] border border-gray-200 text-xs focus:outline-none focus:border-[#0562d2] bg-white text-black"
-                      />
-                    </div>
-
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold text-gray-700 uppercase tracking-wider block text-left">Khu vực sinh sống</label>
-                      <select
-                        name="province"
-                        value={formData.province}
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-2.5 rounded-[4px] border border-gray-200 text-xs bg-white focus:outline-none focus:border-[#0562d2] cursor-pointer text-black"
-                      >
-                        {provinces.length > 0 ? (
-                          provinces.map((p) => (
-                            <option key={p.id} value={p.name}>
-                              {p.name}
-                            </option>
-                          ))
-                        ) : (
-                          <>
-                            <option value="Đồng Nai">Đồng Nai</option>
-                            <option value="TP. Hồ Chí Minh">TP. Hồ Chí Minh</option>
-                            <option value="Bình Dương">Bình Dương</option>
-                            <option value="Vũng Tàu">Bà Rịa - Vũng Tàu</option>
-                            <option value="Khác">Khu vực khác</option>
-                          </>
-                        )}
-                      </select>
-                    </div>
-
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold text-gray-700 uppercase tracking-wider block text-left">Ghi chú yêu cầu thêm</label>
-                      <textarea
-                        name="note"
-                        value={formData.note}
-                        onChange={handleInputChange}
-                        rows={3}
-                        placeholder="Nhập yêu cầu chi tiết (ví dụ: cần lái thử lúc 9h sáng, cần tư vấn trả góp,...)"
-                        className="w-full px-4 py-2.5 rounded-[4px] border border-gray-200 text-xs focus:outline-none focus:border-[#0562d2] bg-white resize-none text-black"
-                      />
-                    </div>
-
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full bg-[#066fef] hover:bg-[#01095c] disabled:bg-gray-400 text-white py-3 rounded-[4px] font-bold uppercase text-xs tracking-wider shadow-xs transition-colors cursor-pointer border-0 mt-2 font-antenna"
-                    >
-                      {isSubmitting ? "Đang gửi yêu cầu..." : "Gửi yêu cầu ngay"}
-                    </button>
-                  </form>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Quote sliding drawer */}
-        {showQuoteModal && (
-          <div className="fixed inset-0 z-50 flex justify-end">
-            <div
-              onClick={() => setShowQuoteModal(false)}
-              className="absolute inset-0 bg-black/40 transition-opacity duration-300"
-            />
-
-            <div className="relative bg-white w-full max-w-[637px] h-full flex flex-col p-8 overflow-y-auto shadow-2xl z-10 animate-in slide-in-from-right duration-300">
-              <button
-                onClick={() => setShowQuoteModal(false)}
-                className="absolute top-8 right-8 w-10 h-10 flex items-center justify-center text-gray-500 hover:text-black hover:bg-gray-100/80 rounded-full transition-colors bg-transparent border-0 cursor-pointer z-20"
+        <AnimatePresence>
+          {showDriveModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.25 }}
+                onClick={() => setShowDriveModal(false)}
+                className="absolute inset-0 bg-black/60 backdrop-blur-xs"
+              />
+              <motion.div
+                initial={{ scale: 0.94, opacity: 0, y: 16 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.94, opacity: 0, y: 16 }}
+                transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                className="bg-white rounded-lg w-full max-w-[500px] max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-200 relative z-10"
               >
-                <X className="w-6 h-6" />
-              </button>
-
-              <div className="flex flex-col gap-3 items-start w-full mb-8">
-                <h2 className="font-['Ford_Antenna',sans-serif] font-semibold text-[#0562d2] text-[32px] leading-[1.2]">
-                  Dự toán chi phí lăn bánh
-                </h2>
-                <p className="font-['Ford_Antenna',sans-serif] font-normal text-[#424242] text-[16px] leading-[1.5]">
-                  Nhập thông tin để tính chi phí lăn bánh dự kiến
-                </p>
-              </div>
-
-              {isSubmitted ? (
-                <div className="flex-1 flex flex-col items-center justify-center py-12 text-center space-y-4">
-                  <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
-                    <Check className="w-8 h-8" />
-                  </div>
-                  <h4 className="text-xl font-bold text-gray-900">Gửi yêu cầu thành công!</h4>
-                  <p className="text-sm text-gray-500 max-w-sm">Đội ngũ tư vấn bán hàng của Long Khánh Ford sẽ liên hệ lại với bạn trong vòng 15 phút để báo giá chính xác.</p>
+                <div className="bg-[#00095b] text-white p-6 relative">
+                  <h3 className="text-lg font-bold uppercase tracking-wide font-display">
+                    Đăng Ký Lái Thử Xe
+                  </h3>
+                  <p className="text-xs text-white/70 mt-1">
+                    Dòng xe: <span className="text-white font-bold">{initialVehicle.name}{activeVersion ? ` - ${activeVersion.name}` : ""}</span>
+                  </p>
+                  <button
+                    onClick={() => setShowDriveModal(false)}
+                    className="absolute top-4 right-4 text-white/70 hover:text-white text-lg cursor-pointer bg-transparent border-0"
+                  >
+                    ✕
+                  </button>
                 </div>
-              ) : drawerStep === "calculate" ? (
-                <div className="flex-1 flex flex-col gap-6 w-full">
-                  <div className="flex flex-col gap-6 w-full">
-                    {/* Select Mẫu xe */}
-                    <div className="flex flex-col gap-[6px] items-start w-full relative">
-                      <label className="font-['Ford_Antenna',sans-serif] font-medium leading-[1.5] text-[#424242] text-[16px] text-left">
-                        Mẫu xe
-                      </label>
-                      <div className="relative w-full">
-                        <select
-                          value={selectedVehicleId}
-                          onChange={(e) => handleVehicleChange(e.target.value)}
-                          className="w-full bg-white border border-[#d6d6d6] border-solid px-[14px] py-[10px] pr-[40px] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] text-black text-[16px] leading-[1.5] appearance-none cursor-pointer focus:outline-none focus:border-[#0562d2]"
-                        >
-                          {(allVehicles.length > 0 ? allVehicles : [initialVehicle]).map((v) => (
-                            <option key={v.id} value={v.id}>
-                              {v.name}
-                            </option>
-                          ))}
-                        </select>
-                        <div className="absolute top-1/2 right-[14px] transform -translate-y-1/2 pointer-events-none text-gray-500">
-                          <ChevronDown className="w-5 h-5" />
-                        </div>
-                      </div>
-                    </div>
 
-                    {/* Select Phiên bản */}
-                    <div className="flex flex-col gap-[6px] items-start w-full relative">
-                      <label className="font-['Ford_Antenna',sans-serif] font-medium leading-[1.5] text-[#424242] text-[16px] text-left">
-                        Phiên bản
-                      </label>
-                      <div className="relative w-full">
-                        <select
-                          value={selectedVersionId}
-                          onChange={(e) => setSelectedVersionId(e.target.value)}
-                          className="w-full bg-white border border-[#d6d6d6] border-solid px-[14px] py-[10px] pr-[40px] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] text-black text-[16px] leading-[1.5] appearance-none cursor-pointer focus:outline-none focus:border-[#0562d2]"
-                        >
-                          {(() => {
-                            const list = allVehicles.length > 0 ? allVehicles : [initialVehicle];
-                            const matched = list.find((v) => v.id === selectedVehicleId) || initialVehicle;
-                            return matched?.versions?.map((ver: any) => (
-                              <option key={ver.id} value={ver.id}>
-                                {ver.name} ({formatPrice(typeof ver.price === 'string' ? parseFloat(ver.price) : ver.price)})
-                              </option>
-                            )) || null;
-                          })()}
-                        </select>
-                        <div className="absolute top-1/2 right-[14px] transform -translate-y-1/2 pointer-events-none text-gray-500">
-                          <ChevronDown className="w-5 h-5" />
-                        </div>
+                <div className="p-6">
+                  {isSubmitted ? (
+                    <div className="py-12 text-center space-y-4">
+                      <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
+                        <Check className="w-8 h-8" />
                       </div>
+                      <h4 className="text-base font-bold text-gray-900">Gửi yêu cầu thành công!</h4>
+                      <p className="text-xs text-gray-500">Đội ngũ tư vấn bán hàng sẽ liên hệ lại với bạn trong vòng 15 phút.</p>
                     </div>
+                  ) : (
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                      {errorMessage && (
+                        <div className="bg-red-50 border border-red-200 text-red-600 p-3 rounded-sm text-xs text-center font-semibold">
+                          {errorMessage}
+                        </div>
+                      )}
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-gray-700 uppercase tracking-wider block text-left">Họ và tên của bạn *</label>
+                        <input
+                          type="text"
+                          name="fullName"
+                          value={formData.fullName}
+                          onChange={handleInputChange}
+                          required
+                          placeholder="Nguyễn Văn A"
+                          className="w-full px-4 py-2.5 rounded-[4px] border border-gray-200 text-xs focus:outline-none focus:border-[#0562d2] bg-white text-black"
+                        />
+                      </div>
 
-                    {/* Select Khu vực */}
-                    <div className="flex flex-col gap-[6px] items-start w-full relative">
-                      <label className="font-['Ford_Antenna',sans-serif] font-medium leading-[1.5] text-[#424242] text-[16px] text-left">
-                        Khu vực đăng ký (tính lệ phí trước bạ &amp; biển số)
-                      </label>
-                      <div className="relative w-full">
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-gray-700 uppercase tracking-wider block text-left">Số điện thoại *</label>
+                        <input
+                          type="tel"
+                          name="phone"
+                          value={formData.phone}
+                          onChange={handleInputChange}
+                          required
+                          placeholder="0918xxxxxx"
+                          className="w-full px-4 py-2.5 rounded-[4px] border border-gray-200 text-xs focus:outline-none focus:border-[#0562d2] bg-white text-black"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-gray-700 uppercase tracking-wider block text-left">Địa chỉ Email</label>
+                        <input
+                          type="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleInputChange}
+                          placeholder="example@mail.com"
+                          className="w-full px-4 py-2.5 rounded-[4px] border border-gray-200 text-xs focus:outline-none focus:border-[#0562d2] bg-white text-black"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-gray-700 uppercase tracking-wider block text-left">Khu vực sinh sống</label>
                         <select
-                          value={selectedProvince}
-                          onChange={(e) => {
-                            setSelectedProvince(e.target.value);
-                            setFormData(prev => ({ ...prev, province: e.target.value }));
-                          }}
-                          className="w-full bg-white border border-[#d6d6d6] border-solid px-[14px] py-[10px] pr-[40px] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] text-black text-[16px] leading-[1.5] appearance-none cursor-pointer focus:outline-none focus:border-[#0562d2]"
+                          name="province"
+                          value={formData.province}
+                          onChange={handleInputChange}
+                          className="w-full px-4 py-2.5 rounded-[4px] border border-gray-200 text-xs bg-white focus:outline-none focus:border-[#0562d2] cursor-pointer text-black"
                         >
                           {provinces.length > 0 ? (
                             provinces.map((p) => (
@@ -585,61 +457,227 @@ export default function VehicleLayoutClient({
                             </>
                           )}
                         </select>
-                        <div className="absolute top-1/2 right-[14px] transform -translate-y-1/2 pointer-events-none text-gray-500">
-                          <ChevronDown className="w-5 h-5" />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-gray-700 uppercase tracking-wider block text-left">Ghi chú yêu cầu thêm</label>
+                        <textarea
+                          name="note"
+                          value={formData.note}
+                          onChange={handleInputChange}
+                          rows={3}
+                          placeholder="Nhập yêu cầu chi tiết (ví dụ: cần lái thử lúc 9h sáng, cần tư vấn trả góp,...)"
+                          className="w-full px-4 py-2.5 rounded-[4px] border border-gray-200 text-xs focus:outline-none focus:border-[#0562d2] bg-white resize-none text-black"
+                        />
+                      </div>
+
+                      <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="w-full bg-[#066fef] hover:bg-[#01095c] disabled:bg-gray-400 text-white py-3 rounded-[4px] font-bold uppercase text-xs tracking-wider shadow-xs transition-colors cursor-pointer border-0 mt-2 font-antenna"
+                      >
+                        {isSubmitting ? "Đang gửi yêu cầu..." : "Gửi yêu cầu ngay"}
+                      </button>
+                    </form>
+                  )}
+                </div>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>
+
+        {/* Quote sliding drawer (Dự toán chi phí lăn bánh) */}
+        <AnimatePresence>
+          {showQuoteModal && (
+            <div className="fixed inset-0 z-50 flex justify-end">
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.25 }}
+                onClick={() => setShowQuoteModal(false)}
+                className="absolute inset-0 bg-black/50 backdrop-blur-xs"
+              />
+
+              <motion.div
+                initial={{ x: "100%", opacity: 0.4 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: "100%", opacity: 0 }}
+                transition={{ type: "spring", damping: 28, stiffness: 280 }}
+                className="relative bg-white w-full max-w-[637px] h-full flex flex-col p-6 md:p-8 overflow-y-auto shadow-2xl z-10"
+              >
+                <button
+                  onClick={() => setShowQuoteModal(false)}
+                  className="absolute top-6 right-6 md:top-8 md:right-8 w-10 h-10 flex items-center justify-center text-gray-500 hover:text-black hover:bg-gray-100/80 rounded-full transition-colors bg-transparent border-0 cursor-pointer z-20"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+
+                <div className="flex flex-col gap-3 items-start w-full mb-8">
+                  <h2 className="font-['Ford_Antenna',sans-serif] font-semibold text-[#0562d2] text-[28px] md:text-[32px] leading-[1.2]">
+                    Dự toán chi phí lăn bánh
+                  </h2>
+                  <p className="font-['Ford_Antenna',sans-serif] font-normal text-[#424242] text-[15px] md:text-[16px] leading-[1.5]">
+                    Nhập thông tin để tính chi phí lăn bánh dự kiến
+                  </p>
+                </div>
+
+                {isSubmitted ? (
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="flex-1 flex flex-col items-center justify-center py-12 text-center space-y-4"
+                  >
+                    <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
+                      <Check className="w-8 h-8" />
+                    </div>
+                    <h4 className="text-xl font-bold text-gray-900">Gửi yêu cầu thành công!</h4>
+                    <p className="text-sm text-gray-500 max-w-sm">Đội ngũ tư vấn bán hàng của Long Khánh Ford sẽ liên hệ lại với bạn trong vòng 15 phút để báo giá chính xác.</p>
+                  </motion.div>
+                ) : drawerStep === "calculate" ? (
+                  <div className="flex-1 flex flex-col gap-6 w-full">
+                    <div className="flex flex-col gap-6 w-full">
+                      {/* Select Mẫu xe */}
+                      <div className="flex flex-col gap-[6px] items-start w-full relative">
+                        <label className="font-['Ford_Antenna',sans-serif] font-medium leading-[1.5] text-[#424242] text-[16px] text-left">
+                          Mẫu xe
+                        </label>
+                        <div className="relative w-full">
+                          <select
+                            value={selectedVehicleId}
+                            onChange={(e) => handleVehicleChange(e.target.value)}
+                            className="w-full bg-white border border-[#d6d6d6] border-solid px-[14px] py-[10px] pr-[40px] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] text-black text-[16px] leading-[1.5] appearance-none cursor-pointer focus:outline-none focus:border-[#0562d2]"
+                          >
+                            {(allVehicles.length > 0 ? allVehicles : [initialVehicle]).map((v) => (
+                              <option key={v.id} value={v.id}>
+                                {v.name}
+                              </option>
+                            ))}
+                          </select>
+                          <div className="absolute top-1/2 right-[14px] transform -translate-y-1/2 pointer-events-none text-gray-500">
+                            <ChevronDown className="w-5 h-5" />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Select Phiên bản */}
+                      <div className="flex flex-col gap-[6px] items-start w-full relative">
+                        <label className="font-['Ford_Antenna',sans-serif] font-medium leading-[1.5] text-[#424242] text-[16px] text-left">
+                          Phiên bản
+                        </label>
+                        <div className="relative w-full">
+                          <select
+                            value={selectedVersionId}
+                            onChange={(e) => setSelectedVersionId(e.target.value)}
+                            className="w-full bg-white border border-[#d6d6d6] border-solid px-[14px] py-[10px] pr-[40px] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] text-black text-[16px] leading-[1.5] appearance-none cursor-pointer focus:outline-none focus:border-[#0562d2]"
+                          >
+                            {(() => {
+                              const list = allVehicles.length > 0 ? allVehicles : [initialVehicle];
+                              const matched = list.find((v) => v.id === selectedVehicleId) || initialVehicle;
+                              return matched?.versions?.map((ver: any) => (
+                                <option key={ver.id} value={ver.id}>
+                                  {ver.name} ({formatPrice(typeof ver.price === 'string' ? parseFloat(ver.price) : ver.price)})
+                                </option>
+                              )) || null;
+                            })()}
+                          </select>
+                          <div className="absolute top-1/2 right-[14px] transform -translate-y-1/2 pointer-events-none text-gray-500">
+                            <ChevronDown className="w-5 h-5" />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Select Khu vực */}
+                      <div className="flex flex-col gap-[6px] items-start w-full relative">
+                        <label className="font-['Ford_Antenna',sans-serif] font-medium leading-[1.5] text-[#424242] text-[16px] text-left">
+                          Khu vực đăng ký (tính lệ phí trước bạ &amp; biển số)
+                        </label>
+                        <div className="relative w-full">
+                          <select
+                            value={selectedProvince}
+                            onChange={(e) => {
+                              setSelectedProvince(e.target.value);
+                              setFormData(prev => ({ ...prev, province: e.target.value }));
+                            }}
+                            className="w-full bg-white border border-[#d6d6d6] border-solid px-[14px] py-[10px] pr-[40px] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] text-black text-[16px] leading-[1.5] appearance-none cursor-pointer focus:outline-none focus:border-[#0562d2]"
+                          >
+                            {provinces.length > 0 ? (
+                              provinces.map((p) => (
+                                <option key={p.id} value={p.name}>
+                                  {p.name}
+                                </option>
+                              ))
+                            ) : (
+                              <>
+                                <option value="Đồng Nai">Đồng Nai</option>
+                                <option value="TP. Hồ Chí Minh">TP. Hồ Chí Minh</option>
+                                <option value="Bình Dương">Bình Dương</option>
+                                <option value="Vũng Tàu">Bà Rịa - Vũng Tàu</option>
+                                <option value="Khác">Khu vực khác</option>
+                              </>
+                            )}
+                          </select>
+                          <div className="absolute top-1/2 right-[14px] transform -translate-y-1/2 pointer-events-none text-gray-500">
+                            <ChevronDown className="w-5 h-5" />
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
 
-                  {/* Calculations Sheet */}
-                  <div className="border border-[#e5e5e5] rounded-lg p-5 bg-[#fafafa] space-y-4 text-sm mt-2">
-                    <h4 className="font-bold text-gray-900 border-b border-gray-200 pb-2 mb-3 uppercase tracking-wider text-xs">Chi tiết bảng tính dự toán:</h4>
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Giá xe niêm yết:</span>
-                      <span className="font-bold text-gray-900">{formatPrice(rollingCost.basePrice)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Thuế trước bạ:</span>
-                      <span className="font-semibold text-gray-800">+{formatPrice(rollingCost.registrationTax)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Phí cấp biển số:</span>
-                      <span className="font-semibold text-gray-800">+{formatPrice(rollingCost.plateFee)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Phí đăng kiểm:</span>
-                      <span className="font-semibold text-gray-800">+{formatPrice(rollingCost.registryFee)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Phí bảo trì đường bộ (12 tháng):</span>
-                      <span className="font-semibold text-gray-800">+{formatPrice(rollingCost.roadFee)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Bảo hiểm trách nhiệm dân sự:</span>
-                      <span className="font-semibold text-gray-800">+{formatPrice(rollingCost.insuranceFee)}</span>
-                    </div>
-                    {rollingCost.serviceFee && rollingCost.serviceFee > 0 ? (
+                    {/* Calculations Sheet */}
+                    <motion.div 
+                      key={`${selectedVehicleId}-${selectedVersionId}-${selectedProvince}`}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.25 }}
+                      className="border border-[#e5e5e5] rounded-lg p-5 bg-[#fafafa] space-y-4 text-sm mt-2 shadow-xs"
+                    >
+                      <h4 className="font-bold text-gray-900 border-b border-gray-200 pb-2 mb-3 uppercase tracking-wider text-xs">Chi tiết bảng tính dự toán:</h4>
                       <div className="flex justify-between">
-                        <span className="text-gray-500">Phí dịch vụ đăng ký:</span>
-                        <span className="font-semibold text-gray-800">+{formatPrice(rollingCost.serviceFee)}</span>
+                        <span className="text-gray-500">Giá xe niêm yết:</span>
+                        <span className="font-bold text-gray-900">{formatPrice(rollingCost.basePrice)}</span>
                       </div>
-                    ) : null}
-                    <div className="border-t border-gray-200 pt-3 mt-3 flex justify-between items-center">
-                      <span className="font-bold text-gray-900 text-base">Tổng chi phí lăn bánh dự kiến:</span>
-                      <span className="font-extrabold text-[#066fef] text-xl">{formatPrice(rollingCost.total)}</span>
-                    </div>
-                  </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">Thuế trước bạ:</span>
+                        <span className="font-semibold text-gray-800">+{formatPrice(rollingCost.registrationTax)}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">Phí cấp biển số:</span>
+                        <span className="font-semibold text-gray-800">+{formatPrice(rollingCost.plateFee)}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">Phí đăng kiểm:</span>
+                        <span className="font-semibold text-gray-800">+{formatPrice(rollingCost.registryFee)}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">Phí bảo trì đường bộ (12 tháng):</span>
+                        <span className="font-semibold text-gray-800">+{formatPrice(rollingCost.roadFee)}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">Bảo hiểm trách nhiệm dân sự:</span>
+                        <span className="font-semibold text-gray-800">+{formatPrice(rollingCost.insuranceFee)}</span>
+                      </div>
+                      {rollingCost.serviceFee && rollingCost.serviceFee > 0 ? (
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">Phí dịch vụ đăng ký:</span>
+                          <span className="font-semibold text-gray-800">+{formatPrice(rollingCost.serviceFee)}</span>
+                        </div>
+                      ) : null}
+                      <div className="border-t border-gray-200 pt-3 mt-3 flex justify-between items-center">
+                        <span className="font-bold text-gray-900 text-base">Tổng chi phí lăn bánh dự kiến:</span>
+                        <span className="font-extrabold text-[#066fef] text-xl">{formatPrice(rollingCost.total)}</span>
+                      </div>
+                    </motion.div>
 
-                  <button
-                    onClick={() => setDrawerStep("contact")}
-                    className="w-full bg-[#066fef] hover:bg-[#01095c] text-white py-3.5 rounded-[4px] font-bold uppercase text-xs tracking-wider shadow-xs transition-colors cursor-pointer border-0 mt-4 font-antenna"
-                  >
-                    Nhận báo giá chính xác kèm khuyến mãi
-                  </button>
-                </div>
-              ) : (
-                <div className="flex-1 flex flex-col gap-6 w-full">
+                    <button
+                      onClick={() => setDrawerStep("contact")}
+                      className="w-full bg-[#066fef] hover:bg-[#01095c] text-white py-3.5 rounded-[4px] font-bold uppercase text-xs tracking-wider shadow-xs transition-colors cursor-pointer border-0 mt-4 font-antenna"
+                    >
+                      Nhận báo giá chính xác kèm khuyến mãi
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex-1 flex flex-col gap-6 w-full">
                   <button
                     onClick={() => setDrawerStep("calculate")}
                     className="text-xs font-semibold text-[#066fef] hover:underline bg-transparent border-0 cursor-pointer self-start"
@@ -714,11 +752,12 @@ export default function VehicleLayoutClient({
                   </form>
                 </div>
               )}
-            </div>
+            </motion.div>
           </div>
         )}
-      </div>
-    </VehicleContext.Provider>
+      </AnimatePresence>
+    </div>
+  </VehicleContext.Provider>
   );
 }
 
