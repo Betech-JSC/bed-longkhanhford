@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 // vehiclesAPI removed — data fetched server-side
@@ -91,11 +91,20 @@ export function groupVehiclesBySeries(apiVehicles: any[]) {
 }
 
 export interface BangGiaClientProps {
-  vehicles: any[];
+  rawVehicles?: any[];
+  vehicles?: any[]; // Legacy prop for backward compat
 }
 
-export default function BangGiaClient({ vehicles }: BangGiaClientProps) {
+export default function BangGiaClient({ rawVehicles, vehicles: vehiclesProp }: BangGiaClientProps) {
   const loading = false; // Data already loaded from server
+
+  // Group raw vehicles on the client side (avoids server serialization issues)
+  const vehicles = useMemo(() => {
+    if (rawVehicles && rawVehicles.length > 0) {
+      return groupVehiclesBySeries(rawVehicles);
+    }
+    return vehiclesProp || [];
+  }, [rawVehicles, vehiclesProp]);
   return (
     <div className="bg-[#fafafa] min-h-screen font-sans">
       {/* Hero */}

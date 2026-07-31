@@ -1,7 +1,6 @@
 import { Metadata } from "next";
 import { vehiclesAPI } from "@/lib/api";
-import { resolveImageUrl, getPopularVehicleImage } from "@/lib/site-assets";
-import BangGiaClient, { groupVehiclesBySeries } from "./BangGiaClient";
+import BangGiaClient from "./BangGiaClient";
 
 export const metadata: Metadata = {
   title: "Bảng Giá Xe Ford 2026 | Long Khánh Ford - Đại lý chính hãng",
@@ -19,18 +18,19 @@ export const metadata: Metadata = {
 
 /**
  * Bảng giá — Server Component (SSR)
+ * Truyền raw API data để client tự group bằng groupVehiclesBySeries
  */
 export default async function PriceListPage() {
-  let vehicles: any[] = [];
+  let rawVehicles: any[] = [];
 
   try {
     const res = await vehiclesAPI.getAll({ with_versions: 1 });
     if (res && res.success && Array.isArray(res.data)) {
-      vehicles = groupVehiclesBySeries(res.data);
+      rawVehicles = res.data;
     }
   } catch (err) {
     console.error("Error loading vehicles for price list (SSR):", err);
   }
 
-  return <BangGiaClient vehicles={vehicles} />;
+  return <BangGiaClient rawVehicles={rawVehicles} />;
 }
