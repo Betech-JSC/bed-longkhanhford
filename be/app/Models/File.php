@@ -512,8 +512,20 @@ class File
         return $this->responseDefault();
     }
 
-    protected function responseStreamingVideo(): bool
+    protected function responseStreamingVideo()
     {
+        if ($this->disk === 'uploads') {
+            return redirect(asset('storage/uploads/' . $this->path), 302, [
+                'Cache-Control' => 'public, max-age=86400',
+            ]);
+        }
+
+        if ($this->disk === 'public') {
+            return redirect(asset('storage/' . $this->path), 302, [
+                'Cache-Control' => 'public, max-age=86400',
+            ]);
+        }
+
         return VideoStreamer::streamFile($this->getFullPath());
     }
 
@@ -598,7 +610,8 @@ class File
 
     protected function isVideo(): bool
     {
-        return str_contains($this->path, '.mp4');
+        $extension = strtolower(pathinfo($this->path, PATHINFO_EXTENSION));
+        return in_array($extension, ['mp4', 'avi', 'mov', 'wmv', 'flv', 'mkv', 'webm', '3gp', 'm4v']);
     }
 
     private function formatBytes($size)

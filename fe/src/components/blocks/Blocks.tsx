@@ -381,6 +381,7 @@ function HeroBannerBlock({ blockIndex, data, vehicle, openQuoteDrawer, openDrive
             onPlay={() => setIsVideoReady(true)}
             onPlaying={() => setIsVideoReady(true)}
             onLoadedData={() => setIsVideoReady(true)}
+            onLoadedMetadata={() => setIsVideoReady(true)}
           />
         ) : null}
 
