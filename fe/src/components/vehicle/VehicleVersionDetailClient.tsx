@@ -164,6 +164,16 @@ export default function VehicleVersionDetailClient() {
     : (vehicle?.colors && vehicle.colors.length > 0 ? vehicle.colors : []);
   const currentColor = (selectedColorIndex !== null && colors.length > 0) ? colors[selectedColorIndex] : null;
 
+  const displayedPrice = useMemo(() => {
+    if (currentColor && currentColor.price) {
+      const colorPrice = typeof currentColor.price === 'string' ? parseFloat(currentColor.price) : currentColor.price;
+      if (colorPrice > 0) {
+        return colorPrice;
+      }
+    }
+    return selectedVersion ? selectedVersion.price : vehicle?.basePrice;
+  }, [currentColor, selectedVersion, vehicle]);
+
   // Detect if external or internal image sequence exists
   const hasExteriorSeq = (currentColor && currentColor.images_360 && currentColor.images_360.length > 0)
     || (vehicle && vehicle.images_360_external && vehicle.images_360_external.length > 0);
@@ -578,7 +588,7 @@ export default function VehicleVersionDetailClient() {
               <div className="space-y-1 font-antenna">
                 <span className="text-[11px] text-gray-500 font-bold uppercase tracking-wider block">Giá niêm yết từ</span>
                 <span className="text-[28px] sm:text-[32px] font-extrabold text-[#066fef] block leading-none">
-                  {selectedVersion ? formatPrice(selectedVersion.price) : formatPrice(vehicle.basePrice)}
+                  {formatPrice(displayedPrice)}
                 </span>
               </div>
             </div>
@@ -704,7 +714,7 @@ export default function VehicleVersionDetailClient() {
                         const isSelected = selectedColorIndex === idx || (selectedColorIndex === null && idx === 0 && !selectedVersion?.image_url);
                         return (
                           <button
-                            key={color.name}
+                            key={`${color.name || ''}-${color.color_code || color.hex || ''}-${idx}`}
                             onClick={() => {
                               setSelectedColorIndex(idx);
                               setIs360Active(false);

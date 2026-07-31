@@ -371,7 +371,7 @@
 
                                             <!-- Color Content (Shown when expanded) -->
                                             <div v-show="!isColorCollapsed(cIdx)" class="p-4 space-y-4">
-                                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                                     <Field v-model="form.versions[activeVersionIndex].colors[cIdx].name" :field="{
                                                         type: 'text',
                                                         name: 'ver_' + activeVersionIndex + '_color_name_' + cIdx,
@@ -397,6 +397,12 @@
                                                             />
                                                         </div>
                                                     </div>
+
+                                                    <Field v-model="form.versions[activeVersionIndex].colors[cIdx].price" :field="{
+                                                        type: 'money',
+                                                        name: 'ver_' + activeVersionIndex + '_color_price_' + cIdx,
+                                                        label: 'Giá riêng cho màu này (đ) - Để trống nếu bằng giá mặc định',
+                                                    }" />
                                                 </div>
 
                                                 <div class="border-t border-gray-200 pt-3 mt-3 space-y-3">
@@ -1874,6 +1880,7 @@ export default {
                         return {
                             name: col.name ?? col.color_name ?? '',
                             color_code: code || '#cbd5e1',
+                            price: col.price ?? '',
                             images_360: col.images_360 ?? [],
                             image_360_internal: col.image_360_internal ?? null,
                             images_360_internal: col.images_360_internal ?? [],
@@ -2130,6 +2137,7 @@ export default {
             form.versions[versionIndex].colors.push({
                 name: '',
                 color_code: '#cbd5e1',
+                price: '',
                 images_360: [],
                 image_360_internal: null,
                 images_360_internal: [],

@@ -48,6 +48,7 @@ class VehicleController extends Controller
                     'name'       => $color['name'] ?? ($color['color_name'] ?? ''),
                     'hex'        => $color['hex'] ?? ($color['color_code'] ?? ''),
                     'image_path' => $imagePath,
+                    'price'      => $color['price'] ?? null,
                 ];
             })->toArray(),
         ];
@@ -97,6 +98,7 @@ class VehicleController extends Controller
                         'images_360'          => $images360,
                         'image_360_internal'  => $image360Internal,
                         'images_360_internal' => $images360Internal,
+                        'price'               => $color['price'] ?? null,
                     ];
                 })->toArray(),
             ])->toArray();
@@ -234,6 +236,7 @@ class VehicleController extends Controller
                     'images_360'          => $images360,
                     'image_360_internal'  => $image360Internal,
                     'images_360_internal' => $images360Internal,
+                    'price'               => $color['price'] ?? null,
                 ];
             })->toArray(),
             'images_360_external'    => collect($vehicle->images_360_external ?? [])->map(fn($img) => $this->resolveFileUrl($img))->filter()->values()->toArray(),
@@ -284,6 +287,7 @@ class VehicleController extends Controller
                         'images_360'          => $images360,
                         'image_360_internal'  => $image360Internal,
                         'images_360_internal' => $images360Internal,
+                        'price'               => $color['price'] ?? null,
                     ];
                 })->toArray(),
             ]),

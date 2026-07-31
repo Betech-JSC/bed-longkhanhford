@@ -48,7 +48,10 @@ async function fetchAPI<T = any>(
 
   // Apply caching strategy
   if (isGet && !options?.cache && !options?.next) {
-    if (isServer && tags && tags.length > 0) {
+    if (process.env.NODE_ENV === 'development') {
+      // Development mode: bypass cache so updates from CMS sync immediately
+      fetchOptions.cache = 'no-store';
+    } else if (isServer && tags && tags.length > 0) {
       // Server-side: use force-cache with tags for on-demand revalidation
       fetchOptions.cache = 'force-cache';
       fetchOptions.next = { tags };

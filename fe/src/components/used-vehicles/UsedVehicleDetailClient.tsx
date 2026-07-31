@@ -359,29 +359,43 @@ export default function UsedVehicleDetailClient({ vehicle }: { vehicle: any }) {
             </div>
 
             {/* Price Box */}
-            <div className="bg-[#00095B] text-white p-5 rounded-none border border-neutral-800 space-y-1">
-              <span className="text-xs font-bold text-white/60 uppercase tracking-wider block font-antenna">Giá bán ưu đãi</span>
-              <div className="text-2xl md:text-3xl font-bold text-white font-antenna">
-                {formatPrice(vehicle.price)}
+            {vehicle.price > 0 && (
+              <div className="bg-[#00095B] text-white p-5 rounded-none border border-neutral-800 space-y-1">
+                <span className="text-xs font-bold text-white/60 uppercase tracking-wider block font-antenna">Giá bán ưu đãi</span>
+                <div className="text-2xl md:text-3xl font-bold text-white font-antenna">
+                  {formatPrice(vehicle.price)}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Actions Row */}
             <div className="flex gap-4">
-              <button
-                onClick={() => setShowBookingModal(true)}
-                className="flex-1 bg-[#066fef] text-white rounded-[4px] flex gap-2 items-center justify-center py-4 font-bold text-xs uppercase tracking-wider hover:bg-[#01095c] transition-all shadow-xs cursor-pointer border-0"
-              >
-                <Car className="w-5 h-5" />
-                <span>Đăng ký lái thử / Tư vấn</span>
-              </button>
+              {vehicle.price > 0 ? (
+                <>
+                  <button
+                    onClick={() => setShowBookingModal(true)}
+                    className="flex-1 bg-[#066fef] text-white rounded-[4px] flex gap-2 items-center justify-center py-5 font-bold text-xs uppercase tracking-wider hover:bg-[#01095c] transition-all shadow-xs cursor-pointer border-0"
+                  >
+                    <Car className="w-5 h-5" />
+                    <span>Đăng ký lái thử / Tư vấn</span>
+                  </button>
 
-              <a
-                href="tel:0812868622"
-                className="flex items-center justify-center border border-gray-200 hover:border-[#066fef] text-[#066fef] bg-white rounded-[4px] px-5 transition-all cursor-pointer"
-              >
-                <Phone className="w-5 h-5" />
-              </a>
+                  <a
+                    href="tel:0812868622"
+                    className="flex items-center justify-center border border-gray-200 hover:border-[#066fef] text-[#066fef] bg-white rounded-[4px] px-5 transition-all cursor-pointer"
+                  >
+                    <Phone className="w-5 h-5" />
+                  </a>
+                </>
+              ) : (
+                <a
+                  href="tel:0812868622"
+                  className="flex-1 bg-[#066fef] text-white rounded-[4px] flex gap-2 items-center justify-center py-5 font-bold text-xs uppercase tracking-wider hover:bg-[#01095c] transition-all shadow-xs cursor-pointer border-0 text-center no-underline hover:text-white"
+                >
+                  <Phone className="w-5 h-5" />
+                  <span>Liên hệ</span>
+                </a>
+              )}
             </div>
 
             {/* Assured highlights */}

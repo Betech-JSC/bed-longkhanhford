@@ -158,6 +158,7 @@ export default async function VehicleDetailLayout({
     colors: apiVehicle.colors ? safeArray(apiVehicle.colors).map((c: any) => ({
       name: c.name || c.color_name || '',
       hex: c.hex || c.color_code || '',
+      price: typeof c.price === 'string' ? parseFloat(c.price) : (c.price || null),
       image: resolveFileUrl(c.image_path || c.image),
       images_360: safeArray(c.images_360).map((img: any) => resolveFileUrl(img)).filter(Boolean),
       image_360_internal: resolveFileUrl(c.image_360_internal) || null,
@@ -178,6 +179,7 @@ export default async function VehicleDetailLayout({
           ? safeArray(v.colors).map((c: any) => ({
               name: c.name || c.color_name || '',
               hex: c.hex || c.color_code || '',
+              price: typeof c.price === 'string' ? parseFloat(c.price) : (c.price || null),
               image: resolveFileUrl(c.image_path || c.image),
               images_360: safeArray(c.images_360).map((img: any) => resolveFileUrl(img)).filter(Boolean),
               image_360_internal: resolveFileUrl(c.image_360_internal) || null,
@@ -186,6 +188,7 @@ export default async function VehicleDetailLayout({
           : (apiVehicle.colors ? safeArray(apiVehicle.colors).map((c: any) => ({
               name: c.name || c.color_name || '',
               hex: c.hex || c.color_code || '',
+              price: typeof c.price === 'string' ? parseFloat(c.price) : (c.price || null),
               image: resolveFileUrl(c.image_path || c.image),
               images_360: safeArray(c.images_360).map((img: any) => resolveFileUrl(img)).filter(Boolean),
               image_360_internal: resolveFileUrl(c.image_360_internal) || null,

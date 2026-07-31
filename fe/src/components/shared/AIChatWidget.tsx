@@ -443,8 +443,8 @@ export default function AIChatWidget() {
     const isMobile = window.innerWidth < 640;
     const offset = (isMobile && hasCompareItems) ? 56 : 0;
     setPosition({
-      x: isMobile ? 16 : 24,
-      y: window.innerHeight - BUBBLE_SIZE - (isMobile ? 80 : 24) - offset,
+      x: 84,
+      y: window.innerHeight - BUBBLE_SIZE - 96 - offset,
     });
   }, [hasCompareItems]);
 
@@ -707,7 +707,7 @@ export default function AIChatWidget() {
           left: `${position.x}px`,
           top: `${position.y}px`,
         }}
-        className={`fixed z-[60] w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all duration-300 ease-in-out cursor-pointer select-none ${
+        className={`fixed z-[60] w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-colors duration-200 cursor-pointer select-none ${
           isOpen
             ? "bg-[#333] hover:bg-[#1a1a1a]"
             : "bg-[#0562d2] hover:bg-[#044ea7]"

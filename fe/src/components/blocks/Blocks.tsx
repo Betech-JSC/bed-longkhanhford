@@ -1483,7 +1483,7 @@ function ThreeSixtyViewerBlock({ data, vehicle, isEditMode, onChangeData, threeS
                         <div className="color-selector" role="radiogroup">
                           {colors.map((color: any, idx: number) => (
                             <div
-                              key={color.name}
+                              key={`${color.name || ''}-${color.color_code || color.hex || ''}-${idx}`}
                               className={`color-container ${selectedColorIndex === idx ? "selected" : ""}`}
                               onClick={() => setSelectedColorIndex(idx)}
                               title={color.name}
