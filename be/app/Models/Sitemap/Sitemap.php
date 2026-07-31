@@ -20,53 +20,40 @@ class Sitemap
 
     public function addStaticRoutes(): static
     {
-        foreach (Route::getRoutes() as $route) {
-            if ($route->getName() === 'dynamic-redirect') continue;
+        $staticRoutes = [
+            '/',
+            '/san-pham',
+            '/tin-tuc',
+            '/bang-gia',
+            '/dich-vu',
+            '/dich-vu/bao-duong-dinh-ky',
+            '/dich-vu/bao-duong-nhanh',
+            '/dich-vu/giao-nhan-xe-tan-noi',
+            '/dich-vu/cham-soc-khach-hang',
+            '/dich-vu/dich-vu-sua-chua',
+            '/dich-vu/dich-vu-cuu-ho-247',
+            '/dich-vu/dich-vu-xe-da-qua-su-dung',
+            '/dich-vu/dich-vu-nang-cap-xe',
+            '/dich-vu/ford-sync',
+            '/dich-vu/ung-dung-ford',
+            '/dich-vu/ford-ensure',
+            '/dich-vu/intelligent-oil-life-monitor',
+            '/phu-kien',
+            '/xe-da-qua-su-dung',
+            '/gioi-thieu',
+            '/lien-he',
+            '/dang-ky-lai-thu',
+            '/tuyen-dung',
+            '/thu-vien-media',
+            '/chinh-sach-bao-mat',
+            '/dieu-khoan-su-dung',
+            '/cong-cu/so-sanh-xe',
+            '/cong-cu/uoc-tinh-lan-banh',
+            '/cong-cu/uoc-tinh-tra-gop',
+        ];
 
-            if (isset($route->getAction()['middleware']) && $route->methods()[0] == 'GET') {
-                $middleware = $route->getAction()['middleware'];
-                $uri = $route->uri;
-                if (is_array($middleware)) {
-                    if (
-                        in_array('frontend', $middleware) &&
-                        !str_contains($uri, '{') &&
-                        !str_contains($uri, '}') &&
-                        $uri !== 'sitemap.xml' &&
-                        $uri !== '/'
-                    ) {
-                        $excludePatterns = [
-                            'robots.txt',
-                            'error',
-                            'demo',
-                            'routes',
-                            'checkout',
-                            'api/',
-                            'search',
-                            'tim-kiem',
-                            'en',
-                            'danh-muc/',
-                            'posts',
-                            'policies',
-                            'jobs',
-                            'regions',
-                            'agencies',
-                            'nha-may'
-                        ];
-                        
-                        $shouldExclude = false;
-                        foreach ($excludePatterns as $pattern) {
-                            if (str_contains($uri, $pattern)) {
-                                $shouldExclude = true;
-                                break;
-                            }
-                        }
-
-                        if (!$shouldExclude) {
-                            $this->add(url($uri));
-                        }
-                    }
-                }
-            }
+        foreach ($staticRoutes as $route) {
+            $this->add(url($route));
         }
 
         return $this;

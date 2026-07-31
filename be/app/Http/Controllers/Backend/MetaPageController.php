@@ -66,12 +66,18 @@ class MetaPageController extends Controller
             $storedRoutes = MetaPage::pluck('url');
             $routes = collect(Sitemap::create()->addStaticRoutes()->tags)
                 ->transform(fn($item) => str_replace(env('APP_URL'), '', $item['url']) ?: '/')
-                ->prepend('/');
+                ->prepend('/')
+                ->unique();
 
             $diff = $routes->diff($storedRoutes);
 
             if ($diff->count()) {
                 MetaPage::insert($diff->transform(fn($item) => ['url' => $item])->toArray());
+            }
+
+            $outdated = $storedRoutes->diff($routes);
+            if ($outdated->count()) {
+                MetaPage::whereIn('url', $outdated->toArray())->delete();
             }
         }
 
