@@ -74,10 +74,37 @@ export default async function Page({ params }: Props) {
     notFound();
   }
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://longkhanhford.com.vn";
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    "headline": article.title,
+    "description": article.description || article.seo_description || "",
+    "image": article.image?.url ? [article.image.url] : [],
+    "datePublished": article.published_at || article.created_at,
+    "author": {
+      "@type": "Organization",
+      "name": "Long Khánh Ford",
+      "url": siteUrl
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Long Khánh Ford",
+      "url": siteUrl
+    }
+  };
+
   return (
-    <ArticleDetailClient 
-      article={article} 
-      relatedArticles={relatedArticles} 
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
+      <ArticleDetailClient 
+        article={article} 
+        relatedArticles={relatedArticles} 
+      />
+    </>
   );
 }
+

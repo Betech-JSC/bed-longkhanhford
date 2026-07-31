@@ -247,12 +247,43 @@ export default async function VehicleDetailLayout({
     });
   }
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://longkhanhford.com.vn";
+  const carJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Car",
+    "name": apiVehicle.title || apiVehicle.name,
+    "image": normalizedVehicle.images?.filter(Boolean) || [],
+    "description": apiVehicle.tagline || `Xe Ford ${apiVehicle.title || apiVehicle.name} chính hãng tại Long Khánh Ford.`,
+    "brand": {
+      "@type": "Brand",
+      "name": "Ford"
+    },
+    "offers": {
+      "@type": "AggregateOffer",
+      "priceCurrency": "VND",
+      "lowPrice": normalizedVehicle.basePrice || 0,
+      "offerCount": normalizedVehicle.versions?.length || 1,
+      "seller": {
+        "@type": "AutoDealer",
+        "name": "Long Khánh Ford",
+        "url": siteUrl
+      }
+    }
+  };
+
   return (
-    <VehicleLayoutClient 
-      initialVehicle={normalizedVehicle} 
-      allVehicles={normalizedAllVehicles}
-    >
-      {children}
-    </VehicleLayoutClient>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(carJsonLd) }}
+      />
+      <VehicleLayoutClient 
+        initialVehicle={normalizedVehicle} 
+        allVehicles={normalizedAllVehicles}
+      >
+        {children}
+      </VehicleLayoutClient>
+    </>
   );
 }
+
