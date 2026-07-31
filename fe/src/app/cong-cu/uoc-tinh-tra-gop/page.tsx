@@ -309,7 +309,7 @@ export default function InstallmentCalculatorPage() {
       <div className="hidden print:block mb-8 border-b pb-4">
         <div className="flex justify-between items-center">
           <div>
-            <div className="text-2xl font-bold text-[#00095B] uppercase tracking-tight">LONG KHÁNH FORD</div>
+            <h1 className="text-2xl font-bold text-[#00095B] uppercase tracking-tight">LONG KHÁNH FORD</h1>
             <p className="text-xs text-gray-500 mt-1">
               Địa chỉ: Đường 21/4, Tổ 1, Khu phố Cẩm Tân, Phường Hàng Gòn, Thành phố Đồng Nai, Việt Nam
             </p>

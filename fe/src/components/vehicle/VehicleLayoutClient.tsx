@@ -785,14 +785,12 @@ export function VehicleTabBar() {
     <div className="sticky-tabs bg-white border-b border-[#e5e5e5] shadow-xs">
       <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full flex items-center justify-between gap-4">
         <div className="flex items-center gap-4 md:gap-6 min-w-0 flex-1">
-          <h1 className="m-0 p-0 inline-block font-['Ford_Antenna',sans-serif] font-extrabold text-[#1a1a1a] text-[13px] uppercase tracking-wider whitespace-nowrap hidden sm:block">
-            <Link 
-              href={`/${id}`}
-              className="text-[#1a1a1a] hover:text-[#066fef] no-underline"
-            >
-              {vehicle.name}
-            </Link>
-          </h1>
+          <Link 
+            href={`/${id}`}
+            className="font-['Ford_Antenna',sans-serif] font-extrabold text-[#1a1a1a] text-[13px] uppercase tracking-wider whitespace-nowrap hidden sm:block hover:text-[#066fef] no-underline"
+          >
+            {vehicle.name}
+          </Link>
           <div className="h-[20px] w-[1px] bg-[#e5e5e5] hidden sm:block" />
 
           <div className="flex items-center overflow-x-auto scrollbar-none gap-3 md:gap-[20px] py-1 min-w-0 flex-1">
