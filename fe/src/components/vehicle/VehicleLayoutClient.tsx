@@ -5,6 +5,8 @@ import { useState, useEffect, useMemo, createContext, useContext } from "react";
 import Link from "next/link";
 import { contactsAPI, regionsAPI, registrationFeesAPI } from "@/lib/api";
 import { calculateRollingCost } from "@/lib/rolling-cost";
+import { formatPhoneNumber } from "@/lib/formatters";
+import Breadcrumbs from "@/components/shared/Breadcrumbs";
 import {
   X,
   Check,
@@ -201,7 +203,8 @@ export default function VehicleLayoutClient({
   // Form input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const formattedValue = name === "phone" ? formatPhoneNumber(value) : value;
+    setFormData((prev) => ({ ...prev, [name]: formattedValue }));
   };
 
   // Calculate rolling costs

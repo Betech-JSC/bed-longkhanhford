@@ -31,15 +31,15 @@ class RouteServiceProvider extends ServiceProvider
             Route::namespace($this->namespace)
                 ->group(package_path('core/routes/api.php'));
 
-            Route::domain(to_domain(config('app.frontend_url')))
-                ->middleware(['web', 'frontend'])
-                ->namespace($this->namespace)
-                ->group(package_path('core/routes/frontend.php'));
-
             Route::prefix('admin')
                 ->middleware(['web', 'backend'])
                 ->namespace($this->namespace)
                 ->group(package_path('core/routes/backend.php'));
+
+            Route::domain(to_domain(config('app.frontend_url')))
+                ->middleware(['web', 'frontend'])
+                ->namespace($this->namespace)
+                ->group(package_path('core/routes/frontend.php'));
         });
     }
 }

@@ -49,7 +49,7 @@ export default function CookieConsent() {
 
   return (
     <div
-      className={`fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-50 max-w-[440px] w-[calc(100%-32px)] sm:w-[440px] bg-white rounded-2xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-gray-100 flex flex-col gap-4 text-left transition-all duration-500 ease-out transform ${
+      className={`fixed bottom-[60px] left-4 sm:bottom-6 sm:left-6 z-50 max-w-[440px] w-[calc(100%-32px)] sm:w-[440px] bg-white rounded-xl p-5 shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-gray-100 flex flex-col gap-3.5 text-left transition-all duration-500 ease-out transform ${
         isVisible ? "translate-y-0 opacity-100 scale-100" : "translate-y-8 opacity-0 scale-95 pointer-events-none"
       }`}
     >

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useVehicle } from "@/components/vehicle/VehicleLayoutClient";
 import { regionsAPI, contactsAPI, registrationFeesAPI } from "@/lib/api";
 import { calculateRollingCost } from "@/lib/rolling-cost";
+import { formatPhoneNumber } from "@/lib/formatters";
 import { Check, Info, FileText } from "lucide-react";
 import AnimatedNumber from "@/components/shared/AnimatedNumber";
 
@@ -68,7 +69,8 @@ export default function VehiclePriceCalculatorClient() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const formattedValue = name === "phone" ? formatPhoneNumber(value) : value;
+    setFormData((prev) => ({ ...prev, [name]: formattedValue }));
   };
 
   const getSelectedVersion = () => {

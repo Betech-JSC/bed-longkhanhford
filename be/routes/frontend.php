@@ -51,7 +51,7 @@ Route::middleware(['meta_seo', 'opening'])->group(function () {
             Route::get(Lang::uri('policies') . '/{slug}', 'show')->name('policies.show');
         });
 
-        Route::get('{slug}', [PostController::class, 'show'])->name('posts.show');
+        Route::get('{slug}', [PostController::class, 'show'])->where('slug', '^(?!admin|api|storage|build).*$')->name('posts.show');
     });
 });
 

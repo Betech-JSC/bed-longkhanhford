@@ -131,6 +131,7 @@ export default function JobDetailClient({ job }: { job: JobDetail }) {
         contact: {
           type: "APPLY_FORM",
           data: {
+            Name: formData.name,
             "Họ và tên": formData.name,
             Phone: formData.phone,
             Email: formData.email,

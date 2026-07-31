@@ -157,13 +157,13 @@ export default function ExpressMaintenanceLayout({ service }: { service?: { titl
           
           {/* Key Advantages Column */}
           <div className="bg-white border border-gray-200 shadow-xs flex flex-col group hover:border-[#066fef]/40 transition-all duration-300">
-            <div className="relative aspect-[16/7] w-full overflow-hidden">
+            <div className="relative aspect-[16/9] sm:aspect-[16/9] w-full overflow-hidden">
               <Image
                 src={siteAssets.serviceMaintenance}
                 alt="Ưu Điểm Chính"
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover group-hover:scale-102 transition-transform duration-500"
+                className="object-cover object-top group-hover:scale-102 transition-transform duration-500"
                 unoptimized
               />
             </div>
@@ -183,13 +183,13 @@ export default function ExpressMaintenanceLayout({ service }: { service?: { titl
 
           {/* VIP Lounge Experience Column */}
           <div className="bg-white border border-gray-200 shadow-xs flex flex-col group hover:border-[#066fef]/40 transition-all duration-300">
-            <div className="relative aspect-[16/7] w-full overflow-hidden">
+            <div className="relative aspect-[16/9] sm:aspect-[16/9] w-full overflow-hidden">
               <Image
                 src={siteAssets.serviceCustomerCare}
                 alt="Phòng chờ VIP"
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover group-hover:scale-102 transition-transform duration-500"
+                className="object-cover object-top group-hover:scale-102 transition-transform duration-500"
                 unoptimized
               />
             </div>

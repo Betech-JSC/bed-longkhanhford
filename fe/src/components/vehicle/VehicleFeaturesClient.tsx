@@ -166,10 +166,10 @@ function FeatureSectionSlider({ sec, openDriveDrawer }: FeatureSectionSliderProp
                   </div>
 
                   {/* Text details */}
-                  <h3 className="font-['Ford_Antenna',sans-serif] font-bold text-sm md:text-[15px] text-[#1a1a1a] mt-4 mb-2 line-clamp-2 min-h-[40px] md:min-h-[44px]">
+                  <h3 className="font-['Ford_Antenna',sans-serif] font-bold text-sm md:text-[15px] text-[#1a1a1a] mt-4 mb-2 whitespace-pre-line">
                     {feat.title}
                   </h3>
-                  <p className="text-[#616161] text-xs md:text-[13px] leading-relaxed font-normal line-clamp-4">
+                  <p className="text-[#616161] text-xs md:text-[13px] leading-relaxed font-normal whitespace-pre-line">
                     {feat.desc}
                   </p>
                 </div>

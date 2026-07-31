@@ -108,6 +108,16 @@ const nextConfig = {
         destination: "/phu-kien",
         permanent: true,
       },
+      {
+        source: "/so-sanh",
+        destination: "/cong-cu/so-sanh-xe",
+        permanent: true,
+      },
+      {
+        source: "/so-sanh-xe",
+        destination: "/cong-cu/so-sanh-xe",
+        permanent: true,
+      },
       // --- CHUYỂN HƯỚNG URL SẢN PHẨM XE CÓ CHỨA /SAN-PHAM SANG URL NGẮN ---
       // Redirects từ slug xe cũ không có tiền tố "ford-" sang có tiền tố "ford-"
       {

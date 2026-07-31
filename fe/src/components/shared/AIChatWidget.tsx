@@ -742,7 +742,7 @@ export default function AIChatWidget() {
       >
         <div 
           style={{ height: `${CHAT_HEIGHT}px`, maxHeight: "calc(100dvh - 32px)" }}
-          className="bg-white rounded-[24px] shadow-2xl border border-gray-200 overflow-hidden flex flex-col w-full"
+          className="bg-white rounded-[16px] shadow-2xl border border-gray-200 overflow-hidden flex flex-col w-full"
         >
           {/* Header */}
           <div className="bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between flex-shrink-0">

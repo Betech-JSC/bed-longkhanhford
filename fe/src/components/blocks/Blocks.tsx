@@ -305,7 +305,20 @@ export default function Blocks({
    1. HERO BANNER BLOCK
    ========================================================================== */
 function HeroBannerBlock({ blockIndex, data, vehicle, openQuoteDrawer, openDriveModal, isEditMode, onChangeData, anchorId }: any) {
-  const [isVideoReady, setIsVideoReady] = React.useState(false);
+  const [isVideoReady, setIsVideoReady] = React.useState(true);
+
+  const videoRef = React.useCallback((el: HTMLVideoElement | null) => {
+    if (el) {
+      el.muted = true;
+      el.setAttribute("muted", "true");
+      el.setAttribute("playsinline", "true");
+      el.setAttribute("webkit-playsinline", "true");
+      const playPromise = el.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {});
+      }
+    }
+  }, []);
 
   const title = data.title || vehicle.name;
   const tagline = data.tagline || vehicle.tagline;
@@ -369,19 +382,16 @@ function HeroBannerBlock({ blockIndex, data, vehicle, openQuoteDrawer, openDrive
           />
         ) : bgVideo ? (
           <video
+            ref={videoRef}
             src={bgVideo}
-            preload="metadata"
+            preload="auto"
             autoPlay
             loop
             muted
             playsInline
-            className={`absolute inset-0 w-full h-full object-cover object-center pointer-events-none z-5 transition-opacity duration-1000 ${
-              isVideoReady ? "opacity-100" : "opacity-0"
-            }`}
-            onPlay={() => setIsVideoReady(true)}
-            onPlaying={() => setIsVideoReady(true)}
-            onLoadedData={() => setIsVideoReady(true)}
-            onLoadedMetadata={() => setIsVideoReady(true)}
+            // @ts-ignore
+            webkit-playsinline="true"
+            className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none z-5"
           />
         ) : null}
 
@@ -405,7 +415,7 @@ function HeroBannerBlock({ blockIndex, data, vehicle, openQuoteDrawer, openDrive
       <div className="max-w-[1440px] mx-auto px-4 xl:px-8 w-full relative z-20">
         <div className={`flex flex-col gap-[16px] sm:gap-[24px] py-[24px] w-full ${alignClass}`}>
           <h1
-            className={`font-['Ford_Antenna',sans-serif] font-semibold text-white tracking-[-0.96px] leading-[1.15] uppercase ${titleSizeClass}
+            className={`font-['Ford_Antenna',sans-serif] font-semibold text-white tracking-[-0.96px] leading-[1.15] uppercase ${titleSizeClass} whitespace-pre-line
               ${isEditMode ? 'outline-[1px] outline-dashed outline-[#008060]/70 hover:outline-[#008060] outline-offset-2 cursor-pointer transition-all' : ''}`}
             style={titleStyle}
           >
@@ -1011,11 +1021,11 @@ function FeaturesListBlock({ blockIndex, data, vehicle, isEditMode, onChangeData
                     Nổi bật
                   </span>
 
-                  <h3 className={`text-lg font-bold tracking-tight text-[#1A1A1A] mb-2 font-display uppercase group-hover:text-[#0562d2] transition-colors w-full
+                  <h3 className={`text-lg font-bold tracking-tight text-[#1A1A1A] mb-2 font-display uppercase group-hover:text-[#0562d2] transition-colors w-full whitespace-pre-line
                     ${isEditMode ? 'outline-[1px] outline-dashed outline-[#008060]/70 hover:outline-[#008060] outline-offset-2 cursor-pointer transition-all' : ''}`}>
                     {feat.title || "Tính năng mới"}
                   </h3>
-                  <p className={`text-sm text-gray-600 leading-relaxed w-full
+                  <p className={`text-sm text-gray-600 leading-relaxed w-full whitespace-pre-line
                     ${isEditMode ? 'outline-[1px] outline-dashed outline-[#008060]/70 hover:outline-[#008060] outline-offset-2 cursor-pointer transition-all' : ''}`}>
                     {feat.description || "Mô tả tính năng vượt trội."}
                   </p>
@@ -1107,7 +1117,7 @@ function AccordionFAQsBlock({ data, vehicle, isEditMode, onChangeData, anchorId 
     <section id={anchorId || undefined} className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full py-16 border-t border-[#e5e5e5]">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-[40px] lg:gap-[80px] items-start justify-center">
 
-        <div className={`lg:col-span-4 space-y-3 ${alignClass}`}>
+        <div className={`lg:col-span-4 space-y-3 lg:sticky lg:top-28 self-start ${alignClass}`}>
           <span className="text-xs font-bold uppercase tracking-wider text-[#0562d2] block">Giải đáp thắc mắc</span>
           <h2 className="font-['Ford_Antenna',sans-serif] font-semibold text-[#1a1a1a] text-[36px] sm:text-[48px] tracking-[-0.96px] leading-[1.2] uppercase">
             Hỏi đáp thường gặp

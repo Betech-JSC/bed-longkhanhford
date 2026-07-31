@@ -26,10 +26,10 @@ const MessengerIcon = () => (
   </svg>
 );
 
-const ZaloIcon = () => (
-  <svg viewBox="0 0 32 32" className="w-[18px] h-[18px]" xmlns="http://www.w3.org/2000/svg">
-    <path fillRule="evenodd" clipRule="evenodd" d="M4.97875 27.8971C6.46541 28.0614 8.3241 27.6375 9.64384 26.9968C15.3746 30.1644 24.3328 30.0131 29.7553 26.5428C29.9656 26.2274 30.1621 25.8993 30.3444 25.5592C31.4282 23.5379 32.0005 21.2608 32.0005 17.3642V14.5392C32.0005 10.6426 31.4282 8.3655 30.3444 6.34415C29.2728 4.32279 27.6777 2.7398 25.6563 1.65605C23.6349 0.572313 21.3579 0 17.4613 0H14.6241C11.3054 0 9.15104 0.417763 7.34093 1.21532C7.24199 1.30392 7.1449 1.39404 7.04986 1.48566C1.73929 6.60499 1.33561 17.702 5.83878 23.73C5.8438 23.7389 5.84937 23.7479 5.85548 23.757C6.54957 24.7798 5.87984 26.5699 4.83263 27.617C4.66215 27.7754 4.72304 27.8728 4.97875 27.8971Z" fill="currentColor" />
-    <path d="M13.1605 10.88H6.93646V12.2146H11.2556L6.99707 17.4923C6.86363 17.6864 6.7666 17.8684 6.7666 18.2809V18.6206H12.6387C12.9299 18.6206 13.1726 18.378 13.1726 18.0868V17.3709H8.63502L12.6387 12.348C12.6994 12.2753 12.8086 12.1418 12.8572 12.0812L12.8814 12.0447C13.1119 11.705 13.1605 11.4138 13.1605 11.062V10.88ZM21.0826 18.6206H21.9683V10.88H20.6337V18.1717C20.6337 18.4144 20.8279 18.6206 21.0826 18.6206ZM16.521 12.6031C14.8467 12.6031 13.4878 13.962 13.4878 15.6363C13.4878 17.3106 14.8467 18.6694 16.521 18.6694C18.1953 18.6694 19.5541 17.3106 19.5541 15.6363C19.5663 13.962 18.2074 12.6031 16.521 12.6031ZM16.521 17.4198C15.5382 17.4198 14.7375 16.619 14.7375 15.6363C14.7375 14.6536 15.5382 13.8528 16.521 13.8528C17.5037 13.8528 18.3045 14.6536 18.3045 15.6363C18.3045 16.619 17.5158 17.4198 16.521 17.4198ZM25.9115 12.5544C24.225 12.5544 22.8541 13.9254 22.8541 15.6118C22.8541 17.2982 24.225 18.6693 25.9115 18.6693C27.5979 18.6693 28.9689 17.2982 28.9689 15.6118C28.9689 13.9254 27.5979 12.5544 25.9115 12.5544ZM25.9115 17.4196C24.9166 17.4196 24.1158 16.6188 24.1158 15.6239C24.1158 14.6291 24.9166 13.8283 25.9115 13.8283C26.9064 13.8283 27.7071 14.6291 27.7071 15.6239C27.7071 16.6188 26.9064 17.4196 25.9115 17.4196ZM18.8522 18.6204H19.568V12.7725H18.3184V18.0987C18.3184 18.3778 18.561 18.6204 18.8522 18.6204Z" fill="white" />
+const ZaloIcon = ({ className = "w-6 h-6" }: { className?: string }) => (
+  <svg viewBox="0 0 100 100" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M50 5C25.1 5 5 25.1 5 50C5 60.1 8.4 69.5 14.1 77L8 95L26.7 89.2C33.8 94.1 42.4 97 50 97C74.9 97 95 76.9 95 50C95 25.1 74.9 5 50 5Z" fill="#FFFFFF"/>
+    <text x="50" y="60" fontStyle="normal" fontWeight="900" fontSize="30" fill="#0068FF" textAnchor="middle">Zalo</text>
   </svg>
 );
 
@@ -188,7 +188,7 @@ export default function QuickAccessToolbar() {
       `}</style>
 
       {/* Desktop Version */}
-      <div className="hidden md:flex fixed right-0 top-[44%] -translate-y-1/2 z-50 flex-col items-end gap-1.5 select-none">
+      <div className="hidden md:flex fixed right-0 top-[60%] -translate-y-1/2 z-50 flex-col items-end gap-1.5 select-none">
         {/* Action stack container */}
         <div className="flex flex-col bg-white border-l border-y border-gray-200 shadow-[0_8px_30px_rgba(0,0,0,0.06)] rounded-l-xl overflow-visible w-12">
           {desktopMenuItems.map((item, idx) => {
@@ -224,40 +224,100 @@ export default function QuickAccessToolbar() {
         </div>
       </div>
 
-      {/* Mobile Version */}
-      <div className={`flex md:hidden fixed right-4 z-50 flex-col items-center gap-2.5 select-none transition-all duration-300 ${
-        hasCompareItems ? "bottom-28" : "bottom-20"
-      }`}>
-        {mobileMenuItems.map((item, idx) => {
-          const isExternal = item.target === "_blank";
-          return (
-            <Link
-              key={idx}
-              href={item.href}
-              target={item.target}
-              rel={isExternal ? "noopener noreferrer" : undefined}
-              className={`w-12 h-12 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-md border border-gray-200/60 shadow-[0_4px_16px_rgba(0,0,0,0.08)] transition-all duration-300 active:scale-90 ${item.rippleClass}`}
-              style={{ animationDelay: item.delay }}
-            >
-              <div className={`relative z-10 transition-transform duration-300 ${item.colorClass}`}>
-                {item.icon}
-              </div>
-            </Link>
-          );
-        })}
+      {/* Floating Action Buttons (Mobile - Left) */}
+      <div className="flex flex-col gap-2.5 md:hidden fixed left-4 bottom-16 z-50 select-none">
+        {/* Zalo */}
+        <Link
+          href="https://zalo.me/0812868622"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-11 h-11 flex items-center justify-center rounded-full bg-[#0068ff] text-white shadow-lg shadow-blue-500/30 active:scale-90 transition-transform overflow-hidden"
+          aria-label="Chat Zalo"
+        >
+          <ZaloIcon className="w-7 h-7" />
+        </Link>
 
-        {/* Mobile Scroll to top button */}
-        {showScrollTop && (
+        {/* Hotline Call */}
+        <Link
+          href="tel:0812868622"
+          className="w-11 h-11 flex items-center justify-center rounded-full bg-[#006fef] text-white shadow-lg shadow-blue-500/30 active:scale-90 transition-transform animate-pulse"
+          aria-label="Gọi điện hotline"
+        >
+          <Phone className="w-5 h-5 fill-current stroke-0" />
+        </Link>
+      </div>
+
+      {/* Mobile Bottom Navigation Bar */}
+      <div className="grid grid-cols-5 md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#f0f2f5] border-t-2 border-[#002f6c] shadow-[0_-4px_20px_rgba(0,0,0,0.08)] select-none w-full pb-[calc(0.25rem+env(safe-area-inset-bottom,0px))]">
+        {/* Lái thử */}
+        <Link
+          href="/dang-ky-lai-thu"
+          className="flex flex-col items-center justify-center gap-1.5 py-2 px-1 border-r border-gray-300/70 text-[#101828] hover:text-[#002f6c] active:bg-gray-200/80 transition-colors"
+        >
+          <div className="w-5 h-5 flex items-center justify-center text-[#101828]">
+            <SteeringWheelIcon />
+          </div>
+          <span className="text-[11px] font-semibold text-[#101828] leading-none whitespace-nowrap">Lái thử</span>
+        </Link>
+
+        {/* So sánh */}
+        <Link
+          href="/cong-cu/so-sanh-xe"
+          className="flex flex-col items-center justify-center gap-1.5 py-2 px-1 border-r border-gray-300/70 text-[#101828] hover:text-[#002f6c] active:bg-gray-200/80 transition-colors"
+        >
+          <div className="w-5 h-5 flex items-center justify-center text-[#101828]">
+            <ArrowLeftRight className="w-5 h-5 stroke-[1.8]" />
+          </div>
+          <span className="text-[11px] font-semibold text-[#101828] leading-none whitespace-nowrap">So sánh</span>
+        </Link>
+
+        {/* P.Lăn bánh */}
+        <Link
+          href="/cong-cu/uoc-tinh-lan-banh"
+          className="flex flex-col items-center justify-center gap-1.5 py-2 px-1 border-r border-gray-300/70 text-[#101828] hover:text-[#002f6c] active:bg-gray-200/80 transition-colors"
+        >
+          <div className="w-5 h-5 flex items-center justify-center text-[#101828]">
+            <Calculator className="w-5 h-5 stroke-[1.8]" />
+          </div>
+          <span className="text-[11px] font-semibold text-[#101828] leading-none whitespace-nowrap">P.Lăn bánh</span>
+        </Link>
+
+        {/* P.Trả góp */}
+        <Link
+          href="/cong-cu/uoc-tinh-tra-gop"
+          className="flex flex-col items-center justify-center gap-1.5 py-2 px-1 border-r border-gray-300/70 text-[#101828] hover:text-[#002f6c] active:bg-gray-200/80 transition-colors"
+        >
+          <div className="w-5 h-5 flex items-center justify-center text-[#101828]">
+            <PiggyBank className="w-5 h-5 stroke-[1.8]" />
+          </div>
+          <span className="text-[11px] font-semibold text-[#101828] leading-none whitespace-nowrap">P.Trả góp</span>
+        </Link>
+
+        {/* Đặt hẹn */}
+        <Link
+          href="/lien-he"
+          className="flex flex-col items-center justify-center gap-1.5 py-2 px-1 text-[#101828] hover:text-[#002f6c] active:bg-gray-200/80 transition-colors"
+        >
+          <div className="w-5 h-5 flex items-center justify-center text-[#101828]">
+            <Wrench className="w-5 h-5 stroke-[1.8]" />
+          </div>
+          <span className="text-[11px] font-semibold text-[#101828] leading-none whitespace-nowrap">Đặt hẹn</span>
+        </Link>
+      </div>
+
+      {/* Mobile Scroll to Top Floating Button (positioned above bottom nav bar) */}
+      {showScrollTop && (
+        <div className="block md:hidden fixed right-4 bottom-16 z-40 select-none">
           <button
             onClick={scrollToTop}
             type="button"
-            className="w-12 h-12 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-md border border-gray-200/60 shadow-[0_4px_16px_rgba(0,0,0,0.08)] text-gray-650 transition-all duration-300 active:scale-90"
-            aria-label="Scroll to top"
+            className="w-10 h-10 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-md border border-gray-200/80 shadow-[0_4px_16px_rgba(0,0,0,0.12)] text-gray-700 active:scale-90 transition-transform"
+            aria-label="Về đầu trang"
           >
-            <ArrowUp className="w-5 h-5 relative z-10" />
+            <ArrowUp className="w-4.5 h-4.5" />
           </button>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Desktop Scroll to Top Button */}
       {showScrollTop && (

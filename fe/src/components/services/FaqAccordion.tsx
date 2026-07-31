@@ -44,9 +44,9 @@ export default function FaqAccordion({ faqs = defaultFaqs }: { faqs?: FaqItem[] 
 
   return (
     <div className="w-full bg-white py-16 px-4 md:px-8">
-      <div className="max-w-[1152px] mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <div className="max-w-[1152px] mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
         {/* Left Side Title */}
-        <div className="lg:col-span-1">
+        <div className="lg:col-span-1 lg:sticky lg:top-28 self-start">
           <h2 className="text-4xl md:text-5xl font-bold font-display text-gray-900 tracking-tight leading-tight">
             Các câu hỏi thường gặp
           </h2>

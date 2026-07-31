@@ -784,14 +784,26 @@ function ContactFormContent() {
                       Tỉnh / Thành phố nhận xe
                     </label>
                     <div className="relative">
-                      <input
-                        type="text"
+                      <select
                         value={formCity}
                         onChange={(e) => setFormCity(e.target.value)}
-                        placeholder="VD: Đồng Nai, TP.HCM, Bình Dương..."
-                        className="w-full bg-gray-50/30 hover:bg-gray-100/30 focus:bg-white border border-gray-200 focus:border-[#066fef] focus:ring-4 focus:ring-[#066fef]/10 rounded-xl py-3 pl-10 pr-4 text-xs font-semibold font-antenna transition-all outline-none text-gray-700"
-                      />
-                      <MapPin className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                        className="w-full bg-gray-50/30 hover:bg-gray-100/30 focus:bg-white border border-gray-200 focus:border-[#066fef] focus:ring-4 focus:ring-[#066fef]/10 rounded-xl py-3 pl-10 pr-10 text-xs font-semibold font-antenna transition-all outline-none text-gray-700 appearance-none cursor-pointer"
+                      >
+                        <option value="Đồng Nai">Đồng Nai</option>
+                        <option value="TP. Hồ Chí Minh">TP. Hồ Chí Minh</option>
+                        <option value="Bình Dương">Bình Dương</option>
+                        <option value="Bà Rịa - Vũng Tàu">Bà Rịa - Vũng Tàu</option>
+                        <option value="Long An">Long An</option>
+                        <option value="Tây Ninh">Tây Ninh</option>
+                        <option value="Bình Phước">Bình Phước</option>
+                        <option value="Bình Thuận">Bình Thuận</option>
+                        <option value="Lâm Đồng">Lâm Đồng</option>
+                        <option value="Hà Nội">Hà Nội</option>
+                        <option value="Đà Nẵng">Đà Nẵng</option>
+                        <option value="Khác">Khu vực khác</option>
+                      </select>
+                      <MapPin className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                      <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 text-xs">▼</div>
                     </div>
                   </div>
                 </div>

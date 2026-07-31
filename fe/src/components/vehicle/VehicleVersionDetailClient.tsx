@@ -583,8 +583,8 @@ export default function VehicleVersionDetailClient() {
               </p>
             </div>
 
-            {/* Spec Sheets Details */}
-            <div className="flex flex-col gap-6 text-left w-full mt-6">
+            {/* Spec Sheets Details (Desktop Only) */}
+            <div className="hidden lg:flex flex-col gap-6 text-left w-full mt-6">
               <div className="space-y-1 font-antenna">
                 <span className="text-[11px] text-gray-500 font-bold uppercase tracking-wider block">Giá niêm yết từ</span>
                 <span className="text-[28px] sm:text-[32px] font-extrabold text-[#066fef] block leading-none">
@@ -593,8 +593,8 @@ export default function VehicleVersionDetailClient() {
               </div>
             </div>
 
-            {/* Action Buttons: 2x2 Grid Layout */}
-            <div className="mt-6 grid grid-cols-2 gap-2.5 w-full max-w-md">
+            {/* Action Buttons: Desktop Only (hidden on mobile) */}
+            <div className="mt-6 hidden lg:grid grid-cols-2 gap-2.5 w-full max-w-md">
               <button
                 onClick={() => openDriveDrawer(activeVersionIndex)}
                 className="bg-[#00095B] hover:bg-[#066fef] transition-all px-3 py-2.5 rounded-full text-white text-[12px] sm:text-[13px] font-bold cursor-pointer inline-flex items-center justify-center gap-2 border-0 uppercase tracking-tight font-antenna shadow-xs hover:shadow-md w-full"
@@ -755,6 +755,47 @@ export default function VehicleVersionDetailClient() {
               </div>
             )}
 
+            {/* Price Display: Mobile Only (positioned below Bảng màu) */}
+            <div className="flex lg:hidden flex-col gap-1 text-left w-full mt-6 font-antenna">
+              <span className="text-[11px] text-gray-500 font-bold uppercase tracking-wider block">Giá niêm yết từ</span>
+              <span className="text-[28px] sm:text-[32px] font-extrabold text-[#066fef] block leading-none">
+                {formatPrice(displayedPrice)}
+              </span>
+            </div>
+
+            {/* Action Buttons: Mobile Only (positioned below Price) */}
+            <div className="mt-4 grid lg:hidden grid-cols-2 gap-2.5 w-full">
+              <button
+                onClick={() => openDriveDrawer(activeVersionIndex)}
+                className="bg-[#00095B] hover:bg-[#066fef] transition-all px-3 py-2.5 rounded-full text-white text-[12px] sm:text-[13px] font-bold cursor-pointer inline-flex items-center justify-center gap-2 border-0 uppercase tracking-tight font-antenna shadow-xs hover:shadow-md w-full"
+              >
+                <Car className="w-4 h-4 shrink-0 text-white" />
+                <span>Đăng ký lái thử</span>
+              </button>
+
+              <Link
+                href={`/cong-cu/uoc-tinh-tra-gop?car=${vehicle.slug || vehicle.id}`}
+                className="bg-[#00095B] hover:bg-[#066fef] transition-all px-3 py-2.5 rounded-full text-white text-[12px] sm:text-[13px] font-bold cursor-pointer inline-flex items-center justify-center gap-2 border-0 uppercase tracking-tight font-antenna no-underline shadow-xs hover:shadow-md w-full"
+              >
+                <Calculator className="w-4 h-4 shrink-0 text-white" />
+                <span>Ước tính trả góp</span>
+              </Link>
+
+              <Link
+                href={`/${vehicle.slug || vehicle.id}/du-toan-lan-banh`}
+                className="bg-[#00095B] hover:bg-[#066fef] transition-all px-3 py-2.5 rounded-full text-white text-[12px] sm:text-[13px] font-bold cursor-pointer inline-flex items-center justify-center gap-2 border-0 uppercase tracking-tight font-antenna no-underline shadow-xs hover:shadow-md w-full"
+              >
+                <FileText className="w-4 h-4 shrink-0 text-white" />
+                <span>Ước tính lăn bánh</span>
+              </Link>
+
+              <button
+                onClick={() => openQuoteDrawer(vehicle.id, selectedVersion?.id)}
+                className="bg-[#00095B] hover:bg-[#066fef] transition-all px-3 py-2.5 rounded-full text-white text-[12px] sm:text-[13px] font-bold cursor-pointer inline-flex items-center justify-center gap-2 border-0 uppercase tracking-tight font-antenna shadow-xs hover:shadow-md w-full"
+              >
+                <span>Nhận báo giá</span>
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -876,7 +917,7 @@ export default function VehicleVersionDetailClient() {
           <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px] relative z-10">
             <div className="flex flex-col lg:flex-row items-center justify-between gap-10">
               {/* Left Title & Description */}
-              <div className="flex flex-col items-start text-left max-w-2xl gap-4 font-antenna">
+              <div className="flex flex-col items-start text-left max-w-2xl gap-3 font-antenna">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-white/90 backdrop-blur-xs text-xs font-semibold tracking-wider uppercase border border-white/15">
                   <ShieldCheck className="w-3.5 h-3.5 text-[#066fef] fill-white" />
                   <span>Ưu Đãi Chính Hãng Long Khánh Ford</span>
@@ -886,23 +927,15 @@ export default function VehicleVersionDetailClient() {
                   Sẵn sàng trải nghiệm {vehicle?.name || "Ford"} {getVersionDisplayName(selectedVersion?.name || "", vehicle?.name || "")}?
                 </h2>
 
-                <p className="text-sm md:text-base text-white/80 leading-relaxed max-w-xl">
-                  Liên hệ ngay với tư vấn bán hàng của Long Khánh Ford để nhận báo giá lăn bánh ưu đãi nhất, tặng gói phụ kiện cao cấp và hỗ trợ lái thử tận nhà hoàn toàn miễn phí.
-                </p>
-
                 {/* Trust Badges */}
-                <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-4 pt-2 text-xs font-medium text-white/90">
+                <div className="flex flex-wrap gap-4 pt-1 text-xs font-medium text-white/90">
                   <div className="flex items-center gap-2">
                     <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <span>Hỗ trợ trả góp 80%</span>
+                    <span>Trả góp 80%</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <span>Bảo dưỡng nhanh 60 phút</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <span>Lái thử tận nhà miễn phí</span>
+                    <span>Lái thử tận nhà</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
