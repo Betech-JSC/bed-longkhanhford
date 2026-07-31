@@ -4,7 +4,7 @@ import { useState, useEffect, Fragment } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ChevronDown, X, Plus, ArrowRight, Trash2, GitCompare } from "lucide-react";
-import { type Vehicle, type Specs } from "@/data/vehicles";
+import { vehicles as staticVehicles, type Vehicle, type Specs } from "@/data/vehicles";
 import { getPopularVehicleImage, handleImageError, resolveImageUrl } from "@/lib/site-assets";
 import { formatPriceShort } from "@/lib/rolling-cost";
 import BookingBanner from "@/components/services/BookingBanner";
@@ -210,10 +210,81 @@ interface CompareOption {
   vehicle: any;
 }
 
+function buildCompareOptionsFromVehicles(vehiclesList: any[]): CompareOption[] {
+  const options: CompareOption[] = [];
+  if (!Array.isArray(vehiclesList)) return options;
+
+  vehiclesList.forEach((v: any) => {
+    if (!v) return;
+    const id = v.id || v.slug || "";
+    const name = v.name || v.title || "";
+    const typeName = v.typeName || (name.toLowerCase().includes('raptor') ? 'Bán Tải Hiệu Suất Cao' : v.type === 'suv' ? 'SUV' : 'Bán tải');
+
+    if (Array.isArray(v.versions) && v.versions.length > 0) {
+      v.versions.forEach((ver: any) => {
+        if (!ver) return;
+        const verId = String(ver.id || "");
+        const img = ver.image_thumbnail_url || ver.image_url || ver.image || v.image_thumbnail_url || v.image_url || (v.images && v.images[0]) || getPopularVehicleImage(id);
+        const parsedSpecs = parseSpecsArray(ver.specs || v.specs);
+        options.push({
+          key: `${id}__${verId}`,
+          vehicleId: id,
+          versionId: verId,
+          displayName: `${name} ${ver.name || ''}`.trim().toUpperCase(),
+          vehicleName: name,
+          versionName: ver.name || '',
+          typeName: typeName,
+          image: typeof img === 'string' ? img : resolveImageUrl(img),
+          basePrice: ver.price || v.basePrice || v.base_price || 0,
+          specs: {
+            engine: parsedSpecs.engine || ver.specs?.engine || ver.specs?.engine_type || '',
+            power: parsedSpecs.power || ver.specs?.power || '',
+            torque: parsedSpecs.torque || ver.specs?.torque || '',
+            transmission: parsedSpecs.transmission || ver.specs?.transmission || '',
+            drivetrain: parsedSpecs.drivetrain || ver.specs?.drivetrain || '',
+            dimensions: parsedSpecs.dimensions || ver.specs?.dimensions || '',
+            clearance: parsedSpecs.clearance || ver.specs?.clearance || '',
+            fuelEconomy: parsedSpecs.fuelEconomy || ver.specs?.fuelEconomy || ver.specs?.fuel_guide || ver.specs?.fuel_economy || '',
+          },
+          rawSpecs: ver.specs || v.specs,
+          vehicle: v
+        });
+      });
+    } else {
+      const parsedSpecs = parseSpecsArray(v.specs || {});
+      const img = v.image_thumbnail_url || v.image_url || (v.images && v.images[0]) || getPopularVehicleImage(id);
+      options.push({
+        key: id,
+        vehicleId: id,
+        versionId: null,
+        displayName: name.trim().toUpperCase(),
+        vehicleName: name,
+        versionName: "",
+        typeName: typeName,
+        image: typeof img === 'string' ? img : resolveImageUrl(img),
+        basePrice: v.basePrice || v.base_price || 0,
+        specs: {
+          engine: parsedSpecs.engine || v.specs?.engine || v.specs?.engine_type || '',
+          power: parsedSpecs.power || v.specs?.power || '',
+          torque: parsedSpecs.torque || v.specs?.torque || '',
+          transmission: parsedSpecs.transmission || v.specs?.transmission || '',
+          drivetrain: parsedSpecs.drivetrain || v.specs?.drivetrain || '',
+          dimensions: parsedSpecs.dimensions || v.specs?.dimensions || '',
+          clearance: parsedSpecs.clearance || v.specs?.clearance || '',
+          fuelEconomy: parsedSpecs.fuelEconomy || v.specs?.fuelEconomy || v.specs?.fuel_guide || v.specs?.fuel_economy || '',
+        },
+        rawSpecs: v.specs,
+        vehicle: v
+      });
+    }
+  });
+  return options;
+}
+
 export default function ComparePage() {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [allVehicles, setAllVehicles] = useState<any[]>([]);
-  const [allCompareOptions, setAllCompareOptions] = useState<CompareOption[]>([]);
+  const [allVehicles, setAllVehicles] = useState<any[]>(staticVehicles || []);
+  const [allCompareOptions, setAllCompareOptions] = useState<CompareOption[]>(() => buildCompareOptionsFromVehicles(staticVehicles || []));
   const [selectedCompareOptions, setSelectedCompareOptions] = useState<(CompareOption | null)[]>([]);
   const [hasClearedAll, setHasClearedAll] = useState(false);
 
@@ -227,7 +298,7 @@ export default function ComparePage() {
           const mapped = items.map((v: any) => {
             const id = v.slug || v.id;
             const name = v.title || v.name;
-            const image = v.image_thumbnail_url || v.image_url || v.images?.[0] || "";
+            const image = v.image_thumbnail_url || v.image_url || (v.images && v.images[0]) || "";
             const price = typeof v.base_price === 'string' ? parseFloat(v.base_price) : (v.base_price || v.basePrice || 0);
             return {
               ...v,
@@ -238,7 +309,7 @@ export default function ComparePage() {
               typeName: (name.toLowerCase().includes('raptor') || id.toLowerCase().includes('raptor'))
                 ? 'Bán Tải Hiệu Suất Cao'
                 : (v.type_name || v.typeName || (v.type === 'suv' ? 'SUV' : v.type === 'pickup' ? 'Bán tải' : 'Thương mại')),
-              versions: v.versions ? v.versions.map((ver: any) => {
+              versions: Array.isArray(v.versions) ? v.versions.map((ver: any) => {
                 const parsedSpecs = parseSpecsArray(ver.specs || v.specs);
                 return {
                   id: String(ver.id),
@@ -262,57 +333,7 @@ export default function ComparePage() {
             };
           });
           setAllVehicles(mapped);
-
-          // Build all compare options
-          const options: CompareOption[] = [];
-          mapped.forEach((v: any) => {
-            if (v.versions && v.versions.length > 0) {
-              v.versions.forEach((ver: any) => {
-                const img = ver.image_thumbnail_url || ver.image_url || ver.image || v.image_thumbnail_url || v.image_url || v.image || getPopularVehicleImage(v.id);
-                options.push({
-                  key: `${v.id}__${ver.id}`,
-                  vehicleId: v.id,
-                  versionId: ver.id,
-                  displayName: `${v.name} ${ver.name}`.trim().toUpperCase(),
-                  vehicleName: v.name,
-                  versionName: ver.name,
-                  typeName: v.typeName,
-                  image: img,
-                  basePrice: ver.price || v.basePrice,
-                  specs: ver.specs,
-                  rawSpecs: ver.rawSpecs,
-                  vehicle: v
-                });
-              });
-            } else {
-              const parsedSpecs = parseSpecsArray(v.specs || {});
-              const img = v.image_thumbnail_url || v.image_url || v.image || getPopularVehicleImage(v.id);
-              options.push({
-                key: v.id,
-                vehicleId: v.id,
-                versionId: null,
-                displayName: v.name.trim().toUpperCase(),
-                vehicleName: v.name,
-                versionName: "",
-                typeName: v.typeName,
-                image: img,
-                basePrice: v.basePrice,
-                specs: {
-                  engine: parsedSpecs.engine || v.specs?.engine || v.specs?.engine_type || '',
-                  power: parsedSpecs.power || v.specs?.power || '',
-                  torque: parsedSpecs.torque || v.specs?.torque || '',
-                  transmission: parsedSpecs.transmission || v.specs?.transmission || '',
-                  drivetrain: parsedSpecs.drivetrain || v.specs?.drivetrain || '',
-                  dimensions: parsedSpecs.dimensions || v.specs?.dimensions || '',
-                  clearance: parsedSpecs.clearance || v.specs?.clearance || '',
-                  fuelEconomy: parsedSpecs.fuelEconomy || v.specs?.fuelEconomy || v.specs?.fuel_guide || v.specs?.fuel_economy || '',
-                },
-                rawSpecs: v.specs,
-                vehicle: v
-              });
-            }
-          });
-          setAllCompareOptions(options);
+          setAllCompareOptions(buildCompareOptionsFromVehicles(mapped));
         }
       } catch (err) {
         console.error("Error loading vehicles in ComparePage:", err);
@@ -349,7 +370,6 @@ export default function ComparePage() {
     }
   }, []);
 
-
   // Sync URL query params with selectedIds
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -373,16 +393,21 @@ export default function ComparePage() {
     }
 
     const resolved = selectedIds.map((id) => {
+      if (!id) return null;
       let found = allCompareOptions.find((opt) => opt.key === id);
       if (found) return found;
 
-      // Fallback: Support single and double underscore mismatch in URL/state
       const normId = id.replace(/_+/g, '_');
       found = allCompareOptions.find((opt) => opt.key.replace(/_+/g, '_') === normId);
       if (found) return found;
 
-      // Fallback for vehicle ID
       found = allCompareOptions.find((opt) => opt.vehicleId === id);
+      if (found) return found;
+
+      found = allCompareOptions.find((opt) => 
+        opt.key.toLowerCase().includes(id.toLowerCase()) || 
+        opt.vehicleId.toLowerCase().includes(id.toLowerCase())
+      );
       return found || null;
     });
     setSelectedCompareOptions(resolved);

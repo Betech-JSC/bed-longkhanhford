@@ -914,7 +914,7 @@ export default function VehicleVersionDetailClient() {
               {/* Right CTA Action Card */}
               <div className="w-full lg:w-auto shrink-0 bg-white/10 backdrop-blur-md border border-white/20 p-6 md:p-8 rounded-xl flex flex-col gap-4 max-w-md shadow-2xl">
                 <button
-                  onClick={openQuoteDrawer}
+                  onClick={() => openQuoteDrawer()}
                   className="w-full bg-[#066fef] hover:bg-white hover:text-[#00095B] text-white font-bold py-4 px-6 rounded-md uppercase tracking-wider text-xs md:text-sm transition-all duration-300 shadow-lg flex items-center justify-center gap-2.5 cursor-pointer border-0 font-antenna group"
                 >
                   <Calculator className="w-4.5 h-4.5 group-hover:scale-110 transition-transform" />
@@ -922,7 +922,7 @@ export default function VehicleVersionDetailClient() {
                 </button>
 
                 <button
-                  onClick={openDriveDrawer}
+                  onClick={() => openDriveDrawer()}
                   className="w-full bg-white/15 hover:bg-white/25 text-white border border-white/30 font-bold py-3.5 px-6 rounded-md uppercase tracking-wider text-xs md:text-sm transition-all duration-300 flex items-center justify-center gap-2.5 cursor-pointer font-antenna"
                 >
                   <Car className="w-4.5 h-4.5 text-white" />

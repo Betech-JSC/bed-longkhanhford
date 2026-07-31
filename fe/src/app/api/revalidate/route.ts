@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     // Revalidate by cache tags
     if (Array.isArray(tags)) {
       for (const tag of tags) {
-        revalidateTag(tag);
+        (revalidateTag as Function)(tag);
         revalidated.push(`tag:${tag}`);
       }
     }

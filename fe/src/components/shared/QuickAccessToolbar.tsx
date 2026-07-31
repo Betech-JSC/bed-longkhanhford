@@ -258,6 +258,27 @@ export default function QuickAccessToolbar() {
           </button>
         )}
       </div>
+
+      {/* Desktop Scroll to Top Button */}
+      {showScrollTop && (
+        <div className="hidden md:block fixed right-6 bottom-8 z-50 select-none">
+          <button
+            onClick={scrollToTop}
+            type="button"
+            className="group relative flex items-center justify-start h-12 w-12 hover:w-36 bg-white/95 hover:bg-[#002f6c] backdrop-blur-md border border-gray-200/80 shadow-[0_6px_24px_rgba(0,0,0,0.12)] rounded-full text-gray-700 hover:text-white transition-all duration-300 ease-out overflow-hidden cursor-pointer"
+            aria-label="Về đầu trang"
+            title="Về đầu trang"
+          >
+            <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:-translate-y-0.5 text-gray-700 group-hover:text-white">
+              <ArrowUp className="w-5 h-5" />
+            </div>
+            <span className="text-xs font-semibold whitespace-nowrap opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300 ease-out pr-4 text-white font-sans">
+              Về đầu trang
+            </span>
+          </button>
+        </div>
+      )}
     </>
   );
 }
+
