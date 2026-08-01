@@ -63,6 +63,46 @@ function getStaticFallbackSpecs(vehicleIdOrName: string, versionIdOrName: string
   return null;
 }
 
+function decodeHtmlEntities(str: string): string {
+  if (!str || typeof str !== 'string') return '';
+  return str
+    .replace(/&iacutec;/g, 'í')
+    .replace(/&iacute;/g, 'í')
+    .replace(/&ograve;/g, 'ò')
+    .replace(/&oacute;/g, 'ó')
+    .replace(/&uacute;/g, 'ú')
+    .replace(/&ocirc;/g, 'ô')
+    .replace(/&aacute;/g, 'á')
+    .replace(/&agrave;/g, 'à')
+    .replace(/&eacute;/g, 'é')
+    .replace(/&egrave;/g, 'è')
+    .replace(/&ecirc;/g, 'ê')
+    .replace(/&otilde;/g, 'õ')
+    .replace(/&ugrave;/g, 'ù')
+    .replace(/&yacute;/g, 'ý')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>');
+}
+
+function renderSpecValue(value: string) {
+  if (!value || value === "—") return "—";
+  const decoded = decodeHtmlEntities(value);
+
+  if (/<[a-z][\s\S]*>/i.test(decoded)) {
+    return (
+      <div
+        className="text-left text-xs md:text-sm text-gray-800 [&_ul]:list-disc [&_ul]:pl-4 [&_li]:my-1 [&_p]:my-1 [&_strong]:font-bold [&_span]:inline"
+        dangerouslySetInnerHTML={{ __html: decoded }}
+      />
+    );
+  }
+  return decoded;
+}
+
 const mapSpecKey = (key: string, val: string, result: Record<string, string>) => {
   const k = key.trim().toLowerCase();
   const v = val.trim();
@@ -878,7 +918,7 @@ export default function ComparePage() {
                               key={index}
                               className={`px-3 md:px-5 py-3 md:py-4 text-xs md:text-sm text-gray-800 text-center font-medium flex items-center justify-center border-l border-gray-100 border-b border-gray-100 ${rowBgClass} leading-relaxed`}
                             >
-                              {specValue}
+                              {renderSpecValue(specValue)}
                             </div>
                           );
                         })}
@@ -916,7 +956,7 @@ export default function ComparePage() {
                               className="px-3 md:px-5 py-3 md:py-4 text-xs md:text-sm text-gray-700 text-left border-l border-gray-150 font-normal border-b border-gray-150 [&_ul]:list-disc [&_ul]:pl-4 [&_li]:my-1 [&_strong]:font-semibold [&_strong]:text-gray-900"
                             >
                               {groupSpec?.content ? (
-                                <div dangerouslySetInnerHTML={{ __html: groupSpec.content }} />
+                                <div dangerouslySetInnerHTML={{ __html: decodeHtmlEntities(groupSpec.content) }} />
                               ) : (
                                 <span className="text-gray-400 italic text-xs">Không có thông tin</span>
                               )}
