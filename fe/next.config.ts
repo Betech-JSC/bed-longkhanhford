@@ -237,27 +237,27 @@ const nextConfig = {
   async headers() {
     return [
       {
+        source: "/fonts/:path*",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
+      {
         source: "/assets/:path*",
         headers: [
-          { key: "Cache-Control", value: "no-cache, no-store, must-revalidate, max-age=0" },
-          { key: "Pragma", value: "no-cache" },
-          { key: "Expires", value: "0" },
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
         ],
       },
       {
         source: "/images/:path*",
         headers: [
-          { key: "Cache-Control", value: "no-cache, no-store, must-revalidate, max-age=0" },
-          { key: "Pragma", value: "no-cache" },
-          { key: "Expires", value: "0" },
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
         ],
       },
       {
         source: "/images-dynamic/:path*",
         headers: [
-          { key: "Cache-Control", value: "no-cache, no-store, must-revalidate, max-age=0" },
-          { key: "Pragma", value: "no-cache" },
-          { key: "Expires", value: "0" },
+          { key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=604800" },
         ],
       },
     ];

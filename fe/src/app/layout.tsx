@@ -118,6 +118,10 @@ export default async function RootLayout({
         <link rel="dns-prefetch" href="https://cms.dnf.betech-digital.com" />
         <link rel="preconnect" href="https://cms.longkhanhford.com.vn" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://cms.longkhanhford.com.vn" />
+        {/* Preload Critical Fonts & LCP Hero Banner */}
+        <link rel="preload" href="/fonts/FordAntenna-Regular.woff" as="font" type="font/woff" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/FordAntenna-Bold.woff" as="font" type="font/woff" crossOrigin="anonymous" />
+        <link rel="preload" href="/images-dynamic/ford_ranger_banner.webp" as="image" type="image/webp" fetchPriority="high" />
         <script
           suppressHydrationWarning
           type="application/ld+json"
