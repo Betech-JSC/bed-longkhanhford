@@ -123,7 +123,8 @@ export default async function RootLayout({
         <link rel="preload" href="/fonts/FordAntenna-Medium.woff" as="font" type="font/woff" crossOrigin="anonymous" />
         <link rel="preload" href="/fonts/FordAntenna-Semibold.woff" as="font" type="font/woff" crossOrigin="anonymous" />
         <link rel="preload" href="/fonts/FordAntenna-Bold.woff" as="font" type="font/woff" crossOrigin="anonymous" />
-        <link rel="preload" href="/images-dynamic/ford_ranger_banner.webp" as="image" type="image/webp" fetchPriority="high" />
+        <link rel="preload" href="/images-dynamic/ford_ranger_banner.webp" as="image" type="image/webp" media="(min-width: 768px)" fetchPriority="high" />
+        <link rel="preload" href="/images-dynamic/ford_ranger_banner.webp" as="image" type="image/webp" media="(max-width: 767px)" fetchPriority="high" />
         <script
           suppressHydrationWarning
           type="application/ld+json"
