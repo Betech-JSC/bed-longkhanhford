@@ -294,6 +294,24 @@ interface CompareOption {
   vehicle: any;
 }
 
+function formatDisplayName(vName: string, verName: string): string {
+  if (!verName) return vName.trim().toUpperCase();
+  const vUpper = vName.trim().toUpperCase();
+  const verUpper = verName.trim().toUpperCase();
+
+  if (verUpper.startsWith(vUpper)) return verUpper;
+
+  const vWords = vUpper.split(/\s+/);
+  const verWords = verUpper.split(/\s+/);
+
+  const filteredVerWords = verWords.filter(w => !vWords.includes(w));
+  if (filteredVerWords.length > 0) {
+    return `${vUpper} ${filteredVerWords.join(' ')}`;
+  }
+
+  return `${vUpper} ${verUpper}`;
+}
+
 function buildCompareOptionsFromVehicles(vehiclesList: any[]): CompareOption[] {
   const options: CompareOption[] = [];
   if (!Array.isArray(vehiclesList)) return options;
@@ -321,7 +339,7 @@ function buildCompareOptionsFromVehicles(vehiclesList: any[]): CompareOption[] {
           key: `${id}__${verId}`,
           vehicleId: id,
           versionId: verId,
-          displayName: `${name} ${verName}`.trim().toUpperCase(),
+          displayName: formatDisplayName(name, verName),
           vehicleName: name,
           versionName: verName,
           typeName: typeName,
