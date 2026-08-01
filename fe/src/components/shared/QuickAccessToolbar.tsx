@@ -202,6 +202,7 @@ export default function QuickAccessToolbar() {
                   href={item.href}
                   target={item.target}
                   rel={isExternal ? "noopener noreferrer" : undefined}
+                  aria-label={item.label}
                   className={`absolute right-0 top-0 h-full w-12 hover:w-44 flex items-center justify-start group text-gray-700 hover:text-white bg-white hover:bg-[#002f6c] transition-all duration-300 ease-out ${
                     idx === 0 ? "rounded-tl-xl" : ""
                   } ${

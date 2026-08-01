@@ -755,7 +755,7 @@ export default function Navbar() {
                 className={`p-2 transition-colors duration-300 cursor-pointer ${
                   isSearchOpen ? "text-[#066fef]" : isTransparent ? "text-white hover:text-[#066fef]" : "text-[#333333] hover:text-[#066fef]"
                 }`} 
-                aria-label="Search"
+                aria-label="Tìm kiếm xe và dịch vụ"
               >
                 {isSearchOpen ? <X className="w-5 h-5" /> : <Search className="w-5 h-5" />}
               </button>

@@ -305,6 +305,7 @@ export default function Footer() {
               rel="noopener noreferrer"
               className="w-8 h-8 rounded-full bg-neutral-200/60 hover:bg-[#1877f2] transition-colors flex items-center justify-center text-neutral-700 hover:text-white"
               title="Facebook"
+              aria-label="Theo dõi Long Khánh Ford trên Facebook"
             >
               <svg width="28" height="27" viewBox="0 0 28 27" fill="none" className="w-[18px] h-[18px]" xmlns="http://www.w3.org/2000/svg">
                 <path fillRule="evenodd" clipRule="evenodd" d="M0 13.318C0 19.9031 5.02036 25.3783 11.5855 26.4881V16.9229H8.10982V13.2441H11.5855V10.3009C11.5855 6.9899 13.8253 5.15046 16.992 5.15046C17.996 5.15046 19.0774 5.29761 20.0814 5.44476V8.82936H18.305C16.6058 8.82936 16.2196 9.63872 16.2196 10.6688V13.2441H19.927L19.3091 16.9229H16.2196V26.4881C22.7848 25.3783 27.8051 19.9031 27.8051 13.318C27.8051 5.99312 21.5489 0 13.9025 0C6.25614 0 0 5.99312 0 13.318Z" fill="currentColor"/>
@@ -317,6 +318,7 @@ export default function Footer() {
               rel="noopener noreferrer"
               className="w-8 h-8 rounded-full bg-neutral-200/60 hover:bg-[#0068ff] transition-colors flex items-center justify-center text-neutral-700 hover:text-white"
               title="Zalo"
+              aria-label="Nhắn tin với Long Khánh Ford qua Zalo"
             >
               <svg width="32" height="32" viewBox="0 0 32 32" fill="none" className="w-5 h-5" xmlns="http://www.w3.org/2000/svg">
                 <defs>
@@ -335,6 +337,7 @@ export default function Footer() {
               rel="noopener noreferrer"
               className="w-8 h-8 rounded-full bg-neutral-200/60 hover:bg-[#ff0000] transition-colors flex items-center justify-center text-neutral-700 hover:text-white"
               title="YouTube"
+              aria-label="Xem kênh YouTube Long Khánh Ford"
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="w-5 h-5" xmlns="http://www.w3.org/2000/svg">
                 <path d="M23.7609 7.20005C23.7609 7.20005 23.5266 5.54536 22.8047 4.8188C21.8906 3.86255 20.8688 3.85786 20.4 3.80161C17.0438 3.55786 12.0047 3.55786 12.0047 3.55786H11.9953C11.9953 3.55786 6.95625 3.55786 3.6 3.80161C3.13125 3.85786 2.10938 3.86255 1.19531 4.8188C0.473438 5.54536 0.24375 7.20005 0.24375 7.20005C0.24375 7.20005 0 9.14536 0 11.086V12.9047C0 14.8454 0.239062 16.7907 0.239062 16.7907C0.239062 16.7907 0.473437 18.4454 1.19062 19.1719C2.10469 20.1282 3.30469 20.0954 3.83906 20.1985C5.76094 20.3813 12 20.4375 12 20.4375C12 20.4375 17.0438 20.4282 20.4 20.1891C20.8688 20.1329 21.8906 20.1282 22.8047 19.1719C23.5266 18.4454 23.7609 16.7907 23.7609 16.7907C23.7609 16.7907 24 14.85 24 12.9047V11.086C24 9.14536 23.7609 7.20005 23.7609 7.20005ZM9.52031 15.1125V8.36724L16.0031 11.7516L9.52031 15.1125Z" fill="currentColor"/>
@@ -347,6 +350,7 @@ export default function Footer() {
               rel="noopener noreferrer"
               className="w-8 h-8 rounded-full bg-neutral-200/60 hover:bg-[#010101] transition-colors flex items-center justify-center text-neutral-700 hover:text-white"
               title="TikTok"
+              aria-label="Xem kênh TikTok Long Khánh Ford"
             >
               <svg width="24" height="25" viewBox="0 0 24 25" fill="none" className="w-[18px] h-[18px]" xmlns="http://www.w3.org/2000/svg">
                 <g clipPath="url(#clip0_tiktok)">
