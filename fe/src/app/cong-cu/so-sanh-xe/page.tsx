@@ -806,156 +806,156 @@ export default function ComparePage() {
                 )}
               </div>
 
-              {/* Specs Comparison Table */}
-              <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
-                {/* Header Row */}
+              {/* Mobile Swipe Hint Badge */}
+              <div className="md:hidden flex items-center justify-between text-[11px] font-semibold text-gray-600 bg-blue-50/80 border border-blue-200/60 rounded-xl px-3.5 py-2.5 mb-3 shadow-2xs animate-fade-in">
+                <span className="flex items-center gap-1">
+                  <span className="text-sm">👈</span>
+                  <span>Vuốt ngang để so sánh các xe</span>
+                </span>
+                <span className="text-[#0562D2] font-bold tracking-wide">Swipe 👉</span>
+              </div>
+
+              {/* Specs Comparison Table Container */}
+              <div className="bg-white rounded-2xl border border-gray-200 overflow-x-auto shadow-sm relative w-full scrollbar-thin">
                 <div
-                  className="grid border-b-2 border-gray-200 bg-[#00095B] text-white"
+                  className="grid min-w-[540px] md:min-w-full"
                   style={{
-                    gridTemplateColumns: `200px repeat(${selectedIds.length}, 1fr)`,
+                    gridTemplateColumns: `minmax(120px, 200px) repeat(${selectedIds.length}, minmax(135px, 1fr))`,
                   }}
                 >
-                  <div className="px-5 py-4 text-sm font-bold">Thông số</div>
-                  {selectedIds.map((id, index) => {
-                    const opt = selectedCompareOptions[index];
-                    return (
-                      <div key={index} className="px-5 py-4 text-sm font-bold text-center uppercase">
-                        {opt?.displayName || "Đang tải..."}
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {/* Price Row */}
-                <div
-                  className="grid border-b border-gray-100 bg-blue-50/50"
-                  style={{
-                    gridTemplateColumns: `200px repeat(${selectedIds.length}, 1fr)`,
-                  }}
-                >
-                  <div className="px-5 py-4 text-sm font-bold text-gray-700">
-                    Giá khởi điểm
-                  </div>
-                  {selectedIds.map((id, index) => {
-                    const opt = selectedCompareOptions[index];
-                    return (
-                      <div
-                        key={index}
-                        className="px-5 py-4 text-sm font-bold text-[#0562D2] text-center whitespace-nowrap"
-                      >
-                        {opt ? formatPriceShort(opt.basePrice) : "—"}
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {/* Spec Rows */}
-                {visibleSpecLabels.map((spec, specIdx) => (
-                  <div
-                    key={spec.key}
-                    className={`grid border-b border-gray-50 ${
-                      specIdx % 2 === 0 ? "bg-white" : "bg-gray-50/50"
-                    }`}
-                    style={{
-                      gridTemplateColumns: `200px repeat(${selectedIds.length}, 1fr)`,
-                    }}
-                  >
-                    <div className="px-5 py-4 text-sm font-semibold text-gray-600">
-                      {spec.label}
+                  {/* Header Row */}
+                  <div className="contents bg-[#00095B] text-white">
+                    <div className="px-3 md:px-5 py-3.5 md:py-4 text-xs md:text-sm font-bold sticky left-0 z-20 bg-[#00095B] border-r border-blue-900/60 shadow-[4px_0_10px_rgba(0,0,0,0.12)] md:shadow-none flex items-center">
+                      Thông số
                     </div>
                     {selectedIds.map((id, index) => {
                       const opt = selectedCompareOptions[index];
-                      const specValue = opt?.specs?.[spec.key] || "—";
                       return (
                         <div
                           key={index}
-                          className="px-5 py-4 text-sm text-gray-700 text-center font-medium"
+                          className="px-3 md:px-5 py-3.5 md:py-4 text-xs md:text-sm font-bold text-center uppercase bg-[#00095B] flex items-center justify-center border-l border-blue-900/40"
                         >
-                          {specValue}
+                          {opt?.displayName || "Đang tải..."}
                         </div>
                       );
                     })}
                   </div>
-                ))}
 
-                {/* Detailed Specs Sections (CMS group specs parsed and aligned) */}
-                {visibleCategoryTitles.map((title) => (
-                  <Fragment key={title}>
-                    {/* Category Header Row */}
-                    <div
-                      className="grid border-b border-gray-200 bg-gray-100 text-gray-800 font-bold"
-                      style={{
-                        gridTemplateColumns: `200px repeat(${selectedIds.length}, 1fr)`,
-                      }}
-                    >
-                      <div className="px-5 py-3 text-xs md:text-sm uppercase tracking-wider text-[#00095B] col-span-full font-bold">
-                        📂 {title}
-                      </div>
+                  {/* Price Row */}
+                  <div className="contents bg-blue-50/50">
+                    <div className="px-3 md:px-5 py-3 md:py-4 text-xs md:text-sm font-bold text-gray-800 sticky left-0 z-20 bg-[#eff6ff] border-r border-blue-100 shadow-[4px_0_10px_rgba(0,0,0,0.05)] md:shadow-none flex items-center">
+                      Giá khởi điểm
                     </div>
-
-                    {/* Content Row */}
-                    <div
-                      className="grid border-b border-gray-150 bg-white items-start"
-                      style={{
-                        gridTemplateColumns: `200px repeat(${selectedIds.length}, 1fr)`,
-                      }}
-                    >
-                      <div className="px-5 py-4 text-xs font-semibold text-gray-500 italic bg-gray-50/20">
-                        Chi tiết
-                      </div>
-                      {selectedIds.map((id, index) => {
-                        const specs = detailedSpecsList[index];
-                        const groupSpec = specs?.find(s => s.title === title);
-                        return (
-                          <div
-                            key={index}
-                            className="px-5 py-4 text-xs md:text-sm text-gray-700 text-left border-l border-gray-100 font-normal [&_ul]:list-disc [&_ul]:pl-5 [&_li]:my-1 [&_strong]:font-semibold [&_strong]:text-gray-900"
-                          >
-                            {groupSpec?.content ? (
-                              <div dangerouslySetInnerHTML={{ __html: groupSpec.content }} />
-                            ) : (
-                              <span className="text-gray-400 italic text-xs">Không có thông tin</span>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </Fragment>
-                ))}
-
-                {/* CTA Row */}
-                <div
-                  className="grid bg-gray-50"
-                  style={{
-                    gridTemplateColumns: `200px repeat(${selectedIds.length}, 1fr)`,
-                  }}
-                >
-                  <div className="px-5 py-5" />
-                  {selectedIds.map((id, index) => {
-                    const opt = selectedCompareOptions[index];
-                    return opt ? (
-                      <div
-                        key={index}
-                        className="px-5 py-5 flex flex-col items-center gap-2"
-                      >
-                        <Link
-                          href={`/${opt.vehicleId}`}
-                          className="text-xs font-semibold text-[#0562d2] hover:text-[#044ea7] transition-colors flex items-center gap-1"
+                    {selectedIds.map((id, index) => {
+                      const opt = selectedCompareOptions[index];
+                      return (
+                        <div
+                          key={index}
+                          className="px-3 md:px-5 py-3 md:py-4 text-xs md:text-sm font-bold text-[#0562D2] text-center whitespace-nowrap bg-blue-50/40 flex items-center justify-center border-l border-blue-100/50"
                         >
-                          Xem chi tiết
-                          <ArrowRight className="w-3 h-3" />
-                        </Link>
-                        <Link
-                          href="/lien-he"
-                          className="text-xs font-semibold text-white bg-[#0562d2] hover:bg-[#044ea7] px-4 py-2 rounded-full transition-colors"
+                          {opt ? formatPriceShort(opt.basePrice) : "—"}
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Spec Rows */}
+                  {visibleSpecLabels.map((spec, specIdx) => {
+                    const rowBgClass = specIdx % 2 === 0 ? "bg-white" : "bg-slate-50/60";
+                    const stickyBgClass = specIdx % 2 === 0 ? "bg-white" : "bg-[#f8fafc]";
+                    return (
+                      <div key={spec.key} className={`contents ${rowBgClass}`}>
+                        <div
+                          className={`px-3 md:px-5 py-3 md:py-4 text-xs md:text-sm font-semibold text-gray-700 sticky left-0 z-20 ${stickyBgClass} border-r border-gray-200/80 shadow-[4px_0_10px_rgba(0,0,0,0.04)] md:shadow-none flex items-center border-b border-gray-100`}
                         >
-                          Nhận báo giá
-                        </Link>
+                          {spec.label}
+                        </div>
+                        {selectedIds.map((id, index) => {
+                          const opt = selectedCompareOptions[index];
+                          const specValue = opt?.specs?.[spec.key] || "—";
+                          return (
+                            <div
+                              key={index}
+                              className={`px-3 md:px-5 py-3 md:py-4 text-xs md:text-sm text-gray-800 text-center font-medium flex items-center justify-center border-l border-gray-100 border-b border-gray-100 ${rowBgClass} leading-relaxed`}
+                            >
+                              {specValue}
+                            </div>
+                          );
+                        })}
                       </div>
-                    ) : (
-                      <div key={index} className="px-5 py-5" />
                     );
                   })}
+
+                  {/* Detailed Specs Sections (CMS group specs parsed and aligned) */}
+                  {visibleCategoryTitles.map((title) => (
+                    <Fragment key={title}>
+                      {/* Category Header Row */}
+                      <div className="contents bg-gray-100">
+                        <div className="px-3 md:px-5 py-2.5 md:py-3 text-xs md:text-sm uppercase tracking-wider text-[#00095B] font-bold bg-gray-100 sticky left-0 z-20 border-r border-gray-200 flex items-center">
+                          📂 {title}
+                        </div>
+                        {selectedIds.map((_, index) => (
+                          <div
+                            key={index}
+                            className="px-3 md:px-5 py-2.5 md:py-3 bg-gray-100 border-l border-gray-200"
+                          />
+                        ))}
+                      </div>
+
+                      {/* Content Row */}
+                      <div className="contents bg-white">
+                        <div className="px-3 md:px-5 py-3 md:py-4 text-xs font-semibold text-gray-500 italic bg-gray-50/40 sticky left-0 z-20 border-r border-gray-200 shadow-[4px_0_10px_rgba(0,0,0,0.04)] md:shadow-none flex items-start border-b border-gray-150">
+                          Chi tiết
+                        </div>
+                        {selectedIds.map((id, index) => {
+                          const specs = detailedSpecsList[index];
+                          const groupSpec = specs?.find((s) => s.title === title);
+                          return (
+                            <div
+                              key={index}
+                              className="px-3 md:px-5 py-3 md:py-4 text-xs md:text-sm text-gray-700 text-left border-l border-gray-150 font-normal border-b border-gray-150 [&_ul]:list-disc [&_ul]:pl-4 [&_li]:my-1 [&_strong]:font-semibold [&_strong]:text-gray-900"
+                            >
+                              {groupSpec?.content ? (
+                                <div dangerouslySetInnerHTML={{ __html: groupSpec.content }} />
+                              ) : (
+                                <span className="text-gray-400 italic text-xs">Không có thông tin</span>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </Fragment>
+                  ))}
+
+                  {/* CTA Row */}
+                  <div className="contents bg-gray-50">
+                    <div className="px-3 md:px-5 py-4 md:py-5 bg-gray-50 sticky left-0 z-20 border-r border-gray-200" />
+                    {selectedIds.map((id, index) => {
+                      const opt = selectedCompareOptions[index];
+                      return opt ? (
+                        <div
+                          key={index}
+                          className="px-3 md:px-5 py-4 md:py-5 flex flex-col items-center justify-center gap-2 border-l border-gray-100 bg-gray-50"
+                        >
+                          <Link
+                            href={`/${opt.vehicleId}`}
+                            className="text-xs font-semibold text-[#0562d2] hover:text-[#044ea7] transition-colors flex items-center gap-1 whitespace-nowrap"
+                          >
+                            Xem chi tiết
+                            <ArrowRight className="w-3 h-3" />
+                          </Link>
+                          <Link
+                            href="/lien-he"
+                            className="text-xs font-semibold text-white bg-[#0562d2] hover:bg-[#044ea7] px-3.5 py-1.5 rounded-full transition-colors whitespace-nowrap shadow-2xs"
+                          >
+                            Nhận báo giá
+                          </Link>
+                        </div>
+                      ) : (
+                        <div key={index} className="px-3 md:px-5 py-4 md:py-5 border-l border-gray-100 bg-gray-50" />
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
             </>
