@@ -1223,7 +1223,7 @@ export default function Navbar() {
       <div 
         className={`lg:hidden bg-white shadow-inner transition-all duration-300 ease-in-out overflow-y-auto
           ${isOpen 
-            ? "max-h-[calc(100vh-72px)] opacity-100 visible px-4 py-4 space-y-3 border-t border-gray-100" 
+            ? "max-h-[calc(100vh-72px)] opacity-100 visible px-4 pt-4 pb-24 space-y-3 border-t border-gray-100" 
             : "max-h-0 opacity-0 invisible px-4 py-0 space-y-0 border-t-0"}`}
       >
           {navLinks.map((link) => {
