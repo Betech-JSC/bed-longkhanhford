@@ -12,6 +12,8 @@ const nextConfig = {
   images: {
     unoptimized: true,
     formats: ["image/avif", "image/webp"],
+    deviceSizes: [375, 414, 640, 750, 828, 1080, 1200],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256],
     minimumCacheTTL: 0,
     dangerouslyAllowLocalIP: true,
     remotePatterns: [

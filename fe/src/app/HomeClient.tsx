@@ -1081,6 +1081,8 @@ export default function HomeClient({
                         <img
                           src={homeArticles[0].image}
                           alt={homeArticles[0].title}
+                          loading="lazy"
+                          decoding="async"
                           className="absolute inset-0 w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
                           onError={handleImageError}
                         />
@@ -1112,6 +1114,8 @@ export default function HomeClient({
                           <img
                             src={art.image}
                             alt={art.title}
+                            loading="lazy"
+                            decoding="async"
                             className="absolute inset-0 w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
                             onError={handleImageError}
                           />
