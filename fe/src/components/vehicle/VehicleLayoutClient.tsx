@@ -507,7 +507,7 @@ export default function VehicleLayoutClient({
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: "100%", opacity: 0 }}
                 transition={{ type: "spring", damping: 28, stiffness: 280 }}
-                className="relative bg-white w-full max-w-[637px] h-full flex flex-col p-6 md:p-8 overflow-y-auto shadow-2xl z-10"
+                className="relative bg-white w-full max-w-[637px] h-full flex flex-col p-6 md:p-8 pb-28 md:pb-8 overflow-y-auto shadow-2xl z-10"
               >
                 <button
                   onClick={() => setShowQuoteModal(false)}

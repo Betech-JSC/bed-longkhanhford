@@ -226,7 +226,7 @@ export default function QuickAccessToolbar() {
       </div>
 
       {/* Floating Action Buttons (Mobile - Left) */}
-      <div className="flex flex-col gap-2.5 md:hidden fixed left-4 bottom-16 z-50 select-none">
+      <div className="flex flex-col gap-2.5 md:hidden fixed left-4 bottom-20 z-50 select-none">
         {/* Zalo */}
         <Link
           href="https://zalo.me/0812868622"
@@ -308,7 +308,7 @@ export default function QuickAccessToolbar() {
 
       {/* Mobile Scroll to Top Floating Button (positioned above bottom nav bar) */}
       {showScrollTop && (
-        <div className="block md:hidden fixed right-4 bottom-16 z-40 select-none">
+        <div className="block md:hidden fixed right-4 bottom-20 z-40 select-none">
           <button
             onClick={scrollToTop}
             type="button"
