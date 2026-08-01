@@ -89,17 +89,17 @@ function ContactFormContent() {
       } else {
         setFormType("general");
       }
-
-      // Smooth scroll directly to form for fast user action
-      setTimeout(() => {
-        const formEl = document.getElementById("contact-form");
-        if (formEl) {
-          formEl.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
-      }, 250);
     } else {
       setFormType("new-car"); // default is "new-car" (Tư vấn mua xe mới)
     }
+
+    // Always scroll to form on mount so users land directly on the form
+    setTimeout(() => {
+      const formEl = document.getElementById("contact-form");
+      if (formEl) {
+        formEl.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 300);
   }, [reasonParam]);
 
   useEffect(() => {
@@ -434,7 +434,7 @@ function ContactFormContent() {
         </div>
 
         {/* Right Side: Appointment Booking Form Card (7 cols) */}
-        <div id="contact-form" className="lg:col-span-7 relative bg-white border border-gray-200/80 p-8 rounded-[24px] shadow-lg text-gray-900 overflow-hidden">
+        <div id="contact-form" className="lg:col-span-7 relative bg-white border border-gray-200/80 p-8 rounded-[24px] shadow-lg text-gray-900 overflow-hidden scroll-mt-20">
           {/* Header colorful highlight bar */}
           <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#002F6C] via-[#066fef] to-[#00aaff]" />
 

@@ -88,6 +88,16 @@ function TestDriveFormContent({ initialVehicles }: { initialVehicles?: any[] }) 
     }
   }, [noteParam]);
 
+  // Auto-scroll to form on mount
+  useEffect(() => {
+    setTimeout(() => {
+      const formEl = document.getElementById("test-drive-form");
+      if (formEl) {
+        formEl.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 300);
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formName || !formPhone) {
@@ -279,7 +289,7 @@ function TestDriveFormContent({ initialVehicles }: { initialVehicles?: any[] }) 
         </div>
 
         {/* Right Column: Registration Form Card */}
-        <div className="bg-[#003478] flex flex-col gap-6 p-8 rounded-[16px] shadow-lg text-white">
+        <div id="test-drive-form" className="bg-[#003478] flex flex-col gap-6 p-8 rounded-[16px] shadow-lg text-white scroll-mt-20">
           <h3 className="font-['Ford_Antenna',sans-serif] font-semibold text-[28px] text-center text-white flex items-center justify-center gap-2">
             <Car className="w-7 h-7" />
             Đăng ký lái thử
