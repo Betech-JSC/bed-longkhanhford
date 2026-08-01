@@ -10,6 +10,59 @@ import { formatPriceShort } from "@/lib/rolling-cost";
 import BookingBanner from "@/components/services/BookingBanner";
 import { vehiclesAPI } from "@/lib/api";
 
+function getStaticFallbackSpecs(vehicleIdOrName: string, versionIdOrName: string = ""): Specs | null {
+  const vTarget = (vehicleIdOrName || "").toLowerCase();
+  const verTarget = (versionIdOrName || "").toLowerCase();
+
+  let staticV = staticVehicles.find(sv => 
+    sv.id.toLowerCase() === vTarget || 
+    sv.name.toLowerCase() === vTarget ||
+    vTarget.includes(sv.id.toLowerCase()) || 
+    sv.id.toLowerCase().includes(vTarget.replace(/202[0-9]/g, '').trim()) ||
+    vTarget.includes(sv.name.toLowerCase()) ||
+    sv.name.toLowerCase().includes(vTarget.replace(/202[0-9]/g, '').trim())
+  );
+
+  if (!staticV) {
+    if (vTarget.includes("territory")) staticV = staticVehicles.find(sv => sv.id === "ford-territory");
+    else if (vTarget.includes("everest")) staticV = staticVehicles.find(sv => sv.id === "ford-everest");
+    else if (vTarget.includes("raptor")) staticV = staticVehicles.find(sv => sv.id === "ford-ranger");
+    else if (vTarget.includes("ranger")) staticV = staticVehicles.find(sv => sv.id === "ford-ranger");
+    else if (vTarget.includes("transit")) staticV = staticVehicles.find(sv => sv.id === "ford-transit");
+    else if (vTarget.includes("mach-e")) staticV = staticVehicles.find(sv => sv.id === "new-mustang-mach-e");
+    else if (vTarget.includes("mustang")) staticV = staticVehicles.find(sv => sv.id === "mustang-fastback");
+  }
+
+  if (!staticV) return null;
+
+  if (staticV.versions && staticV.versions.length > 0) {
+    let staticVer = staticV.versions.find(ver => 
+      ver.id.toLowerCase() === verTarget ||
+      ver.name.toLowerCase() === verTarget ||
+      verTarget.includes(ver.id.toLowerCase()) ||
+      ver.name.toLowerCase().includes(verTarget) ||
+      verTarget.includes(ver.name.toLowerCase())
+    );
+
+    if (!staticVer && verTarget) {
+      if (verTarget.includes("platinum")) staticVer = staticV.versions.find(v => v.id.includes("platinum") || v.name.toLowerCase().includes("platinum"));
+      else if (verTarget.includes("titanium-x") || (verTarget.includes("titanium") && verTarget.includes("x"))) staticVer = staticV.versions.find(v => v.id.includes("titanium-x"));
+      else if (verTarget.includes("titanium")) staticVer = staticV.versions.find(v => v.id === "titanium" || v.id.includes("titanium"));
+      else if (verTarget.includes("wildtrak")) staticVer = staticV.versions.find(v => v.id.includes("wildtrak"));
+      else if (verTarget.includes("raptor")) staticVer = staticV.versions.find(v => v.id.includes("raptor"));
+      else if (verTarget.includes("sport")) staticVer = staticV.versions.find(v => v.id.includes("sport"));
+      else if (verTarget.includes("trend")) staticVer = staticV.versions.find(v => v.id.includes("trend"));
+      else if (verTarget.includes("xls")) staticVer = staticV.versions.find(v => v.id.includes("xls"));
+      else if (verTarget.includes("xl")) staticVer = staticV.versions.find(v => v.id.includes("xl"));
+    }
+
+    if (staticVer && staticVer.specs) return staticVer.specs;
+    if (staticV.versions[0] && staticV.versions[0].specs) return staticV.versions[0].specs;
+  }
+
+  return null;
+}
+
 const mapSpecKey = (key: string, val: string, result: Record<string, string>) => {
   const k = key.trim().toLowerCase();
   const v = val.trim();
@@ -38,7 +91,7 @@ const mapSpecKey = (key: string, val: string, result: Record<string, string>) =>
   }
 };
 
-const parseSpecsArray = (specsArray: any): Record<string, string> => {
+const parseSpecsArray = (specsArray: any, vehicleName: string = "", versionName: string = ""): Record<string, string> => {
   const result: Record<string, string> = {
     engine: '',
     power: '',
@@ -50,46 +103,71 @@ const parseSpecsArray = (specsArray: any): Record<string, string> => {
     fuelEconomy: ''
   };
 
-  let actualArray = specsArray;
-  
-  if (actualArray && typeof actualArray === 'object' && !Array.isArray(actualArray)) {
-    if (Array.isArray(actualArray.detailed_specs)) {
-      actualArray = actualArray.detailed_specs;
-    }
+  let actualSpecs = specsArray;
+  if (typeof actualSpecs === 'string') {
+    try { actualSpecs = JSON.parse(actualSpecs); } catch {}
   }
 
-  if (!Array.isArray(actualArray)) {
-    return result;
-  }
-
-  actualArray.forEach((group: any) => {
-    if (Array.isArray(group.items)) {
-      group.items.forEach((item: any) => {
-        mapSpecKey(item.name || '', item.value || '', result);
+  if (actualSpecs && typeof actualSpecs === 'object' && !Array.isArray(actualSpecs)) {
+    if (Array.isArray(actualSpecs.detailed_specs)) {
+      actualSpecs = actualSpecs.detailed_specs;
+    } else {
+      Object.keys(actualSpecs).forEach(key => {
+        mapSpecKey(key, String(actualSpecs[key] || ''), result);
       });
-    }
-
-    const htmlContent = group.content || '';
-    if (htmlContent) {
-      const items = htmlContent.split(/<\/li>|<li>|<br\s*\/?>|\n/).map((item: string) => {
-        return item.replace(/<[^>]*>/g, '').trim();
-      }).filter(Boolean);
-
-      items.forEach((item: string) => {
-        const colonIndex = item.indexOf(':');
-        if (colonIndex > -1) {
-          const key = item.substring(0, colonIndex).trim().toLowerCase();
-          const val = item.substring(colonIndex + 1).trim();
-          mapSpecKey(key, val, result);
+      ['engine', 'power', 'torque', 'transmission', 'drivetrain', 'dimensions', 'clearance', 'fuelEconomy'].forEach(k => {
+        if (actualSpecs[k] && !result[k]) {
+          result[k] = String(actualSpecs[k]);
         }
       });
     }
-  });
+  }
+
+  if (Array.isArray(actualSpecs)) {
+    actualSpecs.forEach((group: any) => {
+      if (Array.isArray(group.items)) {
+        group.items.forEach((item: any) => {
+          mapSpecKey(item.name || item.title || '', item.value || item.content || '', result);
+        });
+      }
+
+      const htmlContent = group.content || '';
+      if (htmlContent) {
+        const items = htmlContent.split(/<\/li>|<li>|<br\s*\/?>|\n/).map((item: string) => {
+          return item.replace(/<[^>]*>/g, '').trim();
+        }).filter(Boolean);
+
+        items.forEach((item: string) => {
+          const colonIndex = item.indexOf(':');
+          if (colonIndex > -1) {
+            const key = item.substring(0, colonIndex).trim().toLowerCase();
+            const val = item.substring(colonIndex + 1).trim();
+            mapSpecKey(key, val, result);
+          }
+        });
+      }
+    });
+  }
+
+  // Fall back to static specs for any missing properties
+  const fallback = getStaticFallbackSpecs(vehicleName, versionName);
+  if (fallback) {
+    (Object.keys(result) as (keyof Specs)[]).forEach(k => {
+      if (!result[k] && fallback[k]) {
+        result[k] = fallback[k];
+      }
+    });
+  }
 
   return result;
 };
 
-function parseSpecs(specs: any, vehicleName: string): any[] {
+function parseSpecs(specs: any, vehicleName: string, versionName: string = ""): any[] {
+  let actualSpecs = specs;
+  if (typeof actualSpecs === 'string') {
+    try { actualSpecs = JSON.parse(actualSpecs); } catch {}
+  }
+
   const parseDetailedItem = (item: any) => {
     if (item.content) {
       return {
@@ -118,19 +196,19 @@ function parseSpecs(specs: any, vehicleName: string): any[] {
     };
   };
 
-  if (Array.isArray(specs)) {
-    if (specs.length > 0 && (specs[0].items || specs[0].content)) {
-      return specs.map(parseDetailedItem);
+  if (Array.isArray(actualSpecs) && actualSpecs.length > 0) {
+    if (actualSpecs[0].items || actualSpecs[0].content) {
+      return actualSpecs.map(parseDetailedItem);
     }
-    return specs.map(item => ({
+    return actualSpecs.map(item => ({
       title: item.title ?? item.label ?? item.category ?? '',
       content: item.content ?? item.value ?? ''
     }));
   }
 
-  if (specs && typeof specs === "object") {
-    if (specs.detailed_specs && Array.isArray(specs.detailed_specs)) {
-      return specs.detailed_specs.map(parseDetailedItem);
+  if (actualSpecs && typeof actualSpecs === "object") {
+    if (actualSpecs.detailed_specs && Array.isArray(actualSpecs.detailed_specs) && actualSpecs.detailed_specs.length > 0) {
+      return actualSpecs.detailed_specs.map(parseDetailedItem);
     }
 
     const keyLabelMap: Record<string, string> = {
@@ -148,15 +226,15 @@ function parseSpecs(specs: any, vehicleName: string): any[] {
     let contentHtml = '<ul class="list-disc pl-4 space-y-1">';
     let hasContent = false;
     knownKeys.forEach(key => {
-      const val = specs[key];
+      const val = actualSpecs[key];
       if (val != null && val !== '') {
         contentHtml += `<li>${keyLabelMap[key]}: <strong>${val}</strong></li>`;
         hasContent = true;
       }
     });
-    Object.keys(specs).forEach(key => {
+    Object.keys(actualSpecs).forEach(key => {
       if (!knownKeys.includes(key) && key !== 'detailed_specs') {
-        const val = specs[key];
+        const val = actualSpecs[key];
         if (val != null && val !== '') {
           contentHtml += `<li>${key}: <strong>${val}</strong></li>`;
           hasContent = true;
@@ -168,6 +246,12 @@ function parseSpecs(specs: any, vehicleName: string): any[] {
     if (hasContent) {
       return [{ title: 'Thông số chung', content: contentHtml }];
     }
+  }
+
+  // Fallback to static specs if no content
+  const fallback = getStaticFallbackSpecs(vehicleName, versionName);
+  if (fallback && fallback !== specs) {
+    return parseSpecs(fallback, vehicleName, versionName);
   }
 
   return [];
@@ -224,35 +308,46 @@ function buildCompareOptionsFromVehicles(vehiclesList: any[]): CompareOption[] {
       v.versions.forEach((ver: any) => {
         if (!ver) return;
         const verId = String(ver.id || "");
+        const verName = ver.name || "";
         const img = ver.image_thumbnail_url || ver.image_url || ver.image || v.image_thumbnail_url || v.image_url || (v.images && v.images[0]) || getPopularVehicleImage(id);
-        const parsedSpecs = parseSpecsArray(ver.specs || v.specs);
+        const parsedSpecs = parseSpecsArray(ver.specs || v.specs, name, verName);
+        const rawSpecs = (ver.specs && ((Array.isArray(ver.specs) && ver.specs.length > 0) || (typeof ver.specs === 'object' && Object.keys(ver.specs).length > 0)))
+          ? ver.specs
+          : (v.specs && ((Array.isArray(v.specs) && v.specs.length > 0) || (typeof v.specs === 'object' && Object.keys(v.specs).length > 0)))
+            ? v.specs
+            : getStaticFallbackSpecs(name, verName);
+
         options.push({
           key: `${id}__${verId}`,
           vehicleId: id,
           versionId: verId,
-          displayName: `${name} ${ver.name || ''}`.trim().toUpperCase(),
+          displayName: `${name} ${verName}`.trim().toUpperCase(),
           vehicleName: name,
-          versionName: ver.name || '',
+          versionName: verName,
           typeName: typeName,
           image: typeof img === 'string' ? img : resolveImageUrl(img),
           basePrice: ver.price || v.basePrice || v.base_price || 0,
           specs: {
-            engine: parsedSpecs.engine || ver.specs?.engine || ver.specs?.engine_type || '',
-            power: parsedSpecs.power || ver.specs?.power || '',
-            torque: parsedSpecs.torque || ver.specs?.torque || '',
-            transmission: parsedSpecs.transmission || ver.specs?.transmission || '',
-            drivetrain: parsedSpecs.drivetrain || ver.specs?.drivetrain || '',
-            dimensions: parsedSpecs.dimensions || ver.specs?.dimensions || '',
-            clearance: parsedSpecs.clearance || ver.specs?.clearance || '',
-            fuelEconomy: parsedSpecs.fuelEconomy || ver.specs?.fuelEconomy || ver.specs?.fuel_guide || ver.specs?.fuel_economy || '',
+            engine: parsedSpecs.engine || '',
+            power: parsedSpecs.power || '',
+            torque: parsedSpecs.torque || '',
+            transmission: parsedSpecs.transmission || '',
+            drivetrain: parsedSpecs.drivetrain || '',
+            dimensions: parsedSpecs.dimensions || '',
+            clearance: parsedSpecs.clearance || '',
+            fuelEconomy: parsedSpecs.fuelEconomy || '',
           },
-          rawSpecs: ver.specs || v.specs,
+          rawSpecs: rawSpecs,
           vehicle: v
         });
       });
     } else {
-      const parsedSpecs = parseSpecsArray(v.specs || {});
+      const parsedSpecs = parseSpecsArray(v.specs || {}, name, "");
       const img = v.image_thumbnail_url || v.image_url || (v.images && v.images[0]) || getPopularVehicleImage(id);
+      const rawSpecs = (v.specs && ((Array.isArray(v.specs) && v.specs.length > 0) || (typeof v.specs === 'object' && Object.keys(v.specs).length > 0)))
+        ? v.specs
+        : getStaticFallbackSpecs(name, "");
+
       options.push({
         key: id,
         vehicleId: id,
@@ -264,16 +359,16 @@ function buildCompareOptionsFromVehicles(vehiclesList: any[]): CompareOption[] {
         image: typeof img === 'string' ? img : resolveImageUrl(img),
         basePrice: v.basePrice || v.base_price || 0,
         specs: {
-          engine: parsedSpecs.engine || v.specs?.engine || v.specs?.engine_type || '',
-          power: parsedSpecs.power || v.specs?.power || '',
-          torque: parsedSpecs.torque || v.specs?.torque || '',
-          transmission: parsedSpecs.transmission || v.specs?.transmission || '',
-          drivetrain: parsedSpecs.drivetrain || v.specs?.drivetrain || '',
-          dimensions: parsedSpecs.dimensions || v.specs?.dimensions || '',
-          clearance: parsedSpecs.clearance || v.specs?.clearance || '',
-          fuelEconomy: parsedSpecs.fuelEconomy || v.specs?.fuelEconomy || v.specs?.fuel_guide || v.specs?.fuel_economy || '',
+          engine: parsedSpecs.engine || '',
+          power: parsedSpecs.power || '',
+          torque: parsedSpecs.torque || '',
+          transmission: parsedSpecs.transmission || '',
+          drivetrain: parsedSpecs.drivetrain || '',
+          dimensions: parsedSpecs.dimensions || '',
+          clearance: parsedSpecs.clearance || '',
+          fuelEconomy: parsedSpecs.fuelEconomy || '',
         },
-        rawSpecs: v.specs,
+        rawSpecs: rawSpecs,
         vehicle: v
       });
     }
@@ -310,7 +405,7 @@ export default function ComparePage() {
                 ? 'Bán Tải Hiệu Suất Cao'
                 : (v.type_name || v.typeName || (v.type === 'suv' ? 'SUV' : v.type === 'pickup' ? 'Bán tải' : 'Thương mại')),
               versions: Array.isArray(v.versions) ? v.versions.map((ver: any) => {
-                const parsedSpecs = parseSpecsArray(ver.specs || v.specs);
+                const parsedSpecs = parseSpecsArray(ver.specs || v.specs, name, ver.name);
                 return {
                   id: String(ver.id),
                   name: ver.name,
@@ -483,7 +578,7 @@ export default function ComparePage() {
 
   const detailedSpecsList = selectedCompareOptions.map((opt) => {
     if (!opt) return [];
-    return parseSpecs(opt.rawSpecs || opt.specs, opt.displayName || "");
+    return parseSpecs(opt.rawSpecs || opt.specs, opt.vehicleName || opt.displayName || "", opt.versionName || "");
   });
 
   const allCategoryTitles = Array.from(
