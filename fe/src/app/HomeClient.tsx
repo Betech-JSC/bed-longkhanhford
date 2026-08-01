@@ -607,8 +607,8 @@ export default function HomeClient({
                   {heroSlides[activeHeroIndex]?.title || ""}
                 </h2>
 
-                {/* CTAs - Dark Background Hover styles */}
-                <div className="flex flex-col sm:flex-row justify-start gap-4 pt-6 md:pt-8 w-full sm:w-auto">
+                {/* CTAs - Dark Background Hover styles (Side by side on mobile) */}
+                <div className="flex flex-row items-center justify-start gap-2.5 sm:gap-4 pt-4 md:pt-8 w-full sm:w-auto">
                   <Button
                     variant="primary"
                     onClick={() => {
@@ -620,7 +620,7 @@ export default function HomeClient({
                         router.push("/dang-ky-lai-thu");
                       }
                     }}
-                    className="w-full sm:w-auto cursor-pointer"
+                    className="flex-1 sm:flex-initial text-xs sm:text-sm px-2.5 sm:px-6 h-11 sm:h-12 whitespace-nowrap cursor-pointer"
                   >
                     Đăng ký lái thử
                   </Button>
@@ -638,7 +638,7 @@ export default function HomeClient({
                         router.push("/san-pham");
                       }
                     }}
-                    className="w-full sm:w-auto cursor-pointer"
+                    className="flex-1 sm:flex-initial text-xs sm:text-sm px-2.5 sm:px-6 h-11 sm:h-12 whitespace-nowrap cursor-pointer"
                   >
                     Khám phá ngay
                   </Button>
