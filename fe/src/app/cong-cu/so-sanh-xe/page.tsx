@@ -69,24 +69,24 @@ const mapSpecKey = (key: string, val: string, result: Record<string, string>) =>
   if (!k || !v) return;
 
   if (k.includes('động cơ') || k.includes('dong co') || k.includes('engine') || k.includes('motor') || k.includes('pin')) {
-    if (k.includes('pin') && !result.engine.toLowerCase().includes('pin')) {
-      result.engine = result.engine ? `${result.engine} / Pin: ${v}` : `Pin: ${v}`;
+    if (k.includes('pin') && result.engine && !result.engine.toLowerCase().includes('pin')) {
+      result.engine = `${result.engine} / Pin: ${v}`;
     } else {
       result.engine = v;
     }
-  } else if (k.includes('công suất') || k.includes('cong suat') || k.includes('power')) {
+  } else if (k.includes('công suất') || k.includes('cong suat') || k.includes('power') || k.includes('mã lực') || k.includes('ma luc')) {
     result.power = v;
-  } else if (k.includes('mô-men xoắn') || k.includes('mô men xoắn') || k.includes('mo-men xoan') || k.includes('torque')) {
+  } else if (k.includes('mô-men') || k.includes('mô men') || k.includes('mo-men') || k.includes('mo men') || k.includes('torque') || k.includes('xoắn') || k.includes('xoan')) {
     result.torque = v;
   } else if (k.includes('hộp số') || k.includes('hop so') || k.includes('transmission') || k.includes('truyền động') || k.includes('truyen dong')) {
     result.transmission = v;
-  } else if (k.includes('dẫn động') || k.includes('dan dong') || k.includes('drivetrain')) {
+  } else if (k.includes('dẫn động') || k.includes('dan dong') || k.includes('drivetrain') || k.includes('cầu') || k.includes('fwd') || k.includes('rwd') || k.includes('awd') || k.includes('4wd')) {
     result.drivetrain = v;
-  } else if (k.includes('kích thước') || k.includes('kich thuoc') || k.includes('dimensions')) {
+  } else if (k.includes('kích thước') || k.includes('kich thuoc') || k.includes('dimensions') || k.includes('dxrxc')) {
     result.dimensions = v;
-  } else if (k.includes('khoảng sáng gầm') || k.includes('khoang sang gam') || k.includes('clearance')) {
+  } else if (k.includes('khoảng sáng gầm') || k.includes('khoang sang gam') || k.includes('clearance') || k.includes('gầm')) {
     result.clearance = v;
-  } else if (k.includes('tiêu hao nhiên liệu') || k.includes('tieu hao nhien lieu') || k.includes('nhiên liệu') || k.includes('fuel') || k.includes('quãng đường') || k.includes('quang duong') || k.includes('wltp')) {
+  } else if (k.includes('tiêu hao') || k.includes('tieu hao') || k.includes('nhiên liệu') || k.includes('nhien lieu') || k.includes('fuel') || k.includes('quãng đường') || k.includes('quang duong') || k.includes('wltp')) {
     result.fuelEconomy = v;
   }
 };
@@ -108,6 +108,7 @@ const parseSpecsArray = (specsArray: any, vehicleName: string = "", versionName:
     try { actualSpecs = JSON.parse(actualSpecs); } catch {}
   }
 
+  // 1. Parse CMS Direct Object
   if (actualSpecs && typeof actualSpecs === 'object' && !Array.isArray(actualSpecs)) {
     if (Array.isArray(actualSpecs.detailed_specs)) {
       actualSpecs = actualSpecs.detailed_specs;
@@ -123,33 +124,38 @@ const parseSpecsArray = (specsArray: any, vehicleName: string = "", versionName:
     }
   }
 
+  // 2. Parse CMS Array (Category groups or flat item arrays)
   if (Array.isArray(actualSpecs)) {
     actualSpecs.forEach((group: any) => {
-      if (Array.isArray(group.items)) {
-        group.items.forEach((item: any) => {
-          mapSpecKey(item.name || item.title || '', item.value || item.content || '', result);
-        });
-      }
+      if (group && typeof group === 'object') {
+        if (Array.isArray(group.items)) {
+          group.items.forEach((item: any) => {
+            mapSpecKey(item.name || item.title || item.key || item.label || '', item.value || item.content || item.val || '', result);
+          });
+        } else if (group.name || group.title || group.key || group.label) {
+          mapSpecKey(group.name || group.title || group.key || group.label, group.value || group.content || group.val || group.text || '', result);
+        }
 
-      const htmlContent = group.content || '';
-      if (htmlContent) {
-        const items = htmlContent.split(/<\/li>|<li>|<br\s*\/?>|\n/).map((item: string) => {
-          return item.replace(/<[^>]*>/g, '').trim();
-        }).filter(Boolean);
+        const htmlContent = group.content || '';
+        if (typeof htmlContent === 'string' && htmlContent) {
+          const items = htmlContent.split(/<\/li>|<li>|<br\s*\/?>|\n/).map((item: string) => {
+            return item.replace(/<[^>]*>/g, '').trim();
+          }).filter(Boolean);
 
-        items.forEach((item: string) => {
-          const colonIndex = item.indexOf(':');
-          if (colonIndex > -1) {
-            const key = item.substring(0, colonIndex).trim().toLowerCase();
-            const val = item.substring(colonIndex + 1).trim();
-            mapSpecKey(key, val, result);
-          }
-        });
+          items.forEach((item: string) => {
+            const colonIndex = item.indexOf(':');
+            if (colonIndex > -1) {
+              const key = item.substring(0, colonIndex).trim();
+              const val = item.substring(colonIndex + 1).trim();
+              mapSpecKey(key, val, result);
+            }
+          });
+        }
       }
     });
   }
 
-  // Fall back to static specs for any missing properties
+  // 3. Fall back to static specs ONLY for any properties missing in CMS
   const fallback = getStaticFallbackSpecs(vehicleName, versionName);
   if (fallback) {
     (Object.keys(result) as (keyof Specs)[]).forEach(k => {
