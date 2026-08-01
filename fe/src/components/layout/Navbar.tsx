@@ -1108,9 +1108,9 @@ export default function Navbar() {
               const displayAccessories = accessoriesList.length > 0
                 ? accessoriesList.slice(0, 6)
                 : [
-                    { id: "nap-thung-ranger", name: "Nắp thùng cuộn điện Ranger", price: 21500000, image_url: "/assets/quality-care-circle.png" },
-                    { id: "phim-cach-nhiet-everest", name: "Phim cách nhiệt cao cấp Everest", price: 9500000, image_url: "/assets/territory-interior.png" },
-                    { id: "tham-lot-san-territory", name: "Thảm lót sàn 3D cao cấp Territory", price: 2200000, image_url: "/assets/territory-promo.png" }
+                    { id: "nap-thung-ranger", name: "Nắp thùng cuộn điện Ranger", price: 21500000, image_url: "/assets/quality-care-circle.webp" },
+                    { id: "phim-cach-nhiet-everest", name: "Phim cách nhiệt cao cấp Everest", price: 9500000, image_url: "/assets/territory-interior.webp" },
+                    { id: "tham-lot-san-territory", name: "Thảm lót sàn 3D cao cấp Territory", price: 2200000, image_url: "/assets/territory-promo.webp" }
                   ];
 
               return (
@@ -1473,7 +1473,7 @@ export default function Navbar() {
                     };
 
                     const getVehicleImage = () => {
-                      return resolveImageUrl(vehicle.image_thumbnail_url || vehicle.image_url || "/assets/img-gradient-1.png");
+                      return resolveImageUrl(vehicle.image_thumbnail_url || vehicle.image_url || "/assets/img-gradient-1.webp");
                     };
 
                     return (
@@ -1491,7 +1491,7 @@ export default function Navbar() {
                               sizes="80px"
                               className="object-contain p-1"
                               onError={(e: any) => {
-                                e.target.src = "/assets/img-gradient-1.png";
+                                e.target.src = "/assets/img-gradient-1.webp";
                               }}
                             />
                           </div>

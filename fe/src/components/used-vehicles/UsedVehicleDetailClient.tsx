@@ -55,7 +55,7 @@ export default function UsedVehicleDetailClient({ vehicle }: { vehicle: any }) {
     .map((img: any) => resolveImageUrl(img))
     .filter(Boolean);
 
-  const activeImage = displayThumbnails[activeIndex] || resolveImageUrl(vehicle?.image_url || vehicle?.image) || "/assets/images/placeholder_car.png";
+  const activeImage = displayThumbnails[activeIndex] || resolveImageUrl(vehicle?.image_url || vehicle?.image) || "/assets/images/placeholder_car.webp";
 
   useEffect(() => {
     if (!showLightbox) return;
@@ -565,7 +565,7 @@ export default function UsedVehicleDetailClient({ vehicle }: { vehicle: any }) {
               onMouseUp={onMouseUp}
             >
               <Image
-                src={displayThumbnails[activeIndex] || "/assets/images/placeholder_car.png"}
+                src={displayThumbnails[activeIndex] || "/assets/images/placeholder_car.webp"}
                 alt={vehicle.title}
                 fill
                 priority

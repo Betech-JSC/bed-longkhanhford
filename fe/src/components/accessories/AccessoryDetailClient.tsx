@@ -271,7 +271,7 @@ export default function AccessoryDetailClient({
 
             <div className="flex-1 aspect-square relative overflow-hidden rounded-none border border-gray-100 bg-white">
               <Image
-                src={activeImage || accessory.images[0] || "/assets/images/placeholder_car.png"}
+                src={activeImage || accessory.images[0] || "/assets/images/placeholder_car.webp"}
                 alt={accessory.name}
                 fill
                 priority
@@ -456,7 +456,7 @@ export default function AccessoryDetailClient({
               >
                 <div className="aspect-square relative bg-gray-50 overflow-hidden">
                   <Image
-                    src={item.images[0] || "/assets/images/placeholder_car.png"}
+                    src={item.images[0] || "/assets/images/placeholder_car.webp"}
                     alt={item.name}
                     fill
                     unoptimized

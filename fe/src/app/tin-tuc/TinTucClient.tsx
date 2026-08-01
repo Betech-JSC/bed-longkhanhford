@@ -274,7 +274,7 @@ function NewsListPageContent({ initialData, initialReviews }: { initialData?: an
       <section className="relative w-full h-[320px] bg-slate-900 overflow-hidden flex items-end pt-24 pb-10 mb-12">
         <div className="absolute inset-0 z-0">
           <img
-            src="/images/about/banner.jpg"
+            src="/images/about/banner.webp"
             alt="Tin tức Long Khánh Ford"
             className="w-full h-full object-cover object-center opacity-60"
           />

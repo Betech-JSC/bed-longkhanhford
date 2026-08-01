@@ -265,7 +265,7 @@ export default function XeDaQuaSuDungClient({ initialVehicles }: XeDaQuaSuDungCl
                     {/* Image Area */}
                     <div className="relative h-[220px] bg-white overflow-hidden flex items-center justify-center border-b-0">
                       <Image 
-                        src={resolveImageUrl(vehicle.image_url || vehicle.image) || "/assets/images/placeholder_car.png"} 
+                        src={resolveImageUrl(vehicle.image_url || vehicle.image) || "/assets/images/placeholder_car.webp"} 
                         alt={vehicle.title}
                         fill
                         unoptimized

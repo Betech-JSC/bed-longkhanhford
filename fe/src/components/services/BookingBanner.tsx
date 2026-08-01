@@ -6,7 +6,7 @@ import { Phone, Bookmark } from "lucide-react";
 
 export default function BookingBanner() {
   // Use official-style Ford Everest landscape banner image as background
-  const bannerBg = "/images-dynamic/image-hero-1.jpg";
+  const bannerBg = "/images-dynamic/image-hero-1.webp";
 
   return (
     <div className="w-full relative min-h-[440px] md:min-h-[480px] py-8 md:py-12 flex items-center overflow-hidden">

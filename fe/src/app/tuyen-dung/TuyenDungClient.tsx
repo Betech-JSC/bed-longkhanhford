@@ -133,7 +133,7 @@ export default function TuyenDungClient({ initialJobs }: TuyenDungClientProps) {
       <section className="relative w-full h-[400px] md:h-[460px] bg-slate-900 overflow-hidden flex items-end">
         <div className="absolute inset-0 z-0">
           <img
-            src="/images-dynamic/recruitment-banner.png"
+            src="/images-dynamic/recruitment-banner.webp"
             alt="Tuyển dụng Ford Long Khánh"
             className="w-full h-full object-cover object-[center_40%]"
           />

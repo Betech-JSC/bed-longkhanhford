@@ -628,10 +628,10 @@ function SpecsGridBlock({ data, vehicle, isEditMode, onChangeData, openQuoteDraw
     name: ver.name,
     price: ver.price,
     image: resolveImageUrl(ver.image_thumbnail_url || ver.image_url || ver.image || vehicle.image_thumbnail_url || vehicle.image_url || vehicle.images?.[idx] || vehicle.images?.[0] || (idx === 0
-      ? "/assets/territory-hero.png"
+      ? "/assets/territory-hero.webp"
       : idx === 1
-        ? "/assets/territory-tech-split.png"
-        : "/assets/territory-promo.png")),
+        ? "/assets/territory-tech-split.webp"
+        : "/assets/territory-promo.webp")),
     specs: ver.specs || {},
     isExternal: false
   }));
@@ -1584,14 +1584,14 @@ function ThreeSixtyViewerBlock({ data, vehicle, isEditMode, onChangeData, threeS
                       src={resolveImageUrl(vehicle.id === "mustang-fastback"
                         ? `/images/360/mustang/ecoboostfastback/exterior/desktop/adriatic-blue-green/64f/001-adriatic-blue-green-64f.jpeg`
                         : vehicle.id === "new-territory"
-                          ? (viewType === "exterior" ? "/assets/territory-3d.png" : "/assets/territory-interior.png")
+                          ? (viewType === "exterior" ? "/assets/territory-3d.webp" : "/assets/territory-interior.webp")
                           : (viewType === "exterior"
                             ? (() => {
                               const colorImg = (colors?.[selectedColorIndex] || colors?.[0])?.image;
                               if (colorImg) {
                                 return colorImg;
                               }
-                              return vehicle.images?.[0] || vehicle.image_url || "/assets/car-everest.png";
+                              return vehicle.images?.[0] || vehicle.image_url || "/assets/car-everest.webp";
                             })()
                             : media.splitLeft))}
                       alt="3D vehicle preview"
@@ -2116,7 +2116,7 @@ function VersionsGridBlock({ data, vehicle, isEditMode, onChangeData, anchorId, 
 
               // Quyết định ảnh: Lấy ảnh đại diện (thumbnail) của phiên bản nếu có, nếu không lấy ảnh đặc trưng, nếu không lấy ảnh trong images array theo index, nếu không lấy ảnh chính của xe
               const versionImage = ver.image_thumbnail_url || ver.image_url || vehicle?.images?.[idx] || vehicle?.images?.[0] || vehicle?.image;
-              const imgUrl = mounted ? resolveImageUrl(versionImage) : "/assets/img-gradient-1.png";
+              const imgUrl = mounted ? resolveImageUrl(versionImage) : "/assets/img-gradient-1.webp";
 
               return (
                 <div
@@ -2176,7 +2176,7 @@ function BookingBannerBlock({ blockIndex, data, vehicle, isEditMode, onChangeDat
   const btnText = data.btn_text || "Đặt lịch hẹn";
   const btnLink = data.btn_link || "/lien-he";
   const hasCarImage = hasImageField(data.car_image) || vehicle?.image_url;
-  const carImage = hasImageField(data.car_image) ? resolveImageUrl(data.car_image) : "/assets/everest_platinum.png";
+  const carImage = hasImageField(data.car_image) ? resolveImageUrl(data.car_image) : "/assets/everest_platinum.webp";
 
   const handleUploadCarImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

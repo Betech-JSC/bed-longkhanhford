@@ -113,7 +113,7 @@ export default async function ServiceSlugPage({ params }: Props) {
       if (scheduleRes && scheduleRes.success && Array.isArray(scheduleRes.data)) {
         displaySchedules = scheduleRes.data.map((item: any) => ({
           name: item.name || "",
-          image: item.image || "/assets/car-placeholder.png",
+          image: item.image || "/assets/car-placeholder.webp",
           links: Array.isArray(item.links) ? item.links : [],
         }));
       }

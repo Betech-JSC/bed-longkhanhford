@@ -69,7 +69,7 @@ export default async function ServicesPage() {
           title: item.title || "",
           slug: item.slug || "",
           description: item.description || "",
-          image: resolved || siteAssets.showroomBg || "/showroom_bg.png",
+          image: resolved || siteAssets.showroomBg || "/showroom_bg.webp",
           href: (item.custom_link && item.custom_link.startsWith('/dich-vu/'))
             ? item.custom_link
             : `/dich-vu/${item.slug}`,
@@ -79,7 +79,7 @@ export default async function ServicesPage() {
     } else {
       displayServices = fallbackServices.map(item => ({
         ...item,
-        image: resolveImageUrl(item.image) || siteAssets.showroomBg || "/showroom_bg.png",
+        image: resolveImageUrl(item.image) || siteAssets.showroomBg || "/showroom_bg.webp",
         href: `/dich-vu/${item.slug}`
       }));
     }
@@ -87,7 +87,7 @@ export default async function ServicesPage() {
     console.error("Failed to load services from CMS API, using fallbacks:", error);
     displayServices = fallbackServices.map(item => ({
       ...item,
-      image: resolveImageUrl(item.image) || siteAssets.showroomBg || "/showroom_bg.png",
+      image: resolveImageUrl(item.image) || siteAssets.showroomBg || "/showroom_bg.webp",
       href: `/dich-vu/${item.slug}`
     }));
   }

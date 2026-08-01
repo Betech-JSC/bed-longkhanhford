@@ -19,12 +19,12 @@ const getCategorySlugUnified = (slugOrId: string | number): string => {
 };
 
 const getCategoryFallbackImage = (slug: string): string => {
-  if (slug.includes("noi-that") || slug.includes("interior")) return "/images/categories/cat_interior.png";
-  if (slug.includes("ngoai-that") || slug.includes("exterior")) return "/images/categories/cat_exterior.png";
-  if (slug.includes("cong-nghe") || slug.includes("tech")) return "/images/categories/cat_tech.png";
-  if (slug.includes("mam-lop") || slug.includes("wheel")) return "/images/categories/cat_wheels.png";
-  if (slug.includes("hieu-suat") || slug.includes("performance")) return "/images/categories/cat_performance.png";
-  return "/images/categories/cat_exterior.png";
+  if (slug.includes("noi-that") || slug.includes("interior")) return "/images/categories/cat_interior.webp";
+  if (slug.includes("ngoai-that") || slug.includes("exterior")) return "/images/categories/cat_exterior.webp";
+  if (slug.includes("cong-nghe") || slug.includes("tech")) return "/images/categories/cat_tech.webp";
+  if (slug.includes("mam-lop") || slug.includes("wheel")) return "/images/categories/cat_wheels.webp";
+  if (slug.includes("hieu-suat") || slug.includes("performance")) return "/images/categories/cat_performance.webp";
+  return "/images/categories/cat_exterior.webp";
 };
 
 const mapAPIAccessoryToItem = (apiAcc: any): AccessoryItem => {
@@ -57,11 +57,11 @@ const mapAPIAccessoryToItem = (apiAcc: any): AccessoryItem => {
 };
 
 const staticCategories = [
-  { id: "interior", name: "Phụ Kiện Nội Thất", image: "/images/categories/cat_interior.png" },
-  { id: "exterior", name: "Phụ Kiện Ngoại Thất", image: "/images/categories/cat_exterior.png" },
-  { id: "tech", name: "Công Nghệ & Điện Tử", image: "/images/categories/cat_tech.png" },
-  { id: "wheels", name: "Mâm & Lốp Xe", image: "/images/categories/cat_wheels.png" },
-  { id: "performance", name: "Phụ Tùng Hiệu Suất", image: "/images/categories/cat_performance.png" }
+  { id: "interior", name: "Phụ Kiện Nội Thất", image: "/images/categories/cat_interior.webp" },
+  { id: "exterior", name: "Phụ Kiện Ngoại Thất", image: "/images/categories/cat_exterior.webp" },
+  { id: "tech", name: "Công Nghệ & Điện Tử", image: "/images/categories/cat_tech.webp" },
+  { id: "wheels", name: "Mâm & Lốp Xe", image: "/images/categories/cat_wheels.webp" },
+  { id: "performance", name: "Phụ Tùng Hiệu Suất", image: "/images/categories/cat_performance.webp" }
 ];
 
 const sidebarModels = [

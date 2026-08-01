@@ -344,7 +344,7 @@ function ContactFormContent() {
       <section className="relative w-full h-[400px] md:h-[460px] bg-slate-900 overflow-hidden flex items-end">
         <div className="absolute inset-0 z-0">
           <img
-            src="/images-dynamic/ford_ranger_banner.png"
+            src="/images-dynamic/ford_ranger_banner.webp"
             alt="Showroom Ford Long Khánh"
             className="w-full h-full object-cover object-center"
           />
