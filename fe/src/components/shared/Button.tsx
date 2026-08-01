@@ -35,7 +35,7 @@ export default function Button({
     ghost: "bg-transparent hover:bg-neutral-50 text-neutral-600 hover:text-black border-transparent",
     white: "bg-white hover:bg-neutral-50 text-black border-white hover:border-neutral-50",
     "white-outline":
-      "bg-transparent border-white text-white hover:bg-white hover:text-black hover:border-white",
+      "bg-black/60 backdrop-blur-xs border-white text-white hover:bg-white hover:text-black hover:border-white",
     "outline-gray":
       "bg-transparent border-neutral-300 text-neutral-600 hover:bg-neutral-50 hover:text-black hover:border-neutral-400",
   };

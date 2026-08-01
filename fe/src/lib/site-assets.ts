@@ -124,24 +124,17 @@ export const resolveImageUrl = (img: string | { url?: string; path?: string; sta
       const host = parsed.hostname.toLowerCase();
       const isCmsHost = host.includes("longkhanhford") || host.includes("betech") || host === "localhost" || host === "127.0.0.1";
       
-      if (!isCmsHost) {
-        return path;
+      if (isCmsHost) {
+        if (parsed.pathname.startsWith("/storage/")) {
+          return `/cms-storage${parsed.pathname.replace(/^\/storage/, "")}`;
+        }
+        if (parsed.pathname.startsWith("/uploads/")) {
+          return `/cms-uploads${parsed.pathname.replace(/^\/uploads/, "")}`;
+        }
       }
-      
-      // If it's already a full CMS URL, return it directly
       return path;
     } catch {
       // keep path as is
-    }
-  }
-
-  // 4. CMS Base Domain for relative paths from CMS API
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://cms.longkhanhford.betech-digital.com/api";
-  let baseDomain = apiUrl.replace(/\/api\/?$/, "");
-
-  if (!process.env.NEXT_PUBLIC_API_URL && typeof window !== "undefined") {
-    if (window.location.hostname.includes("longkhanhford")) {
-      baseDomain = "https://cms.longkhanhford.betech-digital.com";
     }
   }
 
@@ -150,11 +143,17 @@ export const resolveImageUrl = (img: string | { url?: string; path?: string; sta
   clean = clean.replace(/^(\/?uploads)+/gi, "/uploads");
   clean = clean.replace(/^(\/?storage)+/gi, "/storage");
 
-  if (clean.startsWith("/static/") || clean.startsWith("/uploads/") || clean.startsWith("/storage/")) {
-    return `${baseDomain}${clean}`;
+  if (clean.startsWith("/storage/")) {
+    return `/cms-storage${clean.replace(/^\/storage/, "")}`;
   }
-  if (clean.startsWith("static/") || clean.startsWith("uploads/") || clean.startsWith("storage/")) {
-    return `${baseDomain}/${clean}`;
+  if (clean.startsWith("storage/")) {
+    return `/cms-storage/${clean.replace(/^storage\//, "")}`;
+  }
+  if (clean.startsWith("/uploads/")) {
+    return `/cms-uploads${clean.replace(/^\/uploads/, "")}`;
+  }
+  if (clean.startsWith("uploads/")) {
+    return `/cms-uploads/${clean.replace(/^uploads\//, "")}`;
   }
 
   const cleanPath = clean.replace(/^\//, "");

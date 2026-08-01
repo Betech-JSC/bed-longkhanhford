@@ -232,6 +232,15 @@ const nextConfig = {
         source: "/chuyen-muc/:slug",
         destination: "/tin-tuc",
       },
+      // Proxy CMS images to inject Cache-Control headers
+      {
+        source: "/cms-storage/:path*",
+        destination: "https://cms.longkhanhford.com.vn/storage/:path*",
+      },
+      {
+        source: "/cms-uploads/:path*",
+        destination: "https://cms.longkhanhford.com.vn/uploads/:path*",
+      },
     ];
   },
   async headers() {
@@ -258,6 +267,18 @@ const nextConfig = {
         source: "/images-dynamic/:path*",
         headers: [
           { key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=604800" },
+        ],
+      },
+      {
+        source: "/cms-storage/:path*",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
+      {
+        source: "/cms-uploads/:path*",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
         ],
       },
     ];

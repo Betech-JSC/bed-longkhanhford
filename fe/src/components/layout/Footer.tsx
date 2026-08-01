@@ -266,7 +266,7 @@ export default function Footer() {
             {/* Background image */}
             <div 
               className="absolute inset-0 opacity-20 bg-cover bg-center transition-transform duration-500 group-hover:scale-105 pointer-events-none"
-              style={{ backgroundImage: "url('/showroom_bg.png')" }}
+              style={{ backgroundImage: "url('/showroom_bg.webp')" }}
             />
             
             {/* Header with avatar & page title */}
@@ -281,14 +281,14 @@ export default function Footer() {
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                 </h5>
-                <p className="text-[11px] text-white/70 truncate font-sans">
+                <p className="text-[11px] text-white/90 truncate font-sans">
                   Đại lý 3S Chính Thức
                 </p>
               </div>
             </div>
 
             {/* Full-width CTA Button */}
-            <div className="relative z-10 w-full bg-[#1877f2] group-hover:bg-[#0562d2] text-white text-xs font-semibold py-2 px-3 rounded-lg flex items-center justify-center gap-2 transition-all duration-200 shadow-sm whitespace-nowrap">
+            <div className="relative z-10 w-full bg-[#002f6c] group-hover:bg-[#066fef] text-white text-xs font-bold py-2 px-3 rounded-lg flex items-center justify-center gap-2 transition-all duration-200 shadow-sm whitespace-nowrap">
               <svg className="w-4 h-4 text-white shrink-0" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
               </svg>
@@ -369,15 +369,15 @@ export default function Footer() {
 
       {/* Bottom Copyright Disclosures */}
       <div className="max-w-[1152px] mx-auto border-t border-neutral-200 pt-6">
-        <div className="flex flex-col sm:flex-row justify-between items-center text-xs text-neutral-500 gap-4">
+        <div className="flex flex-col sm:flex-row justify-between items-center text-xs text-neutral-700 font-medium gap-4">
           <p>
             Copyright © 2026 Ford Long Khánh. Tất cả quyền được bảo lưu.
           </p>
           <div className="flex gap-6">
-            <Link href="/dieu-khoan-su-dung" className="hover:text-neutral-800 transition-colors">
+            <Link href="/dieu-khoan-su-dung" className="text-neutral-700 hover:text-[#002f6c] transition-colors font-medium">
               Điều khoản và điều kiện
             </Link>
-            <Link href="/chinh-sach-bao-mat" className="hover:text-neutral-800 transition-colors">
+            <Link href="/chinh-sach-bao-mat" className="text-neutral-700 hover:text-[#002f6c] transition-colors font-medium">
               Chính sách bảo mật
             </Link>
           </div>
