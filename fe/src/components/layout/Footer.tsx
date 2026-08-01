@@ -37,7 +37,7 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer className="bg-[#f8f9fa] text-neutral-800 pt-[50px] pb-[30px] px-4 lg:px-[80px] border-t border-neutral-200 mt-auto">
+    <footer className="bg-[#f8f9fa] text-neutral-800 pt-[50px] pb-28 md:pb-[30px] px-4 lg:px-[80px] border-t border-neutral-200 mt-auto">
       {/* Upper Grid Area */}
       <div className="max-w-[1152px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10 items-start mb-12">
         

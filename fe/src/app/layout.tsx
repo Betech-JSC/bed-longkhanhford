@@ -161,7 +161,7 @@ export default async function RootLayout({
         <Suspense fallback={null}>
           <PageTransitionLoader />
         </Suspense>
-        <main className="flex-1 flex flex-col pb-16 md:pb-0">{children}</main>
+        <main className="flex-1 flex flex-col pb-20 md:pb-0">{children}</main>
         <Footer />
         {/* <AIChatWidget /> */}
         {/* <CompareDrawer /> */}
