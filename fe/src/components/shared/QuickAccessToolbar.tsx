@@ -249,7 +249,7 @@ export default function QuickAccessToolbar() {
       </div>
 
       {/* Mobile Bottom Navigation Bar */}
-      <div className="grid grid-cols-5 md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#f0f2f5] border-t-2 border-[#002f6c] shadow-[0_-4px_20px_rgba(0,0,0,0.08)] select-none w-full pb-[calc(0.25rem+env(safe-area-inset-bottom,0px))]">
+      <div className="grid grid-cols-5 md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#f0f2f5] border-t-2 border-[#002f6c] shadow-[0_-4px_20px_rgba(0,0,0,0.08)] select-none w-full pb-[calc(0.25rem+env(safe-area-inset-bottom,0px))] [-webkit-tap-highlight-color:transparent]">
         {/* Lái thử */}
         <Link
           href="/dang-ky-lai-thu"

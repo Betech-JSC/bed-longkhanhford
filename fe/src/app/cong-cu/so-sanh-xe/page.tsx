@@ -696,7 +696,7 @@ export default function ComparePage() {
       </section>
 
       {/* Compare Content */}
-      <section className="py-10 md:py-14">
+      <section className="py-8 md:py-14 pb-24 md:pb-14">
         <div className="max-w-[1440px] mx-auto px-4 xl:px-[80px]">
           {selectedIds.length === 0 ? (
             <div className="bg-white rounded-2xl border border-gray-200 p-8 md:p-12 text-center max-w-2xl mx-auto shadow-sm">
@@ -764,43 +764,47 @@ export default function ComparePage() {
               </div>
 
               {/* Vehicle Selector Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
                 {selectedIds.map((id, index) => {
                   const opt = selectedCompareOptions[index];
                   return (
                     <div
                       key={index}
-                      className="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm relative"
+                      className="bg-white rounded-2xl border border-gray-200 p-4 sm:p-5 shadow-sm relative overflow-hidden"
                     >
-                      {/* Remove button */}
-                      <button
-                        onClick={() => handleRemove(index)}
-                        className="absolute -top-2.5 -right-2.5 w-6 h-6 rounded-full bg-white border border-gray-200 hover:bg-red-50 hover:text-red-500 flex items-center justify-center text-gray-400 transition-all cursor-pointer shadow-sm z-10 animate-fade-in"
-                      >
-                        <X className="w-3.5 h-3.5" />
-                      </button>
+                      {/* Vehicle Dropdown & Remove Button Row */}
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="relative flex-1 min-w-0">
+                          <select
+                            value={opt ? opt.key : id}
+                            onChange={(e) => handleSelect(index, e.target.value)}
+                            className="w-full appearance-none bg-gray-50 border border-gray-200 rounded-xl px-3 sm:px-4 py-2.5 pr-8 text-xs sm:text-sm font-bold text-[#1a1a1a] uppercase focus:outline-none focus:ring-2 focus:ring-[#0562d2] focus:border-transparent cursor-pointer truncate [-webkit-tap-highlight-color:transparent]"
+                          >
+                            {allVehicles.map((vehicle) => {
+                              const vehicleOptions = allCompareOptions.filter((o) => o.vehicleId === vehicle.id);
+                              return (
+                                <optgroup key={vehicle.id} label={vehicle.name.toUpperCase()} className="not-italic font-bold text-gray-700">
+                                  {vehicleOptions.map((o) => (
+                                    <option key={o.key} value={o.key} className="font-normal normal-case text-gray-900">
+                                      {o.versionName ? `${vehicle.name} - ${o.versionName}` : vehicle.name}
+                                    </option>
+                                  ))}
+                                </optgroup>
+                              );
+                            })}
+                          </select>
+                          <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                        </div>
 
-                      {/* Vehicle Dropdown */}
-                      <div className="relative mb-4">
-                        <select
-                          value={opt ? opt.key : id}
-                          onChange={(e) => handleSelect(index, e.target.value)}
-                          className="w-full appearance-none bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 pr-10 text-sm font-bold text-[#1a1a1a] uppercase focus:outline-none focus:ring-2 focus:ring-[#0562d2] focus:border-transparent cursor-pointer"
+                        {/* Remove button */}
+                        <button
+                          onClick={() => handleRemove(index)}
+                          className="w-9 h-9 rounded-xl bg-gray-100 hover:bg-red-50 text-gray-400 hover:text-red-500 flex items-center justify-center transition-all cursor-pointer flex-shrink-0 active:scale-95"
+                          title="Xóa xe này"
+                          aria-label="Xóa xe khỏi so sánh"
                         >
-                          {allVehicles.map((vehicle) => {
-                            const vehicleOptions = allCompareOptions.filter((o) => o.vehicleId === vehicle.id);
-                            return (
-                              <optgroup key={vehicle.id} label={vehicle.name.toUpperCase()} className="not-italic font-bold text-gray-700">
-                                {vehicleOptions.map((o) => (
-                                  <option key={o.key} value={o.key} className="font-normal normal-case text-gray-900">
-                                    {o.versionName ? `${vehicle.name} - ${o.versionName}` : vehicle.name}
-                                  </option>
-                                ))}
-                              </optgroup>
-                            );
-                          })}
-                        </select>
-                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                          <X className="w-4 h-4" />
+                        </button>
                       </div>
 
                       {/* Vehicle Preview */}
@@ -838,7 +842,7 @@ export default function ComparePage() {
                 {selectedIds.length < MAX_COMPARE && (
                   <button
                     onClick={handleAdd}
-                    className="bg-white rounded-2xl border-2 border-dashed border-gray-300 hover:border-[#0562d2] p-5 flex flex-col items-center justify-center gap-3 text-gray-400 hover:text-[#0562d2] transition-all cursor-pointer min-h-[280px]"
+                    className="bg-white rounded-2xl border-2 border-dashed border-gray-300 hover:border-[#0562d2] p-5 flex flex-col items-center justify-center gap-3 text-gray-400 hover:text-[#0562d2] transition-all cursor-pointer min-h-[220px]"
                   >
                     <Plus className="w-8 h-8" />
                     <span className="text-sm font-semibold">Thêm xe so sánh</span>
@@ -856,7 +860,7 @@ export default function ComparePage() {
               </div>
 
               {/* Specs Comparison Table Container */}
-              <div className="bg-white rounded-2xl border border-gray-200 overflow-x-auto shadow-sm relative w-full scrollbar-thin">
+              <div className="bg-white rounded-2xl border border-gray-200 overflow-x-auto shadow-sm relative w-full scrollbar-thin [-webkit-overflow-scrolling:touch]">
                 <div
                   className="grid min-w-[540px] md:min-w-full"
                   style={{
