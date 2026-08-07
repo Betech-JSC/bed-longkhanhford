@@ -116,10 +116,19 @@ export default function ArticleDetailClient({
           )}
 
           {/* Article Content Body */}
-          <div 
-            className="font-sans text-[#1a1a1a] leading-relaxed text-[16px] max-w-[760px] mx-auto w-full prose prose-blue font-antenna"
-            dangerouslySetInnerHTML={{ __html: article.content }}
-          />
+          {(() => {
+            const cleanContent = article.content 
+              ? article.content
+                  .replace(/<h1([^>]*)>/gi, '<h2$1>')
+                  .replace(/<\/h1>/gi, '</h2>')
+              : "";
+            return (
+              <div 
+                className="font-sans text-[#1a1a1a] leading-relaxed text-[16px] max-w-[760px] mx-auto w-full prose prose-blue font-antenna"
+                dangerouslySetInnerHTML={{ __html: cleanContent }}
+              />
+            );
+          })()}
 
           {/* Call to Action Booking Box */}
           <div className="bg-gray-50 rounded-none p-6 border border-gray-200 text-center flex flex-col items-center gap-4 mt-4 font-antenna">

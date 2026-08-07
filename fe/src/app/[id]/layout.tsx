@@ -83,21 +83,30 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
     if (!apiVehicle) return {};
 
-    const title = `${apiVehicle.title} | Giá & Thông số | Long Khánh Ford`;
-    const description = apiVehicle.tagline || `Khám phá chi tiết dòng xe Ford ${apiVehicle.title} chính hãng tại Long Khánh Ford. Nhận báo giá lăn bánh mới nhất.`;
+    const title = apiVehicle.seo_meta_title || `${apiVehicle.title} | Giá & Thông số | Long Khánh Ford`;
+    
+    // Fallback description incorporating tagline and vehicle title to prevent duplicate description tags
+    const fallbackDesc = apiVehicle.tagline 
+      ? `${apiVehicle.tagline} - Khám phá chi tiết dòng xe Ford ${apiVehicle.title} chính hãng tại Long Khánh Ford. Nhận báo giá lăn bánh mới nhất.`
+      : `Khám phá chi tiết dòng xe Ford ${apiVehicle.title} chính hãng tại Long Khánh Ford. Nhận báo giá lăn bánh mới nhất và ưu đãi đặc quyền.`;
+
+    const description = apiVehicle.seo_meta_description || fallbackDesc;
 
     return {
       title,
       description,
+      keywords: apiVehicle.seo_meta_keywords || "",
       alternates: {
-        canonical: `/${id}`,
+        canonical: apiVehicle.seo_canonical || `/${id}`,
       },
       openGraph: {
         title,
         description,
         type: "website",
         locale: "vi_VN",
-        images: apiVehicle.image_url ? [{ url: apiVehicle.image_url }] : [],
+        images: apiVehicle.seo_image 
+          ? [{ url: apiVehicle.seo_image }] 
+          : (apiVehicle.image_url ? [{ url: apiVehicle.image_url }] : []),
       },
     };
   } catch (error) {
