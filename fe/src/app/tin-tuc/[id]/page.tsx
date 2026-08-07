@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Props) {
       description,
       keywords: article.seo_keywords || "",
       alternates: {
-        canonical: `/${id}`,
+        canonical: `/tin-tuc/${id}`,
       },
       openGraph: {
         title,

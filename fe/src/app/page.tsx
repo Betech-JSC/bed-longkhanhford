@@ -82,7 +82,7 @@ export default async function Home() {
   const customerHandovers = Array.isArray(handoversItems)
     ? handoversItems.map((item: any) => ({
         ...item,
-        image_url: resolveImageUrl(item.image_url || item.image?.url || item.image || "/images/team/team_1.webp"),
+        image_url: resolveImageUrl(item.image_url || item.image?.url || item.image || "/images/team/team_1.jpg"),
       }))
     : [];
 
@@ -102,7 +102,7 @@ export default async function Home() {
     articles.push({
       id: item.slug || item.id || String(Math.random()),
       title: item.title || "",
-      image: resolveImageUrl(rawImg) || "/assets/everest_platinum.webp",
+      image: resolveImageUrl(rawImg) || "/assets/everest_platinum.jpg",
       published_at: item.published_at || "",
       category: item.category ? { title: item.category.title } : { title: "Tin tức" },
       description: item.description || item.excerpt || "",

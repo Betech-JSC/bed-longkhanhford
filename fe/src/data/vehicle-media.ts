@@ -22,7 +22,7 @@ export const vehicleMediaAssets: Record<string, VehicleMediaAssets> = {
     grid2: "/assets/territory-grid-2.webp",
     grid3: "/assets/territory-grid-3.webp",
     bannerLarge: "/assets/territory-interior.webp",
-    splitLeft: "/assets/territory-tech-split.webp",
+    splitLeft: "/assets/territory-tech-split.jpg",
     splitTitle: "Kết nối liền mạch cùng với trang bị màn hình đôi cỡ lớn",
     splitDesc:
       "Hệ thống kết nối không dây Apple CarPlay & Android Auto tích hợp màn hình kép kỹ thuật số 12.3 inch tạo không gian tương lai sang trọng.",
@@ -37,11 +37,11 @@ export const vehicleMediaAssets: Record<string, VehicleMediaAssets> = {
     promoDesc:
       "Tặng gói bảo hiểm vật chất 1 năm và ưu đãi 50% lệ phí trước bạ khi ký hợp đồng xe Ford Everest trong tháng.",
     promoImage: "/assets/car-everest.webp",
-    grid1: "/assets/img-gradient-1.webp",
+    grid1: "/assets/img-gradient-1.jpg",
     grid2: "/assets/img-gradient-2.webp",
     grid3: "/assets/img-gradient-3.webp",
     bannerLarge: "/assets/territory-interior.webp",
-    splitLeft: "/assets/territory-tech-split.webp",
+    splitLeft: "/assets/territory-tech-split.jpg",
     splitTitle: "Không gian nội thất hạng sang cùng cửa sổ trời toàn cảnh",
     splitDesc:
       "Khoang cabin 7 chỗ rộng rãi bọc da cao cấp, kết hợp cửa sổ trời toàn cảnh Panorama đem lại cảm giác thoáng đãng sang trọng.",
@@ -60,7 +60,7 @@ export const vehicleMediaAssets: Record<string, VehicleMediaAssets> = {
     grid2: "/assets/img-gradient-3.webp",
     grid3: "/assets/img-gradient.webp",
     bannerLarge: "/assets/territory-interior.webp",
-    splitLeft: "/assets/territory-tech-split.webp",
+    splitLeft: "/assets/territory-tech-split.jpg",
     splitTitle: "Bảng điều khiển trung tâm tối giản kết nối SYNC 4A",
     splitDesc:
       "Màn hình cảm ứng dọc 15.5 inch điều khiển toàn bộ tính năng xe, học hỏi thói quen người dùng bằng trí tuệ nhân tạo.",
@@ -75,11 +75,11 @@ export const vehicleMediaAssets: Record<string, VehicleMediaAssets> = {
     promoDesc:
       "Tặng nắp thùng cuộn điện chính hãng và gói phụ kiện offroad chuyên dụng cho các hợp đồng giao xe nhanh.",
     promoImage: "/assets/car-ranger.webp",
-    grid1: "/assets/img-gradient-1.webp",
+    grid1: "/assets/img-gradient-1.jpg",
     grid2: "/assets/img-gradient-3.webp",
     grid3: "/assets/img-gradient.webp",
     bannerLarge: "/assets/territory-interior.webp",
-    splitLeft: "/assets/territory-tech-split.webp",
+    splitLeft: "/assets/territory-tech-split.jpg",
     splitTitle: "Bộ giảm xóc FOX Racing Live Valve đỉnh cao",
     splitDesc:
       "Hệ thống treo FOX kiểm soát hành trình chủ động thích ứng với địa hình 500 lần/giây, đem lại cảm giác êm ái hoàn hảo.",
@@ -95,10 +95,10 @@ export const vehicleMediaAssets: Record<string, VehicleMediaAssets> = {
       "Hỗ trợ lệ phí trước bạ lên đến 100% cùng chương trình vay lãi suất đặc quyền cố định dài hạn tại Long Khánh Ford.",
     promoImage: "/assets/car-transit.webp",
     grid1: "/assets/img-gradient-3.webp",
-    grid2: "/assets/img-gradient-1.webp",
+    grid2: "/assets/img-gradient-1.jpg",
     grid3: "/assets/img-gradient-2.webp",
     bannerLarge: "/assets/territory-interior.webp",
-    splitLeft: "/assets/territory-tech-split.webp",
+    splitLeft: "/assets/territory-tech-split.jpg",
     splitTitle: "Không gian cabin linh hoạt, tiện nghi chuẩn 16 chỗ",
     splitDesc:
       "Thiết kế trần xe cao và lối đi rộng rãi kết hợp các cổng sạc USB phân bổ đều khắp các hàng ghế mang lại tiện nghi vượt trội.",

@@ -29,6 +29,7 @@ export default function VehicleCompareClient() {
 
   return (
     <div className="bg-[#ffffff] text-[#1a1a1a] font-sans pb-24">
+      <h1 className="sr-only">So sánh xe Ford {vehicle.name}</h1>
       <VehicleTabBar />
       {/* Specs Grid Blocks */}
       <div className="space-y-16">

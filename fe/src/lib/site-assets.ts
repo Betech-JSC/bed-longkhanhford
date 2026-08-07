@@ -1,28 +1,28 @@
 export const siteAssets = {
   heroSlides: [
-    "/images-dynamic/image-hero-1.webp",
-    "/images-dynamic/ford_ranger_banner.webp",
+    "/images-dynamic/image-hero-1.jpg",
+    "/images-dynamic/ford_ranger_banner.jpg",
     "/images-dynamic/image-hero-3.webp",
   ],
   showroomBg: "/showroom_bg.webp",
   serviceBannerBg: "/assets/service-banner-bg.webp",
   serviceBannerFg: "/assets/service-banner-fg.webp",
   serviceBanners: {
-    periodic: "/assets/service-periodic-banner.webp",
-    express: "/assets/service-express-banner.webp",
-    delivery: "/assets/service-delivery-banner.webp",
-    customerCare: "/assets/service-customer-banner.webp",
-    repair: "/assets/service-repair-banner.webp",
-    roadside: "/assets/service-roadside-banner.webp",
-    usedCars: "/assets/service-usedcars-banner.webp",
-    upgrade: "/assets/service-upgrade-banner.webp",
+    periodic: "/assets/service-periodic-banner.jpg",
+    express: "/assets/service-express-banner.jpg",
+    delivery: "/assets/service-delivery-banner.jpg",
+    customerCare: "/assets/service-customer-banner.jpg",
+    repair: "/assets/service-repair-banner.jpg",
+    roadside: "/assets/service-roadside-banner.jpg",
+    usedCars: "/assets/service-usedcars-banner.jpg",
+    upgrade: "/assets/service-upgrade-banner.jpg",
   },
-  serviceCustomerCare: "/service-support-customer.webp",
-  serviceMaintenance: "/service-fixed-car.webp",
+  serviceCustomerCare: "/service-support-customer.jpg",
+  serviceMaintenance: "/service-fixed-car.jpg",
   serviceDelivery: "/service-delivery.webp",
   bookingCar: "/assets/booking-car.webp",
-  qualityCareBadge: "/assets/quality-care-circle.webp",
-  expressFlow: "/assets/express-maintenance-flow.webp",
+  qualityCareBadge: "/assets/quality-care-circle.jpg",
+  expressFlow: "/assets/express-maintenance-flow.jpg",
   carPlaceholder: "/assets/mach-e-hero.webp",
   ourStoryBanner: "/showroom_bg.webp",
   testDriveBg: "/assets/test-drive-bg.webp",
@@ -33,11 +33,11 @@ export const siteAssets = {
 
 export const aboutAssets = {
   hero: "/showroom_bg.webp",
-  ourStory: "/images-dynamic/image-hero-1.webp",
+  ourStory: "/images-dynamic/image-hero-1.jpg",
   history: "/images-dynamic/image-hero-2.webp",
-  facilities: "/service-fixed-car.webp",
+  facilities: "/service-fixed-car.jpg",
   visionGallery: [
-    "/assets/img-gradient-1.webp",
+    "/assets/img-gradient-1.jpg",
     "/assets/img-gradient-2.webp",
     "/assets/img-gradient-3.webp",
     "/assets/img-gradient.webp",
@@ -45,19 +45,19 @@ export const aboutAssets = {
 } as const;
 
 export const popularVehicleImages: Record<string, string> = {
-  "ford-territory": "/assets/territory-hero.webp",
-  "ford-everest": "/assets/everest_platinum.webp",
+  "ford-territory": "/assets/territory-hero.jpg",
+  "ford-everest": "/assets/everest_platinum.jpg",
   "new-mustang-mach-e": "/assets/mach-e-hero.webp",
   "ford-mustang-mach-e": "/assets/mach-e-hero.webp",
-  "ford-ranger": "/assets/ranger_wildtrak.webp",
-  "ford-ranger-2026": "/assets/ranger_wildtrak.webp",
+  "ford-ranger": "/assets/ranger_wildtrak.jpg",
+  "ford-ranger-2026": "/assets/ranger_wildtrak.jpg",
   "ford-ranger-raptor": "/assets/ranger_raptor.webp",
   "ford-ranger-raptor-2026": "/assets/ranger_raptor.webp",
   "ford-range-raptor-2026": "/assets/ranger_raptor.webp",
-  "ford-transit-2024": "/assets/transit_premium.webp",
-  "ford-transit": "/assets/transit_premium.webp",
-  "mustang-fastback": "/assets/mustang_dark_horse.webp",
-  "ford-mustang": "/assets/mustang_dark_horse.webp",
+  "ford-transit-2024": "/assets/transit_premium.jpg",
+  "ford-transit": "/assets/transit_premium.jpg",
+  "mustang-fastback": "/assets/mustang_dark_horse.jpg",
+  "ford-mustang": "/assets/mustang_dark_horse.jpg",
 };
 
 export function getPopularVehicleImage(vehicleId: string, fallback?: string) {
@@ -89,6 +89,20 @@ export const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event
 };
 
 export const resolveImageUrl = (img: string | { url?: string; path?: string; static_url?: string } | null | undefined): string => {
+  const getBaseDomain = (): string => {
+    if (process.env.NEXT_PUBLIC_API_URL) {
+      return process.env.NEXT_PUBLIC_API_URL.replace(/\/api\/?$/, "");
+    }
+    if (typeof window !== "undefined") {
+      if (window.location.hostname.includes("longkhanhford")) {
+        return "https://cms.longkhanhford.betech-digital.com";
+      }
+      return window.location.origin;
+    }
+    return "https://cms.longkhanhford.betech-digital.com";
+  };
+  const baseDomain = getBaseDomain();
+
   if (!img) return "";
   let path = "";
   if (typeof img === "string") {

@@ -105,7 +105,7 @@ export default function VehicleDetailClient() {
               tagline: vehicle.tagline || "Cơ hội vàng. Sẵn sàng rước xế.",
               button_text: "Đăng ký lái thử",
               button_link: "#drive",
-              background_image: vehicle.images?.[0] || vehicle.image_url || "/assets/territory-hero.webp"
+              background_image: vehicle.images?.[0] || vehicle.image_url || "/assets/territory-hero.jpg"
             }
           },
           {
@@ -121,13 +121,13 @@ export default function VehicleDetailClient() {
             type: "FeaturesGrid",
             data: {
               title_1: "Thiết kế ấn tượng, khẳng định vị thế vượt trội",
-              image_1: vehicle.images?.[1] || vehicle.image_url || "/assets/territory-hero.webp",
-              image_2: vehicle.images?.[2] || vehicle.image_url || "/assets/territory-tech-split.webp",
+              image_1: vehicle.images?.[1] || vehicle.image_url || "/assets/territory-hero.jpg",
+              image_2: vehicle.images?.[2] || vehicle.image_url || "/assets/territory-tech-split.jpg",
               image_3: vehicle.images?.[3] || vehicle.image_url || "/assets/territory-promo.webp",
               title_2: "Không không gian lái thông minh rộng rãi",
               image_large: vehicle.images?.[4] || vehicle.image_url || "/assets/territory-interior.webp",
               title_3: "Nâng tầm tiện nghi & Công nghệ kết nối",
-              split_image: vehicle.images?.[0] || vehicle.image_url || "/assets/territory-tech-split.webp",
+              split_image: vehicle.images?.[0] || vehicle.image_url || "/assets/territory-tech-split.jpg",
               split_title: "Tiện nghi thông minh",
               split_features: [
                 { value: vehicle.versions?.[0]?.specs?.engine || "Động cơ", label: "Động cơ Ford thế hệ mới tối ưu" },
@@ -195,11 +195,11 @@ export default function VehicleDetailClient() {
   const handleAddBlock = (type: string) => {
     let newBlock = { type, data: {} as any };
     if (type === "HeroBanner") {
-      newBlock.data = { title: vehicle?.name || "Ford Vehicle", tagline: "Tagline giới thiệu", button_text: "Đặt lịch hẹn", button_link: "/lien-he", background_image: "/assets/territory-hero.webp" };
+      newBlock.data = { title: vehicle?.name || "Ford Vehicle", tagline: "Tagline giới thiệu", button_text: "Đặt lịch hẹn", button_link: "/lien-he", background_image: "/assets/territory-hero.jpg" };
     } else if (type === "Promotions") {
       newBlock.data = { title: "Chương trình ưu đãi", description: "Mô tả ngắn khuyến mãi", image: "/assets/img-gradient-2.webp", button_text: "Nhận báo giá" };
     } else if (type === "FeaturesGrid") {
-      newBlock.data = { title_1: "Thiết kế ấn tượng", image_1: "/assets/territory-hero.webp", image_2: "/assets/territory-tech-split.webp", image_3: "/assets/territory-promo.webp", title_2: "Tiện nghi", image_large: "/assets/territory-interior.webp", title_3: "Công nghệ", split_image: "/assets/territory-tech-split.webp", split_title: "Chi tiết", split_features: [] };
+      newBlock.data = { title_1: "Thiết kế ấn tượng", image_1: "/assets/territory-hero.jpg", image_2: "/assets/territory-tech-split.jpg", image_3: "/assets/territory-promo.webp", title_2: "Tiện nghi", image_large: "/assets/territory-interior.webp", title_3: "Công nghệ", split_image: "/assets/territory-tech-split.jpg", split_title: "Chi tiết", split_features: [] };
     } else if (type === "VersionsGrid") {
       newBlock.data = { title: "Các phiên bản xe", descriptions: [] };
     } else if (type === "SpecsGrid") {

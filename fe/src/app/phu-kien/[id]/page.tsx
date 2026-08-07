@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { accessoriesAPI } from "@/lib/api";
 import AccessoryDetailClient from "@/components/accessories/AccessoryDetailClient";
 
@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props) {
       title,
       description,
       alternates: {
-        canonical: `/phu-kien/${id}`,
+        canonical: `/phu-kien/${accessory.slug || id}`,
       },
       openGraph: {
         title,
@@ -63,6 +63,11 @@ export default async function Page({ params }: Props) {
 
   if (!accessory) {
     notFound();
+  }
+
+  // Redirect 308 if accessed via numeric ID instead of slug to resolve duplicate URLs
+  if (accessory.slug && id !== accessory.slug) {
+    permanentRedirect(`/phu-kien/${accessory.slug}`);
   }
 
   return (

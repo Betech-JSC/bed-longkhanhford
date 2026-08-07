@@ -45,7 +45,7 @@ export default function GenericServiceLayout({ service }: { service: ServiceDeta
   const [activeTab, setActiveTab] = useState(0);
   const [activeSlide, setActiveSlide] = useState(0);
 
-  const sImg = service.image?.url || "/service-support-customer.webp";
+  const sImg = service.image?.url || "/service-support-customer.jpg";
   const tabs = service.content_by_tab || [];
   const benefits = service.benefits || [];
   const sliders = service.sliders || [];

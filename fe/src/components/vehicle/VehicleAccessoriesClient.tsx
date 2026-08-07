@@ -153,7 +153,7 @@ export default function VehicleAccessoriesClient() {
   };
 
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-    e.currentTarget.src = "/assets/img-gradient-1.webp";
+    e.currentTarget.src = "/assets/img-gradient-1.jpg";
   };
 
   // Extract unique brands dynamically
@@ -360,7 +360,7 @@ export default function VehicleAccessoriesClient() {
                   >
                     <div className="aspect-square relative bg-gray-50 overflow-hidden">
                       <img
-                        src={item.images[0] || "/assets/img-gradient-1.webp"}
+                        src={item.images[0] || "/assets/img-gradient-1.jpg"}
                         alt={item.name}
                         className="object-cover w-full h-full group-hover:scale-[1.03] transition-transform duration-500"
                         onError={handleImageError}

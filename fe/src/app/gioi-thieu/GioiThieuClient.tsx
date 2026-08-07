@@ -13,17 +13,17 @@ interface TeamCard {
 }
 
 const row1Cards: TeamCard[] = [
-  { id: "r1-1", name: "Lễ Bàn Giao Xe Mới Cho Khách Hàng", image: "/images/team/team_1.webp", link: "/lien-he" },
-  { id: "r1-2", name: "Đội Ngũ Tư Vấn Bán Hàng Chuyên Nghiệp", image: "/images/team/team_3.webp", link: "/lien-he" },
-  { id: "r1-3", name: "Sự Kiện Trưng Bày & Trải Nghiệm Lái Thử Xe", image: "/images/team/team_2.webp", link: "/dang-ky-lai-thu" },
-  { id: "r1-4", name: "Lễ Bàn Giao Xe Cho Khách Hàng", image: "/images/team/team_1.webp", link: "/lien-he" },
+  { id: "r1-1", name: "Lễ Bàn Giao Xe Mới Cho Khách Hàng", image: "/images/team/team_1.jpg", link: "/lien-he" },
+  { id: "r1-2", name: "Đội Ngũ Tư Vấn Bán Hàng Chuyên Nghiệp", image: "/images/team/team_3.jpg", link: "/lien-he" },
+  { id: "r1-3", name: "Sự Kiện Trưng Bày & Trải Nghiệm Lái Thử Xe", image: "/images/team/team_2.jpg", link: "/dang-ky-lai-thu" },
+  { id: "r1-4", name: "Lễ Bàn Giao Xe Cho Khách Hàng", image: "/images/team/team_1.jpg", link: "/lien-he" },
 ];
 
 const row2Cards: TeamCard[] = [
-  { id: "r2-1", name: "Hệ Thống Showroom Hiện Đại", image: "/images/about/image-introduce.webp", link: "/lien-he" },
-  { id: "r2-2", name: "Xưởng Dịch Vụ Đạt Chuẩn Brand@Retail", image: "/images/about/showroom-entrance.webp", link: "/lien-he" },
-  { id: "r2-3", name: "Trang Thiết Bị Sửa Chữa Chuyên Dụng", image: "/images/about/image-about-2.webp", link: "/lien-he" },
-  { id: "r2-4", name: "Không Gian Trưng Bày Xe Cao Cấp", image: "/images/about/image-vision-1.webp", link: "/lien-he" },
+  { id: "r2-1", name: "Hệ Thống Showroom Hiện Đại", image: "/images/about/image-introduce.jpg", link: "/lien-he" },
+  { id: "r2-2", name: "Xưởng Dịch Vụ Đạt Chuẩn Brand@Retail", image: "/images/about/showroom-entrance.jpg", link: "/lien-he" },
+  { id: "r2-3", name: "Trang Thiết Bị Sửa Chữa Chuyên Dụng", image: "/images/about/image-about-2.jpg", link: "/lien-he" },
+  { id: "r2-4", name: "Không Gian Trưng Bày Xe Cao Cấp", image: "/images/about/image-vision-1.jpg", link: "/lien-he" },
 ];
 
 function ScrollReveal({
@@ -167,13 +167,13 @@ export default function GioiThieuClient({ initialJobs, initialTeamImages }: Gioi
 
   const getPageGalleryImages = useCallback(() => {
     const staticList = [
-      { src: "/images/about/image-introduce.webp", title: "Tập thể đội ngũ & Ban lãnh đạo Long Khánh Ford" },
-      { src: "/images/about/showroom-entrance.webp", title: "Showroom trưng bày xe Long Khánh Ford" },
-      { src: "/images/about/image-about-2.webp", title: "Khoang xưởng dịch vụ sửa chữa Brand@Retail" },
-      { src: "/images/about/image-vision-1.webp", title: "Đội ngũ nhân sự Long Khánh Ford" },
-      { src: "/images/about/image-vision-2.webp", title: "Lễ tân & Đón tiếp khách hàng" },
-      { src: "/images/about/image-vision-3.webp", title: "Tư vấn sản phẩm chuyên nghiệp" },
-      { src: "/images/about/image-vision-4.webp", title: "Sự kiện tri ân khách hàng" },
+      { src: "/images/about/image-introduce.jpg", title: "Tập thể đội ngũ & Ban lãnh đạo Long Khánh Ford" },
+      { src: "/images/about/showroom-entrance.jpg", title: "Showroom trưng bày xe Long Khánh Ford" },
+      { src: "/images/about/image-about-2.jpg", title: "Khoang xưởng dịch vụ sửa chữa Brand@Retail" },
+      { src: "/images/about/image-vision-1.jpg", title: "Đội ngũ nhân sự Long Khánh Ford" },
+      { src: "/images/about/image-vision-2.jpg", title: "Lễ tân & Đón tiếp khách hàng" },
+      { src: "/images/about/image-vision-3.jpg", title: "Tư vấn sản phẩm chuyên nghiệp" },
+      { src: "/images/about/image-vision-4.jpg", title: "Sự kiện tri ân khách hàng" },
     ];
 
     const teamList = [...teamRow1, ...teamRow2].map((card) => ({
@@ -341,7 +341,7 @@ export default function GioiThieuClient({ initialJobs, initialTeamImages }: Gioi
       {/* SECTION 1: HERO BANNER (Full-width image only with slow zoom & badge overlay) */}
       <section className="relative w-full h-[400px] md:h-[600px] lg:h-[680px] bg-gray-100 overflow-hidden border-b border-[#e5e5e5] group">
         <img
-          src="/images/about/banner.webp"
+          src="/images/about/banner.jpg"
           alt="Long Khánh Ford Showroom"
           className="w-full h-full object-cover object-center group-hover:scale-[1.03] transition-transform duration-1000 ease-out"
         />
@@ -381,11 +381,11 @@ export default function GioiThieuClient({ initialJobs, initialTeamImages }: Gioi
               {/* Showroom Image */}
               <ScrollReveal delay={200}>
                 <div
-                  onClick={() => handleImageClick("/images/about/image-introduce.webp")}
+                  onClick={() => handleImageClick("/images/about/image-introduce.jpg")}
                   className="relative w-full aspect-[16/9] rounded-none overflow-hidden border border-[#e5e5e5] group cursor-pointer"
                 >
                   <img
-                    src="/images/about/image-introduce.webp"
+                    src="/images/about/image-introduce.jpg"
                     alt="Showroom Long Khánh Ford"
                     className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
                   />
@@ -443,11 +443,11 @@ export default function GioiThieuClient({ initialJobs, initialTeamImages }: Gioi
             <div className="lg:col-span-5 flex">
               <ScrollReveal direction="left" delay={200} className="w-full">
                 <div
-                  onClick={() => handleImageClick("/images/about/showroom-entrance.webp")}
+                  onClick={() => handleImageClick("/images/about/showroom-entrance.jpg")}
                   className="w-full aspect-[4/5] relative rounded-none overflow-hidden border border-[#e5e5e5] group cursor-pointer"
                 >
                   <img
-                    src="/images/about/showroom-entrance.webp"
+                    src="/images/about/showroom-entrance.jpg"
                     alt="Showroom Long Khánh Ford"
                     className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
                   />
@@ -474,11 +474,11 @@ export default function GioiThieuClient({ initialJobs, initialTeamImages }: Gioi
             <div className="lg:col-span-5 flex">
               <ScrollReveal direction="right" delay={100} className="w-full">
                 <div
-                  onClick={() => handleImageClick("/images/about/image-about-2.webp")}
+                  onClick={() => handleImageClick("/images/about/image-about-2.jpg")}
                   className="w-full aspect-[4/5] relative rounded-none overflow-hidden border border-[#e5e5e5] group cursor-pointer"
                 >
                   <img
-                    src="/images/about/image-about-2.webp"
+                    src="/images/about/image-about-2.jpg"
                     alt="Xưởng dịch vụ Long Khánh Ford"
                     className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
                   />
@@ -561,11 +561,11 @@ export default function GioiThieuClient({ initialJobs, initialTeamImages }: Gioi
               {/* Primary tall card */}
               <ScrollReveal delay={100} className="w-full md:w-[45%]">
                 <div
-                  onClick={() => handleImageClick("/images/about/image-vision-1.webp")}
+                  onClick={() => handleImageClick("/images/about/image-vision-1.jpg")}
                   className="w-full aspect-[3/4] relative rounded-none overflow-hidden border border-[#e5e5e5] bg-gray-100 group cursor-pointer h-full"
                 >
                   <img
-                    src="/images/about/image-vision-1.webp"
+                    src="/images/about/image-vision-1.jpg"
                     alt="Vision Gallery Left"
                     className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
                   />
@@ -585,11 +585,11 @@ export default function GioiThieuClient({ initialJobs, initialTeamImages }: Gioi
                 {/* Horizontal image */}
                 <ScrollReveal delay={200}>
                   <div
-                    onClick={() => handleImageClick("/images/about/image-vision-2.webp")}
+                    onClick={() => handleImageClick("/images/about/image-vision-2.jpg")}
                     className="w-full aspect-[2/1] relative rounded-none overflow-hidden border border-[#e5e5e5] bg-gray-100 group cursor-pointer"
                   >
                     <img
-                      src="/images/about/image-vision-2.webp"
+                      src="/images/about/image-vision-2.jpg"
                       alt="Vision Gallery Top Right"
                       className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
                     />
@@ -608,11 +608,11 @@ export default function GioiThieuClient({ initialJobs, initialTeamImages }: Gioi
                 <div className="grid grid-cols-2 gap-3 flex-1">
                   <ScrollReveal delay={300} className="h-full">
                     <div
-                      onClick={() => handleImageClick("/images/about/image-vision-3.webp")}
+                      onClick={() => handleImageClick("/images/about/image-vision-3.jpg")}
                       className="relative rounded-none overflow-hidden border border-[#e5e5e5] bg-gray-100 h-full min-h-[140px] group cursor-pointer"
                     >
                       <img
-                        src="/images/about/image-vision-3.webp"
+                        src="/images/about/image-vision-3.jpg"
                         alt="Vision Gallery Bottom Left"
                         className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
                       />
@@ -629,11 +629,11 @@ export default function GioiThieuClient({ initialJobs, initialTeamImages }: Gioi
 
                   <ScrollReveal delay={400} className="h-full">
                     <div
-                      onClick={() => handleImageClick("/images/about/image-vision-4.webp")}
+                      onClick={() => handleImageClick("/images/about/image-vision-4.jpg")}
                       className="relative rounded-none overflow-hidden border border-[#e5e5e5] bg-gray-100 h-full min-h-[140px] group cursor-pointer"
                     >
                       <img
-                        src="/images/about/image-vision-4.webp"
+                        src="/images/about/image-vision-4.jpg"
                         alt="Vision Gallery Bottom Right"
                         className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
                       />

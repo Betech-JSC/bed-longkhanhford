@@ -214,7 +214,7 @@ function TestDriveFormContent({ initialVehicles }: { initialVehicles?: any[] }) 
           alt="Đăng ký lái thử xe Ford"
           className="object-cover w-full h-full"
           src={siteAssets.testDriveBg || "/assets/test-drive-bg.webp"}
-          fallbackSrc="/images-dynamic/ford_ranger_banner.webp"
+          fallbackSrc="/images-dynamic/ford_ranger_banner.jpg"
           fill
           priority
           sizes="(max-width: 1440px) 100vw, 1152px"

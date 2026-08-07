@@ -78,7 +78,7 @@ export default function VehicleUpgradeLayout({ service }: { service?: any }) {
   };
 
   const handleImageError = (e: any) => {
-    e.target.src = "/assets/img-gradient-1.webp";
+    e.target.src = "/assets/img-gradient-1.jpg";
   };
 
   return (
@@ -140,7 +140,7 @@ export default function VehicleUpgradeLayout({ service }: { service?: any }) {
               const catName = item.category_name || item.categories?.[0]?.title || "Phụ kiện cao cấp";
               
               // Get first image url safely
-              const firstImgUrl = item.images?.[0]?.url || item.image?.url || item.image_url || "/assets/img-gradient-1.webp";
+              const firstImgUrl = item.images?.[0]?.url || item.image?.url || item.image_url || "/assets/img-gradient-1.jpg";
               const resolvedImg = resolveImageUrl(firstImgUrl);
 
               return (

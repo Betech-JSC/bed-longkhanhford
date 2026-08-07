@@ -114,21 +114,21 @@ const techItems = [
   {
     title: "FordPass™",
     description: "Kết nối điện thoại của bạn với xe Ford thế hệ mới để khởi động từ xa, định vị xe, kiểm tra áp suất lốp và mức nhiên liệu trực quan ngay trên ứng dụng di động.",
-    image: "/assets/tech_fordpass.webp",
+    image: "/assets/tech_fordpass.jpg",
     buttonText: "Khám phá ứng dụng",
     link: "/dich-vu/fordpass"
   },
   {
     title: "Ford Co-Pilot360",
     description: "Hệ thống hỗ trợ người lái tiên tiến trên các dòng xe Ford mới giúp bạn tự tin di chuyển nhờ cảnh báo va chạm, giữ làn đường và hỗ trợ đỗ xe chủ động.",
-    image: "/assets/tech_copilot360.webp",
+    image: "/assets/tech_copilot360.jpg",
     buttonText: "Đăng ký lái thử",
     link: "/dang-ky-lai-thu"
   },
   {
     title: "SYNC® 4",
     description: "Màn hình cảm ứng cỡ lớn tích hợp bản đồ dẫn đường thông minh, kết nối không dây Apple CarPlay / Android Auto cùng tính năng ra lệnh giọng nói tiện lợi.",
-    image: "/assets/territory-tech-split.webp",
+    image: "/assets/territory-tech-split.jpg",
     buttonText: "Khám phá Ford SYNC®",
     link: "/dich-vu/ford-sync"
   }
@@ -140,7 +140,7 @@ const INITIAL_BRAND_ITEMS = [
     category: "Ford Everest Mới",
     slogan: "Dấn Bước. Dẫn Đầu.",
     description: "Dòng SUV 7 chỗ sang trọng và mạnh mẽ hàng đầu, trang bị động cơ Bi-Turbo tối tân cùng hệ dẫn động 2 cầu chủ động giúp bạn tự tin chinh phục mọi cung đường hiểm trở.",
-    image: "/assets/everest_platinum.webp",
+    image: "/assets/everest_platinum.jpg",
     link: "/lien-he"
   },
   {
@@ -148,7 +148,7 @@ const INITIAL_BRAND_ITEMS = [
     category: "Ford Ranger Mới",
     slogan: "Bản Lĩnh. Thách Thức.",
     description: "Vua bán tải - Thiết kế cơ bắp, thông minh và vô cùng bền bỉ. Đáp ứng hoàn hảo từ nhu cầu chuyên chở công việc cho đến những hành trình khám phá mạo hiểm.",
-    image: "/assets/ranger_wildtrak.webp",
+    image: "/assets/ranger_wildtrak.jpg",
     link: "/lien-he"
   },
   {
@@ -156,7 +156,7 @@ const INITIAL_BRAND_ITEMS = [
     category: "Ford Territory Mới",
     slogan: "Thông Minh. Tiện Nghi.",
     description: "SUV 5 chỗ thông minh mang đậm hơi thở đô thị. Thiết kế sang trọng, không gian cabin kỹ thuật số hiện đại cùng gói công nghệ an toàn chủ động Co-Pilot360™.",
-    image: "/assets/territory-hero.webp",
+    image: "/assets/territory-hero.jpg",
     link: "/lien-he"
   },
   {
@@ -573,7 +573,7 @@ export default function HomeClient({
                 fetchPriority={idx === 0 ? "high" : "low"}
                 decoding="async"
                 onError={(e) => {
-                  (e.target as HTMLImageElement).src = "/images-dynamic/image-hero-1.webp";
+                  (e.target as HTMLImageElement).src = "/images-dynamic/image-hero-1.jpg";
                 }}
                 className="hidden md:block object-cover w-full h-full object-top transform transition-transform duration-10000"
               />
@@ -585,7 +585,7 @@ export default function HomeClient({
                 fetchPriority={idx === 0 ? "high" : "low"}
                 decoding="async"
                 onError={(e) => {
-                  (e.target as HTMLImageElement).src = "/images-dynamic/image-hero-1.webp";
+                  (e.target as HTMLImageElement).src = "/images-dynamic/image-hero-1.jpg";
                 }}
                 className="block md:hidden object-cover w-full h-full object-center transform transition-transform duration-10000"
               />

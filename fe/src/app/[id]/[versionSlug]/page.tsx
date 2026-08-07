@@ -48,7 +48,7 @@ export async function generateMetadata({ params }: Props) {
       ? `${vehicleName} ${versionDisplayName} | Thông số & Giá lăn bánh | Long Khánh Ford`
       : `${vehicleName} | Thông số & Giá lăn bánh | Long Khánh Ford`;
 
-    const description = matchedVersion?.description || vehicle.tagline || `Khám phá chi tiết phiên bản Ford ${vehicleName} ${versionDisplayName} chính hãng tại Long Khánh Ford. Nhận báo giá lăn bánh mới nhất.`;
+    const description = matchedVersion?.description || `Khám phá chi tiết phiên bản Ford ${vehicleName} ${versionDisplayName} chính hãng tại Long Khánh Ford. Nhận báo giá lăn bánh mới nhất và chi tiết thông số kỹ thuật.`;
 
     let imageUrl = "";
     if (matchedVersion && matchedVersion.image_url) {

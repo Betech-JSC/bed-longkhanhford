@@ -15,12 +15,25 @@ export const metadata: Metadata = {
   },
 };
 
+type ProductsPageProps = {
+  initialCategory?: string;
+  searchParams?: Promise<{ category?: string }>;
+};
+
 /**
  * Sản phẩm — Server Component (SSR)
  */
-export default async function ProductsPage() {
+export default async function ProductsPage({ initialCategory, searchParams }: ProductsPageProps = {}) {
   let initialVehicles: any[] = [];
   let initialCategories: any[] = [];
+
+  let resolvedCategory = initialCategory;
+  if (!resolvedCategory && searchParams) {
+    const sp = await searchParams.catch(() => null);
+    if (sp?.category) {
+      resolvedCategory = sp.category;
+    }
+  }
 
   try {
     const [vehiclesRes, catsRes] = await Promise.all([
@@ -41,6 +54,7 @@ export default async function ProductsPage() {
     <SanPhamClient
       initialVehicles={initialVehicles}
       initialCategories={initialCategories}
+      initialCategory={resolvedCategory}
     />
   );
 }

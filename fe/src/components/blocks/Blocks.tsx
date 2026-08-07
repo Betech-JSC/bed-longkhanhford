@@ -628,9 +628,9 @@ function SpecsGridBlock({ data, vehicle, isEditMode, onChangeData, openQuoteDraw
     name: ver.name,
     price: ver.price,
     image: resolveImageUrl(ver.image_thumbnail_url || ver.image_url || ver.image || vehicle.image_thumbnail_url || vehicle.image_url || vehicle.images?.[idx] || vehicle.images?.[0] || (idx === 0
-      ? "/assets/territory-hero.webp"
+      ? "/assets/territory-hero.jpg"
       : idx === 1
-        ? "/assets/territory-tech-split.webp"
+        ? "/assets/territory-tech-split.jpg"
         : "/assets/territory-promo.webp")),
     specs: ver.specs || {},
     isExternal: false
@@ -2116,7 +2116,7 @@ function VersionsGridBlock({ data, vehicle, isEditMode, onChangeData, anchorId, 
 
               // Quyết định ảnh: Lấy ảnh đại diện (thumbnail) của phiên bản nếu có, nếu không lấy ảnh đặc trưng, nếu không lấy ảnh trong images array theo index, nếu không lấy ảnh chính của xe
               const versionImage = ver.image_thumbnail_url || ver.image_url || vehicle?.images?.[idx] || vehicle?.images?.[0] || vehicle?.image;
-              const imgUrl = mounted ? resolveImageUrl(versionImage) : "/assets/img-gradient-1.webp";
+              const imgUrl = mounted ? resolveImageUrl(versionImage) : "/assets/img-gradient-1.jpg";
 
               return (
                 <div
@@ -2176,7 +2176,7 @@ function BookingBannerBlock({ blockIndex, data, vehicle, isEditMode, onChangeDat
   const btnText = data.btn_text || "Đặt lịch hẹn";
   const btnLink = data.btn_link || "/lien-he";
   const hasCarImage = hasImageField(data.car_image) || vehicle?.image_url;
-  const carImage = hasImageField(data.car_image) ? resolveImageUrl(data.car_image) : "/assets/everest_platinum.webp";
+  const carImage = hasImageField(data.car_image) ? resolveImageUrl(data.car_image) : "/assets/everest_platinum.jpg";
 
   const handleUploadCarImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

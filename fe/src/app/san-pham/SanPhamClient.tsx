@@ -32,16 +32,19 @@ const staticCategories = [
 export interface SanPhamClientProps {
   initialVehicles?: any[];
   initialCategories?: any[];
+  initialCategory?: string;
 }
 
-export default function SanPhamClient({ initialVehicles, initialCategories }: SanPhamClientProps) {
+export default function SanPhamClient({ initialVehicles, initialCategories, initialCategory }: SanPhamClientProps) {
   const [apiVehicles, setApiVehicles] = useState<any[]>(initialVehicles || []);
   const [apiCategories, setApiCategories] = useState<any[]>(initialCategories || []);
   const [loading, setLoading] = useState(!initialVehicles?.length);
 
   // Filter States
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(
+    initialCategory ? [initialCategory] : []
+  );
   const [priceRange, setPriceRange] = useState<string | null>(null);
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const [selectedFuels, setSelectedFuels] = useState<string[]>([]);
@@ -133,9 +136,11 @@ export default function SanPhamClient({ initialVehicles, initialCategories }: Sa
       const cat = params.get("category");
       if (cat) {
         setSelectedCategories([cat]);
+      } else if (initialCategory) {
+        setSelectedCategories([initialCategory]);
       }
     }
-  }, []);
+  }, [initialCategory]);
 
   const categories = apiCategories.length > 0 ? apiCategories : staticCategories;
 
@@ -509,8 +514,14 @@ export default function SanPhamClient({ initialVehicles, initialCategories }: Sa
           </div>
           <div className="text-center font-antenna max-w-4xl mx-auto px-2">
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[56px] font-bold tracking-tight uppercase leading-[1.15] mb-5 font-antenna text-white">
-              <span className="inline-block">Dòng xe Ford</span>{" "}
-              <span className="inline-block text-[#066fef]">thế hệ mới</span>
+              {selectedCategories.length === 1 ? (
+                <span className="inline-block">Dòng xe Ford {getCategoryTitle(selectedCategories[0])}</span>
+              ) : (
+                <>
+                  <span className="inline-block">Dòng xe Ford</span>{" "}
+                  <span className="inline-block text-[#066fef]">thế hệ mới</span>
+                </>
+              )}
             </h1>
             <p className="text-white/80 text-sm md:text-base max-w-2xl mx-auto leading-relaxed font-antenna font-medium">
               Khám phá sức mạnh, công nghệ thông minh và sự đa dụng vượt trội của các dòng xe Ford chính hãng tại showroom Long Khánh Ford.
