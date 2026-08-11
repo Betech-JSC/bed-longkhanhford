@@ -100,6 +100,24 @@ class PostController extends Controller
                 ->first();
 
             if (!$post) {
+                if (\Schema::hasTable('redirects')) {
+                    $requestPath = 'tin-tuc/' . $slug;
+                    $redirect = \DB::table('redirects')
+                        ->where('old_url', $requestPath)
+                        ->where('is_active', 1)
+                        ->first();
+
+                    if ($redirect) {
+                        $target = str_replace('tin-tuc/', '', $redirect->new_url);
+                        if (request()->wantsJson() || request()->is('api/*')) {
+                            return response()->json([
+                                'redirect_to' => $target,
+                            ]);
+                        }
+                        return redirect()->to($redirect->new_url, $redirect->status_code);
+                    }
+                }
+
                 $activePostIds = $this->model::query()
                     ->where('type', Post::TYPE_POST)
                     ->active()

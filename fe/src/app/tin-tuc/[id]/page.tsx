@@ -56,7 +56,7 @@ export default async function Page({ params }: Props) {
     }) as any;
     if (res) {
       if (res.redirect_to) {
-        redirect(`/${res.redirect_to}`);
+        redirect(`/tin-tuc/${res.redirect_to}`);
       }
       if (res.post) {
         article = res.post;

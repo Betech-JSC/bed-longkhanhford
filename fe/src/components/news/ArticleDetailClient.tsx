@@ -120,7 +120,7 @@ export default function ArticleDetailClient({
             const cleanContent = article.content 
               ? article.content
                   .replace(/<h1([^>]*)>/gi, '<h2$1>')
-                  .replace(/<\/h1>/gi, '</h2>')
+                  .replace(/<\/h1\s*>/gi, '</h2>')
               : "";
             return (
               <div 
