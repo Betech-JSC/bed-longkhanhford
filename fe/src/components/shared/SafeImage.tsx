@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image, { ImageProps } from "next/image";
 import { imageFallbackSvg } from "@/lib/site-assets";
 
@@ -18,14 +18,38 @@ export default function SafeImage({
   skeletonClass = "",
   ...props
 }: SafeImageProps) {
+  const [prevSrc, setPrevSrc] = useState(src);
+  const [prevFallbackSrc, setPrevFallbackSrc] = useState(fallbackSrc);
   const [isLoaded, setIsLoaded] = useState(false);
   const [imgSrc, setImgSrc] = useState<string>(src || fallbackSrc);
+  const imgRef = useRef<HTMLImageElement>(null);
 
-  useEffect(() => {
-    // Reset loading state and update source when src changes
+  // Adjust state when props change (during render, as recommended by React docs)
+  if (src !== prevSrc || fallbackSrc !== prevFallbackSrc) {
+    setPrevSrc(src);
+    setPrevFallbackSrc(fallbackSrc);
     setIsLoaded(false);
     setImgSrc(src || fallbackSrc);
-  }, [src, fallbackSrc]);
+  }
+
+  useEffect(() => {
+    const img = imgRef.current;
+    if (img) {
+      if (img.complete) {
+        if (img.naturalWidth === 0) {
+          // Failed to load
+          if (imgSrc !== fallbackSrc) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setImgSrc(fallbackSrc);
+          }
+          setIsLoaded(true);
+        } else {
+          // Loaded successfully
+          setIsLoaded(true);
+        }
+      }
+    }
+  }, [imgSrc, fallbackSrc]);
 
   return (
     <div className={`relative w-full h-full overflow-hidden ${skeletonClass}`}>
@@ -36,6 +60,7 @@ export default function SafeImage({
       
       <Image
         {...props}
+        ref={imgRef}
         src={imgSrc}
         alt={alt || "Hình ảnh"}
         className={`${className} transition-opacity duration-300 ${
