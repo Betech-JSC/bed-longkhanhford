@@ -67,8 +67,8 @@ export default {
     data() {
         return {
             form: this.$inertia.form({
-                email: null,
-                password: null,
+                email: 'admin@gmail.com',
+                password: 'admin@gmail.com',
                 remember: true,
             }),
             isProduction: import.meta.env.PROD,
