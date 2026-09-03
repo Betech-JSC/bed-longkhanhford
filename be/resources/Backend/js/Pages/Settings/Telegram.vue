@@ -119,14 +119,17 @@ export default {
     components: { WrapSetting },
     props: ["item", "schema"],
     data() {
+        const isEnabled = this.item?.telegram_enabled !== undefined
+            ? (this.item.telegram_enabled === true || this.item.telegram_enabled === 1 || this.item.telegram_enabled === '1' || this.item.telegram_enabled === 'true')
+            : true;
         return {
             isTesting: false,
             isDetecting: false,
             formData: {
-                telegram_enabled: true,
                 telegram_bot_token: "",
                 telegram_chat_id: "",
                 ...this.item,
+                telegram_enabled: isEnabled,
             },
         };
     },
