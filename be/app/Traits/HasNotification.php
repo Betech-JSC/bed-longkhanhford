@@ -37,17 +37,17 @@ trait HasNotification
                     }
 
                     if ($model->type === 'SERVICE_BOOKING') {
-                        $contactData = $model->data;
+                        $contactData = $model->data ?? [];
                         $emailData = [
                             'mail_title' => 'Yêu cầu dịch vụ - Long Khánh Ford',
-                            'customer_name' => $contactData['Họ và tên'],
-                            'phone' => $contactData['Số điện thoại'],
-                            'email' => $contactData['E-mail'] ?? '--',
-                            'license_plate' => $contactData['Biển số xe'],
-                            'appointment_time' => $contactData['Thời gian hẹn'],
-                            'content' => $contactData['Nội dung yêu cầu dịch vụ'] ?? '',
-                            'location' => $contactData['Tại'],
-                            'url' => route(current_locale() . '.admin.contacts.form', ['id' => $model->id])
+                            'customer_name' => $contactData['Họ và tên'] ?? $contactData['Name'] ?? 'Khách hàng',
+                            'phone' => $contactData['Số điện thoại'] ?? $contactData['Phone'] ?? '--',
+                            'email' => $contactData['E-mail'] ?? $contactData['Email'] ?? '--',
+                            'license_plate' => $contactData['Biển số xe'] ?? '--',
+                            'appointment_time' => $contactData['Thời gian hẹn'] ?? '--',
+                            'content' => $contactData['Nội dung yêu cầu dịch vụ'] ?? $contactData['Nội dung'] ?? '',
+                            'location' => $contactData['Tại'] ?? $contactData['Địa điểm làm dịch vụ'] ?? 'Long Khánh Ford',
+                            'url' => route(current_locale() . '.admin.service-bookings.form', ['id' => $model->id])
                         ];
 
                         foreach ($emails as $email) {

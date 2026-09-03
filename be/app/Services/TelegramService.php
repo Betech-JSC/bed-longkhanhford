@@ -135,8 +135,8 @@ class TelegramService
             $message .= "📍 *Địa điểm làm dịch vụ:* {$location}\n";
         }
 
-        if (!empty($leadData['payment_method'])) {
-            $message .= "💳 *Hình thức mua:* {$leadData['payment_method']}\n";
+        if (!empty($paymentMethod)) {
+            $message .= "💳 *Hình thức mua:* {$paymentMethod}\n";
         }
 
         if (!empty($city)) {
