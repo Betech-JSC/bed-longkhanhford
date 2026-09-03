@@ -11,6 +11,15 @@ use Illuminate\Support\Facades\Http;
 
 class TelegramNotificationTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        config([
+            'services.telegram.bot_token' => '123456:TEST_BOT_TOKEN',
+            'services.telegram.chat_id' => '-100987654321',
+            'services.telegram.enabled' => true,
+        ]);
+    }
     /**
      * Test Setting model validation rules for telegram
      */
