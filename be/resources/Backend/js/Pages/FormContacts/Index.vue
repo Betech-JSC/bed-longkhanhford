@@ -37,19 +37,22 @@
             {
                 field: 'Họ và tên',
                 transform: (data) => {
-                    return data.data_contact.Name || data.data_contact['Họ và tên'] || '';
+                    const c = data?.data_contact || {};
+                    return c['Họ và tên'] || c.Name || '';
                 }
             },
             {
                 field: 'Số điện thoại',
                 transform: (data) => {
-                    return data.data_contact.Phone || data.data_contact['Số điện thoại'] || '';
+                    const c = data?.data_contact || {};
+                    return c['Số điện thoại'] || c.Phone || '';
                 }
             },
             {
                 field: 'Email',
                 transform: (data) => {
-                    return data.data_contact.Email || data.data_contact['E-mail'] || '--';
+                    const c = data?.data_contact || {};
+                    return c['E-mail'] || c.Email || '--';
                 }
             },
             {

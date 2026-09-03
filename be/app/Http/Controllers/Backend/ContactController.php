@@ -18,8 +18,9 @@ class ContactController extends Controller
 
     private function beforeIndex($query)
     {
-        return $query->whereIn('type', ['CONTACT_FORM', 'ADVISE_FORM', 'NEW_CAR_QUOTE_FORM', 'TEST_DRIVE', 'APPLY_FORM'])
-            ->orWhereNull('type')
-            ->orderBy('id', 'DESC');
+        return $query->where(function ($q) {
+            $q->whereIn('type', ['CONTACT_FORM', 'ADVISE_FORM', 'NEW_CAR_QUOTE_FORM', 'TEST_DRIVE', 'APPLY_FORM'])
+              ->orWhereNull('type');
+        })->orderBy('id', 'DESC');
     }
 }
