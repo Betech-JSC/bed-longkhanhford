@@ -127,6 +127,13 @@ function TestDriveFormContent({ initialVehicles }: { initialVehicles?: any[] }) 
             Name: formName,
             Phone: formPhone,
             Email: formEmail || undefined,
+            "Họ và tên": formName,
+            "Số điện thoại": formPhone,
+            "E-mail": formEmail || undefined,
+            "Dòng xe quan tâm": vehicleTitle,
+            "Xe quan tâm": vehicleTitle,
+            "Tỉnh / Thành phố": formProvince,
+            "Khu vực": formProvince,
             Province: formProvince,
             Product: {
               id: selectedVehicle,

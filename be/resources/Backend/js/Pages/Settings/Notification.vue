@@ -30,6 +30,33 @@
                             help: tt('models.setting.notification_from.help'),
                         }"
                     />
+                    <Field
+                        v-model="form.notification_to"
+                        :field="{
+                            type: 'text',
+                            name: 'notification_to',
+                            label: 'Email nhận yêu cầu báo giá & tư vấn',
+                            help: 'Có thể nhập nhiều email, phân cách bởi dấu phẩy',
+                        }"
+                    />
+                    <hr />
+                    <Field
+                        v-model="form.telegram_bot_token"
+                        :field="{
+                            type: 'text',
+                            name: 'telegram_bot_token',
+                            label: 'Telegram Bot Token',
+                            help: 'Tự động nhận thông báo Telegram khi có khách hàng đăng ký lái thử / báo giá mới',
+                        }"
+                    />
+                    <Field
+                        v-model="form.telegram_chat_id"
+                        :field="{
+                            type: 'text',
+                            name: 'telegram_chat_id',
+                            label: 'Telegram Chat ID',
+                        }"
+                    />
                 </div>
             </div>
             <!-- <div class="card">

@@ -4,20 +4,20 @@
             <div class="card">
                 <div class="card-header">{{ tt('models.setting.general_information') }}</div>
                 <div class="card-body">
-                    <template v-for="(val, field) in form.data_contact" :key="field">
-                        <div v-if="typeof form.data_contact[field] === 'object' && form.data_contact[field] != null">
+                    <template v-for="(val, field) in filteredDataContact" :key="field">
+                        <div v-if="typeof val === 'object' && val != null">
                             <div class="pb-3 text-sm font-medium select-none">
                                 {{ field }}
                             </div>
                             <div class="pb-4">
-                                <pre class="bg-gray-50 p-3 rounded-lg text-xs">{{ JSON.stringify(form.data_contact[field], null, 2) }}</pre>
+                                <pre class="bg-gray-50 p-3 rounded-lg text-xs">{{ JSON.stringify(val, null, 2) }}</pre>
                             </div>
                         </div>
                         <div v-else>
                             <Field
                                 :key="field"
                                 :disabled="true"
-                                :modelValue="form.data_contact[field]"
+                                :modelValue="val"
                                 :field="{
                                     label: field,
                                 }"
@@ -61,5 +61,25 @@ export default {
             formData: this.item,
         }
     },
+    computed: {
+        filteredDataContact() {
+            const raw = this.formData?.data_contact || {};
+            const clean = {};
+            const aliasMap = {
+                'Name': 'Họ và tên',
+                'Phone': 'Số điện thoại',
+                'Email': 'E-mail',
+                'Tại': 'Địa điểm làm dịch vụ',
+            };
+
+            for (const [key, value] of Object.entries(raw)) {
+                if (aliasMap[key] && raw[aliasMap[key]] !== undefined) {
+                    continue;
+                }
+                clean[key] = value;
+            }
+            return clean;
+        }
+    }
 }
 </script>

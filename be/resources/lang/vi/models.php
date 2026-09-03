@@ -89,6 +89,8 @@ return [
         'service-bookings' => 'Đặt hẹn dịch vụ',
         'service_bookings' => 'Đặt hẹn dịch vụ',
         'ServiceBookings' => 'Đặt hẹn dịch vụ',
+        'Telegram' => 'Cấu hình Telegram',
+        'telegram' => 'Cấu hình Telegram',
     ],
     'common' => [
         'id' => 'ID',
@@ -172,6 +174,7 @@ return [
         'custom_vars' => 'Tùy chỉnh biến môi trường',
         'config_smtp' => 'Cấu hình SMTP',
         'notification' => 'Thông báo',
+        'telegram' => 'Cấu hình Telegram',
         'custom_vars_form' => [
             'general_information' => 'Danh sách',
             'add' => 'Thêm',

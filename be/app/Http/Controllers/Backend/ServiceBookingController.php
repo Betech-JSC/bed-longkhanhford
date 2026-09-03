@@ -18,7 +18,7 @@ class ServiceBookingController extends Controller
 
     private function beforeIndex($query)
     {
-        return $query->where('type', 'SERVICE_BOOKING')
+        return $query->whereIn('type', ['SERVICE_BOOKING', 'REPAIR_QUOTE_FORM'])
             ->orderBy('id', 'DESC');
     }
 }

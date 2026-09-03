@@ -41,11 +41,16 @@ createInertiaApp({
             './Pages/**/*.vue',
         ])
 
+        let localPath = `./Pages/${name.replace('@Core/', '')}.vue`
+        let corePath =
+            name.replace('@Core', '../../../packages/bed-package-essentials/core/resources/Backend/js/Pages') +
+            '.vue'
+
         let filePath = `./Pages/${name}.vue`
-        if (name.includes('@Core')) {
-            filePath =
-                name.replace('@Core', '../../../packages/bed-package-essentials/core/resources/Backend/js/Pages') +
-                '.vue'
+        if (pages[localPath]) {
+            filePath = localPath
+        } else if (pages[corePath]) {
+            filePath = corePath
         }
         const page = resolvePageComponent(filePath, pages)
 

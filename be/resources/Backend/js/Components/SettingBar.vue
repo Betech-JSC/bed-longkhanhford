@@ -127,6 +127,23 @@
                             {{ tt('models.setting.notification') }}
                         </Link>
                     </AccordionTab>
+                    <AccordionTab :header="tt('Cảnh báo & Thông báo')">
+                        <Link
+                            class="item"
+                            :href="
+                                route('admin.settings.form', {
+                                    id: 'telegram',
+                                })
+                            "
+                            :class="{
+                                active: isUrl('admin.settings.form', {
+                                    id: 'telegram',
+                                }),
+                            }"
+                        >
+                            {{ tt('Cấu hình Telegram') }}
+                        </Link>
+                    </AccordionTab>
                 </Accordion>
             </div>
         </div>

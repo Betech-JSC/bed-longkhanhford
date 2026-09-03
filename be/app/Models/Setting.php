@@ -65,8 +65,22 @@ class Setting extends Model
                 'mail_encryption' => 'nullable',
             ],
             'notification' => [
-                'notification_production_to' => 'required',
-                'notification_staging_to' => 'required',
+                'notification_production_to' => 'nullable',
+                'notification_staging_to' => 'nullable',
+                'sys_notif_enabled' => 'nullable',
+                'sys_notif_title' => 'nullable',
+                'sys_notif_content' => 'nullable',
+                'sys_notif_type' => 'nullable',
+                'sys_notif_display_style' => 'nullable',
+                'sys_notif_link' => 'nullable',
+                'sys_notif_link_text' => 'nullable',
+                'sys_notif_dismissible' => 'nullable',
+                'sys_notif_start_at' => 'nullable',
+                'sys_notif_end_at' => 'nullable',
+                'notification_to' => 'nullable',
+                'telegram_bot_token' => 'nullable',
+                'telegram_chat_id' => 'nullable',
+                'discord_webhook' => 'nullable',
             ],
             'robots_txt' => [
                 'robots_txt'  => 'required',
@@ -77,7 +91,12 @@ class Setting extends Model
             'installment' => [
                 'installment_rate_year_1' => 'required|numeric|min:0|max:30',
                 'installment_rate_subsequent' => 'required|numeric|min:0|max:30',
-            ]
+            ],
+            'telegram' => [
+                'telegram_enabled' => 'nullable',
+                'telegram_bot_token' => 'nullable|string',
+                'telegram_chat_id' => 'nullable|string',
+            ],
         ][$id] ?? [];
     }
 
