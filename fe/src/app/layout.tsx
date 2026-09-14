@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Script from "next/script";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { settingsAPI } from "@/lib/api";
@@ -132,37 +131,73 @@ export default async function RootLayout({
         />
         {/* Dynamic Head Inject Code from CMS */}
         {injectHead && (
-          <script
-            id="cms-head-inject"
-            dangerouslySetInnerHTML={{
-              __html: `
-                (function() {
-                  const temp = document.createElement('div');
-                  temp.innerHTML = \`${injectHead.replace(/`/g, '\\`').replace(/\$/g, '\\$').replace(/<\/script>/gi, '<\\/script>')}\`;
-                  Array.from(temp.childNodes).forEach(node => {
-                    if (node.nodeType === 1 && node.tagName === 'SCRIPT') {
-                      const script = document.createElement('script');
-                      Array.from(node.attributes).forEach(attr => script.setAttribute(attr.name, attr.value));
-                      script.innerHTML = node.innerHTML;
-                      document.head.appendChild(script);
-                    } else if (node.nodeType === 1 || node.nodeType === 3 || node.nodeType === 8) {
-                      document.head.appendChild(node.cloneNode(true));
+          <>
+            <noscript dangerouslySetInnerHTML={{ __html: injectHead }} />
+            <script
+              id="cms-head-inject"
+              dangerouslySetInnerHTML={{
+                __html: `
+                  (function() {
+                    try {
+                      // Dùng JSON.stringify để escape an toàn tuyệt đối mọi ký tự đặc biệt, regex, xuống dòng
+                      var raw = ${JSON.stringify(injectHead).replace(/</g, '\\u003c')};
+                      var parser = new DOMParser();
+                      var doc = parser.parseFromString(raw, 'text/html');
+                      var nodes = Array.from(doc.head.childNodes).concat(Array.from(doc.body.childNodes));
+                      nodes.forEach(function(node) {
+                        if (node.nodeType === 1 && node.tagName === 'SCRIPT') {
+                          var s = document.createElement('script');
+                          Array.from(node.attributes).forEach(function(a) { s.setAttribute(a.name, a.value); });
+                          s.text = node.textContent || '';
+                          document.head.appendChild(s);
+                        } else if (node.nodeType === 1 && node.tagName !== 'NOSCRIPT') {
+                          document.head.appendChild(document.importNode(node, true));
+                        }
+                      });
+                    } catch (e) {
+                      console.error('Lỗi khi chèn mã Head từ CMS:', e);
                     }
-                  });
-                })();
-              `
-            }}
-          />
+                  })();
+                `,
+              }}
+            />
+          </>
         )}
       </head>
       <body className="min-h-full flex flex-col bg-light text-dark font-sans" suppressHydrationWarning>
         {/* Dynamic Body Start Inject Code from CMS */}
         {injectBodyStart && (
-          <div
-            id="cms-body-start-inject"
-            style={{ display: 'none' }}
-            dangerouslySetInnerHTML={{ __html: injectBodyStart }}
-          />
+          <>
+            <noscript dangerouslySetInnerHTML={{ __html: injectBodyStart }} />
+            <script
+              id="cms-body-start-inject"
+              dangerouslySetInnerHTML={{
+                __html: `
+                  (function() {
+                    try {
+                      var raw = ${JSON.stringify(injectBodyStart).replace(/</g, '\\u003c')};
+                      var parser = new DOMParser();
+                      var doc = parser.parseFromString(raw, 'text/html');
+                      var nodes = Array.from(doc.head.childNodes).concat(Array.from(doc.body.childNodes));
+                      var target = document.getElementById('cms-body-start-inject');
+                      nodes.forEach(function(node) {
+                        if (node.nodeType === 1 && node.tagName === 'SCRIPT') {
+                          var s = document.createElement('script');
+                          Array.from(node.attributes).forEach(function(a) { s.setAttribute(a.name, a.value); });
+                          s.text = node.textContent || '';
+                          document.body.insertBefore(s, target ? target.nextSibling : document.body.firstChild);
+                        } else if (node.nodeType === 1 && node.tagName !== 'NOSCRIPT') {
+                          document.body.insertBefore(document.importNode(node, true), target ? target.nextSibling : document.body.firstChild);
+                        }
+                      });
+                    } catch (e) {
+                      console.error('Lỗi khi chèn mã Body Start từ CMS:', e);
+                    }
+                  })();
+                `,
+              }}
+            />
+          </>
         )}
         <Navbar />
         <Suspense fallback={null}>
@@ -175,10 +210,32 @@ export default async function RootLayout({
         <ClientWidgets />
         {/* Dynamic Body End Inject Code from CMS */}
         {injectBodyEnd && (
-          <div
+          <script
             id="cms-body-end-inject"
-            style={{ display: 'none' }}
-            dangerouslySetInnerHTML={{ __html: injectBodyEnd }}
+            dangerouslySetInnerHTML={{
+              __html: `
+                (function() {
+                  try {
+                    var raw = ${JSON.stringify(injectBodyEnd).replace(/</g, '\\u003c')};
+                    var parser = new DOMParser();
+                    var doc = parser.parseFromString(raw, 'text/html');
+                    var nodes = Array.from(doc.head.childNodes).concat(Array.from(doc.body.childNodes));
+                    nodes.forEach(function(node) {
+                      if (node.nodeType === 1 && node.tagName === 'SCRIPT') {
+                        var s = document.createElement('script');
+                        Array.from(node.attributes).forEach(function(a) { s.setAttribute(a.name, a.value); });
+                        s.text = node.textContent || '';
+                        document.body.appendChild(s);
+                      } else if (node.nodeType === 1) {
+                        document.body.appendChild(document.importNode(node, true));
+                      }
+                    });
+                  } catch (e) {
+                    console.error('Lỗi khi chèn mã Body End từ CMS:', e);
+                  }
+                })();
+              `,
+            }}
           />
         )}
       </body>
