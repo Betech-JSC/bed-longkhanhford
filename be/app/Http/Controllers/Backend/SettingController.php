@@ -9,6 +9,7 @@ use Illuminate\Routing\Controller;
 use App\Models\Setting;
 use JamstackVietnam\Core\Traits\HasCrudActions;
 use Illuminate\Support\Facades\Artisan;
+use App\Services\RevalidateService;
 
 class SettingController extends Controller
 {
@@ -86,6 +87,11 @@ class SettingController extends Controller
         }
 
         settings()->group($id)->set($validated);
+
+        // Tự động xóa cache Next.js cho cấu hình chung (general) để frontend nhận ngay mã script mới
+        if ($id === 'general') {
+            RevalidateService::revalidate(['settings'], ['/']);
+        }
 
         if (in_array($id, ['smtp', 'notification'])) {
             Artisan::call('queue:restart');
