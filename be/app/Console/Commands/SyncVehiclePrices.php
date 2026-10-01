@@ -56,7 +56,17 @@ class SyncVehiclePrices extends Command
             if ($catPickup) {
                 $this->line("   ℹ Found Pickup category: ID {$catPickup->id}");
             } else {
-                $this->warn("   ⚠️ Pickup category not found by slug ('ban-tai', 'pickup') or title keyword");
+                if ($isDryRun) {
+                    $this->line("   [DRY-RUN] Would create missing VehicleCategory: Bán tải (slug: 'ban-tai', en: 'Pickup', slug: 'pickup')");
+                } else {
+                    $catPickup = new VehicleCategory(['status' => 'ACTIVE', 'sort_order' => 2]);
+                    $catPickup->fill([
+                        'vi' => ['title' => 'Bán tải', 'slug' => 'ban-tai'],
+                        'en' => ['title' => 'Pickup', 'slug' => 'pickup'],
+                    ]);
+                    $catPickup->save();
+                    $this->info("   ✓ Created missing Pickup category (ID: {$catPickup->id})");
+                }
             }
 
             // 2. Define master price datasets
@@ -221,12 +231,16 @@ class SyncVehiclePrices extends Command
                 }
 
                 // Attach Pickup category for Ranger if needed
-                if ($key === 'ranger' && $catPickup) {
-                    if ($isDryRun) {
-                        $this->line("   [DRY-RUN] Would attach Pickup category (ID: {$catPickup->id}) to Ranger (ID: {$vehicle->id})");
-                    } else {
-                        $vehicle->categories()->syncWithoutDetaching([$catPickup->id]);
-                        $this->line("   [APPLIED] Attached Pickup category (ID: {$catPickup->id}) to Ranger");
+                if ($key === 'ranger') {
+                    if ($catPickup) {
+                        if ($isDryRun) {
+                            $this->line("   [DRY-RUN] Would attach Pickup category (ID: {$catPickup->id}) to Ranger (ID: {$vehicle->id})");
+                        } else {
+                            $vehicle->categories()->syncWithoutDetaching([$catPickup->id]);
+                            $this->line("   [APPLIED] Attached Pickup category (ID: {$catPickup->id}) to Ranger");
+                        }
+                    } elseif ($isDryRun) {
+                        $this->line("   [DRY-RUN] Would attach Pickup category to Ranger (ID: {$vehicle->id})");
                     }
                 }
 
