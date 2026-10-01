@@ -204,6 +204,33 @@ const nextConfig = {
         destination: "/ford-mustang-mach-e/:subpath*",
         permanent: true,
       },
+      // Model Year 301 Permanent Redirects
+      {
+        source: "/ford-territory-2026",
+        destination: "/ford-territory",
+        permanent: true,
+      },
+      {
+        source: "/ford-territory-2026/:subpath*",
+        destination: "/ford-territory/:subpath*",
+        permanent: true,
+      },
+      {
+        source: "/ford-ranger-2026",
+        destination: "/ford-ranger",
+        permanent: true,
+      },
+      {
+        source: "/ford-ranger-2026/:subpath*",
+        destination: "/ford-ranger/:subpath*",
+        permanent: true,
+      },
+      // Chuyển hướng 301 legacy URL /san-pham/:path+ về /:path+ (không redirect /san-pham)
+      {
+        source: "/san-pham/:path+",
+        destination: "/:path+",
+        permanent: true,
+      },
       // Tự động Redirect 301 từ URL cũ có .html sang URL mới không có .html
       {
         source: "/:slug.html",
@@ -246,7 +273,27 @@ const nextConfig = {
     ];
   },
   async headers() {
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "";
+    const isStaging =
+      siteUrl.includes("betech-digital") ||
+      siteUrl.includes("staging");
+
+    const stagingHeaders = isStaging
+      ? [
+          {
+            source: "/:path*",
+            headers: [
+              {
+                key: "X-Robots-Tag",
+                value: "noindex, nofollow, noarchive",
+              },
+            ],
+          },
+        ]
+      : [];
+
     return [
+      ...stagingHeaders,
       {
         source: "/fonts/:path*",
         headers: [

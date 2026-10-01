@@ -147,22 +147,43 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       const priorityMatch = content.match(/<priority>(.*?)<\/priority>/);
 
       if (locMatch) {
-        let locUrl = locMatch[1];
+        let locUrl = locMatch[1].trim();
         const siteUrl = "https://longkhanhford.com.vn";
 
+        let pathname = "";
+        let search = "";
         try {
           const urlObj = new URL(locUrl);
-          locUrl = `${siteUrl}${urlObj.pathname}${urlObj.search}`;
+          pathname = urlObj.pathname;
+          search = urlObj.search;
         } catch {
-          locUrl = locUrl.replace(/https?:\/\/[^\/]+/, siteUrl);
+          const cleaned = locUrl.replace(/^https?:\/\/[^\/]+/, "");
+          const [p, s] = cleaned.split("?");
+          pathname = p || "/";
+          search = s ? `?${s}` : "";
         }
 
-        urls.push({
-          url: locUrl,
-          lastModified: lastmodMatch ? new Date(lastmodMatch[1]) : undefined,
-          changeFrequency: changefreqMatch ? (changefreqMatch[1] as any) : "daily",
-          priority: priorityMatch ? parseFloat(priorityMatch[1]) : 0.8,
-        });
+        // Loại bỏ tiền tố /san-pham/ cũ cho các trang sản phẩm xe, đưa về /{slug} (chỉ giữ lại danh mục gốc /san-pham)
+        if (pathname.startsWith("/san-pham/") && pathname.length > "/san-pham/".length) {
+          pathname = pathname.replace(/^\/san-pham\//, "/");
+        }
+
+        // Đồng bộ các URL Model Year cũ về URL canonical
+        pathname = pathname
+          .replace(/^\/ford-territory-2026(\/|$)/, "/ford-territory$1")
+          .replace(/^\/ford-ranger-2026(\/|$)/, "/ford-ranger$1");
+
+        locUrl = `${siteUrl}${pathname}${search}`;
+
+        // Tránh trùng lặp URL trong sitemap
+        if (!urls.some((u) => u.url === locUrl)) {
+          urls.push({
+            url: locUrl,
+            lastModified: lastmodMatch ? new Date(lastmodMatch[1]) : undefined,
+            changeFrequency: changefreqMatch ? (changefreqMatch[1] as any) : "daily",
+            priority: priorityMatch ? parseFloat(priorityMatch[1]) : 0.8,
+          });
+        }
       }
     }
 

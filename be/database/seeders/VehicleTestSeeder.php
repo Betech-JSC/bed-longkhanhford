@@ -105,6 +105,20 @@ class VehicleTestSeeder extends Seeder
                         'vi' => ['name' => 'Territory Titanium X 1.5L AT']
                     ],
                     [
+                        'price' => 909000000,
+                        'specs' => [
+                            'engine' => '1.5L Ecoboost Xăng tăng áp',
+                            'power' => '160 Hp @ 5400-5700 rpm',
+                            'torque' => '248 Nm @ 1500-3000 rpm',
+                            'transmission' => 'Tự động 7 cấp ly hợp kép ướt',
+                            'drivetrain' => 'Cầu trước (FWD)',
+                            'dimensions' => '4.630 x 1.935 x 1.706 mm',
+                            'clearance' => '190 mm',
+                            'fuelEconomy' => '7.0 L/100km'
+                        ],
+                        'vi' => ['name' => 'Territory Sport 1.5L AT']
+                    ],
+                    [
                         'price' => 899000000,
                         'specs' => [
                             'engine' => '1.5L Ecoboost Xăng tăng áp',
@@ -266,7 +280,7 @@ class VehicleTestSeeder extends Seeder
                             'clearance' => '200 mm',
                             'fuelEconomy' => '7.5 L/100km'
                         ],
-                        'vi' => ['name' => 'Everest Active 2.0L Single-Turbo 6AT']
+                        'vi' => ['name' => 'Everest Ambiente 2.0L AT 4x2']
                     ],
                     [
                         'price' => 1178000000,
@@ -281,7 +295,7 @@ class VehicleTestSeeder extends Seeder
                             'clearance' => '200 mm',
                             'fuelEconomy' => '7.6 L/100km'
                         ],
-                        'vi' => ['name' => 'Everest Sport 2.0L Single-Turbo 6AT']
+                        'vi' => ['name' => 'Everest Sport 2.0L AT 4x2']
                     ],
                     [
                         'price' => 1399000000,
@@ -296,7 +310,7 @@ class VehicleTestSeeder extends Seeder
                             'clearance' => '200 mm',
                             'fuelEconomy' => '7.8 L/100km'
                         ],
-                        'vi' => ['name' => 'Everest Platinum 2.0L Bi-Turbo 10AT 4x2']
+                        'vi' => ['name' => 'Everest Titanium 2.0L AT 4x2']
                     ],
                     [
                         'price' => 1468000000,
@@ -311,22 +325,22 @@ class VehicleTestSeeder extends Seeder
                             'clearance' => '200 mm',
                             'fuelEconomy' => '8.0 L/100km'
                         ],
-                        'vi' => ['name' => 'Everest Platinum 2.0L Bi-Turbo 10AT 4x4']
+                        'vi' => ['name' => 'Everest Titanium+ 2.0L AT 4x4']
                     ],
                     [
                         'price' => 1540000000,
                         'image' => 'everest_platinum.png',
                         'specs' => [
-                            'engine' => '2.3L EcoBoost Xăng tăng áp',
-                            'power' => '270 Hp @ 5500 rpm',
-                            'torque' => '420 Nm @ 3000 rpm',
+                            'engine' => 'Bi-Turbo Diesel 2.0L i4',
+                            'power' => '210 Hp @ 3750 rpm',
+                            'torque' => '500 Nm @ 1750-2000 rpm',
                             'transmission' => 'Tự động 10 cấp điện tử',
                             'drivetrain' => 'Hai cầu chủ động (4WD)',
                             'dimensions' => '4.914 x 1.923 x 1.842 mm',
                             'clearance' => '200 mm',
-                            'fuelEconomy' => '9.2 L/100km'
+                            'fuelEconomy' => '8.0 L/100km'
                         ],
-                        'vi' => ['name' => 'Everest Platinum 2.3L EcoBoost 10AT 4x4']
+                        'vi' => ['name' => 'Everest Wildtrak 2.0L AT 4x4']
                     ]
                 ],
                 'layout_blocks' => [
@@ -440,13 +454,27 @@ class VehicleTestSeeder extends Seeder
                             'engine' => 'Single-Turbo Diesel 2.0L i4',
                             'power' => '170 Hp @ 3500 rpm',
                             'torque' => '405 Nm @ 1750-2500 rpm',
+                            'transmission' => 'Số sàn 6 cấp',
+                            'drivetrain' => 'Hai cầu chủ động (4x4)',
+                            'dimensions' => '5.362 x 1.918 x 1.875 mm',
+                            'clearance' => '235 mm',
+                            'fuelEconomy' => '7.5 L/100km'
+                        ],
+                        'vi' => ['name' => 'Ranger XL 2.0L 4x4 6MT']
+                    ],
+                    [
+                        'price' => 707000000,
+                        'specs' => [
+                            'engine' => 'Single-Turbo Diesel 2.0L i4',
+                            'power' => '170 Hp @ 3500 rpm',
+                            'torque' => '405 Nm @ 1750-2500 rpm',
                             'transmission' => 'Tự động 6 cấp',
                             'drivetrain' => 'Một cầu sau (4x2)',
                             'dimensions' => '5.362 x 1.918 x 1.875 mm',
                             'clearance' => '235 mm',
                             'fuelEconomy' => '7.8 L/100km'
                         ],
-                        'vi' => ['name' => 'Ranger XLS 2.0L Single-Turbo 6AT 4x2']
+                        'vi' => ['name' => 'Ranger XLS 2.0L 4x2 6AT']
                     ],
                     [
                         'price' => 779000000,
@@ -460,7 +488,21 @@ class VehicleTestSeeder extends Seeder
                             'clearance' => '235 mm',
                             'fuelEconomy' => '7.9 L/100km'
                         ],
-                        'vi' => ['name' => 'Ranger XLT 2.0L Single-Turbo 6AT 4x4']
+                        'vi' => ['name' => 'Ranger XLS 2.0L 4x4 6AT']
+                    ],
+                    [
+                        'price' => 864000000,
+                        'specs' => [
+                            'engine' => 'Single-Turbo Diesel 2.0L i4',
+                            'power' => '170 Hp @ 3500 rpm',
+                            'torque' => '405 Nm @ 1750-2500 rpm',
+                            'transmission' => 'Tự động 6 cấp',
+                            'drivetrain' => 'Hai cầu chủ động (4x4)',
+                            'dimensions' => '5.362 x 1.918 x 1.875 mm',
+                            'clearance' => '235 mm',
+                            'fuelEconomy' => '8.0 L/100km'
+                        ],
+                        'vi' => ['name' => 'Ranger Sport 2.0L 4x4 6AT']
                     ],
                     [
                         'price' => 979000000,

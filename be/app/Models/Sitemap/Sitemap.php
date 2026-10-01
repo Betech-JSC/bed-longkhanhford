@@ -2,16 +2,20 @@
 
 namespace App\Models\Sitemap;
 
+use App\Models\Vehicle\VehicleVersion;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 class Sitemap
 {
     public array $tags = [];
 
     const CHANGE_FREQUENCY_DAILY = 'daily';
+    const CHANGE_FREQUENCY_WEEKLY = 'weekly';
     const PRIORITY = 0.8;
+    const PRIORITY_VERSION = 0.85;
 
     public static function create(): static
     {
@@ -61,6 +65,16 @@ class Sitemap
 
     public function add(string | iterable | Model $tag, $name = null): static
     {
+        if (is_array($tag) && (isset($tag['VI']) || isset($tag['vi']))) {
+            $defaultLocale = strtoupper(config('app.locale', 'vi'));
+            $url = $tag[$defaultLocale] ?? $tag[strtolower($defaultLocale)] ?? head($tag);
+            if ($url) {
+                $this->add($url);
+            }
+
+            return $this;
+        }
+
         if (is_iterable($tag)) {
             foreach ($tag as $item) {
                 $this->add($item);
@@ -82,6 +96,60 @@ class Sitemap
                 $this->tags = array_merge($this->tags, $tag);
             } else {
                 $this->tags[] = $tag;
+            }
+        }
+
+        return $this;
+    }
+
+    public function addVehicleVersions(iterable $vehicles): static
+    {
+        foreach ($vehicles as $vehicle) {
+            $vehicleSlug = null;
+            if (!empty($vehicle->url['VI'])) {
+                $vehicleSlug = ltrim($vehicle->url['VI'], '/');
+            } else {
+                $translation = $vehicle->translations->firstWhere('locale', 'vi') ?? $vehicle->translations->first();
+                $vehicleSlug = $translation?->seo_slug ?? $translation?->slug;
+            }
+
+            if (empty($vehicleSlug)) {
+                continue;
+            }
+
+            $versions = $vehicle->relationLoaded('versions')
+                ? $vehicle->versions
+                : $vehicle->versions()->where('status', VehicleVersion::STATUS_ACTIVE)->get();
+
+            foreach ($versions as $version) {
+                if ($version->status !== VehicleVersion::STATUS_ACTIVE) {
+                    continue;
+                }
+
+                $versionTranslation = $version->relationLoaded('translations')
+                    ? ($version->translations->firstWhere('locale', 'vi') ?? $version->translations->first())
+                    : ($version->translate('vi') ?? $version->translations->first());
+
+                $versionName = $versionTranslation?->name ?? $version->name;
+
+                if (empty($versionName)) {
+                    continue;
+                }
+
+                $versionSlug = Str::slug(str_replace('+', '-plus', $versionName));
+                if (empty($versionSlug)) {
+                    continue;
+                }
+
+                $url = '/' . ltrim($vehicleSlug, '/') . '/' . ltrim($versionSlug, '/');
+                $lastMod = $version->updated_at ?? $version->created_at ?? $vehicle->updated_at ?? $vehicle->created_at;
+
+                $this->tags[] = [
+                    'url' => $url,
+                    'lastModificationDate' => $lastMod ? Carbon::parse($lastMod)->toAtomString() : now()->toAtomString(),
+                    'changeFrequency' => self::CHANGE_FREQUENCY_WEEKLY,
+                    'priority' => self::PRIORITY_VERSION,
+                ];
             }
         }
 
@@ -119,6 +187,9 @@ class Sitemap
 
     private function transformUrl($item)
     {
+        $lastMod = $item->updated_at ?? $item->published_at ?? $item->created_at;
+        $lastModificationDate = $lastMod ? Carbon::parse($lastMod)->toAtomString() : now()->toAtomString();
+
         if (is_array($item->url)) {
             $urls = [];
             foreach ($item->url as $locale => $url) {
@@ -127,7 +198,7 @@ class Sitemap
                 }
                 $urls[] = [
                     'url' => $url,
-                    'lastModificationDate' => Carbon::create($item->created_at)->toAtomString(),
+                    'lastModificationDate' => $lastModificationDate,
                     'changeFrequency' => self::CHANGE_FREQUENCY_DAILY,
                     'priority' => $item->priority ?? self::PRIORITY,
                 ];
@@ -136,7 +207,7 @@ class Sitemap
         } else {
             return [
                 'url' => $item->url,
-                'lastModificationDate' => Carbon::create($item->created_at)->toAtomString(),
+                'lastModificationDate' => $lastModificationDate,
                 'changeFrequency' => self::CHANGE_FREQUENCY_DAILY,
                 'priority' => $item->priority ?? self::PRIORITY,
             ];

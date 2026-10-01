@@ -66,3 +66,8 @@ config.bat
 *.docx
 *.pdf
 
+.agent
+.kiro
+.venv_packages
+openspec/
+scripts/

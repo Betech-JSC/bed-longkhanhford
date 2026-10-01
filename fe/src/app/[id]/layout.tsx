@@ -260,6 +260,13 @@ export default async function VehicleDetailLayout({
   }
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://longkhanhford.com.vn";
+  const versionPrices = (normalizedVehicle.versions || [])
+    .map((v: any) => (typeof v.price === 'string' ? parseFloat(v.price) : v.price))
+    .filter((p: number) => typeof p === 'number' && p > 0);
+  const lowPrice = versionPrices.length > 0 ? Math.min(...versionPrices) : (normalizedVehicle.basePrice || 0);
+  const highPrice = versionPrices.length > 0 ? Math.max(...versionPrices) : lowPrice;
+  const offerCount = normalizedVehicle.versions?.length || 1;
+
   const carJsonLd = {
     "@context": "https://schema.org",
     "@type": "Car",
@@ -273,8 +280,11 @@ export default async function VehicleDetailLayout({
     "offers": {
       "@type": "AggregateOffer",
       "priceCurrency": "VND",
-      "lowPrice": normalizedVehicle.basePrice || 0,
-      "offerCount": normalizedVehicle.versions?.length || 1,
+      "lowPrice": lowPrice,
+      "highPrice": highPrice,
+      "offerCount": offerCount,
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition",
       "seller": {
         "@type": "AutoDealer",
         "name": "Long Khánh Ford",

@@ -181,34 +181,15 @@ class Post extends BaseModel
     public function getUrlAttribute(): array
     {
         $urls = [];
-        $default_locale = config('app.locale');
 
         if ($this->is_active) {
-            if (Route::has($default_locale . ".posts.show")) {
-                foreach ($this->translations as $translation) {
-                    $urls[strtoupper($translation->locale)] = route("$translation->locale.posts.show", [
-                        'slug' => $translation->seo_slug ?? $translation->slug,
-                    ]);
-                }
-            } else if (Route::has($default_locale . ".nested_posts.show")) {
-                $category = $this->categories
-                    ->where('status', PostCategory::STATUS_ACTIVE)
-                    ->values()
-                    ->first();
-
-                if ($category) {
-                    foreach ($this->translations as $translation) {
-                        $categoryTranslation = $category->translations->where(function ($item) use ($translation, $default_locale) {
-                            return $item->locale === $translation->locale || $item->locale === $default_locale;
-                        })
-                            ->sortBy(fn($item) => $item['locale'] === $translation->locale ? 0 : 1)
-                            ->first();
-
-                        $urls[strtoupper($translation->locale)] = route("$translation->locale.nested_posts.show", [
-                            'nested' => $categoryTranslation->seo_slug ?? $categoryTranslation->slug,
-                            'slug' => $translation->seo_slug ?? $translation->slug,
-                        ]);
-                    }
+            foreach ($this->translations as $translation) {
+                $slug = $translation->seo_slug ?? $translation->slug;
+                $locale = strtolower($translation->locale);
+                if ($locale === 'vi') {
+                    $urls['VI'] = '/tin-tuc/' . ltrim($slug, '/');
+                } else {
+                    $urls[strtoupper($translation->locale)] = '/' . $locale . '/tin-tuc/' . ltrim($slug, '/');
                 }
             }
         }

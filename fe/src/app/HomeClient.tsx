@@ -513,7 +513,7 @@ export default function HomeClient({
 
   return (
     <div className="relative min-h-screen bg-[#f8f8f8] overflow-x-hidden font-sans">
-      <h1 className="sr-only">Long Khánh Ford | Đại lý xe Ford chính hãng lớn nhất Đồng Nai & Long Khánh</h1>
+      <h1 className="sr-only">Long Khánh Ford | Đại lý xe Ford chính hãng tại Long Khánh, Đồng Nai</h1>
 
       {/* Embed local keyframe styles for slider bar progress */}
       <style dangerouslySetInnerHTML={{ __html: `

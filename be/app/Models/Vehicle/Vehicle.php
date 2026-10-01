@@ -347,18 +347,12 @@ class Vehicle extends BaseModel
         $urls = [];
         if ($this->status === self::STATUS_ACTIVE) {
             foreach ($this->translations as $translation) {
-                $routeName = "$translation->locale.products.show";
-                if (\Illuminate\Support\Facades\Route::has($routeName)) {
-                    $urls[strtoupper($translation->locale)] = route($routeName, [
-                        'slug' => $translation->seo_slug ?? $translation->slug,
-                    ]);
+                $slug = $translation->seo_slug ?? $translation->slug;
+                $locale = strtolower($translation->locale);
+                if ($locale === 'vi') {
+                    $urls['VI'] = '/' . ltrim($slug, '/');
                 } else {
-                    $slug = $translation->seo_slug ?? $translation->slug;
-                    if ($translation->locale === 'vi') {
-                        $urls['VI'] = '/san-pham/' . $slug;
-                    } else {
-                        $urls[strtoupper($translation->locale)] = '/en/san-pham/' . $slug;
-                    }
+                    $urls[strtoupper($translation->locale)] = '/' . $locale . '/' . ltrim($slug, '/');
                 }
             }
         }

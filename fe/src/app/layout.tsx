@@ -35,6 +35,9 @@ export const metadata: Metadata = {
     type: "website",
     locale: "vi_VN",
   },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GSC_VERIFICATION,
+  },
 };
 
 
@@ -86,6 +89,8 @@ const jsonLd = {
   ],
 };
 
+const cleanNoscript = (html: string) => (html ? html.replace(/<\/?noscript>/gi, "") : "");
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -132,7 +137,7 @@ export default async function RootLayout({
         {/* Dynamic Head Inject Code from CMS */}
         {injectHead && (
           <>
-            <noscript dangerouslySetInnerHTML={{ __html: injectHead }} />
+            <noscript dangerouslySetInnerHTML={{ __html: cleanNoscript(injectHead) }} />
             <script
               id="cms-head-inject"
               dangerouslySetInnerHTML={{
@@ -168,7 +173,7 @@ export default async function RootLayout({
         {/* Dynamic Body Start Inject Code from CMS */}
         {injectBodyStart && (
           <>
-            <noscript dangerouslySetInnerHTML={{ __html: injectBodyStart }} />
+            <noscript dangerouslySetInnerHTML={{ __html: cleanNoscript(injectBodyStart) }} />
             <script
               id="cms-body-start-inject"
               dangerouslySetInnerHTML={{
