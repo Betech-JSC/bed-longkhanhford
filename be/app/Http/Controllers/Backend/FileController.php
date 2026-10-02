@@ -35,6 +35,21 @@ class FileController extends Controller
         $files = $request->file('files');
         $relativePaths = $request->input('relative_paths', []);
 
+        if (empty($files)) {
+            $files = $request->input('files', []);
+        }
+
+        if (empty($files)) {
+            return response()->json([
+                'message' => 'Không tìm thấy tệp tải lên hoặc tệp vượt quá giới hạn upload của máy chủ (post_max_size / upload_max_filesize).',
+                'errors' => ['files' => 'Không có tệp nào được gửi lên']
+            ], 422);
+        }
+
+        if (!is_array($files)) {
+            $files = [$files];
+        }
+
         $file = new File($request->input('path', '/'));
         $result = $file->store($files, $relativePaths);
 

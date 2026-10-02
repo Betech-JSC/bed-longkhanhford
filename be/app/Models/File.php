@@ -207,7 +207,7 @@ class File
         }
 
         // 5. Transform only the paginated result slice
-        return $files->values()->map(fn($item) => $this->transformFile($item))->keyBy('path');
+        return $files->values()->map(fn($item) => $this->transformFile($item))->values();
     }
 
     public function findOrFail($options = [])
@@ -243,6 +243,17 @@ class File
     {
         $successFiles = [];
         $failureFiles = [];
+
+        if (empty($files)) {
+            return [
+                'successFiles' => [],
+                'failureFiles' => ['No files provided'],
+            ];
+        }
+
+        if (!is_array($files)) {
+            $files = [$files];
+        }
 
         foreach ($files as $index => $file) {
             if (is_string($file) && preg_match('/^data:([^;]+);base64,(.*)$/', $file, $matches)) {
@@ -374,27 +385,24 @@ class File
                             } catch (\Exception $e) {
                                 logger()->error('Image processing failed: ' . $e->getMessage());
                                 $filePath = $this->storage->putFileAs(
-                                    $targetDir,
+                                    $targetDir == '/' ? '' : $targetDir,
                                     $file,
                                     $fileName
                                 );
                             }
                         } else {
                             $filePath = $this->storage->putFileAs(
-                                $targetDir,
+                                $targetDir == '/' ? '' : $targetDir,
                                 $file,
                                 $fileName
                             );
                         }
-                        $successFiles[] = static_url($filePath, [], false);
 
-                        if (!$filePath) {
-                            logger('Store file');
-                            logger($file);
-                            logger("Disk: $this->disk");
-                            logger("Folder: $this->path");
-                            logger("File name: $fileName");
-                            logger('End store file');
+                        if ($filePath) {
+                            $successFiles[] = static_url($filePath, [], false);
+                        } else {
+                            $failureFiles[] = $fileName;
+                            logger()->error("Store file failed for $fileName on disk $this->disk in folder $targetDir");
                         }
                     } else {
                         $failureFiles[] = $fileName;

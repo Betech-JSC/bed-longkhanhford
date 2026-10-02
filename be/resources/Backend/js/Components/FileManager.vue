@@ -563,6 +563,7 @@ export default {
                     path: this.currentPath,
                     type: this.currentType,
                     sort: this.currentSort,
+                    _t: Date.now(),
                     ...params,
                 }
 
@@ -837,17 +838,18 @@ export default {
             }
             this.$refs.folderInput.value = ''
         },
-        uploadFilesWithPaths(filesToUpload) {
-            if (filesToUpload.length === 0) {
+        async uploadBatch(items) {
+            if (!items || items.length === 0) {
                 this.loading = false
                 return
             }
+            this.loading = true
 
-            for (const item of filesToUpload) {
+            for (const item of items) {
                 const fileCheck = this.fileCheck(item.file)
                 if (!fileCheck.valid) {
                     alert(
-                        item.relativePath + ': ' +
+                        (item.relativePath || item.file.name) + ': ' +
                         this.tt('models.files.maximum_size') +
                         ' ' +
                         fileCheck.maxSize +
@@ -858,79 +860,66 @@ export default {
                 }
             }
 
-            var formData = new FormData()
-            for (let index = 0; index < filesToUpload.length; index++) {
-                const item = filesToUpload[index]
-                const file = item.file
-                const relativePath = item.relativePath
+            let successCount = 0
+            let failCount = 0
+            let lastErrorMsg = ''
 
-                if (this.isImage(file.name)) {
-                    const reader = new FileReader()
-                    reader.onload = (e) => {
-                        this.uploadingFiles.push({
-                            filename: relativePath,
-                            base64_code: e.target.result,
-                        })
-                    }
-                    reader.readAsDataURL(file)
-                } else {
-                    this.uploadingFiles.push({
-                        filename: relativePath,
-                        base64_code: null,
-                        size: file.size,
-                    })
+            for (let i = 0; i < items.length; i++) {
+                const item = items[i]
+                const formData = new FormData()
+                formData.append('files[0]', item.file)
+                if (item.relativePath) {
+                    formData.append('relative_paths[0]', item.relativePath)
                 }
-                formData.append('files[' + index + ']', file)
-                formData.append('relative_paths[' + index + ']', relativePath)
+                formData.append('path', this.currentPath)
+
+                try {
+                    const res = await this.$axios.post(this.route('admin.files.store'), formData)
+                    if (res.status === 200) {
+                        successCount++
+                    } else {
+                        failCount++
+                    }
+                } catch (err) {
+                    failCount++
+                    lastErrorMsg = err.response?.data?.message || (item.file.name + ' tải lên thất bại.')
+                }
             }
-            
-            formData.append('path', this.currentPath)
-            this.postFiles(formData)
+
+            this.loading = false
+            this.uploadingFiles = []
+            this.getFiles({ page: 1 }, true)
+
+            if (successCount > 0) {
+                this.$toast.add({
+                    severity: 'success',
+                    summary: this.tt('models.admins.success'),
+                    detail: `Đã tải lên thành công ${successCount} tệp.` + (failCount > 0 ? ` (${failCount} tệp lỗi)` : ''),
+                    life: 3000,
+                })
+            }
+            if (failCount > 0) {
+                this.$toast.add({
+                    severity: 'error',
+                    summary: 'Lỗi tải tệp',
+                    detail: lastErrorMsg || `${failCount} tệp tải lên thất bại.`,
+                    life: 5000,
+                })
+            }
+        },
+        uploadFilesWithPaths(filesToUpload) {
+            this.uploadBatch(filesToUpload)
         },
         uploadFiles(images) {
-            if (images.length === 0 || this.loading) return
-            this.loading = true
-
-            for (const image of images) {
-                const fileCheck = this.fileCheck(image)
-                if (!fileCheck.valid) {
-                    alert(
-                        this.tt('models.files.maximum_size') +
-                        ' ' +
-                        fileCheck.maxSize +
-                        this.tt('models.files.try_again')
-                    )
-                    this.$refs.file.value = ''
-                    this.loading = false
-                    return false
-                }
+            if (!images || images.length === 0 || this.loading) return
+            const items = Array.from(images).map((file) => ({
+                file: file,
+                relativePath: file.name,
+            }))
+            if (this.$refs.file) {
+                this.$refs.file.value = ''
             }
-
-            var formData = new FormData()
-            for (let index = 0; index < images.length; index++) {
-                const image = images[index]
-
-                if (this.isImage(image.name)) {
-                    const reader = new FileReader()
-                    reader.onload = (e) => {
-                        this.uploadingFiles.push({
-                            filename: image.name,
-                            base64_code: e.target.result,
-                        })
-                    }
-                    reader.readAsDataURL(image)
-                } else {
-                    this.uploadingFiles.push({
-                        filename: image.name,
-                        base64_code: null,
-                        size: image.size,
-                    })
-                }
-                formData.append('files[' + index + ']', image)
-                formData.append('path', this.currentPath)
-            }
-            this.$refs.file.value = ''
-            this.postFiles(formData)
+            this.uploadBatch(items)
         },
         postFiles(formData) {
             this.loading = true
