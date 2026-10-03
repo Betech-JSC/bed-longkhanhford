@@ -8,11 +8,10 @@ import {
   SlidersHorizontal, 
   X, 
   RotateCcw, 
-  ChevronRight,
-  ShieldCheck,
-  Calendar,
-  Gauge,
-  PhoneCall
+  ShieldCheck, 
+  Calendar, 
+  Gauge, 
+  PhoneCall 
 } from "lucide-react";
 import { usedVehiclesAPI } from "@/lib/api";
 import { resolveImageUrl, handleImageError } from "@/lib/site-assets";
@@ -224,9 +223,9 @@ export default function XeDaQuaSuDungClient({ initialVehicles }: XeDaQuaSuDungCl
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[1, 2, 3].map((n) => (
-                <div key={n} className="bg-white rounded-none overflow-hidden border border-gray-200 shadow-xs animate-pulse h-[400px]">
-                  <div className="bg-gray-200 h-[220px]" />
-                  <div className="p-6 space-y-4">
+                <div key={n} className="bg-white rounded-lg overflow-hidden border border-gray-100 shadow-xs animate-pulse flex flex-col h-full">
+                  <div className="bg-gray-200 aspect-[16/10] w-full" />
+                  <div className="p-6 space-y-4 flex-1">
                     <div className="h-4 bg-gray-200 rounded w-2/3" />
                     <div className="h-3 bg-gray-200 rounded w-full" />
                     <div className="h-5 bg-gray-200 rounded w-1/3" />
@@ -263,23 +262,26 @@ export default function XeDaQuaSuDungClient({ initialVehicles }: XeDaQuaSuDungCl
                     className="group bg-white border border-gray-100 hover:border-[#066fef]/40 rounded-lg overflow-hidden shadow-xs hover:shadow-md transition-all duration-300 flex flex-col h-full"
                   >
                     {/* Image Area */}
-                    <div className="relative h-[220px] bg-white overflow-hidden flex items-center justify-center border-b-0">
+                    <Link 
+                      href={`/xe-da-qua-su-dung/${vehicle.slug}`}
+                      className="relative aspect-[16/10] w-full bg-gray-100 overflow-hidden block border-b border-gray-100"
+                    >
                       <Image 
                         src={resolveImageUrl(vehicle.image_url || vehicle.image) || "/assets/images/placeholder_car.webp"} 
                         alt={vehicle.title}
                         fill
                         unoptimized
-                        className="object-contain p-3 group-hover:scale-105 transition-all duration-500"
+                        className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         onError={handleImageError}
                       />
                       
                       {/* Assured Badge */}
-                      <div className="absolute top-4 left-4 bg-[#066fef]/90 backdrop-blur-xs text-white text-[9px] font-bold uppercase tracking-wider py-1.5 px-3 rounded-[4px] shadow-xs flex items-center gap-1 z-10 font-antenna">
+                      <div className="absolute top-3.5 left-3.5 bg-[#066fef]/90 backdrop-blur-xs text-white text-[9px] font-bold uppercase tracking-wider py-1.5 px-3 rounded-[4px] shadow-sm flex items-center gap-1 z-10 font-antenna">
                         <ShieldCheck className="w-3.5 h-3.5" />
                         <span>Ford Assured</span>
                       </div>
-                    </div>
+                    </Link>
 
                     {/* Info Area */}
                     <div className="p-6 flex-1 flex flex-col justify-between font-antenna">
@@ -298,7 +300,9 @@ export default function XeDaQuaSuDungClient({ initialVehicles }: XeDaQuaSuDungCl
 
                         {/* Title */}
                         <h3 className="text-base font-bold text-gray-900 mb-2 group-hover:text-[#066fef] transition-colors leading-snug font-display">
-                          {vehicle.title}
+                          <Link href={`/xe-da-qua-su-dung/${vehicle.slug}`} className="hover:underline">
+                            {vehicle.title}
+                          </Link>
                         </h3>
 
                         {/* Tagline */}
