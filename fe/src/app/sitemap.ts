@@ -168,10 +168,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           pathname = pathname.replace(/^\/san-pham\//, "/");
         }
 
-        // Đồng bộ các URL Model Year cũ về URL canonical
-        pathname = pathname
-          .replace(/^\/ford-territory-2026(\/|$)/, "/ford-territory$1")
-          .replace(/^\/ford-ranger-2026(\/|$)/, "/ford-ranger$1");
 
         locUrl = `${siteUrl}${pathname}${search}`;
 

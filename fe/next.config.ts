@@ -204,27 +204,6 @@ const nextConfig = {
         destination: "/ford-mustang-mach-e/:subpath*",
         permanent: true,
       },
-      // Model Year 301 Permanent Redirects
-      {
-        source: "/ford-territory-2026",
-        destination: "/ford-territory",
-        permanent: true,
-      },
-      {
-        source: "/ford-territory-2026/:subpath*",
-        destination: "/ford-territory/:subpath*",
-        permanent: true,
-      },
-      {
-        source: "/ford-ranger-2026",
-        destination: "/ford-ranger",
-        permanent: true,
-      },
-      {
-        source: "/ford-ranger-2026/:subpath*",
-        destination: "/ford-ranger/:subpath*",
-        permanent: true,
-      },
       // Chuyển hướng 301 legacy URL /san-pham/:path+ về /:path+ (không redirect /san-pham)
       {
         source: "/san-pham/:path+",
