@@ -62,6 +62,11 @@ class Vehicle extends BaseModel
     public const STATUS_ACTIVE = 'ACTIVE';
     public const STATUS_INACTIVE = 'INACTIVE';
 
+    public const STATUS_LIST = [
+        self::STATUS_ACTIVE => 'Hiển thị',
+        self::STATUS_INACTIVE => 'Ẩn',
+    ];
+
     public function rules(): array
     {
         $base = [

@@ -55,7 +55,10 @@
                             type: 'radio_list',
                             name: 'status',
                             label: 'Trạng thái',
-                            options: schema.columns.status.list,
+                            options: schema.columns?.status?.list || [
+                                { id: 'ACTIVE', label: 'Hiển thị' },
+                                { id: 'INACTIVE', label: 'Ẩn' }
+                            ],
                         }"
                     />
                     <Field
