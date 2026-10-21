@@ -1,13 +1,7 @@
-import { Suspense } from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
 import { settingsAPI } from "@/lib/api";
-// import AIChatWidget from "@/components/shared/AIChatWidget";
-// import CompareDrawer from "@/components/shared/CompareDrawer";
-import ClientWidgets from "@/components/shared/ClientWidgets";
-import PageTransitionLoader from "@/components/shared/PageTransitionLoader";
+import MainLayoutStructure from "@/components/layout/MainLayoutStructure";
 import "./globals.css";
 
 const inter = Inter({
@@ -118,8 +112,8 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        <link rel="preconnect" href="https://cms.dnf.betech-digital.com" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://cms.dnf.betech-digital.com" />
+        <link rel="preconnect" href="https://cms.longkhanhford.betech-digital.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://cms.longkhanhford.betech-digital.com" />
         <link rel="preconnect" href="https://cms.longkhanhford.com.vn" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://cms.longkhanhford.com.vn" />
         {/* Preload Critical Fonts & LCP Hero Banner */}
@@ -204,15 +198,7 @@ export default async function RootLayout({
             />
           </>
         )}
-        <Navbar />
-        <Suspense fallback={null}>
-          <PageTransitionLoader />
-        </Suspense>
-        <main className="flex-1 flex flex-col pb-20 md:pb-0">{children}</main>
-        <Footer />
-        {/* <AIChatWidget /> */}
-        {/* <CompareDrawer /> */}
-        <ClientWidgets />
+        <MainLayoutStructure>{children}</MainLayoutStructure>
         {/* Dynamic Body End Inject Code from CMS */}
         {injectBodyEnd && (
           <script

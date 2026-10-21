@@ -26,6 +26,7 @@ class File
 
     public function __construct($path = '/', $disk = null)
     {
+        $path = is_string($path) ? rawurldecode($path) : $path;
         $this->disk = $disk ?? 'uploads';
         if ($this->disk === 'uploads' && is_string($path)) {
             $cleanedPath = ltrim($path, '/');
@@ -48,6 +49,15 @@ class File
         $this->path = $path;
         $this->storage = Storage::disk($this->disk);
         $this->publicStorage = Storage::disk('public');
+
+        if ($this->disk === 'uploads' && is_string($this->path) && $this->path !== '/' && !$this->storage->exists($this->path)) {
+            $webpCandidate = preg_replace('/\.(png|jpe?g)$/i', '.webp', $this->path);
+            if ($webpCandidate && $webpCandidate !== $this->path && $this->storage->exists($webpCandidate)) {
+                $this->path = $webpCandidate;
+            } elseif ($this->storage->exists('vehicles/' . ltrim($this->path, '/'))) {
+                $this->path = 'vehicles/' . ltrim($this->path, '/');
+            }
+        }
     }
 
     public function items()
@@ -160,6 +170,11 @@ class File
     public function findOrFail($options = [])
     {
         try {
+            if (!$this->storage->exists($this->path)) {
+                return response('File not found in CMS storage', 404)
+                    ->header('Content-Type', 'text/plain');
+            }
+
             if ($this->isVideo()) {
                 return $this->responseStreamingVideo();
             }
@@ -388,22 +403,27 @@ class File
         $cacheFullPath = $cacheFolder . '/' . $cacheFilename;
 
         if (!$this->publicStorage->exists($cacheFullPath)) {
-            // Create cache folder if it doesn't exist
-            $this->publicStorage->makeDirectory($cacheFolder, 0755, true);
+            try {
+                // Create cache folder if it doesn't exist
+                $this->publicStorage->makeDirectory($cacheFolder, 0755, true);
 
-            $imagePath = $this->storage->path($this->path);
+                $imagePath = $this->storage->path($this->path);
 
-            $image = Image::make($imagePath);
+                $image = Image::make($imagePath);
 
-            if (isset($options['w'])) {
-                $image->resize($options['w'], null, function ($constraint) {
-                    $constraint->aspectRatio();
-                });
+                if (isset($options['w'])) {
+                    $image->resize($options['w'], null, function ($constraint) {
+                        $constraint->aspectRatio();
+                    });
+                }
+
+                $image
+                    ->encode($options['fm'], 80)
+                    ->save($this->publicStorage->path($cacheFullPath));
+            } catch (\Exception $e) {
+                logger()->error('Image caching/resize failed, falling back to original: ' . $e->getMessage());
+                return $this->responseDefault();
             }
-
-            $image
-                ->encode($options['fm'], 80)
-                ->save($this->publicStorage->path($cacheFullPath));
         }
 
         return redirect(asset('storage/' . $cacheFullPath), 302, [

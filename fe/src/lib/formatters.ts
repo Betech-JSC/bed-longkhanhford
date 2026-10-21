@@ -26,3 +26,15 @@ export function formatCurrencyVND(amount: number): string {
   if (isNaN(amount) || amount === 0) return "0 đ";
   return new Intl.NumberFormat("vi-VN").format(amount) + " đ";
 }
+
+/**
+ * Chuẩn hóa viết hoa chữ cái đầu cho tên riêng tiếng Việt (e.g., "nguyễn thị thu trang" -> "Nguyễn Thị Thu Trang")
+ */
+export function formatPersonName(input?: string | null): string {
+  if (!input) return "";
+  return input
+    .trim()
+    .split(/\s+/)
+    .map((word) => (word ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase() : ""))
+    .join(" ");
+}

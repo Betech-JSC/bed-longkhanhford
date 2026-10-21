@@ -114,6 +114,69 @@
                             }" />
                         </div>
 
+                        <!-- LDP Sales Consultant Block Edit Form -->
+                        <div v-else-if="blocks[activeIndex].type === 'LdpSalesConsultant'" class="space-y-4">
+                            <Field
+                                v-model="vehicleData.sales_consultant_id"
+                                :field="{
+                                    type: 'dropdown',
+                                    name: 'sales_consultant_id',
+                                    label: 'Cố vấn phụ trách (Sales)',
+                                    options: salesConsultants,
+                                    emptyLabel: '-- Chọn cố vấn bán hàng --',
+                                }"
+                            />
+                            <div class="text-xs text-gray-500 italic mt-2">
+                                ℹ️ Khối này tự động hiển thị Banner thông tin chi tiết của cố vấn được chọn (tên, avatar, số điện thoại, nút gọi/nhận báo giá).
+                            </div>
+                        </div>
+
+                        <!-- LDP Promotions Block Edit Form -->
+                        <div v-else-if="blocks[activeIndex].type === 'LdpPromotions'" class="space-y-4">
+                            <Field v-model="blocks[activeIndex].data.title" :field="{
+                                type: 'text',
+                                name: 'ldp_promo_title_' + activeIndex,
+                                label: 'Tiêu đề khối khuyến mãi',
+                                placeholder: 'vd: Chương Trình Khuyến Mãi Đặc Biệt',
+                            }" />
+                            <Field v-model="blocks[activeIndex].data.description" :field="{
+                                type: 'textarea',
+                                name: 'ldp_promo_desc_' + activeIndex,
+                                label: 'Mô tả ngắn',
+                                placeholder: 'vd: Nhận ưu đãi độc quyền từ Cố vấn khi đăng ký mua xe trong tháng này.',
+                            }" />
+
+                            <!-- Khuyến mãi hệ thống (Global) -->
+                            <div class="border-t border-gray-200 pt-3">
+                                <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">1. Khuyến mãi chung từ hệ thống</label>
+                                <div class="space-y-2 max-h-48 overflow-y-auto pr-1 border rounded p-2 bg-white">
+                                    <div v-for="promo in globalPromotions" :key="promo.id" class="flex items-start space-x-2 py-1">
+                                        <input
+                                            type="checkbox"
+                                            :id="'editor-promo-' + promo.id"
+                                            :value="promo.id"
+                                            v-model="vehicleData.promotions.global_promotion_ids"
+                                            class="mt-0.5 h-3.5 w-3.5 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                                        />
+                                        <label :for="'editor-promo-' + promo.id" class="text-xs font-medium text-gray-700 cursor-pointer">
+                                            {{ promo.title }}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Khuyến mãi tự nhập (Custom) -->
+                            <div class="border-t border-gray-200 pt-3">
+                                <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">2. Khuyến mãi riêng của bạn (Tự nhập)</label>
+                                <div v-for="(promo, index) in (vehicleData.promotions ? vehicleData.promotions.custom_promotions : [])" :key="index" class="border border-gray-200 rounded p-3 mb-2 bg-gray-50/50 relative">
+                                    <button type="button" class="absolute top-2 right-2 text-red-500 text-[10px] font-bold hover:underline" @click="vehicleData.promotions.custom_promotions.splice(index, 1)">❌ Xoá</button>
+                                    <Field v-model="vehicleData.promotions.custom_promotions[index].title" :field="{ type: 'text', name: 'c_title_' + index, label: 'Tiêu đề' }" class="mb-1" />
+                                    <Field v-model="vehicleData.promotions.custom_promotions[index].description" :field="{ type: 'textarea', name: 'c_desc_' + index, label: 'Mô tả chi tiết' }" />
+                                </div>
+                                <button type="button" class="btn btn-outline-primary btn-xs mt-1" @click="addCustomPromoToVehicleData">➕ Thêm khuyến mãi riêng</button>
+                            </div>
+                        </div>
+
                         <!-- 2. Promotions Edit Form -->
                         <div v-else-if="blocks[activeIndex].type === 'Promotions'" class="space-y-4">
                             <div class="relative">
@@ -433,6 +496,518 @@
                                 urlOnly: true,
                             }" />
                         </div>
+
+                        <!-- 10. TestimonialSlider Edit Form -->
+                        <div v-else-if="blocks[activeIndex].type === 'TestimonialSlider'" class="space-y-4">
+                            <div class="relative">
+                                <button type="button" @click="openAIModal('TestimonialSlider', 'title', activeIndex)" class="absolute top-0 right-0 z-10 text-[10px] text-blue-400 hover:text-blue-300 bg-transparent border-0 p-1 flex items-center gap-1 font-semibold" title="Viết bằng AI">
+                                    ✨ AI viết
+                                </button>
+                                <Field v-model="blocks[activeIndex].data.title" :field="{
+                                    type: 'text',
+                                    name: 'ts_title_' + activeIndex,
+                                    label: 'Tiêu đề mục đánh giá',
+                                    placeholder: 'vd: Khách hàng nói gì về chúng tôi?',
+                                }" />
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <label class="text-xs font-bold text-slate-300">Danh sách đánh giá:</label>
+                                <button type="button" class="text-xs text-blue-400 hover:text-blue-300 font-bold" @click="addTestimonial(activeIndex)">
+                                    + Thêm đánh giá
+                                </button>
+                            </div>
+                            <div v-for="(review, rIndex) in blocks[activeIndex].data.reviews" :key="rIndex" class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-3 relative">
+                                <button type="button" class="absolute top-2.5 right-2.5 text-red-400 hover:text-red-500 font-bold text-xs" @click="removeTestimonial(activeIndex, rIndex)">✕ Xóa</button>
+                                <span class="text-[9px] uppercase font-bold text-slate-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800">Đánh giá #{{ rIndex + 1 }}</span>
+                                <Field v-model="blocks[activeIndex].data.reviews[rIndex].name" :field="{
+                                    type: 'text',
+                                    name: 'ts_name_' + activeIndex + '_' + rIndex,
+                                    label: 'Tên khách hàng',
+                                    placeholder: 'vd: Anh Nguyễn Văn A',
+                                }" />
+                                <div class="relative">
+                                    <button type="button" @click="openAIModal('TestimonialSlider', 'content', activeIndex, rIndex)" class="absolute top-0 right-0 z-10 text-[10px] text-blue-400 hover:text-blue-300 bg-transparent border-0 p-1 flex items-center gap-1 font-semibold" title="Viết bằng AI">
+                                        ✨ AI viết
+                                    </button>
+                                    <Field v-model="blocks[activeIndex].data.reviews[rIndex].content" :field="{
+                                        type: 'textarea',
+                                        name: 'ts_content_' + activeIndex + '_' + rIndex,
+                                        label: 'Nội dung nhận xét',
+                                        placeholder: 'vd: Rất hài lòng với dịch vụ tại Long Khánh Ford...',
+                                    }" />
+                                </div>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">Số sao (1-5)</label>
+                                        <select
+                                            v-model.number="blocks[activeIndex].data.reviews[rIndex].rating"
+                                            class="w-full bg-white border border-gray-200 rounded-lg p-2 text-xs text-gray-800 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                                        >
+                                            <option :value="5">⭐⭐⭐⭐⭐ (5 sao)</option>
+                                            <option :value="4">⭐⭐⭐⭐ (4 sao)</option>
+                                            <option :value="3">⭐⭐⭐ (3 sao)</option>
+                                            <option :value="2">⭐⭐ (2 sao)</option>
+                                            <option :value="1">⭐ (1 sao)</option>
+                                        </select>
+                                    </div>
+                                    <Field v-model="blocks[activeIndex].data.reviews[rIndex].role" :field="{
+                                        type: 'text',
+                                        name: 'ts_role_' + activeIndex + '_' + rIndex,
+                                        label: 'Chức danh / Xe đã mua',
+                                        placeholder: 'vd: Chủ xe Everest 2024',
+                                    }" />
+                                </div>
+                                <Field v-model="blocks[activeIndex].data.reviews[rIndex].avatar" :field="{
+                                    type: 'file_upload',
+                                    name: 'ts_avatar_' + activeIndex + '_' + rIndex,
+                                    label: 'Ảnh đại diện (tuỳ chọn)',
+                                    urlOnly: true,
+                                }" />
+                            </div>
+                        </div>
+
+                        <!-- 11. VideoShowcase Edit Form -->
+                        <div v-else-if="blocks[activeIndex].type === 'VideoShowcase'" class="space-y-4">
+                            <div class="relative">
+                                <button type="button" @click="openAIModal('VideoShowcase', 'title', activeIndex)" class="absolute top-0 right-0 z-10 text-[10px] text-blue-400 hover:text-blue-300 bg-transparent border-0 p-1 flex items-center gap-1 font-semibold" title="Viết bằng AI">
+                                    ✨ AI viết
+                                </button>
+                                <Field v-model="blocks[activeIndex].data.title" :field="{
+                                    type: 'text',
+                                    name: 'vs_title_' + activeIndex,
+                                    label: 'Tiêu đề mục video',
+                                    placeholder: 'vd: Trải nghiệm Ford Everest trên mọi cung đường',
+                                }" />
+                            </div>
+                            <div class="relative">
+                                <button type="button" @click="openAIModal('VideoShowcase', 'description', activeIndex)" class="absolute top-0 right-0 z-10 text-[10px] text-blue-400 hover:text-blue-300 bg-transparent border-0 p-1 flex items-center gap-1 font-semibold" title="Viết bằng AI">
+                                    ✨ AI viết
+                                </button>
+                                <Field v-model="blocks[activeIndex].data.description" :field="{
+                                    type: 'textarea',
+                                    name: 'vs_desc_' + activeIndex,
+                                    label: 'Mô tả ngắn',
+                                }" />
+                            </div>
+                            <Field v-model="blocks[activeIndex].data.video_url" :field="{
+                                type: 'text',
+                                name: 'vs_url_' + activeIndex,
+                                label: 'Link video YouTube hoặc TikTok',
+                                placeholder: 'vd: https://www.youtube.com/watch?v=...',
+                            }" />
+                            <Field v-model="blocks[activeIndex].data.thumbnail" :field="{
+                                type: 'file_upload',
+                                name: 'vs_thumb_' + activeIndex,
+                                label: 'Ảnh thumbnail (nếu bỏ trống sẽ lấy tự động từ video)',
+                                urlOnly: true,
+                            }" />
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">Kiểu hiển thị</label>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button
+                                        v-for="opt in [{value: 'embed', label: '▶ Nhúng trực tiếp'}, {value: 'lightbox', label: '🔳 Lightbox popup'}]"
+                                        :key="opt.value"
+                                        type="button"
+                                        class="py-1.5 px-2 text-xs rounded-lg font-medium border transition-all text-center cursor-pointer"
+                                        :class="(blocks[activeIndex].data.display_mode || 'embed') === opt.value ? 'bg-[#008060] text-white border-[#008060] shadow-xs' : 'bg-white text-gray-750 border-gray-300 hover:bg-gray-50'"
+                                        @click="blocks[activeIndex].data.display_mode = opt.value"
+                                    >
+                                        {{ opt.label }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 12. CountdownTimer Edit Form -->
+                        <div v-else-if="blocks[activeIndex].type === 'CountdownTimer'" class="space-y-4">
+                            <div class="relative">
+                                <button type="button" @click="openAIModal('CountdownTimer', 'title', activeIndex)" class="absolute top-0 right-0 z-10 text-[10px] text-blue-400 hover:text-blue-300 bg-transparent border-0 p-1 flex items-center gap-1 font-semibold" title="Viết bằng AI">
+                                    ✨ AI viết
+                                </button>
+                                <Field v-model="blocks[activeIndex].data.title" :field="{
+                                    type: 'text',
+                                    name: 'ct_title_' + activeIndex,
+                                    label: 'Tiêu đề ưu đãi',
+                                    placeholder: 'vd: Ưu đãi cuối tháng — Sắp kết thúc!',
+                                }" />
+                            </div>
+                            <div class="relative">
+                                <button type="button" @click="openAIModal('CountdownTimer', 'subtitle', activeIndex)" class="absolute top-0 right-0 z-10 text-[10px] text-blue-400 hover:text-blue-300 bg-transparent border-0 p-1 flex items-center gap-1 font-semibold" title="Viết bằng AI">
+                                    ✨ AI viết
+                                </button>
+                                <Field v-model="blocks[activeIndex].data.subtitle" :field="{
+                                    type: 'text',
+                                    name: 'ct_subtitle_' + activeIndex,
+                                    label: 'Dòng phụ (Subtitle)',
+                                    placeholder: 'vd: Nhận ngay ưu đãi lên đến 100 triệu đồng',
+                                }" />
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">Ngày kết thúc</label>
+                                <input
+                                    type="datetime-local"
+                                    v-model="blocks[activeIndex].data.end_date"
+                                    class="w-full bg-white border border-gray-200 rounded-lg p-2 text-xs text-gray-800 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                                />
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <Field v-model="blocks[activeIndex].data.button_text" :field="{
+                                    type: 'text',
+                                    name: 'ct_btn_' + activeIndex,
+                                    label: 'Nhãn nút bấm',
+                                    placeholder: 'vd: Đăng ký ngay',
+                                }" />
+                                <Field v-model="blocks[activeIndex].data.button_link" :field="{
+                                    type: 'text',
+                                    name: 'ct_blink_' + activeIndex,
+                                    label: 'Liên kết nút bấm',
+                                    placeholder: 'vd: /lien-he',
+                                }" />
+                            </div>
+                            <Field v-model="blocks[activeIndex].data.background_image" :field="{
+                                type: 'file_upload',
+                                name: 'ct_bg_' + activeIndex,
+                                label: 'Ảnh nền (tuỳ chọn)',
+                                urlOnly: true,
+                            }" />
+                        </div>
+
+                        <!-- 13. ComparisonTable Edit Form -->
+                        <div v-else-if="blocks[activeIndex].type === 'ComparisonTable'" class="space-y-4">
+                            <div class="relative">
+                                <button type="button" @click="openAIModal('ComparisonTable', 'title', activeIndex)" class="absolute top-0 right-0 z-10 text-[10px] text-blue-400 hover:text-blue-300 bg-transparent border-0 p-1 flex items-center gap-1 font-semibold" title="Viết bằng AI">
+                                    ✨ AI viết
+                                </button>
+                                <Field v-model="blocks[activeIndex].data.title" :field="{
+                                    type: 'text',
+                                    name: 'cpt_title_' + activeIndex,
+                                    label: 'Tiêu đề bảng so sánh',
+                                    placeholder: 'vd: Ford Everest vs Toyota Fortuner',
+                                }" />
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <Field v-model="blocks[activeIndex].data.ford_name" :field="{
+                                    type: 'text',
+                                    name: 'cpt_ford_' + activeIndex,
+                                    label: 'Tên xe Ford',
+                                    placeholder: 'vd: Ford Everest',
+                                }" />
+                                <Field v-model="blocks[activeIndex].data.competitor_name" :field="{
+                                    type: 'text',
+                                    name: 'cpt_comp_' + activeIndex,
+                                    label: 'Tên xe đối thủ',
+                                    placeholder: 'vd: Toyota Fortuner',
+                                }" />
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <Field v-model="blocks[activeIndex].data.ford_image" :field="{
+                                    type: 'file_upload',
+                                    name: 'cpt_ford_img_' + activeIndex,
+                                    label: 'Ảnh xe Ford',
+                                    urlOnly: true,
+                                }" />
+                                <Field v-model="blocks[activeIndex].data.competitor_image" :field="{
+                                    type: 'file_upload',
+                                    name: 'cpt_comp_img_' + activeIndex,
+                                    label: 'Ảnh xe đối thủ',
+                                    urlOnly: true,
+                                }" />
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <label class="text-xs font-bold text-slate-300">Tiêu chí so sánh:</label>
+                                <button type="button" class="text-xs text-blue-400 hover:text-blue-300 font-bold" @click="addComparisonRow(activeIndex)">
+                                    + Thêm tiêu chí
+                                </button>
+                            </div>
+                            <div v-for="(row, rowIndex) in blocks[activeIndex].data.rows" :key="rowIndex" class="bg-slate-900/80 border border-slate-800 rounded-xl p-3 space-y-2 relative">
+                                <button type="button" class="absolute top-2 right-2 text-red-400 hover:text-red-500 font-bold text-xs" @click="removeComparisonRow(activeIndex, rowIndex)">✕</button>
+                                <Field v-model="blocks[activeIndex].data.rows[rowIndex].criteria" :field="{
+                                    type: 'text',
+                                    name: 'cpt_cr_' + activeIndex + '_' + rowIndex,
+                                    label: 'Tiêu chí',
+                                    placeholder: 'vd: Động cơ',
+                                }" />
+                                <div class="grid grid-cols-2 gap-2">
+                                    <input v-model="blocks[activeIndex].data.rows[rowIndex].ford_value" type="text" class="w-full bg-white border border-gray-200 rounded px-2 py-1 text-xs text-gray-800" placeholder="Giá trị Ford" />
+                                    <input v-model="blocks[activeIndex].data.rows[rowIndex].competitor_value" type="text" class="w-full bg-white border border-gray-200 rounded px-2 py-1 text-xs text-gray-800" placeholder="Giá trị đối thủ" />
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Bên thắng</label>
+                                    <div class="flex gap-2">
+                                        <button type="button" class="flex-1 py-1 text-[10px] rounded font-bold border cursor-pointer"
+                                            :class="blocks[activeIndex].data.rows[rowIndex].winner === 'ford' ? 'bg-green-100 text-green-700 border-green-300' : 'bg-white text-gray-500 border-gray-200'"
+                                            @click="blocks[activeIndex].data.rows[rowIndex].winner = 'ford'"
+                                        >✓ Ford</button>
+                                        <button type="button" class="flex-1 py-1 text-[10px] rounded font-bold border cursor-pointer"
+                                            :class="blocks[activeIndex].data.rows[rowIndex].winner === 'tie' ? 'bg-yellow-100 text-yellow-700 border-yellow-300' : 'bg-white text-gray-500 border-gray-200'"
+                                            @click="blocks[activeIndex].data.rows[rowIndex].winner = 'tie'"
+                                        >= Hòa</button>
+                                        <button type="button" class="flex-1 py-1 text-[10px] rounded font-bold border cursor-pointer"
+                                            :class="blocks[activeIndex].data.rows[rowIndex].winner === 'competitor' ? 'bg-red-100 text-red-700 border-red-300' : 'bg-white text-gray-500 border-gray-200'"
+                                            @click="blocks[activeIndex].data.rows[rowIndex].winner = 'competitor'"
+                                        >✓ Đối thủ</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 14. GalleryMasonry Edit Form -->
+                        <div v-else-if="blocks[activeIndex].type === 'GalleryMasonry'" class="space-y-4">
+                            <div class="relative">
+                                <button type="button" @click="openAIModal('GalleryMasonry', 'title', activeIndex)" class="absolute top-0 right-0 z-10 text-[10px] text-blue-400 hover:text-blue-300 bg-transparent border-0 p-1 flex items-center gap-1 font-semibold" title="Viết bằng AI">
+                                    ✨ AI viết
+                                </button>
+                                <Field v-model="blocks[activeIndex].data.title" :field="{
+                                    type: 'text',
+                                    name: 'gm_title_' + activeIndex,
+                                    label: 'Tiêu đề bộ sưu tập',
+                                    placeholder: 'vd: Hình ảnh thực tế tại Long Khánh Ford',
+                                }" />
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">Số cột hiển thị</label>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <button
+                                        v-for="col in [2, 3, 4]"
+                                        :key="col"
+                                        type="button"
+                                        class="py-1.5 px-2 text-xs rounded-lg font-medium border transition-all text-center cursor-pointer"
+                                        :class="(blocks[activeIndex].data.columns || 3) === col ? 'bg-[#008060] text-white border-[#008060] shadow-xs' : 'bg-white text-gray-750 border-gray-300 hover:bg-gray-50'"
+                                        @click="blocks[activeIndex].data.columns = col"
+                                    >
+                                        {{ col }} cột
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <label class="text-xs font-bold text-slate-300">Danh sách ảnh:</label>
+                                <button type="button" class="text-xs text-blue-400 hover:text-blue-300 font-bold" @click="addGalleryImage(activeIndex)">
+                                    + Thêm ảnh
+                                </button>
+                            </div>
+                            <div v-for="(img, imgIndex) in blocks[activeIndex].data.images" :key="imgIndex" class="bg-slate-900/80 border border-slate-800 rounded-xl p-3 space-y-2 relative">
+                                <button type="button" class="absolute top-2 right-2 text-red-400 hover:text-red-500 font-bold text-xs" @click="removeGalleryImage(activeIndex, imgIndex)">✕</button>
+                                <span class="text-[9px] uppercase font-bold text-slate-400">Ảnh #{{ imgIndex + 1 }}</span>
+                                <Field v-model="blocks[activeIndex].data.images[imgIndex].src" :field="{
+                                    type: 'file_upload',
+                                    name: 'gm_img_' + activeIndex + '_' + imgIndex,
+                                    label: 'Hình ảnh',
+                                    urlOnly: true,
+                                }" />
+                                <Field v-model="blocks[activeIndex].data.images[imgIndex].caption" :field="{
+                                    type: 'text',
+                                    name: 'gm_cap_' + activeIndex + '_' + imgIndex,
+                                    label: 'Chú thích ảnh (tuỳ chọn)',
+                                    placeholder: 'vd: Khu vực showroom chính',
+                                }" />
+                            </div>
+                        </div>
+
+                        <!-- 15. SocialProof Edit Form -->
+                        <div v-else-if="blocks[activeIndex].type === 'SocialProof'" class="space-y-4">
+                            <div class="relative">
+                                <button type="button" @click="openAIModal('SocialProof', 'title', activeIndex)" class="absolute top-0 right-0 z-10 text-[10px] text-blue-400 hover:text-blue-300 bg-transparent border-0 p-1 flex items-center gap-1 font-semibold" title="Viết bằng AI">
+                                    ✨ AI viết
+                                </button>
+                                <Field v-model="blocks[activeIndex].data.title" :field="{
+                                    type: 'text',
+                                    name: 'sp_title_' + activeIndex,
+                                    label: 'Tiêu đề khối',
+                                    placeholder: 'vd: Tại sao chọn Long Khánh Ford?',
+                                }" />
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <label class="text-xs font-bold text-slate-300">Các con số ấn tượng:</label>
+                                <button type="button" class="text-xs text-blue-400 hover:text-blue-300 font-bold" @click="addStatItem(activeIndex)">
+                                    + Thêm chỉ số
+                                </button>
+                            </div>
+                            <div v-for="(stat, sIndex) in blocks[activeIndex].data.stats" :key="sIndex" class="bg-slate-900/80 border border-slate-800 rounded-xl p-3 space-y-2 relative">
+                                <button type="button" class="absolute top-2 right-2 text-red-400 hover:text-red-500 font-bold text-xs" @click="removeStatItem(activeIndex, sIndex)">✕</button>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <Field v-model="blocks[activeIndex].data.stats[sIndex].value" :field="{
+                                        type: 'text',
+                                        name: 'sp_val_' + activeIndex + '_' + sIndex,
+                                        label: 'Con số',
+                                        placeholder: 'vd: 5000+',
+                                    }" />
+                                    <Field v-model="blocks[activeIndex].data.stats[sIndex].label" :field="{
+                                        type: 'text',
+                                        name: 'sp_lbl_' + activeIndex + '_' + sIndex,
+                                        label: 'Mô tả',
+                                        placeholder: 'vd: Xe đã bán',
+                                    }" />
+                                </div>
+                                <Field v-model="blocks[activeIndex].data.stats[sIndex].icon" :field="{
+                                    type: 'text',
+                                    name: 'sp_ico_' + activeIndex + '_' + sIndex,
+                                    label: 'Biểu tượng (emoji hoặc icon class)',
+                                    placeholder: 'vd: 🚗 hoặc 🏆',
+                                }" />
+                            </div>
+                            <Field v-model="blocks[activeIndex].data.background_image" :field="{
+                                type: 'file_upload',
+                                name: 'sp_bg_' + activeIndex,
+                                label: 'Ảnh nền (tuỳ chọn)',
+                                urlOnly: true,
+                            }" />
+                        </div>
+
+                        <!-- 16. InstallmentCalculator Edit Form -->
+                        <div v-else-if="blocks[activeIndex].type === 'InstallmentCalculator'" class="space-y-4">
+                            <Field v-model="blocks[activeIndex].data.title" :field="{
+                                type: 'text',
+                                name: 'ic_title_' + activeIndex,
+                                label: 'Tiêu đề khối trả góp',
+                                placeholder: 'vd: Bảng Tính Chi Phí Trả Góp Ước Tính',
+                            }" />
+                            <Field v-model="blocks[activeIndex].data.subtitle" :field="{
+                                type: 'text',
+                                name: 'ic_sub_' + activeIndex,
+                                label: 'Mô tả phụ',
+                                placeholder: 'vd: Chỉ từ 20% giá trị xe, hỗ trợ vay đến 8 năm',
+                            }" />
+                            <div class="grid grid-cols-2 gap-3">
+                                <Field v-model.number="blocks[activeIndex].data.interest_rate" :field="{
+                                    type: 'text',
+                                    name: 'ic_ir_' + activeIndex,
+                                    label: 'Lãi suất (%/năm)',
+                                    placeholder: '7.9',
+                                }" />
+                                <Field v-model.number="blocks[activeIndex].data.max_years" :field="{
+                                    type: 'text',
+                                    name: 'ic_my_' + activeIndex,
+                                    label: 'Năm vay tối đa',
+                                    placeholder: '8',
+                                }" />
+                            </div>
+                            <Field v-model="blocks[activeIndex].data.custom_price" :field="{
+                                type: 'text',
+                                name: 'ic_cp_' + activeIndex,
+                                label: 'Giá tham khảo tùy chỉnh (nếu bỏ trống tự lấy giá xe)',
+                                placeholder: 'vd: 850000000',
+                            }" />
+                            <Field v-model="blocks[activeIndex].data.zalo_button_text" :field="{
+                                type: 'text',
+                                name: 'ic_zb_' + activeIndex,
+                                label: 'Nhãn nút liên hệ Zalo',
+                                placeholder: 'vd: Nhận bảng tính chi tiết qua Zalo',
+                            }" />
+                        </div>
+
+                        <!-- 17. CountdownOfferBanner Edit Form -->
+                        <div v-else-if="blocks[activeIndex].type === 'CountdownOfferBanner'" class="space-y-4">
+                            <Field v-model="blocks[activeIndex].data.title" :field="{
+                                type: 'text',
+                                name: 'cob_title_' + activeIndex,
+                                label: 'Tiêu đề khuyến mãi',
+                                placeholder: 'vd: CHƯƠNG TRÌNH ƯU ĐÃI ĐẶC BIỆT THÁNG NÀY',
+                            }" />
+                            <Field v-model="blocks[activeIndex].data.subtitle" :field="{
+                                type: 'text',
+                                name: 'cob_sub_' + activeIndex,
+                                label: 'Mô tả chương trình',
+                                placeholder: 'vd: Đăng ký ngay để giữ suất quà tặng...',
+                            }" />
+                            <div class="grid grid-cols-2 gap-3">
+                                <Field v-model="blocks[activeIndex].data.end_date" :field="{
+                                    type: 'text',
+                                    name: 'cob_ed_' + activeIndex,
+                                    label: 'Hạn đếm ngược (YYYY-MM-DD HH:mm)',
+                                    placeholder: 'vd: 2026-08-15 23:59',
+                                }" />
+                                <Field v-model.number="blocks[activeIndex].data.remaining_slots" :field="{
+                                    type: 'text',
+                                    name: 'cob_rs_' + activeIndex,
+                                    label: 'Số suất còn lại',
+                                    placeholder: '3',
+                                }" />
+                            </div>
+                            <Field v-model="blocks[activeIndex].data.button_text" :field="{
+                                type: 'text',
+                                name: 'cob_btn_' + activeIndex,
+                                label: 'Nhãn nút đăng ký giữ suất',
+                                placeholder: 'vd: Đăng Ký Giữ Suất Ưu Đãi',
+                            }" />
+                            <Field v-model="blocks[activeIndex].data.background_image" :field="{
+                                type: 'file_upload',
+                                name: 'cob_bg_' + activeIndex,
+                                label: 'Ảnh nền khối ưu đãi',
+                                urlOnly: true,
+                            }" />
+                        </div>
+
+                        <!-- 18. DualVehicleComparison Edit Form -->
+                        <div v-else-if="blocks[activeIndex].type === 'DualVehicleComparison'" class="space-y-4">
+                            <Field v-model="blocks[activeIndex].data.title" :field="{
+                                type: 'text',
+                                name: 'dvc_title_' + activeIndex,
+                                label: 'Tiêu đề khối so sánh',
+                                placeholder: 'vd: SO SÁNH TRỰC QUAN 2 DÒNG XE',
+                            }" />
+                            <Field v-model="blocks[activeIndex].data.subtitle" :field="{
+                                type: 'text',
+                                name: 'dvc_sub_' + activeIndex,
+                                label: 'Mô tả phụ',
+                                placeholder: 'vd: Lựa chọn dòng xe phù hợp nhất...',
+                            }" />
+                            <Field v-model="blocks[activeIndex].data.consultant_note_1" :field="{
+                                type: 'textarea',
+                                name: 'dvc_cn1_' + activeIndex,
+                                label: 'Ghi chú tư vấn cho Xe thứ nhất',
+                                placeholder: 'vd: Phù hợp di chuyển gia đình đô thị...',
+                            }" />
+                            <Field v-model="blocks[activeIndex].data.consultant_note_2" :field="{
+                                type: 'textarea',
+                                name: 'dvc_cn2_' + activeIndex,
+                                label: 'Ghi chú tư vấn cho Xe thứ hai',
+                                placeholder: 'vd: Mạnh mẽ vượt địa hình...',
+                            }" />
+                        </div>
+
+                        <!-- 19. LdpVehiclesGrid Edit Form -->
+                        <div v-else-if="blocks[activeIndex].type === 'LdpVehiclesGrid'" class="space-y-4">
+                            <Field v-model="blocks[activeIndex].data.title" :field="{
+                                type: 'text',
+                                name: 'lvg_title_' + activeIndex,
+                                label: 'Tiêu đề khối danh sách xe',
+                                placeholder: 'vd: Dòng xe Cố vấn phụ trách',
+                            }" />
+                            <Field v-model="blocks[activeIndex].data.subtitle" :field="{
+                                type: 'textarea',
+                                name: 'lvg_sub_' + activeIndex,
+                                label: 'Mô tả phụ',
+                                placeholder: 'vd: Chọn dòng xe quý khách quan tâm để xem bảng giá...',
+                            }" />
+                            <div class="p-3 bg-blue-50 border border-blue-200 rounded-lg text-xs text-blue-800">
+                                ℹ️ Khối này tự động lấy tất cả các dòng xe được chỉ định cho Cố vấn bán hàng này trong tab <strong>Thông tin chung</strong> để hiển thị dưới dạng lưới showroom kèm tab lọc phân loại.
+                            </div>
+                        </div>
+
+                        <!-- 20. LdpUsedVehicles Edit Form -->
+                        <div v-else-if="blocks[activeIndex].type === 'LdpUsedVehicles'" class="space-y-4">
+                            <Field v-model="blocks[activeIndex].data.title" :field="{
+                                type: 'text',
+                                name: 'luv_title_' + activeIndex,
+                                label: 'Tiêu đề khối xe đã qua sử dụng',
+                                placeholder: 'vd: Xe Đã Qua Sử Dụng Chất Lượng Cao',
+                            }" />
+                            <Field v-model="blocks[activeIndex].data.subtitle" :field="{
+                                type: 'textarea',
+                                name: 'luv_sub_' + activeIndex,
+                                label: 'Mô tả phụ',
+                                placeholder: 'vd: Tuyển chọn các dòng xe Ford lướt được kiểm tra 167 điểm kỹ thuật...',
+                            }" />
+                            <Field v-model="blocks[activeIndex].data.limit" :field="{
+                                type: 'number',
+                                name: 'luv_limit_' + activeIndex,
+                                label: 'Số lượng xe hiển thị tối đa',
+                                placeholder: '10',
+                            }" />
+                            <div class="p-3 bg-blue-50 border border-blue-200 rounded-lg text-xs text-blue-800">
+                                ℹ️ Khối này tự động kết nối với module <strong>Xe đã qua sử dụng</strong> trong CMS để trình chiếu Slider các mẫu xe Ford Assured chính hãng.
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Styling & Layout Panel -->
@@ -492,7 +1067,7 @@
                         </div>
 
                         <!-- Description Size & Description Color (for Promotions, ThreeSixtyViewer) -->
-                        <div v-if="['Promotions', 'ThreeSixtyViewer'].includes(blocks[activeIndex].type)" class="grid grid-cols-2 gap-3">
+                        <div v-if="['Promotions', 'ThreeSixtyViewer', 'VideoShowcase'].includes(blocks[activeIndex].type)" class="grid grid-cols-2 gap-3">
                             <div>
                                 <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">Cỡ chữ mô tả</label>
                                 <select 
@@ -541,6 +1116,103 @@
                                 />
                             </div>
                         </div>
+
+                        <!-- 🛠️ BỐ CỤC & MÀU SẮC (CUSTOM LAYOUT) -->
+                        <div class="mt-6 pt-6 border-t border-gray-200 space-y-4">
+                            <div class="bg-blue-50/50 border border-blue-100 rounded-lg p-3">
+                                <h5 class="text-xs font-bold text-blue-900 uppercase tracking-wide flex items-center gap-1.5">
+                                    ⚙️ Cấu hình Bố cục & Màu sắc
+                                </h5>
+                                <p class="text-[10px] text-blue-700 mt-1">
+                                    Tùy chỉnh khoảng cách, màu sắc nền, màu chữ và thẻ định danh cho khối này.
+                                </p>
+                            </div>
+
+                            <!-- Anchor ID -->
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">ID định danh liên kết (Anchor ID)</label>
+                                <input 
+                                    type="text" 
+                                    v-model="blocks[activeIndex].anchorId" 
+                                    placeholder="vd: uu-dai, thong-so, faq (viết liền không dấu)"
+                                    class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs text-gray-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                />
+                            </div>
+
+                            <!-- Background Color -->
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Màu nền tùy chọn (Background Color)</label>
+                                <div class="flex gap-2 items-center">
+                                    <input 
+                                        type="color" 
+                                        :value="lowercaseColor(getLayoutSetting(blocks[activeIndex], 'bg_color', '#ffffff'))" 
+                                        @input="setLayoutSetting(blocks[activeIndex], 'bg_color', $event.target.value)"
+                                        class="w-8 h-8 rounded-lg cursor-pointer border border-gray-200 bg-transparent p-0 shrink-0"
+                                    />
+                                    <input 
+                                        type="text" 
+                                        :value="getLayoutSetting(blocks[activeIndex], 'bg_color', '')"
+                                        @input="setLayoutSetting(blocks[activeIndex], 'bg_color', $event.target.value)"
+                                        placeholder="Mặc định (Trong suốt)"
+                                        class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs text-gray-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                    />
+                                </div>
+                            </div>
+
+                            <!-- Text Color -->
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Màu chữ tùy chọn (Text Color)</label>
+                                <div class="flex gap-2 items-center">
+                                    <input 
+                                        type="color" 
+                                        :value="lowercaseColor(getLayoutSetting(blocks[activeIndex], 'text_color', '#000000'))" 
+                                        @input="setLayoutSetting(blocks[activeIndex], 'text_color', $event.target.value)"
+                                        class="w-8 h-8 rounded-lg cursor-pointer border border-gray-200 bg-transparent p-0 shrink-0"
+                                    />
+                                    <input 
+                                        type="text" 
+                                        :value="getLayoutSetting(blocks[activeIndex], 'text_color', '')"
+                                        @input="setLayoutSetting(blocks[activeIndex], 'text_color', $event.target.value)"
+                                        placeholder="Mặc định"
+                                        class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs text-gray-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                    />
+                                </div>
+                            </div>
+
+                            <!-- Padding Spacing -->
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Khoảng lề trên (Padding Top)</label>
+                                    <select 
+                                        :value="getLayoutSetting(blocks[activeIndex], 'padding_top', 'default')"
+                                        @change="setLayoutSetting(blocks[activeIndex], 'padding_top', $event.target.value)"
+                                        class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs text-gray-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                    >
+                                        <option value="default">Mặc định</option>
+                                        <option value="none">Sát lề (0px)</option>
+                                        <option value="small">Nhỏ (16px)</option>
+                                        <option value="medium">Vừa (48px)</option>
+                                        <option value="large">Lớn (80px)</option>
+                                        <option value="xlarge">Cực lớn (120px)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Khoảng lề dưới (Padding Bottom)</label>
+                                    <select 
+                                        :value="getLayoutSetting(blocks[activeIndex], 'padding_bottom', 'default')"
+                                        @change="setLayoutSetting(blocks[activeIndex], 'padding_bottom', $event.target.value)"
+                                        class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs text-gray-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                    >
+                                        <option value="default">Mặc định</option>
+                                        <option value="none">Sát lề (0px)</option>
+                                        <option value="small">Nhỏ (16px)</option>
+                                        <option value="medium">Vừa (48px)</option>
+                                        <option value="large">Lớn (80px)</option>
+                                        <option value="xlarge">Cực lớn (120px)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -553,7 +1225,9 @@
                         item-key="id"
                         handle=".list-handle"
                         :animation="200"
-                        class="space-y-3"
+                        :group="{ name: 'blocks', pull: true, put: true }"
+                        class="space-y-3 min-h-[60px]"
+                        @add="onLibraryBlockAdd"
                     >
                         <template #item="{ index, element }">
                             <div 
@@ -608,43 +1282,72 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition">
+                                <div class="flex items-center space-x-1">
                                     <button type="button" class="text-xs text-gray-500 hover:text-gray-800 bg-gray-50 hover:bg-gray-100 p-1.5 rounded-lg border border-gray-250 cursor-pointer" title="Nhấn để sửa">
                                         ⚙️
                                     </button>
                                     <button type="button" class="text-xs text-gray-500 hover:text-gray-800 bg-gray-50 hover:bg-gray-100 p-1.5 rounded-lg border border-gray-250 cursor-pointer" title="Nhân bản" @click.stop="duplicateBlock(index)">
                                         ➕
                                     </button>
-                                    <button type="button" class="text-xs text-red-500 hover:text-red-650 bg-red-50 hover:bg-red-100 p-1.5 rounded-lg border border-red-200 cursor-pointer" title="Xóa" @click.stop="removeBlock(index)">
-                                        ✕
+                                    <button type="button" class="text-xs text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 p-1.5 rounded-lg border border-red-200 cursor-pointer" title="Xóa khối này" @click.stop="removeBlock(index)">
+                                        🗑️
                                     </button>
                                 </div>
                             </div>
                         </template>
                     </Draggable>
 
-                    <div v-else class="border border-dashed border-gray-200 rounded-2xl p-8 text-center text-gray-400 italic text-xs">
-                        Chưa có khối giao diện nào được thêm vào trang xe này. Hãy chọn tab "Thêm khối mới" để bắt đầu thiết kế.
-                    </div>
+                    <!-- Empty state: also needs to be a droppable target -->
+                    <Draggable
+                        v-else
+                        tag="div"
+                        v-model="blocks"
+                        item-key="id"
+                        :group="{ name: 'blocks', pull: true, put: true }"
+                        :animation="200"
+                        class="min-h-[200px]"
+                        @add="onLibraryBlockAdd"
+                    >
+                        <template #item="{ element }">
+                            <div></div>
+                        </template>
+                        <template #header>
+                            <div class="border border-dashed border-gray-200 rounded-2xl p-8 text-center text-gray-400 italic text-xs">
+                                Chưa có khối nào. Kéo khối từ tab "Thêm khối mới" hoặc nhấn vào để thêm.
+                            </div>
+                        </template>
+                    </Draggable>
                 </div>
 
-                <!-- SCENE B2: BLOCK TEMPLATE LIBRARY (TAB 2) -->
-                <div v-else-if="activeTab === 'library'" class="grid grid-cols-1 gap-3">
-                    <div 
-                        v-for="tpl in libraryBlocks" 
-                        :key="tpl.type" 
-                        class="flex items-center p-3.5 bg-white border border-gray-200 hover:border-[#008060] hover:bg-emerald-50/5 rounded-xl cursor-pointer transition select-none group"
-                        @click="addBlockType(tpl.type)"
+                <!-- SCENE B2: BLOCK TEMPLATE LIBRARY (TAB 2) — Draggable Source -->
+                <div v-else-if="activeTab === 'library'">
+                    <p class="text-[10px] text-gray-400 mb-3 italic">💡 Nhấn vào khối để thêm nhanh, hoặc kéo thả vào danh sách bên trái.</p>
+                    <Draggable
+                        tag="div"
+                        :list="libraryBlocks"
+                        :clone="cloneLibraryBlock"
+                        item-key="type"
+                        :group="{ name: 'blocks', pull: 'clone', put: false }"
+                        :sort="false"
+                        :animation="200"
+                        class="grid grid-cols-1 gap-3"
                     >
-                        <div class="h-10 w-10 flex items-center justify-center bg-gray-50 border border-gray-200 rounded-lg text-lg group-hover:bg-emerald-50/10 group-hover:border-[#008060] transition">
-                            {{ tpl.icon }}
-                        </div>
-                        <div class="ml-3.5 flex-1">
-                            <h4 class="text-xs font-bold text-gray-800 group-hover:text-[#008060] transition">{{ tpl.name }}</h4>
-                            <p class="text-[10px] text-gray-500 mt-0.5">{{ tpl.desc }}</p>
-                        </div>
-                        <span class="text-gray-400 group-hover:text-[#008060] text-xs font-black transition">＋</span>
-                    </div>
+                        <template #item="{ element: tpl }">
+                            <div 
+                                class="flex items-center p-3.5 bg-white border border-gray-200 hover:border-[#008060] hover:bg-emerald-50/5 rounded-xl cursor-grab active:cursor-grabbing transition select-none group"
+                                @click="addBlockType(tpl.type)"
+                            >
+                                <div class="h-10 w-10 flex items-center justify-center bg-gray-50 border border-gray-200 rounded-lg text-lg group-hover:bg-emerald-50/10 group-hover:border-[#008060] transition">
+                                    {{ tpl.icon }}
+                                </div>
+                                <div class="ml-3.5 flex-1">
+                                    <h4 class="text-xs font-bold text-gray-800 group-hover:text-[#008060] transition">{{ tpl.name }}</h4>
+                                    <p class="text-[10px] text-gray-500 mt-0.5">{{ tpl.desc }}</p>
+                                </div>
+                                <span class="text-gray-400 group-hover:text-[#008060] text-xs font-black transition">＋</span>
+                            </div>
+                        </template>
+                    </Draggable>
                 </div>
             </div>
         </div>
@@ -670,7 +1373,7 @@
                     <span class="w-3 h-3 rounded-full bg-green-400 inline-block"></span>
                 </div>
                 <div class="flex-1 bg-white border border-gray-300 rounded-lg py-1 px-4 text-gray-500 text-xs font-mono truncate select-all flex items-center space-x-2">
-                    <span class="text-gray-400">🌐 https://longkhanhford.com.vn/xe/chi-tiet-xem-truoc</span>
+                    <span class="text-gray-400">🌐 {{ iframeUrl }}</span>
                 </div>
                 <span class="text-[10px] text-[#008060] font-bold uppercase ml-4 select-none tracking-widest bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
                     Live Preview
@@ -744,6 +1447,18 @@ export default {
         fullscreen: {
             type: Boolean,
             default: false,
+        },
+        salesConsultants: {
+            type: Array,
+            default: () => [],
+        },
+        globalPromotions: {
+            type: Array,
+            default: () => [],
+        },
+        allVehicles: {
+            type: Array,
+            default: () => [],
         }
     },
     emits: ['update:modelValue'],
@@ -767,7 +1482,11 @@ export default {
             mediaTarget: null, // { index, field, subIndex }
             libraryBlocks: [
                 { type: 'HeroBanner', icon: '📢', name: 'Banner lớn (Hero)', desc: 'Banner trần viền ấn tượng, có chữ và nút bấm hành động' },
-                { type: 'Promotions', icon: '🎁', name: 'Ưu đãi khuyến mãi', desc: 'Thông tin quà tặng tiền mặt, bảo hiểm và quà độc quyền' },
+                { type: 'LdpVehiclesGrid', icon: '🚘', name: 'Danh sách dòng xe (Showroom)', desc: 'Lưới hiển thị các dòng xe Cố vấn bán hàng phụ trách kèm bộ lọc' },
+                { type: 'LdpUsedVehicles', icon: '🚙', name: 'Xe đã qua sử dụng (Slider)', desc: 'Slide hiển thị các dòng xe Ford cũ chính hãng (Ford Assured)' },
+                { type: 'LdpSalesConsultant', icon: '👤', name: 'Cố vấn bán hàng LDP', desc: 'Hiển thị Banner thông tin của Cố vấn phụ trách trang LDP' },
+                { type: 'LdpPromotions', icon: '🎁', name: 'Khuyến mãi LDP', desc: 'Hiển thị các chương trình khuyến mãi đã chọn hoặc tự nhập' },
+                { type: 'Promotions', icon: '🎁', name: 'Ưu đãi khuyến mãi (Tùy biến)', desc: 'Thông tin quà tặng tiền mặt, bảo hiểm và quà độc quyền' },
                 { type: 'ThreeSixtyViewer', icon: '🔄', name: 'Trình xem xoay 360°', desc: 'Mô phỏng đổi màu ngoại thất xe và tự do xoay góc nhìn' },
                 { type: 'FeaturesGrid', icon: '🔲', name: 'Khung lưới tính năng', desc: 'Bố cục ghép ảnh dạng lưới cho Thiết kế, Nội thất, Công nghệ' },
                 { type: 'VersionsGrid', icon: '🚗', name: 'Danh sách các phiên bản', desc: 'So sánh ngắn và hiển thị các phiên bản cùng mức giá' },
@@ -775,6 +1494,15 @@ export default {
                 { type: 'FeaturesList', icon: '✨', name: 'Danh sách công nghệ', desc: 'Liệt kê so le các tính năng lái an toàn chủ động' },
                 { type: 'AccordionFAQs', icon: '❓', name: 'Câu hỏi thường gặp', desc: 'Các thắc mắc xếp gập về bảo dưỡng, giá lăn bánh' },
                 { type: 'BookingBanner', icon: '📞', name: 'Tư vấn & Đặt lịch', desc: 'Khối liên hệ hotline và liên kết đặt lịch hẹn bảo dưỡng' },
+                { type: 'TestimonialSlider', icon: '💬', name: 'Đánh giá khách hàng', desc: 'Slider hiển thị nhận xét và đánh giá sao từ khách hàng thực tế' },
+                { type: 'VideoShowcase', icon: '🎬', name: 'Video giới thiệu xe', desc: 'Nhúng video YouTube hoặc TikTok review xe, lái thử' },
+                { type: 'CountdownTimer', icon: '⏰', name: 'Đếm ngược ưu đãi', desc: 'Tạo urgency với bộ đếm ngược thời hạn chương trình khuyến mãi' },
+                { type: 'ComparisonTable', icon: '⚖️', name: 'So sánh với đối thủ', desc: 'Bảng so sánh nhanh xe Ford vs đối thủ cạnh tranh' },
+                { type: 'GalleryMasonry', icon: '🖼️', name: 'Bộ sưu tập ảnh', desc: 'Hiển thị nhiều ảnh dạng lưới Masonry (ảnh thực tế xe, showroom)' },
+                { type: 'SocialProof', icon: '📱', name: 'Bằng chứng xã hội', desc: 'Hiển thị số liệu thống kê ấn tượng (số xe bán, năm kinh nghiệm)' },
+                { type: 'InstallmentCalculator', icon: '🧮', name: 'Bảng tính chi phí trả góp', desc: 'Slider kéo chọn tỷ lệ trả trước & số tháng để tính số tiền trả gốc lãi hàng tháng' },
+                { type: 'CountdownOfferBanner', icon: '🔥', name: 'Đếm ngược ưu đãi & Giữ suất', desc: 'Đồng hồ đếm ngược thời gian thực + hiển thị số suất còn lại + đăng ký giữ suất quà' },
+                { type: 'DualVehicleComparison', icon: '⚖️', name: 'So sánh song song 2 xe', desc: 'Bảng so sánh trực quan các thông số nổi bật dành riêng cho LDP chọn 2 xe' },
             ]
         }
     },
@@ -788,23 +1516,16 @@ export default {
             }
         },
         iframeUrl() {
-            let host = 'http://localhost:3000';
+            let host = 'https://longkhanhford.com.vn';
             const hostname = window.location.hostname;
-            if (hostname === 'localhost' || hostname === '127.0.0.1') {
+            const port = window.location.port;
+            if (port === '8000' || hostname === 'localhost' || hostname === '127.0.0.1') {
                 host = 'http://localhost:3000';
-            } else if (hostname === 'cms.dnf.betech-digital.com') {
-                host = 'https://client.dnf.betech-digital.com';
-            } else if (hostname === 'cms.longkhanhford.com.vn') {
-                host = 'https://longkhanhford.com.vn';
             } else {
-                if (hostname.startsWith('cms.')) {
-                    host = window.location.origin.replace('//cms.', '//client.');
-                } else {
-                    host = window.location.origin;
-                }
+                host = 'https://longkhanhford.com.vn';
             }
             const slug = this.vehicleSlug || 'preview';
-            return `${host}/san-pham/${slug}?edit=true&embed=true`;
+            return `${host}/${slug}?edit=true&embed=true`;
         }
     },
     watch: {
@@ -885,6 +1606,34 @@ export default {
             this.showMediaManager = false;
             this.mediaTarget = null;
         },
+        addCustomPromoToVehicleData() {
+            if (!this.vehicleData.promotions) {
+                this.vehicleData.$set ? this.vehicleData.$set(this.vehicleData, 'promotions', { global_promotion_ids: [], custom_promotions: [] }) : (this.vehicleData.promotions = { global_promotion_ids: [], custom_promotions: [] });
+            }
+            if (!this.vehicleData.promotions.custom_promotions) {
+                this.vehicleData.promotions.custom_promotions = [];
+            }
+            this.vehicleData.promotions.custom_promotions.push({
+                title: '',
+                description: '',
+                image: null,
+                link: ''
+            });
+        },
+        getLayoutSetting(block, key, defaultValue = '') {
+            if (!block.layout_settings) {
+                return defaultValue;
+            }
+            return block.layout_settings[key] !== undefined ? block.layout_settings[key] : defaultValue;
+        },
+        setLayoutSetting(block, key, value) {
+            if (!block.layout_settings) {
+                this.$set ? this.$set(block, 'layout_settings', {}) : (block.layout_settings = {});
+            }
+            block.layout_settings[key] = value;
+            this.$emit('update:modelValue', [...this.blocks]);
+            this.syncToIframe();
+        },
         lowercaseColor(val) {
             if (!val || typeof val !== 'string') return '#ffffff';
             let cleaned = val.trim();
@@ -910,12 +1659,55 @@ export default {
             const iframe = this.$refs.previewIframe;
             if (iframe && iframe.contentWindow && this.iframeLoaded) {
                 const resolvedBlocks = this.resolveBlockImages(this.blocks);
+                
+                // Resolve promotions and sales consultant
+                let resolvedPromotions = { global: [], custom: [] };
+                let resolvedConsultant = null;
+                if (this.vehicleData) {
+                    if (this.vehicleData.promotions) {
+                        const globalIds = this.vehicleData.promotions.global_promotion_ids || [];
+                        const allPromos = this.globalPromotions || [];
+                        resolvedPromotions.global = allPromos.filter(p => globalIds.includes(p.id)).map(p => ({
+                            id: p.id,
+                            title: p.title,
+                            slug: p.slug,
+                            image_url: p.image_url || (p.image ? this.resolveImageUrl(p.image) : null),
+                            description: p.description || ''
+                        }));
+                        
+                        resolvedPromotions.custom = (this.vehicleData.promotions.custom_promotions || []).map(p => ({
+                            title: p.title || '',
+                            description: p.description || '',
+                            image_url: p.image ? this.resolveImageUrl(p.image) : null,
+                            link: p.link || ''
+                        }));
+                    }
+                    if (this.vehicleData.sales_consultant_id) {
+                        const allConsultants = this.salesConsultants || [];
+                        const c = allConsultants.find(x => x.id == this.vehicleData.sales_consultant_id);
+                        if (c) {
+                            resolvedConsultant = {
+                                id: c.id,
+                                name: c.name,
+                                avatar: c.avatar,
+                                phone: c.phone,
+                                zalo_url: c.zalo_url,
+                                job_title: c.job_title,
+                                short_bio: c.short_bio
+                            };
+                        }
+                    }
+                }
+
                 try {
                     iframe.contentWindow.postMessage({
                         type: 'INIT_PREVIEW',
                         vehicle: JSON.parse(JSON.stringify(this.vehicleData || {})),
                         blocks: JSON.parse(JSON.stringify(resolvedBlocks || [])),
-                        activeIndex: this.activeIndex
+                        activeIndex: this.activeIndex,
+                        promotions: resolvedPromotions,
+                        salesConsultant: resolvedConsultant,
+                        allVehicles: JSON.parse(JSON.stringify(this.allVehicles || []))
                     }, '*');
                 } catch (e) {
                     console.error('Failed to postMessage INIT_PREVIEW:', e);
@@ -926,11 +1718,53 @@ export default {
             if (!this.iframeLoaded) return;
             const iframe = this.$refs.previewIframe;
             if (iframe && iframe.contentWindow) {
+                // Resolve promotions and sales consultant
+                let resolvedPromotions = { global: [], custom: [] };
+                let resolvedConsultant = null;
+                if (this.vehicleData) {
+                    if (this.vehicleData.promotions) {
+                        const globalIds = this.vehicleData.promotions.global_promotion_ids || [];
+                        const allPromos = this.globalPromotions || [];
+                        resolvedPromotions.global = allPromos.filter(p => globalIds.includes(p.id)).map(p => ({
+                            id: p.id,
+                            title: p.title,
+                            slug: p.slug,
+                            image_url: p.image_url || (p.image ? this.resolveImageUrl(p.image) : null),
+                            description: p.description || ''
+                        }));
+                        
+                        resolvedPromotions.custom = (this.vehicleData.promotions.custom_promotions || []).map(p => ({
+                            title: p.title || '',
+                            description: p.description || '',
+                            image_url: p.image ? this.resolveImageUrl(p.image) : null,
+                            link: p.link || ''
+                        }));
+                    }
+                    if (this.vehicleData.sales_consultant_id) {
+                        const allConsultants = this.salesConsultants || [];
+                        const c = allConsultants.find(x => x.id == this.vehicleData.sales_consultant_id);
+                        if (c) {
+                            resolvedConsultant = {
+                                id: c.id,
+                                name: c.name,
+                                avatar: c.avatar,
+                                phone: c.phone,
+                                zalo_url: c.zalo_url,
+                                job_title: c.job_title,
+                                short_bio: c.short_bio
+                            };
+                        }
+                    }
+                }
+
                 try {
                     iframe.contentWindow.postMessage({
                         type: 'UPDATE_BLOCKS',
                         blocks: JSON.parse(JSON.stringify(this.resolveBlockImages(this.blocks) || [])),
-                        activeIndex: this.activeIndex
+                        activeIndex: this.activeIndex,
+                        promotions: resolvedPromotions,
+                        salesConsultant: resolvedConsultant,
+                        allVehicles: JSON.parse(JSON.stringify(this.allVehicles || []))
                     }, '*');
                 } catch (e) {
                     console.error('Failed to postMessage UPDATE_BLOCKS:', e);
@@ -1011,6 +1845,23 @@ export default {
                         });
                     } else if (block.type === 'BookingBanner') {
                         block.data.car_image = this.resolveImageUrl(block.data.car_image);
+                    } else if (block.type === 'TestimonialSlider' && block.data.reviews) {
+                        block.data.reviews.forEach(r => {
+                            r.avatar = this.resolveImageUrl(r.avatar);
+                        });
+                    } else if (block.type === 'VideoShowcase') {
+                        block.data.thumbnail = this.resolveImageUrl(block.data.thumbnail);
+                    } else if (block.type === 'CountdownTimer') {
+                        block.data.background_image = this.resolveImageUrl(block.data.background_image);
+                    } else if (block.type === 'ComparisonTable') {
+                        block.data.ford_image = this.resolveImageUrl(block.data.ford_image);
+                        block.data.competitor_image = this.resolveImageUrl(block.data.competitor_image);
+                    } else if (block.type === 'GalleryMasonry' && block.data.images) {
+                        block.data.images.forEach(img => {
+                            img.src = this.resolveImageUrl(img.src);
+                        });
+                    } else if (block.type === 'SocialProof') {
+                        block.data.background_image = this.resolveImageUrl(block.data.background_image);
                     }
                 }
             });
@@ -1027,6 +1878,17 @@ export default {
                 FeaturesList: 'Danh sách công nghệ (Features List)',
                 AccordionFAQs: 'Câu hỏi thường gặp (Accordion FAQs)',
                 BookingBanner: 'Tư vấn & Đặt lịch (Booking Banner)',
+                TestimonialSlider: 'Đánh giá khách hàng (Testimonials)',
+                VideoShowcase: 'Video giới thiệu xe (Video)',
+                CountdownTimer: 'Đếm ngược ưu đãi (Countdown)',
+                ComparisonTable: 'So sánh với đối thủ (Comparison)',
+                GalleryMasonry: 'Bộ sưu tập ảnh (Gallery)',
+                SocialProof: 'Bằng chứng xã hội (Social Proof)',
+                InstallmentCalculator: 'Bảng tính chi phí trả góp (Installment Calculator)',
+                CountdownOfferBanner: 'Đếm ngược ưu đãi & Giữ suất (Countdown Offer)',
+                DualVehicleComparison: 'So sánh song song 2 xe (Dual Vehicle Comparison)',
+                LdpVehiclesGrid: 'Danh sách dòng xe phụ trách (LdpVehiclesGrid)',
+                LdpUsedVehicles: 'Xe đã qua sử dụng (LdpUsedVehicles)',
             }[type] || type
         },
         getBlockIcon(type) {
@@ -1040,6 +1902,17 @@ export default {
                 FeaturesList: '✨',
                 AccordionFAQs: '❓',
                 BookingBanner: '📞',
+                TestimonialSlider: '💬',
+                VideoShowcase: '🎬',
+                CountdownTimer: '⏰',
+                ComparisonTable: '⚖️',
+                GalleryMasonry: '🖼️',
+                SocialProof: '📱',
+                InstallmentCalculator: '🧮',
+                CountdownOfferBanner: '🔥',
+                DualVehicleComparison: '⚖️',
+                LdpVehiclesGrid: '🚘',
+                LdpUsedVehicles: '🚙',
             }[type] || '📦'
         },
         addBlockType(type) {
@@ -1139,6 +2012,134 @@ export default {
                     title_size: 'medium',
                     title_color: '#ffffff'
                 }
+            } else if (type === 'TestimonialSlider') {
+                newBlock.data = {
+                    align: 'center',
+                    title: 'Khách hàng nói gì về chúng tôi?',
+                    title_size: 'medium',
+                    title_color: '#1a1a1a',
+                    reviews: [
+                        { name: 'Anh Nguyễn Văn A', content: 'Dịch vụ tại Long Khánh Ford rất chuyên nghiệp và tận tâm. Tôi rất hài lòng!', rating: 5, role: 'Chủ xe Everest 2024', avatar: null }
+                    ]
+                }
+            } else if (type === 'VideoShowcase') {
+                newBlock.data = {
+                    align: 'center',
+                    title: '',
+                    description: '',
+                    video_url: '',
+                    thumbnail: null,
+                    display_mode: 'embed',
+                    title_size: 'medium',
+                    title_color: '#1a1a1a'
+                }
+            } else if (type === 'CountdownTimer') {
+                newBlock.data = {
+                    align: 'center',
+                    title: 'Ưu đãi đặc biệt — Sắp kết thúc!',
+                    subtitle: 'Nhận ngay ưu đãi lên đến 100 triệu đồng',
+                    end_date: '',
+                    button_text: 'Đăng ký ngay',
+                    button_link: '/lien-he',
+                    background_image: null,
+                    title_size: 'medium',
+                    title_color: '#ffffff'
+                }
+            } else if (type === 'ComparisonTable') {
+                newBlock.data = {
+                    align: 'center',
+                    title: '',
+                    ford_name: '',
+                    competitor_name: '',
+                    ford_image: null,
+                    competitor_image: null,
+                    title_size: 'medium',
+                    title_color: '#1a1a1a',
+                    rows: [
+                        { criteria: 'Động cơ', ford_value: '', competitor_value: '', winner: 'ford' },
+                        { criteria: 'Hộp số', ford_value: '', competitor_value: '', winner: 'ford' },
+                        { criteria: 'Giá bán', ford_value: '', competitor_value: '', winner: 'tie' },
+                    ]
+                }
+            } else if (type === 'GalleryMasonry') {
+                newBlock.data = {
+                    align: 'center',
+                    title: 'Hình ảnh thực tế',
+                    columns: 3,
+                    title_size: 'medium',
+                    title_color: '#1a1a1a',
+                    images: [
+                        { src: null, caption: '' },
+                        { src: null, caption: '' },
+                        { src: null, caption: '' },
+                    ]
+                }
+            } else if (type === 'SocialProof') {
+                newBlock.data = {
+                    align: 'center',
+                    title: 'Tại sao chọn Long Khánh Ford?',
+                    background_image: null,
+                    title_size: 'medium',
+                    title_color: '#ffffff',
+                    stats: [
+                        { value: '5000+', label: 'Xe đã bán', icon: '🚗' },
+                        { value: '15+', label: 'Năm kinh nghiệm', icon: '🏆' },
+                        { value: '4.9/5', label: 'Đánh giá trung bình', icon: '⭐' },
+                        { value: '50+', label: 'Nhân viên chuyên nghiệp', icon: '👨‍💼' },
+                    ]
+                }
+            } else if (type === 'InstallmentCalculator') {
+                newBlock.data = {
+                    title: 'Bảng Tính Chi Phí Trả Góp Ước Tính',
+                    subtitle: 'Chỉ từ 20% giá trị xe, hỗ trợ vay đến 8 năm với lãi suất ưu đãi',
+                    interest_rate: 7.9,
+                    max_years: 8,
+                    default_downpayment_pct: 20,
+                    custom_price: '',
+                    zalo_button_text: 'Nhận bảng tính chi tiết qua Zalo',
+                    align: 'center',
+                    title_size: 'medium',
+                    title_color: '#1a1a1a'
+                }
+            } else if (type === 'CountdownOfferBanner') {
+                newBlock.data = {
+                    title: 'CHƯƠNG TRÌNH ƯU ĐÃI ĐẶC BIỆT THÁNG NÀY',
+                    subtitle: 'Đăng ký ngay để giữ suất quà tặng phụ kiện & giảm trực tiếp tiền mặt',
+                    end_date: new Date(Date.now() + 7 * 86400000).toISOString().slice(0, 16),
+                    remaining_slots: 3,
+                    button_text: 'Đăng Ký Giữ Suất Ưu Đãi',
+                    background_image: null,
+                    align: 'center',
+                    title_size: 'medium',
+                    title_color: '#ffffff'
+                }
+            } else if (type === 'DualVehicleComparison') {
+                newBlock.data = {
+                    title: 'SO SÁNH TRỰC QUAN 2 DÒNG XE',
+                    subtitle: 'Lựa chọn dòng xe phù hợp nhất với nhu cầu sử dụng của bạn',
+                    consultant_note_1: 'Phù hợp di chuyển gia đình đô thị, tiết kiệm nhiên liệu.',
+                    consultant_note_2: 'Mạnh mẽ vượt địa hình, khoang hành lý cực rộng rãi.',
+                    align: 'center',
+                    title_size: 'medium',
+                    title_color: '#1a1a1a'
+                }
+            } else if (type === 'LdpVehiclesGrid') {
+                newBlock.data = {
+                    title: 'Dòng xe Cố vấn phụ trách',
+                    subtitle: 'Chọn dòng xe quý khách quan tâm để xem bảng giá, thông số và ưu đãi độc quyền.',
+                    align: 'center',
+                    title_size: 'medium',
+                    title_color: '#00095b'
+                }
+            } else if (type === 'LdpUsedVehicles') {
+                newBlock.data = {
+                    title: 'Xe Đã Qua Sử Dụng Chất Lượng Cao',
+                    subtitle: 'Tuyển chọn các dòng xe Ford lướt được kiểm tra 167 điểm kỹ thuật, bảo hành chính hãng, nguồn gốc minh bạch.',
+                    limit: 10,
+                    align: 'center',
+                    title_size: 'medium',
+                    title_color: '#00095b'
+                }
             }
 
             const list = [...this.blocks, newBlock]
@@ -1147,15 +2148,13 @@ export default {
             this.activeIndex = list.length - 1
         },
         removeBlock(index) {
-            if (confirm('Bạn có chắc chắn muốn xóa khối nội dung này không?')) {
-                const list = [...this.blocks]
-                list.splice(index, 1)
-                this.$emit('update:modelValue', list)
-                if (this.activeIndex === index) {
-                    this.activeIndex = null
-                } else if (this.activeIndex > index) {
-                    this.activeIndex--
-                }
+            const list = [...this.blocks]
+            list.splice(index, 1)
+            this.$emit('update:modelValue', list)
+            if (this.activeIndex === index) {
+                this.activeIndex = null
+            } else if (this.activeIndex > index) {
+                this.activeIndex--
             }
         },
         duplicateBlock(index) {
@@ -1270,6 +2269,127 @@ export default {
             this.$emit('update:modelValue', list)
         },
 
+        // Helper methods for TestimonialSlider
+        addTestimonial(blockIndex) {
+            const list = JSON.parse(JSON.stringify(this.blocks))
+            if (!list[blockIndex].data.reviews) {
+                list[blockIndex].data.reviews = []
+            }
+            list[blockIndex].data.reviews.push({ name: '', content: '', rating: 5, role: '', avatar: null })
+            this.$emit('update:modelValue', list)
+        },
+        removeTestimonial(blockIndex, rIndex) {
+            const list = JSON.parse(JSON.stringify(this.blocks))
+            list[blockIndex].data.reviews.splice(rIndex, 1)
+            this.$emit('update:modelValue', list)
+        },
+
+        // Helper methods for ComparisonTable
+        addComparisonRow(blockIndex) {
+            const list = JSON.parse(JSON.stringify(this.blocks))
+            if (!list[blockIndex].data.rows) {
+                list[blockIndex].data.rows = []
+            }
+            list[blockIndex].data.rows.push({ criteria: '', ford_value: '', competitor_value: '', winner: 'ford' })
+            this.$emit('update:modelValue', list)
+        },
+        removeComparisonRow(blockIndex, rowIndex) {
+            const list = JSON.parse(JSON.stringify(this.blocks))
+            list[blockIndex].data.rows.splice(rowIndex, 1)
+            this.$emit('update:modelValue', list)
+        },
+
+        // Helper methods for GalleryMasonry
+        addGalleryImage(blockIndex) {
+            const list = JSON.parse(JSON.stringify(this.blocks))
+            if (!list[blockIndex].data.images) {
+                list[blockIndex].data.images = []
+            }
+            list[blockIndex].data.images.push({ src: null, caption: '' })
+            this.$emit('update:modelValue', list)
+        },
+        removeGalleryImage(blockIndex, imgIndex) {
+            const list = JSON.parse(JSON.stringify(this.blocks))
+            list[blockIndex].data.images.splice(imgIndex, 1)
+            this.$emit('update:modelValue', list)
+        },
+
+        // Helper methods for SocialProof
+        addStatItem(blockIndex) {
+            const list = JSON.parse(JSON.stringify(this.blocks))
+            if (!list[blockIndex].data.stats) {
+                list[blockIndex].data.stats = []
+            }
+            list[blockIndex].data.stats.push({ value: '', label: '', icon: '📊' })
+            this.$emit('update:modelValue', list)
+        },
+        removeStatItem(blockIndex, sIndex) {
+            const list = JSON.parse(JSON.stringify(this.blocks))
+            list[blockIndex].data.stats.splice(sIndex, 1)
+            this.$emit('update:modelValue', list)
+        },
+
+        // Drag-and-drop from Library to Layout
+        cloneLibraryBlock(tpl) {
+            // Create a shell object with just type and id. 
+            // The actual data initialization will happen in onLibraryBlockAdd.
+            return {
+                id: 'block_' + Math.random().toString(36).substring(2, 9) + '_' + Date.now(),
+                type: tpl.type,
+                is_collapsed: false,
+                data: {}
+            }
+        },
+        onLibraryBlockAdd(evt) {
+            // When a block is dragged from library, it arrives as a shell.
+            // We need to initialize its data using addBlockType logic.
+            const newIndex = evt.newIndex
+            const list = [...this.blocks]
+            const block = list[newIndex]
+            if (block && block.data && Object.keys(block.data).length === 0) {
+                // Re-initialize data for the new block type
+                const tempBlock = { data: {} }
+                this._initBlockData(block.type, tempBlock)
+                block.data = tempBlock.data
+                this.$emit('update:modelValue', list)
+                this.activeIndex = newIndex
+                this.activeTab = 'sections'
+            }
+        },
+        _initBlockData(type, block) {
+            if (type === 'HeroBanner') {
+                block.data = { title: '', tagline: '', button_text: 'Tìm hiểu thêm', button_link: '/lien-he', background_image: null, align: 'center', title_size: 'medium', title_color: '#ffffff', tagline_color: '#ffffff' }
+            } else if (type === 'Promotions') {
+                block.data = { title: '', description: '', image: null, button_text: 'Nhận báo giá ngay', align: 'left', title_size: 'medium', title_color: '#0562d2', desc_size: 'medium', desc_color: '#1a1a1a' }
+            } else if (type === 'ThreeSixtyViewer') {
+                block.data = { title: '', description: '', align: 'left', title_size: 'medium', title_color: '#0562d2', desc_size: 'medium', desc_color: '#1a1a1a' }
+            } else if (type === 'FeaturesGrid') {
+                block.data = { align: 'center', title_1: '', image_1: null, image_2: null, image_3: null, title_2: '', image_large: null, image_large_2: null, image_large_3: null, title_3: '', split_image: null, split_title: '', split_features: [{ value: '', label: '' }] }
+            } else if (type === 'VersionsGrid') {
+                block.data = { align: 'center', title: '', descriptions: ['', '', ''] }
+            } else if (type === 'SpecsGrid') {
+                block.data = { align: 'center' }
+            } else if (type === 'FeaturesList') {
+                block.data = { align: 'center', features: [{ title: '', description: '', image: null }] }
+            } else if (type === 'AccordionFAQs') {
+                block.data = { align: 'left', faqs: [{ q: '', a: '', is_open: true }] }
+            } else if (type === 'BookingBanner') {
+                block.data = { align: 'left', title: 'Kết nối ngay với chuyên viên Long Khánh Ford', phone: '0812 86 86 22', btn_text: 'Đặt lịch hẹn', btn_link: '/lien-he', car_image: null, title_size: 'medium', title_color: '#ffffff' }
+            } else if (type === 'TestimonialSlider') {
+                block.data = { align: 'center', title: 'Khách hàng nói gì về chúng tôi?', title_size: 'medium', title_color: '#1a1a1a', reviews: [{ name: '', content: '', rating: 5, role: '', avatar: null }] }
+            } else if (type === 'VideoShowcase') {
+                block.data = { align: 'center', title: '', description: '', video_url: '', thumbnail: null, display_mode: 'embed', title_size: 'medium', title_color: '#1a1a1a' }
+            } else if (type === 'CountdownTimer') {
+                block.data = { align: 'center', title: 'Ưu đãi đặc biệt — Sắp kết thúc!', subtitle: '', end_date: '', button_text: 'Đăng ký ngay', button_link: '/lien-he', background_image: null, title_size: 'medium', title_color: '#ffffff' }
+            } else if (type === 'ComparisonTable') {
+                block.data = { align: 'center', title: '', ford_name: '', competitor_name: '', ford_image: null, competitor_image: null, title_size: 'medium', title_color: '#1a1a1a', rows: [{ criteria: '', ford_value: '', competitor_value: '', winner: 'ford' }] }
+            } else if (type === 'GalleryMasonry') {
+                block.data = { align: 'center', title: 'Hình ảnh thực tế', columns: 3, title_size: 'medium', title_color: '#1a1a1a', images: [{ src: null, caption: '' }] }
+            } else if (type === 'SocialProof') {
+                block.data = { align: 'center', title: 'Tại sao chọn Long Khánh Ford?', background_image: null, title_size: 'medium', title_color: '#ffffff', stats: [{ value: '', label: '', icon: '🚗' }] }
+            }
+        },
+
         // Image URL helpers
         resolveImageUrl(image) {
             if (!image) return ''
@@ -1308,6 +2428,12 @@ export default {
                 FeaturesList: 'Danh sách tính năng (FeaturesList)',
                 AccordionFAQs: 'Hỏi đáp (AccordionFAQs)',
                 BookingBanner: 'Banner đặt lịch (BookingBanner)',
+                TestimonialSlider: 'Đánh giá khách hàng (Testimonials)',
+                VideoShowcase: 'Video giới thiệu (VideoShowcase)',
+                CountdownTimer: 'Đếm ngược ưu đãi (CountdownTimer)',
+                ComparisonTable: 'So sánh đối thủ (ComparisonTable)',
+                GalleryMasonry: 'Bộ sưu tập ảnh (GalleryMasonry)',
+                SocialProof: 'Bằng chứng xã hội (SocialProof)',
             };
             this.aiTarget = {
                 sectionType,

@@ -58,7 +58,13 @@ class Contact extends BaseModel
         'status',
         'ip_address',
         'user_agent',
+        'sales_consultant_id',
     ];
+
+    public function salesConsultant()
+    {
+        return $this->belongsTo(\App\Models\Vehicle\SalesConsultant::class, 'sales_consultant_id');
+    }
 
     protected $casts = [
         'data' => 'array',

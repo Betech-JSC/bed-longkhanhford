@@ -145,6 +145,14 @@ export const consultantsAPI = {
 };
 
 /**
+ * Landing Pages API
+ */
+export const ldpAPI = {
+  getBySalesSlug: (salesSlug: string) => fetchAPI<any>(`/ldp/${salesSlug}`, { cache: 'no-store' }),
+  getBySlug: (salesSlug: string, vehicleSlug: string) => fetchAPI<any>(`/ldp/${salesSlug}/${vehicleSlug}`, { cache: 'no-store' }),
+};
+
+/**
  * Partners API
  */
 export const partnersAPI = {
@@ -259,7 +267,8 @@ export const registrationFeesAPI = {
 export const contactsAPI = {
   submit: (payload: {
     contact: {
-      type: 'CONTACT_FORM' | 'ADVISE_FORM' | 'APPLY_FORM' | 'TEST_DRIVE_SURVEY' | 'SERVICE_SURVEY' | 'SERVICE_BOOKING' | 'REPAIR_QUOTE_FORM' | 'NEW_CAR_QUOTE_FORM';
+      type: 'CONTACT_FORM' | 'ADVISE_FORM' | 'APPLY_FORM' | 'TEST_DRIVE' | 'TEST_DRIVE_SURVEY' | 'SERVICE_SURVEY' | 'SERVICE_BOOKING' | 'REPAIR_QUOTE_FORM' | 'NEW_CAR_QUOTE_FORM';
+      sales_consultant_id?: number;
       data: Record<string, any>;
     };
   }) => fetchAPI<{ success: boolean; data: any; message?: string }>('/contacts', {

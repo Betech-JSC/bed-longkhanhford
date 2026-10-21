@@ -36,6 +36,30 @@ trait HasNotification
                         $emails = [config('contact.mail_spam') ?: 'admin@longkhanhford.com.vn'];
                     }
 
+                    // Tùy biến email nhận thông báo về Sale nếu form gửi từ Landing Page hoặc có cấu hình sales_email
+                    $salesEmail = null;
+                    if (!empty($model->data['sales_email']) && filter_var($model->data['sales_email'], FILTER_VALIDATE_EMAIL)) {
+                        $salesEmail = trim($model->data['sales_email']);
+                    } elseif (!empty($model->data['landing_page_id'])) {
+                        $ldp = \App\Models\Vehicle\LandingPage::find($model->data['landing_page_id']);
+                        if ($ldp && !empty($ldp->sales_email) && filter_var($ldp->sales_email, FILTER_VALIDATE_EMAIL)) {
+                            $salesEmail = trim($ldp->sales_email);
+                        }
+                    } elseif (!empty($model->sales_consultant_id)) {
+                        $ldp = \App\Models\Vehicle\LandingPage::where('sales_consultant_id', $model->sales_consultant_id)
+                            ->whereNotNull('sales_email')
+                            ->first();
+                        if ($ldp && !empty($ldp->sales_email) && filter_var($ldp->sales_email, FILTER_VALIDATE_EMAIL)) {
+                            $salesEmail = trim($ldp->sales_email);
+                        } elseif ($model->salesConsultant && !empty($model->salesConsultant->email) && filter_var($model->salesConsultant->email, FILTER_VALIDATE_EMAIL)) {
+                            $salesEmail = trim($model->salesConsultant->email);
+                        }
+                    }
+
+                    if ($salesEmail) {
+                        $emails = [$salesEmail];
+                    }
+
                     if ($model->type === 'SERVICE_BOOKING') {
                         $contactData = $model->data ?? [];
                         $emailData = [

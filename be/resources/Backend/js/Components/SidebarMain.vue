@@ -155,6 +155,12 @@
         <span>Đội ngũ tư vấn</span>
     </Link>
 
+    <Link v-if="can('admin.landing-pages.index')" :href="route('admin.landing-pages.index')"
+        :class="{ active: isUrl('admin.landing-pages.*') }" class="item">
+        <ph:clipboard-text-light />
+        <span>Landing Pages Sales</span>
+    </Link>
+
     <!-- ===== TIỆN ÍCH MARKETING ===== -->
     <div class="item-group-label">Tiện ích Marketing</div>
 

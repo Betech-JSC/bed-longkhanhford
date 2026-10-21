@@ -43,7 +43,7 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "cms.dnf.betech-digital.com",
+        hostname: "cms.longkhanhford.betech-digital.com",
         port: "",
         pathname: "/**",
       },

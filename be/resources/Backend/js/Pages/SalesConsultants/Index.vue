@@ -1,6 +1,9 @@
 <template layout>
     <Table
         :schema="schema"
+        :config="{
+            canImport: true
+        }"
         :columns="[
             'id',
             'name',
