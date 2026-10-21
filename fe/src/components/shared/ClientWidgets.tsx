@@ -16,10 +16,10 @@ const CookieConsent = dynamic(
  * Client-side widgets that load lazily after the page renders.
  * Extracted from layout.tsx because `ssr: false` requires a Client Component.
  */
-export default function ClientWidgets() {
+export default function ClientWidgets({ isLdp = false }: { isLdp?: boolean }) {
   return (
     <>
-      <QuickAccessToolbar />
+      {!isLdp && <QuickAccessToolbar />}
       <CookieConsent />
     </>
   );

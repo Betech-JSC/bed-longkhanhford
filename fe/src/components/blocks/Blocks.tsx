@@ -3,9 +3,16 @@
 import React from "react";
 import Image from "next/image";
 import ScrollReveal from "@/components/common/ScrollReveal";
-import { Plus, Minus, ChevronDown, Phone, Bookmark, ChevronLeft, ChevronRight } from "lucide-react";
+import { Plus, Minus, ChevronDown, ChevronUp, Phone, Bookmark, ChevronLeft, ChevronRight, Sparkles, Mail } from "lucide-react";
 import { mediaAPI } from "@/lib/api";
 import { resolveImageUrl } from "@/lib/site-assets";
+import { formatPersonName } from "@/lib/formatters";
+import LdpVehiclesGridBlock from "./LdpVehiclesGridBlock";
+import LdpHeroBannerBlock from "./LdpHeroBannerBlock";
+import LdpTechnologyBlock from "./LdpTechnologyBlock";
+import LdpServicesBlock from "./LdpServicesBlock";
+import LdpFaqBlock from "./LdpFaqBlock";
+import LdpUsedVehiclesBlock from "./LdpUsedVehiclesBlock";
 export { resolveImageUrl };
 
 const formatUploadError = (err: any): string => {
@@ -59,6 +66,11 @@ interface BlocksProps {
   onDragEnd?: () => void;
   draggedIndex?: number | null;
   draggedOverIndex?: number | null;
+  salesConsultant?: any;
+  promotions?: any;
+  allVehicles?: any[];
+  landingPageId?: number | string;
+  salesEmail?: string;
 }
 
 export default function Blocks({
@@ -80,7 +92,12 @@ export default function Blocks({
   onDrop,
   onDragEnd,
   draggedIndex = null,
-  draggedOverIndex = null
+  draggedOverIndex = null,
+  salesConsultant,
+  promotions,
+  allVehicles,
+  landingPageId,
+  salesEmail,
 }: BlocksProps) {
   if (!layout || !Array.isArray(layout) || layout.length === 0) {
     return null;
@@ -103,6 +120,102 @@ export default function Blocks({
                 isEditMode={isEditMode}
                 onChangeData={(updatedData: any) => onChangeBlock(index, updatedData)}
                 anchorId={block.anchorId}
+              />
+            );
+            break;
+          case "LdpSalesConsultant":
+            blockComponent = (
+              <LdpSalesConsultantBlock
+                blockIndex={startIndex + index}
+                data={block.data}
+                salesConsultant={salesConsultant}
+                openQuoteDrawer={openQuoteDrawer}
+                isEditMode={isEditMode}
+                onChangeData={(updatedData: any) => onChangeBlock(index, updatedData)}
+                anchorId={block.anchorId}
+              />
+            );
+            break;
+          case "LdpPromotions":
+            blockComponent = (
+              <LdpPromotionsBlock
+                blockIndex={startIndex + index}
+                data={block.data}
+                promotions={promotions}
+                salesConsultant={salesConsultant}
+                openQuoteDrawer={openQuoteDrawer}
+                isEditMode={isEditMode}
+                onChangeData={(updatedData: any) => onChangeBlock(index, updatedData)}
+                anchorId={block.anchorId}
+              />
+            );
+            break;
+          case "LdpVehiclesGrid":
+            blockComponent = (
+              <LdpVehiclesGridBlock
+                data={block.data}
+                salesConsultant={salesConsultant}
+                allVehicles={allVehicles}
+                currentVehicle={vehicle}
+                anchorId={block.anchorId}
+                isEditMode={isEditMode}
+              />
+            );
+            break;
+          case "LdpHeroBanner":
+            blockComponent = (
+              <LdpHeroBannerBlock
+                data={block.data}
+                salesConsultant={salesConsultant}
+                openQuoteDrawer={openQuoteDrawer}
+                openDriveModal={openDriveModal}
+                anchorId={block.anchorId}
+                isEditMode={isEditMode}
+              />
+            );
+            break;
+          case "LdpTechnology":
+            blockComponent = (
+              <LdpTechnologyBlock
+                data={block.data}
+                salesConsultant={salesConsultant}
+                openQuoteDrawer={openQuoteDrawer}
+                openDriveModal={openDriveModal}
+                anchorId={block.anchorId}
+                isEditMode={isEditMode}
+              />
+            );
+            break;
+          case "LdpServices":
+            blockComponent = (
+              <LdpServicesBlock
+                data={block.data}
+                salesConsultant={salesConsultant}
+                anchorId={block.anchorId}
+                isEditMode={isEditMode}
+              />
+            );
+            break;
+          case "LdpFaq":
+            blockComponent = (
+              <LdpFaqBlock
+                data={block.data}
+                salesConsultant={salesConsultant}
+                anchorId={block.anchorId}
+                isEditMode={isEditMode}
+              />
+            );
+            break;
+          case "LdpUsedVehicles":
+            blockComponent = (
+              <LdpUsedVehiclesBlock
+                data={block.data}
+                salesConsultant={salesConsultant}
+                landingPageId={landingPageId}
+                salesEmail={salesEmail}
+                openQuoteDrawer={openQuoteDrawer}
+                anchorId={block.anchorId}
+                isEditMode={isEditMode}
               />
             );
             break;
@@ -199,6 +312,37 @@ export default function Blocks({
                 isEditMode={isEditMode}
                 onChangeData={(updatedData: any) => onChangeBlock(index, updatedData)}
                 anchorId={block.anchorId}
+                salesConsultant={salesConsultant}
+                openQuoteDrawer={openQuoteDrawer}
+              />
+            );
+            break;
+          case "InstallmentCalculator":
+            blockComponent = (
+              <InstallmentCalculatorBlock
+                data={block.data}
+                vehicle={vehicle}
+                openQuoteDrawer={openQuoteDrawer}
+                anchorId={block.anchorId}
+              />
+            );
+            break;
+          case "CountdownOfferBanner":
+            blockComponent = (
+              <CountdownOfferBannerBlock
+                data={block.data}
+                openQuoteDrawer={openQuoteDrawer}
+                anchorId={block.anchorId}
+              />
+            );
+            break;
+          case "DualVehicleComparison":
+            blockComponent = (
+              <DualVehicleComparisonBlock
+                data={block.data}
+                vehicle={vehicle}
+                openQuoteDrawer={openQuoteDrawer}
+                anchorId={block.anchorId}
               />
             );
             break;
@@ -208,10 +352,51 @@ export default function Blocks({
 
         if (!blockComponent) return null;
 
+        const settings = block.layout_settings || {};
+        const bgStyle = settings.bg_color ? { backgroundColor: settings.bg_color } : {};
+        const textStyle = settings.text_color ? { color: settings.text_color } : {};
+        const combinedStyle = { ...bgStyle, ...textStyle };
+
+        let wrapperClass = "w-full transition-all";
+        if (settings.bg_color) {
+          wrapperClass += " [&_section]:!bg-transparent [&_section]:!bg-none [&_section]:!shadow-none";
+        }
+        if (settings.text_color) {
+          wrapperClass += " [&_section]:!text-inherit [&_h2]:!text-inherit [&_h3]:!text-inherit [&_p]:!text-inherit [&_span]:!text-inherit";
+        }
+        if (settings.padding_top && settings.padding_top !== "default") {
+          wrapperClass += " [&_section]:!pt-0 [&_section]:!mt-0";
+          switch (settings.padding_top) {
+            case "none": wrapperClass += " pt-0"; break;
+            case "small": wrapperClass += " pt-4 md:pt-6"; break;
+            case "medium": wrapperClass += " pt-10 md:pt-16"; break;
+            case "large": wrapperClass += " pt-16 md:pt-24"; break;
+            case "xlarge": wrapperClass += " pt-24 md:pt-32"; break;
+          }
+        }
+        if (settings.padding_bottom && settings.padding_bottom !== "default") {
+          wrapperClass += " [&_section]:!pb-0 [&_section]:!mb-0";
+          switch (settings.padding_bottom) {
+            case "none": wrapperClass += " pb-0"; break;
+            case "small": wrapperClass += " pb-4 md:pb-6"; break;
+            case "medium": wrapperClass += " pb-10 md:pb-16"; break;
+            case "large": wrapperClass += " pb-16 md:pb-24"; break;
+            case "xlarge": wrapperClass += " pb-24 md:pb-32"; break;
+          }
+        }
+
         if (isEditMode) {
           const getBlockLabel = (type: string) => {
             switch (type) {
               case "HeroBanner": return "Banner lớn";
+              case "LdpHeroBanner": return "Hero Banner (Trang chủ)";
+              case "LdpVehiclesGrid": return "Danh sách dòng xe (Showroom)";
+              case "LdpSalesConsultant": return "Cố vấn bán hàng LDP";
+              case "LdpPromotions": return "Khuyến mãi LDP";
+              case "LdpTechnology": return "Công nghệ Ford";
+              case "LdpServices": return "Dịch vụ của chúng tôi";
+              case "LdpUsedVehicles": return "Xe đã qua sử dụng (Slider)";
+              case "LdpFaq": return "Câu hỏi thường gặp (FAQs)";
               case "Promotions": return "Khuyến mãi";
               case "ThreeSixtyViewer": return "Xoay 360°";
               case "FeaturesGrid": return "Lưới tính năng";
@@ -220,6 +405,9 @@ export default function Blocks({
               case "FeaturesList": return "Danh sách tính năng dọc";
               case "AccordionFAQs": return "Hỏi đáp (FAQs)";
               case "BookingBanner": return "Tư vấn & Đặt lịch";
+              case "InstallmentCalculator": return "Bảng tính trả góp";
+              case "CountdownOfferBanner": return "Đếm ngược ưu đãi";
+              case "DualVehicleComparison": return "So sánh 2 xe";
               default: return type;
             }
           };
@@ -239,7 +427,9 @@ export default function Blocks({
                 }
                 onSelectBlock && onSelectBlock(startIndex + index);
               }}
-              className={`relative transition-all overflow-hidden group/block cursor-pointer
+              style={combinedStyle}
+              id={block.anchorId || undefined}
+              className={`relative overflow-hidden group/block cursor-pointer ${wrapperClass}
                 ${activeIndex === startIndex + index ? "outline-[3px] outline-solid outline-[#008060] outline-offset-[-3px]" : "outline-[1.5px] outline-dashed outline-[#008060]/30 hover:outline-[#008060] outline-offset-[-1.5px]"}
                 ${draggedIndex === startIndex + index ? "opacity-35 scale-[0.98] outline-dashed outline-gray-400" : ""}
                 ${draggedOverIndex === startIndex + index ? "outline-amber-400 bg-amber-500/5" : ""}
@@ -293,7 +483,13 @@ export default function Blocks({
 
         return (
           <ScrollReveal key={block.id || `wrapper-${index}`} direction="up" delay={Math.min(index * 60, 240)}>
-            {blockComponent}
+            <div
+              style={combinedStyle}
+              className={wrapperClass}
+              id={block.anchorId || undefined}
+            >
+              {blockComponent}
+            </div>
           </ScrollReveal>
         );
       })}
@@ -2170,9 +2366,9 @@ function VersionsGridBlock({ data, vehicle, isEditMode, onChangeData, anchorId, 
 /* ==========================================================================
    9. BOOKING BANNER BLOCK
    ========================================================================== */
-function BookingBannerBlock({ blockIndex, data, vehicle, isEditMode, onChangeData, anchorId }: any) {
+function BookingBannerBlock({ blockIndex, data, vehicle, isEditMode, onChangeData, anchorId, salesConsultant, openQuoteDrawer }: any) {
   const title = data.title || "Kết nối ngay với chuyên viên Long Khánh Ford";
-  const phone = data.phone || "0812 86 86 22";
+  const phone = salesConsultant?.phone || data.phone || "0812 86 86 22";
   const btnText = data.btn_text || "Đặt lịch hẹn";
   const btnLink = data.btn_link || "/lien-he";
   const hasCarImage = hasImageField(data.car_image) || vehicle?.image_url;
@@ -2258,13 +2454,24 @@ function BookingBannerBlock({ blockIndex, data, vehicle, isEditMode, onChangeDat
               <Phone className="w-4 h-4 shrink-0" />
               <span className="whitespace-nowrap">{phone}</span>
             </a>
-            <a
-              href={btnLink}
-              className="flex items-center justify-center gap-2 bg-transparent hover:bg-gray-50 border border-gray-300 text-gray-700 hover:text-black font-bold px-4 sm:px-5 py-3 rounded-full text-xs sm:text-sm transition-all duration-300 active:scale-95 cursor-pointer shrink-0 font-antenna uppercase tracking-wider flex-1 whitespace-nowrap"
-            >
-              <Bookmark className="w-4 h-4 shrink-0" />
-              <span className="whitespace-nowrap">{btnText}</span>
-            </a>
+            {openQuoteDrawer ? (
+              <button
+                type="button"
+                onClick={() => !isEditMode && openQuoteDrawer(vehicle?.id)}
+                className="flex items-center justify-center gap-2 bg-transparent hover:bg-gray-50 border border-gray-300 text-gray-700 hover:text-black font-bold px-4 sm:px-5 py-3 rounded-full text-xs sm:text-sm transition-all duration-300 active:scale-95 cursor-pointer shrink-0 font-antenna uppercase tracking-wider flex-1 whitespace-nowrap"
+              >
+                <Bookmark className="w-4 h-4 shrink-0" />
+                <span className="whitespace-nowrap">{btnText}</span>
+              </button>
+            ) : (
+              <a
+                href={btnLink}
+                className="flex items-center justify-center gap-2 bg-transparent hover:bg-gray-50 border border-gray-300 text-gray-700 hover:text-black font-bold px-4 sm:px-5 py-3 rounded-full text-xs sm:text-sm transition-all duration-300 active:scale-95 cursor-pointer shrink-0 font-antenna uppercase tracking-wider flex-1 whitespace-nowrap"
+              >
+                <Bookmark className="w-4 h-4 shrink-0" />
+                <span className="whitespace-nowrap">{btnText}</span>
+              </a>
+            )}
           </div>
         </div>
       </div>
@@ -2296,6 +2503,451 @@ function BookingBannerBlock({ blockIndex, data, vehicle, isEditMode, onChangeDat
           </button>
         </div>
       )}
+    </section>
+  );
+}
+
+/* ==========================================================================
+   LDP SALES CONSULTANT BLOCK
+   ========================================================================== */
+function LdpSalesConsultantBlock({ blockIndex, data, salesConsultant, openQuoteDrawer, isEditMode, onChangeData, anchorId }: any) {
+  if (!salesConsultant) {
+    return (
+      <section className="bg-slate-100 border border-dashed border-slate-300 py-8 px-4 text-center rounded-xl max-w-[1152px] mx-auto select-none my-4 w-full">
+        <p className="text-slate-500 font-semibold text-sm">👤 KHỐI CHUYÊN VIÊN KINH DOANH LDP</p>
+        <p className="text-slate-400 text-xs mt-1">Chưa chọn Chuyên viên kinh doanh. Vui lòng chọn trong bảng thuộc tính bên trái.</p>
+      </section>
+    );
+  }
+
+  return (
+    <section id={anchorId || undefined} className="bg-gradient-to-br from-[#0b2c5c] to-[#00095B] text-white py-12 px-4 shadow-inner relative overflow-hidden select-none w-full">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(5,98,210,0.15),transparent)] pointer-events-none"></div>
+      <div className="max-w-[1152px] mx-auto flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
+        <div className="flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
+          {salesConsultant.avatar && (
+            <div className="relative w-28 h-28 rounded-full overflow-hidden border-4 border-white/10 shadow-2xl">
+              <img
+                src={resolveImageUrl(salesConsultant.avatar)}
+                alt={formatPersonName(salesConsultant.name)}
+                className="object-cover w-full h-full"
+              />
+            </div>
+          )}
+          <div>
+            <div className="inline-flex items-center gap-1.5 bg-[#0562d2]/15 text-[#3b82f6] px-3 py-1 rounded-full text-xs font-semibold mb-2">
+              <Sparkles className="w-3.5 h-3.5" /> Chuyên viên kinh doanh chính hãng
+            </div>
+            <h2 className="text-2xl font-bold tracking-tight text-white">{formatPersonName(salesConsultant.name)}</h2>
+            <div className="flex flex-wrap items-center gap-2 mt-1 text-blue-200 text-sm">
+              <span>{salesConsultant.job_title || "Chuyên viên kinh doanh Long Khánh Ford"}</span>
+              {salesConsultant.email && (
+                <>
+                  <span className="opacity-40">•</span>
+                  <a
+                    href={`mailto:${salesConsultant.email}`}
+                    className="inline-flex items-center gap-1 text-blue-200 hover:text-white transition underline"
+                    title="Gửi email cho Chuyên viên kinh doanh"
+                  >
+                    <Mail className="w-3.5 h-3.5" />
+                    <span>{salesConsultant.email}</span>
+                  </a>
+                </>
+              )}
+            </div>
+            {salesConsultant.short_bio && (
+              <p className="text-gray-300 text-sm mt-3 max-w-xl italic">
+                &ldquo;{salesConsultant.short_bio}&rdquo;
+              </p>
+            )}
+          </div>
+        </div>
+        <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+          {salesConsultant.phone && (
+            <a
+              href={`tel:${salesConsultant.phone}`}
+              className="bg-green-600 hover:bg-green-700 text-white font-bold px-6 py-3.5 rounded-xl shadow-lg flex items-center justify-center gap-2 transition duration-200 text-sm active:scale-95 border-0"
+            >
+              <Phone className="w-4 h-4" /> Gọi điện tư vấn ({salesConsultant.phone})
+            </a>
+          )}
+          <button
+            onClick={() => openQuoteDrawer()}
+            className="bg-[#0562D2] hover:bg-[#0052b4] text-white font-bold px-6 py-3.5 rounded-xl shadow-lg transition duration-200 text-sm active:scale-95 border-0 cursor-pointer"
+          >
+            Nhận báo giá xe
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ==========================================================================
+   LDP PROMOTIONS BLOCK
+   ========================================================================== */
+function LdpPromotionsBlock({ blockIndex, data, promotions, salesConsultant, openQuoteDrawer, isEditMode, onChangeData, anchorId }: any) {
+  const title = data.title || "Chương Trình Khuyến Mãi Đặc Biệt";
+  const desc = (data.description || "Nhận ưu đãi độc quyền từ chuyên viên kinh doanh khi đăng ký mua xe trong tháng này.").replace(/từ (?:Cố vấn|Chuyên viên kinh doanh|chuyên viên kinh doanh)/gi, "từ chuyên viên kinh doanh");
+
+  const hasPromotions = promotions && (
+    (promotions.global && promotions.global.length > 0) ||
+    (promotions.custom && promotions.custom.length > 0)
+  );
+
+  if (!hasPromotions) {
+    return (
+      <section className="bg-slate-100 border border-dashed border-slate-300 py-8 px-4 text-center rounded-xl max-w-[1152px] mx-auto select-none my-4 w-full">
+        <p className="text-slate-500 font-semibold text-sm">🎁 KHỐI KHUYẾN MÃI LDP</p>
+        <p className="text-slate-400 text-xs mt-1">Chưa chọn hoặc nhập chương trình khuyến mãi nào. Vui lòng cấu hình ở cột bên trái.</p>
+      </section>
+    );
+  }
+
+  return (
+    <section id={anchorId || undefined} className="bg-[#f8fafc] border-y border-slate-100 py-16 px-4 select-none w-full">
+      <div className="max-w-[1152px] mx-auto">
+        <div className="text-center max-w-2xl mx-auto mb-12">
+          <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">{title}</h2>
+          <p className="text-slate-500 text-sm mt-3">
+            {salesConsultant ? desc.replace(/từ chuyên viên kinh doanh/gi, `từ chuyên viên kinh doanh ${formatPersonName(salesConsultant.name)}`) : desc}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Global Promotions */}
+          {promotions.global && promotions.global.map((promo: any) => (
+            <div key={promo.id} className="bg-white rounded-2xl border border-slate-100 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between">
+              <div>
+                {promo.image_url && (
+                  <div className="relative h-56 w-full">
+                    <img
+                      src={promo.image_url}
+                      alt={promo.title}
+                      className="object-cover w-full h-full"
+                    />
+                  </div>
+                )}
+                <div className="p-6">
+                  <h3 className="text-lg font-bold text-slate-800 line-clamp-2 leading-snug">{promo.title}</h3>
+                  <p className="text-slate-500 text-sm mt-3 line-clamp-3 leading-relaxed">{promo.description}</p>
+                </div>
+              </div>
+              <div className="p-6 pt-0 border-t border-slate-50/50 mt-4 flex items-center justify-between">
+                <span className="text-xs font-semibold text-[#0562D2] bg-blue-50 px-3 py-1 rounded-full">Khuyến mãi chung</span>
+                <button
+                  onClick={() => openQuoteDrawer()}
+                  className="text-xs font-bold text-[#0562D2] hover:text-[#0052b4] inline-flex items-center gap-1 cursor-pointer border-0 bg-transparent"
+                >
+                  Nhận báo giá <ChevronRight className="w-3 h-3" />
+                </button>
+              </div>
+            </div>
+          ))}
+
+          {/* Custom Promotions */}
+          {promotions.custom && promotions.custom.map((promo: any, idx: number) => (
+            <div key={idx} className="bg-white rounded-2xl border border-slate-100 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between">
+              <div>
+                {promo.image_url && (
+                  <div className="relative h-56 w-full">
+                    <img
+                      src={promo.image_url}
+                      alt={promo.title}
+                      className="object-cover w-full h-full"
+                    />
+                  </div>
+                )}
+                <div className="p-6">
+                  <h3 className="text-lg font-bold text-slate-800 line-clamp-2 leading-snug">{promo.title}</h3>
+                  <p className="text-slate-500 text-sm mt-3 line-clamp-3 leading-relaxed">{promo.description}</p>
+                </div>
+              </div>
+              <div className="p-6 pt-0 border-t border-slate-50/50 mt-4 flex items-center justify-between">
+                <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">Ưu đãi độc quyền</span>
+                <button
+                  onClick={() => openQuoteDrawer()}
+                  className="text-xs font-bold text-[#0562D2] hover:text-[#0052b4] inline-flex items-center gap-1 cursor-pointer border-0 bg-transparent"
+                >
+                  Nhận báo giá <ChevronRight className="w-3 h-3" />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function InstallmentCalculatorBlock({ data, vehicle, openQuoteDrawer, anchorId }: any) {
+  const [downpaymentPct, setDownpaymentPct] = React.useState<number>(data.default_downpayment_pct || 20);
+  const [loanYears, setLoanYears] = React.useState<number>(5);
+
+  const price = parseFloat(data.custom_price) || (vehicle && vehicle.base_price ? parseFloat(vehicle.base_price) : 850000000);
+  const maxYears = data.max_years || 8;
+  const interestRate = parseFloat(data.interest_rate) || 7.9;
+
+  const downpaymentAmount = price * (downpaymentPct / 100);
+  const loanAmount = price - downpaymentAmount;
+  const totalMonths = loanYears * 12;
+  const monthlyPrincipal = loanAmount / totalMonths;
+  const monthlyInterest = loanAmount * (interestRate / 100 / 12);
+  const monthlyPayment = Math.round(monthlyPrincipal + monthlyInterest);
+
+  const title = data.title || "Bảng Tính Chi Phí Trả Góp Ước Tính";
+  const subtitle = data.subtitle || "Hỗ trợ vay lên đến 80% giá trị xe với lãi suất ưu đãi";
+
+  return (
+    <section id={anchorId || undefined} className="w-full bg-[#f8fafc] py-12 px-4 md:px-12 flex justify-center">
+      <div className="max-w-[1152px] w-full bg-white rounded-2xl p-6 md:p-10 shadow-lg border border-slate-200">
+        <div className="text-center max-w-2xl mx-auto mb-8">
+          <span className="inline-block px-3 py-1 bg-blue-50 text-[#0562d2] font-bold text-xs rounded-full mb-2">
+            🧮 TÀI CHÍNH TỰ ĐỘNG
+          </span>
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">{title}</h2>
+          <p className="text-slate-600 text-sm">{subtitle}</p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          {/* Sliders Area */}
+          <div className="lg:col-span-7 space-y-6 bg-slate-50 p-6 rounded-xl border border-slate-200">
+            {/* Slider 1: % Trả trước */}
+            <div>
+              <div className="flex justify-between items-center mb-2">
+                <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                  Số tiền trả trước ({downpaymentPct}%)
+                </label>
+                <span className="text-sm font-bold text-[#0562d2]">
+                  {Math.round(downpaymentAmount).toLocaleString("vi-VN")} VNĐ
+                </span>
+              </div>
+              <input
+                type="range"
+                min={20}
+                max={80}
+                step={5}
+                value={downpaymentPct}
+                onChange={(e) => setDownpaymentPct(Number(e.target.value))}
+                className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#0562d2]"
+              />
+              <div className="flex justify-between text-[11px] text-slate-400 mt-1 font-medium">
+                <span>20% (Tối thiểu)</span>
+                <span>50%</span>
+                <span>80% (Tối đa)</span>
+              </div>
+            </div>
+
+            {/* Slider 2: Thời hạn vay */}
+            <div>
+              <div className="flex justify-between items-center mb-2">
+                <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                  Thời gian vay ({loanYears} năm / {totalMonths} tháng)
+                </label>
+                <span className="text-sm font-bold text-[#0562d2]">
+                  {loanYears} năm
+                </span>
+              </div>
+              <input
+                type="range"
+                min={1}
+                max={maxYears}
+                step={1}
+                value={loanYears}
+                onChange={(e) => setLoanYears(Number(e.target.value))}
+                className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#0562d2]"
+              />
+              <div className="flex justify-between text-[11px] text-slate-400 mt-1 font-medium">
+                <span>1 năm</span>
+                <span>{Math.round(maxYears / 2)} năm</span>
+                <span>{maxYears} năm</span>
+              </div>
+            </div>
+
+            <div className="text-[11px] text-slate-500 italic bg-white p-3 rounded-lg border border-slate-200">
+              * Lãi suất ước tính: {interestRate}%/năm. Kết quả mang tính chất tham khảo, vui lòng liên hệ chuyên viên kinh doanh để có bảng tính chi tiết lăn bánh kèm ưu đãi thuế phí.
+            </div>
+          </div>
+
+          {/* Result Card */}
+          <div className="lg:col-span-5 bg-gradient-to-br from-[#00095b] to-[#0562d2] text-white p-6 md:p-8 rounded-2xl shadow-xl flex flex-col justify-between space-y-6">
+            <div>
+              <span className="text-xs font-semibold uppercase tracking-widest text-blue-200 block mb-1">
+                Ước tính trả hàng tháng (Gốc + Lãi)
+              </span>
+              <div className="text-3xl md:text-4xl font-extrabold text-amber-300">
+                {monthlyPayment.toLocaleString("vi-VN")} <span className="text-sm font-bold text-white">VNĐ/tháng</span>
+              </div>
+            </div>
+
+            <div className="space-y-3 pt-4 border-t border-white/20 text-xs">
+              <div className="flex justify-between text-blue-100">
+                <span>Giá xe niêm yết:</span>
+                <span className="font-bold text-white">{Math.round(price).toLocaleString("vi-VN")} VNĐ</span>
+              </div>
+              <div className="flex justify-between text-blue-100">
+                <span>Số tiền vay ngân hàng:</span>
+                <span className="font-bold text-white">{Math.round(loanAmount).toLocaleString("vi-VN")} VNĐ</span>
+              </div>
+              <div className="flex justify-between text-blue-100">
+                <span>Số tiền trả trước:</span>
+                <span className="font-bold text-amber-300">{Math.round(downpaymentAmount).toLocaleString("vi-VN")} VNĐ</span>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => openQuoteDrawer()}
+              className="w-full py-3 px-4 bg-amber-400 hover:bg-amber-300 text-slate-900 font-extrabold rounded-xl text-sm transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <span>{data.zalo_button_text || "Nhận Bảng Tính Chi Tiết Qua Zalo"}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CountdownOfferBannerBlock({ data, openQuoteDrawer, anchorId }: any) {
+  const [timeLeft, setTimeLeft] = React.useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+
+  React.useEffect(() => {
+    const targetDate = data.end_date ? new Date(data.end_date).getTime() : Date.now() + 7 * 86400000;
+    const interval = setInterval(() => {
+      const now = Date.now();
+      const diff = Math.max(0, targetDate - now);
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / 1000 / 60) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+      setTimeLeft({ days, hours, minutes, seconds });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [data.end_date]);
+
+  const bgImage = resolveImageUrl(data.background_image);
+  const bgStyle = data.background_image ? { backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center' } : {};
+
+  return (
+    <section id={anchorId || undefined} style={bgStyle} className="w-full bg-gradient-to-r from-red-900 via-rose-800 to-red-900 py-12 px-4 md:px-12 flex justify-center relative overflow-hidden text-white">
+      <div className="max-w-[1152px] w-full relative z-10 flex flex-col items-center text-center space-y-6">
+        <span className="px-4 py-1.5 bg-amber-400 text-slate-950 font-extrabold text-xs rounded-full uppercase tracking-wider animate-bounce">
+          🔥 🔥 CHƯƠNG TRÌNH KHUYẾN MÃI HẠN GIỜ
+        </span>
+
+        <h2 className="text-2xl md:text-4xl font-extrabold max-w-3xl leading-tight">
+          {data.title || "CHƯƠNG TRÌNH ƯU ĐÃI ĐẶC BIỆT THÁNG NÀY"}
+        </h2>
+
+        <p className="text-rose-100 text-sm md:text-base max-w-2xl">
+          {data.subtitle || "Đăng ký ngay để giữ suất quà tặng phụ kiện & giảm trực tiếp tiền mặt"}
+        </p>
+
+        {/* Live Timer Boxes */}
+        <div className="grid grid-cols-4 gap-3 md:gap-6 my-4">
+          <div className="bg-white/10 backdrop-blur-md border border-white/20 p-3 md:p-5 rounded-2xl flex flex-col items-center min-w-[70px] md:min-w-[100px]">
+            <span className="text-2xl md:text-4xl font-black text-amber-300">{timeLeft.days}</span>
+            <span className="text-[10px] md:text-xs uppercase font-bold text-rose-200 mt-1">Ngày</span>
+          </div>
+          <div className="bg-white/10 backdrop-blur-md border border-white/20 p-3 md:p-5 rounded-2xl flex flex-col items-center min-w-[70px] md:min-w-[100px]">
+            <span className="text-2xl md:text-4xl font-black text-amber-300">{String(timeLeft.hours).padStart(2, '0')}</span>
+            <span className="text-[10px] md:text-xs uppercase font-bold text-rose-200 mt-1">Giờ</span>
+          </div>
+          <div className="bg-white/10 backdrop-blur-md border border-white/20 p-3 md:p-5 rounded-2xl flex flex-col items-center min-w-[70px] md:min-w-[100px]">
+            <span className="text-2xl md:text-4xl font-black text-amber-300">{String(timeLeft.minutes).padStart(2, '0')}</span>
+            <span className="text-[10px] md:text-xs uppercase font-bold text-rose-200 mt-1">Phút</span>
+          </div>
+          <div className="bg-white/10 backdrop-blur-md border border-white/20 p-3 md:p-5 rounded-2xl flex flex-col items-center min-w-[70px] md:min-w-[100px]">
+            <span className="text-2xl md:text-4xl font-black text-amber-300">{String(timeLeft.seconds).padStart(2, '0')}</span>
+            <span className="text-[10px] md:text-xs uppercase font-bold text-rose-200 mt-1">Giây</span>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 text-xs font-semibold bg-black/40 px-4 py-2 rounded-full border border-amber-400/40 text-amber-300">
+          <span>⚡ Cảnh báo: Chỉ còn</span>
+          <span className="font-extrabold text-sm underline">{data.remaining_slots || 3} suất</span>
+          <span>ưu đãi cuối cùng cho đợt này!</span>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => openQuoteDrawer()}
+          className="mt-2 py-3.5 px-8 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black rounded-full text-base transition-all transform hover:scale-105 shadow-xl cursor-pointer"
+        >
+          {data.button_text || "🎁 Đăng Ký Giữ Suất Ưu Đãi Ngay"}
+        </button>
+      </div>
+    </section>
+  );
+}
+
+function DualVehicleComparisonBlock({ data, vehicle, openQuoteDrawer, anchorId }: any) {
+  const title = data.title || "SO SÁNH TRỰC QUAN 2 DÒNG XE";
+  const subtitle = data.subtitle || "Lựa chọn dòng xe phù hợp nhất với nhu cầu sử dụng của bạn";
+
+  return (
+    <section id={anchorId || undefined} className="w-full bg-slate-900 py-12 px-4 md:px-12 flex justify-center text-white">
+      <div className="max-w-[1152px] w-full space-y-8">
+        <div className="text-center max-w-2xl mx-auto">
+          <span className="inline-block px-3 py-1 bg-amber-400/20 text-amber-400 font-bold text-xs rounded-full mb-2">
+            ⚖️ BẢNG SO SÁNH SONG SONG
+          </span>
+          <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">{title}</h2>
+          <p className="text-slate-400 text-sm">{subtitle}</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Card 1 */}
+          <div className="bg-slate-800 border border-slate-700 rounded-2xl p-6 space-y-4 hover:border-amber-400/50 transition">
+            <div className="flex items-center justify-between border-b border-slate-700 pb-3">
+              <h3 className="text-xl font-bold text-amber-400">
+                {vehicle?.title || "Dòng xe 1"}
+              </h3>
+              <span className="text-xs bg-amber-400/10 text-amber-300 px-2.5 py-1 rounded font-semibold">Xe đang chọn</span>
+            </div>
+            {vehicle?.image_url && (
+              <img src={vehicle.image_url} alt={vehicle.title} className="w-full h-48 object-contain my-2" />
+            )}
+            <div className="space-y-2 text-xs text-slate-300">
+              <div className="flex justify-between py-1 border-b border-slate-700/50">
+                <span className="text-slate-400">Giá khởi điểm từ:</span>
+                <span className="font-bold text-white">{vehicle?.base_price ? `${parseFloat(vehicle.base_price).toLocaleString("vi-VN")} VNĐ` : "Liên hệ"}</span>
+              </div>
+              <div className="py-2 text-slate-300 italic bg-slate-900/60 p-3 rounded-lg border border-slate-700">
+                📌 <strong>Ghi chú từ chuyên viên kinh doanh:</strong> {data.consultant_note_1 || "Lựa chọn tuyệt vời cho nhu cầu di chuyển hàng ngày."}
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => openQuoteDrawer(vehicle?.id)}
+              className="w-full py-2.5 px-4 bg-[#0562d2] hover:bg-[#044ea7] text-white font-bold rounded-xl text-xs transition cursor-pointer"
+            >
+              Báo giá lăn bánh xe này ↗
+            </button>
+          </div>
+
+          {/* Card 2 */}
+          <div className="bg-slate-800 border border-slate-700 rounded-2xl p-6 space-y-4 hover:border-blue-400/50 transition">
+            <div className="flex items-center justify-between border-b border-slate-700 pb-3">
+              <h3 className="text-xl font-bold text-blue-400">
+                Dòng xe áp dụng kèm theo
+              </h3>
+              <span className="text-xs bg-blue-400/10 text-blue-300 px-2.5 py-1 rounded font-semibold">Xe lựa chọn thêm</span>
+            </div>
+            <div className="py-2 text-xs text-slate-300 italic bg-slate-900/60 p-3 rounded-lg border border-slate-700">
+              📌 <strong>Ghi chú từ chuyên viên kinh doanh:</strong> {data.consultant_note_2 || "Động cơ mạnh mẽ, không gian cực kỳ rộng rãi cho hành trình xa."}
+            </div>
+            <button
+              type="button"
+              onClick={() => openQuoteDrawer()}
+              className="w-full py-2.5 px-4 bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold rounded-xl text-xs transition cursor-pointer"
+            >
+              Nhận tư vấn so sánh chi tiết ↗
+            </button>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }

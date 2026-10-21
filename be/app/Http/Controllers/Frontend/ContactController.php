@@ -10,6 +10,8 @@ use App\Models\File;
 use Illuminate\Support\Facades\Notification;
 use App\Http\Notifications\CommonNotification;
 use App\Http\Notifications\ServiceBookingNotification;
+use App\Models\Vehicle\LandingPage;
+use App\Models\Vehicle\SalesConsultant;
 use App\Traits\ApiResponse;
 
 class ContactController extends Controller
@@ -23,10 +25,84 @@ class ContactController extends Controller
             if (!$request->has('contact.data')) {
                 return $this->empty();
             }
-            $data = $request->input('contact')['data'];
-            $requestData = $request->all()['contact'];
-            $requestData['type'] = $requestData['type'] ?? key(config('contact.types'));
-            $rules = config('contact.types.' . $requestData['type'] . '.rules');
+            $data = $request->input('contact')['data'] ?? [];
+            $requestData = $request->all()['contact'] ?? [];
+            $rawType = $requestData['type'] ?? key(config('contact.types'));
+            $requestData['type'] = $rawType;
+
+            // Chuẩn hóa Họ và tên
+            $nameVal = $data['Name'] ?? $data['Họ và tên'] ?? $data['full_name'] ?? $data['fullname'] ?? $data['name'] ?? null;
+            if ($nameVal) {
+                $data['Name'] = $nameVal;
+                $data['Họ và tên'] = $nameVal;
+            }
+
+            // Chuẩn hóa Số điện thoại
+            $phoneVal = $data['Phone'] ?? $data['Số điện thoại'] ?? $data['phone'] ?? $data['telephone'] ?? $data['sdt'] ?? null;
+            if ($phoneVal) {
+                $data['Phone'] = $phoneVal;
+                $data['Số điện thoại'] = $phoneVal;
+            }
+
+            // Chuẩn hóa Email
+            $emailVal = $data['Email'] ?? $data['E-mail'] ?? $data['email'] ?? null;
+            if ($emailVal) {
+                $data['Email'] = $emailVal;
+                $data['E-mail'] = $emailVal;
+            }
+
+            // Chuẩn hóa Lời nhắn / Ghi chú
+            $noteVal = $data['Nội dung cần hỗ trợ'] ?? $data['notes'] ?? $data['note'] ?? $data['message'] ?? $data['Ghi chú'] ?? null;
+            if ($noteVal) {
+                $data['Nội dung cần hỗ trợ'] = $noteVal;
+            }
+
+            // Chuẩn hóa trường Product cho ADVISE_FORM và TEST_DRIVE để tránh lỗi validation khi form gửi từ Landing Page
+            if ($rawType === 'ADVISE_FORM' || $rawType === 'TEST_DRIVE') {
+                if (empty($data['Product']) || !is_array($data['Product'])) {
+                    $vehicleId = $data['vehicle_id'] ?? 'ford-longkhanh';
+                    $vehicleTitle = 'Long Khánh Ford';
+                    $vehicleSlug = 'ford-longkhanh';
+                    if (!empty($data['vehicle_id']) && is_numeric($data['vehicle_id'])) {
+                        try {
+                            $vModel = \App\Models\Vehicle\Vehicle::find($data['vehicle_id']);
+                            if ($vModel) {
+                                $vehicleTitle = $vModel->title ?? $vModel->name ?? 'Long Khánh Ford';
+                                $vehicleSlug = $vModel->slug ?? 'ford-longkhanh';
+                            }
+                        } catch (\Throwable $e) {}
+                    }
+                    $data['Product'] = [
+                        'id' => (string)$vehicleId,
+                        'slug' => $vehicleSlug,
+                        'title' => $vehicleTitle,
+                        'type' => 'vehicle',
+                    ];
+                } else {
+                    if (empty($data['Product']['id'])) {
+                        $data['Product']['id'] = 'ford-longkhanh';
+                    }
+                    if (empty($data['Product']['slug'])) {
+                        $data['Product']['slug'] = 'ford-longkhanh';
+                    }
+                    if (empty($data['Product']['title'])) {
+                        $data['Product']['title'] = 'Long Khánh Ford';
+                    }
+                }
+            }
+
+            $requestData['data'] = $data;
+            $requestData['sent_at'] = now();
+            $rules = config('contact.types.' . $rawType . '.rules');
+
+            if (!is_array($rules)) {
+                $rules = [
+                    'Phone' => 'nullable',
+                    'Name' => 'nullable',
+                    'Số điện thoại' => 'nullable',
+                    'Họ và tên' => 'nullable',
+                ];
+            }
             $validator = Validator::make($data, $rules);
 
             if ($validator->fails()) {
@@ -220,6 +296,138 @@ class ContactController extends Controller
                 $telegramService->sendHotLeadAlert($leadData, 'FORM-' . $createdContact->id);
             } catch (\Throwable $e) {
                 \Illuminate\Support\Facades\Log::error('Telegram form notification error: ' . $e->getMessage());
+            }
+
+            // Tự động gửi Email thông báo Lead mới (ưu tiên Cố vấn / Landing Page đã setup)
+            try {
+                $contactData = $requestData['data'] ?? [];
+                $landingPageId = $contactData['landing_page_id'] ?? $requestData['landing_page_id'] ?? null;
+                $salesConsultantId = $requestData['sales_consultant_id'] ?? $contactData['sales_consultant_id'] ?? null;
+
+                $targetEmails = [];
+
+                // 1. Email từ trường sales_email gửi trực tiếp từ form hoặc LDP
+                $salesEmail = $contactData['sales_email'] ?? $requestData['sales_email'] ?? null;
+                if (!empty($salesEmail) && filter_var($salesEmail, FILTER_VALIDATE_EMAIL)) {
+                    $targetEmails[] = trim($salesEmail);
+                }
+
+                // 2. Nếu có landing_page_id, truy vấn Landing Page để lấy sales_email cấu hình và email của cố vấn
+                $landingPage = null;
+                if (!empty($landingPageId)) {
+                    try {
+                        $landingPage = LandingPage::with('salesConsultant')->find($landingPageId);
+                        if ($landingPage) {
+                            if (!empty($landingPage->sales_email) && filter_var($landingPage->sales_email, FILTER_VALIDATE_EMAIL)) {
+                                $targetEmails[] = trim($landingPage->sales_email);
+                            }
+                            if ($landingPage->salesConsultant && !empty($landingPage->salesConsultant->email) && filter_var($landingPage->salesConsultant->email, FILTER_VALIDATE_EMAIL)) {
+                                $targetEmails[] = trim($landingPage->salesConsultant->email);
+                            }
+                            if (empty($salesConsultantId) && $landingPage->sales_consultant_id) {
+                                $salesConsultantId = $landingPage->sales_consultant_id;
+                            }
+                        }
+                    } catch (\Throwable $e) {
+                        \Illuminate\Support\Facades\Log::warning('Error loading LandingPage for email notification: ' . $e->getMessage());
+                    }
+                }
+
+                // 3. Nếu có sales_consultant_id mà chưa có cố vấn
+                $consultant = null;
+                if (!empty($salesConsultantId)) {
+                    try {
+                        $consultant = SalesConsultant::find($salesConsultantId);
+                        if ($consultant && !empty($consultant->email) && filter_var($consultant->email, FILTER_VALIDATE_EMAIL)) {
+                            $targetEmails[] = trim($consultant->email);
+                        }
+                    } catch (\Throwable $e) {
+                        \Illuminate\Support\Facades\Log::warning('Error loading SalesConsultant for email notification: ' . $e->getMessage());
+                    }
+                }
+
+                // 4. Email thông báo chung của đại lý (nếu có cấu hình)
+                $generalEmailSetting = function_exists('notification_to') ? notification_to() : null;
+                if (!empty($generalEmailSetting)) {
+                    $arr = explode(',', $generalEmailSetting);
+                    foreach ($arr as $gm) {
+                        $gm = trim($gm);
+                        if (filter_var($gm, FILTER_VALIDATE_EMAIL)) {
+                            $targetEmails[] = $gm;
+                        }
+                    }
+                }
+
+                $targetEmails = array_values(array_unique(array_filter($targetEmails)));
+
+                if (!empty($targetEmails)) {
+                    $consultantName = $consultant?->name ?? $landingPage?->salesConsultant?->name ?? '';
+                    $isLandingPage = !empty($landingPageId) || !empty($salesConsultantId) || !empty($salesEmail);
+
+                    $isTestDrive = ($requestData['type'] ?? '') === 'TEST_DRIVE'
+                        || ($contactData['Loại yêu cầu'] ?? '') === 'Đăng ký lái thử xe'
+                        || str_contains(mb_strtolower($formTitle ?? ''), 'lái thử')
+                        || str_contains(mb_strtolower($cleanMessage ?? ''), 'lái thử')
+                        || str_contains(mb_strtolower($formSource ?? ''), 'lái thử');
+
+                    if ($isTestDrive) {
+                        $mailSubject = '🚗💨 [Đăng Ký Lái Thử' . ($consultantName ? " - {$consultantName}" : '') . '] ' . $contactName . ($vehicle ? " - {$vehicle}" : '');
+                    } elseif ($isLandingPage) {
+                        $mailSubject = '🔥 [Landing Page' . ($consultantName ? " - {$consultantName}" : '') . '] ' . ($vehicle ? "Báo giá {$vehicle}: " : 'Báo giá xe mới: ') . $contactName;
+                    } else {
+                        $mailSubject = '🔥 [Long Khánh Ford] ' . ($formTitle ?? 'Yêu cầu liên hệ mới') . ': ' . $contactName;
+                    }
+
+                    $emailData = [
+                        'mail_title' => $mailSubject,
+                        'Loại yêu cầu' => $isTestDrive ? 'Đăng ký lái thử xe' : ($contactData['Loại yêu cầu'] ?? ($formTitle ?? 'Yêu cầu tư vấn báo giá')),
+                        'Họ và tên khách hàng' => $contactName,
+                        'Số điện thoại' => $contactPhone,
+                    ];
+
+                    if (!empty($contactEmail)) {
+                        $emailData['Email khách hàng'] = $contactEmail;
+                    }
+                    if (!empty($vehicle)) {
+                        $emailData[$isTestDrive ? 'Dòng xe đăng ký lái thử' : 'Dòng xe quan tâm'] = $vehicle;
+                    }
+                    if (!empty($city)) {
+                        $emailData['Khu vực sinh sống'] = $city;
+                    }
+                    if (!empty($cleanMessage)) {
+                        $emailData['Ghi chú yêu cầu thêm'] = $cleanMessage;
+                    }
+                    if (!empty($selectedService)) {
+                        $emailData['Dịch vụ quan tâm'] = $selectedService;
+                    }
+                    if (!empty($paymentMethod)) {
+                        $emailData['Hình thức mua xe'] = $paymentMethod;
+                    }
+                    if (!empty($appointment)) {
+                        $emailData['Thời gian hẹn'] = $appointment;
+                    }
+                    if (!empty($location)) {
+                        $emailData['Địa điểm'] = $location;
+                    }
+                    if ($isLandingPage && !empty($consultantName)) {
+                        $emailData['Cố vấn phụ trách'] = $consultantName;
+                    }
+                    $emailData['Nguồn gửi'] = $formSource ?? ($isTestDrive ? 'Form Đăng Ký Lái Thử Xe' : 'Website');
+                    $emailData['Thời gian'] = now()->format('H:i d/m/Y');
+                    $emailData['url'] = url('/admin/contacts');
+
+                    foreach ($targetEmails as $recipientEmail) {
+                        try {
+                            Notification::route('mail', $recipientEmail)
+                                ->notifyNow(new CommonNotification($emailData));
+                            \Illuminate\Support\Facades\Log::info("Sent contact notification email to: {$recipientEmail} for contact ID {$createdContact->id}");
+                        } catch (\Throwable $e) {
+                            \Illuminate\Support\Facades\Log::error("Failed to send contact notification email to {$recipientEmail}: " . $e->getMessage());
+                        }
+                    }
+                }
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::error('Contact notification email general error: ' . $e->getMessage());
             }
 
             if ($request->wantsJson() || $request->ajax()) {

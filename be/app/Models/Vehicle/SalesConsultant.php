@@ -30,10 +30,12 @@ class SalesConsultant extends BaseModel
         'cover_image',
         'gallery',
         'facebook_url',
+        'fanpage_url',
         'linkedin_url',
         'zalo_url',
         'email',
         'phone',
+        'custom_domain',
         'status',
         'sort_order',
     ];
@@ -110,6 +112,24 @@ class SalesConsultant extends BaseModel
         return isset($this->cover_image['path']) ? static_url($this->cover_image['path']) : null;
     }
 
+    public function getZaloUrlAttribute($value): ?string
+    {
+        $val = trim($value ?? '');
+        if (empty($val)) {
+            $val = trim($this->attributes['phone'] ?? '');
+        }
+        if (empty($val)) return null;
+
+        if (str_starts_with($val, 'http://') || str_starts_with($val, 'https://')) {
+            return $val;
+        }
+        if (str_starts_with($val, 'zalo.me/')) {
+            return 'https://' . $val;
+        }
+        $digits = preg_replace('/[^0-9]/', '', $val);
+        return $digits ? ('https://zalo.me/' . $digits) : ('https://' . $val);
+    }
+
     public function getDefaultLocale(): ?string
     {
         return 'vi';
@@ -147,10 +167,11 @@ class SalesConsultant extends BaseModel
     public function toLocalizedSummary(?string $locale = null, bool $fallback = true): array
     {
         $translation = $this->localizedTranslation($locale, $fallback);
+        $rawName = $translation?->name ?? $this->name;
 
         return [
             'id'         => $this->id,
-            'name'       => $translation?->name,
+            'name'       => $rawName ? mb_convert_case(trim($rawName), MB_CASE_TITLE, "UTF-8") : null,
             'slug'       => $translation?->slug,
             'job_title'  => $translation?->job_title,
             'department' => $this->department,
@@ -162,21 +183,27 @@ class SalesConsultant extends BaseModel
     public function toLocalizedDetail(?string $locale = null, bool $fallback = true): array
     {
         $translation = $this->localizedTranslation($locale, $fallback);
+        $rawName = $translation?->name ?? $this->name;
 
         return [
             'id'         => $this->id,
-            'name'       => $translation?->name,
+            'name'       => $rawName ? mb_convert_case(trim($rawName), MB_CASE_TITLE, "UTF-8") : null,
             'slug'       => $translation?->slug,
             'job_title'  => $translation?->job_title,
+            'avatar'     => $this->avatar,
             'avatar_url' => $this->avatar_url,
+            'short_bio'  => $translation?->short_bio,
             'bio'        => $translation?->bio,
+            'phone'      => $this->phone,
+            'zalo_url'   => $this->zalo_url,
             'gallery'    => collect($this->gallery ?? [])->map(fn($g) => [
                 'image_url' => isset($g['image']['path'])
                     ? static_url($g['image']['path'])
                     : (isset($g['path']) ? static_url($g['path']) : ($g['image_url'] ?? null)),
                 'caption'   => $g['caption'] ?? null,
             ])->values()->all(),
-            'email'      => $this->email,
+            'email'          => $this->email,
+            'custom_domain'  => $this->custom_domain,
         ];
     }
 }

@@ -125,6 +125,8 @@ export const resolveImageUrl = (img: string | { url?: string; path?: string; sta
     path.startsWith("images/") ||
     path.startsWith("/images-dynamic/") ||
     path.startsWith("images-dynamic/") ||
+    path.startsWith("/images-services/") ||
+    path.startsWith("images-services/") ||
     path.startsWith("/showroom_bg") ||
     path.startsWith("/service-")
   ) {
@@ -136,7 +138,8 @@ export const resolveImageUrl = (img: string | { url?: string; path?: string; sta
     try {
       const parsed = new URL(path);
       const host = parsed.hostname.toLowerCase();
-      const isCmsHost = host.includes("longkhanhford") || host.includes("betech") || host === "localhost" || host === "127.0.0.1";
+      const isLocalHost = host === "localhost" || host === "127.0.0.1";
+      const isCmsHost = (host.includes("longkhanhford") || host.includes("betech")) && !isLocalHost;
       
       if (isCmsHost) {
         if (parsed.pathname.startsWith("/storage/")) {
@@ -157,19 +160,33 @@ export const resolveImageUrl = (img: string | { url?: string; path?: string; sta
   clean = clean.replace(/^(\/?uploads)+/gi, "/uploads");
   clean = clean.replace(/^(\/?storage)+/gi, "/storage");
 
-  if (clean.startsWith("/storage/")) {
-    return `/cms-storage${clean.replace(/^\/storage/, "")}`;
-  }
-  if (clean.startsWith("storage/")) {
-    return `/cms-storage/${clean.replace(/^storage\//, "")}`;
-  }
-  if (clean.startsWith("/uploads/")) {
-    return `/cms-uploads${clean.replace(/^\/uploads/, "")}`;
-  }
-  if (clean.startsWith("uploads/")) {
-    return `/cms-uploads/${clean.replace(/^uploads\//, "")}`;
+  const isLocalBackend = baseDomain.includes("localhost") || baseDomain.includes("127.0.0.1");
+  if (!isLocalBackend) {
+    if (clean.startsWith("/storage/")) {
+      return `/cms-storage${clean.replace(/^\/storage/, "")}`;
+    }
+    if (clean.startsWith("storage/")) {
+      return `/cms-storage/${clean.replace(/^storage\//, "")}`;
+    }
+    if (clean.startsWith("/uploads/")) {
+      return `/cms-uploads${clean.replace(/^\/uploads/, "")}`;
+    }
+    if (clean.startsWith("uploads/")) {
+      return `/cms-uploads/${clean.replace(/^uploads\//, "")}`;
+    }
   }
 
-  const cleanPath = clean.replace(/^\//, "");
+  const cleanPath = clean.replace(/^\/?(static|uploads|storage)\//i, "").replace(/^\//, "");
   return `${baseDomain}/static/${cleanPath}`;
+};
+
+export const hasImageField = (img: any): boolean => {
+  if (!img) return false;
+  let path = "";
+  if (typeof img === "string") {
+    path = img;
+  } else if (typeof img === "object") {
+    path = img.url || img.path || img.static_url || "";
+  }
+  return typeof path === "string" && path.trim() !== "";
 };
