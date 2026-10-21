@@ -41,7 +41,7 @@ const DEFAULT_SLIDES: BannerSlide[] = [
     buttonText: "Nhận báo giá ngay",
   },
   {
-    title: "DỊCH VỤ CHÍNH HÃNG TIÊU CHUẨN 5S",
+    title: "DỊCH VỤ CHÍNH HÃNG TIÊU CHUẨN 3S",
     subtitle: "Đồng hành và chăm sóc khách hàng trọn đời cùng Ford Việt Nam",
     image: siteAssets.heroSlides[2],
     imageMobile: siteAssets.heroSlides[2],

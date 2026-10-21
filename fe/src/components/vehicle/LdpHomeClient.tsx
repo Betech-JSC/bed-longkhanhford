@@ -91,7 +91,7 @@ const resolveZaloUrl = (zaloUrl?: string, phone?: string): string => {
 const faqs = [
   {
     q: "Điều gì tạo nên sự nổi bật thương hiệu Long Khánh Ford?",
-    a: "Long Khánh Ford tự hào là đại lý ủy quyền chính thức của Ford Việt Nam với cơ sở vật chất 5S hiện đại bậc nhất, đội ngũ nhân sự chuyên nghiệp và quy trình dịch vụ đạt tiêu chuẩn toàn cầu, mang đến trải nghiệm hài lòng tối đa cho khách hàng."
+    a: "Long Khánh Ford tự hào là đại lý ủy quyền chính thức của Ford Việt Nam với cơ sở vật chất 3S hiện đại bậc nhất, đội ngũ nhân sự chuyên nghiệp và quy trình dịch vụ đạt tiêu chuẩn toàn cầu, mang đến trải nghiệm hài lòng tối đa cho khách hàng."
   },
   {
     q: "Sự sáng tạo trong thiết kế sản phẩm",
@@ -153,7 +153,7 @@ const formatBannersList = (items: any[]) => {
   return [
     {
       title: "KHÁM PHÁ CÁC DÒNG XE FORD THẾ HỆ MỚI",
-      subtitle: "Đại lý ủy quyền 5S chính thức của Ford Việt Nam tại Long Khánh",
+      subtitle: "Đại lý ủy quyền 3S chính thức của Ford Việt Nam tại Long Khánh",
       image: siteAssets.heroSlides[0] || "/showroom_bg.webp",
       imageMobile: siteAssets.heroSlides[0] || "/showroom_bg.webp",
       buttonText: "Đăng ký lái thử",
@@ -603,7 +603,7 @@ function LdpHomeInner({
               </div>
             )}
             <h1 className="text-2xl sm:text-4xl lg:text-[44px] font-bold tracking-tight leading-[1.2] text-white uppercase">
-              {heroSlides[activeHeroIndex]?.title || "LONG KHÁNH FORD — ĐẠI LÝ 5S CHÍNH THỨC"}
+              {heroSlides[activeHeroIndex]?.title || "LONG KHÁNH FORD — ĐẠI LÝ 3S CHÍNH THỨC"}
             </h1>
             <p className="mt-3 text-sm sm:text-lg md:text-xl font-medium text-white/85 leading-snug max-w-[90%]">
               {heroSlides[activeHeroIndex]?.subtitle || "Trải nghiệm sức mạnh, công nghệ và sự an toàn vượt trội cùng Ford Việt Nam."}

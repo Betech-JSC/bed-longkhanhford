@@ -150,7 +150,7 @@ export default function LdpServicesBlock({
         <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] mb-6">
           <div className="space-y-2">
             <span className="text-xs font-semibold text-[#0562D2] uppercase tracking-wider block">
-              Dịch vụ tiêu chuẩn 5S
+              Dịch vụ tiêu chuẩn 3S
             </span>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[#1a1a1a] tracking-tight leading-[1.2]">
               {data?.title || "Các dịch vụ của chúng tôi"}

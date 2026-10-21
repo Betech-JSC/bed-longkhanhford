@@ -19,7 +19,7 @@ interface FaqItem {
 const DEFAULT_FAQS: FaqItem[] = [
   {
     q: "Điều gì tạo nên sự nổi bật thương hiệu Long Khánh Ford?",
-    a: "Long Khánh Ford tự hào là đại lý ủy quyền chính thức lớn nhất của Ford Việt Nam tại khu vực miền Nam, sở hữu cơ sở vật chất 5S hiện đại, đội ngũ kỹ thuật viên đạt chuẩn quốc tế và kho xe luôn sẵn sàng giao ngay."
+    a: "Long Khánh Ford tự hào là đại lý ủy quyền chính thức lớn nhất của Ford Việt Nam tại khu vực miền Nam, sở hữu cơ sở vật chất 3S hiện đại, đội ngũ kỹ thuật viên đạt chuẩn quốc tế và kho xe luôn sẵn sàng giao ngay."
   },
   {
     q: "Chuyên viên kinh doanh có thể hỗ trợ tôi những gì trong quá trình mua xe?",
