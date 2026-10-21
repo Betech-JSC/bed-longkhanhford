@@ -38,6 +38,7 @@ use App\Http\Controllers\Backend\TestDriveSurveyController;
 use App\Http\Controllers\Backend\ServiceSurveyController;
 use App\Http\Controllers\Backend\ServiceBookingController;
 use App\Http\Controllers\Backend\RegistrationFeeController;
+use App\Http\Controllers\Backend\LandingPageController;
 
 Route::localized(function () {
     Route::middleware(['auth:admin'])->name('admin.')->group(function () {
@@ -64,11 +65,14 @@ Route::localized(function () {
         Route::module(BannerController::class);
         Route::module(VehicleCategoryController::class);
         Route::module(VehicleController::class);
+        Route::module(LandingPageController::class);
         Route::get('vehicles/{id}/accessories-ids', [VehicleController::class, 'getAccessoriesIds'])->name('vehicles.accessories-ids');
         Route::get('vehicles/{id}/features', [VehicleController::class, 'getFeatures'])->name('vehicles.features');
         Route::module(UsedVehicleController::class);
         Route::module(CustomerReviewController::class);
         Route::module(PartnerController::class);
+        Route::get('sales-consultants/export', [SalesConsultantController::class, 'export'])->name('sales-consultants.export');
+        Route::post('sales-consultants/import', [SalesConsultantController::class, 'import'])->name('sales-consultants.import');
         Route::module(SalesConsultantController::class);
         Route::module(DealerActivityController::class);
         Route::module(AwardController::class);

@@ -150,6 +150,9 @@
                                 { id: 'service', label: 'Phòng Dịch Vụ (Service)' },
                                 { id: 'marketing', label: 'Phòng Marketing' },
                                 { id: 'technical', label: 'Phòng Kỹ Thuật' },
+                                { id: '1', label: 'Phòng 1' },
+                                { id: '2', label: 'Phòng 2' },
+                                { id: '3', label: 'Phòng 3' },
                             ],
                             emptyLabel: '-- Chọn phòng ban --',
                         }"
@@ -219,6 +222,26 @@
                             placeholder: 'vd: https://facebook.com/...',
                         }"
                     />
+
+                    <Field
+                        v-model="form.fanpage_url"
+                        :field="{
+                            type: 'text',
+                            name: 'fanpage_url',
+                            label: 'Đường dẫn Fanpage',
+                            placeholder: 'vd: https://facebook.com/fanpage...',
+                        }"
+                    />
+
+                    <Field
+                        v-model="form.custom_domain"
+                        :field="{
+                            type: 'text',
+                            name: 'custom_domain',
+                            label: 'Tên miền riêng của Sale (nếu có)',
+                            placeholder: 'vd: tuanford.com (không chứa http:// hoặc https://)',
+                        }"
+                    />
                 </div>
             </div>
         </template>
@@ -252,6 +275,8 @@ export default {
                 phone: '',
                 zalo_url: '',
                 facebook_url: '',
+                fanpage_url: '',
+                custom_domain: '',
                 cover_image: null,
                 ...item,
             }
