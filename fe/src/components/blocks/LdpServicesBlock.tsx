@@ -28,7 +28,7 @@ const DEFAULT_SERVICES: ServiceItem[] = [
     title: "Bảo Dưỡng Định Kỳ",
     slug: "bao-duong-dinh-ky",
     description: "Quy trình kiểm tra 75 hạng mục chuẩn Ford toàn cầu giúp xe vận hành bền bỉ và an toàn tối đa.",
-    image: "/images-services/service-maintenance-banner.webp",
+    image: "/assets/service-periodic-banner.jpg",
   },
   {
     id: 2,
@@ -42,21 +42,21 @@ const DEFAULT_SERVICES: ServiceItem[] = [
     title: "Phụ Tùng & Nâng Cấp Phụ Kiện",
     slug: "phu-tung-chinh-hang",
     description: "100% phụ tùng, dầu nhớt và phụ kiện nâng cấp được nhập khẩu chính hãng với bảo hành đầy đủ.",
-    image: "/images-services/service-upgrade-banner.webp",
+    image: "/assets/service-upgrade-banner.jpg",
   },
   {
     id: 4,
     title: "Cứu Hộ 24/7 & Giao Xe Tận Nơi",
     slug: "cuu-ho-24-7",
     description: "Đội ngũ kỹ thuật cơ động túc trực 24/7 sẵn sàng hỗ trợ khách hàng trên mọi cung đường.",
-    image: "/service-delivery.jpg",
+    image: "/service-delivery.webp",
   },
   {
     id: 5,
     title: "Chăm Sóc & Làm Đẹp Xe",
     slug: "dich-vu-cham-soc-xe",
     description: "Công nghệ phủ bóng ceramic, vệ sinh khoang động cơ và nội thất chuyên sâu cao cấp.",
-    image: "/images-services/service-detailing-banner.webp",
+    image: "/assets/service-customer-banner.jpg",
   },
   {
     id: 6,
@@ -68,11 +68,11 @@ const DEFAULT_SERVICES: ServiceItem[] = [
 ];
 
 const FALLBACK_SERVICE_IMAGES = [
-  "/images-services/service-maintenance-banner.webp",
+  "/assets/service-periodic-banner.jpg",
   "/service-fixed-car.jpg",
-  "/images-services/service-upgrade-banner.webp",
-  "/service-delivery.jpg",
-  "/images-services/service-detailing-banner.webp",
+  "/assets/service-upgrade-banner.jpg",
+  "/service-delivery.webp",
+  "/assets/service-customer-banner.jpg",
   "/service-support-customer.jpg",
 ];
 
@@ -83,19 +83,19 @@ function resolveServiceImage(item: any, index: number): string {
   }
   const str = (item?.slug || item?.title || "").toLowerCase();
   if (str.includes("bao-duong") || str.includes("bảo dưỡng")) {
-    return "/images-services/service-maintenance-banner.webp";
+    return "/assets/service-periodic-banner.jpg";
   }
   if (str.includes("sua-chua") || str.includes("sửa chữa") || str.includes("dong-son") || str.includes("đồng sơn")) {
     return "/service-fixed-car.jpg";
   }
   if (str.includes("cuu-ho") || str.includes("cứu hộ") || str.includes("giao-xe") || str.includes("delivery")) {
-    return "/service-delivery.jpg";
+    return "/service-delivery.webp";
   }
   if (str.includes("phu-tung") || str.includes("phụ tùng") || str.includes("nang-cap") || str.includes("phụ kiện")) {
-    return "/images-services/service-upgrade-banner.webp";
+    return "/assets/service-upgrade-banner.jpg";
   }
   if (str.includes("cham-soc") || str.includes("chăm sóc") || str.includes("detailing")) {
-    return "/images-services/service-detailing-banner.webp";
+    return "/assets/service-customer-banner.jpg";
   }
   return FALLBACK_SERVICE_IMAGES[index % FALLBACK_SERVICE_IMAGES.length];
 }

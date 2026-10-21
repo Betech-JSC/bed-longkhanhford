@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { resolveImageUrl } from "@/lib/site-assets";
 
 interface LdpTechnologyBlockProps {
   data?: any;
@@ -17,19 +18,19 @@ const DEFAULT_TECH_SLIDES = [
   {
     title: "Ứng dụng Ford",
     description: "Ứng dụng Ford mang đến cho bạn trải nghiệm sở hữu trọn vẹn và dễ dàng trong tầm tay. Khi truy cập vào ứng dụng này, bạn có đầy đủ thông tin các tính năng của xe và kiểm tra về tình trạng xe.",
-    image: "/assets/cq5dam.web.1280.1280.webp",
+    image: "/assets/tech_fordpass.jpg",
     category: "Lái xe",
   },
   {
     title: "Ford Co-Pilot360",
     description: "Dù trong thành phố hay ra xa lộ, hệ thống Ford Co-Pilot360™ - Công nghệ An toàn Hỗ trợ Người lái được thiết kế để giúp bạn cảm thấy tự tin hơn khi lái xe.",
-    image: "/assets/blis-everest.webp",
+    image: "/assets/tech_copilot360.jpg",
     category: "Lái xe",
   },
   {
     title: "Hệ thống âm thanh cao cấp",
     description: "Hệ thống loa B&O cho trải nghiệm âm thanh tuyệt vời với chất âm trung thực và rõ ràng đến từng chi tiết.",
-    image: "/assets/ford-raptor-tabbed-desktop.webp",
+    image: "/assets/tech_audio.webp",
     category: "Giải trí",
   }
 ];
@@ -162,7 +163,7 @@ export default function LdpTechnologyBlock({
                   className="relative overflow-hidden rounded-2xl aspect-[16/10] bg-[#121824] flex-shrink-0 w-[var(--slide-width)] select-none border border-white/10 shadow-2xl group"
                 >
                   <Image
-                    src={slide.image}
+                    src={resolveImageUrl(slide.image) || "/assets/tech_copilot360.jpg"}
                     alt={slide.title}
                     fill
                     sizes="(max-width: 768px) 85vw, 760px"

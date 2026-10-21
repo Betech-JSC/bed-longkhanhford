@@ -327,7 +327,7 @@ export default function LdpUsedVehiclesBlock({
                 const odo = car.odo ? `${new Intl.NumberFormat("vi-VN").format(Number(car.odo))} km` : "Đang cập nhật";
                 const isBroken = brokenImages[car.id];
                 const rawImg = car.image_url || (Array.isArray(car.images_urls) && car.images_urls[0]) || "";
-                const img = (!isBroken && rawImg) ? resolveImageUrl(rawImg) : "/assets/territory-hero.webp";
+                const img = (!isBroken && rawImg) ? resolveImageUrl(rawImg) : "/assets/territory-hero.jpg";
 
                 return (
                   <div 
@@ -480,7 +480,7 @@ export default function LdpUsedVehiclesBlock({
                     src={
                       !brokenImages[selectedCar.id] && selectedCar.image_url
                         ? resolveImageUrl(selectedCar.image_url)
-                        : "/assets/territory-hero.webp"
+                        : "/assets/territory-hero.jpg"
                     }
                     alt={selectedCar.title || "Xe Ford cũ"}
                     fill

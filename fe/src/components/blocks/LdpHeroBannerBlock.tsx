@@ -29,22 +29,22 @@ const DEFAULT_SLIDES: BannerSlide[] = [
   {
     title: "KHÁM PHÁ CÁC DÒNG XE FORD THẾ HỆ MỚI",
     subtitle: "Trải nghiệm sức mạnh, công nghệ và sự an toàn vượt trội cùng Long Khánh Ford",
-    image: "/assets/cq5dam.web.2160.2160.webp",
-    imageMobile: "/assets/cq5dam.web.1280.1280.webp",
+    image: siteAssets.heroSlides[0],
+    imageMobile: siteAssets.heroSlides[0],
     buttonText: "Đăng ký lái thử",
   },
   {
     title: "ƯU ĐÃI ĐẶC QUYỀN TỪ CHUYÊN VIÊN KINH DOANH",
     subtitle: "Hỗ trợ trả góp lãi suất ưu đãi, thủ tục nhanh chóng, giao xe tận nơi",
-    image: "/assets/blis-everest.webp",
-    imageMobile: "/assets/blis-everest.webp",
+    image: siteAssets.heroSlides[1],
+    imageMobile: siteAssets.heroSlides[1],
     buttonText: "Nhận báo giá ngay",
   },
   {
     title: "DỊCH VỤ CHÍNH HÃNG TIÊU CHUẨN 5S",
     subtitle: "Đồng hành và chăm sóc khách hàng trọn đời cùng Ford Việt Nam",
-    image: "/assets/ford-raptor-tabbed-desktop.webp",
-    imageMobile: "/assets/ford-raptor-tabbed-desktop.webp",
+    image: siteAssets.heroSlides[2],
+    imageMobile: siteAssets.heroSlides[2],
     buttonText: "Tư vấn trực tiếp",
   }
 ];

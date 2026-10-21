@@ -119,21 +119,21 @@ const techSlides = [
   {
     title: "Ứng dụng Ford",
     description: "Ứng dụng Ford mang đến cho bạn trải nghiệm sở hữu trọn vẹn và dễ dàng trong tầm tay. Khi truy cập vào ứng dụng này, bạn có đầy đủ thông tin các tính năng của xe và kiểm tra về tình trạng xe.",
-    image: "/assets/cq5dam.web.1280.1280.webp",
+    image: "/assets/tech_fordpass.jpg",
     category: "Lái xe",
     link: "/dang-ky-lai-thu"
   },
   {
     title: "Ford Co-Pilot360",
     description: "Dù trong thành phố hay ra xa lộ, hệ thống Ford Co-Pilot360™ - Công nghệ An toàn Hỗ trợ Người lái được thiết kế để giúp bạn cảm thấy tự tin hơn khi lái xe.",
-    image: "/assets/blis-everest.webp",
+    image: "/assets/tech_copilot360.jpg",
     category: "Lái xe",
     link: "/dang-ky-lai-thu"
   },
   {
     title: "Hệ thống âm thanh cao cấp",
     description: "Hệ thống loa B&O cho trải nghiệm âm thanh tuyệt vời với chất âm trung thực và rõ ràng đến từng chi tiết.",
-    image: "/assets/ford-raptor-tabbed-desktop.webp",
+    image: "/assets/tech_audio.webp",
     category: "Giải trí",
     link: "/dang-ky-lai-thu"
   }
@@ -144,8 +144,8 @@ const formatBannersList = (items: any[]) => {
     return items.map((item: any) => ({
       title: item.title || "",
       subtitle: item.subtitle || "",
-      image: item.image_url || siteAssets.heroSlides[0],
-      imageMobile: item.image_mobile_url || item.image_url || siteAssets.heroSlides[0],
+      image: resolveImageUrl(item.image_url || item.image) || siteAssets.heroSlides[0],
+      imageMobile: resolveImageUrl(item.image_mobile_url || item.image_url || item.image) || siteAssets.heroSlides[0],
       buttonText: item.button_text || "Đăng ký lái thử",
       buttonLink: item.button_link || "#showroom"
     }));
@@ -154,8 +154,8 @@ const formatBannersList = (items: any[]) => {
     {
       title: "KHÁM PHÁ CÁC DÒNG XE FORD THẾ HỆ MỚI",
       subtitle: "Đại lý ủy quyền 5S chính thức của Ford Việt Nam tại Long Khánh",
-      image: siteAssets.heroSlides[0] || "/showroom_bg.jpg",
-      imageMobile: siteAssets.heroSlides[0] || "/showroom_bg.jpg",
+      image: siteAssets.heroSlides[0] || "/showroom_bg.webp",
+      imageMobile: siteAssets.heroSlides[0] || "/showroom_bg.webp",
       buttonText: "Đăng ký lái thử",
       buttonLink: "#showroom"
     }
@@ -167,7 +167,7 @@ const formatArticlesList = (items: any[]) => {
     return items.map((item: any) => ({
       id: item.slug || item.id || String(Math.random()),
       title: item.title || "",
-      image: item.image?.url || item.image_url || "/assets/blis-everest.webp",
+      image: resolveImageUrl(item.image?.url || item.image_url || item.image) || "/assets/tech_copilot360.jpg",
       imageAlt: item.image?.alt || item.title || "",
       published_at: item.published_at || "",
       category: item.category ? { title: item.category.title } : undefined,
@@ -1081,7 +1081,7 @@ function LdpHomeInner({
               <div className="animate-marquee-continuous gap-[var(--card-gap-service)]">
                 {[...servicesList, ...servicesList].map((srv, idx) => {
                   const sTitle = srv.title;
-                  const sImg = srv.image?.url || "/service-support-customer.jpg";
+                  const sImg = resolveImageUrl(srv.image?.url || srv.image_url || srv.image) || "/service-support-customer.jpg";
                   const sHref = (srv.custom_link && srv.custom_link.startsWith('/dich-vu/'))
                     ? srv.custom_link
                     : `/dich-vu/${srv.slug}`;
@@ -1336,7 +1336,7 @@ function LdpHomeInner({
                       }}
                     >
                       <Image
-                        src={item.image_url}
+                        src={resolveImageUrl(item.image_url || item.image?.url || item.image) || "/assets/customer_handover_everest.webp"}
                         alt={item.title || "Tri ân khách hàng"}
                         fill
                         sizes="(max-width: 768px) 280px, 360px"
