@@ -17,9 +17,11 @@ const CookieConsent = dynamic(
  * Extracted from layout.tsx because `ssr: false` requires a Client Component.
  */
 export default function ClientWidgets({ isLdp = false }: { isLdp?: boolean }) {
+  if (isLdp) return null;
+
   return (
     <>
-      {!isLdp && <QuickAccessToolbar />}
+      <QuickAccessToolbar />
       <CookieConsent />
     </>
   );
