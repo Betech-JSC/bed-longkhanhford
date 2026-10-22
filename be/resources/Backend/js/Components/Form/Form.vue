@@ -78,7 +78,8 @@ export default {
         form: {
             deep: true,
             handler(value) {
-                this.$emit("update:modelValue", value);
+                const plainData = typeof value?.data === 'function' ? value.data() : value;
+                this.$emit("update:modelValue", plainData);
             },
         },
     },
@@ -156,10 +157,19 @@ export default {
             return confirm(this.tt('models.message.confirm_message'));
         },
 
-        confirmStayInDirtyForm() {
+        confirmStayInDirtyForm(e) {
+            if (this.isLoading || this.form?.processing) {
+                return false;
+            }
+
+            if (e && e.detail && e.detail.visit) {
+                const method = (e.detail.visit.method || '').toLowerCase();
+                if (['post', 'put', 'patch', 'delete'].includes(method)) {
+                    return false;
+                }
+            }
+
             return (
-                !this.isLoading &&
-                !this.form.processing &&
                 this.formValueChanged() &&
                 this.form.isDirty &&
                 !this.confirmLeave()
@@ -167,7 +177,7 @@ export default {
         },
 
         beforeWindowUnload(e) {
-            if (this.confirmStayInDirtyForm()) {
+            if (this.confirmStayInDirtyForm(e)) {
                 e.preventDefault();
                 e.returnValue = "";
             }
@@ -178,61 +188,120 @@ export default {
         },
 
         pick(obj, fields) {
-            return fields.reduce(
-                (acc, cur) => ((acc[cur] = obj[cur]), acc),
-                {}
-            );
+            const source = typeof obj?.data === 'function' ? obj.data() : obj;
+            return fields.reduce((acc, cur) => {
+                if (cur && cur.includes('.')) {
+                    const parts = cur.split('.');
+                    let val = source;
+                    for (const p of parts) {
+                        val = val?.[p];
+                    }
+                    if (val !== undefined) {
+                        let target = acc;
+                        for (let i = 0; i < parts.length - 1; i++) {
+                            target[parts[i]] = target[parts[i]] || {};
+                            target = target[parts[i]];
+                        }
+                        target[parts[parts.length - 1]] = val;
+                    }
+                } else if (source && source[cur] !== undefined) {
+                    acc[cur] = source[cur];
+                }
+                return acc;
+            }, {});
         },
 
         validateAsync(...fields) {
-            this.isLoading = true,
-                this.$inertia.post(
-                    this.route(`admin.${this.currentResource}.store`, {
-                        id: this.form?.id,
-                    }),
-                    this.pick(this.form, fields),
-                    {
-                        preserveScroll: true,
-                        headers: { "X-Dry-Run": true },
-                        onError: (errors) => this.form.setError(errors),
-                        onSuccess: () => this.form.clearErrors(...fields),
-                    }
-                );
-            this.isLoading = false
+            const payload = this.pick(this.form, fields);
+            if (!payload || Object.keys(payload).length === 0) {
+                return;
+            }
+            const url = this.route(`admin.${this.currentResource}.store`, {
+                id: this.form?.id,
+            });
+            if (this.$axios) {
+                this.$axios
+                    .post(url, payload, {
+                        headers: {
+                            "X-Dry-Run": "true",
+                            Accept: "application/json",
+                        },
+                    })
+                    .then(() => {
+                        this.form.clearErrors(...fields);
+                    })
+                    .catch((err) => {
+                        if (err?.response?.status === 422 && err.response.data?.errors) {
+                            const errs = {};
+                            Object.entries(err.response.data.errors).forEach(([k, v]) => {
+                                errs[k] = Array.isArray(v) ? v[0] : v;
+                            });
+                            this.form.setError(errs);
+                        }
+                    });
+            }
         },
 
         submit() {
-            this.isLoading = true,
-                this.$inertia.post(
-                    this.route(`admin.${this.currentResource}.store`, {
-                        id: this.form?.id,
-                    }),
-                    this.form,
-                    {
-                        onSuccess: () => {
-                            this.form = this.$inertia.form(this.modelValue);
-                            this.isLoading = true
-                        },
-                    }
-                );
-            this.isLoading = false
+            this.isLoading = true;
+            const url = this.route(`admin.${this.currentResource}.store`, {
+                id: this.form?.id,
+            });
+            const handleFinish = () => {
+                this.isLoading = false;
+            };
+            const syncFormFromModel = () => {
+                this.$nextTick(() => {
+                    this.initFormValue = JSON.parse(JSON.stringify(this.modelValue || {}));
+                    this.form = this.$inertia.form(this.modelValue);
+                    handleFinish();
+                });
+            };
+            if (this.form && typeof this.form.post === 'function') {
+                this.form.post(url, {
+                    onSuccess: syncFormFromModel,
+                    onError: handleFinish,
+                    onFinish: handleFinish,
+                });
+            } else {
+                const payload = this.form && typeof this.form.data === 'function' ? this.form.data() : this.form;
+                this.$inertia.post(url, payload, {
+                    onSuccess: syncFormFromModel,
+                    onError: handleFinish,
+                    onFinish: handleFinish,
+                });
+            }
         },
 
         storeDraft() {
-            this.isLoading = true
-            this.$inertia.post(
-                this.route(`admin.${this.currentResource}.draft`, {
-                    id: this.form?.id,
-                }),
-                this.form,
-                {
-                    onSuccess: () => {
-                        this.form = this.$inertia.form(this.modelValue);
-                        this.isLoading = true
-                    },
-                }
-            );
-            this.isLoading = false
+            this.isLoading = true;
+            const url = this.route(`admin.${this.currentResource}.draft`, {
+                id: this.form?.id,
+            });
+            const handleFinish = () => {
+                this.isLoading = false;
+            };
+            const syncFormFromModel = () => {
+                this.$nextTick(() => {
+                    this.initFormValue = JSON.parse(JSON.stringify(this.modelValue || {}));
+                    this.form = this.$inertia.form(this.modelValue);
+                    handleFinish();
+                });
+            };
+            if (this.form && typeof this.form.post === 'function') {
+                this.form.post(url, {
+                    onSuccess: syncFormFromModel,
+                    onError: handleFinish,
+                    onFinish: handleFinish,
+                });
+            } else {
+                const payload = this.form && typeof this.form.data === 'function' ? this.form.data() : this.form;
+                this.$inertia.post(url, payload, {
+                    onSuccess: syncFormFromModel,
+                    onError: handleFinish,
+                    onFinish: handleFinish,
+                });
+            }
         },
 
         duplicate() {

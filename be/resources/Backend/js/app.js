@@ -32,6 +32,40 @@ const emitter = new TinyEmitter()
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel'
 
+// An toàn chống DataCloneError khi Inertia lưu page state vào Browser History
+if (typeof window !== 'undefined' && window.history) {
+    const origReplace = window.history.replaceState;
+    window.history.replaceState = function (state, title, url) {
+        try {
+            return origReplace.apply(this, arguments);
+        } catch (err) {
+            if (err && err.name === 'DataCloneError') {
+                try {
+                    return origReplace.call(this, JSON.parse(JSON.stringify(state)), title, url);
+                } catch (_) {
+                    return origReplace.call(this, null, title, url);
+                }
+            }
+            throw err;
+        }
+    };
+    const origPush = window.history.pushState;
+    window.history.pushState = function (state, title, url) {
+        try {
+            return origPush.apply(this, arguments);
+        } catch (err) {
+            if (err && err.name === 'DataCloneError') {
+                try {
+                    return origPush.call(this, JSON.parse(JSON.stringify(state)), title, url);
+                } catch (_) {
+                    return origPush.call(this, null, title, url);
+                }
+            }
+            throw err;
+        }
+    };
+}
+
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) => {

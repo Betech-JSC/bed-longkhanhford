@@ -25,7 +25,7 @@
                         v-model="form[currentTab].name"
                         :field="{
                             type: 'text',
-                            name: `name_${currentTab}`,
+                            name: `${currentTab}.name`,
                             label: 'Họ và tên',
                             placeholder: 'vd: Đinh Thị Bích Ly',
                         }"
@@ -36,7 +36,7 @@
                         v-model="form[currentTab].job_title"
                         :field="{
                             type: 'text',
-                            name: `job_title_${currentTab}`,
+                            name: `${currentTab}.job_title`,
                             label: 'Chức danh',
                             placeholder: 'vd: Cố vấn bán hàng / Cố vấn dịch vụ',
                         }"
@@ -47,7 +47,7 @@
                         v-model="form[currentTab].short_bio"
                         :field="{
                             type: 'textarea',
-                            name: `short_bio_${currentTab}`,
+                            name: `${currentTab}.short_bio`,
                             label: 'Giới thiệu ngắn',
                         }"
                     />
@@ -57,7 +57,7 @@
                         v-model="form[currentTab].bio"
                         :field="{
                             type: 'richtext',
-                            name: `bio_${currentTab}`,
+                            name: `${currentTab}.bio`,
                             label: 'Thông tin chi tiết / Giới thiệu bản thân',
                         }"
                     />
@@ -266,19 +266,33 @@ export default {
     },
 
     methods: {
-        initFormData(item) {
+        initFormData(item = {}) {
             const data = {
                 status: 'ACTIVE',
                 sort_order: 0,
                 gallery: [],
                 department: 'sales',
+                email: '',
                 phone: '',
                 zalo_url: '',
                 facebook_url: '',
                 fanpage_url: '',
                 custom_domain: '',
+                avatar: null,
                 cover_image: null,
                 ...item,
+            }
+            if (!data.department) {
+                data.department = 'sales'
+            }
+            if (!data.status) {
+                data.status = 'ACTIVE'
+            }
+            if (data.sort_order === null || data.sort_order === undefined) {
+                data.sort_order = 0
+            }
+            if (!Array.isArray(data.gallery)) {
+                data.gallery = []
             }
             const locales = ['vi', 'en']
             locales.forEach(loc => {
