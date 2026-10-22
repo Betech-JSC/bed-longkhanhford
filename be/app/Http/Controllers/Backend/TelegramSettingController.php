@@ -117,6 +117,12 @@ class TelegramSettingController extends Controller
                     'sales_consultant_id' => $lp->sales_consultant_id,
                 ];
             }
+            // Đưa thêm các tài khoản vừa bấm START trên Bot (chưa gắn cố vấn) vào danh bạ để chọn nhanh không sợ trùng
+            foreach ($tgNames as $cid => $tName) {
+                if (!isset($known[$cid]) && !str_starts_with((string) $cid, '-')) {
+                    $known[$cid] = ['chat_id' => (string) $cid, 'telegram_name' => $tName, 'consultant_name' => null, 'sales_consultant_id' => null];
+                }
+            }
             if ($request->boolean('only_list')) {
                 \Illuminate\Support\Facades\DB::table('settings')->updateOrInsert(['group' => 'telegram', 'name' => 'telegram_known_chats'], ['val' => json_encode($known, JSON_UNESCAPED_UNICODE)]);
                 return response()->json(['success' => true, 'known_chats' => array_values($known)]);
@@ -155,6 +161,17 @@ class TelegramSettingController extends Controller
             $chatId = (string) $chat['id'];
             $ldpId = $request->input('landing_page_id');
             $scId = $request->input('sales_consultant_id') ?: ($ldpId ? \App\Models\Vehicle\LandingPage::where('id', $ldpId)->value('sales_consultant_id') : null);
+            if (!$selId && $scId && !empty($known[$chatId]['sales_consultant_id']) && (string) $known[$chatId]['sales_consultant_id'] !== (string) $scId) {
+                for ($i = count($updates) - 1; $i >= 0; $i--) {
+                    $c = $updates[$i]['message']['chat'] ?? $updates[$i]['my_chat_member']['chat'] ?? null;
+                    $cid = isset($c['id']) ? (string) $c['id'] : null;
+                    if ($cid && (empty($known[$cid]['sales_consultant_id']) || (string) $known[$cid]['sales_consultant_id'] === (string) $scId)) {
+                        $chat = $c;
+                        $chatId = $cid;
+                        break;
+                    }
+                }
+            }
             $consultantName = $scId ? \App\Models\Vehicle\SalesConsultant::find($scId)?->name : ($known[$chatId]['consultant_name'] ?? null);
             $existingScId = $known[$chatId]['sales_consultant_id'] ?? null;
             $existingOwner = $known[$chatId]['consultant_name'] ?? 'Sale khác';
