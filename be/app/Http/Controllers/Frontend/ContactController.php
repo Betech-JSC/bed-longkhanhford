@@ -383,7 +383,7 @@ class ContactController extends Controller
 
                 $telegramService->sendHotLeadAlert($leadData, 'FORM-' . $createdContact->id);
             } catch (\Throwable $e) {
-                \Illuminate\Support\Facades\Log::error('Telegram form notification error: ' . $e->getMessage());
+                try { \Illuminate\Support\Facades\Log::error('Telegram form notification error: ' . $e->getMessage()); } catch (\Throwable $_) {}
             }
 
             // Tự động gửi Email thông báo Lead mới (ưu tiên Cố vấn / Landing Page đã setup)
@@ -460,7 +460,7 @@ class ContactController extends Controller
 
                 $targetEmails = array_values(array_unique(array_filter($targetEmails)));
 
-                if (!empty($targetEmails)) {
+                if (config('contact.send_email_default', false) && !empty($targetEmails)) {
                     $consultantName = $consultant?->name ?? $landingPage?->salesConsultant?->name ?? '';
                     $isLandingPage = !empty($landingPageId) || !empty($salesConsultantId) || !empty($salesEmail);
 
@@ -523,14 +523,14 @@ class ContactController extends Controller
                         try {
                             Notification::route('mail', $recipientEmail)
                                 ->notifyNow(new CommonNotification($emailData));
-                            \Illuminate\Support\Facades\Log::info("Sent contact notification email to: {$recipientEmail} for contact ID {$createdContact->id}");
+                            try { \Illuminate\Support\Facades\Log::info("Sent contact notification email to: {$recipientEmail} for contact ID {$createdContact->id}"); } catch (\Throwable $_) {}
                         } catch (\Throwable $e) {
-                            \Illuminate\Support\Facades\Log::error("Failed to send contact notification email to {$recipientEmail}: " . $e->getMessage());
+                            try { \Illuminate\Support\Facades\Log::error("Failed to send contact notification email to {$recipientEmail}: " . $e->getMessage()); } catch (\Throwable $_) {}
                         }
                     }
                 }
             } catch (\Throwable $e) {
-                \Illuminate\Support\Facades\Log::error('Contact notification email general error: ' . $e->getMessage());
+                try { \Illuminate\Support\Facades\Log::error('Contact notification email general error: ' . $e->getMessage()); } catch (\Throwable $_) {}
             }
 
             if ($request->wantsJson() || $request->ajax()) {

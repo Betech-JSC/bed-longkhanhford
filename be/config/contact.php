@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'send_email_default' => false,
     'types' => [
         'CONTACT_FORM' => [
             'title' => 'Liên hệ',

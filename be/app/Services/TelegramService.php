@@ -76,7 +76,7 @@ class TelegramService
         $targetChatIds = !empty($saleChatIds) ? $saleChatIds : array_values(array_unique(array_filter(array_map('trim', explode(',', (string) $this->chatId)))));
         $targetChatIds = array_values(array_unique(array_filter(array_map('trim', $targetChatIds))));
         if (empty($this->botToken) || empty($targetChatIds)) {
-            Log::warning('Telegram not configured, skipping lead alert', $leadData);
+            try { Log::warning('Telegram not configured, skipping lead alert', $leadData); } catch (\Throwable $_) {}
             return false;
         }
 
@@ -206,7 +206,7 @@ class TelegramService
                     'disable_web_page_preview' => true,
                 ]);
             } catch (\Throwable $e) {
-                Log::warning('Telegram extra chat_id error: ' . $e->getMessage());
+                try { Log::warning('Telegram extra chat_id error: ' . $e->getMessage()); } catch (\Throwable $_) {}
             }
         }
 
@@ -222,7 +222,7 @@ class TelegramService
             );
 
             if ($response->successful()) {
-                Log::info('Telegram lead alert sent', ['session' => $sessionId]);
+                try { Log::info('Telegram lead alert sent', ['session' => $sessionId]); } catch (\Throwable $_) {}
                 return true;
             }
 
