@@ -80,7 +80,8 @@ async function fetchAPI<T = any>(
     if (error && error.status) {
       throw error;
     }
-    console.error(`Failed to fetch ${endpoint}:`, error);
+    // Dùng console.warn với chuỗi message để tránh bật Next.js 16 Turbopack Console Error Overlay khi caller đã có .catch()
+    console.warn(`Failed to fetch ${endpoint}:`, error?.message || String(error));
     throw error;
   }
 }

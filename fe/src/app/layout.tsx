@@ -102,7 +102,8 @@ export default async function RootLayout({
       injectBodyEnd = settingsRes.data.inject_body_end || "";
     }
   } catch (error) {
-    console.error("Failed to fetch general layout settings:", error);
+    // Dùng console.warn với chuỗi message để không kích hoạt lỗi đỏ khi server API chưa chạy
+    console.warn("Failed to fetch general layout settings:", (error as any)?.message || String(error));
   }
 
   return (
