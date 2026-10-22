@@ -155,7 +155,7 @@ class TelegramSettingController extends Controller
             $chatId = (string) $chat['id'];
             $ldpId = $request->input('landing_page_id');
             $scId = $request->input('sales_consultant_id') ?: ($ldpId ? \App\Models\Vehicle\LandingPage::where('id', $ldpId)->value('sales_consultant_id') : null);
-            $consultantName = $scId ? \App\Models\Vehicle\SalesConsultant::where('id', $scId)->value('name') : ($known[$chatId]['consultant_name'] ?? null);
+            $consultantName = $scId ? \App\Models\Vehicle\SalesConsultant::find($scId)?->name : ($known[$chatId]['consultant_name'] ?? null);
             $existingScId = $known[$chatId]['sales_consultant_id'] ?? null;
             $existingOwner = $known[$chatId]['consultant_name'] ?? 'Sale khác';
             if ($existingScId && $scId && (string) $existingScId !== (string) $scId) {
