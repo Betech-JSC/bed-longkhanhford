@@ -268,7 +268,8 @@ export default function VehicleLayoutClient({
         productId = String(selVeh.id);
         productSlug = selVeh.slug || String(selVeh.id);
         productTitle = `${selVeh.name} - ${selVer?.name}`;
-        note = formData.note || `Yêu cầu báo giá lăn bánh xe ${selVeh.name} - ${selVer?.name} tại ${selectedProvince}. Tổng dự toán: ${formatPrice(rollingCost.total)}`;
+        const quoteSummary = `Tổng dự toán lăn bánh (${selectedProvince}): ${formatPrice(rollingCost.total)}`;
+        note = formData.note ? `${quoteSummary} — Ghi chú: ${formData.note}` : quoteSummary;
       } else {
         const activeVer = initialVehicle?.versions?.[activeVersionIndex];
         if (activeVer) {
@@ -288,9 +289,11 @@ export default function VehicleLayoutClient({
             Name: formData.fullName,
             Phone: formData.phone,
             Email: formData.email || undefined,
-            Province: formData.province,
-            "Tỉnh / Thành phố": formData.province,
-            "Khu vực sinh sống": formData.province,
+            Province: isTestDrive ? formData.province : selectedProvince,
+            "Tỉnh / Thành phố": isTestDrive ? formData.province : selectedProvince,
+            "Khu vực sinh sống": isTestDrive ? formData.province : selectedProvince,
+
+
             Product: {
               id: productId,
               slug: productSlug,
@@ -299,8 +302,9 @@ export default function VehicleLayoutClient({
             },
             "Dòng xe quan tâm": productTitle,
             "Dòng xe lái thử": productTitle,
-            "Loại yêu cầu": isTestDrive ? "Đăng ký lái thử xe" : "Báo giá lăn bánh xe",
-            "Nội dung cần hỗ trợ": note,
+            "Loại yêu cầu": isTestDrive ? "Đăng ký lái thử xe" : "Dự toán chi phí lăn bánh",
+            "Tổng dự toán lăn bánh": !isTestDrive ? `${formatPrice(rollingCost.total)} (Giá niêm yết: ${formatPrice(rollingCost.basePrice)})` : undefined,
+            "Nội dung cần hỗ trợ": formData.note.trim() || undefined,
             "Ghi chú yêu cầu thêm": formData.note || undefined,
             source: isTestDrive ? "🚘 Form Đăng Ký Lái Thử Xe" : "💰 Form Báo Giá Lăn Bánh Xe",
           }

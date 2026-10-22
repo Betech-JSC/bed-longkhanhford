@@ -186,7 +186,7 @@ class LandingPageApiController extends Controller
 
         return $this->success([
             'id'                  => $ldp?->id,
-            'sales_email'         => $ldp?->sales_email,
+            'sales_email'         => $ldp?->sales_email ?: (LandingPage::where('sales_consultant_id', $consultant->id)->whereNotNull('sales_email')->where('sales_email', '!=', '')->value('sales_email') ?: $consultant->email),
             'sales_consultant'    => $consultantDetail,
             'vehicle'             => $leadVehicleData,
             'vehicles'            => $allVehiclesData,
@@ -355,7 +355,7 @@ class LandingPageApiController extends Controller
 
         return $this->success([
             'id'                  => $ldp->id,
-            'sales_email'         => $ldp?->sales_email,
+            'sales_email'         => $ldp?->sales_email ?: (LandingPage::where('sales_consultant_id', $consultant->id)->whereNotNull('sales_email')->where('sales_email', '!=', '')->value('sales_email') ?: $consultant->email),
             'sales_consultant'    => $consultantDetail,
             'vehicle'             => $this->formatSingleVehicle($vehicle),
             'vehicles'            => $allVehiclesData,

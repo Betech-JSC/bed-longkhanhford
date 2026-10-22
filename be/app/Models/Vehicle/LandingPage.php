@@ -21,6 +21,7 @@ class LandingPage extends BaseModel
         'sales_consultant_id',
         'zalo_url',
         'sales_email',
+        'telegram_chat_id',
         'vehicle_id',
         'vehicle_ids',
         'layout_blocks',
@@ -116,6 +117,18 @@ class LandingPage extends BaseModel
     protected static function booted()
     {
         static::saving(function ($landingPage) {
+            if (!empty($landingPage->telegram_chat_id) && !empty($landingPage->sales_consultant_id)) {
+                $conflictLdp = static::with('salesConsultant')
+                    ->where('telegram_chat_id', trim((string) $landingPage->telegram_chat_id))
+                    ->where('sales_consultant_id', '!=', $landingPage->sales_consultant_id)
+                    ->first();
+                if ($conflictLdp) {
+                    $ownerName = $conflictLdp->salesConsultant?->name ?? ('ID #' . $conflictLdp->sales_consultant_id);
+                    throw \Illuminate\Validation\ValidationException::withMessages([
+                        'telegram_chat_id' => ["⛔ Chặn bảo mật: Mã Chat ID {$landingPage->telegram_chat_id} đã thuộc về cố vấn {$ownerName}. Không thể gắn sang trang của cố vấn khác!"],
+                    ]);
+                }
+            }
             // Tự động kiểm tra và xóa index UNIQUE cũ uid_lp_sales_vehicle trên mọi môi trường DB
             try {
                 $hasOldIndex = \Illuminate\Support\Facades\DB::select("SHOW INDEXES FROM landing_pages WHERE Key_name = 'uid_lp_sales_vehicle'");
@@ -222,6 +235,7 @@ class LandingPage extends BaseModel
             'sales_consultant_id' => 'required|integer|exists:sales_consultants,id',
             'zalo_url' => 'nullable|string|max:255',
             'sales_email' => 'nullable|email|max:255',
+            'telegram_chat_id' => 'nullable|string|max:255',
             'vehicle_ids' => 'required|array|min:1',
             'vehicle_id' => 'nullable|integer',
             'status' => 'required|string|in:ACTIVE,INACTIVE',

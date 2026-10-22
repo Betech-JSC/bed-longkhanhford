@@ -376,6 +376,19 @@ function LdpHomeInner({
   const [leadSubmitStatus, setLeadSubmitStatus] = useState<"idle" | "success" | "error">("idle");
   const [leadErrorMessage, setLeadErrorMessage] = useState("");
 
+  // Service Booking Modal State
+  const [showServiceModal, setShowServiceModal] = useState(false);
+  const [srvForm, setSrvForm] = useState({
+    name: "",
+    phone: "",
+    plate: "",
+    date: "",
+    location: "Tại đại lý",
+    note: "",
+  });
+  const [srvStatus, setSrvStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [srvError, setSrvError] = useState("");
+
   // Auto-play Hero Banner
   useEffect(() => {
     if (heroSlides.length <= 1) return;
@@ -524,6 +537,49 @@ function LdpHomeInner({
       setLeadErrorMessage(err?.data?.message || err?.message || "Gửi yêu cầu không thành công. Vui lòng thử lại sau.");
     } finally {
       setIsSubmittingLead(false);
+    }
+  };
+
+  const handleSubmitServiceBooking = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!srvForm.name.trim() || !srvForm.phone.trim() || !srvForm.plate.trim() || !srvForm.date) {
+      setSrvStatus("error");
+      setSrvError("Vui lòng nhập đầy đủ Họ tên, SĐT, Biển số xe và Ngày hẹn.");
+      return;
+    }
+    setSrvStatus("submitting");
+    setSrvError("");
+    try {
+      const response = await contactsAPI.submit({
+        contact: {
+          type: "SERVICE_BOOKING",
+          sales_consultant_id: salesConsultant?.id ? Number(salesConsultant.id) : undefined,
+          data: {
+            landing_page_id: landingPageId ? Number(landingPageId) : undefined,
+            sales_email: salesEmail || salesConsultant?.email,
+            Name: srvForm.name.trim(),
+            Phone: srvForm.phone.trim(),
+            "Họ và tên": srvForm.name.trim(),
+            "Số điện thoại": srvForm.phone.trim(),
+            "Biển số xe": srvForm.plate.trim(),
+            "Thời gian hẹn": srvForm.date,
+            "Tại": srvForm.location,
+            "Nội dung yêu cầu dịch vụ": srvForm.note.trim() || "Đặt hẹn bảo dưỡng định kỳ",
+            source: "landing_page_service_booking",
+          },
+        },
+      });
+      if (response && response.success === false) {
+        setSrvStatus("error");
+        const msg = typeof response.message === "object" ? Object.values(response.message).flat().join(", ") : response.message;
+        setSrvError(msg || "Gửi yêu cầu không thành công. Vui lòng thử lại.");
+        return;
+      }
+      setSrvStatus("success");
+      setSrvForm({ name: "", phone: "", plate: "", date: "", location: "Tại đại lý", note: "" });
+    } catch (err: any) {
+      setSrvStatus("error");
+      setSrvError(err?.data?.message || err?.message || "Gửi yêu cầu không thành công. Vui lòng thử lại.");
     }
   };
 
@@ -715,7 +771,13 @@ function LdpHomeInner({
 
             {/* Action 4: Đặt hẹn bảo dưỡng */}
             <Link
-              href="/lien-he?reason=Đặt lịch hẹn bảo dưỡng"
+              href="#service-booking"
+              onClick={(e) => {
+                e.preventDefault();
+                setSrvStatus("idle");
+                setSrvError("");
+                setShowServiceModal(true);
+              }}
               className="flex flex-col gap-[16px] items-center justify-center text-center p-[20px_24px] rounded-[12px] h-[140px] w-full bg-[#f0f0f0] text-[#1a1a1a] hover:bg-[#0562d2] hover:text-white hover:shadow-[2px_6px_12px_-1px_rgba(16,24,40,0.12),0px_4px_6px_-2px_rgba(16,24,40,0.05)] transition-all duration-300 group cursor-pointer border border-transparent"
             >
               <WrenchIcon className="h-[32px] text-[#0562D2] group-hover:text-white transition-colors duration-300 shrink-0" />
@@ -1235,6 +1297,71 @@ function LdpHomeInner({
           </a>
         )}
       </div>
+
+      {/* SERVICE BOOKING MODAL */}
+      {showServiceModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-[9999] flex items-center justify-center p-4" onClick={() => setShowServiceModal(false)}>
+          <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden border border-gray-100" onClick={(e) => e.stopPropagation()}>
+            <div className="bg-[#003478] text-white px-6 py-4 flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-extrabold uppercase tracking-wide">Đặt hẹn bảo dưỡng</h3>
+                <p className="text-xs text-blue-100 mt-0.5">Hỗ trợ bởi {formatPersonName(salesConsultant?.name) || "Tư vấn dịch vụ"} — Long Khánh Ford</p>
+              </div>
+              <button type="button" onClick={() => setShowServiceModal(false)} className="p-1.5 rounded-full hover:bg-white/15 transition-colors cursor-pointer" aria-label="Đóng">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            {srvStatus === "success" ? (
+              <div className="p-8 text-center space-y-4">
+                <CheckCircle className="w-14 h-14 text-green-600 mx-auto" />
+                <h4 className="text-xl font-bold text-gray-900">Đặt lịch hẹn thành công!</h4>
+                <p className="text-sm text-gray-600 leading-relaxed">Cảm ơn Quý khách. Thông tin đặt hẹn bảo dưỡng đã được gửi trực tiếp tới <strong>{formatPersonName(salesConsultant?.name) || "Long Khánh Ford"}</strong>. Chúng tôi sẽ liên hệ xác nhận sớm nhất.</p>
+                <button type="button" onClick={() => setShowServiceModal(false)} className="mt-2 bg-[#003478] hover:bg-[#0562d2] text-white font-bold px-8 py-3 rounded-lg text-sm uppercase tracking-wider transition-colors cursor-pointer">Đóng cửa sổ</button>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmitServiceBooking} className="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
+                {srvStatus === "error" && (
+                  <div className="p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-red-700 text-xs font-medium">
+                    <span>{srvError}</span>
+                  </div>
+                )}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Họ và tên <span className="text-red-500">*</span></label>
+                    <input type="text" required placeholder="Nhập họ và tên" value={srvForm.name} onChange={(e) => setSrvForm({ ...srvForm, name: e.target.value })} className="w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-900 focus:border-[#0562d2] focus:ring-2 focus:ring-blue-100 outline-none" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Số điện thoại <span className="text-red-500">*</span></label>
+                    <input type="tel" required placeholder="09xx xxx xxx" value={srvForm.phone} onChange={(e) => setSrvForm({ ...srvForm, phone: e.target.value })} className="w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-900 focus:border-[#0562d2] focus:ring-2 focus:ring-blue-100 outline-none" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Biển số xe <span className="text-red-500">*</span></label>
+                    <input type="text" required placeholder="VD: 60A-123.45" value={srvForm.plate} onChange={(e) => setSrvForm({ ...srvForm, plate: e.target.value })} className="w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-900 focus:border-[#0562d2] focus:ring-2 focus:ring-blue-100 outline-none" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Ngày hẹn <span className="text-red-500">*</span></label>
+                    <input type="date" required value={srvForm.date} onChange={(e) => setSrvForm({ ...srvForm, date: e.target.value })} className="w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-900 focus:border-[#0562d2] focus:ring-2 focus:ring-blue-100 outline-none" />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Địa điểm bảo dưỡng <span className="text-red-500">*</span></label>
+                  <select value={srvForm.location} onChange={(e) => setSrvForm({ ...srvForm, location: e.target.value })} className="w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-900 bg-white focus:border-[#0562d2] focus:ring-2 focus:ring-blue-100 outline-none">
+                    <option value="Tại đại lý">Tại xưởng dịch vụ Long Khánh Ford</option>
+                    <option value="Nhận và giao xe tận nơi">Nhận và giao xe tận nơi</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Nội dung yêu cầu dịch vụ <span className="text-red-500">*</span></label>
+                  <textarea rows={3} required placeholder="VD: Bảo dưỡng định kỳ 10.000km, kiểm tra phanh..." value={srvForm.note} onChange={(e) => setSrvForm({ ...srvForm, note: e.target.value })} className="w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-900 focus:border-[#0562d2] focus:ring-2 focus:ring-blue-100 outline-none resize-none" />
+                </div>
+                <button type="submit" disabled={srvStatus === "submitting"} className="w-full bg-[#003478] hover:bg-[#0562d2] disabled:bg-gray-400 text-white font-bold py-3.5 rounded-lg text-sm uppercase tracking-wider transition-all shadow-md cursor-pointer">
+                  {srvStatus === "submitting" ? "Đang gửi yêu cầu..." : "Xác nhận đặt hẹn bảo dưỡng"}
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* GLASSMORPHIC LIGHTBOX OVERLAY */}
       {lightboxIndex !== null && customerHandovers.length > 0 && (

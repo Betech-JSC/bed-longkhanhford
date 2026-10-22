@@ -158,7 +158,7 @@ class Contact extends BaseModel
         $data = ['Form' => $this->formatted_type];
 
         $columns = config('contact.types.' . $this->type . '.columns');
-        foreach ($columns as $column) {
+        foreach ($columns ?? [] as $column) {
             $data[$column] = $this->data[$column] ?? null;
         }
 
@@ -171,7 +171,7 @@ class Contact extends BaseModel
         $data = ['Form' => $this->formatted_type];
 
         $columns = config('contact.types.' . $this->type . '.all_columns');
-        foreach ($columns as $key => $column) {
+        foreach ($columns ?? [] as $key => $column) {
             if (is_array($column) && isset($column['route']['name'])) {
                 $params = [];
                 foreach ($column['route']['params'] as $param) {
@@ -211,7 +211,7 @@ class Contact extends BaseModel
 
     public function getUrl()
     {
-        $route = config('contact.types.' . $this->type . '.route');
+        $route = config('contact.types.' . $this->type . '.route') ?: 'contacts';
         return route(current_locale() . '.admin.' . $route . '.form', ['id' => $this->id]);
     }
 }

@@ -72,7 +72,10 @@ class TelegramService
             return false;
         }
 
-        if (empty($this->botToken) || empty($this->chatId)) {
+        $saleChatIds = array_values(array_unique(array_filter(array_map('trim', (array) ($leadData['telegram_chat_ids'] ?? [])))));
+        $targetChatIds = !empty($saleChatIds) ? $saleChatIds : array_values(array_unique(array_filter(array_map('trim', explode(',', (string) $this->chatId)))));
+        $targetChatIds = array_values(array_unique(array_filter(array_map('trim', $targetChatIds))));
+        if (empty($this->botToken) || empty($targetChatIds)) {
             Log::warning('Telegram not configured, skipping lead alert', $leadData);
             return false;
         }
@@ -107,11 +110,15 @@ class TelegramService
         $location = $this->escapeMarkdown($leadData['location'] ?? null);
         $city = $this->escapeMarkdown($leadData['city'] ?? null);
         $paymentMethod = $this->escapeMarkdown($leadData['payment_method'] ?? null);
+        $rollingCost = $this->escapeMarkdown($leadData['rolling_cost'] ?? null);
         $safeSessionId = str_replace(['`', '\\'], '', (string) $sessionId);
 
         // Xây dựng nội dung tin nhắn Telegram
         $message = "🔔 *{$title}*\n\n";
         $message .= "📝 *Nguồn tiếp nhận:* {$source}\n";
+        if (!empty($leadData['consultant_name'])) {
+            $message .= "👨‍💼 *Cố vấn phụ trách:* " . $this->escapeMarkdown($leadData['consultant_name']) . "\n";
+        }
         $message .= "👤 *Khách hàng:* {$name}\n";
         $message .= "📞 *Số điện thoại:* `{$phone}`\n";
 
@@ -120,7 +127,18 @@ class TelegramService
         }
 
         if (!empty($vehicle)) {
-            $message .= "🚗 *Dòng xe quan tâm:* {$vehicle}\n";
+            $vehLabel = match($type) {
+                'test_drive' => 'Dòng xe đăng ký lái thử',
+                'rolling_cost' => 'Dòng xe & Phiên bản',
+                'used_vehicle' => 'Xe đã qua sử dụng',
+                'accessory' => 'Phụ kiện quan tâm',
+                'repair_quote' => 'Dòng xe sửa chữa / bảo dưỡng',
+                default => 'Dòng xe quan tâm',
+            };
+            $message .= "🚗 *{$vehLabel}:* {$vehicle}\n";
+            if (!empty($rollingCost)) {
+                $message .= "💰 *Tổng dự toán lăn bánh:* {$rollingCost}\n";
+            }
         }
 
         if (!empty($licensePlate)) {
@@ -140,11 +158,22 @@ class TelegramService
         }
 
         if (!empty($city)) {
-            $message .= "🏙️ *Tỉnh/Thành nhận xe:* {$city}\n";
+            $cityLabel = match($type) {
+                'rolling_cost' => 'Khu vực đăng ký lăn bánh',
+                'test_drive' => 'Khu vực đăng ký lái thử',
+                default => 'Tỉnh/Thành phố',
+            };
+            $message .= "🏙️ *{$cityLabel}:* {$city}\n";
         }
 
         if (!empty($service)) {
-            $message .= "🛠️ *Dịch vụ / Gói:* {$service}\n";
+            $srvLabel = match($type) {
+                'apply' => 'Thông tin ứng tuyển',
+                'accessory' => 'Thông tin lắp đặt',
+                'survey' => 'Kết quả đánh giá',
+                default => 'Dịch vụ / Gói',
+            };
+            $message .= "🛠️ *{$srvLabel}:* {$service}\n";
         }
 
         if (!empty($mileage)) {
@@ -156,7 +185,9 @@ class TelegramService
             $msgLabel = match($type) {
                 'service_booking' => 'Nội dung yêu cầu dịch vụ',
                 'repair_quote' => 'Mô tả tình trạng xe / Ghi chú',
-                'quote', 'new_car_quote' => 'Ghi chú yêu cầu thêm',
+                'quote', 'new_car_quote', 'rolling_cost', 'test_drive', 'used_vehicle', 'accessory' => 'Ghi chú của khách hàng',
+                'apply' => 'Lời nhắn ứng viên',
+                'survey' => 'Ý kiến đóng góp thêm',
                 default => 'Nội dung yêu cầu / Lời nhắn',
             };
             $message .= "\n💬 *{$msgLabel}:*\n_{$cleanMsg}_\n";
@@ -166,11 +197,24 @@ class TelegramService
         $message .= "⏰ " . $this->formatTime() . "\n\n";
         $message .= "💡 _Vui lòng kiểm tra và xử lý liên hệ ngay để hỗ trợ khách hàng!_";
 
+        foreach (array_slice($targetChatIds, 1) as $extraChatId) {
+            try {
+                Http::timeout(10)->post("{$this->baseUrl}/bot{$this->botToken}/sendMessage", [
+                    'chat_id' => $extraChatId,
+                    'text' => $message,
+                    'parse_mode' => 'Markdown',
+                    'disable_web_page_preview' => true,
+                ]);
+            } catch (\Throwable $e) {
+                Log::warning('Telegram extra chat_id error: ' . $e->getMessage());
+            }
+        }
+
         try {
             $response = Http::timeout(10)->post(
                 "{$this->baseUrl}/bot{$this->botToken}/sendMessage",
                 [
-                    'chat_id' => $this->chatId,
+                    'chat_id' => $targetChatIds[0],
                     'text' => $message,
                     'parse_mode' => 'Markdown',
                     'disable_web_page_preview' => true,

@@ -477,6 +477,50 @@
                         }"
                     />
 
+                    <!-- Telegram Chat ID nhận báo giá riêng của Sale -->
+                    <Field
+                        v-model="form.telegram_chat_id"
+                        :field="{
+                            type: 'text',
+                            name: 'telegram_chat_id',
+                            label: 'Telegram Chat ID Nhận Lead',
+                            placeholder: 'vd: 123456789 hoặc -100123456789',
+                            help: 'Sale nhắn 1 tin bất kỳ cho Bot Telegram của đại lý rồi bấm nút Lấy ID tự động bên dưới.',
+                        }"
+                    />
+                    <div v-if="form.telegram_chat_id && getChatIdOwnerInfo(form.telegram_chat_id, form.sales_consultant_id)" class="mb-2 -mt-2 px-3 py-2 rounded-lg border text-xs font-medium" :class="getChatIdOwnerInfo(form.telegram_chat_id, form.sales_consultant_id).isConflict ? 'bg-red-50 border-red-300 text-red-800' : 'bg-emerald-50 border-emerald-200 text-emerald-800'">
+                        <div>{{ getChatIdOwnerInfo(form.telegram_chat_id, form.sales_consultant_id).label }}</div>
+                        <div v-if="getChatIdOwnerInfo(form.telegram_chat_id, form.sales_consultant_id).isConflict" class="mt-1 text-[11px] font-bold">
+                            ⛔ Chặn bảo mật: Mã Chat ID này đã khóa riêng cho cố vấn khác! Hệ thống sẽ từ chối lưu để chống cướp Lead.
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="block text-[11px] font-bold text-gray-600 mb-1">📋 Chọn nhanh từ Danh bạ Chat ID đã lưu ({{ knownTelegramChats.length }}):</label>
+                        <select class="w-full text-xs border border-blue-300 rounded-lg px-2.5 py-2 bg-blue-50/40 text-gray-800 font-semibold cursor-pointer" :value="form.telegram_chat_id || ''" @change="detectSaleTelegramChatId(form, $event.target.value)">
+                            <option value="">-- Bấm để chọn tài khoản Telegram đã lưu theo tên Cố vấn --</option>
+                            <option v-for="c in knownTelegramChats" :key="c.chat_id" :value="c.chat_id" :disabled="Boolean(c.sales_consultant_id && form.sales_consultant_id && String(c.sales_consultant_id) !== String(form.sales_consultant_id))">
+                                {{ (c.sales_consultant_id && form.sales_consultant_id && String(c.sales_consultant_id) !== String(form.sales_consultant_id)) ? `🔒 [Đã khóa] ${c.consultant_name} — ID: ${c.chat_id} (Không thể chọn)` : (c.consultant_name ? `✅ ${c.consultant_name} — ID: ${c.chat_id} (Tele: ${c.telegram_name || 'N/A'})` : `🆕 Chưa gắn cố vấn — ID: ${c.chat_id} (Tele: ${c.telegram_name || 'N/A'})`) }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2 mb-4 -mt-2">
+                        <button
+                            type="button"
+                            class="btn btn-xs btn-outline-primary"
+                            @click="detectSaleTelegramChatId(form)"
+                        >
+                            ⚡ Lấy Chat ID tự động
+                        </button>
+                        <button
+                            v-if="form.telegram_chat_id"
+                            type="button"
+                            class="btn btn-xs btn-outline-secondary"
+                            @click="testSaleTelegramChatId(form)"
+                        >
+                            📨 Gửi thử Telegram
+                        </button>
+                    </div>
+
                     <!-- Trạng thái hoạt động -->
                     <Field
                         v-model="form.status"
@@ -738,6 +782,7 @@
     </Form>
 </template>
 <script>
+import axios from 'axios';
 export default {
     props: ['schema', 'item', 'data'],
     data() {
@@ -766,8 +811,12 @@ export default {
             activeHelpTab: 1,
             salesConsultants: this.data?.sales_consultants ?? [],
             vehicles: this.data?.vehicles ?? [],
-            globalPromotions: this.data?.global_promotions ?? []
+            globalPromotions: this.data?.global_promotions ?? [],
+            knownTelegramChats: []
         }
+    },
+    mounted() {
+        this.loadKnownTelegramChats();
     },
     watch: {
         item() {
@@ -879,9 +928,60 @@ export default {
         }
     },
     methods: {
+        async loadKnownTelegramChats() {
+            try {
+                const res = await (this.$axios || axios).post('/admin/settings/telegram/detect-chat-id', { only_list: true });
+                if (res.data?.known_chats) this.knownTelegramChats = res.data.known_chats;
+            } catch (e) {}
+        },
+        getChatIdOwnerInfo(chatId, currentScId) {
+            if (!chatId) return null;
+            const found = (this.knownTelegramChats || []).find(c => String(c.chat_id) === String(chatId));
+            const curSc = (this.salesConsultants || []).find(sc => String(sc.id) === String(currentScId));
+            if (found && found.consultant_name) {
+                const isConflict = curSc && found.sales_consultant_id && String(found.sales_consultant_id) !== String(currentScId);
+                return {
+                    isConflict,
+                    label: `👨‍💼 Đang gắn cho: ${found.consultant_name} (ID: ${chatId} • Tele: ${found.telegram_name || 'N/A'})`
+                };
+            }
+            return { isConflict: false, label: `👨‍💼 Cố vấn trang này: ${curSc?.name || 'Chưa chọn'} (ID: ${chatId})` };
+        },
+        async detectSaleTelegramChatId(form, selectedChatId = null) {
+            if (selectedChatId === '') return;
+            try {
+                const res = await (this.$axios || axios).post('/admin/settings/telegram/detect-chat-id', {
+                    landing_page_id: this.item?.id || form?.id,
+                    sales_consultant_id: form?.sales_consultant_id || this.formData?.sales_consultant_id,
+                    selected_chat_id: selectedChatId
+                });
+                if (res.data?.known_chats) this.knownTelegramChats = res.data.known_chats;
+                if (res.data?.success && res.data?.chat_id) {
+                    form.telegram_chat_id = res.data.chat_id;
+                    this.formData.telegram_chat_id = res.data.chat_id;
+                    this.triggerToast(res.data.message || `Đã điền Chat ID: ${res.data.chat_id}`, 'success');
+                } else {
+                    this.triggerToast(res.data?.message || 'Chưa thấy tin nhắn mới gửi cho Bot.', 'warning');
+                }
+            } catch (e) {
+                this.triggerToast(e.response?.data?.message || 'Vui lòng cấu hình Bot Token tại Cài đặt Telegram trước.', 'warning');
+            }
+        },
+        async testSaleTelegramChatId(form) {
+            try {
+                const res = await (this.$axios || axios).post('/admin/settings/telegram/test', { chat_id: form.telegram_chat_id });
+                this.triggerToast(res.data?.message || 'Đã gửi tin nhắn thử nghiệm!', res.data?.success ? 'success' : 'warning');
+            } catch (e) {
+                this.triggerToast(e.response?.data?.message || 'Không thể gửi tin nhắn thử nghiệm.', 'warning');
+            }
+        },
         onSalesConsultantChange(form, consultantId) {
             if (!consultantId || !form) return;
             // Tự động điền email của Cố vấn nếu form chưa có sales_email
+            if (!form.telegram_chat_id) {
+                const savedChat = (this.knownTelegramChats || []).find(c => String(c.sales_consultant_id) === String(consultantId));
+                if (savedChat?.chat_id) form.telegram_chat_id = savedChat.chat_id;
+            }
             if (!form.sales_email) {
                 const c = (this.salesConsultants || []).find(sc => String(sc.id) === String(consultantId));
                 if (c && c.email) {
@@ -930,6 +1030,11 @@ export default {
 
             const cleanItem = JSON.parse(JSON.stringify(item || {}));
             let initialSalesEmail = cleanItem.sales_email || '';
+            const scList = this.salesConsultants || this.data?.sales_consultants || [];
+            if (!initialSalesEmail && cleanItem.sales_consultant_id && scList.length) {
+                const foundSc = scList.find(sc => String(sc.id) === String(cleanItem.sales_consultant_id));
+                if (foundSc && foundSc.email) initialSalesEmail = foundSc.email;
+            }
             if (!initialSalesEmail && cleanItem.sales_consultant_id && this.salesConsultants) {
                 const c = this.salesConsultants.find(sc => String(sc.id) === String(cleanItem.sales_consultant_id));
                 if (c && c.email) {
@@ -944,6 +1049,7 @@ export default {
                 zalo_url: cleanItem.zalo_url || '',
                 ...cleanItem,
                 sales_email: initialSalesEmail,
+                telegram_chat_id: cleanItem.telegram_chat_id || '',
                 vehicle_ids: vehicleIds,
                 promotions: cleanItem.promotions || {
                     global_promotion_ids: [],
@@ -1311,6 +1417,8 @@ export default {
                 const cleanBlocks = JSON.parse(JSON.stringify(this.formData?.layout_blocks || {}));
                 if (form) {
                     form.layout_blocks = cleanBlocks;
+                    if (!form.sales_email && this.formData?.sales_email) form.sales_email = this.formData.sales_email;
+                    if (!form.telegram_chat_id && this.formData?.telegram_chat_id) form.telegram_chat_id = this.formData.telegram_chat_id;
                     if (!form.vi) form.vi = {};
                     if (!form.vi.title) {
                         form.vi.title = this.formData?.vi?.title || ('Ưu đãi xe ' + (this.activeVehicleTitle || 'Ford') + ' tốt nhất');

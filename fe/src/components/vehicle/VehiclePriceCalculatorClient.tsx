@@ -120,7 +120,12 @@ export default function VehiclePriceCalculatorClient() {
               title: productTitle,
               type: "vehicle",
             },
-            "Nội dung cần hỗ trợ": note
+            "Tỉnh / Thành phố": selectedProvince,
+            "Loại yêu cầu": "Dự toán chi phí lăn bánh",
+            "Tổng dự toán lăn bánh": `${formatPrice(rollingCost.total)} (Giá niêm yết: ${formatPrice(rollingCost.basePrice)})`,
+            "Ghi chú yêu cầu thêm": formData.note.trim() || undefined,
+            "Nội dung cần hỗ trợ": note,
+            source: "💰 Trang Dự Toán Chi Phí Lăn Bánh"
           }
         }
       });

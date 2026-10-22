@@ -43,6 +43,23 @@ return [
             ],
             'route' => 'contacts',
         ],
+        'TEST_DRIVE' => [
+            'title' => 'Đăng ký lái thử',
+            'columns' => [
+                'Name',
+                'Phone',
+            ],
+            'all_columns' => [
+                'Name',
+                'Phone',
+                'Email',
+            ],
+            'rules' => [
+                'Phone' => 'required|regex:/(0)[0-9]/|not_regex:/[a-z]/|min:9|max:12',
+                'Name' => 'required',
+            ],
+            'route' => 'contacts',
+        ],
         'TEST_DRIVE_SURVEY' => [
             'title' => 'Khảo sát lái thử',
             'columns' => [

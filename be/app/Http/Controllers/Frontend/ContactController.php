@@ -159,6 +159,12 @@ class ContactController extends Controller
                 $vehicle = null;
                 if (!empty($contactData['Dòng xe quan tâm'])) {
                     $vehicle = $contactData['Dòng xe quan tâm'];
+
+                } elseif (!empty($contactData['Dòng xe đăng ký'])) {
+                    $vehicle = $contactData['Dòng xe đăng ký'];
+                } elseif (!empty($contactData['Dòng xe lái thử'])) {
+                    $vehicle = $contactData['Dòng xe lái thử'];
+
                 } elseif (!empty($contactData['Dòng xe'])) {
                     $vehicle = $contactData['Dòng xe'];
                 } elseif (!empty($contactData['Loại xe'])) {
@@ -170,7 +176,12 @@ class ContactController extends Controller
                 }
 
                 // Nhận diện nguồn form & tiêu đề cảnh báo
-                $rawMessage = $contactData['Nội dung yêu cầu'] 
+                $rawMessage = $contactData['Ghi chú yêu cầu thêm']
+                    ?? $contactData['Nội dung yêu cầu dịch vụ']
+                    ?? $contactData['Ghi chú thêm']
+                    ?? $contactData['Lời nhắn']
+                    ?? $contactData['Ý kiến đóng góp khác']
+                    ?? $contactData['Nội dung yêu cầu'] 
                     ?? $contactData['Nội dung cần hỗ trợ'] 
                     ?? $contactData['Nội dung quan tâm'] 
                     ?? $contactData['Nội dung'] 
@@ -195,19 +206,19 @@ class ContactController extends Controller
                     $formTitle = '📰 TƯ VẤN TỪ BÀI VIẾT TIN TỨC';
                     $formType = 'quote';
                     $cleanMessage = trim(preg_replace('/\[Đăng ký tư vấn từ bài viết:[^\]]+\]/', '', $rawMessage));
-                } elseif ($type === 'REPAIR_QUOTE_FORM' || str_contains(mb_strtolower($rawMessage), 'sửa chữa')) {
+                } elseif ($type === 'REPAIR_QUOTE_FORM') {
                     $formSource = '🔧 Form Báo Giá Sửa Chữa (Tab Báo giá sửa chữa)';
                     $formTitle = '🔧 TƯ VẤN & BÁO GIÁ SỬA CHỮA XE';
                     $formType = 'repair_quote';
-                } elseif ($type === 'SERVICE_BOOKING' || str_contains(mb_strtolower($rawMessage), 'đặt hẹn') || str_contains(mb_strtolower($rawMessage), 'đặt lịch')) {
+                } elseif ($type === 'SERVICE_BOOKING') {
                     $formSource = '📅 Form Đặt Lịch Dịch Vụ (Tab Đặt lịch dịch vụ)';
                     $formTitle = '🛠️ ĐẶT HẸN DỊCH VỤ TRỰC TUYẾN';
                     $formType = 'service_booking';
-                } elseif ($type === 'NEW_CAR_QUOTE_FORM' || str_contains(mb_strtolower($rawMessage), 'báo giá xe') || str_contains(mb_strtolower($rawMessage), 'mua xe')) {
+                } elseif ($type === 'NEW_CAR_QUOTE_FORM') {
                     $formSource = '💰 Form Báo Giá Xe Mới (Tab Mua xe mới)';
                     $formTitle = '🚗 YÊU CẦU BÁO GIÁ XE MỚI';
                     $formType = 'new_car_quote';
-                } elseif ($type === 'TEST_DRIVE' || str_contains(mb_strtolower($rawMessage), 'lái thử')) {
+                } elseif ($type === 'TEST_DRIVE') {
                     $formSource = '🚘 Form Đăng Ký Lái Thử';
                     $formTitle = '🚘 ĐĂNG KÝ LÁI THỬ XE';
                     $formType = 'test_drive';
@@ -215,6 +226,42 @@ class ContactController extends Controller
                     $formSource = '💼 Form Ứng Tuyển Tuyển Dụng';
                     $formTitle = '💼 HỒ SƠ ỨNG TUYỂN MỚI';
                     $formType = 'apply';
+                } elseif ($type === 'ADVISE_FORM') {
+                    $reqKind = $contactData['Loại yêu cầu'] ?? '';
+                    $prodType = $contactData['Product']['type'] ?? 'vehicle';
+                    if (str_contains(mb_strtolower($reqKind), 'lăn bánh') || !empty($contactData['Tổng dự toán lăn bánh'])) {
+                        $formTitle = '💰 DỰ TOÁN CHI PHÍ LĂN BÁNH & BÁO GIÁ XE';
+                        $formSource = '💰 Form Dự Toán Chi Phí Lăn Bánh';
+                        $formType = 'rolling_cost';
+                    } elseif (str_contains(mb_strtolower($reqKind), 'lái thử')) {
+                        $formTitle = '🚘 ĐĂNG KÝ LÁI THỬ XE';
+                        $formSource = '🚘 Form Đăng Ký Lái Thử';
+                        $formType = 'test_drive';
+                    } elseif ($prodType === 'used_vehicle') {
+                        $formTitle = '🚘 TƯ VẤN XE ĐÃ QUA SỬ DỤNG (FORD ASSURED)';
+                        $formSource = '🚘 Form Tư Vấn Xe Đã Qua Sử Dụng';
+                        $formType = 'used_vehicle';
+                    } elseif ($prodType === 'accessory') {
+                        $formTitle = '🧩 ĐĂNG KÝ TƯ VẤN & LẮP ĐẶT PHỤ KIỆN';
+                        $formSource = '🧩 Form Tư Vấn Phụ Kiện Chính Hãng';
+                        $formType = 'accessory';
+                    } else {
+                        $formTitle = !empty($reqKind) ? '🚗 ' . mb_strtoupper($reqKind) : '🚗 ĐĂNG KÝ TƯ VẤN & NHẬN BÁO GIÁ XE';
+                        $formSource = (!empty($contactData['source']) && $contactData['source'] !== 'landing_page_consultation')
+                            ? $contactData['source']
+                            : '🎯 Form Đăng Ký Tư Vấn & Báo Giá';
+                        $formType = 'new_car_quote';
+                    }
+                } elseif ($type === 'TEST_DRIVE_SURVEY') {
+                    $formTitle = '⭐ KHẢO SÁT TRẢI NGHIỆM LÁI THỬ';
+                    $formSource = '📋 Form Khảo Sát Lái Thử';
+                    $formType = 'survey';
+                    $vehicle = $vehicle ?: ($contactData['Dòng xe lái thử'] ?? null);
+                } elseif ($type === 'SERVICE_SURVEY') {
+                    $formTitle = '⭐ KHẢO SÁT CHẤT LƯỢNG DỊCH VỤ';
+                    $formSource = '📋 Form Khảo Sát Dịch Vụ';
+                    $formType = 'survey';
+
                 } elseif ($type === 'CONTACT_FORM') {
                     $formSource = '✉️ Form Liên Hệ & Đóng Góp Ý Kiến (Tab Liên hệ khác)';
                     $formTitle = '✉️ LIÊN HỆ & ĐÓNG GÓP Ý KIẾN';
@@ -238,6 +285,15 @@ class ContactController extends Controller
                 if (!empty($contactData['Vị trí ứng tuyển'])) {
                     $serviceList[] = 'Vị trí: ' . $contactData['Vị trí ứng tuyển'];
                 }
+                if (!empty($contactData['Job']['title'])) {
+                    $serviceList[] = 'Vị trí ứng tuyển: ' . $contactData['Job']['title'];
+                }
+                if (!empty($contactData['CarModel'])) {
+                    $serviceList[] = 'Dòng xe lắp đặt: ' . $contactData['CarModel'];
+                }
+                if (!empty($contactData['Mức độ hài lòng chung'])) {
+                    $serviceList[] = 'Đánh giá: ' . $contactData['Mức độ hài lòng chung'];
+                }
                 $selectedService = !empty($serviceList) ? implode(' - ', $serviceList) : null;
 
                 // Hình thức mua xe / Phương thức thanh toán
@@ -253,6 +309,7 @@ class ContactController extends Controller
                     ?? $contactData['Tỉnh/Thành phố'] 
                     ?? $contactData['Tỉnh/Thành'] 
                     ?? $contactData['Khu vực'] 
+                    ?? $contactData['Province']
                     ?? $contactData['City'] 
                     ?? null;
 
@@ -265,6 +322,9 @@ class ContactController extends Controller
                     } else {
                         $appointment = $rawDate;
                     }
+                } elseif (!empty($contactData['InstallDate']) || !empty($contactData['Ngày thực hiện dịch vụ'])) {
+                    $rawDate = $contactData['InstallDate'] ?? $contactData['Ngày thực hiện dịch vụ'];
+                    $appointment = preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $rawDate, $m) ? "{$m[3]}/{$m[2]}/{$m[1]}" : $rawDate;
                 } elseif (!empty($contactData['Ngày lái thử'])) {
                     $appointment = $contactData['Ngày lái thử'] . (!empty($contactData['Thời gian lái thử']) ? ' (' . $contactData['Thời gian lái thử'] . ')' : '');
                 }
@@ -285,6 +345,7 @@ class ContactController extends Controller
                     'service' => $selectedService,
                     'payment_method' => $paymentMethod,
                     'city' => $city,
+                    'rolling_cost' => $contactData['Tổng dự toán lăn bánh'] ?? null,
                     'message' => $cleanMessage,
                     'license_plate' => $contactData['Biển số xe'] ?? null,
                     'mileage' => $contactData['Số KM hiện tại'] ?? null,
@@ -292,6 +353,33 @@ class ContactController extends Controller
                     'location' => $location,
                     'score' => 'HOT',
                 ];
+
+                $ldpIdForTg = $contactData['landing_page_id'] ?? $requestData['landing_page_id'] ?? null;
+                $scIdForTg = $requestData['sales_consultant_id'] ?? $contactData['sales_consultant_id'] ?? null;
+                $tgChatIds = [];
+                $tgConsultantName = null;
+                if (!empty($ldpIdForTg) && ($ldpForTg = LandingPage::with('salesConsultant')->find($ldpIdForTg))) {
+                    if (!empty($ldpForTg->telegram_chat_id)) {
+                        $tgChatIds[] = $ldpForTg->telegram_chat_id;
+                    }
+                    $scIdForTg = $scIdForTg ?: $ldpForTg->sales_consultant_id;
+                    $tgConsultantName = $ldpForTg->salesConsultant?->name;
+                }
+                if (!empty($scIdForTg)) {
+                    $tgConsultantName = $tgConsultantName ?: SalesConsultant::find($scIdForTg)?->name;
+                    if (empty($tgChatIds)) {
+                        $tgChatIds = LandingPage::where('sales_consultant_id', $scIdForTg)
+                            ->whereNotNull('telegram_chat_id')
+                            ->where('telegram_chat_id', '!=', '')
+                            ->pluck('telegram_chat_id')
+                            ->all();
+                    }
+                }
+                if (!empty($tgConsultantName)) {
+                    $leadData['consultant_name'] = $tgConsultantName;
+                    $leadData['source'] .= " (LDP: {$tgConsultantName})";
+                }
+                $leadData['telegram_chat_ids'] = $tgChatIds;
 
                 $telegramService->sendHotLeadAlert($leadData, 'FORM-' . $createdContact->id);
             } catch (\Throwable $e) {
@@ -338,6 +426,15 @@ class ContactController extends Controller
                 if (!empty($salesConsultantId)) {
                     try {
                         $consultant = SalesConsultant::find($salesConsultantId);
+                        $ldpEmails = LandingPage::where('sales_consultant_id', $salesConsultantId)
+                            ->whereNotNull('sales_email')
+                            ->where('sales_email', '!=', '')
+                            ->pluck('sales_email');
+                        foreach ($ldpEmails as $le) {
+                            if (filter_var(trim($le), FILTER_VALIDATE_EMAIL)) {
+                                $targetEmails[] = trim($le);
+                            }
+                        }
                         if ($consultant && !empty($consultant->email) && filter_var($consultant->email, FILTER_VALIDATE_EMAIL)) {
                             $targetEmails[] = trim($consultant->email);
                         }
@@ -390,6 +487,9 @@ class ContactController extends Controller
                     }
                     if (!empty($vehicle)) {
                         $emailData[$isTestDrive ? 'Dòng xe đăng ký lái thử' : 'Dòng xe quan tâm'] = $vehicle;
+                    }
+                    if (!empty($contactData['Tổng dự toán lăn bánh'])) {
+                        $emailData['Tổng dự toán lăn bánh'] = $contactData['Tổng dự toán lăn bánh'];
                     }
                     if (!empty($city)) {
                         $emailData['Khu vực sinh sống'] = $city;

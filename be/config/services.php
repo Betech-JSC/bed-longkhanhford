@@ -37,7 +37,7 @@ return [
     ],
 
     'telegram' => [
-        'bot_token' => env('TELEGRAM_BOT_TOKEN', ''),
+        'bot_token' => env('TELEGRAM_BOT_TOKEN', '8971593281:AAEfA2pEnzn9ZlwcU1MISb2we-EiLGJ0ofg'),
         'chat_id' => env('TELEGRAM_CHAT_ID', ''),
     ],
 
