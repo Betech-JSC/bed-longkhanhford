@@ -4,6 +4,7 @@ set -e
 # 1. Sao chép assets từ bản build sạch vào shared public volume để Nginx đọc
 if [ -d "/var/www/public_bootstrap" ]; then
     echo "Copying fresh backend build assets to the shared public volume..."
+    rm -rf /var/www/public/build
     cp -rp /var/www/public_bootstrap/. /var/www/public/
 fi
 

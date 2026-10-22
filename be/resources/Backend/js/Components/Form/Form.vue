@@ -71,15 +71,28 @@ export default {
             form: this.$inertia.form(this.modelValue),
             octaneReloading: false,
             isLoading: false,
+            isEmittingFromForm: false,
             initFormValue: this.modelValue,
         };
     },
     watch: {
+        modelValue: {
+            handler(newValue) {
+                if (!this.isEmittingFromForm && newValue) {
+                    this.initFormValue = JSON.parse(JSON.stringify(newValue));
+                    this.form = this.$inertia.form(newValue);
+                }
+            },
+        },
         form: {
             deep: true,
             handler(value) {
+                this.isEmittingFromForm = true;
                 const plainData = typeof value?.data === 'function' ? value.data() : value;
                 this.$emit("update:modelValue", plainData);
+                this.$nextTick(() => {
+                    this.isEmittingFromForm = false;
+                });
             },
         },
     },
