@@ -98,22 +98,24 @@ class TelegramSettingController extends Controller
 
             $updates = $response->json()['result'] ?? [];
             $rawKnown = \Illuminate\Support\Facades\DB::table('settings')->where('group', 'telegram')->where('name', 'telegram_known_chats')->value('val');
-            $known = is_string($rawKnown) ? (json_decode($rawKnown, true) ?: []) : [];
-            foreach (\App\Models\Vehicle\LandingPage::with('salesConsultant')->whereNotNull('telegram_chat_id')->where('telegram_chat_id', '!=', '')->get() as $lp) {
-                $cid = trim((string) $lp->telegram_chat_id);
-                if (!isset($known[$cid])) $known[$cid] = ['chat_id' => $cid, 'telegram_name' => 'Telegram'];
-                if ($lp->salesConsultant) {
-                    $known[$cid]['consultant_name'] = $lp->salesConsultant->name;
-                    $known[$cid]['sales_consultant_id'] = $lp->sales_consultant_id;
-                }
-            }
+            $savedMeta = is_string($rawKnown) ? (json_decode($rawKnown, true) ?: []) : [];
+            $tgNames = [];
             foreach ($updates as $u) {
                 $c = $u['message']['chat'] ?? $u['my_chat_member']['chat'] ?? $u['channel_post']['chat'] ?? null;
                 if ($c && isset($c['id'])) {
                     $cid = (string) $c['id'];
-                    $tgName = trim(($c['first_name'] ?? '') . ' ' . ($c['last_name'] ?? '')) ?: ($c['title'] ?? ($c['username'] ?? 'Tài khoản cá nhân'));
-                    $known[$cid] = array_merge($known[$cid] ?? [], ['chat_id' => $cid, 'telegram_name' => $tgName, 'username' => $c['username'] ?? null]);
+                    $tgNames[$cid] = trim(($c['first_name'] ?? '') . ' ' . ($c['last_name'] ?? '')) ?: ($c['title'] ?? ($c['username'] ?? 'Tài khoản cá nhân'));
                 }
+            }
+            $known = [];
+            foreach (\App\Models\Vehicle\LandingPage::with('salesConsultant')->whereNotNull('telegram_chat_id')->where('telegram_chat_id', '!=', '')->get() as $lp) {
+                $cid = trim((string) $lp->telegram_chat_id);
+                $known[$cid] = [
+                    'chat_id' => $cid,
+                    'telegram_name' => $tgNames[$cid] ?? ($savedMeta[$cid]['telegram_name'] ?? 'Telegram'),
+                    'consultant_name' => $lp->salesConsultant?->name,
+                    'sales_consultant_id' => $lp->sales_consultant_id,
+                ];
             }
             if ($request->boolean('only_list')) {
                 \Illuminate\Support\Facades\DB::table('settings')->updateOrInsert(['group' => 'telegram', 'name' => 'telegram_known_chats'], ['val' => json_encode($known, JSON_UNESCAPED_UNICODE)]);
@@ -163,15 +165,19 @@ class TelegramSettingController extends Controller
                     'message' => "⛔ Chặn bảo mật: Mã Chat ID {$chatId} đã được khóa riêng cho cố vấn {$existingOwner}. Không thể gắn sang trang của cố vấn khác!",
                 ], 422);
             }
-            if ($consultantName) {
-                $known[$chatId]['consultant_name'] = $consultantName;
-                $known[$chatId]['sales_consultant_id'] = $scId;
-            }
+            $tgName = $tgNames[$chatId] ?? ($savedMeta[$chatId]['telegram_name'] ?? ($chat['title'] ?? ($chat['first_name'] ?? 'Telegram')));
+            $known[$chatId] = [
+                'chat_id' => $chatId,
+                'telegram_name' => $tgName,
+                'consultant_name' => $consultantName,
+                'sales_consultant_id' => $scId,
+            ];
             \Illuminate\Support\Facades\DB::table('settings')->updateOrInsert(['group' => 'telegram', 'name' => 'telegram_known_chats'], ['val' => json_encode($known, JSON_UNESCAPED_UNICODE)]);
-            $tgName = $known[$chatId]['telegram_name'] ?? ($chat['title'] ?? ($chat['first_name'] ?? 'Telegram'));
             $title = $consultantName ? "{$consultantName} (Tele: {$tgName})" : $tgName;
             if ($ldpId) {
-                \App\Models\Vehicle\LandingPage::where('id', $ldpId)->update(['telegram_chat_id' => $chatId]);
+                $q = \App\Models\Vehicle\LandingPage::where('id', $ldpId);
+                if ($scId) $q->where('sales_consultant_id', $scId);
+                $q->update(['telegram_chat_id' => $chatId]);
             }
             return response()->json([
                 'success' => true,
@@ -182,10 +188,7 @@ class TelegramSettingController extends Controller
                 'known_chats' => array_values($known),
                 'message' => $consultantName ? "Đã gắn Chat ID {$chatId} cho cố vấn {$consultantName} (Tele: {$tgName})" : "Tìm thấy Chat ID: {$chatId} ({$tgName})",
             ]);
-            $title = $chat['title'] ?? ($chat['first_name'] ?? ($chat['username'] ?? 'Tài khoản cá nhân'));
-            if ($ldpId = $request->input('landing_page_id')) {
-                \App\Models\Vehicle\LandingPage::where('id', $ldpId)->update(['telegram_chat_id' => $chatId]);
-            }
+
 
             return response()->json([
                 'success' => true,

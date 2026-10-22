@@ -978,9 +978,10 @@ export default {
         onSalesConsultantChange(form, consultantId) {
             if (!consultantId || !form) return;
             // Tự động điền email của Cố vấn nếu form chưa có sales_email
-            if (!form.telegram_chat_id) {
+            const curOwner = (this.knownTelegramChats || []).find(c => String(c.chat_id) === String(form.telegram_chat_id));
+            if (!form.telegram_chat_id || (curOwner?.sales_consultant_id && String(curOwner.sales_consultant_id) !== String(consultantId))) {
                 const savedChat = (this.knownTelegramChats || []).find(c => String(c.sales_consultant_id) === String(consultantId));
-                if (savedChat?.chat_id) form.telegram_chat_id = savedChat.chat_id;
+                form.telegram_chat_id = savedChat?.chat_id || '';
             }
             if (!form.sales_email) {
                 const c = (this.salesConsultants || []).find(sc => String(sc.id) === String(consultantId));

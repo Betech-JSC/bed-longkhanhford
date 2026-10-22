@@ -117,9 +117,12 @@ class LandingPage extends BaseModel
     protected static function booted()
     {
         static::saving(function ($landingPage) {
+            if (isset($landingPage->telegram_chat_id)) {
+                $landingPage->telegram_chat_id = trim((string) $landingPage->telegram_chat_id) ?: null;
+            }
             if (!empty($landingPage->telegram_chat_id) && !empty($landingPage->sales_consultant_id)) {
                 $conflictLdp = static::with('salesConsultant')
-                    ->where('telegram_chat_id', trim((string) $landingPage->telegram_chat_id))
+                    ->where('telegram_chat_id', $landingPage->telegram_chat_id)
                     ->where('sales_consultant_id', '!=', $landingPage->sales_consultant_id)
                     ->first();
                 if ($conflictLdp) {

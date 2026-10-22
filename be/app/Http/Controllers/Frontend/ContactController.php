@@ -426,13 +426,16 @@ class ContactController extends Controller
                 if (!empty($salesConsultantId)) {
                     try {
                         $consultant = SalesConsultant::find($salesConsultantId);
-                        $ldpEmails = LandingPage::where('sales_consultant_id', $salesConsultantId)
-                            ->whereNotNull('sales_email')
-                            ->where('sales_email', '!=', '')
-                            ->pluck('sales_email');
-                        foreach ($ldpEmails as $le) {
-                            if (filter_var(trim($le), FILTER_VALIDATE_EMAIL)) {
-                                $targetEmails[] = trim($le);
+                        if (empty($landingPage?->sales_email)) {
+                            $ldpEmails = LandingPage::where('sales_consultant_id', $salesConsultantId)
+                                ->where('status', 'ACTIVE')
+                                ->whereNotNull('sales_email')
+                                ->where('sales_email', '!=', '')
+                                ->pluck('sales_email');
+                            foreach ($ldpEmails as $le) {
+                                if (filter_var(trim($le), FILTER_VALIDATE_EMAIL)) {
+                                    $targetEmails[] = trim($le);
+                                }
                             }
                         }
                         if ($consultant && !empty($consultant->email) && filter_var($consultant->email, FILTER_VALIDATE_EMAIL)) {

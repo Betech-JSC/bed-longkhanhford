@@ -558,9 +558,9 @@ function LdpHomeInner({
             landing_page_id: landingPageId ? Number(landingPageId) : undefined,
             sales_email: salesEmail || salesConsultant?.email,
             Name: srvForm.name.trim(),
-            Phone: srvForm.phone.trim(),
+            Phone: srvForm.phone.replace(/[\s.-]+/g, ""),
             "Họ và tên": srvForm.name.trim(),
-            "Số điện thoại": srvForm.phone.trim(),
+            "Số điện thoại": srvForm.phone.replace(/[\s.-]+/g, ""),
             "Biển số xe": srvForm.plate.trim(),
             "Thời gian hẹn": srvForm.date,
             "Tại": srvForm.location,
@@ -1340,7 +1340,7 @@ function LdpHomeInner({
                   </div>
                   <div>
                     <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Ngày hẹn <span className="text-red-500">*</span></label>
-                    <input type="date" required value={srvForm.date} onChange={(e) => setSrvForm({ ...srvForm, date: e.target.value })} className="w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-900 focus:border-[#0562d2] focus:ring-2 focus:ring-blue-100 outline-none" />
+                    <input type="date" required min={new Date().toISOString().split("T")[0]} value={srvForm.date} onChange={(e) => setSrvForm({ ...srvForm, date: e.target.value })} className="w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-900 focus:border-[#0562d2] focus:ring-2 focus:ring-blue-100 outline-none" />
                   </div>
                 </div>
                 <div>

@@ -304,7 +304,7 @@ export default function VehicleLayoutClient({
             "Dòng xe lái thử": productTitle,
             "Loại yêu cầu": isTestDrive ? "Đăng ký lái thử xe" : "Dự toán chi phí lăn bánh",
             "Tổng dự toán lăn bánh": !isTestDrive ? `${formatPrice(rollingCost.total)} (Giá niêm yết: ${formatPrice(rollingCost.basePrice)})` : undefined,
-            "Nội dung cần hỗ trợ": formData.note.trim() || undefined,
+            "Nội dung cần hỗ trợ": note || undefined,
             "Ghi chú yêu cầu thêm": formData.note || undefined,
             source: isTestDrive ? "🚘 Form Đăng Ký Lái Thử Xe" : "💰 Form Báo Giá Lăn Bánh Xe",
           }
