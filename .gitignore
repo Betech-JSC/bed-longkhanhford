@@ -44,7 +44,6 @@ fe/build/
 
 # IDEs
 .idea/
-.vscode/
 *.suo
 *.ntvs*
 *.njsproj
