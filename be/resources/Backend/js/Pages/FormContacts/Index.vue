@@ -66,6 +66,21 @@
                     return '--';
                 }
             },
+            {
+                field: 'Nguồn Landing Page',
+                transform: (data) => {
+                    const c = data?.data_contact || {};
+                    const consultantName = data?.sales_consultant?.name || c['Cố vấn phụ trách'] || '';
+                    if (consultantName) {
+                        const cleanName = String(consultantName).replace(/\s*\(SĐT:.*\)$/i, '').trim();
+                        return `LDP TVBH - ${cleanName}`;
+                    }
+                    if (c.landing_page_id || c.sales_email || data?.sales_consultant_id) {
+                        return c.sales_email ? `LDP TVBH (${c.sales_email})` : 'LDP TVBH';
+                    }
+                    return 'Trang chính Đại lý';
+                }
+            },
             'status',
             'created_at',
         ]"

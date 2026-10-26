@@ -126,6 +126,16 @@ class ContactController extends Controller
                 }
             }
 
+            if (empty($requestData['sales_consultant_id'])) {
+                $scIdFromData = $requestData['data']['sales_consultant_id'] ?? null;
+                $ldpIdFromData = $requestData['data']['landing_page_id'] ?? $requestData['landing_page_id'] ?? null;
+                if (!empty($scIdFromData)) {
+                    $requestData['sales_consultant_id'] = $scIdFromData;
+                } elseif (!empty($ldpIdFromData)) {
+                    $requestData['sales_consultant_id'] = LandingPage::where('id', $ldpIdFromData)->value('sales_consultant_id');
+                }
+            }
+
             $createdContact = $this->model::create($requestData);
 
             // Gửi thông báo tức thì qua Telegram cho Sales team
