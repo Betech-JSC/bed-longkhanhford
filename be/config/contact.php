@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'send_email_default' => false,
+    'send_email_default' => env('CONTACT_SEND_EMAIL_DEFAULT', true),
     'types' => [
         'CONTACT_FORM' => [
             'title' => 'Liên hệ',

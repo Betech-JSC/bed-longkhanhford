@@ -458,9 +458,16 @@ class ContactController extends Controller
                     }
                 }
 
+                if (empty($targetEmails)) {
+                    $defaultMail = config('mail.from.address') ?: 'admin@longkhanhford.com.vn';
+                    if (filter_var($defaultMail, FILTER_VALIDATE_EMAIL)) {
+                        $targetEmails[] = $defaultMail;
+                    }
+                }
+
                 $targetEmails = array_values(array_unique(array_filter($targetEmails)));
 
-                if (config('contact.send_email_default', false) && !empty($targetEmails)) {
+                if (config('contact.send_email_default', true) && !empty($targetEmails)) {
                     $consultantName = $consultant?->name ?? $landingPage?->salesConsultant?->name ?? '';
                     $isLandingPage = !empty($landingPageId) || !empty($salesConsultantId) || !empty($salesEmail);
 

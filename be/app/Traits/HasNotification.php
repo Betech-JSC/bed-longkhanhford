@@ -12,7 +12,7 @@ trait HasNotification
     public static function bootHasNotification()
     {
         static::created(function ($model) {
-            if (request()->route() === null || !config('contact.send_email_default', false)) return;
+            if (request()->route() === null || !config('contact.send_email_default', true)) return;
 
             try {
                 if ($model->status === Contact::STATUS_IS_SPAM) {
