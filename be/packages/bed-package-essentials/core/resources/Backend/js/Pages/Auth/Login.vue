@@ -90,9 +90,10 @@ export default {
     data() {
         return {
             form: this.$inertia.form({
-                email: 'admin@gmail.com',
-                password: 'admin@gmail.com',
-                remember: true,
+                // Không gán cứng thông tin đăng nhập ở client để tránh lộ tài khoản
+                email: '',
+                password: '',
+                remember: false,
             }),
             isProduction: import.meta.env.PROD,
         }
