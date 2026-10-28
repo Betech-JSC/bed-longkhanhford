@@ -396,18 +396,18 @@ class ContactController extends Controller
                 try { \Illuminate\Support\Facades\Log::error('Telegram form notification error: ' . $e->getMessage()); } catch (\Throwable $_) {}
             }
 
-            // Tự động gửi Email thông báo Lead mới (ưu tiên Cố vấn / Landing Page đã setup)
+            // Tự động gửi Email thông báo Lead mới (Khóa 1-1: Cố vấn phụ trách + Admin BCC cố định)
             try {
                 $contactData = $requestData['data'] ?? [];
                 $landingPageId = $contactData['landing_page_id'] ?? $requestData['landing_page_id'] ?? null;
                 $salesConsultantId = $requestData['sales_consultant_id'] ?? $contactData['sales_consultant_id'] ?? null;
 
-                $targetEmails = [];
+                $consultantEmails = [];
 
                 // 1. Email từ trường sales_email gửi trực tiếp từ form hoặc LDP
                 $salesEmail = $contactData['sales_email'] ?? $requestData['sales_email'] ?? null;
-                if (!empty($salesEmail) && filter_var($salesEmail, FILTER_VALIDATE_EMAIL)) {
-                    $targetEmails[] = trim($salesEmail);
+                if (!empty($salesEmail) && filter_var(trim($salesEmail), FILTER_VALIDATE_EMAIL)) {
+                    $consultantEmails[] = trim($salesEmail);
                 }
 
                 // 2. Nếu có landing_page_id, truy vấn Landing Page để lấy sales_email cấu hình và email của cố vấn
@@ -416,11 +416,11 @@ class ContactController extends Controller
                     try {
                         $landingPage = LandingPage::with('salesConsultant')->find($landingPageId);
                         if ($landingPage) {
-                            if (!empty($landingPage->sales_email) && filter_var($landingPage->sales_email, FILTER_VALIDATE_EMAIL)) {
-                                $targetEmails[] = trim($landingPage->sales_email);
+                            if (!empty($landingPage->sales_email) && filter_var(trim($landingPage->sales_email), FILTER_VALIDATE_EMAIL)) {
+                                $consultantEmails[] = trim($landingPage->sales_email);
                             }
-                            if ($landingPage->salesConsultant && !empty($landingPage->salesConsultant->email) && filter_var($landingPage->salesConsultant->email, FILTER_VALIDATE_EMAIL)) {
-                                $targetEmails[] = trim($landingPage->salesConsultant->email);
+                            if ($landingPage->salesConsultant && !empty($landingPage->salesConsultant->email) && filter_var(trim($landingPage->salesConsultant->email), FILTER_VALIDATE_EMAIL)) {
+                                $consultantEmails[] = trim($landingPage->salesConsultant->email);
                             }
                             if (empty($salesConsultantId) && $landingPage->sales_consultant_id) {
                                 $salesConsultantId = $landingPage->sales_consultant_id;
@@ -431,7 +431,7 @@ class ContactController extends Controller
                     }
                 }
 
-                // 3. Nếu có sales_consultant_id mà chưa có cố vấn
+                // 3. Nếu có sales_consultant_id
                 $consultant = null;
                 if (!empty($salesConsultantId)) {
                     try {
@@ -444,34 +444,60 @@ class ContactController extends Controller
                                 ->pluck('sales_email');
                             foreach ($ldpEmails as $le) {
                                 if (filter_var(trim($le), FILTER_VALIDATE_EMAIL)) {
-                                    $targetEmails[] = trim($le);
+                                    $consultantEmails[] = trim($le);
                                 }
                             }
                         }
-                        if ($consultant && !empty($consultant->email) && filter_var($consultant->email, FILTER_VALIDATE_EMAIL)) {
-                            $targetEmails[] = trim($consultant->email);
+                        if ($consultant && !empty($consultant->email) && filter_var(trim($consultant->email), FILTER_VALIDATE_EMAIL)) {
+                            $consultantEmails[] = trim($consultant->email);
                         }
                     } catch (\Throwable $e) {
                         \Illuminate\Support\Facades\Log::warning('Error loading SalesConsultant for email notification: ' . $e->getMessage());
                     }
                 }
 
-                // 4. Email thông báo chung của đại lý (nếu có cấu hình)
-                $generalEmailSetting = function_exists('notification_to') ? notification_to() : null;
-                if (!empty($generalEmailSetting)) {
-                    $arr = explode(',', $generalEmailSetting);
-                    foreach ($arr as $gm) {
-                        $gm = trim($gm);
-                        if (filter_var($gm, FILTER_VALIDATE_EMAIL)) {
-                            $targetEmails[] = $gm;
+                $consultantEmails = array_values(array_unique(array_filter($consultantEmails)));
+
+                // Danh sách email Admin cố định nhận bản sao ẩn (BCC)
+                $adminBccEmails = [];
+                $rawAdminBcc = function_exists('notification_admin_bcc') ? notification_admin_bcc() : config('contact.admin_bcc_email', '');
+                if (!empty($rawAdminBcc)) {
+                    $bccParts = is_array($rawAdminBcc) ? $rawAdminBcc : explode(',', (string) $rawAdminBcc);
+                    foreach ($bccParts as $bccItem) {
+                        $bccItem = trim((string) $bccItem);
+                        if (filter_var($bccItem, FILTER_VALIDATE_EMAIL)) {
+                            $adminBccEmails[] = $bccItem;
                         }
                     }
                 }
+                $adminBccEmails = array_values(array_unique($adminBccEmails));
 
-                if (empty($targetEmails)) {
-                    $defaultMail = config('mail.from.address') ?: 'admin@longkhanhford.com.vn';
-                    if (filter_var($defaultMail, FILTER_VALIDATE_EMAIL)) {
-                        $targetEmails[] = $defaultMail;
+                $targetEmails = [];
+                if (!empty($consultantEmails)) {
+                    // Lead ĐÃ có Cố vấn phụ trách: chỉ gửi cho Cố vấn phụ trách (tuyệt đối không cộng dồn notification_to)
+                    $targetEmails = $consultantEmails;
+                } else {
+                    // Lead CHƯA có Cố vấn phụ trách: gửi về email thông báo chung của đại lý
+                    $generalEmailSetting = function_exists('notification_to') ? notification_to() : null;
+                    if (!empty($generalEmailSetting)) {
+                        $arr = is_array($generalEmailSetting) ? $generalEmailSetting : explode(',', (string) $generalEmailSetting);
+                        foreach ($arr as $gm) {
+                            $gm = trim((string) $gm);
+                            if (filter_var($gm, FILTER_VALIDATE_EMAIL)) {
+                                $targetEmails[] = $gm;
+                            }
+                        }
+                    }
+
+                    if (empty($targetEmails) && !empty($adminBccEmails)) {
+                        $targetEmails = $adminBccEmails;
+                    }
+
+                    if (empty($targetEmails)) {
+                        $defaultMail = config('mail.from.address') ?: 'admin@longkhanhford.com.vn';
+                        if (filter_var($defaultMail, FILTER_VALIDATE_EMAIL)) {
+                            $targetEmails[] = $defaultMail;
+                        }
                     }
                 }
 
@@ -487,12 +513,15 @@ class ContactController extends Controller
                         || str_contains(mb_strtolower($cleanMessage ?? ''), 'lái thử')
                         || str_contains(mb_strtolower($formSource ?? ''), 'lái thử');
 
+                    $submittedAt = now()->timezone('Asia/Ho_Chi_Minh')->format('H:i d/m/Y');
+                    $subjectSuffix = " #{$createdContact->id} - {$submittedAt}";
+
                     if ($isTestDrive) {
-                        $mailSubject = '🚗💨 [Đăng Ký Lái Thử' . ($consultantName ? " - {$consultantName}" : '') . '] ' . $contactName . ($vehicle ? " - {$vehicle}" : '');
+                        $mailSubject = '🚗💨 [Đăng Ký Lái Thử' . ($consultantName ? " - {$consultantName}" : '') . '] ' . $contactName . ($vehicle ? " - {$vehicle}" : '') . $subjectSuffix;
                     } elseif ($isLandingPage) {
-                        $mailSubject = '🔥 [Landing Page' . ($consultantName ? " - {$consultantName}" : '') . '] ' . ($vehicle ? "Báo giá {$vehicle}: " : 'Báo giá xe mới: ') . $contactName;
+                        $mailSubject = '🔥 [Landing Page' . ($consultantName ? " - {$consultantName}" : '') . '] ' . ($vehicle ? "Báo giá {$vehicle}: " : 'Báo giá xe mới: ') . $contactName . $subjectSuffix;
                     } else {
-                        $mailSubject = '🔥 [Long Khánh Ford] ' . ($formTitle ?? 'Yêu cầu liên hệ mới') . ': ' . $contactName;
+                        $mailSubject = '🔥 [Long Khánh Ford] ' . ($formTitle ?? 'Yêu cầu liên hệ mới') . ': ' . $contactName . $subjectSuffix;
                     }
 
                     $emailData = [
@@ -533,13 +562,28 @@ class ContactController extends Controller
                         $emailData['Cố vấn phụ trách'] = $consultantName;
                     }
                     $emailData['Nguồn gửi'] = $formSource ?? ($isTestDrive ? 'Form Đăng Ký Lái Thử Xe' : 'Website');
-                    $emailData['Thời gian'] = now()->format('H:i d/m/Y');
-                    $emailData['url'] = url('/admin/contacts');
+                    $emailData['Thời gian'] = $submittedAt;
+                    try {
+                        $emailData['url'] = $createdContact->getUrl();
+                    } catch (\Throwable $_) {
+                        $emailData['url'] = url('/admin/contacts/form/' . $createdContact->id);
+                    }
+
+                    $targetEmailsLower = array_map('mb_strtolower', $targetEmails);
+                    $bccList = array_values(array_filter($adminBccEmails, function ($bccEmail) use ($targetEmailsLower) {
+                        return !in_array(mb_strtolower($bccEmail), $targetEmailsLower, true);
+                    }));
+                    $bccSent = false;
 
                     foreach ($targetEmails as $recipientEmail) {
                         try {
+                            $recipientEmailData = $emailData;
+                            if (!$bccSent && !empty($bccList)) {
+                                $recipientEmailData['bcc_emails'] = $bccList;
+                            }
                             Notification::route('mail', $recipientEmail)
-                                ->notifyNow(new CommonNotification($emailData));
+                                ->notifyNow(new CommonNotification($recipientEmailData));
+                            $bccSent = true;
                             try { \Illuminate\Support\Facades\Log::info("Sent contact notification email to: {$recipientEmail} for contact ID {$createdContact->id}"); } catch (\Throwable $_) {}
                         } catch (\Throwable $e) {
                             try { \Illuminate\Support\Facades\Log::error("Failed to send contact notification email to {$recipientEmail}: " . $e->getMessage()); } catch (\Throwable $_) {}

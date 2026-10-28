@@ -39,6 +39,15 @@
                             help: 'Có thể nhập nhiều email, phân cách bởi dấu phẩy',
                         }"
                     />
+                    <Field
+                        v-model="form.notification_admin_bcc"
+                        :field="{
+                            type: 'text',
+                            name: 'notification_admin_bcc',
+                            label: 'Email Admin cố định (BCC cho Lead của Cố vấn)',
+                            help: 'Nhận bản sao ẩn (BCC) khi khách hàng gửi form cho Cố vấn bán hàng. Có thể nhập 1 hoặc nhiều email cách nhau bởi dấu phẩy.',
+                        }"
+                    />
                     <hr />
                     <Field
                         v-model="form.telegram_bot_token"

@@ -2,6 +2,7 @@
 
 return [
     'send_email_default' => env('CONTACT_SEND_EMAIL_DEFAULT', true),
+    'admin_bcc_email' => env('CONTACT_ADMIN_BCC_EMAIL', ''),
     'types' => [
         'CONTACT_FORM' => [
             'title' => 'Liên hệ',
