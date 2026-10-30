@@ -36,8 +36,13 @@ class SalesConsultant extends BaseModel
         'email',
         'phone',
         'custom_domain',
+        'tracking_config',
         'status',
         'sort_order',
+    ];
+
+    protected $casts = [
+        'tracking_config' => 'array',
     ];
 
     public $translatedAttributes = [
@@ -54,7 +59,8 @@ class SalesConsultant extends BaseModel
             'vi.name'    => 'required|string|max:255',
             'avatar'     => 'nullable|array',
             'cover_image'=> 'nullable|array',
-            'gallery'    => 'nullable|array',
+            'gallery'         => 'nullable|array',
+            'tracking_config' => 'nullable|array',
         ];
     }
 
@@ -203,7 +209,8 @@ class SalesConsultant extends BaseModel
                 'caption'   => $g['caption'] ?? null,
             ])->values()->all(),
             'email'          => $this->email,
-            'custom_domain'  => $this->custom_domain,
+            'custom_domain'   => $this->custom_domain,
+            'tracking_config' => $this->tracking_config ?? null,
         ];
     }
 }

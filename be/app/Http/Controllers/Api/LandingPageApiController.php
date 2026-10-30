@@ -170,6 +170,7 @@ class LandingPageApiController extends Controller
 
         // 6. Thông tin SEO
         $consultantDetail = $consultant->toLocalizedDetail($locale);
+        $consultantDetail['tracking_config'] = $consultant->tracking_config ?? null;
         if (!empty($ldp?->zalo_url)) {
             $consultantDetail['zalo_url'] = $ldp->formatted_zalo_url ?? $ldp->zalo_url;
         }
@@ -346,6 +347,7 @@ class LandingPageApiController extends Controller
         }
 
         $consultantDetail = $consultant->toLocalizedDetail($locale);
+        $consultantDetail['tracking_config'] = $consultant->tracking_config ?? null;
         if (!empty($ldp?->zalo_url)) {
             $consultantDetail['zalo_url'] = $ldp->formatted_zalo_url ?? $ldp->zalo_url;
         }

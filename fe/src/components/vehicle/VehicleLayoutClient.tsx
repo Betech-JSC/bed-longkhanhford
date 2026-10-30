@@ -1,7 +1,8 @@
 "use client";
 
 import { useParams, usePathname } from "next/navigation";
-import { useState, useEffect, useMemo, createContext, useContext } from "react";
+import { useState, useEffect, useMemo, createContext, useContext, isValidElement } from "react";
+import LdpTrackingManager, { fireLdpFormConversion } from "@/components/vehicle/LdpTrackingManager";
 import Link from "next/link";
 import { contactsAPI, regionsAPI, registrationFeesAPI } from "@/lib/api";
 import { calculateRollingCost } from "@/lib/rolling-cost";
@@ -52,6 +53,7 @@ export default function VehicleLayoutClient({
   children,
   initialVehicle,
   allVehicles,
+  salesConsultant,
   salesConsultantId,
   salesEmail,
   landingPageId
@@ -59,10 +61,18 @@ export default function VehicleLayoutClient({
   children: React.ReactNode;
   initialVehicle: any;
   allVehicles: any[];
+  salesConsultant?: any;
   salesConsultantId?: number;
   salesEmail?: string;
   landingPageId?: number;
 }) {
+  const resolvedSalesConsultant = useMemo(() => {
+    if (salesConsultant) return salesConsultant;
+    if (isValidElement(children) && children.props && typeof children.props === "object") {
+      return (children.props as any).salesConsultant || null;
+    }
+    return null;
+  }, [salesConsultant, children]);
   const [activeVersionIndex, setActiveVersionIndex] = useState(0);
   const [compareIds, setCompareIds] = useState<string[]>([]);
 
@@ -315,6 +325,14 @@ export default function VehicleLayoutClient({
         setErrorMessage(response.message || "Gửi yêu cầu thất bại. Vui lòng thử lại!");
       } else {
         setIsSubmitted(true);
+        if (resolvedSalesConsultant) {
+          fireLdpFormConversion({
+            salesConsultant: resolvedSalesConsultant,
+            isTestDrive,
+            targetVehicleName: productTitle,
+            customerPhone: formData.phone,
+          });
+        }
         setTimeout(() => {
           setIsSubmitted(false);
           setShowQuoteModal(false);
@@ -363,6 +381,14 @@ export default function VehicleLayoutClient({
 
   return (
     <VehicleContext.Provider value={providerValue}>
+      {resolvedSalesConsultant && (
+        <LdpTrackingManager
+          salesConsultant={resolvedSalesConsultant}
+          landingPageId={landingPageId}
+          salesEmail={salesEmail}
+          vehicleName={initialVehicle?.title || initialVehicle?.name}
+        />
+      )}
       <div className="bg-light text-dark flex-1 flex flex-col w-full">
         {/* Content Viewport */}
         <div className="flex-1 flex flex-col">

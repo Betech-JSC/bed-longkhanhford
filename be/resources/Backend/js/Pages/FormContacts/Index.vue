@@ -31,6 +31,12 @@
                     if (data.type === 'APPLY_FORM') {
                         return '💼 Tuyển dụng';
                     }
+                    if (data.type === 'LDP_CLICK_CALL') {
+                        return '📞 Click Gọi điện trên LDP';
+                    }
+                    if (data.type === 'LDP_CLICK_ZALO') {
+                        return '💬 Click Chat Zalo trên LDP';
+                    }
                     return '🌐 Form liên hệ website';
                 }
             },
@@ -59,6 +65,12 @@
                 field: 'Nội dung yêu cầu / Lời nhắn',
                 transform: (data) => {
                     const c = data.data_contact || {};
+                    if (data.type === 'LDP_CLICK_CALL' || data.type === 'LDP_CLICK_ZALO') {
+                        const btnPos = c['Vị trí nút bấm trên trang'] || c['Vị trí nút bấm'] || '';
+                        const carView = c['Dòng xe khách đang xem'] || '';
+                        const parts = [btnPos ? `Nút: ${btnPos}` : '', carView ? `Xe: ${carView}` : ''].filter(Boolean);
+                        if (parts.length > 0) return parts.join(' • ');
+                    }
                     let raw = c['Ghi chú yêu cầu thêm'] || c['Nội dung yêu cầu'] || c['Nội dung cần hỗ trợ'] || c['Message'] || c['Nội dung'] || '--';
                     if (typeof raw === 'string') {
                         return raw.replace('[Đăng ký tư vấn từ popup trang chủ] - Nội dung quan tâm: ', '').replace('[Đăng ký tư vấn từ popup trang chủ]', '');

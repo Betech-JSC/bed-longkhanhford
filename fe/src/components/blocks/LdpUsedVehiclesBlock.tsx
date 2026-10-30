@@ -19,6 +19,7 @@ import {
 import { usedVehiclesAPI, contactsAPI } from "@/lib/api";
 import { resolveImageUrl } from "@/lib/site-assets";
 import { formatPersonName } from "@/lib/formatters";
+import { fireLdpFormConversion } from "@/components/vehicle/LdpTrackingManager";
 
 interface UsedVehicleItem {
   id: number | string;
@@ -227,6 +228,14 @@ export default function LdpUsedVehiclesBlock({
         setSubmitError(typeof response.message === "string" ? response.message : "Gửi yêu cầu không thành công. Vui lòng thử lại!");
       } else {
         setIsSubmitted(true);
+        if (salesConsultant) {
+          fireLdpFormConversion({
+            salesConsultant,
+            formType: "ADVISE_FORM",
+            targetVehicleName: carTitle,
+            customerPhone: cleanPhone,
+          });
+        }
         setTimeout(() => {
           setIsSubmitted(false);
           setShowConsultModal(false);
