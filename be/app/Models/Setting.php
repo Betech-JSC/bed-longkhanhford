@@ -78,6 +78,7 @@ class Setting extends Model
                 'sys_notif_start_at' => 'nullable',
                 'sys_notif_end_at' => 'nullable',
                 'notification_to' => 'nullable',
+                'notification_admin_bcc' => 'nullable',
                 'telegram_bot_token' => 'nullable',
                 'telegram_chat_id' => 'nullable',
                 'discord_webhook' => 'nullable',

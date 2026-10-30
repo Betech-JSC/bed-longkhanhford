@@ -209,6 +209,21 @@ if (!function_exists('notification_to')) {
     }
 }
 
+if (!function_exists('notification_admin_bcc')) {
+    function notification_admin_bcc()
+    {
+        try {
+            $settingBcc = settings()->group('notification')->get('notification_admin_bcc', null);
+            if (!empty($settingBcc)) {
+                return $settingBcc;
+            }
+        } catch (\Throwable $_) {
+        }
+
+        return config('contact.admin_bcc_email', '');
+    }
+}
+
 if (!function_exists('replace_layout')) {
     function replace_layout($content)
     {

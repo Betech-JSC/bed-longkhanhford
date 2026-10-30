@@ -12,6 +12,10 @@ trait HasNotification
     public static function bootHasNotification()
     {
         static::created(function ($model) {
+            // Đã chuyển toàn bộ luồng gửi thông báo Email Lead về Frontend\ContactController::store()
+            // để tránh gửi trùng lặp (duplicate emails) và đảm bảo khóa 1-1 cho Cố vấn phụ trách.
+            return;
+
             if (request()->route() === null || !config('contact.send_email_default', true)) return;
 
             try {

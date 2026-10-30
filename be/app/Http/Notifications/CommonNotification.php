@@ -48,11 +48,29 @@ class CommonNotification extends Notification implements ShouldQueue
             ->subject($this->data['mail_title'])
             ->greeting($this->data['mail_title']);
 
+        $bccEmails = $this->data['bcc_emails'] ?? [];
+        if (is_string($bccEmails)) {
+            $bccEmails = array_values(array_filter(array_map('trim', explode(',', $bccEmails)), fn ($e) => filter_var($e, FILTER_VALIDATE_EMAIL)));
+        } elseif (is_array($bccEmails)) {
+            $bccEmails = array_values(array_unique(array_filter(array_map('trim', $bccEmails), fn ($e) => filter_var($e, FILTER_VALIDATE_EMAIL))));
+        } else {
+            $bccEmails = [];
+        }
+
+        if (!empty($bccEmails)) {
+            $email->bcc($bccEmails);
+        }
+
+        // Gắn X-Entity-Ref-ID riêng cho mỗi lead để Gmail không gộp chung các email khách hàng khác nhau vào 1 luồng
+        $email->withSymfonyMessage(function ($message) {
+            $message->getHeaders()->addTextHeader('X-Entity-Ref-ID', uniqid('lkf-lead-', true));
+        });
+
         foreach ($this->data as $key => $value) {
-            if($key != 'mail_title') {
+            if (!in_array($key, ['mail_title', 'bcc_emails'], true)) {
                 if (is_array($this->data[$key])) {
                     foreach ($this->data[$key] as $item => $res) {
-                        if (in_array(str_replace('_', ' ', $item), config('contact.html_string'))) {
+                        if (in_array(str_replace('_', ' ', $item), config('contact.html_string', []))) {
                             $email->line(new HtmlString($res));
                         } else {
                             $email->line(Str::title(str_replace('_', ' ', $item)) . ': ' . $res);
