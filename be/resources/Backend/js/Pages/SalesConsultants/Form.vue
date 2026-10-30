@@ -64,6 +64,11 @@
                 </div>
             </div>
 
+            <TrackingConfigCard
+                :config="form.tracking_config"
+                :consultant-name="form[currentTab]?.name || form.vi?.name || ''"
+            />
+
             <!-- Gallery -->
             <div class="card mt-4">
                 <div class="card-header">Thư viện ảnh hoạt động</div>
@@ -249,7 +254,10 @@
 </template>
 
 <script>
+import TrackingConfigCard, { normalizeTrackingConfig } from './TrackingConfigCard.vue'
+
 export default {
+    components: { TrackingConfigCard },
     props: ['item', 'schema'],
 
     data() {
@@ -291,6 +299,7 @@ export default {
             if (data.sort_order === null || data.sort_order === undefined) {
                 data.sort_order = 0
             }
+            data.tracking_config = normalizeTrackingConfig(data.tracking_config)
             if (!Array.isArray(data.gallery)) {
                 data.gallery = []
             }

@@ -136,6 +136,30 @@ class ContactController extends Controller
                 }
             }
 
+            if (!empty($requestData['sales_consultant_id'])) {
+                $scObj = SalesConsultant::find($requestData['sales_consultant_id']);
+                if ($scObj && empty($requestData['data']['Cố vấn phụ trách'])) {
+                    $scPhoneStr = $scObj->phone ? " ({$scObj->phone})" : '';
+                    $requestData['data']['Cố vấn phụ trách'] = $scObj->name . $scPhoneStr;
+                    if ($scObj->phone && empty($requestData['data']['SĐT Cố vấn nhận liên hệ'])) {
+                        $requestData['data']['SĐT Cố vấn nhận liên hệ'] = $scObj->phone;
+                    }
+                }
+            }
+
+            if (in_array($rawType, ['LDP_CLICK_CALL', 'LDP_CLICK_ZALO'], true)) {
+                $actionLabel = $rawType === 'LDP_CLICK_CALL' ? 'Khách bấm Gọi điện trên LDP' : 'Khách bấm Chat Zalo trên LDP';
+                if (empty($requestData['data']['Họ và tên']) && empty($requestData['data']['Name'])) {
+                    $requestData['data']['Họ và tên'] = $actionLabel;
+                    $requestData['data']['Name'] = $actionLabel;
+                }
+                if (empty($requestData['data']['Số điện thoại']) && empty($requestData['data']['Phone'])) {
+                    $fallbackPhone = $rawType === 'LDP_CLICK_CALL' ? 'Click gọi trực tiếp' : 'Click mở chat Zalo';
+                    $requestData['data']['Số điện thoại'] = $fallbackPhone;
+                    $requestData['data']['Phone'] = $fallbackPhone;
+                }
+            }
+
             $createdContact = $this->model::create($requestData);
 
             // Gửi thông báo tức thì qua Telegram cho Sales team
@@ -272,6 +296,16 @@ class ContactController extends Controller
                     $formSource = '📋 Form Khảo Sát Dịch Vụ';
                     $formType = 'survey';
 
+                } elseif ($type === 'LDP_CLICK_CALL') {
+                    $formSource = $contactData['source'] ?? '📞 Khách bấm nút Gọi điện trên LDP';
+                    $formTitle = '📞 KHÁCH BẤM NÚT GỌI ĐIỆN TRÊN LDP';
+                    $formType = 'ldp_click_call';
+                    $vehicle = $vehicle ?: ($contactData['Dòng xe khách đang xem'] ?? null);
+                } elseif ($type === 'LDP_CLICK_ZALO') {
+                    $formSource = $contactData['source'] ?? '💬 Khách bấm nút Chat Zalo trên LDP';
+                    $formTitle = '💬 KHÁCH BẤM NÚT CHAT ZALO TRÊN LDP';
+                    $formType = 'ldp_click_zalo';
+                    $vehicle = $vehicle ?: ($contactData['Dòng xe khách đang xem'] ?? null);
                 } elseif ($type === 'CONTACT_FORM') {
                     $formSource = '✉️ Form Liên Hệ & Đóng Góp Ý Kiến (Tab Liên hệ khác)';
                     $formTitle = '✉️ LIÊN HỆ & ĐÓNG GÓP Ý KIẾN';
@@ -389,6 +423,16 @@ class ContactController extends Controller
                     $leadData['consultant_name'] = $tgConsultantName;
                     $leadData['source'] .= " (LDP: {$tgConsultantName})";
                 }
+                $tgConsultantObj = !empty($scIdForTg) ? SalesConsultant::find($scIdForTg) : ($ldpForTg->salesConsultant ?? null);
+                $leadData['consultant_phone'] = $tgConsultantObj?->phone ?: ($contactData['SĐT Cố vấn nhận liên hệ'] ?? null);
+                $leadData['button_position'] = $contactData['Vị trí nút bấm trên trang']
+                    ?? $contactData['Vị trí nút bấm']
+                    ?? $contactData['button_position']
+                    ?? null;
+                $leadData['page_url'] = $contactData['Đường dẫn trang (URL)']
+                    ?? $contactData['Trang LDP']
+                    ?? $contactData['page_url']
+                    ?? null;
                 $leadData['telegram_chat_ids'] = $tgChatIds;
 
                 $telegramService->sendHotLeadAlert($leadData, 'FORM-' . $createdContact->id);
@@ -396,7 +440,8 @@ class ContactController extends Controller
                 try { \Illuminate\Support\Facades\Log::error('Telegram form notification error: ' . $e->getMessage()); } catch (\Throwable $_) {}
             }
 
-            // Tự động gửi Email thông báo Lead mới (Khóa 1-1: Cố vấn phụ trách + Admin BCC cố định)
+            // Tự động gửi Email thông báo Lead mới (Khóa 1-1: Cố vấn phụ trách + Admin BCC cố định; bỏ qua click Call/Zalo để tránh spam mail)
+            if (!in_array($rawType, ['LDP_CLICK_CALL', 'LDP_CLICK_ZALO'], true))
             try {
                 $contactData = $requestData['data'] ?? [];
                 $landingPageId = $contactData['landing_page_id'] ?? $requestData['landing_page_id'] ?? null;

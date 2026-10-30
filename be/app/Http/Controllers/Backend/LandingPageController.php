@@ -37,6 +37,8 @@ class LandingPageController extends Controller
                 'email' => $c->email,
                 'slug' => $c->slug,
                 'custom_domain' => $c->custom_domain,
+                'phone' => $c->phone,
+                'tracking_config' => $c->tracking_config ?? [],
             ]);
 
         $data['vehicles'] = Vehicle::where('status', Vehicle::STATUS_ACTIVE)
@@ -70,5 +72,36 @@ class LandingPageController extends Controller
             ]);
 
         return $data;
+    }
+
+    private function afterStore($request, $resource = null)
+    {
+        if (!$request->has('tracking_config')) {
+            return;
+        }
+        $consultantId = $request->input('sales_consultant_id') ?: ($resource->sales_consultant_id ?? null);
+        if (empty($consultantId)) {
+            return;
+        }
+        $rawConfig = $request->input('tracking_config');
+        if (!is_array($rawConfig)) {
+            return;
+        }
+        $consultant = SalesConsultant::find($consultantId);
+        if (!$consultant) {
+            return;
+        }
+        $keys = [
+            'google_ads_id', 'google_ads_form_label', 'google_ads_call_label', 'google_ads_zalo_label',
+            'gtm_id', 'facebook_pixel_id', 'tiktok_pixel_id',
+            'inject_head', 'inject_body_start', 'inject_body_end',
+        ];
+        $cleanConfig = [];
+        foreach ($keys as $k) {
+            $cleanConfig[$k] = trim((string) ($rawConfig[$k] ?? ''));
+        }
+        $consultant->tracking_config = $cleanConfig;
+        $consultant->save();
+        \App\Services\RevalidateService::revalidateForModel(SalesConsultant::class);
     }
 }

@@ -332,6 +332,14 @@
                 </div>
             </div>
 
+            <div v-show="activeFormTab === 'general'">
+                <TrackingConfigCard
+                    :config="form.tracking_config"
+                    :consultant-name="selectedConsultantName"
+                    :is-ldp-sync="true"
+                />
+            </div>
+
             <!-- ===== TAB 2: BLOCK EDITOR ===== -->
             <teleport to="body">
                 <div v-if="activeFormTab === 'builder'" class="fixed inset-0 z-[9999] bg-[#f6f6f7] flex flex-col font-sans select-none overflow-hidden h-screen w-screen">
@@ -721,6 +729,15 @@
                                     <li>Bấm nút <span class="font-semibold">📋 COPY</span> bên cạnh dòng xe tương ứng để copy link xe đó, hoặc bấm <span class="font-semibold">🔗 XEM</span> để mở trực tiếp trên trình duyệt.</li>
                                     <li>Dán đường dẫn đã copy vào bài chạy Facebook Ads, Google Ads hoặc gửi trực tiếp cho khách hàng qua Zalo/Messenger!</li>
                                     <li>Link chuẩn sẽ có dạng: <code>https://longkhanhford.com.vn/ldp/ten-cua-ban/ten-dong-xe</code></li>
+                                    <li>
+                                        <span class="font-semibold text-blue-800">🎯 Cài mã đo chuyển đổi Google Ads / Facebook Pixel / TikTok / GTM riêng của bạn:</span>
+                                        Kéo xuống khung <strong>"🎯 Mã Theo Dõi Quảng Cáo &amp; Chuyển Đổi (Đồng Bộ Theo Cố Vấn)"</strong> ngay bên dưới phần SEO để dán:
+                                        <ul class="list-disc pl-5 mt-1 space-y-1 text-xs">
+                                            <li><strong>Mã Google Ads Tag ID (AW-XXXXXXXXX)</strong> và <strong>3 Nhãn Chuyển Đổi (Conversion Label)</strong> riêng cho 3 hành động: <em>Điền Form</em>, <em>Bấm Gọi Điện</em>, <em>Bấm Chat Zalo</em>.</li>
+                                            <li>Hoặc điền <strong>GTM ID / Facebook Pixel ID / TikTok Pixel ID</strong> nếu chạy đa kênh.</li>
+                                            <li>Khi khách bấm Gọi điện hoặc Chat Zalo trên LDP, hệ thống vừa bắn chuyển đổi về Google/FB/TikTok Ads của bạn, vừa tự ghi nhận lượt click vào <strong>Quản lý Liên hệ</strong> &amp; <strong>Telegram</strong> kèm tên của bạn!</li>
+                                        </ul>
+                                    </li>
                                 </ol>
                             </div>
                         </div>
@@ -783,7 +800,9 @@
 </template>
 <script>
 import axios from 'axios';
+import TrackingConfigCard, { normalizeTrackingConfig } from '../SalesConsultants/TrackingConfigCard.vue';
 export default {
+    components: { TrackingConfigCard },
     props: ['schema', 'item', 'data'],
     data() {
         const fd = this.initFormData(this.item);
@@ -857,6 +876,10 @@ export default {
             handler(newVal) {
                 if (!newVal) return;
                 // Tự động gợi ý email của Cố vấn nếu ô sales_email đang để trống
+                const pickedSc = (this.salesConsultants || []).find(c => String(c.id) === String(newVal));
+                if (pickedSc) {
+                    this.formData.tracking_config = normalizeTrackingConfig(pickedSc.tracking_config);
+                }
                 if (!this.formData.sales_email) {
                     const consultant = (this.salesConsultants || []).find(c => String(c.id) === String(newVal));
                     if (consultant && consultant.email) {
@@ -867,6 +890,12 @@ export default {
         }
     },
     computed: {
+        selectedConsultantName() {
+            const scId = this.formData?.sales_consultant_id;
+            if (!scId) return '';
+            const c = (this.salesConsultants || []).find(sc => String(sc.id) === String(scId));
+            return c ? (c.name || c.label || '') : '';
+        },
         hasVehicleSelected() {
             if (Array.isArray(this.formData.vehicle_ids) && this.formData.vehicle_ids.length > 0) {
                 return true;
@@ -983,6 +1012,12 @@ export default {
                 const savedChat = (this.knownTelegramChats || []).find(c => String(c.sales_consultant_id) === String(consultantId));
                 form.telegram_chat_id = savedChat?.chat_id || '';
             }
+            const pickedConsultant = (this.salesConsultants || []).find(sc => String(sc.id) === String(consultantId));
+            if (pickedConsultant) {
+                const synced = normalizeTrackingConfig(pickedConsultant.tracking_config);
+                form.tracking_config = synced;
+                if (this.formData) this.formData.tracking_config = { ...synced };
+            }
             if (!form.sales_email) {
                 const c = (this.salesConsultants || []).find(sc => String(sc.id) === String(consultantId));
                 if (c && c.email) {
@@ -1051,6 +1086,10 @@ export default {
                 ...cleanItem,
                 sales_email: initialSalesEmail,
                 telegram_chat_id: cleanItem.telegram_chat_id || '',
+                tracking_config: normalizeTrackingConfig(
+                    (scList.find(sc => String(sc.id) === String(cleanItem.sales_consultant_id)) || {}).tracking_config
+                    || cleanItem?.sales_consultant?.tracking_config
+                ),
                 vehicle_ids: vehicleIds,
                 promotions: cleanItem.promotions || {
                     global_promotion_ids: [],

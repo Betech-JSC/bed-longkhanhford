@@ -4,6 +4,21 @@
             <div class="card">
                 <div class="card-header">{{ tt('models.setting.general_information') }}</div>
                 <div class="card-body">
+                    <div
+                        v-if="form.type === 'LDP_CLICK_CALL' || form.type === 'LDP_CLICK_ZALO'"
+                        class="mb-4 p-3.5 rounded-lg border text-xs space-y-1"
+                        :class="form.type === 'LDP_CLICK_CALL' ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-blue-50 border-blue-200 text-blue-900'"
+                    >
+                        <div class="font-bold text-sm">
+                            {{ form.type === 'LDP_CLICK_CALL' ? '📞 Lượt Click Nút Gọi Điện Trực Tiếp Trên LDP' : '💬 Lượt Click Nút Chat Zalo Trên LDP' }}
+                        </div>
+                        <div v-if="form.sales_consultant?.name || form.data_contact?.['Cố vấn phụ trách']">
+                            <strong>Cố vấn phụ trách:</strong> {{ form.data_contact?.['Cố vấn phụ trách'] || form.sales_consultant?.name }}
+                        </div>
+                        <div v-if="form.data_contact?.['Vị trí nút bấm trên trang'] || form.data_contact?.['Vị trí nút bấm']">
+                            <strong>Vị trí nút bấm:</strong> {{ form.data_contact?.['Vị trí nút bấm trên trang'] || form.data_contact?.['Vị trí nút bấm'] }}
+                        </div>
+                    </div>
                     <template v-for="(key, field) in form.data_contact" :key="field">
                         <div v-if="typeof form.data_contact[field] === 'object' && form.data_contact[field] != null">
                             <div class="pb-3 text-sm font-medium select-none">

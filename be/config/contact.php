@@ -182,6 +182,26 @@ return [
             ],
             'route' => 'applies',
         ],
+        'LDP_CLICK_CALL' => [
+            'title' => '📞 Click Gọi Điện LDP',
+            'columns' => ['Name', 'Phone'],
+            'all_columns' => ['Name', 'Phone'],
+            'rules' => [
+                'Phone' => 'nullable',
+                'Name' => 'nullable',
+            ],
+            'route' => 'contacts',
+        ],
+        'LDP_CLICK_ZALO' => [
+            'title' => '💬 Click Chat Zalo LDP',
+            'columns' => ['Name', 'Phone'],
+            'all_columns' => ['Name', 'Phone'],
+            'rules' => [
+                'Phone' => 'nullable',
+                'Name' => 'nullable',
+            ],
+            'route' => 'contacts',
+        ],
     ],
     'message' => [
         'new_contact' => 'Bạn nhận được liên hệ mới',

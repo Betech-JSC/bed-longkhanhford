@@ -120,7 +120,20 @@ class TelegramService
             $message .= "👨‍💼 *Cố vấn phụ trách:* " . $this->escapeMarkdown($leadData['consultant_name']) . "\n";
         }
         $message .= "👤 *Khách hàng:* {$name}\n";
-        $message .= "📞 *Số điện thoại:* `{$phone}`\n";
+        if (in_array($type, ['ldp_click_call', 'ldp_click_zalo'], true)) {
+            if (!empty($leadData['consultant_phone'])) {
+                $scPhone = str_replace(['`', '\\'], '', (string) $leadData['consultant_phone']);
+                $message .= "📱 *SĐT/Zalo Sale nhận liên hệ:* `{$scPhone}`\n";
+            }
+            if (!empty($leadData['button_position'])) {
+                $message .= "🎯 *Vị trí nút bấm:* " . $this->escapeMarkdown($leadData['button_position']) . "\n";
+            }
+            if (!empty($leadData['page_url'])) {
+                $message .= "🔗 *Trang LDP:* " . $this->escapeMarkdown($leadData['page_url']) . "\n";
+            }
+        } else {
+            $message .= "📞 *Số điện thoại:* `{$phone}`\n";
+        }
 
         if (!empty($email)) {
             $message .= "📧 *Email:* {$email}\n";

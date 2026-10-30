@@ -268,13 +268,14 @@ export const registrationFeesAPI = {
 export const contactsAPI = {
   submit: (payload: {
     contact: {
-      type: 'CONTACT_FORM' | 'ADVISE_FORM' | 'APPLY_FORM' | 'TEST_DRIVE' | 'TEST_DRIVE_SURVEY' | 'SERVICE_SURVEY' | 'SERVICE_BOOKING' | 'REPAIR_QUOTE_FORM' | 'NEW_CAR_QUOTE_FORM';
+      type: 'CONTACT_FORM' | 'ADVISE_FORM' | 'APPLY_FORM' | 'TEST_DRIVE' | 'TEST_DRIVE_SURVEY' | 'SERVICE_SURVEY' | 'SERVICE_BOOKING' | 'REPAIR_QUOTE_FORM' | 'NEW_CAR_QUOTE_FORM' | 'LDP_CLICK_CALL' | 'LDP_CLICK_ZALO';
       sales_consultant_id?: number;
       data: Record<string, any>;
     };
-  }) => fetchAPI<{ success: boolean; data: any; message?: string }>('/contacts', {
+  }, options?: { keepalive?: boolean }) => fetchAPI<{ success: boolean; data: any; message?: string }>('/contacts', {
     method: 'POST',
     body: JSON.stringify(payload),
+    keepalive: options?.keepalive,
   }),
 };
 

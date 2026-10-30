@@ -32,6 +32,7 @@ import { bannersAPI, postsAPI, vehiclesAPI, servicesAPI, customerHandoversAPI, c
 import SafeImage from "@/components/shared/SafeImage";
 import LdpUsedVehiclesBlock from "@/components/blocks/LdpUsedVehiclesBlock";
 import VehicleLayoutClient, { useVehicle } from "./VehicleLayoutClient";
+import { fireLdpFormConversion } from "./LdpTrackingManager";
 import { formatPersonName } from "@/lib/formatters";
 
 // Custom SVG Icons
@@ -529,6 +530,7 @@ function LdpHomeInner({
       }
 
       setLeadSubmitStatus("success");
+      if (salesConsultant) fireLdpFormConversion({ salesConsultant, formType: "ADVISE_FORM", targetVehicleName: pTitle, customerPhone: leadPhone.trim() });
       setLeadName("");
       setLeadPhone("");
       setLeadNote("");
@@ -576,6 +578,7 @@ function LdpHomeInner({
         return;
       }
       setSrvStatus("success");
+      if (salesConsultant) fireLdpFormConversion({ salesConsultant, formType: "SERVICE_BOOKING", targetVehicleName: srvForm.plate.trim(), customerPhone: srvForm.phone });
       setSrvForm({ name: "", phone: "", plate: "", date: "", location: "Tại đại lý", note: "" });
     } catch (err: any) {
       setSrvStatus("error");
@@ -1430,6 +1433,7 @@ export default function LdpHomeClient(props: LdpHomeClientProps) {
     <VehicleLayoutClient
       initialVehicle={leadVehicle || allVehicles[0]}
       allVehicles={allVehicles}
+      salesConsultant={salesConsultant}
       salesConsultantId={salesConsultant?.id}
       salesEmail={salesEmail || salesConsultant?.email}
       landingPageId={typeof landingPageId === "string" ? parseInt(landingPageId, 10) : landingPageId}
