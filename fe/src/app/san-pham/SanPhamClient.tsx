@@ -22,6 +22,7 @@ import { vehiclesAPI } from "@/lib/api";
 import { formatPriceShort } from "@/lib/rolling-cost";
 import { getPopularVehicleImage, handleImageError, resolveImageUrl } from "@/lib/site-assets";
 import BookingBanner from "@/components/services/BookingBanner";
+import { groupVehiclesBySeries } from "@/lib/group-vehicles";
 
 const staticCategories = [
   { slug: "suv", title: "SUV" },
@@ -36,7 +37,9 @@ export interface SanPhamClientProps {
 }
 
 export default function SanPhamClient({ initialVehicles, initialCategories, initialCategory }: SanPhamClientProps) {
-  const [apiVehicles, setApiVehicles] = useState<any[]>(initialVehicles || []);
+  const [apiVehicles, setApiVehicles] = useState<any[]>(
+    initialVehicles && initialVehicles.length > 0 ? groupVehiclesBySeries(initialVehicles) : []
+  );
   const [apiCategories, setApiCategories] = useState<any[]>(initialCategories || []);
   const [loading, setLoading] = useState(!initialVehicles?.length);
 
@@ -113,7 +116,7 @@ export default function SanPhamClient({ initialVehicles, initialCategories, init
 
         const vItems = (vehiclesData as any)?.data || vehiclesData;
         if (Array.isArray(vItems) && vItems.length > 0) {
-          setApiVehicles(vItems);
+          setApiVehicles(groupVehiclesBySeries(vItems));
         }
 
         const cItems = (categoriesData as any)?.data || categoriesData;

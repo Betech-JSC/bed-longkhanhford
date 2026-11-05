@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import { vehicles, Vehicle } from "@/data/vehicles";
 import { getPopularVehicleImage, siteAssets, handleImageError, resolveImageUrl } from "@/lib/site-assets";
+import { groupVehiclesBySeries } from "@/lib/group-vehicles";
 // API imports removed — data is fetched server-side and passed via props
 import { motion } from "motion/react";
 import SafeImage from "@/components/shared/SafeImage";
@@ -195,7 +196,9 @@ export default function HomeClient({
   const [heroSlides] = useState<any[]>(initialHeroSlides);
   const [homeArticles] = useState<any[]>(initialArticles);
   const [categories] = useState<any[]>(initialCategories);
-  const [vehiclesList] = useState<any[]>(initialVehicles);
+  const [vehiclesList] = useState<any[]>(() =>
+    initialVehicles && initialVehicles.length > 0 ? groupVehiclesBySeries(initialVehicles) : []
+  );
   const [brandItems] = useState<any[]>(initialBrandItems);
   const [servicesList] = useState<any[]>(initialServices);
   const [customerHandovers] = useState<any[]>(initialHandovers);

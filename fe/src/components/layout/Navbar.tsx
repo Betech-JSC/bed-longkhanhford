@@ -7,6 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { MapPin, Mail, Phone, Search, ChevronDown, ChevronRight, X, Download, FileText } from "lucide-react";
 import { vehiclesAPI, accessoriesAPI, servicesAPI, usedVehiclesAPI } from "@/lib/api";
 import { getPopularVehicleImage, handleImageError, resolveImageUrl } from "@/lib/site-assets";
+import { groupVehiclesBySeries } from "@/lib/group-vehicles";
 
 type DropdownItem = {
   name: string;
@@ -214,7 +215,7 @@ export default function Navbar() {
           setCategoriesList(cats);
         }
         if (Array.isArray(vehs) && vehs.length > 0) {
-          setVehiclesList(vehs);
+          setVehiclesList(groupVehiclesBySeries(vehs));
         }
         if (Array.isArray(accs) && accs.length > 0) {
           setAccessoriesList(accs);
