@@ -55,6 +55,11 @@ class AdminController extends Controller
 
     private function afterForm($item)
     {
+        if (is_array($item)) {
+            $item['role_id'] = null;
+            return $item;
+        }
+
         if (!current_admin()->hasRole('Super Admin') && $item->hasRole('Super Admin')) {
             abort(403);
         }

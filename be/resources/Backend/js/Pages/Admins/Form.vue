@@ -46,7 +46,7 @@
                     class="w-full"
                     v-model="form.role_id"
                     :field="{
-                        name: 'role',
+                        name: 'role_id',
                         type: 'radio_list',
                         keyBy: 'id',
                         labelBy: 'name',
@@ -90,6 +90,7 @@ export default {
     data() {
         return {
             formData: {
+                role_id: this.item?.role_id ?? null,
                 password: '',
                 password_confirmation: '',
                 ...this.item,
