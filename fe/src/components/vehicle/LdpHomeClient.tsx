@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -178,9 +178,36 @@ const formatArticlesList = (items: any[]) => {
   return [];
 };
 
+function HandoverCardItem({ item, onClick, isMarquee = false }: { item: any; onClick: () => void; isMarquee?: boolean }) {
+  return (
+    <div
+      onClick={onClick}
+      className={`relative overflow-hidden rounded-xl aspect-[4/3] group cursor-pointer bg-gray-100 transition-all duration-300 block shadow-sm hover:shadow-md border border-gray-100 ${isMarquee ? 'flex-shrink-0' : ''}`}
+      style={isMarquee ? { width: "var(--card-width-handover, 360px)" } : undefined}
+    >
+      <Image
+        src={resolveImageUrl(item.image_url || item.image?.url || item.image) || "/assets/customer_handover_everest.webp"}
+        alt={item.title || "Tri ân khách hàng"}
+        fill
+        sizes={isMarquee ? "(max-width: 768px) 280px, 360px" : "(max-width: 768px) 100vw, 360px"}
+        className="object-cover group-hover:scale-103 transition-transform duration-500"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+        <h3 className="text-white text-base font-semibold leading-snug transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+          {item.title}
+        </h3>
+        <p className="text-white/70 text-xs mt-1.5 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300 delay-75">
+          Xem phóng to hình ảnh
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export type LdpHomeClientProps = {
   salesConsultant: any;
   allVehicles?: any[];
+  assignedVehicles?: any[];
   leadVehicle?: any;
   landingPageId?: number | string;
   salesEmail?: string;
@@ -195,6 +222,7 @@ export type LdpHomeClientProps = {
 function LdpHomeInner({
   salesConsultant,
   allVehicles = [],
+  assignedVehicles = [],
   leadVehicle,
   landingPageId,
   salesEmail,
@@ -297,10 +325,23 @@ function LdpHomeInner({
   const [activeServiceIndex, setActiveServiceIndex] = useState<number>(0);
   const [isServiceHovered, setIsServiceHovered] = useState<boolean>(false);
 
-  // News & Handovers State
+  // News & Handovers State (Ưu tiên kho ảnh của TVBH, fallback về ảnh chung đại lý)
   const [homeArticles, setHomeArticles] = useState<any[]>(() => formatArticlesList(initialArticles));
   const [activeNewsTab, setActiveNewsTab] = useState<number>(3); // 3: Khuyến Mãi
-  const [customerHandovers, setCustomerHandovers] = useState<any[]>(initialHandovers);
+  const [fallbackHandovers, setFallbackHandovers] = useState<any[]>(initialHandovers);
+  const consultantGallery = useMemo(() => {
+    return Array.isArray(salesConsultant?.gallery)
+      ? salesConsultant.gallery
+          .map((g: any, idx: number) => ({
+            id: g.id || `consultant-handover-${idx}`,
+            image_url: resolveImageUrl(g.image_url || g.image || g.path),
+            title: g.caption || g.title || (salesConsultant?.name ? `Lễ bàn giao xe - CVKD ${formatPersonName(salesConsultant.name)}` : "Lễ bàn giao xe Long Khánh Ford"),
+          }))
+          .filter((g: any) => Boolean(g.image_url))
+      : [];
+  }, [salesConsultant?.gallery, salesConsultant?.name]);
+
+  const customerHandovers = consultantGallery.length > 0 ? consultantGallery : fallbackHandovers;
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const isInitialPostsMount = useRef(true);
 
@@ -434,7 +475,7 @@ function LdpHomeInner({
       if (Array.isArray(sItems) && sItems.length > 0) setServicesList(sItems);
 
       const hItems = (hRes as any)?.data || hRes;
-      if (Array.isArray(hItems) && hItems.length > 0) setCustomerHandovers(hItems);
+      if (Array.isArray(hItems) && hItems.length > 0) setFallbackHandovers(hItems);
 
       const pItems = (pRes as any)?.posts?.data || (pRes as any)?.data || pRes;
       if (Array.isArray(pItems) && pItems.length > 0) setHomeArticles(formatArticlesList(pItems));
@@ -598,13 +639,9 @@ function LdpHomeInner({
     <div className="w-full min-h-screen bg-white relative pb-16 md:pb-0 font-sans">
       {/* 0. STICKY VEHICLE SWITCHER (MULTI-VEHICLE JUMP BAR) */}
       {allVehicles && allVehicles.length > 1 && (
-        <div id="ldp-vehicles-tabs" className="bg-[#0b192e] text-white py-3.5 px-4 border-y border-white/10 sticky top-0 z-[40] shadow-md scroll-mt-2">
-          <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <div className="flex items-center gap-2 text-xs font-semibold text-blue-300 shrink-0">
-              <Car className="w-4 h-4 text-[#0562D2]" />
-              <span>Dòng xe Chuyên viên kinh doanh {formatPersonName(salesConsultant?.name)} phụ trách ({allVehicles.length}):</span>
-            </div>
-            <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0 scrollbar-none">
+        <div id="ldp-vehicles-tabs" className="bg-[#0b192e] text-white py-2.5 px-4 border-y border-white/10 sticky top-0 z-[40] shadow-md scroll-mt-2">
+          <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] flex items-center justify-center">
+            <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto justify-start sm:justify-center pb-1 sm:pb-0 scrollbar-none">
               {allVehicles.map((v: any) => (
                 <Link
                   key={v.id}
@@ -1163,47 +1200,33 @@ function LdpHomeInner({
               </div>
             </div>
 
-            {/* Slider track container — continuous infinite marquee */}
-            <div className="relative w-full overflow-hidden py-4 select-none">
-              <div
-                className="animate-marquee-continuous gap-[var(--card-gap-handover,24px)]"
-              >
-                {[...customerHandovers, ...customerHandovers].map((item, idx) => {
-                  const originalIdx = idx % customerHandovers.length;
-                  return (
-                    <div
+            {/* Nếu từ 1-3 ảnh: hiển thị lưới căn giữa; từ 4 ảnh trở lên: chạy marquee liên tục */}
+            {customerHandovers.length <= 3 ? (
+              <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px]">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {customerHandovers.map((item: any, idx: number) => (
+                    <HandoverCardItem
                       key={`${item.id}-${idx}`}
-                      onClick={() => {
-                        setLightboxIndex(originalIdx);
-                      }}
-                      className="relative overflow-hidden rounded-xl aspect-[4/3] group cursor-pointer bg-gray-100 flex-shrink-0 transition-all duration-300 block shadow-sm hover:shadow-md border border-gray-100"
-                      style={{
-                        width: "var(--card-width-handover, 360px)",
-                      }}
-                    >
-                      <Image
-                        src={resolveImageUrl(item.image_url || item.image?.url || item.image) || "/assets/customer_handover_everest.webp"}
-                        alt={item.title || "Tri ân khách hàng"}
-                        fill
-                        sizes="(max-width: 768px) 280px, 360px"
-                        className="object-cover group-hover:scale-103 transition-transform duration-500"
-                        onError={handleImageError}
-                      />
-
-                      {/* Premium gradient overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
-                        <h3 className="text-white text-base font-semibold leading-snug transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                          {item.title}
-                        </h3>
-                        <p className="text-white/70 text-xs mt-1.5 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300 delay-75">
-                          Xem phóng to hình ảnh
-                        </p>
-                      </div>
-                    </div>
-                  );
-                })}
+                      item={item}
+                      onClick={() => setLightboxIndex(idx)}
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="relative w-full overflow-hidden py-4 select-none">
+                <div className="animate-marquee-continuous gap-[var(--card-gap-handover,24px)]">
+                  {[...customerHandovers, ...customerHandovers].map((item, idx) => (
+                    <HandoverCardItem
+                      key={`${item.id}-${idx}`}
+                      item={item}
+                      isMarquee
+                      onClick={() => setLightboxIndex(idx % customerHandovers.length)}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
 
           </div>
         </section>

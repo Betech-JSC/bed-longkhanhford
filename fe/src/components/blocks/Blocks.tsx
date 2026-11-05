@@ -159,6 +159,7 @@ export default function Blocks({
                 currentVehicle={vehicle}
                 anchorId={block.anchorId}
                 isEditMode={isEditMode}
+                openQuoteDrawer={openQuoteDrawer}
               />
             );
             break;

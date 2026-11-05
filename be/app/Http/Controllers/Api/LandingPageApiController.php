@@ -273,6 +273,15 @@ class LandingPageApiController extends Controller
             ->first();
 
         if (!$ldp) {
+            // Fallback: Tìm LDP hoạt động bất kỳ của cố vấn để lấy thông tin liên hệ & ưu đãi
+            $ldp = LandingPage::query()
+                ->where('status', LandingPage::STATUS_ACTIVE)
+                ->where('sales_consultant_id', $consultant->id)
+                ->orderByDesc('updated_at')
+                ->first();
+        }
+
+        if (!$ldp) {
             return $this->failure(__('Không tìm thấy Landing Page của cố vấn bán hàng cho dòng xe này'), 404);
         }
 
