@@ -6,7 +6,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Hash;
-use JamstackVietnam\Core\Models\Admin;
+use App\Models\Admin;
 use JamstackVietnam\Core\Traits\HasCrudActions;
 
 class AdminController extends Controller
@@ -37,6 +37,21 @@ class AdminController extends Controller
         return $rules;
     }
 
+    private function beforeForm($data)
+    {
+        $data['sales_consultants'] = \App\Models\Vehicle\SalesConsultant::where('status', 'ACTIVE')
+            ->sortByPosition()
+            ->get()
+            ->map(fn($c) => [
+                'id' => $c->id,
+                'name' => $c->name,
+                'email' => $c->email,
+                'phone' => $c->phone,
+            ]);
+
+        return $data;
+    }
+
     private function afterForm($item)
     {
         if (!current_admin()->hasRole('Super Admin') && $item->hasRole('Super Admin')) {
@@ -48,7 +63,7 @@ class AdminController extends Controller
 
     private function beforeIndex($query)
     {
-        $query->orderBy('id', 'DESC');
+        $query->orderByRaw('CASE WHEN id = 1 THEN 0 ELSE 1 END ASC')->orderBy('id', 'ASC');
 
         if (current_admin()->hasRole('Super Admin')) {
             $query->whereHas('roles', function ($query) {

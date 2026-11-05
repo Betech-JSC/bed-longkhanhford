@@ -442,7 +442,9 @@
                             name: 'sales_consultant_id',
                             label: 'Cố vấn phụ trách (Sales)',
                             options: salesConsultants,
+                            disabled: Boolean(data?.is_sale_user),
                             emptyLabel: '-- Chọn cố vấn bán hàng --',
+                            help: data?.is_sale_user ? 'Tài khoản của bạn đã được gắn cố định với hồ sơ Cố vấn này.' : null,
                         }"
                         @update:modelValue="onSalesConsultantChange(form, $event)"
                     />

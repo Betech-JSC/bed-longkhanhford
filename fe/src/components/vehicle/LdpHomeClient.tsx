@@ -142,27 +142,62 @@ const techSlides = [
   }
 ];
 
-const formatBannersList = (items: any[]) => {
-  if (Array.isArray(items) && items.length > 0) {
-    return items.map((item: any) => ({
-      title: item.title || "",
-      subtitle: item.subtitle || "",
-      image: resolveImageUrl(item.image_url || item.image) || siteAssets.heroSlides[0],
-      imageMobile: resolveImageUrl(item.image_mobile_url || item.image_url || item.image) || siteAssets.heroSlides[0],
-      buttonText: item.button_text || "Đăng ký lái thử",
-      buttonLink: item.button_link || "#showroom"
-    }));
+interface LdpBannerSlide {
+  title: string;
+  subtitle: string;
+  image: string;
+  imageMobile?: string;
+  buttonText?: string;
+  buttonLink?: string;
+  isConsultantSlide?: boolean;
+  roleTitle?: string;
+  consultantName?: string;
+}
+
+const formatBannersList = (items: any[], salesConsultant?: any): LdpBannerSlide[] => {
+  const coverUrl = resolveImageUrl(salesConsultant?.cover_image_url || salesConsultant?.cover_image);
+  const consultantName = salesConsultant?.name ? formatPersonName(salesConsultant.name) : "";
+
+  let baseList: LdpBannerSlide[] = Array.isArray(items) && items.length > 0
+    ? items.map((item: any) => ({
+        title: item.title || "",
+        subtitle: item.subtitle || "",
+        image: resolveImageUrl(item.image_url || item.image) || siteAssets.heroSlides[0],
+        imageMobile: resolveImageUrl(item.image_mobile_url || item.image_url || item.image) || siteAssets.heroSlides[0],
+        buttonText: item.button_text || "Đăng ký lái thử",
+        buttonLink: item.button_link || "#showroom"
+      }))
+    : [
+        {
+          title: "KHÁM PHÁ CÁC DÒNG XE FORD THẾ HỆ MỚI",
+          subtitle: "Đại lý ủy quyền 3S chính thức của Ford Việt Nam tại Long Khánh",
+          image: siteAssets.heroSlides[0] || "/showroom_bg.webp",
+          imageMobile: siteAssets.heroSlides[0] || "/showroom_bg.webp",
+          buttonText: "Đăng ký lái thử",
+          buttonLink: "#showroom"
+        }
+      ];
+
+  if (coverUrl) {
+    const roleTitle = (salesConsultant?.job_title || "CHUYÊN VIÊN KINH DOANH").toUpperCase();
+    const formattedName = consultantName ? consultantName.toUpperCase() : "";
+    baseList = [
+      {
+        isConsultantSlide: true,
+        roleTitle,
+        consultantName: formattedName,
+        title: formattedName ? `${roleTitle} ${formattedName}` : baseList[0].title,
+        subtitle: salesConsultant?.short_bio || "Tư vấn tận tâm — Giá lăn bánh ưu đãi nhất — Giao xe tận nhà tại Long Khánh Ford",
+        image: coverUrl,
+        imageMobile: coverUrl,
+        buttonText: "Đăng ký lái thử",
+        buttonLink: "#showroom"
+      },
+      ...baseList
+    ];
   }
-  return [
-    {
-      title: "KHÁM PHÁ CÁC DÒNG XE FORD THẾ HỆ MỚI",
-      subtitle: "Đại lý ủy quyền 3S chính thức của Ford Việt Nam tại Long Khánh",
-      image: siteAssets.heroSlides[0] || "/showroom_bg.webp",
-      imageMobile: siteAssets.heroSlides[0] || "/showroom_bg.webp",
-      buttonText: "Đăng ký lái thử",
-      buttonLink: "#showroom"
-    }
-  ];
+
+  return baseList;
 };
 
 const formatArticlesList = (items: any[]) => {
@@ -241,7 +276,7 @@ function LdpHomeInner({
   const consultantSlug = salesConsultant?.slug || salesConsultant?.name?.toLowerCase().trim().replace(/\s+/g, "-") || "tu-van";
 
   // Banner State
-  const [heroSlides, setHeroSlides] = useState<any[]>(() => formatBannersList(initialBanners));
+  const [heroSlides, setHeroSlides] = useState<LdpBannerSlide[]>(() => formatBannersList(initialBanners, salesConsultant));
   const [activeHeroIndex, setActiveHeroIndex] = useState<number>(0);
 
   // Showroom & Filter State
@@ -455,7 +490,7 @@ function LdpHomeInner({
       postsAPI.getAll({ categories: 3 }).catch(() => null),
     ]).then(([bannersRes, catRes, vRes, sRes, hRes, pRes]) => {
       const bItems = (bannersRes as any)?.data || bannersRes;
-      if (Array.isArray(bItems) && bItems.length > 0) setHeroSlides(formatBannersList(bItems));
+      if (Array.isArray(bItems) && bItems.length > 0) setHeroSlides(formatBannersList(bItems, salesConsultant));
 
       const cItems = (catRes as any)?.data || catRes;
       if (Array.isArray(cItems) && cItems.length > 0) setCategories(cItems);
@@ -648,7 +683,7 @@ function LdpHomeInner({
       />
 
       {/* 1. HERO BANNER SECTION (SLIDER) */}
-      <section className="relative w-full h-[580px] md:h-[680px] overflow-hidden bg-black select-none">
+      <section className="relative w-full h-[62vh] min-h-[460px] sm:h-[70vh] sm:min-h-[520px] md:h-[680px] overflow-hidden bg-black select-none">
         {heroSlides.map((slide, idx) => (
           <div
             key={idx}
@@ -663,7 +698,9 @@ function LdpHomeInner({
                 fill
                 priority={idx === 0}
                 sizes="100vw"
-                className="object-cover w-full h-full object-top"
+                className={`object-cover w-full h-full ${
+                  slide.isConsultantSlide ? "object-[15%_center]" : "object-center"
+                }`}
               />
             </div>
             <div className="block md:hidden relative w-full h-full">
@@ -673,15 +710,17 @@ function LdpHomeInner({
                 fill
                 priority={idx === 0}
                 sizes="100vw"
-                className="object-cover w-full h-full object-top"
+                className={`object-cover w-full h-full ${
+                  slide.isConsultantSlide ? "object-[15%_center]" : "object-center"
+                }`}
               />
             </div>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/20" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/20" />
           </div>
         ))}
 
         {/* Hero Content Area */}
-        <div className="max-w-[1440px] mx-auto w-full h-full px-6 xl:px-[144px] flex flex-col justify-end text-center relative z-10 pb-16 md:pb-20">
+        <div className="max-w-[1440px] mx-auto w-full h-full px-6 xl:px-[144px] flex flex-col justify-end text-center relative z-10 pb-10 sm:pb-14 md:pb-20">
           <div className="max-w-3xl mx-auto flex flex-col items-center">
             {salesConsultant?.name && (
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-xs font-semibold mb-4 border border-white/30">
@@ -689,10 +728,21 @@ function LdpHomeInner({
                 <span>Trang giới thiệu chính thức: Chuyên viên kinh doanh {formatPersonName(salesConsultant.name)}</span>
               </div>
             )}
-            <h1 className="text-2xl sm:text-4xl lg:text-[44px] font-bold tracking-tight leading-[1.2] text-white uppercase">
-              {heroSlides[activeHeroIndex]?.title || "LONG KHÁNH FORD — ĐẠI LÝ 3S CHÍNH THỨC"}
-            </h1>
-            <p className="mt-3 text-sm sm:text-lg md:text-xl font-medium text-white/85 leading-snug max-w-[90%]">
+            {heroSlides[activeHeroIndex]?.consultantName ? (
+              <h1 className="flex flex-col items-center tracking-tight leading-tight uppercase animate-fade-in">
+                <span className="text-xs sm:text-lg md:text-2xl font-semibold text-white/90 tracking-wider">
+                  {heroSlides[activeHeroIndex].roleTitle || "CHUYÊN VIÊN KINH DOANH"}
+                </span>
+                <span className="text-xl sm:text-3xl lg:text-[44px] font-black text-white mt-1">
+                  {heroSlides[activeHeroIndex].consultantName}
+                </span>
+              </h1>
+            ) : (
+              <h1 className="text-2xl sm:text-4xl lg:text-[44px] font-bold tracking-tight leading-[1.2] text-white uppercase">
+                {heroSlides[activeHeroIndex]?.title || "LONG KHÁNH FORD — ĐẠI LÝ 3S CHÍNH THỨC"}
+              </h1>
+            )}
+            <p className="mt-2 sm:mt-3 text-xs sm:text-base md:text-xl font-medium text-white/85 leading-snug max-w-[92%]">
               {heroSlides[activeHeroIndex]?.subtitle || "Trải nghiệm sức mạnh, công nghệ và sự an toàn vượt trội cùng Ford Việt Nam."}
             </p>
 
