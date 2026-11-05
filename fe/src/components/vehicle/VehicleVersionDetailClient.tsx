@@ -68,6 +68,43 @@ export default function VehicleVersionDetailClient() {
     }
   };
 
+  // Cuộn thanh phiên bản qua lại
+  const versionsScrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const checkVersionsScroll = () => {
+    if (versionsScrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = versionsScrollRef.current;
+      setCanScrollLeft(scrollLeft > 10);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
+    }
+  };
+
+  useEffect(() => {
+    checkVersionsScroll();
+    window.addEventListener("resize", checkVersionsScroll);
+    return () => window.removeEventListener("resize", checkVersionsScroll);
+  }, [vehicle?.versions]);
+
+  useEffect(() => {
+    if (versionsScrollRef.current && vehicle?.versions?.[activeVersionIndex]) {
+      const activeEl = versionsScrollRef.current.children[activeVersionIndex] as HTMLElement;
+      if (activeEl) {
+        activeEl.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+      }
+      setTimeout(checkVersionsScroll, 350);
+    }
+  }, [activeVersionIndex]);
+
+  const scrollVersionsBar = (dir: "left" | "right") => {
+    if (versionsScrollRef.current) {
+      const amount = dir === "left" ? -350 : 350;
+      versionsScrollRef.current.scrollBy({ left: amount, behavior: "smooth" });
+      setTimeout(checkVersionsScroll, 350);
+    }
+  };
+
   // 360 Viewer & Color Selection States
   const [selectedColorIndex, setSelectedColorIndex] = useState<number | null>(null);
   const [viewType, setViewType] = useState<"exterior" | "interior">("exterior");
@@ -521,10 +558,44 @@ export default function VehicleVersionDetailClient() {
       {/* 1. Version Selector Section */}
       <section className="max-w-[1440px] mx-auto px-4 xl:px-[80px] w-full pt-12 pb-4">
         <div className="w-full text-left">
-          <h2 className="font-['Ford_Antenna',sans-serif] font-bold text-[20px] text-gray-900 mb-2">
-            Các phiên bản
-          </h2>
-          <div className="flex items-center overflow-x-auto scrollbar-none gap-6 py-2 w-full">
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="font-['Ford_Antenna',sans-serif] font-bold text-[20px] text-gray-900">
+              Các phiên bản
+            </h2>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => scrollVersionsBar("left")}
+                disabled={!canScrollLeft}
+                aria-label="Xem phiên bản trước"
+                className={`w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center transition-all ${
+                  canScrollLeft
+                    ? "bg-white text-gray-800 hover:bg-gray-100 hover:border-gray-300 shadow-xs cursor-pointer"
+                    : "bg-gray-50 text-gray-300 border-gray-100 cursor-not-allowed opacity-50"
+                }`}
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollVersionsBar("right")}
+                disabled={!canScrollRight}
+                aria-label="Xem phiên bản kế tiếp"
+                className={`w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center transition-all ${
+                  canScrollRight
+                    ? "bg-white text-gray-800 hover:bg-gray-100 hover:border-gray-300 shadow-xs cursor-pointer"
+                    : "bg-gray-50 text-gray-300 border-gray-100 cursor-not-allowed opacity-50"
+                }`}
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+          <div
+            ref={versionsScrollRef}
+            onScroll={checkVersionsScroll}
+            className="flex items-center overflow-x-auto scrollbar-none gap-6 py-2 w-full scroll-smooth"
+          >
             {vehicle.versions?.map((ver: any, idx: number) => {
               const isActive = activeVersionIndex === idx;
               const imgUrl = ver.image_url || vehicle.image_url;
