@@ -161,15 +161,17 @@ export default async function VehicleDetailLayout({
           return t.includes(familyKey) || s.includes(familyKey);
         });
 
-        const allVersions = apiVehicle.versions ? [...apiVehicle.versions] : [];
+        const allVersions: any[] = [];
         familyVehicles.forEach((fv: any) => {
           (fv.versions || []).forEach((ver: any) => {
-            const cleanName = (ver.name || "").toLowerCase().replace(/ford\s+/i, "").replace(/\s+1\.5l\s+at/i, "").trim();
-            const idx = allVersions.findIndex((x: any) => (x.name || "").toLowerCase().replace(/ford\s+/i, "").replace(/\s+1\.5l\s+at/i, "").trim() === cleanName);
-            if (idx === -1) {
+            const vName = (ver.name || "").trim().toLowerCase();
+            const verId = String(ver.id || "");
+            const exists = allVersions.some((x: any) => 
+              (verId && String(x.id) === verId) || 
+              (x.name || "").trim().toLowerCase() === vName
+            );
+            if (!exists) {
               allVersions.push(ver);
-            } else if ((fv.slug || "").includes("2026") || (fv.title || "").includes("2026")) {
-              allVersions[idx] = ver;
             }
           });
         });
