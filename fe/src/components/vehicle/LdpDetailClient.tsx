@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useVehicle } from "./VehicleLayoutClient";
 import VehicleLayoutClient from "./VehicleLayoutClient";
 import Blocks, { resolveImageUrl } from "@/components/blocks/Blocks";
+import LdpStickyNav from "./LdpStickyNav";
 import { Phone, FileText } from "lucide-react";
 import { formatPersonName } from "@/lib/formatters";
 
@@ -161,53 +162,14 @@ function LdpInnerContent({ salesConsultant, landingPageId, salesEmail, layoutBlo
       )}
 
       {/* MULTI-VEHICLE SWITCHER TAB BAR */}
-      {allVehicles && allVehicles.length > 1 && (
-        <div id="ldp-vehicles-tabs" className="bg-[#0b192e] text-white py-2.5 px-4 border-y border-white/10 sticky top-0 z-[40] shadow-md scroll-mt-2">
-          <div className="max-w-[1152px] mx-auto flex items-center justify-center">
-            <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto justify-start sm:justify-center pb-1 sm:pb-0 scrollbar-none">
-              {allVehicles.map((v: any) => {
-                const isActive = (v.slug || v.id) === (vehicle.slug || vehicle.id);
-                const vehicleSlug = v.slug || v.id;
-                const href = salesConsultant.custom_domain
-                  ? `/${vehicleSlug}`
-                  : `/ldp/${consultantSlug}/${vehicleSlug}`;
-                const targetHref = `${href}#ldp-vehicle-intro`;
-
-                return (
-                  <Link
-                    key={v.id}
-                    href={targetHref}
-                    scroll={false}
-                    onClick={(e) => {
-                      // Nếu chọn chính xe đang hiển thị, cuộn ngay xuống phần giới thiệu xe
-                      if (isActive) {
-                        e.preventDefault();
-                        scrollToVehicleIntro();
-                      }
-                    }}
-                    className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all shrink-0 border ${
-                      isActive
-                        ? "bg-[#0562D2] text-white border-[#0562D2] shadow-sm"
-                        : "bg-white/10 text-gray-200 border-white/10 hover:bg-white/20 hover:text-white"
-                    }`}
-                  >
-                    {v.title || v.name}
-                  </Link>
-                );
-              })}
-              {/* Nút Nhận báo giá nhanh trên thanh điều hướng ghim */}
-              <button
-                type="button"
-                onClick={() => openQuoteDrawer(vehicle?.id)}
-                className="ml-auto sm:ml-2 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all shrink-0 bg-[#0562D2] hover:bg-[#0451B0] text-white border border-[#0562D2] shadow-xs cursor-pointer flex items-center gap-1.5"
-              >
-                <FileText className="w-3.5 h-3.5" />
-                <span>Nhận báo giá</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <LdpStickyNav
+        vehicles={allVehicles}
+        activeSlug={vehicle?.slug || vehicle?.id}
+        consultantSlug={consultantSlug}
+        customDomain={salesConsultant?.custom_domain}
+        onOpenQuote={() => openQuoteDrawer(vehicle?.id)}
+        onActiveClick={scrollToVehicleIntro}
+      />
 
       {/* 2. CÁC BLOCK BÊN DƯỚI (theo đúng thứ tự admin kéo thả trong CMS) */}
       {!hasVehiclesGrid && (

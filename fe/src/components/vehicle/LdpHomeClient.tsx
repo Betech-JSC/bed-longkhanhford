@@ -33,6 +33,7 @@ import { bannersAPI, postsAPI, vehiclesAPI, servicesAPI, customerHandoversAPI, c
 import SafeImage from "@/components/shared/SafeImage";
 import LdpUsedVehiclesBlock from "@/components/blocks/LdpUsedVehiclesBlock";
 import VehicleLayoutClient, { useVehicle } from "./VehicleLayoutClient";
+import LdpStickyNav from "./LdpStickyNav";
 import { fireLdpFormConversion } from "./LdpTrackingManager";
 import { formatPersonName } from "@/lib/formatters";
 
@@ -639,31 +640,12 @@ function LdpHomeInner({
   return (
     <div className="w-full min-h-screen bg-white relative pb-16 md:pb-0 font-sans">
       {/* 0. STICKY VEHICLE SWITCHER (MULTI-VEHICLE JUMP BAR) */}
-      {allVehicles && allVehicles.length > 1 && (
-        <div id="ldp-vehicles-tabs" className="bg-[#0b192e] text-white py-2.5 px-4 border-y border-white/10 sticky top-0 z-[40] shadow-md scroll-mt-2">
-          <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] flex items-center justify-center">
-            <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto justify-start sm:justify-center pb-1 sm:pb-0 scrollbar-none">
-              {allVehicles.map((v: any) => (
-                <Link
-                  key={v.id}
-                  href={getVehicleLink(v)}
-                  className="px-4 py-1.5 rounded-full text-xs font-bold transition-all shrink-0 border bg-white/10 text-gray-200 border-white/10 hover:bg-[#0562D2] hover:text-white hover:border-[#0562D2]"
-                >
-                  {v.title || v.name}
-                </Link>
-              ))}
-              <button
-                type="button"
-                onClick={() => openQuoteDrawer(leadVehicle?.id || (allVehicles.length > 0 ? allVehicles[0]?.id : undefined))}
-                className="px-3.5 py-1.5 rounded-full text-xs font-bold transition-all shrink-0 bg-[#0562D2] hover:bg-[#0451B0] text-white border border-[#0562D2] shadow-xs cursor-pointer flex items-center gap-1.5 ml-1"
-              >
-                <FileText className="w-3.5 h-3.5" />
-                <span>Nhận báo giá</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <LdpStickyNav
+        vehicles={allVehicles}
+        consultantSlug={consultantSlug}
+        customDomain={salesConsultant?.custom_domain}
+        onOpenQuote={() => openQuoteDrawer(leadVehicle?.id || (allVehicles.length > 0 ? allVehicles[0]?.id : undefined))}
+      />
 
       {/* 1. HERO BANNER SECTION (SLIDER) */}
       <section className="relative w-full h-[580px] md:h-[680px] overflow-hidden bg-black select-none">
