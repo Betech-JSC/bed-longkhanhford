@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { ldpAPI } from "@/lib/api";
+import { ldpAPI, vehiclesAPI } from "@/lib/api";
 import { resolveImageUrl as resolveFileUrl } from "@/lib/site-assets";
 import LdpDetailClient from "@/components/vehicle/LdpDetailClient";
 
@@ -143,9 +143,15 @@ export default async function Page({ params }: Props) {
   const { salesSlug, vehicleSlug } = await params;
   
   let ldpData = null;
+  let homepageVehicles: any[] = [];
   try {
-    const res = await ldpAPI.getBySlug(salesSlug, vehicleSlug);
+    const [res, vehiclesRes] = await Promise.all([
+      ldpAPI.getBySlug(salesSlug, vehicleSlug),
+      vehiclesAPI.getAll().catch(() => null),
+    ]);
     ldpData = res?.data;
+    const vItems = (vehiclesRes as any)?.data || vehiclesRes;
+    if (Array.isArray(vItems)) homepageVehicles = vItems;
   } catch (err: any) {
     if (err?.status !== 404) {
       console.error("Error loading LDP page:", err);
@@ -161,5 +167,21 @@ export default async function Page({ params }: Props) {
     ldpData.vehicle = normalizeVehicle(ldpData.vehicle);
   }
 
-  return <LdpDetailClient initialData={ldpData} />;
+  const rawLdpVehicles = Array.isArray(ldpData.vehicles) && ldpData.vehicles.length > 0
+    ? ldpData.vehicles
+    : (ldpData.vehicle ? [ldpData.vehicle] : []);
+
+  // Đồng bộ 100% dòng xe đại lý: Giữ danh sách xe đồng bộ hoàn toàn giữa trang chủ LDP và trang chi tiết
+  const showroomVehicles = homepageVehicles.length > 0
+    ? homepageVehicles.map((hv: any) => {
+        const custom = rawLdpVehicles.find(
+          (v: any) =>
+            (v.slug && (v.slug === hv.slug || v.slug === hv.id)) ||
+            String(v.id) === String(hv.id)
+        );
+        return custom ? { ...hv, ...custom, id: hv.slug || hv.id } : { ...hv, id: hv.slug || hv.id };
+      })
+    : rawLdpVehicles;
+
+  return <LdpDetailClient initialData={ldpData} allVehicles={showroomVehicles} />;
 }

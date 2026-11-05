@@ -234,9 +234,17 @@ function LdpInnerContent({ salesConsultant, landingPageId, salesEmail, layoutBlo
   );
 }
 
-export default function LdpDetailClient({ initialData }: { initialData: any }) {
+export default function LdpDetailClient({
+  initialData,
+  allVehicles: passedAllVehicles,
+}: {
+  initialData: any;
+  allVehicles?: any[];
+}) {
   const { vehicle, vehicles, sales_consultant, layout_blocks, promotions } = initialData;
-  const allVehicles = (vehicles && vehicles.length > 0) ? vehicles : [vehicle];
+  const allVehicles = (passedAllVehicles && passedAllVehicles.length > 0)
+    ? passedAllVehicles
+    : ((vehicles && vehicles.length > 0) ? vehicles : [vehicle]);
 
   return (
     <VehicleLayoutClient
