@@ -24,7 +24,8 @@ import {
   Clock,
   Sparkles,
   Send,
-  MessageCircle
+  MessageCircle,
+  FileText
 } from "lucide-react";
 import { handleCtaFormClick } from "@/lib/scroll-helper";
 import { getPopularVehicleImage, siteAssets, handleImageError, resolveImageUrl } from "@/lib/site-assets";
@@ -651,6 +652,14 @@ function LdpHomeInner({
                   {v.title || v.name}
                 </Link>
               ))}
+              <button
+                type="button"
+                onClick={() => openQuoteDrawer(leadVehicle?.id || (allVehicles.length > 0 ? allVehicles[0]?.id : undefined))}
+                className="px-3.5 py-1.5 rounded-full text-xs font-bold transition-all shrink-0 bg-[#0562D2] hover:bg-[#0451B0] text-white border border-[#0562D2] shadow-xs cursor-pointer flex items-center gap-1.5 ml-1"
+              >
+                <FileText className="w-3.5 h-3.5" />
+                <span>Nhận báo giá</span>
+              </button>
             </div>
           </div>
         </div>
@@ -1296,7 +1305,18 @@ function LdpHomeInner({
 
       {/* 12. FLOATING SALES CONSULTANT WIDGET */}
       {/* Đã hạ vị trí bottom về mép dưới sau khi bỏ sticky bottom bar */}
-      <div className="fixed bottom-[calc(1.25rem+env(safe-area-inset-bottom,0px))] md:bottom-6 right-4 md:right-6 z-[99] flex flex-col items-end gap-2.5">
+      <div className="fixed bottom-[calc(1.25rem+env(safe-area-inset-bottom,0px))] md:bottom-6 right-4 md:right-6 z-[99] flex flex-col items-end gap-2.5 font-sans">
+        {/* Nút Nhận báo giá nổi bật */}
+        <button
+          type="button"
+          onClick={() => openQuoteDrawer(leadVehicle?.id || (allVehicles.length > 0 ? allVehicles[0]?.id : undefined))}
+          className="flex items-center gap-2 px-3.5 py-2.5 md:px-4 md:py-2.5 bg-[#0562D2] hover:bg-[#0451B0] text-white rounded-full shadow-lg shadow-blue-600/30 hover:scale-105 active:scale-95 transition-all duration-200 border border-blue-400/40 cursor-pointer"
+          title="Nhận Báo Giá Lăn Bánh"
+        >
+          <FileText className="w-4 h-4 md:w-5 md:h-5 flex-shrink-0" />
+          <span className="text-xs md:text-sm font-bold tracking-wide pr-1">Nhận báo giá</span>
+        </button>
+
         {finalZaloUrl && (
           <a
             href={finalZaloUrl}
