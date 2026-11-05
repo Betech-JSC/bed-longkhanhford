@@ -124,20 +124,57 @@ export default async function VehicleDetailLayout({
   let rawAllVehicles: any[] = [];
 
   try {
-    const detailRes = await vehiclesAPI.getBySlug(id).catch(() => null);
+    const [detailRes, allRes] = await Promise.all([
+      vehiclesAPI.getBySlug(id).catch(() => null),
+      vehiclesAPI.getAll({ with_versions: true }).catch(() => null),
+    ]);
     const vehicleObj = detailRes?.data || (detailRes?.id ? detailRes : null);
+    const items = (allRes as any)?.data || (Array.isArray(allRes) ? allRes : []);
+
     if (vehicleObj) {
       apiVehicle = vehicleObj;
-    } else {
-      const allRes = await vehiclesAPI.getAll({ with_versions: true }).catch(() => null);
-      const items = (allRes as any)?.data || (Array.isArray(allRes) ? allRes : []);
-      if (Array.isArray(items)) {
-        apiVehicle = items.find((v: any) => 
-          (v.slug && v.slug === id) || 
-          (v.seo_slug && v.seo_slug === id) || 
-          String(v.id) === id || 
-          v.title?.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") === id.toLowerCase()
-        ) || null;
+    } else if (Array.isArray(items)) {
+      apiVehicle = items.find((v: any) => 
+        (v.slug && v.slug === id) || 
+        (v.seo_slug && v.seo_slug === id) || 
+        String(v.id) === id || 
+        v.title?.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") === id.toLowerCase()
+      ) || null;
+    }
+
+    // Tự động gom toàn bộ các phiên bản cùng họ xe (ví dụ: Territory 2026 vào chung mục Territory)
+    if (apiVehicle && Array.isArray(items) && items.length > 0) {
+      const currentTitle = (apiVehicle.title || "").toLowerCase();
+      const currentSlug = (apiVehicle.slug || id || "").toLowerCase();
+      const familyKey = (currentTitle.includes("territory") || currentSlug.includes("territory"))
+        ? "territory"
+        : (currentTitle.includes("everest") || currentSlug.includes("everest")) ? "everest"
+        : (currentTitle.includes("raptor") || currentSlug.includes("raptor")) ? "raptor"
+        : (currentTitle.includes("ranger") || currentSlug.includes("ranger")) ? "ranger"
+        : (currentTitle.includes("transit") || currentSlug.includes("transit")) ? "transit"
+        : "";
+
+      if (familyKey) {
+        const familyVehicles = items.filter((v: any) => {
+          const t = (v.title || "").toLowerCase();
+          const s = (v.slug || "").toLowerCase();
+          return t.includes(familyKey) || s.includes(familyKey);
+        });
+
+        const allVersions = apiVehicle.versions ? [...apiVehicle.versions] : [];
+        familyVehicles.forEach((fv: any) => {
+          (fv.versions || []).forEach((ver: any) => {
+            const cleanName = (ver.name || "").toLowerCase().replace(/ford\s+/i, "").replace(/\s+1\.5l\s+at/i, "").trim();
+            const idx = allVersions.findIndex((x: any) => (x.name || "").toLowerCase().replace(/ford\s+/i, "").replace(/\s+1\.5l\s+at/i, "").trim() === cleanName);
+            if (idx === -1) {
+              allVersions.push(ver);
+            } else if ((fv.slug || "").includes("2026") || (fv.title || "").includes("2026")) {
+              allVersions[idx] = ver;
+            }
+          });
+        });
+        allVersions.sort((a: any, b: any) => parseFloat(b.price || 0) - parseFloat(a.price || 0));
+        apiVehicle.versions = allVersions;
       }
     }
   } catch (err) {
