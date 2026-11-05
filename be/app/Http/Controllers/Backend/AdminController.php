@@ -28,10 +28,10 @@ class AdminController extends Controller
     private function beforeStore($request, $rules)
     {
         if (!$request->input('id')) {
-            $request->validate([
-                'role_id' => 'required',
-                'password' => 'required|min:8|max:255|confirmed',
-            ]);
+            $rules['role_id'] = 'required';
+            $rules['password'] = 'required|min:8|max:255|confirmed';
+
+
         }
 
         return $rules;
@@ -48,6 +48,7 @@ class AdminController extends Controller
                 'email' => $c->email,
                 'phone' => $c->phone,
             ]);
+
 
         return $data;
     }

@@ -89,7 +89,11 @@ export default {
     props: ["item", "schema", "sales_consultants"],
     data() {
         return {
-            formData: this.item,
+            formData: {
+                password: '',
+                password_confirmation: '',
+                ...this.item,
+            },
         };
     },
     computed: {
