@@ -54,12 +54,15 @@ export default {
             if (!this.modelValue) return [];
 
             const selectedIds = this.modelValue.map((option) => {
-                if (typeof option === "object") {
-                    return option[this.keyBy].toString();
-                } else {
-                    return option;
+                if (option && typeof option === "object") {
+                    return option[this.keyBy] !== undefined && option[this.keyBy] !== null 
+                        ? option[this.keyBy].toString() 
+                        : '';
+                } else if (option !== null && option !== undefined) {
+                    return option.toString();
                 }
-            });
+                return '';
+            }).filter(Boolean);
 
             const sortedOptions = this.options
                 .filter((x) => selectedIds.includes(x[this.keyBy]))
