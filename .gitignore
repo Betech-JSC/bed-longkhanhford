@@ -44,6 +44,7 @@ fe/build/
 
 # IDEs
 .idea/
+/.vscode
 *.suo
 *.ntvs*
 *.njsproj
@@ -70,3 +71,4 @@ config.bat
 .venv_packages
 openspec/
 scripts/
+.env
