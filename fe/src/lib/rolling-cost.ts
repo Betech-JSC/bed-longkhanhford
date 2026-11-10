@@ -43,6 +43,36 @@ export function calculateRollingCost(
   const vehicleIdLower = String(vehicle.id || "").toLowerCase();
 
   // 1. Phân loại xe
+  const isTerritory =
+    vehicleNameLower.includes("territory") ||
+    vehicleIdLower.includes("territory") ||
+    String(vehicle.slug || "").toLowerCase().includes("territory");
+
+  // Quy tắc tính phí lăn bánh chuẩn cho Ford Territory (theo bảng giá niêm yết Long Khánh Ford)
+  if (isTerritory) {
+    const isHanoi = province.toLowerCase().includes("hà nội");
+    const isHCMC = province.toLowerCase().includes("hồ chí minh") || province.toLowerCase().includes("tphcm");
+    const registrationTax = Math.round(basePrice * (isHanoi ? 0.12 : 0.10));
+    const plateFee = (isHanoi || isHCMC) ? 14_000_000 : 140_000;
+    const registryFee = 140_000;
+    const roadFee = 1_560_000;
+    const insuranceFee = 531_000;
+    const serviceFee = 0;
+    const total =
+      basePrice + registrationTax + plateFee + registryFee + roadFee + insuranceFee + serviceFee;
+
+    return {
+      basePrice,
+      registrationTax,
+      plateFee,
+      registryFee,
+      roadFee,
+      insuranceFee,
+      serviceFee,
+      total,
+    };
+  }
+
   const isPickup =
     vehicle.type === "pickup" ||
     vehicleNameLower.includes("ranger") ||
