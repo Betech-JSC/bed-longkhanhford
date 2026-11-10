@@ -46,8 +46,20 @@ class HandleInertiaBackendRequests extends Middleware
             ];
         };
 
-        $newContact = Contact::where('status', Contact::STATUS_NEW)->get();
-        $todayContact = Contact::whereDate('created_at', Carbon::today())->get();
+        $consultantId = auth()->guard('admin')->user()?->sales_consultant_id;
+
+        $newContactQuery = Contact::where('status', Contact::STATUS_NEW);
+        $todayContactQuery = Contact::whereDate('created_at', Carbon::today());
+
+        if ($consultantId) {
+            $newContactQuery->where('sales_consultant_id', $consultantId);
+            $todayContactQuery->where('sales_consultant_id', $consultantId);
+        }
+
+        $newContact = $newContactQuery->get();
+        $todayContact = $todayContactQuery->get();
+
+
 
         $totalVehicles = Vehicle::count();
         $totalPosts = Post::count();
@@ -55,7 +67,11 @@ class HandleInertiaBackendRequests extends Middleware
         // Weekly stats for the last 7 days (efficient query with collection filter)
         $weeklyStats = [];
         $sevenDaysAgo = Carbon::today()->subDays(6);
-        $recentContacts = Contact::where('created_at', '>=', $sevenDaysAgo)->get();
+        $recentContactsQuery = Contact::where('created_at', '>=', $sevenDaysAgo);
+        if ($consultantId) {
+            $recentContactsQuery->where('sales_consultant_id', $consultantId);
+        }
+        $recentContacts = $recentContactsQuery->get();
 
         for ($i = 6; $i >= 0; $i--) {
             $date = Carbon::today()->subDays($i);
@@ -74,7 +90,11 @@ class HandleInertiaBackendRequests extends Middleware
         }
 
         // Type distribution for all time
-        $allContacts = Contact::select('type')->get();
+        $allContactsQuery = Contact::select('type');
+        if ($consultantId) {
+            $allContactsQuery->where('sales_consultant_id', $consultantId);
+        }
+        $allContacts = $allContactsQuery->get();
         $typeDistribution = [
             'contact' => $allContacts->where('type', 'CONTACT_FORM')->count(),
             'apply' => $allContacts->where('type', 'APPLY_FORM')->count(),

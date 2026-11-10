@@ -62,9 +62,9 @@ export const vehicles: Vehicle[] = [
     ],
     versions: [
       {
-        id: "titanium-x",
-        name: "Territory Titanium X 1.5L AT",
-        price: 954000000,
+        id: "platinum",
+        name: "Territory Platinum 1.5L AT",
+        price: 916000000,
         specs: {
           engine: "1.5L Ecoboost Xăng tăng áp",
           power: "160 Hp @ 5400-5700 rpm",
@@ -77,9 +77,9 @@ export const vehicles: Vehicle[] = [
         }
       },
       {
-        id: "sport",
-        name: "Territory Sport 1.5L AT",
-        price: 909000000,
+        id: "titanium-x",
+        name: "Territory Titanium X 1.5L AT",
+        price: 875000000,
         specs: {
           engine: "1.5L Ecoboost Xăng tăng áp",
           power: "160 Hp @ 5400-5700 rpm",
@@ -94,7 +94,7 @@ export const vehicles: Vehicle[] = [
       {
         id: "titanium",
         name: "Territory Titanium 1.5L AT",
-        price: 899000000,
+        price: 819000000,
         specs: {
           engine: "1.5L Ecoboost Xăng tăng áp",
           power: "160 Hp @ 5400-5700 rpm",

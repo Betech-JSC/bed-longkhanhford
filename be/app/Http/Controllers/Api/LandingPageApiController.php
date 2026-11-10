@@ -248,12 +248,41 @@ class LandingPageApiController extends Controller
         // 2. Tìm dòng xe
         $vehicle = Vehicle::query()
             ->where('status', Vehicle::STATUS_ACTIVE)
-            ->whereSlug($vehicle_slug)
+            ->where(function ($query) use ($vehicle_slug) {
+                $query->whereTranslation('slug', $vehicle_slug)
+                    ->orWhereTranslation('seo_slug', $vehicle_slug)
+                    ->orWhere('id', $vehicle_slug);
+            })
             ->with([
                 'categories',
                 'versions' => fn($q) => $q->where('status', 'ACTIVE')->sortByPosition()
             ])
             ->first();
+
+        if (!$vehicle) {
+            $allVehicles = Vehicle::where('status', Vehicle::STATUS_ACTIVE)
+                ->with([
+                    'categories',
+                    'versions' => fn($q) => $q->where('status', 'ACTIVE')->sortByPosition()
+                ])
+                ->get();
+            $cleanSlug = preg_replace('/^(ford-)/', '', strtolower($vehicle_slug));
+            $isRaptor = str_contains($vehicle_slug, 'raptor');
+            $vehicle = $allVehicles->first(function ($v) use ($vehicle_slug, $cleanSlug, $isRaptor) {
+                $vSlug = strtolower($v->slug ?? '');
+                $vSeo = strtolower($v->seo_slug ?? '');
+                $vTitle = strtolower(\Illuminate\Support\Str::slug($v->title ?? ''));
+                if ($vSlug === $vehicle_slug || $vSeo === $vehicle_slug || $vTitle === $vehicle_slug) return true;
+                if (preg_replace('/^(ford-)/', '', $vSlug) === $cleanSlug || preg_replace('/^(ford-)/', '', $vTitle) === $cleanSlug) return true;
+                if ($isRaptor) {
+                    return str_contains($vSlug, 'raptor') || str_contains($vTitle, 'raptor');
+                }
+                if ($cleanSlug === 'ranger' && !str_contains($vSlug, 'raptor') && !str_contains($vTitle, 'raptor')) {
+                    return str_contains($vSlug, 'ranger') || str_contains($vTitle, 'ranger');
+                }
+                return false;
+            });
+        }
 
         if (!$vehicle) {
             return $this->failure(__('Không tìm thấy xe'), 404);
@@ -271,6 +300,15 @@ class LandingPageApiController extends Controller
             ->orderByDesc('updated_at')
             ->orderByDesc('id')
             ->first();
+
+        if (!$ldp) {
+            // Fallback: Tìm LDP hoạt động bất kỳ của cố vấn để lấy thông tin liên hệ & ưu đãi
+            $ldp = LandingPage::query()
+                ->where('status', LandingPage::STATUS_ACTIVE)
+                ->where('sales_consultant_id', $consultant->id)
+                ->orderByDesc('updated_at')
+                ->first();
+        }
 
         if (!$ldp) {
             return $this->failure(__('Không tìm thấy Landing Page của cố vấn bán hàng cho dòng xe này'), 404);

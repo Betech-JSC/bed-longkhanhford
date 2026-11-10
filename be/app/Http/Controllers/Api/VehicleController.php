@@ -177,8 +177,21 @@ class VehicleController extends Controller
                     'versions' => fn($q) => $q->where('status', 'ACTIVE')->sortByPosition()
                 ])
                 ->get();
-            $vehicle = $allVehicles->first(function ($v) use ($slug) {
-                return $v->slug === $slug || $v->seo_slug === $slug || \Illuminate\Support\Str::slug($v->title) === $slug;
+            $cleanSlug = preg_replace('/^(ford-)/', '', strtolower($slug));
+            $isRaptor = str_contains($slug, 'raptor');
+            $vehicle = $allVehicles->first(function ($v) use ($slug, $cleanSlug, $isRaptor) {
+                $vSlug = strtolower($v->slug ?? '');
+                $vSeo = strtolower($v->seo_slug ?? '');
+                $vTitle = strtolower(\Illuminate\Support\Str::slug($v->title ?? ''));
+                if ($vSlug === $slug || $vSeo === $slug || $vTitle === $slug) return true;
+                if (preg_replace('/^(ford-)/', '', $vSlug) === $cleanSlug || preg_replace('/^(ford-)/', '', $vTitle) === $cleanSlug) return true;
+                if ($isRaptor) {
+                    return str_contains($vSlug, 'raptor') || str_contains($vTitle, 'raptor');
+                }
+                if ($cleanSlug === 'ranger' && !str_contains($vSlug, 'raptor') && !str_contains($vTitle, 'raptor')) {
+                    return str_contains($vSlug, 'ranger') || str_contains($vTitle, 'ranger');
+                }
+                return false;
             });
         }
 

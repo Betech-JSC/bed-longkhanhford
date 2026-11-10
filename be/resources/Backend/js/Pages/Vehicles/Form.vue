@@ -1753,11 +1753,11 @@ export default {
                 ...item,
             }
             if (Array.isArray(data.categories) && data.categories.length > 0) {
-                data.category_ids = data.categories.map(c => (typeof c === 'object' ? c.id : c)).filter(Boolean);
+                data.category_ids = data.categories.map(c => String(typeof c === 'object' ? c.id : c)).filter(Boolean);
             } else if (Array.isArray(data.category_ids) && data.category_ids.length > 0) {
-                data.category_ids = data.category_ids.map(c => (typeof c === 'object' ? c.id : c)).filter(Boolean);
+                data.category_ids = data.category_ids.map(c => String(typeof c === 'object' ? c.id : c)).filter(Boolean);
             } else if (data.category_id) {
-                data.category_ids = [data.category_id];
+                data.category_ids = [String(data.category_id)];
             } else {
                 data.category_ids = [];
             }

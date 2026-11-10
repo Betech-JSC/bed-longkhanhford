@@ -11,7 +11,9 @@ use Illuminate\Routing\Controller;
 
 class LandingPageController extends Controller
 {
-    use HasCrudActions;
+    use HasCrudActions {
+        destroy as baseDestroy;
+    }
 
     public $model = LandingPage::class;
 
@@ -22,12 +24,45 @@ class LandingPageController extends Controller
 
     private function beforeIndex($query)
     {
+        if ($consultantId = current_admin()?->sales_consultant_id) {
+            $query->where('sales_consultant_id', $consultantId);
+        }
         return $query->orderBy('id', 'DESC');
+    }
+
+    private function afterForm($item)
+    {
+        $consultantId = current_admin()?->sales_consultant_id;
+
+        if ($consultantId) {
+            $itemId = is_object($item) ? ($item->id ?? null) : ($item['id'] ?? null);
+            $itemConsultantId = is_object($item) ? ($item->sales_consultant_id ?? null) : ($item['sales_consultant_id'] ?? null);
+
+            if (!empty($itemId) && $itemConsultantId != $consultantId) {
+                abort(403, 'Bạn không có quyền chỉnh sửa Landing Page của Cố vấn khác.');
+            }
+
+            if (is_object($item)) {
+                $item->sales_consultant_id = $consultantId;
+            } elseif (is_array($item)) {
+                $item['sales_consultant_id'] = $consultantId;
+            }
+        }
+
+        return $item;
     }
 
     private function beforeForm($data)
     {
-        $data['sales_consultants'] = SalesConsultant::where('status', SalesConsultant::STATUS_ACTIVE)
+        $consultantId = current_admin()?->sales_consultant_id;
+
+        $consultantsQuery = SalesConsultant::where('status', SalesConsultant::STATUS_ACTIVE);
+        if ($consultantId) {
+            $consultantsQuery->where('id', $consultantId);
+        }
+
+        $data['is_sale_user'] = !empty($consultantId);
+        $data['sales_consultants'] = $consultantsQuery
             ->sortByPosition()
             ->get()
             ->map(fn($c) => [
@@ -103,5 +138,33 @@ class LandingPageController extends Controller
         $consultant->tracking_config = $cleanConfig;
         $consultant->save();
         \App\Services\RevalidateService::revalidateForModel(SalesConsultant::class);
+    }
+
+    private function beforeStore($request, $rules)
+    {
+        if ($consultantId = current_admin()?->sales_consultant_id) {
+            if (is_object($request) && method_exists($request, 'merge')) {
+                $request->merge(['sales_consultant_id' => $consultantId]);
+            }
+            if (!empty($request->id)) {
+                $existing = LandingPage::find($request->id);
+                if ($existing && $existing->sales_consultant_id != $consultantId) {
+                    abort(403, 'Bạn không có quyền chỉnh sửa Landing Page của Cố vấn khác.');
+                }
+            }
+        }
+        return $rules;
+    }
+
+    public function destroy($id)
+    {
+        if ($consultantId = current_admin()?->sales_consultant_id) {
+            $ids = explode(',', $id);
+            $forbidden = LandingPage::whereIn('id', $ids)->where('sales_consultant_id', '!=', $consultantId)->exists();
+            if ($forbidden) {
+                abort(403, 'Bạn không có quyền xoá Landing Page của Cố vấn khác.');
+            }
+        }
+        return $this->baseDestroy($id);
     }
 }

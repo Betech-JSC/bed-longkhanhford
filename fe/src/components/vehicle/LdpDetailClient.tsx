@@ -5,7 +5,8 @@ import Link from "next/link";
 import { useVehicle } from "./VehicleLayoutClient";
 import VehicleLayoutClient from "./VehicleLayoutClient";
 import Blocks, { resolveImageUrl } from "@/components/blocks/Blocks";
-import { Phone, Car } from "lucide-react";
+import LdpStickyNav from "./LdpStickyNav";
+import { Phone, FileText } from "lucide-react";
 import { formatPersonName } from "@/lib/formatters";
 
 const ZaloIcon = ({ className = "w-6 h-6" }: { className?: string }) => (
@@ -161,48 +162,14 @@ function LdpInnerContent({ salesConsultant, landingPageId, salesEmail, layoutBlo
       )}
 
       {/* MULTI-VEHICLE SWITCHER TAB BAR */}
-      {allVehicles && allVehicles.length > 1 && (
-        <div id="ldp-vehicles-tabs" className="bg-[#0b192e] text-white py-3.5 px-4 border-y border-white/10 sticky top-0 z-[40] shadow-md scroll-mt-2">
-          <div className="max-w-[1152px] mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <div className="flex items-center gap-2 text-xs font-semibold text-blue-300 shrink-0">
-              <Car className="w-4 h-4 text-[#0562D2]" />
-              <span>Dòng xe Chuyên viên kinh doanh {salesConsultant?.name ? `${formatPersonName(salesConsultant.name)} ` : ""}phụ trách ({allVehicles.length}):</span>
-            </div>
-            <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0 scrollbar-none">
-              {allVehicles.map((v: any) => {
-                const isActive = (v.slug || v.id) === (vehicle.slug || vehicle.id);
-                const vehicleSlug = v.slug || v.id;
-                const href = salesConsultant.custom_domain
-                  ? `/${vehicleSlug}`
-                  : `/ldp/${consultantSlug}/${vehicleSlug}`;
-                const targetHref = `${href}#ldp-vehicle-intro`;
-
-                return (
-                  <Link
-                    key={v.id}
-                    href={targetHref}
-                    scroll={false}
-                    onClick={(e) => {
-                      // Nếu chọn chính xe đang hiển thị, cuộn ngay xuống phần giới thiệu xe
-                      if (isActive) {
-                        e.preventDefault();
-                        scrollToVehicleIntro();
-                      }
-                    }}
-                    className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all shrink-0 border ${
-                      isActive
-                        ? "bg-[#0562D2] text-white border-[#0562D2] shadow-sm"
-                        : "bg-white/10 text-gray-200 border-white/10 hover:bg-white/20 hover:text-white"
-                    }`}
-                  >
-                    {v.title || v.name}
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      )}
+      <LdpStickyNav
+        vehicles={allVehicles}
+        activeSlug={vehicle?.slug || vehicle?.id}
+        consultantSlug={consultantSlug}
+        customDomain={salesConsultant?.custom_domain}
+        onOpenQuote={() => openQuoteDrawer(vehicle?.id)}
+        onActiveClick={scrollToVehicleIntro}
+      />
 
       {/* 2. CÁC BLOCK BÊN DƯỚI (theo đúng thứ tự admin kéo thả trong CMS) */}
       {!hasVehiclesGrid && (
@@ -224,6 +191,17 @@ function LdpInnerContent({ salesConsultant, landingPageId, salesEmail, layoutBlo
       {/* FLOATING SALES CONSULTANT WIDGET */}
       {/* Đã hạ vị trí bottom về mép dưới sau khi bỏ sticky bottom bar */}
       <div className="fixed bottom-[calc(1.25rem+env(safe-area-inset-bottom,0px))] md:bottom-6 right-4 md:right-6 z-[99] flex flex-col items-end gap-2.5 font-sans">
+        {/* Nút Nhận báo giá */}
+        <button
+          type="button"
+          onClick={() => openQuoteDrawer(vehicle?.id)}
+          className="flex items-center gap-2 px-3.5 py-2.5 md:px-4 md:py-2.5 bg-[#0562D2] hover:bg-[#0451B0] text-white rounded-full shadow-lg shadow-blue-600/30 hover:scale-105 active:scale-95 transition-all duration-200 border border-blue-400/40 cursor-pointer"
+          title="Nhận Báo Giá Lăn Bánh"
+        >
+          <FileText className="w-4 h-4 md:w-5 md:h-5 flex-shrink-0" />
+          <span className="text-xs md:text-sm font-bold tracking-wide pr-1">Nhận báo giá</span>
+        </button>
+
         {/* Zalo Button */}
         {finalZaloUrl && (
           <a
@@ -256,9 +234,17 @@ function LdpInnerContent({ salesConsultant, landingPageId, salesEmail, layoutBlo
   );
 }
 
-export default function LdpDetailClient({ initialData }: { initialData: any }) {
+export default function LdpDetailClient({
+  initialData,
+  allVehicles: passedAllVehicles,
+}: {
+  initialData: any;
+  allVehicles?: any[];
+}) {
   const { vehicle, vehicles, sales_consultant, layout_blocks, promotions } = initialData;
-  const allVehicles = (vehicles && vehicles.length > 0) ? vehicles : [vehicle];
+  const allVehicles = (passedAllVehicles && passedAllVehicles.length > 0)
+    ? passedAllVehicles
+    : ((vehicles && vehicles.length > 0) ? vehicles : [vehicle]);
 
   return (
     <VehicleLayoutClient

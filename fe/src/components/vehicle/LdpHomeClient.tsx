@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -24,7 +24,8 @@ import {
   Clock,
   Sparkles,
   Send,
-  MessageCircle
+  MessageCircle,
+  FileText
 } from "lucide-react";
 import { handleCtaFormClick } from "@/lib/scroll-helper";
 import { getPopularVehicleImage, siteAssets, handleImageError, resolveImageUrl } from "@/lib/site-assets";
@@ -32,6 +33,7 @@ import { bannersAPI, postsAPI, vehiclesAPI, servicesAPI, customerHandoversAPI, c
 import SafeImage from "@/components/shared/SafeImage";
 import LdpUsedVehiclesBlock from "@/components/blocks/LdpUsedVehiclesBlock";
 import VehicleLayoutClient, { useVehicle } from "./VehicleLayoutClient";
+import LdpStickyNav from "./LdpStickyNav";
 import { fireLdpFormConversion } from "./LdpTrackingManager";
 import { formatPersonName } from "@/lib/formatters";
 
@@ -140,27 +142,62 @@ const techSlides = [
   }
 ];
 
-const formatBannersList = (items: any[]) => {
-  if (Array.isArray(items) && items.length > 0) {
-    return items.map((item: any) => ({
-      title: item.title || "",
-      subtitle: item.subtitle || "",
-      image: resolveImageUrl(item.image_url || item.image) || siteAssets.heroSlides[0],
-      imageMobile: resolveImageUrl(item.image_mobile_url || item.image_url || item.image) || siteAssets.heroSlides[0],
-      buttonText: item.button_text || "Đăng ký lái thử",
-      buttonLink: item.button_link || "#showroom"
-    }));
+interface LdpBannerSlide {
+  title: string;
+  subtitle: string;
+  image: string;
+  imageMobile?: string;
+  buttonText?: string;
+  buttonLink?: string;
+  isConsultantSlide?: boolean;
+  roleTitle?: string;
+  consultantName?: string;
+}
+
+const formatBannersList = (items: any[], salesConsultant?: any): LdpBannerSlide[] => {
+  const coverUrl = resolveImageUrl(salesConsultant?.cover_image_url || salesConsultant?.cover_image);
+  const consultantName = salesConsultant?.name ? formatPersonName(salesConsultant.name) : "";
+
+  let baseList: LdpBannerSlide[] = Array.isArray(items) && items.length > 0
+    ? items.map((item: any) => ({
+        title: item.title || "",
+        subtitle: item.subtitle || "",
+        image: resolveImageUrl(item.image_url || item.image) || siteAssets.heroSlides[0],
+        imageMobile: resolveImageUrl(item.image_mobile_url || item.image_url || item.image) || siteAssets.heroSlides[0],
+        buttonText: item.button_text || "Đăng ký lái thử",
+        buttonLink: item.button_link || "#showroom"
+      }))
+    : [
+        {
+          title: "KHÁM PHÁ CÁC DÒNG XE FORD THẾ HỆ MỚI",
+          subtitle: "Đại lý ủy quyền 3S chính thức của Ford Việt Nam tại Long Khánh",
+          image: siteAssets.heroSlides[0] || "/showroom_bg.webp",
+          imageMobile: siteAssets.heroSlides[0] || "/showroom_bg.webp",
+          buttonText: "Đăng ký lái thử",
+          buttonLink: "#showroom"
+        }
+      ];
+
+  if (coverUrl) {
+    const roleTitle = (salesConsultant?.job_title || "CHUYÊN VIÊN KINH DOANH").toUpperCase();
+    const formattedName = consultantName ? consultantName.toUpperCase() : "";
+    baseList = [
+      {
+        isConsultantSlide: true,
+        roleTitle,
+        consultantName: formattedName,
+        title: formattedName ? `${roleTitle} ${formattedName}` : baseList[0].title,
+        subtitle: salesConsultant?.short_bio || "Tư vấn tận tâm — Giá lăn bánh ưu đãi nhất — Giao xe tận nhà tại Long Khánh Ford",
+        image: coverUrl,
+        imageMobile: coverUrl,
+        buttonText: "Đăng ký lái thử",
+        buttonLink: "#showroom"
+      },
+      ...baseList
+    ];
   }
-  return [
-    {
-      title: "KHÁM PHÁ CÁC DÒNG XE FORD THẾ HỆ MỚI",
-      subtitle: "Đại lý ủy quyền 3S chính thức của Ford Việt Nam tại Long Khánh",
-      image: siteAssets.heroSlides[0] || "/showroom_bg.webp",
-      imageMobile: siteAssets.heroSlides[0] || "/showroom_bg.webp",
-      buttonText: "Đăng ký lái thử",
-      buttonLink: "#showroom"
-    }
-  ];
+
+  return baseList;
 };
 
 const formatArticlesList = (items: any[]) => {
@@ -178,9 +215,36 @@ const formatArticlesList = (items: any[]) => {
   return [];
 };
 
+function HandoverCardItem({ item, onClick, isMarquee = false }: { item: any; onClick: () => void; isMarquee?: boolean }) {
+  return (
+    <div
+      onClick={onClick}
+      className={`relative overflow-hidden rounded-xl aspect-[4/3] group cursor-pointer bg-gray-100 transition-all duration-300 block shadow-sm hover:shadow-md border border-gray-100 ${isMarquee ? 'flex-shrink-0' : ''}`}
+      style={isMarquee ? { width: "var(--card-width-handover, 360px)" } : undefined}
+    >
+      <Image
+        src={resolveImageUrl(item.image_url || item.image?.url || item.image) || "/assets/customer_handover_everest.webp"}
+        alt={item.title || "Tri ân khách hàng"}
+        fill
+        sizes={isMarquee ? "(max-width: 768px) 280px, 360px" : "(max-width: 768px) 100vw, 360px"}
+        className="object-cover group-hover:scale-103 transition-transform duration-500"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+        <h3 className="text-white text-base font-semibold leading-snug transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+          {item.title}
+        </h3>
+        <p className="text-white/70 text-xs mt-1.5 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300 delay-75">
+          Xem phóng to hình ảnh
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export type LdpHomeClientProps = {
   salesConsultant: any;
   allVehicles?: any[];
+  assignedVehicles?: any[];
   leadVehicle?: any;
   landingPageId?: number | string;
   salesEmail?: string;
@@ -195,6 +259,7 @@ export type LdpHomeClientProps = {
 function LdpHomeInner({
   salesConsultant,
   allVehicles = [],
+  assignedVehicles = [],
   leadVehicle,
   landingPageId,
   salesEmail,
@@ -211,7 +276,7 @@ function LdpHomeInner({
   const consultantSlug = salesConsultant?.slug || salesConsultant?.name?.toLowerCase().trim().replace(/\s+/g, "-") || "tu-van";
 
   // Banner State
-  const [heroSlides, setHeroSlides] = useState<any[]>(() => formatBannersList(initialBanners));
+  const [heroSlides, setHeroSlides] = useState<LdpBannerSlide[]>(() => formatBannersList(initialBanners, salesConsultant));
   const [activeHeroIndex, setActiveHeroIndex] = useState<number>(0);
 
   // Showroom & Filter State
@@ -297,10 +362,23 @@ function LdpHomeInner({
   const [activeServiceIndex, setActiveServiceIndex] = useState<number>(0);
   const [isServiceHovered, setIsServiceHovered] = useState<boolean>(false);
 
-  // News & Handovers State
+  // News & Handovers State (Ưu tiên kho ảnh của TVBH, fallback về ảnh chung đại lý)
   const [homeArticles, setHomeArticles] = useState<any[]>(() => formatArticlesList(initialArticles));
   const [activeNewsTab, setActiveNewsTab] = useState<number>(3); // 3: Khuyến Mãi
-  const [customerHandovers, setCustomerHandovers] = useState<any[]>(initialHandovers);
+  const [fallbackHandovers, setFallbackHandovers] = useState<any[]>(initialHandovers);
+  const consultantGallery = useMemo(() => {
+    return Array.isArray(salesConsultant?.gallery)
+      ? salesConsultant.gallery
+          .map((g: any, idx: number) => ({
+            id: g.id || `consultant-handover-${idx}`,
+            image_url: resolveImageUrl(g.image_url || g.image || g.path),
+            title: g.caption || g.title || (salesConsultant?.name ? `Lễ bàn giao xe - CVKD ${formatPersonName(salesConsultant.name)}` : "Lễ bàn giao xe Long Khánh Ford"),
+          }))
+          .filter((g: any) => Boolean(g.image_url))
+      : [];
+  }, [salesConsultant?.gallery, salesConsultant?.name]);
+
+  const customerHandovers = consultantGallery.length > 0 ? consultantGallery : fallbackHandovers;
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const isInitialPostsMount = useRef(true);
 
@@ -412,7 +490,7 @@ function LdpHomeInner({
       postsAPI.getAll({ categories: 3 }).catch(() => null),
     ]).then(([bannersRes, catRes, vRes, sRes, hRes, pRes]) => {
       const bItems = (bannersRes as any)?.data || bannersRes;
-      if (Array.isArray(bItems) && bItems.length > 0) setHeroSlides(formatBannersList(bItems));
+      if (Array.isArray(bItems) && bItems.length > 0) setHeroSlides(formatBannersList(bItems, salesConsultant));
 
       const cItems = (catRes as any)?.data || catRes;
       if (Array.isArray(cItems) && cItems.length > 0) setCategories(cItems);
@@ -434,7 +512,7 @@ function LdpHomeInner({
       if (Array.isArray(sItems) && sItems.length > 0) setServicesList(sItems);
 
       const hItems = (hRes as any)?.data || hRes;
-      if (Array.isArray(hItems) && hItems.length > 0) setCustomerHandovers(hItems);
+      if (Array.isArray(hItems) && hItems.length > 0) setFallbackHandovers(hItems);
 
       const pItems = (pRes as any)?.posts?.data || (pRes as any)?.data || pRes;
       if (Array.isArray(pItems) && pItems.length > 0) setHomeArticles(formatArticlesList(pItems));
@@ -597,30 +675,15 @@ function LdpHomeInner({
   return (
     <div className="w-full min-h-screen bg-white relative pb-16 md:pb-0 font-sans">
       {/* 0. STICKY VEHICLE SWITCHER (MULTI-VEHICLE JUMP BAR) */}
-      {allVehicles && allVehicles.length > 1 && (
-        <div id="ldp-vehicles-tabs" className="bg-[#0b192e] text-white py-3.5 px-4 border-y border-white/10 sticky top-0 z-[40] shadow-md scroll-mt-2">
-          <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <div className="flex items-center gap-2 text-xs font-semibold text-blue-300 shrink-0">
-              <Car className="w-4 h-4 text-[#0562D2]" />
-              <span>Dòng xe Chuyên viên kinh doanh {formatPersonName(salesConsultant?.name)} phụ trách ({allVehicles.length}):</span>
-            </div>
-            <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0 scrollbar-none">
-              {allVehicles.map((v: any) => (
-                <Link
-                  key={v.id}
-                  href={getVehicleLink(v)}
-                  className="px-4 py-1.5 rounded-full text-xs font-bold transition-all shrink-0 border bg-white/10 text-gray-200 border-white/10 hover:bg-[#0562D2] hover:text-white hover:border-[#0562D2]"
-                >
-                  {v.title || v.name}
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
+      <LdpStickyNav
+        vehicles={allVehicles}
+        consultantSlug={consultantSlug}
+        customDomain={salesConsultant?.custom_domain}
+        onOpenQuote={() => openQuoteDrawer(leadVehicle?.id || (allVehicles.length > 0 ? allVehicles[0]?.id : undefined))}
+      />
 
       {/* 1. HERO BANNER SECTION (SLIDER) */}
-      <section className="relative w-full h-[580px] md:h-[680px] overflow-hidden bg-black select-none">
+      <section className="relative w-full h-[62vh] min-h-[460px] sm:h-[70vh] sm:min-h-[520px] md:h-[680px] overflow-hidden bg-black select-none">
         {heroSlides.map((slide, idx) => (
           <div
             key={idx}
@@ -635,7 +698,9 @@ function LdpHomeInner({
                 fill
                 priority={idx === 0}
                 sizes="100vw"
-                className="object-cover w-full h-full object-top"
+                className={`object-cover w-full h-full ${
+                  slide.isConsultantSlide ? "object-[15%_center]" : "object-center"
+                }`}
               />
             </div>
             <div className="block md:hidden relative w-full h-full">
@@ -645,15 +710,17 @@ function LdpHomeInner({
                 fill
                 priority={idx === 0}
                 sizes="100vw"
-                className="object-cover w-full h-full object-top"
+                className={`object-cover w-full h-full ${
+                  slide.isConsultantSlide ? "object-[15%_center]" : "object-center"
+                }`}
               />
             </div>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/20" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/20" />
           </div>
         ))}
 
         {/* Hero Content Area */}
-        <div className="max-w-[1440px] mx-auto w-full h-full px-6 xl:px-[144px] flex flex-col justify-end text-center relative z-10 pb-16 md:pb-20">
+        <div className="max-w-[1440px] mx-auto w-full h-full px-6 xl:px-[144px] flex flex-col justify-end text-center relative z-10 pb-10 sm:pb-14 md:pb-20">
           <div className="max-w-3xl mx-auto flex flex-col items-center">
             {salesConsultant?.name && (
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-xs font-semibold mb-4 border border-white/30">
@@ -661,10 +728,21 @@ function LdpHomeInner({
                 <span>Trang giới thiệu chính thức: Chuyên viên kinh doanh {formatPersonName(salesConsultant.name)}</span>
               </div>
             )}
-            <h1 className="text-2xl sm:text-4xl lg:text-[44px] font-bold tracking-tight leading-[1.2] text-white uppercase">
-              {heroSlides[activeHeroIndex]?.title || "LONG KHÁNH FORD — ĐẠI LÝ 3S CHÍNH THỨC"}
-            </h1>
-            <p className="mt-3 text-sm sm:text-lg md:text-xl font-medium text-white/85 leading-snug max-w-[90%]">
+            {heroSlides[activeHeroIndex]?.consultantName ? (
+              <h1 className="flex flex-col items-center tracking-tight leading-tight uppercase animate-fade-in">
+                <span className="text-xs sm:text-lg md:text-2xl font-semibold text-white/90 tracking-wider">
+                  {heroSlides[activeHeroIndex].roleTitle || "CHUYÊN VIÊN KINH DOANH"}
+                </span>
+                <span className="text-xl sm:text-3xl lg:text-[44px] font-black text-white mt-1">
+                  {heroSlides[activeHeroIndex].consultantName}
+                </span>
+              </h1>
+            ) : (
+              <h1 className="text-2xl sm:text-4xl lg:text-[44px] font-bold tracking-tight leading-[1.2] text-white uppercase">
+                {heroSlides[activeHeroIndex]?.title || "LONG KHÁNH FORD — ĐẠI LÝ 3S CHÍNH THỨC"}
+              </h1>
+            )}
+            <p className="mt-2 sm:mt-3 text-xs sm:text-base md:text-xl font-medium text-white/85 leading-snug max-w-[92%]">
               {heroSlides[activeHeroIndex]?.subtitle || "Trải nghiệm sức mạnh, công nghệ và sự an toàn vượt trội cùng Ford Việt Nam."}
             </p>
 
@@ -1163,47 +1241,33 @@ function LdpHomeInner({
               </div>
             </div>
 
-            {/* Slider track container — continuous infinite marquee */}
-            <div className="relative w-full overflow-hidden py-4 select-none">
-              <div
-                className="animate-marquee-continuous gap-[var(--card-gap-handover,24px)]"
-              >
-                {[...customerHandovers, ...customerHandovers].map((item, idx) => {
-                  const originalIdx = idx % customerHandovers.length;
-                  return (
-                    <div
+            {/* Nếu từ 1-3 ảnh: hiển thị lưới căn giữa; từ 4 ảnh trở lên: chạy marquee liên tục */}
+            {customerHandovers.length <= 3 ? (
+              <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px]">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {customerHandovers.map((item: any, idx: number) => (
+                    <HandoverCardItem
                       key={`${item.id}-${idx}`}
-                      onClick={() => {
-                        setLightboxIndex(originalIdx);
-                      }}
-                      className="relative overflow-hidden rounded-xl aspect-[4/3] group cursor-pointer bg-gray-100 flex-shrink-0 transition-all duration-300 block shadow-sm hover:shadow-md border border-gray-100"
-                      style={{
-                        width: "var(--card-width-handover, 360px)",
-                      }}
-                    >
-                      <Image
-                        src={resolveImageUrl(item.image_url || item.image?.url || item.image) || "/assets/customer_handover_everest.webp"}
-                        alt={item.title || "Tri ân khách hàng"}
-                        fill
-                        sizes="(max-width: 768px) 280px, 360px"
-                        className="object-cover group-hover:scale-103 transition-transform duration-500"
-                        onError={handleImageError}
-                      />
-
-                      {/* Premium gradient overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
-                        <h3 className="text-white text-base font-semibold leading-snug transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                          {item.title}
-                        </h3>
-                        <p className="text-white/70 text-xs mt-1.5 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300 delay-75">
-                          Xem phóng to hình ảnh
-                        </p>
-                      </div>
-                    </div>
-                  );
-                })}
+                      item={item}
+                      onClick={() => setLightboxIndex(idx)}
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="relative w-full overflow-hidden py-4 select-none">
+                <div className="animate-marquee-continuous gap-[var(--card-gap-handover,24px)]">
+                  {[...customerHandovers, ...customerHandovers].map((item, idx) => (
+                    <HandoverCardItem
+                      key={`${item.id}-${idx}`}
+                      item={item}
+                      isMarquee
+                      onClick={() => setLightboxIndex(idx % customerHandovers.length)}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
 
           </div>
         </section>
@@ -1273,7 +1337,18 @@ function LdpHomeInner({
 
       {/* 12. FLOATING SALES CONSULTANT WIDGET */}
       {/* Đã hạ vị trí bottom về mép dưới sau khi bỏ sticky bottom bar */}
-      <div className="fixed bottom-[calc(1.25rem+env(safe-area-inset-bottom,0px))] md:bottom-6 right-4 md:right-6 z-[99] flex flex-col items-end gap-2.5">
+      <div className="fixed bottom-[calc(1.25rem+env(safe-area-inset-bottom,0px))] md:bottom-6 right-4 md:right-6 z-[99] flex flex-col items-end gap-2.5 font-sans">
+        {/* Nút Nhận báo giá nổi bật */}
+        <button
+          type="button"
+          onClick={() => openQuoteDrawer(leadVehicle?.id || (allVehicles.length > 0 ? allVehicles[0]?.id : undefined))}
+          className="flex items-center gap-2 px-3.5 py-2.5 md:px-4 md:py-2.5 bg-[#0562D2] hover:bg-[#0451B0] text-white rounded-full shadow-lg shadow-blue-600/30 hover:scale-105 active:scale-95 transition-all duration-200 border border-blue-400/40 cursor-pointer"
+          title="Nhận Báo Giá Lăn Bánh"
+        >
+          <FileText className="w-4 h-4 md:w-5 md:h-5 flex-shrink-0" />
+          <span className="text-xs md:text-sm font-bold tracking-wide pr-1">Nhận báo giá</span>
+        </button>
+
         {finalZaloUrl && (
           <a
             href={finalZaloUrl}

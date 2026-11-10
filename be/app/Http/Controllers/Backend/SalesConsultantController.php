@@ -15,6 +15,36 @@ class SalesConsultantController extends Controller
 
     public $model = SalesConsultant::class;
 
+    private function beforeIndex($query)
+    {
+        if ($consultantId = current_admin()?->sales_consultant_id) {
+            $query->where('id', $consultantId);
+        }
+        return $query;
+    }
+
+    private function afterForm($item)
+    {
+        $consultantId = current_admin()?->sales_consultant_id;
+        if ($consultantId) {
+            $itemId = is_object($item) ? ($item->id ?? null) : ($item['id'] ?? null);
+            if (empty($itemId) || $itemId != $consultantId) {
+                abort(403, 'Bạn chỉ có quyền xem và chỉnh sửa hồ sơ của chính mình.');
+            }
+        }
+        return $item;
+    }
+
+    private function beforeStore($request, $rules)
+    {
+        if ($consultantId = current_admin()?->sales_consultant_id) {
+            if (empty($request->id) || $request->id != $consultantId) {
+                abort(403, 'Bạn chỉ có quyền chỉnh sửa hồ sơ của chính mình.');
+            }
+        }
+        return $rules;
+    }
+
     public function exportResourcesGenerator()
     {
         $query = $this->model::query();

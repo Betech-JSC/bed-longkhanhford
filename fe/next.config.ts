@@ -123,23 +123,44 @@ const nextConfig = {
       // --- CHUYỂN HƯỚNG URL SẢN PHẨM XE CÓ CHỨA /SAN-PHAM SANG URL NGẮN ---
       // Redirects từ slug xe cũ không có tiền tố "ford-" sang có tiền tố "ford-"
       {
-        source: "/:slug(everest|territory|explorer)",
+        source: "/:slug(everest|territory|explorer|ranger)",
         destination: "/ford-:slug",
         permanent: true,
       },
       {
-        source: "/:slug(everest|territory|explorer)/:subpath(du-toan-lan-banh|phu-kien|so-sanh|tinh-nang)",
+        source: "/:slug(everest|territory|explorer|ranger)/:subpath(du-toan-lan-banh|phu-kien|so-sanh|tinh-nang)",
         destination: "/ford-:slug/:subpath",
         permanent: true,
       },
       {
-        source: "/san-pham/:slug(everest|territory|explorer)",
+        source: "/san-pham/:slug(everest|territory|explorer|ranger)",
         destination: "/ford-:slug",
         permanent: true,
       },
       {
-        source: "/san-pham/:slug(everest|territory|explorer)/:subpath(du-toan-lan-banh|phu-kien|so-sanh|tinh-nang)",
+        source: "/san-pham/:slug(everest|territory|explorer|ranger)/:subpath(du-toan-lan-banh|phu-kien|so-sanh|tinh-nang)",
         destination: "/ford-:slug/:subpath",
+        permanent: true,
+      },
+      // Redirects cho ranger-raptor alias
+      {
+        source: "/:slug(ranger-raptor|ranger-raptor-2026|ford-ranger-raptor-2026)",
+        destination: "/ford-ranger-raptor",
+        permanent: true,
+      },
+      {
+        source: "/:slug(ranger-raptor|ranger-raptor-2026|ford-ranger-raptor-2026)/:subpath(du-toan-lan-banh|phu-kien|so-sanh|tinh-nang)",
+        destination: "/ford-ranger-raptor/:subpath",
+        permanent: true,
+      },
+      {
+        source: "/san-pham/:slug(ranger-raptor|ranger-raptor-2026|ford-ranger-raptor-2026)",
+        destination: "/ford-ranger-raptor",
+        permanent: true,
+      },
+      {
+        source: "/san-pham/:slug(ranger-raptor|ranger-raptor-2026|ford-ranger-raptor-2026)/:subpath(du-toan-lan-banh|phu-kien|so-sanh|tinh-nang)",
+        destination: "/ford-ranger-raptor/:subpath",
         permanent: true,
       },
       // Redirects cho transit alias cũ

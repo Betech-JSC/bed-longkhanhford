@@ -75,11 +75,40 @@ const parseSpecsArray = (specsArray: any): Record<string, string> => {
   return result;
 };
 
+const findVehicleBySmartSlug = (items: any[], targetId: string) => {
+  if (!Array.isArray(items) || items.length === 0) return null;
+  const target = targetId.toLowerCase().trim();
+  const cleanTarget = target.replace(/^ford-/, "");
+  const isRaptor = target.includes("raptor");
+
+  return items.find((v: any) => {
+    const vSlug = (v.slug || "").toLowerCase();
+    const vSeo = (v.seo_slug || "").toLowerCase();
+    const vTitle = (v.title || "").toLowerCase();
+    const cleanVSlug = vSlug.replace(/^ford-/, "");
+    const cleanVTitle = vTitle.replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").replace(/^ford-/, "");
+
+    if (vSlug === target || vSeo === target || String(v.id) === target) return true;
+    if (cleanVSlug === cleanTarget || cleanVTitle === cleanTarget) return true;
+    if (isRaptor) return vSlug.includes("raptor") || vTitle.includes("raptor");
+    if (cleanTarget === "ranger" && !vSlug.includes("raptor") && !vTitle.includes("raptor")) {
+      return vSlug.includes("ranger") || vTitle.includes("ranger");
+    }
+    return false;
+  }) || null;
+};
+
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
     const res = await vehiclesAPI.getBySlug(id).catch(() => null);
-    const apiVehicle = res?.data || (res?.id ? res : null);
+    let apiVehicle = res?.data || (res?.id ? res : null);
+
+    if (!apiVehicle) {
+      const allRes = await vehiclesAPI.getAll({ with_versions: false }).catch(() => null);
+      const items = (allRes as any)?.data || (Array.isArray(allRes) ? allRes : []);
+      apiVehicle = findVehicleBySmartSlug(items, id);
+    }
 
     if (!apiVehicle) return {};
 
@@ -124,20 +153,54 @@ export default async function VehicleDetailLayout({
   let rawAllVehicles: any[] = [];
 
   try {
-    const detailRes = await vehiclesAPI.getBySlug(id).catch(() => null);
+    const [detailRes, allRes] = await Promise.all([
+      vehiclesAPI.getBySlug(id).catch(() => null),
+      vehiclesAPI.getAll({ with_versions: true }).catch(() => null),
+    ]);
     const vehicleObj = detailRes?.data || (detailRes?.id ? detailRes : null);
+    const items = (allRes as any)?.data || (Array.isArray(allRes) ? allRes : []);
+
     if (vehicleObj) {
       apiVehicle = vehicleObj;
-    } else {
-      const allRes = await vehiclesAPI.getAll({ with_versions: true }).catch(() => null);
-      const items = (allRes as any)?.data || (Array.isArray(allRes) ? allRes : []);
-      if (Array.isArray(items)) {
-        apiVehicle = items.find((v: any) => 
-          (v.slug && v.slug === id) || 
-          (v.seo_slug && v.seo_slug === id) || 
-          String(v.id) === id || 
-          v.title?.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") === id.toLowerCase()
-        ) || null;
+    } else if (Array.isArray(items)) {
+      apiVehicle = findVehicleBySmartSlug(items, id);
+    }
+
+    // Tự động gom toàn bộ các phiên bản cùng họ xe (ví dụ: Territory 2026 vào chung mục Territory)
+    if (apiVehicle && Array.isArray(items) && items.length > 0) {
+      const currentTitle = (apiVehicle.title || "").toLowerCase();
+      const currentSlug = (apiVehicle.slug || id || "").toLowerCase();
+      const familyKey = (currentTitle.includes("territory") || currentSlug.includes("territory"))
+        ? "territory"
+        : (currentTitle.includes("everest") || currentSlug.includes("everest")) ? "everest"
+        : (currentTitle.includes("raptor") || currentSlug.includes("raptor")) ? "raptor"
+        : (currentTitle.includes("ranger") || currentSlug.includes("ranger")) ? "ranger"
+        : (currentTitle.includes("transit") || currentSlug.includes("transit")) ? "transit"
+        : "";
+
+      if (familyKey) {
+        const familyVehicles = items.filter((v: any) => {
+          const t = (v.title || "").toLowerCase();
+          const s = (v.slug || "").toLowerCase();
+          return t.includes(familyKey) || s.includes(familyKey);
+        });
+
+        const allVersions: any[] = [];
+        familyVehicles.forEach((fv: any) => {
+          (fv.versions || []).forEach((ver: any) => {
+            const vName = (ver.name || "").trim().toLowerCase();
+            const verId = String(ver.id || "");
+            const exists = allVersions.some((x: any) => 
+              (verId && String(x.id) === verId) || 
+              (x.name || "").trim().toLowerCase() === vName
+            );
+            if (!exists) {
+              allVersions.push(ver);
+            }
+          });
+        });
+        allVersions.sort((a: any, b: any) => parseFloat(b.price || 0) - parseFloat(a.price || 0));
+        apiVehicle.versions = allVersions;
       }
     }
   } catch (err) {

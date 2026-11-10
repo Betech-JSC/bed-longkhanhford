@@ -32,6 +32,7 @@ class Admin extends Authenticatable
         'phone',
         'type',
         'status',
+        'sales_consultant_id',
 
         'google2fa_secret',
         'google2fa_ts'
@@ -99,6 +100,16 @@ class Admin extends Authenticatable
     public function scopeVerified($query)
     {
         $query->where('google2fa_ts', '<>', 0);
+    }
+
+    public function salesConsultant()
+    {
+        return $this->belongsTo(\App\Models\Vehicle\SalesConsultant::class, 'sales_consultant_id');
+    }
+
+    public function isSale(): bool
+    {
+        return !empty($this->sales_consultant_id);
     }
 
     public function transformCurrentAdmin()

@@ -171,21 +171,28 @@ export default function VehicleLayoutClient({
   // Drawer trigger functions
   const openQuoteDrawer = (vehicleId?: string, versionId?: string) => {
     if (vehicleId) {
-      setSelectedVehicleId(vehicleId);
       const list = allVehicles.length > 0 ? allVehicles : [initialVehicle];
-      const veh = list.find(v => v.id === vehicleId);
-      if (veh) {
+      let veh = list.find(v => v.id === vehicleId || String(v.id) === String(vehicleId) || v.slug === vehicleId);
+      if (!veh || !Array.isArray(veh.versions) || veh.versions.length === 0) {
+        if (initialVehicle && (initialVehicle.id === vehicleId || String(initialVehicle.id) === String(vehicleId) || initialVehicle.slug === vehicleId)) {
+          veh = initialVehicle;
+        }
+      }
+      const targetVehicleId = veh ? veh.id : vehicleId;
+      setSelectedVehicleId(targetVehicleId);
+
+      if (veh && Array.isArray(veh.versions) && veh.versions.length > 0) {
         if (versionId && veh.versions.some((v: any) => String(v.id) === String(versionId))) {
-          setSelectedVersionId(versionId);
-        } else if (veh.versions.length > 0) {
-          setSelectedVersionId(veh.versions[0].id);
+          setSelectedVersionId(String(versionId));
+        } else {
+          setSelectedVersionId(String(veh.versions[0].id));
         }
       }
     } else {
       setSelectedVehicleId(initialVehicle.id);
-      const activeVer = initialVehicle.versions[activeVersionIndex] || initialVehicle.versions[0];
+      const activeVer = initialVehicle.versions?.[activeVersionIndex] || initialVehicle.versions?.[0];
       if (activeVer) {
-        setSelectedVersionId(activeVer.id);
+        setSelectedVersionId(String(activeVer.id));
       }
     }
     setDrawerStep("calculate");

@@ -29,10 +29,24 @@
                 </div>
 
                 <Field
+                    v-if="salesConsultantsList.length > 0"
+                    v-model="form.sales_consultant_id"
+                    :field="{
+                        type: 'dropdown',
+                        name: 'sales_consultant_id',
+                        label: 'Liên kết Cố vấn bán hàng (Dành cho tài khoản Sale)',
+                        options: salesConsultantsList,
+                        emptyLabel: '-- Không liên kết (Tài khoản Quản trị chung) --',
+                        help: 'Khi chọn Cố vấn, tài khoản này chỉ quản lý Landing Page và Lead của riêng bạn Sale đó.',
+                    }"
+                    @update:modelValue="onConsultantChange(form, $event)"
+                />
+
+                <Field
                     class="w-full"
                     v-model="form.role_id"
                     :field="{
-                        name: 'role',
+                        name: 'role_id',
                         type: 'radio_list',
                         keyBy: 'id',
                         labelBy: 'name',
@@ -72,11 +86,35 @@
 </template>
 <script>
 export default {
-    props: ["item", "schema"],
+    props: ["item", "schema", "sales_consultants"],
     data() {
         return {
-            formData: this.item,
+            formData: {
+                role_id: this.item?.role_id ?? null,
+                password: '',
+                password_confirmation: '',
+                ...this.item,
+            },
         };
+    },
+    computed: {
+        salesConsultantsList() {
+            return (this.sales_consultants || []).map(c => ({
+                id: c.id,
+                label: `${c.name} (${c.email || c.phone || 'Chưa có email'})`,
+            }));
+        },
+    },
+    methods: {
+        onConsultantChange(form, consultantId) {
+            if (!consultantId) return;
+            const consultant = (this.sales_consultants || []).find(c => c.id === consultantId);
+            if (consultant) {
+                if (!form.name || form.name === '') form.name = consultant.name;
+                if (!form.email || form.email === '') form.email = consultant.email;
+                if (!form.phone || form.phone === '') form.phone = consultant.phone;
+            }
+        },
     },
 };
 </script>

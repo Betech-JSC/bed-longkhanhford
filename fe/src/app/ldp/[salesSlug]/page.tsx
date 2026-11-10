@@ -242,23 +242,34 @@ export default async function Page({ params }: Props) {
     ? ldpData.vehicles
     : (normalizedLeadVehicle ? [normalizedLeadVehicle] : []);
 
-  // Đồng bộ thông tin & hình ảnh dòng xe trực tiếp từ API trang chủ (/api/vehicles)
-  const allVehicles = rawLdpVehicles.length > 0
-    ? rawLdpVehicles.map((v: any) => {
-        const matched = homepageVehicles.find(
-          (hv: any) =>
-            (hv.slug && (hv.slug === v.slug || hv.slug === v.id)) ||
-            String(hv.id) === String(v.id)
+  // Danh sách dòng xe chuyên viên phụ trách (dùng cho thanh tab switcher ghim đầu trang)
+  const assignedVehicles = rawLdpVehicles.map((v: any) => {
+    const matched = homepageVehicles.find(
+      (hv: any) =>
+        (hv.slug && (hv.slug === v.slug || hv.slug === v.id)) ||
+        String(hv.id) === String(v.id)
+    );
+    return matched ? { ...v, ...matched, id: v.slug || matched.slug || v.id } : v;
+  });
+
+  // Đồng bộ 100% dòng xe đại lý: Showroom LDP luôn hiển thị đầy đủ tất cả xe từ trang chính đại lý
+  const showroomVehicles = homepageVehicles.length > 0
+    ? homepageVehicles.map((hv: any) => {
+        const custom = rawLdpVehicles.find(
+          (v: any) =>
+            (v.slug && (v.slug === hv.slug || v.slug === hv.id)) ||
+            String(v.id) === String(hv.id)
         );
-        return matched ? { ...v, ...matched, id: v.slug || matched.slug || v.id } : v;
+        return custom ? { ...hv, ...custom, id: hv.slug || hv.id } : { ...hv, id: hv.slug || hv.id };
       })
-    : homepageVehicles;
+    : assignedVehicles;
 
   return (
     <LdpHomeClient
       salesConsultant={ldpData.sales_consultant}
-      allVehicles={allVehicles}
-      leadVehicle={normalizedLeadVehicle || allVehicles[0]}
+      allVehicles={showroomVehicles}
+      assignedVehicles={assignedVehicles}
+      leadVehicle={normalizedLeadVehicle || showroomVehicles[0]}
       landingPageId={ldpData.id}
       salesEmail={ldpData.sales_email || ldpData.sales_consultant?.email}
       promotions={ldpData.promotions}

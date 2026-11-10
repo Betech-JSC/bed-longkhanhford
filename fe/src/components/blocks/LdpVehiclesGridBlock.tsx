@@ -15,6 +15,7 @@ interface LdpVehiclesGridBlockProps {
   currentVehicle?: any;
   anchorId?: string;
   isEditMode?: boolean;
+  openQuoteDrawer?: (vehicleId?: string, versionId?: string) => void;
 }
 
 // Phân nhóm danh mục dựa trên loại xe hoặc tên xe (fallback)
@@ -36,6 +37,7 @@ export default function LdpVehiclesGridBlock({
   currentVehicle,
   anchorId,
   isEditMode = false,
+  openQuoteDrawer,
 }: LdpVehiclesGridBlockProps) {
   const [selectedCat, setSelectedCat] = useState<string>("all");
   const [categories, setCategories] = useState<any[]>([]);
@@ -66,19 +68,18 @@ export default function LdpVehiclesGridBlock({
       .then((res: any) => {
         const list = res?.data || res || [];
         if (Array.isArray(list) && list.length > 0) {
-          if (Array.isArray(allVehicles) && allVehicles.length > 0) {
-            const enriched = allVehicles.map((v: any) => {
-              const matched = list.find(
-                (hv: any) =>
-                  (hv.slug && (hv.slug === v.slug || hv.slug === v.id)) ||
-                  String(hv.id) === String(v.id)
-              );
-              return matched ? { ...v, ...matched, id: v.slug || matched.slug || v.id } : v;
-            });
-            setVehicles(enriched);
-          } else {
-            setVehicles(list);
-          }
+          // Luôn hiển thị trọn vẹn danh mục xe đại lý, kết hợp thông tin tùy biến nếu có
+          const enriched = list.map((hv: any) => {
+            const custom = Array.isArray(allVehicles)
+              ? allVehicles.find(
+                  (v: any) =>
+                    (v.slug && (v.slug === hv.slug || v.slug === hv.id)) ||
+                    String(hv.id) === String(v.id)
+                )
+              : null;
+            return custom ? { ...hv, ...custom, id: hv.slug || hv.id } : { ...hv, id: hv.slug || hv.id };
+          });
+          setVehicles(enriched);
         } else if (Array.isArray(allVehicles) && allVehicles.length > 0) {
           setVehicles(allVehicles);
         } else if (currentVehicle) {
@@ -261,18 +262,9 @@ export default function LdpVehiclesGridBlock({
                 : `/ldp/${consultantSlug}/${vehicleSlug}#ldp-vehicle-intro`;
 
               return (
-                <Link
+                <div
                   key={vehicle.id || vehicleSlug}
-                  href={href}
-                  scroll={false}
-                  onClick={(e) => {
-                    // Nếu là dòng xe đang xem sẵn, cuộn ngay xuống phần giới thiệu xe
-                    if (isCurrent) {
-                      e.preventDefault();
-                      scrollToVehicleIntro();
-                    }
-                  }}
-                  className={`bg-white border rounded-2xl p-6 flex flex-col justify-between hover:shadow-lg transition-all duration-300 relative group cursor-pointer h-full ${
+                  className={`bg-white border rounded-2xl p-6 flex flex-col justify-between hover:shadow-lg transition-all duration-300 relative group h-full ${
                     isCurrent
                       ? "border-[#0562D2] ring-2 ring-[#0562D2]/20 shadow-md"
                       : "border-[#EAECF0]"
@@ -287,7 +279,17 @@ export default function LdpVehiclesGridBlock({
                   )}
 
                   {/* Khung ảnh xe */}
-                  <div className="relative h-48 w-full bg-white overflow-hidden mb-6 flex items-center justify-center">
+                  <Link
+                    href={href}
+                    scroll={false}
+                    onClick={(e) => {
+                      if (isCurrent) {
+                        e.preventDefault();
+                        scrollToVehicleIntro();
+                      }
+                    }}
+                    className="relative h-48 w-full bg-white overflow-hidden mb-6 flex items-center justify-center block cursor-pointer"
+                  >
                     <SafeImage
                       src={vehicleCardImage}
                       alt={vehicleName}
@@ -296,25 +298,65 @@ export default function LdpVehiclesGridBlock({
                       className="object-contain object-center group-hover:scale-105 transition-transform duration-500 p-2"
                       unoptimized={true}
                     />
-                  </div>
+                  </Link>
 
-                  {/* Tên xe & Giá khởi điểm chuẩn Homepage */}
+                  {/* Tên xe & Giá khởi điểm */}
                   <div className="space-y-2 mt-auto">
-                    <h3
-                      className={`text-base font-bold tracking-tight uppercase ${
-                        vehicleSlug === "new-mustang-mach-e" ? "text-[#0562D2]" : "text-[#1A1A1A]"
-                      }`}
+                    <Link
+                      href={href}
+                      scroll={false}
+                      onClick={(e) => {
+                        if (isCurrent) {
+                          e.preventDefault();
+                          scrollToVehicleIntro();
+                        }
+                      }}
+                      className="block group-hover:text-[#0562D2] transition-colors"
                     >
-                      {vehicleName}
-                    </h3>
+                      <h3
+                        className={`text-base font-bold tracking-tight uppercase ${
+                          vehicleSlug === "new-mustang-mach-e" ? "text-[#0562D2]" : "text-[#1A1A1A]"
+                        }`}
+                      >
+                        {vehicleName}
+                      </h3>
+                    </Link>
                     <div className="text-xs text-gray-500 font-medium">
                       <span>Giá khởi điểm: </span>
                       <span className="text-sm font-bold text-[#0562D2]">
                         {formatPrice(vehiclePrice)}
                       </span>
                     </div>
+
+                    {/* Nút Nhận báo giá & Xem chi tiết */}
+                    <div className="grid grid-cols-2 gap-2 pt-3 border-t border-gray-100">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          if (openQuoteDrawer) openQuoteDrawer(vehicleSlug);
+                        }}
+                        className="w-full py-2.5 px-2 bg-[#0562D2] hover:bg-[#0451B0] text-white rounded-lg text-xs font-bold transition-colors cursor-pointer border-0 text-center"
+                      >
+                        Nhận báo giá
+                      </button>
+                      <Link
+                        href={href}
+                        scroll={false}
+                        onClick={(e) => {
+                          if (isCurrent) {
+                            e.preventDefault();
+                            scrollToVehicleIntro();
+                          }
+                        }}
+                        className="w-full py-2.5 px-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg text-xs font-bold transition-colors cursor-pointer border-0 text-center block"
+                      >
+                        Xem chi tiết
+                      </Link>
+                    </div>
                   </div>
-                </Link>
+                </div>
               );
             })}
           </div>

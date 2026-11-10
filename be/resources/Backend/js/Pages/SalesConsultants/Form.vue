@@ -71,44 +71,93 @@
 
             <!-- Gallery -->
             <div class="card mt-4">
-                <div class="card-header">Thư viện ảnh hoạt động</div>
-                <div class="card-body">
-                    <div
-                        v-for="(item, index) in form.gallery"
-                        :key="index"
-                        class="border rounded p-3 mb-3 bg-gray-50"
-                    >
-                        <div class="flex justify-between items-center mb-2">
-                            <strong>Ảnh {{ index + 1 }}</strong>
-                            <button
-                                type="button"
-                                class="text-red-500 text-sm font-semibold hover:underline"
-                                @click="removeGalleryItem(index)"
-                            >Xoá</button>
-                        </div>
-                        <Field
-                            v-model="form.gallery[index].image"
-                            :field="{
-                                type: 'file_upload',
-                                name: 'gallery_image_' + index,
-                                label: 'Ảnh',
-                            }"
-                        />
-                        <Field
-                            v-model="form.gallery[index].caption"
-                            :field="{
-                                type: 'text',
-                                name: 'gallery_caption_' + index,
-                                label: 'Mô tả ảnh (tuỳ chọn)',
-                            }"
-                        />
+                <div class="card-header font-bold text-gray-900 flex flex-wrap items-center justify-between gap-2">
+                    <div class="flex items-center gap-2">
+                        <span>📸 Kho hình ảnh giao xe / Thư viện ảnh của chính chủ</span>
+                        <span class="text-xs bg-blue-50 text-blue-700 font-semibold px-2 py-0.5 rounded-full border border-blue-200">
+                            {{ form.gallery?.length || 0 }} ảnh
+                        </span>
                     </div>
-                    <button
-                        type="button"
-                        class="btn btn-outline-primary btn-sm"
-                        @click="addGalleryItem"
-                    >+ Thêm ảnh gallery</button>
+                    <div class="flex items-center gap-2">
+                        <button
+                            type="button"
+                            class="btn btn-primary btn-sm !py-1 !px-2.5 text-xs flex items-center gap-1 shadow-sm"
+                            @click="openGalleryFileManager(form)"
+                        >📸 Chọn nhiều ảnh</button>
+                        <button
+                            type="button"
+                            class="btn btn-outline-secondary btn-sm !py-1 !px-2 text-xs"
+                            title="Thêm 1 ô trống thủ công"
+                            @click="addEmptyGalleryItem(form)"
+                        >+ 1 ô</button>
+                        <button
+                            v-if="form.gallery && form.gallery.length > 0"
+                            type="button"
+                            class="text-xs font-semibold text-gray-600 hover:text-gray-900 bg-gray-100 hover:bg-gray-200 px-2.5 py-1 rounded border border-gray-300 transition"
+                            @click="isGalleryCollapsed = !isGalleryCollapsed"
+                        >
+                            {{ isGalleryCollapsed ? '▼ Mở rộng' : '▲ Thu gọn' }}
+                        </button>
+                    </div>
                 </div>
+                <div v-show="!isGalleryCollapsed" class="card-body">
+                    <p class="text-xs text-gray-500 mb-3">
+                        Các hình ảnh tải lên tại đây sẽ hiển thị độc quyền tại mục <strong>Tri ân khách hàng (Bàn giao xe)</strong> trên trang Landing Page của riêng cố vấn này. Khung danh sách có thanh cuộn riêng để không làm dài trang.
+                    </p>
+                    <div
+                        v-if="!form.gallery || form.gallery.length === 0"
+                        class="text-center py-6 border border-dashed border-gray-300 rounded-lg bg-gray-50 text-gray-500 text-xs"
+                    >
+                        Chưa có ảnh giao xe nào. Bấm nút <strong>"📸 Chọn nhiều ảnh"</strong> ở phía trên để tải lên hoặc chọn hàng loạt.
+                    </div>
+                    <div
+                        v-else
+                        class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 max-h-[420px] overflow-y-auto pr-1"
+                    >
+                        <div
+                            v-for="(item, index) in form.gallery"
+                            :key="index"
+                            class="border border-gray-200 rounded-lg p-2.5 bg-gray-50 flex flex-col justify-between shadow-sm"
+                        >
+                            <div class="flex justify-between items-center mb-1.5 pb-1 border-b border-gray-200">
+                                <span class="text-xs font-bold text-gray-700">Ảnh giao xe #{{ index + 1 }}</span>
+                                <button
+                                    type="button"
+                                    class="text-red-500 text-xs font-semibold hover:underline"
+                                    @click="removeGalleryItem(index, form)"
+                                >Xoá</button>
+                            </div>
+                            <div class="gallery-compact-upload">
+                                <Field
+                                    v-model="form.gallery[index].image"
+                                    :field="{
+                                        type: 'file_upload',
+                                        name: 'gallery_image_' + index,
+                                        label: 'Hình ảnh',
+                                    }"
+                                />
+                            </div>
+                            <div class="mt-1">
+                                <Field
+                                    v-model="form.gallery[index].caption"
+                                    :field="{
+                                        type: 'text',
+                                        name: 'gallery_caption_' + index,
+                                        label: 'Chú thích ngắn',
+                                        placeholder: 'VD: Giao xe Ford Everest...',
+                                    }"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <FileManager
+                    v-if="showGalleryFileManager"
+                    v-model:show="showGalleryFileManager"
+                    :multiple="true"
+                    @onSelect="onSelectGalleryImages($event, form)"
+                />
             </div>
         </template>
 
@@ -255,14 +304,17 @@
 
 <script>
 import TrackingConfigCard, { normalizeTrackingConfig } from './TrackingConfigCard.vue'
+import FileManager from "@/Components/FileManager.vue"
 
 export default {
-    components: { TrackingConfigCard },
+    components: { TrackingConfigCard, FileManager },
     props: ['item', 'schema'],
 
     data() {
         return {
             currentTab: this.getCurrentLocale?.() ?? 'vi',
+            isGalleryCollapsed: false,
+            showGalleryFileManager: false,
             formData: this.initFormData(this.item),
         }
     },
@@ -320,14 +372,45 @@ export default {
             return data
         },
 
-        addGalleryItem() {
-            if (!this.formData.gallery) this.formData.gallery = []
-            this.formData.gallery.push({ image: null, caption: '' })
+        openGalleryFileManager() {
+            this.isGalleryCollapsed = false
+            this.showGalleryFileManager = true
         },
 
-        removeGalleryItem(index) {
-            this.formData.gallery.splice(index, 1)
+        addEmptyGalleryItem(form) {
+            this.isGalleryCollapsed = false
+            const target = form?.gallery ?? this.formData.gallery
+            if (target) target.push({ image: null, caption: '' })
+        },
+
+        addGalleryItem() {
+            this.openGalleryFileManager()
+        },
+
+        onSelectGalleryImages(files, form) {
+            this.showGalleryFileManager = false
+            if (!files || (Array.isArray(files) && files.length === 0)) return
+            const list = Array.isArray(files) ? files : [files]
+            const target = form?.gallery ?? this.formData.gallery
+            if (!target) return
+            list.forEach(file => {
+                target.push({ image: file, caption: '' })
+            })
+        },
+
+        removeGalleryItem(index, form) {
+            const target = form?.gallery ?? this.formData.gallery
+            if (target && target.length > index) {
+                target.splice(index, 1)
+            }
         },
     },
 }
 </script>
+
+<style scoped>
+.gallery-compact-upload :deep(img) {
+    max-height: 110px;
+    object-fit: cover;
+}
+</style>
