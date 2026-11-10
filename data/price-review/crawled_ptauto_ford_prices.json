@@ -1,0 +1,293 @@
+{
+  "crawled_at": "2026-11-10T17:44:00+07:00",
+  "source_url": "https://ptauto.com.vn/bao-gia-xe-ford/",
+  "title": "Báo giá lăn bánh xe Ford mới nhất",
+  "brand": "Phòng KD Ford",
+  "advisor": "Tư vấn xe Ford – Mr Thắng",
+  "phone": "0398688868",
+  "zalo": "https://zalo.me/0398688868",
+  "sourceDate": "Tháng 11",
+  "models": [
+    {
+      "id": "territory-trend",
+      "family": "Territory",
+      "version": "Trend 1.5 AT",
+      "kind": "car5",
+      "price": 739000000,
+      "discount": 74000000,
+      "fee_support": 0,
+      "taxbase": 739000000,
+      "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/territory-titanium-x-do.webp",
+      "promotion": "Mr Thắng: 0398.68.88.68 Nhận ưu đãi"
+    },
+    {
+      "id": "territory-titanium",
+      "family": "Territory",
+      "version": "Titanium 1.5 AT",
+      "kind": "car5",
+      "price": 819000000,
+      "discount": 58000000,
+      "fee_support": 0,
+      "taxbase": 819000000,
+      "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/territory-titanium-x-do.webp",
+      "promotion": "Mr Thắng: 0398.68.88.68 Nhận ưu đãi"
+    },
+    {
+      "id": "territory-titanium-x",
+      "family": "Territory",
+      "version": "Titanium X 1.5 AT",
+      "kind": "car5",
+      "price": 875000000,
+      "discount": 61000000,
+      "fee_support": 0,
+      "taxbase": 875000000,
+      "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/territory-titanium-x-do.webp",
+      "promotion": "Mr Thắng: 0398.68.88.68 Nhận ưu đãi"
+    },
+    {
+      "id": "territory-platinum",
+      "family": "Territory",
+      "version": "Platinum 1.5 AT",
+      "kind": "car5",
+      "price": 916000000,
+      "discount": 58000000,
+      "fee_support": 0,
+      "taxbase": 916000000,
+      "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/territory-titanium-x-do.webp",
+      "promotion": "Mr Thắng: 0398.68.88.68 Nhận ưu đãi"
+    },
+    {
+      "id": "everest-active",
+      "family": "Everest",
+      "version": "Active 2.0 AT 4x2",
+      "kind": "car7",
+      "price": 1129000000,
+      "discount": 62000000,
+      "fee_support": 0,
+      "taxbase": 1129000000,
+      "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/ford-everest-platinum-2-0l-at-4x2-2001778800927-1.webp",
+      "promotion": "Mr Thắng: 0398.68.88.68 Nhận ưu đãi"
+    },
+    {
+      "id": "everest-sport",
+      "family": "Everest",
+      "version": "Sport 2.0 AT 4x2",
+      "kind": "car7",
+      "price": 1209000000,
+      "discount": 67000000,
+      "fee_support": 0,
+      "taxbase": 1209000000,
+      "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/ford-everest-platinum-2-0l-at-4x2-2001778800927-1.webp",
+      "promotion": "Mr Thắng: 0398.68.88.68 Nhận ưu đãi"
+    },
+    {
+      "id": "everest-platinum-4x2",
+      "family": "Everest",
+      "version": "Platinum 2.0 AT 4x2",
+      "kind": "car7",
+      "price": 1335000000,
+      "discount": 70000000,
+      "fee_support": 0,
+      "taxbase": 1335000000,
+      "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/ford-everest-platinum-2-0l-at-4x2-2001778800927-1.webp",
+      "promotion": "Mr Thắng: 0398.68.88.68 Nhận ưu đãi"
+    },
+    {
+      "id": "everest-platinum-4x4",
+      "family": "Everest",
+      "version": "Platinum 2.0 AT 4x4",
+      "kind": "car7",
+      "price": 1440000000,
+      "discount": 144000000,
+      "fee_support": 0,
+      "taxbase": 1440000000,
+      "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/ford-everest-platinum-2-0l-at-4x2-2001778800927-1.webp",
+      "promotion": "Mr Thắng: 0398.68.88.68 Nhận ưu đãi"
+    },
+    {
+      "id": "everest-platinum-plus",
+      "family": "Everest",
+      "version": "Platinum+ 2.3 AT 4x4",
+      "kind": "car7",
+      "price": 1629000000,
+      "discount": 0,
+      "fee_support": 0,
+      "taxbase": 1629000000,
+      "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/ford-everest-platinum-2-0l-at-4x2-2001778800927-1.webp",
+      "promotion": "Mr Thắng: 0398.68.88.68 Nhận ưu đãi"
+    },
+    {
+      "id": "ranger-xls-4x2",
+      "family": "Ranger",
+      "version": "XLS 2.0 AT 4x2 (mới)",
+      "kind": "pickup",
+      "price": 726000000,
+      "discount": 37000000,
+      "fee_support": 0,
+      "taxbase": 726000000,
+      "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/ford-ranger-xls-2026.webp",
+      "promotion": "Mr Thắng: 0398.68.88.68 Nhận ưu đãi"
+    },
+    {
+      "id": "ranger-xls-4x4",
+      "family": "Ranger",
+      "version": "XLS 2.0 AT 4x4 (mới)",
+      "kind": "pickup",
+      "price": 795000000,
+      "discount": 48000000,
+      "fee_support": 0,
+      "taxbase": 47700000,
+      "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/ford-ranger-xls-2026.webp",
+      "promotion": "Mr Thắng: 0398.68.88.68 Nhận ưu đãi"
+    },
+    {
+      "id": "ranger-wildtrak-2",
+      "family": "Ranger",
+      "version": "Wildtrak 2.0 AT 4x4 (mới)",
+      "kind": "pickup",
+      "price": 973000000,
+      "discount": 44000000,
+      "fee_support": 0,
+      "taxbase": 795000000,
+      "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/ford-ranger-wiltrak-2026.webp",
+      "promotion": "Mr Thắng: 0398.68.88.68 Nhận ưu đãi"
+    },
+    {
+      "id": "ranger-wildtrak-3",
+      "family": "Ranger",
+      "version": "Wildtrak 3.0 AT 4x4 (mới)",
+      "kind": "pickup",
+      "price": 1093000000,
+      "discount": 80000000,
+      "fee_support": 0,
+      "taxbase": 1093000000,
+      "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/ford-ranger-wiltrak-2026.webp",
+      "promotion": "Mr Thắng: 0398.68.88.68 Nhận ưu đãi"
+    },
+    {
+      "id": "ranger-raptor",
+      "family": "Ranger Raptor",
+      "version": "3.0 AT 4WD",
+      "kind": "pickup",
+      "price": 1448000000,
+      "discount": 86000000,
+      "fee_support": 0,
+      "taxbase": 1448000000,
+      "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/ford-ranger-raptor-2026.png",
+      "promotion": "Mr Thắng: 0398.68.88.68 Nhận ưu đãi"
+    },
+    {
+      "id": "transit-trend",
+      "family": "Transit",
+      "version": "Trend 16 chỗ",
+      "kind": "transit",
+      "price": 907000000,
+      "discount": 80000000,
+      "fee_support": 0,
+      "taxbase": 907000000,
+      "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/ford-transit-trend-2026.png",
+      "promotion": "Mr Thắng: 0398.68.88.68 Nhận ưu đãi"
+    },
+    {
+      "id": "transit-premium",
+      "family": "Transit",
+      "version": "Premium 16 chỗ",
+      "kind": "transit",
+      "price": 999000000,
+      "discount": 70000000,
+      "fee_support": 0,
+      "taxbase": 999000000,
+      "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/ford-transit-premium-2026.webp",
+      "promotion": "Mr Thắng: 0398.68.88.68 Nhận ưu đãi"
+    },
+    {
+      "id": "transit-premium-plus",
+      "family": "Transit",
+      "version": "Premium+ 18 chỗ",
+      "kind": "transit",
+      "price": 1091000000,
+      "discount": 75000000,
+      "fee_support": 0,
+      "taxbase": 1091000000,
+      "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/ford-transit-premium-2026.webp",
+      "promotion": "Mr Thắng: 0398.68.88.68 Nhận ưu đãi"
+    },
+    {
+      "id": "mustang-mach-e",
+      "family": "Mustang Mach-E",
+      "version": "Premium AWD (thuần điện)",
+      "kind": "ev",
+      "price": 1699000000,
+      "discount": 0,
+      "fee_support": 0,
+      "taxbase": 0,
+      "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/ford-mustang-2026.webp",
+      "promotion": "Mr Thắng: 0398.68.88.68 Nhận ưu đãi"
+    }
+  ],
+  "locations": [
+    {
+      "key": "hcm",
+      "name": "TP. Hồ Chí Minh",
+      "taxcar": 10,
+      "taxpickup": 6,
+      "taxtransit": 2,
+      "platecar": 14000000,
+      "platetransit": 350000
+    },
+    {
+      "key": "hanoi",
+      "name": "Hà Nội",
+      "taxcar": 12,
+      "taxpickup": 6,
+      "taxtransit": 2,
+      "platecar": 14000000,
+      "platetransit": 350000
+    },
+    {
+      "key": "dongnai",
+      "name": "Đồng Nai",
+      "taxcar": 10,
+      "taxpickup": 6,
+      "taxtransit": 2,
+      "platecar": 140000,
+      "platetransit": 100000
+    },
+    {
+      "key": "lamdong",
+      "name": "Lâm Đồng",
+      "taxcar": 10,
+      "taxpickup": 6,
+      "taxtransit": 2,
+      "platecar": 140000,
+      "platetransit": 100000
+    },
+    {
+      "key": "other",
+      "name": "Tỉnh/thành khác (tham khảo)",
+      "taxcar": 10,
+      "taxpickup": 6,
+      "taxtransit": 2,
+      "platecar": 140000,
+      "platetransit": 100000
+    }
+  ],
+  "fees_constants": {
+    "inspection": 140000,
+    "serviceFee": 0,
+    "road": {
+      "car5": 1560000,
+      "car7": 1560000,
+      "ev": 1560000,
+      "pickup": 2160000,
+      "transit": 3240000
+    },
+    "insurance": {
+      "car5": 531000,
+      "car7": 951000,
+      "ev": 531000,
+      "pickup": 951000,
+      "transit": 3359400
+    }
+  }
+}

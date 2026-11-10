@@ -291,6 +291,25 @@ function LdpHomeInner({
   const [isTechHovered, setIsTechHovered] = useState<boolean>(false);
   const [isTechInteracted, setIsTechInteracted] = useState<boolean>(false);
 
+  // Promotions Data
+  const globalPromos = useMemo(() => {
+    return Array.isArray(promotions?.global) ? promotions.global.map((p: any) => ({ ...p, _isCustom: false })) : [];
+  }, [promotions?.global]);
+
+  const customPromos = useMemo(() => {
+    return Array.isArray(promotions?.custom) ? promotions.custom.map((p: any) => ({ ...p, _isCustom: true })) : [];
+  }, [promotions?.custom]);
+
+  const rawPromosList = useMemo(() => {
+    return Array.isArray(promotions) ? promotions.map((p: any) => ({ ...p, _isCustom: false })) : [];
+  }, [promotions]);
+
+  const allPromotionCards = useMemo(() => {
+    return [...customPromos, ...globalPromos, ...rawPromosList];
+  }, [customPromos, globalPromos, rawPromosList]);
+
+  const hasAnyPromotions = allPromotionCards.length > 0;
+
   const techDragStartX = useRef<number>(0);
   const isTechDragging = useRef<boolean>(false);
   const techWasDragged = useRef<boolean>(false);
@@ -984,6 +1003,128 @@ function LdpHomeInner({
           </div>
         </div>
       </section>
+
+      {/* 3.5. PROMOTIONS SECTION (#promotions) */}
+      {hasAnyPromotions && (
+        <section id="promotions" className="w-full py-16 md:py-20 bg-slate-50 border-t border-gray-200 scroll-mt-12">
+          <div className="max-w-[1440px] mx-auto px-4 xl:px-[144px] w-full">
+            {/* Header */}
+            <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 md:mb-12 gap-4">
+              <div>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-[#0562D2] text-xs font-bold uppercase tracking-wider mb-3">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>Chương trình ưu đãi tháng</span>
+                </div>
+                <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">
+                  Khuyến Mãi &amp; Quà Tặng Đặc Biệt
+                </h2>
+                <p className="text-sm text-gray-600 mt-2 max-w-2xl">
+                  {salesConsultant
+                    ? `Nhận ngay ưu đãi giá bán tốt nhất, quà tặng phụ kiện chính hãng và chính sách trả góp ưu đãi từ chuyên viên tư vấn ${formatPersonName(salesConsultant.name)}.`
+                    : "Chương trình ưu đãi giá, quà tặng phụ kiện và hỗ trợ tài chính đặc quyền khi mua xe trong tháng này."}
+                </p>
+              </div>
+
+              {salesConsultant?.phone && (
+                <a
+                  href={`tel:${salesConsultant.phone}`}
+                  className="hidden md:inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-md shadow-emerald-600/20 transition-all shrink-0"
+                >
+                  <Phone className="w-4 h-4" />
+                  <span>Hotline: {salesConsultant.phone}</span>
+                </a>
+              )}
+            </div>
+
+            {/* Promotions Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+              {allPromotionCards.map((promo: any, idx: number) => {
+                const promoImg = promo.image_url || promo.image || (promo.image ? resolveImageUrl(promo.image) : "");
+                const isCustom = promo._isCustom;
+
+                return (
+                  <div
+                    key={promo.id || idx}
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group"
+                  >
+                    <div>
+                      {/* Image banner */}
+                      {promoImg ? (
+                        <div className="relative h-48 md:h-52 w-full bg-gray-100 overflow-hidden">
+                          <img
+                            src={promoImg}
+                            alt={promo.title || "Khuyến mãi"}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            onError={(e) => {
+                              (e.target as HTMLElement).style.display = "none";
+                            }}
+                          />
+                          <div className="absolute top-3 left-3">
+                            <span className={`text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm ${
+                              isCustom
+                                ? "bg-emerald-600 text-white"
+                                : "bg-[#0562D2] text-white"
+                            }`}>
+                              {isCustom ? "Ưu đãi độc quyền" : "Khuyến mãi đại lý"}
+                            </span>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="relative h-28 w-full bg-gradient-to-r from-blue-900 to-[#0562D2] p-4 flex items-center justify-between text-white">
+                          <div className="flex items-center gap-2">
+                            <Sparkles className="w-5 h-5 text-yellow-300" />
+                            <span className="text-xs font-bold uppercase tracking-wider">
+                              {isCustom ? "Ưu đãi chuyên viên" : "Ưu đãi đại lý"}
+                            </span>
+                          </div>
+                          <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-white/20">
+                            Tháng {new Date().getMonth() + 1}
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Content */}
+                      <div className="p-6">
+                        <h3 className="text-base md:text-lg font-bold text-gray-900 line-clamp-2 leading-snug group-hover:text-[#0562D2] transition-colors">
+                          {promo.title}
+                        </h3>
+                        <p className="text-gray-600 text-xs md:text-sm mt-2.5 line-clamp-3 leading-relaxed">
+                          {promo.description}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Footer Actions */}
+                    <div className="p-6 pt-0 border-t border-gray-100 mt-4 flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => openQuoteDrawer(leadVehicle?.slug || leadVehicle?.id)}
+                        className="flex-1 py-2.5 px-3 bg-[#0562D2] hover:bg-[#0451B0] text-white rounded-lg text-xs font-bold transition-colors cursor-pointer border-0 flex items-center justify-center gap-1.5"
+                      >
+                        <FileText className="w-3.5 h-3.5" />
+                        <span>Nhận báo giá</span>
+                      </button>
+
+                      {finalZaloUrl && (
+                        <a
+                          href={finalZaloUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="py-2.5 px-3 bg-blue-50 hover:bg-blue-100 text-[#0068FF] rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-1.5 border border-blue-200"
+                          title="Tư vấn qua Zalo"
+                        >
+                          <ZaloIcon className="w-4 h-4" />
+                          <span className="hidden sm:inline">Zalo</span>
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* 4. TECHNOLOGY SHOWCASE (#technology) */}
       <section id="technology" className="w-full bg-[#00095b] py-20 text-white overflow-hidden relative select-none">

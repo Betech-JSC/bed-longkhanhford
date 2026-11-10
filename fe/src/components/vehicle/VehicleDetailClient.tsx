@@ -109,6 +109,13 @@ export default function VehicleDetailClient() {
             }
           },
           {
+            type: "VersionsGrid",
+            data: {
+              title: `Các phiên bản Ford ${vehicle.name}`,
+              descriptions: []
+            }
+          },
+          {
             type: "Promotions",
             data: {
               title: `Ưu Đãi Đặc Biệt Cho Xe ${vehicle.name}`,
@@ -133,13 +140,6 @@ export default function VehicleDetailClient() {
                 { value: vehicle.versions?.[0]?.specs?.engine || "Động cơ", label: "Động cơ Ford thế hệ mới tối ưu" },
                 { value: vehicle.versions?.[0]?.specs?.transmission || "Hộp số", label: "Vận hành êm ái, mượt mà" }
               ]
-            }
-          },
-          {
-            type: "VersionsGrid",
-            data: {
-              title: `Các phiên bản Ford ${vehicle.name}`,
-              descriptions: []
             }
           },
           {
@@ -452,6 +452,32 @@ export default function VehicleDetailClient() {
                 const heroBlock = currentBlocks.find((b: any) => b.type === "Hero" || b.type === "HeroBanner");
                 const otherBlocks = currentBlocks.filter((b: any) => b.type !== "Hero" && b.type !== "HeroBanner");
                 
+                // Sắp xếp lại otherBlocks: VersionsGrid lên đầu tiên, tiếp theo là Promotions, sau đó mới đến FeaturesGrid, SpecsGrid,...
+                const sortedOtherBlocks = (() => {
+                  if (isEditMode) return otherBlocks;
+
+                  let versionsBlocks = otherBlocks.filter((b: any) => b.type === "VersionsGrid");
+                  // Fallback: nếu xe có versions nhưng chưa có block VersionsGrid, tự động bổ sung lên đầu
+                  if (versionsBlocks.length === 0 && vehicle?.versions && vehicle.versions.length > 0) {
+                    versionsBlocks = [
+                      {
+                        type: "VersionsGrid",
+                        data: {
+                          title: `Các phiên bản Ford ${vehicle.name || ""}`,
+                          descriptions: []
+                        }
+                      }
+                    ];
+                  }
+
+                  const promoBlocks = otherBlocks.filter((b: any) => b.type === "Promotions" || b.type === "LdpPromotions");
+                  const restBlocks = otherBlocks.filter(
+                    (b: any) => b.type !== "VersionsGrid" && b.type !== "Promotions" && b.type !== "LdpPromotions"
+                  );
+
+                  return [...versionsBlocks, ...promoBlocks, ...restBlocks];
+                })();
+
                 const handleHeroChange = (idx: number, updatedData: any) => {
                   const actualIdx = currentBlocks.findIndex((b: any) => b.type === "Hero" || b.type === "HeroBanner");
                   if (actualIdx !== -1) {
@@ -460,7 +486,7 @@ export default function VehicleDetailClient() {
                 };
 
                 const handleOtherChange = (idx: number, updatedData: any) => {
-                  const targetBlock = otherBlocks[idx];
+                  const targetBlock = sortedOtherBlocks[idx];
                   const actualIdx = currentBlocks.findIndex((b: any) => b === targetBlock);
                   if (actualIdx !== -1) {
                     handleBlockChange(actualIdx, updatedData);
@@ -486,7 +512,7 @@ export default function VehicleDetailClient() {
                     {!isEditMode && <VehicleTabBar />}
 
                     <Blocks
-                      layout={otherBlocks}
+                      layout={sortedOtherBlocks}
                       vehicle={vehicle}
                       isEditMode={isEditMode}
                       onChangeBlock={handleOtherChange}
@@ -494,7 +520,7 @@ export default function VehicleDetailClient() {
                       openDriveModal={() => openDriveDrawer()}
                       activeIndex={activeIndex}
                       onSelectBlock={handleSelectBlock}
-                      startIndex={otherBlocks.length > 0 ? (currentBlocks.indexOf(otherBlocks[0]) !== -1 ? currentBlocks.indexOf(otherBlocks[0]) : 0) : 0}
+                      startIndex={sortedOtherBlocks.length > 0 ? (currentBlocks.indexOf(sortedOtherBlocks[0]) !== -1 ? currentBlocks.indexOf(sortedOtherBlocks[0]) : 0) : 0}
                     />
                   </>
                 );

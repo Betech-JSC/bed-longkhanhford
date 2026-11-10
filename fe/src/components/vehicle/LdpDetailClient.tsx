@@ -64,11 +64,12 @@ function LdpInnerContent({ salesConsultant, landingPageId, salesEmail, layoutBlo
 
   // Backwards compatibility dynamic injection for existing LDP pages
   // Chuẩn hóa và map các block legacy (nếu có)
-  let resolvedBlocks = [...layoutBlocks]
+  let resolvedBlocks = [...(layoutBlocks || [])]
     .filter((b: any) => b && b.type !== "ThreeSixtyViewer" && b.type !== "LdpVehiclesGrid")
     .map((b: any) => {
       if (b.type === "HeroBanner") return { ...b, type: "LdpHeroBanner" };
       if (b.type === "AccordionFAQs") return { ...b, type: "LdpFaq" };
+      if (b.type === "Promotions") return { ...b, type: "LdpPromotions" };
       return b;
     });
 
@@ -83,8 +84,8 @@ function LdpInnerContent({ salesConsultant, landingPageId, salesEmail, layoutBlo
         data: {}
       },
       {
-        id: 'default-sales-consultant',
-        type: 'LdpSalesConsultant',
+        id: 'default-versions-grid',
+        type: 'VersionsGrid',
         data: {}
       },
       {
@@ -94,6 +95,11 @@ function LdpInnerContent({ salesConsultant, landingPageId, salesEmail, layoutBlo
           title: "Chương Trình Khuyến Mãi Đặc Biệt",
           description: "Nhận ưu đãi độc quyền từ chuyên viên kinh doanh khi đăng ký mua xe trong tháng này."
         }
+      },
+      {
+        id: 'default-sales-consultant',
+        type: 'LdpSalesConsultant',
+        data: {}
       },
       {
         id: 'default-ldp-technology',
@@ -120,9 +126,62 @@ function LdpInnerContent({ salesConsultant, landingPageId, salesEmail, layoutBlo
 
   // Chia danh sách block linh hoạt theo vị trí của HeroBanner (cho phép kéo block lên trước cả Hero)
   const heroIndex = resolvedBlocks.findIndex((b: any) => b.type === "HeroBanner" || b.type === "LdpHeroBanner");
-  const topBlocks = heroIndex > 0 ? resolvedBlocks.slice(0, heroIndex) : [];
+  const rawTopBlocks = heroIndex > 0 ? resolvedBlocks.slice(0, heroIndex) : [];
   const heroBlock = heroIndex !== -1 ? resolvedBlocks[heroIndex] : null;
-  const bottomBlocks = heroIndex !== -1 ? resolvedBlocks.slice(heroIndex + 1) : resolvedBlocks;
+  const rawBottomBlocks = heroIndex !== -1 ? resolvedBlocks.slice(heroIndex + 1) : resolvedBlocks;
+
+  // 1. Tìm hoặc tạo khối VersionsGrid để đưa lên đầu bottomBlocks
+  let versionsBlock = rawBottomBlocks.find((b: any) => b.type === "VersionsGrid") ||
+    rawTopBlocks.find((b: any) => b.type === "VersionsGrid");
+
+  if (!versionsBlock && vehicle?.versions && vehicle.versions.length > 0) {
+    versionsBlock = {
+      id: 'default-versions-grid',
+      type: 'VersionsGrid',
+      data: {}
+    };
+  }
+
+  // 2. Tìm hoặc tạo khối LdpPromotions để đặt ngay sau VersionsGrid
+  const hasPromoData = promotions && (
+    (promotions.global && promotions.global.length > 0) ||
+    (promotions.custom && promotions.custom.length > 0)
+  );
+
+  let promotionsBlock = rawBottomBlocks.find((b: any) => b.type === "LdpPromotions" || b.type === "Promotions") ||
+    rawTopBlocks.find((b: any) => b.type === "LdpPromotions" || b.type === "Promotions");
+
+  if (promotionsBlock) {
+    promotionsBlock = { ...promotionsBlock, type: "LdpPromotions" };
+  } else if (hasPromoData) {
+    promotionsBlock = {
+      id: 'injected-ldp-promotions',
+      type: 'LdpPromotions',
+      data: {
+        title: "Chương Trình Khuyến Mãi Đặc Biệt",
+        description: "Nhận ưu đãi độc quyền từ chuyên viên kinh doanh khi đăng ký mua xe trong tháng này."
+      }
+    };
+  }
+
+  // Loại bỏ VersionsGrid và Promotions khỏi topBlocks và bottomBlocks để tránh render lặp lại
+  const topBlocks = rawTopBlocks.filter((b: any) =>
+    b.type !== "VersionsGrid" && b.type !== "LdpPromotions" && b.type !== "Promotions"
+  );
+  const otherBottomBlocks = rawBottomBlocks.filter((b: any) =>
+    b.type !== "VersionsGrid" && b.type !== "LdpPromotions" && b.type !== "Promotions"
+  );
+
+  // Sắp xếp thứ tự: [VersionsGrid] -> [LdpPromotions] -> [Các blocks còn lại]
+  const bottomBlocks: any[] = [];
+  if (versionsBlock) {
+    bottomBlocks.push(versionsBlock);
+  }
+  if (promotionsBlock) {
+    bottomBlocks.push(promotionsBlock);
+  }
+  bottomBlocks.push(...otherBottomBlocks);
+
   const hasVehiclesGrid = bottomBlocks.some((b: any) => b.type === "LdpVehiclesGrid");
 
   const consultantSlug = salesConsultant?.slug || salesConsultant?.name?.toLowerCase().replace(/\s+/g, '-');

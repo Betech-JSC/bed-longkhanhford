@@ -2597,6 +2597,7 @@ function LdpPromotionsBlock({ blockIndex, data, promotions, salesConsultant, ope
   );
 
   if (!hasPromotions) {
+    if (!isEditMode) return null;
     return (
       <section className="bg-slate-100 border border-dashed border-slate-300 py-8 px-4 text-center rounded-xl max-w-[1152px] mx-auto select-none my-4 w-full">
         <p className="text-slate-500 font-semibold text-sm">🎁 KHỐI KHUYẾN MÃI LDP</p>
@@ -2606,7 +2607,7 @@ function LdpPromotionsBlock({ blockIndex, data, promotions, salesConsultant, ope
   }
 
   return (
-    <section id={anchorId || undefined} className="bg-[#f8fafc] border-y border-slate-100 py-16 px-4 select-none w-full">
+    <section id={anchorId || "promotions"} className="bg-[#f8fafc] border-y border-slate-100 py-16 px-4 select-none w-full">
       <div className="max-w-[1152px] mx-auto">
         <div className="text-center max-w-2xl mx-auto mb-12">
           <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">{title}</h2>

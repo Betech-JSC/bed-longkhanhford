@@ -129,7 +129,7 @@ export const vehicles: Vehicle[] = [
     type: "suv",
     typeName: "SUV 7 Chỗ",
     isBestSeller: true,
-    basePrice: 1099000000,
+    basePrice: 1129000000,
     tagline: "Dấn bước. Dẫn đầu​.",
     description: "Được thiết kế để chinh phục mọi thử thách, Ford Everest thế hệ mới kết hợp khả năng vận hành mạnh mẽ ưu việt, nội thất sang trọng đỉnh cao và hệ thống an toàn thông minh bậc nhất.",
     images: [
@@ -143,9 +143,9 @@ export const vehicles: Vehicle[] = [
     ],
     versions: [
       {
-        id: "everest-ambiente",
-        name: "Everest Ambiente 2.0L AT 4x2",
-        price: 1099000000,
+        id: "everest-active",
+        name: "Everest Active 2.0L AT 4x2",
+        price: 1129000000,
         specs: {
           engine: "Single-Turbo Diesel 2.0L i4",
           power: "170 Hp @ 3500 rpm",
@@ -160,7 +160,7 @@ export const vehicles: Vehicle[] = [
       {
         id: "everest-sport",
         name: "Everest Sport 2.0L AT 4x2",
-        price: 1178000000,
+        price: 1209000000,
         specs: {
           engine: "Single-Turbo Diesel 2.0L i4",
           power: "170 Hp @ 3500 rpm",
@@ -175,7 +175,7 @@ export const vehicles: Vehicle[] = [
       {
         id: "everest-titanium-4x2",
         name: "Everest Titanium 2.0L AT 4x2",
-        price: 1399000000,
+        price: 1335000000,
         specs: {
           engine: "Bi-Turbo Diesel 2.0L i4",
           power: "210 Hp @ 3750 rpm",
@@ -188,9 +188,9 @@ export const vehicles: Vehicle[] = [
         }
       },
       {
-        id: "everest-titanium-plus-4x4",
-        name: "Everest Titanium+ 2.0L AT 4x4",
-        price: 1468000000,
+        id: "everest-platinum-4x4",
+        name: "Everest Platinum 2.0L AT 4x4",
+        price: 1440000000,
         specs: {
           engine: "Bi-Turbo Diesel 2.0L i4",
           power: "210 Hp @ 3750 rpm",
@@ -203,18 +203,18 @@ export const vehicles: Vehicle[] = [
         }
       },
       {
-        id: "everest-wildtrak",
-        name: "Everest Wildtrak 2.0L AT 4x4",
-        price: 1540000000,
+        id: "everest-platinum-plus",
+        name: "Everest Platinum+ 2.3L AT 4x4",
+        price: 1629000000,
         specs: {
-          engine: "Bi-Turbo Diesel 2.0L i4",
+          engine: "2.3L EcoBoost Xăng tăng áp",
           power: "210 Hp @ 3750 rpm",
           torque: "500 Nm @ 1750-2000 rpm",
           transmission: "Tự động 10 cấp điện tử",
           drivetrain: "Hai cầu chủ động (4WD)",
           dimensions: "4.914 x 1.923 x 1.842 mm",
           clearance: "200 mm",
-          fuelEconomy: "8.0 L/100km"
+          fuelEconomy: "8.2 L/100km"
         }
       }
     ]
@@ -225,7 +225,7 @@ export const vehicles: Vehicle[] = [
     type: "pickup",
     typeName: "Bán Tải",
     isBestSeller: true,
-    basePrice: 669000000,
+    basePrice: 726000000,
     tagline: "Vua bán tải chinh phục mọi nẻo đường.",
     description: "Được thiết kế để chinh phục những địa hình khắc nghiệt nhất, Ford Ranger kết hợp khả năng vận hành mạnh mẽ ưu việt cùng thiết kế hầm hố chuẩn Mỹ.",
     images: [
@@ -239,24 +239,9 @@ export const vehicles: Vehicle[] = [
     ],
     versions: [
       {
-        id: "ranger-xl",
-        name: "Ranger XL 2.0L 4x4 6MT",
-        price: 669000000,
-        specs: {
-          engine: "Single-Turbo Diesel 2.0L i4",
-          power: "170 Hp @ 3500 rpm",
-          torque: "405 Nm @ 1750-2500 rpm",
-          transmission: "Số sàn 6 cấp",
-          drivetrain: "Hai cầu chủ động (4x4)",
-          dimensions: "5.362 x 1.918 x 1.875 mm",
-          clearance: "235 mm",
-          fuelEconomy: "7.5 L/100km"
-        }
-      },
-      {
         id: "ranger-xls-4x2",
         name: "Ranger XLS 2.0L 4x2 6AT",
-        price: 707000000,
+        price: 726000000,
         specs: {
           engine: "Single-Turbo Diesel 2.0L i4",
           power: "170 Hp @ 3500 rpm",
@@ -271,7 +256,7 @@ export const vehicles: Vehicle[] = [
       {
         id: "ranger-xls-4x4",
         name: "Ranger XLS 2.0L 4x4 6AT",
-        price: 779000000,
+        price: 795000000,
         specs: {
           engine: "Single-Turbo Diesel 2.0L i4",
           power: "170 Hp @ 3500 rpm",
@@ -284,24 +269,9 @@ export const vehicles: Vehicle[] = [
         }
       },
       {
-        id: "ranger-sport",
-        name: "Ranger Sport 2.0L 4x4 6AT",
-        price: 864000000,
-        specs: {
-          engine: "Single-Turbo Diesel 2.0L i4",
-          power: "170 Hp @ 3500 rpm",
-          torque: "405 Nm @ 1750-2500 rpm",
-          transmission: "Tự động 6 cấp",
-          drivetrain: "Hai cầu chủ động (4x4)",
-          dimensions: "5.362 x 1.918 x 1.875 mm",
-          clearance: "235 mm",
-          fuelEconomy: "8.0 L/100km"
-        }
-      },
-      {
         id: "ranger-wildtrak",
         name: "Ranger Wildtrak 2.0L Bi-Turbo 10AT 4x4",
-        price: 979000000,
+        price: 973000000,
         specs: {
           engine: "Bi-Turbo Diesel 2.0L i4",
           power: "210 Hp @ 3750 rpm",
@@ -314,33 +284,33 @@ export const vehicles: Vehicle[] = [
         }
       },
       {
-        id: "ranger-stormtrak",
-        name: "Ranger Stormtrak 2.0L Bi-Turbo 10AT 4x4",
-        price: 1039000000,
+        id: "ranger-wildtrak-3",
+        name: "Ranger Wildtrak 3.0L V6 AT 4x4",
+        price: 1093000000,
         specs: {
-          engine: "Bi-Turbo Diesel 2.0L i4",
-          power: "210 Hp @ 3750 rpm",
-          torque: "500 Nm @ 1750-2000 rpm",
+          engine: "3.0L V6 Turbo Diesel",
+          power: "250 Hp @ 3250 rpm",
+          torque: "600 Nm @ 1750-2250 rpm",
           transmission: "Tự động 10 cấp điện tử",
           drivetrain: "Hai cầu chủ động bán thời gian",
           dimensions: "5.362 x 1.918 x 1.875 mm",
           clearance: "235 mm",
-          fuelEconomy: "8.1 L/100km"
+          fuelEconomy: "8.5 L/100km"
         }
       },
       {
         id: "ranger-raptor",
-        name: "Ranger Raptor 2.0L Bi-Turbo 10AT 4x4",
-        price: 1299000000,
+        name: "Ranger Raptor 3.0L V6 10AT 4WD",
+        price: 1448000000,
         specs: {
-          engine: "Bi-Turbo Diesel 2.0L i4 Ford Performance",
-          power: "210 Hp @ 3750 rpm",
-          torque: "500 Nm @ 1750-2000 rpm",
+          engine: "3.0L EcoBoost V6 Twin-Turbo Xăng",
+          power: "397 Hp @ 5650 rpm",
+          torque: "583 Nm @ 3500 rpm",
           transmission: "Tự động 10 cấp điện tử",
-          drivetrain: "Hai cầu chủ động bán thời gian thông minh",
+          drivetrain: "Hai cầu chủ động toàn thời gian (4WD)",
           dimensions: "5.381 x 2.028 x 1.922 mm",
           clearance: "272 mm",
-          fuelEconomy: "8.9 L/100km"
+          fuelEconomy: "11.5 L/100km"
         }
       }
     ]
@@ -351,7 +321,7 @@ export const vehicles: Vehicle[] = [
     type: "commercial",
     typeName: "Xe Thương Mại",
     isBestSeller: false,
-    basePrice: 905000000,
+    basePrice: 907000000,
     tagline: "Giải pháp vận chuyển hành khách chuyên nghiệp.",
     description: "Ford Transit Thế hệ Mới được thiết kế tối ưu với không gian rộng rãi hơn, tiện nghi vượt trội cùng độ bền bỉ cao, giúp tối đa hóa hiệu quả kinh doanh của doanh nghiệp.",
     images: [
@@ -364,45 +334,45 @@ export const vehicles: Vehicle[] = [
     versions: [
       {
         id: "transit-trend",
-        name: "Transit Trend 2.2L TDCi 6MT",
-        price: 905000000,
+        name: "Transit Trend 16 chỗ",
+        price: 907000000,
         specs: {
-          engine: "Turbo Diesel 2.2L TDCi",
-          power: "135 Hp @ 3750 rpm",
-          torque: "375 Nm @ 1500-2500 rpm",
+          engine: "Turbo Diesel 2.3L TDCi",
+          power: "171 Hp @ 3200 rpm",
+          torque: "425 Nm @ 1400-2400 rpm",
           transmission: "Số sàn 6 cấp",
           drivetrain: "Cầu sau (RWD)",
-          dimensions: "5.981 x 2.059 x 2.481 mm",
+          dimensions: "5.998 x 2.068 x 2.485 mm",
           clearance: "165 mm",
           fuelEconomy: "8.5 L/100km"
         }
       },
       {
         id: "transit-premium-16s",
-        name: "Transit Premium 16S 2.2L TDCi 6MT",
-        price: 949000000,
+        name: "Transit Premium 16 chỗ",
+        price: 999000000,
         specs: {
-          engine: "Turbo Diesel 2.2L TDCi",
-          power: "135 Hp @ 3750 rpm",
-          torque: "375 Nm @ 1500-2500 rpm",
+          engine: "Turbo Diesel 2.3L TDCi",
+          power: "171 Hp @ 3200 rpm",
+          torque: "425 Nm @ 1400-2400 rpm",
           transmission: "Số sàn 6 cấp",
           drivetrain: "Cầu sau (RWD)",
-          dimensions: "5.981 x 2.059 x 2.481 mm",
+          dimensions: "5.998 x 2.068 x 2.485 mm",
           clearance: "165 mm",
           fuelEconomy: "8.6 L/100km"
         }
       },
       {
         id: "transit-premium-18s",
-        name: "Transit Premium 18S 2.2L TDCi 6MT",
-        price: 1087000000,
+        name: "Transit Premium+ 18 chỗ",
+        price: 1091000000,
         specs: {
-          engine: "Turbo Diesel 2.2L TDCi",
-          power: "135 Hp @ 3750 rpm",
-          torque: "375 Nm @ 1500-2500 rpm",
+          engine: "Turbo Diesel 2.3L TDCi",
+          power: "171 Hp @ 3200 rpm",
+          torque: "425 Nm @ 1400-2400 rpm",
           transmission: "Số sàn 6 cấp",
           drivetrain: "Cầu sau (RWD)",
-          dimensions: "6.081 x 2.059 x 2.581 mm",
+          dimensions: "6.703 x 2.164 x 2.775 mm",
           clearance: "165 mm",
           fuelEconomy: "9.0 L/100km"
         }

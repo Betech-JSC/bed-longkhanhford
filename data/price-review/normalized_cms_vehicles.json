@@ -1,0 +1,254 @@
+[
+  {
+    "slug": "ford-territory",
+    "title": "FORD TERRITORY",
+    "type": "suv",
+    "category_id": 1,
+    "tagline": "Cơ hội vàng. Sẵn sàng rước xế.",
+    "description": "Diện mạo mới đầy cuốn hút, công nghệ ngập tràn và không gian cabin rộng rãi bậc nhất phân khúc. Ford Territory là lựa chọn hoàn hảo cho gia đình trẻ năng động.",
+    "image": "uploads/car-territory.png",
+    "base_price": 739000000,
+    "versions": [
+      {
+        "id": "territory-trend",
+        "name": "Territory Trend 1.5 AT",
+        "short_name": "Trend 1.5 AT",
+        "price": 739000000,
+        "kind": "car5",
+        "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/territory-titanium-x-do.webp",
+        "status": "ACTIVE",
+        "sort_order": 1
+      },
+      {
+        "id": "territory-titanium",
+        "name": "Territory Titanium 1.5 AT",
+        "short_name": "Titanium 1.5 AT",
+        "price": 819000000,
+        "kind": "car5",
+        "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/territory-titanium-x-do.webp",
+        "status": "ACTIVE",
+        "sort_order": 2
+      },
+      {
+        "id": "territory-titanium-x",
+        "name": "Territory Titanium X 1.5 AT",
+        "short_name": "Titanium X 1.5 AT",
+        "price": 875000000,
+        "kind": "car5",
+        "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/territory-titanium-x-do.webp",
+        "status": "ACTIVE",
+        "sort_order": 3
+      },
+      {
+        "id": "territory-platinum",
+        "name": "Territory Platinum 1.5 AT",
+        "short_name": "Platinum 1.5 AT",
+        "price": 916000000,
+        "kind": "car5",
+        "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/territory-titanium-x-do.webp",
+        "status": "ACTIVE",
+        "sort_order": 4
+      }
+    ]
+  },
+  {
+    "slug": "ford-everest",
+    "title": "FORD EVEREST",
+    "type": "suv",
+    "category_id": 1,
+    "tagline": "Chinh phục mọi địa hình.",
+    "description": "Mạnh mẽ, sang trọng và đầy uy lực. Ford Everest thế hệ mới sẵn sàng đồng hành cùng bạn trên mọi nẻo đường.",
+    "image": "uploads/car-everest.png",
+    "base_price": 1129000000,
+    "versions": [
+      {
+        "id": "everest-active",
+        "name": "Everest Active 2.0 AT 4x2",
+        "short_name": "Active 2.0 AT 4x2",
+        "price": 1129000000,
+        "kind": "car7",
+        "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/ford-everest-platinum-2-0l-at-4x2-2001778800927-1.webp",
+        "status": "ACTIVE",
+        "sort_order": 1
+      },
+      {
+        "id": "everest-sport",
+        "name": "Everest Sport 2.0 AT 4x2",
+        "short_name": "Sport 2.0 AT 4x2",
+        "price": 1209000000,
+        "kind": "car7",
+        "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/ford-everest-platinum-2-0l-at-4x2-2001778800927-1.webp",
+        "status": "ACTIVE",
+        "sort_order": 2
+      },
+      {
+        "id": "everest-platinum-4x2",
+        "name": "Everest Platinum 2.0 AT 4x2",
+        "short_name": "Platinum 2.0 AT 4x2",
+        "price": 1335000000,
+        "kind": "car7",
+        "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/ford-everest-platinum-2-0l-at-4x2-2001778800927-1.webp",
+        "status": "ACTIVE",
+        "sort_order": 3
+      },
+      {
+        "id": "everest-platinum-4x4",
+        "name": "Everest Platinum 2.0 AT 4x4",
+        "short_name": "Platinum 2.0 AT 4x4",
+        "price": 1440000000,
+        "kind": "car7",
+        "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/ford-everest-platinum-2-0l-at-4x2-2001778800927-1.webp",
+        "status": "ACTIVE",
+        "sort_order": 4
+      },
+      {
+        "id": "everest-platinum-plus",
+        "name": "Everest Platinum+ 2.3 AT 4x4",
+        "short_name": "Platinum+ 2.3 AT 4x4",
+        "price": 1629000000,
+        "kind": "car7",
+        "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/ford-everest-platinum-2-0l-at-4x2-2001778800927-1.webp",
+        "status": "ACTIVE",
+        "sort_order": 5
+      }
+    ]
+  },
+  {
+    "slug": "ford-ranger",
+    "title": "FORD RANGER",
+    "type": "pickup",
+    "category_id": 2,
+    "tagline": "Vua bán tải - Sống chất như Ranger.",
+    "description": "Khẳng định vị thế dẫn đầu phân khúc xe bán tải tại Việt Nam với khả năng vận hành bền bỉ và tiện nghi hiện đại.",
+    "image": "uploads/car-ranger.png",
+    "base_price": 726000000,
+    "versions": [
+      {
+        "id": "ranger-xls-4x2",
+        "name": "Ranger XLS 2.0 AT 4x2 (mới)",
+        "short_name": "XLS 2.0 AT 4x2 (mới)",
+        "price": 726000000,
+        "kind": "pickup",
+        "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/ford-ranger-xls-2026.webp",
+        "status": "ACTIVE",
+        "sort_order": 1
+      },
+      {
+        "id": "ranger-xls-4x4",
+        "name": "Ranger XLS 2.0 AT 4x4 (mới)",
+        "short_name": "XLS 2.0 AT 4x4 (mới)",
+        "price": 795000000,
+        "kind": "pickup",
+        "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/ford-ranger-xls-2026.webp",
+        "status": "ACTIVE",
+        "sort_order": 2
+      },
+      {
+        "id": "ranger-wildtrak-2",
+        "name": "Ranger Wildtrak 2.0 AT 4x4 (mới)",
+        "short_name": "Wildtrak 2.0 AT 4x4 (mới)",
+        "price": 973000000,
+        "kind": "pickup",
+        "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/ford-ranger-wiltrak-2026.webp",
+        "status": "ACTIVE",
+        "sort_order": 3
+      },
+      {
+        "id": "ranger-wildtrak-3",
+        "name": "Ranger Wildtrak 3.0 AT 4x4 (mới)",
+        "short_name": "Wildtrak 3.0 AT 4x4 (mới)",
+        "price": 1093000000,
+        "kind": "pickup",
+        "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/ford-ranger-wiltrak-2026.webp",
+        "status": "ACTIVE",
+        "sort_order": 4
+      }
+    ]
+  },
+  {
+    "slug": "ford-ranger-raptor",
+    "title": "FORD RANGER RAPTOR",
+    "type": "pickup",
+    "category_id": 2,
+    "tagline": "Chiến binh hiệu năng cao.",
+    "description": "Mẫu bán tải hiệu năng cao được tinh chỉnh bởi Ford Performance, sẵn sàng chinh phục những cung đường khắc nghiệt nhất.",
+    "image": "uploads/car-raptor.png",
+    "base_price": 1448000000,
+    "versions": [
+      {
+        "id": "ranger-raptor",
+        "name": "Ranger Raptor 3.0 AT 4WD",
+        "short_name": "3.0 AT 4WD",
+        "price": 1448000000,
+        "kind": "pickup",
+        "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/ford-ranger-raptor-2026.png",
+        "status": "ACTIVE",
+        "sort_order": 1
+      }
+    ]
+  },
+  {
+    "slug": "ford-transit",
+    "title": "FORD TRANSIT",
+    "type": "commercial",
+    "category_id": 3,
+    "tagline": "Giải pháp kinh doanh vận tải hoàn hảo.",
+    "description": "Không gian rộng rãi, tiết kiệm nhiên liệu và an toàn tối ưu cho hoạt động kinh doanh vận tải hành khách.",
+    "image": "uploads/car-transit.png",
+    "base_price": 907000000,
+    "versions": [
+      {
+        "id": "transit-trend",
+        "name": "Transit Trend 16 chỗ",
+        "short_name": "Trend 16 chỗ",
+        "price": 907000000,
+        "kind": "transit",
+        "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/ford-transit-trend-2026.png",
+        "status": "ACTIVE",
+        "sort_order": 1
+      },
+      {
+        "id": "transit-premium",
+        "name": "Transit Premium 16 chỗ",
+        "short_name": "Premium 16 chỗ",
+        "price": 999000000,
+        "kind": "transit",
+        "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/ford-transit-premium-2026.webp",
+        "status": "ACTIVE",
+        "sort_order": 2
+      },
+      {
+        "id": "transit-premium-plus",
+        "name": "Transit Premium+ 18 chỗ",
+        "short_name": "Premium+ 18 chỗ",
+        "price": 1091000000,
+        "kind": "transit",
+        "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/ford-transit-premium-2026.webp",
+        "status": "ACTIVE",
+        "sort_order": 3
+      }
+    ]
+  },
+  {
+    "slug": "ford-mustang-mach-e",
+    "title": "FORD MUSTANG MACH-E",
+    "type": "suv",
+    "category_id": 1,
+    "tagline": "Biểu tượng tốc độ thuần điện.",
+    "description": "Chiếc SUV thuần điện đậm chất biểu tượng Mustang với khả năng tăng tốc ấn tượng và công nghệ thông minh đỉnh cao.",
+    "image": "uploads/car-mustang-mach-e.png",
+    "base_price": 1699000000,
+    "versions": [
+      {
+        "id": "mustang-mach-e",
+        "name": "Mustang Mach-E Premium AWD (thuần điện)",
+        "short_name": "Premium AWD (thuần điện)",
+        "price": 1699000000,
+        "kind": "ev",
+        "image": "https://ptauto.com.vn/wp-content/uploads/2026/11/ford-mustang-2026.webp",
+        "status": "ACTIVE",
+        "sort_order": 1
+      }
+    ]
+  }
+]
