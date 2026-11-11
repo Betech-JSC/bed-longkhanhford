@@ -74,17 +74,61 @@
                                 Không tìm thấy bài viết khuyến mãi nào trong danh mục 'khuyen-mai'.
                             </div>
                             <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
-                                <div v-for="promo in globalPromotions" :key="promo.id" class="flex items-start space-x-3 p-2.5 border rounded-lg hover:bg-gray-50 transition">
-                                    <input
-                                        type="checkbox"
-                                        :id="'promo-' + promo.id"
-                                        :value="promo.id"
-                                        v-model="form.promotions.global_promotion_ids"
-                                        class="mt-1 h-4 w-4 text-primary-650 border-gray-300 rounded focus:ring-primary-500"
-                                    />
-                                    <label :for="'promo-' + promo.id" class="text-sm font-medium text-gray-800 cursor-pointer">
-                                        {{ promo.title }}
-                                    </label>
+                                <div
+                                    v-for="promo in globalPromotions"
+                                    :key="promo.id"
+                                    class="p-3 border rounded-xl transition bg-white"
+                                    :class="isGlobalPromoChecked(form, promo.id) ? 'border-blue-400 bg-blue-50/20 ring-1 ring-blue-300' : 'border-gray-200 hover:border-gray-300'"
+                                >
+                                    <div class="flex items-start space-x-3">
+                                        <input
+                                            type="checkbox"
+                                            :id="'promo-' + promo.id"
+                                            :value="promo.id"
+                                            v-model="form.promotions.global_promotion_ids"
+                                            @change="onGlobalPromoCheckboxChange(form, promo.id)"
+                                            class="mt-1 h-4 w-4 text-primary-650 border-gray-300 rounded focus:ring-primary-500 cursor-pointer"
+                                        />
+                                        <label :for="'promo-' + promo.id" class="text-sm font-semibold text-gray-800 cursor-pointer flex-1 select-none">
+                                            {{ promo.title }}
+                                        </label>
+                                    </div>
+
+                                    <!-- Bộ chọn dòng xe áp dụng khi khuyến mãi này được tích chọn -->
+                                    <div v-if="isGlobalPromoChecked(form, promo.id)" class="mt-2.5 pt-2.5 border-t border-gray-150 pl-7">
+                                        <div class="flex items-center justify-between mb-1.5">
+                                            <span class="text-[11px] font-bold text-gray-600 flex items-center gap-1">
+                                                🚗 Dòng xe áp dụng:
+                                            </span>
+                                            <span class="text-[10px] text-blue-700 font-semibold truncate max-w-[200px]" :title="getGlobalPromoVehicleLabel(form, promo.id)">
+                                                {{ getGlobalPromoVehicleLabel(form, promo.id) }}
+                                            </span>
+                                        </div>
+                                        <div class="flex flex-wrap gap-1.5">
+                                            <button
+                                                type="button"
+                                                class="text-[11px] px-2.5 py-1 rounded-md border font-medium cursor-pointer transition select-none"
+                                                :class="isGlobalPromoVehicleSelected(form, promo.id, 'all')
+                                                    ? 'bg-blue-600 text-white border-blue-600 font-bold shadow-xs'
+                                                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'"
+                                                @click="toggleGlobalPromoVehicle(form, promo.id, 'all')"
+                                            >
+                                                🌐 Tất cả dòng xe
+                                            </button>
+                                            <button
+                                                v-for="v in availablePromotionVehicles"
+                                                :key="v.id"
+                                                type="button"
+                                                class="text-[11px] px-2.5 py-1 rounded-md border font-medium cursor-pointer transition select-none"
+                                                :class="isGlobalPromoVehicleSelected(form, promo.id, v.id)
+                                                    ? 'bg-blue-600 text-white border-blue-600 font-bold shadow-xs'
+                                                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'"
+                                                @click="toggleGlobalPromoVehicle(form, promo.id, v.id)"
+                                            >
+                                                🚘 {{ v.title }}
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -109,6 +153,42 @@
                                 </button>
                                 
                                 <h4 class="text-sm font-bold text-gray-800 mb-3">Ưu đãi #{{ index + 1 }}</h4>
+                                
+                                <!-- Bộ chọn dòng xe áp dụng cho ưu đãi tự nhập -->
+                                <div class="mb-4 p-3 bg-white border border-gray-200 rounded-lg">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-xs font-bold text-gray-700 flex items-center gap-1">
+                                            🚗 Dòng xe áp dụng:
+                                        </span>
+                                        <span class="text-[11px] text-blue-700 font-semibold truncate max-w-[280px]" :title="getCustomPromoVehicleLabel(form, index)">
+                                            {{ getCustomPromoVehicleLabel(form, index) }}
+                                        </span>
+                                    </div>
+                                    <div class="flex flex-wrap gap-1.5">
+                                        <button
+                                            type="button"
+                                            class="text-[11px] px-2.5 py-1 rounded-md border font-medium cursor-pointer transition select-none"
+                                            :class="isCustomPromoVehicleSelected(form, index, 'all')
+                                                ? 'bg-blue-600 text-white border-blue-600 font-bold shadow-xs'
+                                                : 'bg-gray-50 text-gray-700 border-gray-300 hover:bg-gray-100'"
+                                            @click="toggleCustomPromoVehicle(form, index, 'all')"
+                                        >
+                                            🌐 Tất cả dòng xe (Trang chủ & Mọi xe)
+                                        </button>
+                                        <button
+                                            v-for="v in availablePromotionVehicles"
+                                            :key="v.id"
+                                            type="button"
+                                            class="text-[11px] px-2.5 py-1 rounded-md border font-medium cursor-pointer transition select-none"
+                                            :class="isCustomPromoVehicleSelected(form, index, v.id)
+                                                ? 'bg-blue-600 text-white border-blue-600 font-bold shadow-xs'
+                                                : 'bg-gray-50 text-gray-700 border-gray-300 hover:bg-gray-100'"
+                                            @click="toggleCustomPromoVehicle(form, index, v.id)"
+                                        >
+                                            🚘 {{ v.title }}
+                                        </button>
+                                    </div>
+                                </div>
                                 
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <Field
@@ -933,6 +1013,13 @@ export default {
             const v = this.vehicles.find(v => String(v.id) === String(this.activeVehicleTab));
             return v ? v.slug : '';
         },
+        // Danh sách các dòng xe để chọn áp dụng cho ưu đãi/khuyến mãi
+        availablePromotionVehicles() {
+            if (this.selectedVehicles && this.selectedVehicles.length > 0) {
+                return this.selectedVehicles;
+            }
+            return this.vehicles || [];
+        },
         // Getter/Setter cho blocks của xe đang active
         activeVehicleBlocks: {
             get() {
@@ -1080,6 +1167,31 @@ export default {
                 }
             }
 
+            const rawPromotions = cleanItem.promotions || {};
+            const globalIds = Array.isArray(rawPromotions.global_promotion_ids) ? rawPromotions.global_promotion_ids : [];
+            const globalVehicles = (rawPromotions.global_promotion_vehicles && typeof rawPromotions.global_promotion_vehicles === 'object')
+                ? { ...rawPromotions.global_promotion_vehicles }
+                : (rawPromotions.global_promotions_config && typeof rawPromotions.global_promotions_config === 'object')
+                    ? { ...rawPromotions.global_promotions_config }
+                    : {};
+
+            globalIds.forEach(id => {
+                const key = String(id);
+                if (!globalVehicles[key] || !Array.isArray(globalVehicles[key]) || globalVehicles[key].length === 0) {
+                    globalVehicles[key] = ['all'];
+                }
+            });
+
+            const customPromos = Array.isArray(rawPromotions.custom_promotions)
+                ? rawPromotions.custom_promotions.map(item => ({
+                    title: item.title || '',
+                    description: item.description || '',
+                    image: item.image || null,
+                    link: item.link || '',
+                    vehicle_ids: (Array.isArray(item.vehicle_ids) && item.vehicle_ids.length > 0) ? item.vehicle_ids : ['all']
+                }))
+                : [];
+
             const data = {
                 status: 'ACTIVE',
                 sort_order: 0,
@@ -1093,9 +1205,10 @@ export default {
                     || cleanItem?.sales_consultant?.tracking_config
                 ),
                 vehicle_ids: vehicleIds,
-                promotions: cleanItem.promotions || {
-                    global_promotion_ids: [],
-                    custom_promotions: []
+                promotions: {
+                    global_promotion_ids: globalIds,
+                    global_promotion_vehicles: globalVehicles,
+                    custom_promotions: customPromos
                 },
             };
 
@@ -1243,6 +1356,9 @@ export default {
             }
         },
         addCustomPromo() {
+            if (!this.formData.promotions) {
+                this.formData.promotions = { global_promotion_ids: [], global_promotion_vehicles: {}, custom_promotions: [] };
+            }
             if (!this.formData.promotions.custom_promotions) {
                 this.formData.promotions.custom_promotions = [];
             }
@@ -1250,11 +1366,149 @@ export default {
                 title: '',
                 description: '',
                 image: null,
-                link: ''
+                link: '',
+                vehicle_ids: ['all']
             });
         },
         removeCustomPromo(index) {
             this.formData.promotions.custom_promotions.splice(index, 1);
+        },
+        isGlobalPromoChecked(form, promoId) {
+            const pForm = form || this.formData;
+            const ids = pForm?.promotions?.global_promotion_ids;
+            return Array.isArray(ids) && ids.includes(promoId);
+        },
+        onGlobalPromoCheckboxChange(form, promoId) {
+            const pForm = form || this.formData;
+            if (!pForm.promotions) {
+                pForm.promotions = { global_promotion_ids: [], global_promotion_vehicles: {}, custom_promotions: [] };
+            }
+            if (!pForm.promotions.global_promotion_vehicles) {
+                pForm.promotions.global_promotion_vehicles = {};
+            }
+            const key = String(promoId);
+            if (!pForm.promotions.global_promotion_vehicles[key]) {
+                pForm.promotions.global_promotion_vehicles[key] = ['all'];
+            }
+            if (this.formData && this.formData.promotions) {
+                this.formData.promotions.global_promotion_vehicles = {
+                    ...pForm.promotions.global_promotion_vehicles
+                };
+            }
+        },
+        isGlobalPromoVehicleSelected(form, promoId, vehicleId) {
+            const pForm = form || this.formData;
+            const list = pForm?.promotions?.global_promotion_vehicles?.[String(promoId)];
+            if (vehicleId === 'all') {
+                return !list || list.length === 0 || list.includes('all');
+            }
+            return Array.isArray(list) && !list.includes('all') && (list.includes(vehicleId) || list.includes(String(vehicleId)) || list.includes(Number(vehicleId)));
+        },
+        toggleGlobalPromoVehicle(form, promoId, vehicleId) {
+            const pForm = form || this.formData;
+            if (!pForm.promotions) {
+                pForm.promotions = { global_promotion_ids: [], global_promotion_vehicles: {}, custom_promotions: [] };
+            }
+            if (!pForm.promotions.global_promotion_vehicles) {
+                pForm.promotions.global_promotion_vehicles = {};
+            }
+            const key = String(promoId);
+            let list = pForm.promotions.global_promotion_vehicles[key];
+            if (!Array.isArray(list) || list.length === 0) {
+                list = ['all'];
+            }
+
+            if (vehicleId === 'all') {
+                list = ['all'];
+            } else {
+                const vId = Number(vehicleId) || vehicleId;
+                if (list.includes('all')) {
+                    list = [vId];
+                } else {
+                    const idx = list.findIndex(x => String(x) === String(vId));
+                    if (idx !== -1) {
+                        list.splice(idx, 1);
+                        if (list.length === 0) list = ['all'];
+                    } else {
+                        list.push(vId);
+                    }
+                }
+            }
+
+            pForm.promotions.global_promotion_vehicles = {
+                ...pForm.promotions.global_promotion_vehicles,
+                [key]: list
+            };
+            if (this.formData && this.formData.promotions) {
+                this.formData.promotions.global_promotion_vehicles = {
+                    ...pForm.promotions.global_promotion_vehicles
+                };
+            }
+        },
+        getGlobalPromoVehicleLabel(form, promoId) {
+            const pForm = form || this.formData;
+            const key = String(promoId);
+            const list = pForm?.promotions?.global_promotion_vehicles?.[key];
+            if (!list || list.length === 0 || list.includes('all')) {
+                return 'Tất cả dòng xe (Trang chủ & Mọi xe)';
+            }
+            const titles = list.map(vId => {
+                const v = (this.vehicles || []).find(item => String(item.id) === String(vId));
+                return v ? v.title : `Xe #${vId}`;
+            });
+            return titles.join(', ');
+        },
+        isCustomPromoVehicleSelected(form, index, vehicleId) {
+            const pForm = form || this.formData;
+            const promo = pForm?.promotions?.custom_promotions?.[index];
+            const list = promo?.vehicle_ids;
+            if (vehicleId === 'all') {
+                return !list || list.length === 0 || list.includes('all');
+            }
+            return Array.isArray(list) && !list.includes('all') && (list.includes(vehicleId) || list.includes(String(vehicleId)) || list.includes(Number(vehicleId)));
+        },
+        toggleCustomPromoVehicle(form, index, vehicleId) {
+            const pForm = form || this.formData;
+            if (!pForm?.promotions?.custom_promotions?.[index]) return;
+            const promo = pForm.promotions.custom_promotions[index];
+            if (!promo.vehicle_ids || !Array.isArray(promo.vehicle_ids) || promo.vehicle_ids.length === 0) {
+                promo.vehicle_ids = ['all'];
+            }
+            let list = [...promo.vehicle_ids];
+
+            if (vehicleId === 'all') {
+                list = ['all'];
+            } else {
+                const vId = Number(vehicleId) || vehicleId;
+                if (list.includes('all')) {
+                    list = [vId];
+                } else {
+                    const idx = list.findIndex(x => String(x) === String(vId));
+                    if (idx !== -1) {
+                        list.splice(idx, 1);
+                        if (list.length === 0) list = ['all'];
+                    } else {
+                        list.push(vId);
+                    }
+                }
+            }
+            promo.vehicle_ids = list;
+            if (this.formData?.promotions?.custom_promotions?.[index]) {
+                this.formData.promotions.custom_promotions[index].vehicle_ids = list;
+            }
+        },
+        getCustomPromoVehicleLabel(form, index) {
+            const pForm = form || this.formData;
+            const promo = pForm?.promotions?.custom_promotions?.[index];
+            const list = promo?.vehicle_ids;
+            if (!list || list.length === 0 || list.includes('all')) {
+                return 'Tất cả dòng xe (Trang chủ & Mọi xe)';
+            }
+            const titles = list.map(vId => {
+                const v = (this.vehicles || []).find(item => String(item.id) === String(vId));
+                return v ? v.title : `Xe #${vId}`;
+            });
+            return titles.join(', ');
         },
         getConsultantMainLdpUrl() {
             const consultant = this.salesConsultants.find(c => String(c.id) === String(this.formData.sales_consultant_id));

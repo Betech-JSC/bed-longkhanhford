@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import ScrollReveal from "@/components/common/ScrollReveal";
-import { Plus, Minus, ChevronDown, ChevronUp, Phone, Bookmark, ChevronLeft, ChevronRight, Sparkles, Mail } from "lucide-react";
+import { Plus, Minus, ChevronDown, ChevronUp, Phone, Bookmark, ChevronLeft, ChevronRight, Sparkles, Mail, Car, Award } from "lucide-react";
 import { mediaAPI } from "@/lib/api";
 import { resolveImageUrl } from "@/lib/site-assets";
 import { formatPersonName } from "@/lib/formatters";
@@ -147,6 +147,7 @@ export default function Blocks({
                 isEditMode={isEditMode}
                 onChangeData={(updatedData: any) => onChangeBlock(index, updatedData)}
                 anchorId={block.anchorId}
+                vehicle={vehicle}
               />
             );
             break;
@@ -2587,7 +2588,7 @@ function LdpSalesConsultantBlock({ blockIndex, data, salesConsultant, openQuoteD
 /* ==========================================================================
    LDP PROMOTIONS BLOCK
    ========================================================================== */
-function LdpPromotionsBlock({ blockIndex, data, promotions, salesConsultant, openQuoteDrawer, isEditMode, onChangeData, anchorId }: any) {
+function LdpPromotionsBlock({ blockIndex, data, promotions, salesConsultant, openQuoteDrawer, isEditMode, onChangeData, anchorId, vehicle }: any) {
   const title = data.title || "Chương Trình Khuyến Mãi Đặc Biệt";
   const desc = (data.description || "Nhận ưu đãi độc quyền từ chuyên viên kinh doanh khi đăng ký mua xe trong tháng này.").replace(/từ (?:Cố vấn|Chuyên viên kinh doanh|chuyên viên kinh doanh)/gi, "từ chuyên viên kinh doanh");
 
@@ -2606,76 +2607,233 @@ function LdpPromotionsBlock({ blockIndex, data, promotions, salesConsultant, ope
     );
   }
 
+  const currentVehicleName = vehicle?.name || vehicle?.title || "";
+
   return (
-    <section id={anchorId || "promotions"} className="bg-[#f8fafc] border-y border-slate-100 py-16 px-4 select-none w-full">
+    <section id={anchorId || "promotions"} className="bg-[#f8fafc] border-y border-slate-100 py-16 px-4 select-none w-full scroll-mt-12">
       <div className="max-w-[1152px] mx-auto">
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">{title}</h2>
-          <p className="text-slate-500 text-sm mt-3">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100/80 text-[#0562D2] text-xs font-bold uppercase tracking-wider mb-3">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Ưu đãi &amp; Quà tặng đặc quyền</span>
+          </div>
+          <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">{title}</h2>
+          <p className="text-slate-500 text-sm mt-3 leading-relaxed">
             {salesConsultant ? desc.replace(/từ chuyên viên kinh doanh/gi, `từ chuyên viên kinh doanh ${formatPersonName(salesConsultant.name)}`) : desc}
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Global Promotions */}
-          {promotions.global && promotions.global.map((promo: any) => (
-            <div key={promo.id} className="bg-white rounded-2xl border border-slate-100 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between">
-              <div>
-                {promo.image_url && (
-                  <div className="relative h-56 w-full">
-                    <img
-                      src={promo.image_url}
-                      alt={promo.title}
-                      className="object-cover w-full h-full"
-                    />
+          {promotions.global && promotions.global.map((promo: any) => {
+            const isAll = promo.is_all_vehicles !== false && (!promo.vehicle_titles || promo.vehicle_titles.length === 0 || promo.vehicle_titles.includes('Tất cả dòng xe'));
+            const vehicleTitles: string[] = Array.isArray(promo.vehicle_titles)
+              ? promo.vehicle_titles.filter((t: string) => t && t !== 'Tất cả dòng xe')
+              : [];
+            const displayVehicleName = currentVehicleName || (vehicleTitles.length > 0 ? vehicleTitles[0] : "");
+
+            return (
+              <div key={promo.id} className="bg-white rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col justify-between group">
+                <div>
+                  {promo.image_url ? (
+                    <div className="relative h-52 sm:h-56 w-full bg-slate-100 overflow-hidden">
+                      <img
+                        src={promo.image_url}
+                        alt={promo.title}
+                        className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                        onError={(e) => {
+                          (e.target as HTMLElement).style.display = "none";
+                        }}
+                      />
+                      <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
+                        <span className="text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm bg-[#0562D2] text-white">
+                          Khuyến mãi đại lý
+                        </span>
+                      </div>
+                      {!isAll && (
+                        <div className="absolute top-3 right-3 max-w-[65%] truncate">
+                          <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full bg-slate-900/85 backdrop-blur-md text-amber-300 border border-amber-300/40 shadow-sm">
+                            <Car className="w-3 h-3 text-amber-300 shrink-0" />
+                            <span className="truncate">
+                              {displayVehicleName ? `Ưu đãi ${displayVehicleName.replace(/^Ford\s+/i, '')}` : 'Ưu đãi theo xe'}
+                            </span>
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="relative h-24 w-full bg-gradient-to-r from-blue-900 to-[#0562D2] p-4 flex items-center justify-between text-white">
+                      <div className="flex items-center gap-2">
+                        <Sparkles className="w-5 h-5 text-yellow-300" />
+                        <span className="text-xs font-bold uppercase tracking-wider">Khuyến mãi đại lý</span>
+                      </div>
+                      <span className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full bg-white/20">
+                        {!isAll ? (
+                          <>
+                            <Car className="w-3.5 h-3.5 text-amber-300" />
+                            <span>{displayVehicleName ? displayVehicleName.replace(/^Ford\s+/i, '') : 'Ưu đãi theo xe'}</span>
+                          </>
+                        ) : (
+                          <span>Toàn bộ xe</span>
+                        )}
+                      </span>
+                    </div>
+                  )}
+
+                  <div className="p-6">
+                    {/* Badge dòng xe áp dụng */}
+                    {!isAll ? (
+                      <div className="flex items-center gap-1.5 mb-2.5">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-50 text-amber-900 border border-amber-200/80 shadow-xs">
+                          <Car className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                          <span>Dành riêng cho {displayVehicleName.replace(/^Ford\s+/i, '') || 'dòng xe này'}</span>
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-1.5 mb-2.5">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 text-slate-600 border border-slate-200/60">
+                          <Sparkles className="w-3 h-3 text-slate-400 shrink-0" />
+                          <span>Áp dụng toàn bộ dòng xe</span>
+                        </span>
+                      </div>
+                    )}
+
+                    <h3 className="text-lg font-bold text-slate-800 line-clamp-2 leading-snug group-hover:text-[#0562D2] transition-colors">
+                      {promo.title}
+                    </h3>
+                    <p className="text-slate-500 text-sm mt-2.5 line-clamp-3 leading-relaxed">{promo.description}</p>
                   </div>
-                )}
-                <div className="p-6">
-                  <h3 className="text-lg font-bold text-slate-800 line-clamp-2 leading-snug">{promo.title}</h3>
-                  <p className="text-slate-500 text-sm mt-3 line-clamp-3 leading-relaxed">{promo.description}</p>
+                </div>
+
+                <div className="p-6 pt-0 border-t border-slate-100 mt-4 flex items-center justify-between gap-3">
+                  <span className={`inline-flex items-center gap-1 text-xs font-semibold px-3 py-1 rounded-full ${
+                    isAll 
+                      ? "text-[#0562D2] bg-blue-50 border border-blue-100" 
+                      : "text-amber-800 bg-amber-50 border border-amber-200/70"
+                  }`}>
+                    {isAll ? (
+                      <>
+                        <Sparkles className="w-3 h-3 text-[#0562D2]" />
+                        <span>Khuyến mãi chung</span>
+                      </>
+                    ) : (
+                      <>
+                        <Car className="w-3 h-3 text-amber-600" />
+                        <span>Ưu đãi theo xe</span>
+                      </>
+                    )}
+                  </span>
+                  <button
+                    onClick={() => openQuoteDrawer(vehicle?.slug || vehicle?.id)}
+                    className="text-xs font-bold text-[#0562D2] hover:text-[#0052b4] inline-flex items-center gap-1 cursor-pointer border-0 bg-transparent shrink-0"
+                  >
+                    Nhận báo giá <ChevronRight className="w-3 h-3" />
+                  </button>
                 </div>
               </div>
-              <div className="p-6 pt-0 border-t border-slate-50/50 mt-4 flex items-center justify-between">
-                <span className="text-xs font-semibold text-[#0562D2] bg-blue-50 px-3 py-1 rounded-full">Khuyến mãi chung</span>
-                <button
-                  onClick={() => openQuoteDrawer()}
-                  className="text-xs font-bold text-[#0562D2] hover:text-[#0052b4] inline-flex items-center gap-1 cursor-pointer border-0 bg-transparent"
-                >
-                  Nhận báo giá <ChevronRight className="w-3 h-3" />
-                </button>
-              </div>
-            </div>
-          ))}
+            );
+          })}
 
           {/* Custom Promotions */}
-          {promotions.custom && promotions.custom.map((promo: any, idx: number) => (
-            <div key={idx} className="bg-white rounded-2xl border border-slate-100 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between">
-              <div>
-                {promo.image_url && (
-                  <div className="relative h-56 w-full">
-                    <img
-                      src={promo.image_url}
-                      alt={promo.title}
-                      className="object-cover w-full h-full"
-                    />
+          {promotions.custom && promotions.custom.map((promo: any, idx: number) => {
+            const isAll = promo.is_all_vehicles !== false && (!promo.vehicle_titles || promo.vehicle_titles.length === 0 || promo.vehicle_titles.includes('Tất cả dòng xe'));
+            const vehicleTitles: string[] = Array.isArray(promo.vehicle_titles)
+              ? promo.vehicle_titles.filter((t: string) => t && t !== 'Tất cả dòng xe')
+              : [];
+            const displayVehicleName = currentVehicleName || (vehicleTitles.length > 0 ? vehicleTitles[0] : "");
+
+            return (
+              <div key={idx} className="bg-white rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col justify-between group">
+                <div>
+                  {promo.image_url ? (
+                    <div className="relative h-52 sm:h-56 w-full bg-slate-100 overflow-hidden">
+                      <img
+                        src={promo.image_url}
+                        alt={promo.title}
+                        className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                        onError={(e) => {
+                          (e.target as HTMLElement).style.display = "none";
+                        }}
+                      />
+                      <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
+                        <span className="text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm bg-emerald-600 text-white">
+                          Ưu đãi độc quyền
+                        </span>
+                      </div>
+                      {!isAll && (
+                        <div className="absolute top-3 right-3 max-w-[65%] truncate">
+                          <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full bg-slate-900/85 backdrop-blur-md text-emerald-300 border border-emerald-300/40 shadow-sm">
+                            <Car className="w-3 h-3 text-emerald-300 shrink-0" />
+                            <span className="truncate">
+                              {displayVehicleName ? `Ưu đãi ${displayVehicleName.replace(/^Ford\s+/i, '')}` : 'Ưu đãi theo xe'}
+                            </span>
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="relative h-24 w-full bg-gradient-to-r from-emerald-800 to-teal-600 p-4 flex items-center justify-between text-white">
+                      <div className="flex items-center gap-2">
+                        <Sparkles className="w-5 h-5 text-emerald-200" />
+                        <span className="text-xs font-bold uppercase tracking-wider">Ưu đãi độc quyền</span>
+                      </div>
+                      <span className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full bg-white/20">
+                        {!isAll ? (
+                          <>
+                            <Car className="w-3.5 h-3.5 text-emerald-200" />
+                            <span>{displayVehicleName ? displayVehicleName.replace(/^Ford\s+/i, '') : 'Ưu đãi theo xe'}</span>
+                          </>
+                        ) : (
+                          <span>Toàn bộ xe</span>
+                        )}
+                      </span>
+                    </div>
+                  )}
+
+                  <div className="p-6">
+                    {/* Badge dòng xe áp dụng */}
+                    {!isAll ? (
+                      <div className="flex items-center gap-1.5 mb-2.5">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200/80 shadow-xs">
+                          <Car className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                          <span>Dành riêng cho {displayVehicleName.replace(/^Ford\s+/i, '') || 'dòng xe này'}</span>
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-1.5 mb-2.5">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 text-slate-600 border border-slate-200/60">
+                          <Sparkles className="w-3 h-3 text-slate-400 shrink-0" />
+                          <span>Áp dụng toàn bộ dòng xe</span>
+                        </span>
+                      </div>
+                    )}
+
+                    <h3 className="text-lg font-bold text-slate-800 line-clamp-2 leading-snug group-hover:text-emerald-700 transition-colors">
+                      {promo.title}
+                    </h3>
+                    <p className="text-slate-500 text-sm mt-2.5 line-clamp-3 leading-relaxed">{promo.description}</p>
                   </div>
-                )}
-                <div className="p-6">
-                  <h3 className="text-lg font-bold text-slate-800 line-clamp-2 leading-snug">{promo.title}</h3>
-                  <p className="text-slate-500 text-sm mt-3 line-clamp-3 leading-relaxed">{promo.description}</p>
+                </div>
+
+                <div className="p-6 pt-0 border-t border-slate-100 mt-4 flex items-center justify-between gap-3">
+                  <span className={`inline-flex items-center gap-1 text-xs font-semibold px-3 py-1 rounded-full ${
+                    isAll 
+                      ? "text-emerald-700 bg-emerald-50 border border-emerald-100" 
+                      : "text-emerald-800 bg-emerald-100/70 border border-emerald-200/70"
+                  }`}>
+                    <Award className="w-3 h-3 text-emerald-600" />
+                    <span>{isAll ? "Ưu đãi độc quyền" : `Độc quyền ${displayVehicleName ? `• ${displayVehicleName.replace(/^Ford\s+/i, '')}` : 'theo xe'}`}</span>
+                  </span>
+                  <button
+                    onClick={() => openQuoteDrawer(vehicle?.slug || vehicle?.id)}
+                    className="text-xs font-bold text-[#0562D2] hover:text-[#0052b4] inline-flex items-center gap-1 cursor-pointer border-0 bg-transparent shrink-0"
+                  >
+                    Nhận báo giá <ChevronRight className="w-3 h-3" />
+                  </button>
                 </div>
               </div>
-              <div className="p-6 pt-0 border-t border-slate-50/50 mt-4 flex items-center justify-between">
-                <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">Ưu đãi độc quyền</span>
-                <button
-                  onClick={() => openQuoteDrawer()}
-                  className="text-xs font-bold text-[#0562D2] hover:text-[#0052b4] inline-flex items-center gap-1 cursor-pointer border-0 bg-transparent"
-                >
-                  Nhận báo giá <ChevronRight className="w-3 h-3" />
-                </button>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

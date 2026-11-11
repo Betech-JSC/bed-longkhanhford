@@ -314,8 +314,8 @@ class LandingPageApiController extends Controller
             return $this->failure(__('Không tìm thấy Landing Page của cố vấn bán hàng cho dòng xe này'), 404);
         }
 
-        // 4. Giải mã / định dạng danh sách chương trình khuyến mãi
-        $promotionsData = $this->resolvePromotions($ldp->promotions);
+        // 4. Giải mã / định dạng danh sách chương trình khuyến mãi theo dòng xe đang xem
+        $promotionsData = $this->resolvePromotions($ldp->promotions, $vehicle->id);
 
         // 5. Chuẩn hóa layout_blocks tương ứng với từng dòng xe đang xem
         // Hỗ trợ 2 format:
@@ -416,8 +416,12 @@ class LandingPageApiController extends Controller
 
     /**
      * Lấy danh sách khuyến mãi bao gồm khuyến mãi hệ thống và khuyến mãi tự nhập
+     * Hỗ trợ lọc theo dòng xe ($currentVehicleId)
+     *
+     * @param array|null $promotions Dữ liệu promotions từ cột landing_pages.promotions
+     * @param int|string|null $currentVehicleId ID dòng xe đang xem (null = xem trang chủ showroom của cố vấn)
      */
-    private function resolvePromotions($promotions): array
+    private function resolvePromotions($promotions, $currentVehicleId = null): array
     {
         $resolved = [
             'global' => [],
@@ -426,30 +430,125 @@ class LandingPageApiController extends Controller
 
         if (!is_array($promotions)) return $resolved;
 
-        // Khuyến mãi hệ thống (global)
-        if (!empty($promotions['global_promotion_ids']) && is_array($promotions['global_promotion_ids'])) {
+        // Map tên các dòng xe để hiển thị nhãn xe áp dụng
+        $vehiclesMap = [];
+        try {
+            $vehiclesMap = Vehicle::query()
+                ->where('status', Vehicle::STATUS_ACTIVE)
+                ->pluck('title', 'id')
+                ->toArray();
+        } catch (\Throwable $e) {}
+
+        $matchesVehicle = function ($appliedIds) use ($currentVehicleId) {
+            if ($currentVehicleId === null) {
+                return true;
+            }
+            if (empty($appliedIds)) {
+                return true; // Mặc định áp dụng cho tất cả dòng xe
+            }
+            if (in_array('all', $appliedIds, true)) {
+                return true;
+            }
+
+            $numericApplied = array_map('intval', array_filter($appliedIds, fn($val) => is_numeric($val) && (int)$val > 0));
+            return in_array((int)$currentVehicleId, $numericApplied, true);
+        };
+
+        $formatAppliedVehicles = function ($appliedIds) use ($vehiclesMap) {
+            if (empty($appliedIds) || in_array('all', $appliedIds, true)) {
+                return [
+                    'vehicle_ids' => ['all'],
+                    'vehicle_titles' => ['Tất cả dòng xe'],
+                    'is_all_vehicles' => true,
+                ];
+            }
+
+            $titles = [];
+            $validIds = [];
+            foreach ($appliedIds as $vId) {
+                if (is_numeric($vId)) {
+                    $intId = (int)$vId;
+                    $validIds[] = $intId;
+                    if (isset($vehiclesMap[$intId])) {
+                        $titles[] = $vehiclesMap[$intId];
+                    }
+                }
+            }
+
+            return [
+                'vehicle_ids' => !empty($validIds) ? $validIds : ['all'],
+                'vehicle_titles' => !empty($titles) ? $titles : ['Tất cả dòng xe'],
+                'is_all_vehicles' => empty($validIds),
+            ];
+        };
+
+        // 1. Khuyến mãi hệ thống (global)
+        $globalIds = $promotions['global_promotion_ids'] ?? [];
+        $globalVehiclesConfig = $promotions['global_promotion_vehicles'] ?? $promotions['global_promotions_config'] ?? [];
+
+        if (!empty($globalIds) && is_array($globalIds)) {
             $posts = Post::query()
-                ->whereIn('id', $promotions['global_promotion_ids'])
+                ->whereIn('id', $globalIds)
                 ->where('status', Post::STATUS_ACTIVE)
                 ->get();
-                
-            $resolved['global'] = $posts->map(fn($p) => [
-                'id' => $p->id,
-                'title' => $p->title,
-                'slug' => $p->slug,
-                'image_url' => $p->image ? $this->resolveFileUrl($p->image) : null,
-                'description' => $p->description ?? '',
-            ])->toArray();
+
+            foreach ($posts as $p) {
+                // Lấy cấu hình xe áp dụng cho bài viết khuyến mãi này
+                $promoVehicleConfig = $globalVehiclesConfig[$p->id] ?? $globalVehiclesConfig[(string)$p->id] ?? null;
+                if (is_array($promoVehicleConfig) && isset($promoVehicleConfig['vehicle_ids'])) {
+                    $appliedVehicleIds = $promoVehicleConfig['vehicle_ids'];
+                } elseif (is_array($promoVehicleConfig)) {
+                    $appliedVehicleIds = $promoVehicleConfig;
+                } elseif (is_string($promoVehicleConfig) && !empty($promoVehicleConfig)) {
+                    $appliedVehicleIds = [$promoVehicleConfig];
+                } else {
+                    $appliedVehicleIds = ['all'];
+                }
+
+                // Nếu có chỉ định $currentVehicleId và không khớp thì bỏ qua
+                if (!$matchesVehicle($appliedVehicleIds)) {
+                    continue;
+                }
+
+                $meta = $formatAppliedVehicles($appliedVehicleIds);
+
+                $resolved['global'][] = [
+                    'id' => $p->id,
+                    'title' => $p->title,
+                    'slug' => $p->slug,
+                    'image_url' => $p->image ? $this->resolveFileUrl($p->image) : null,
+                    'description' => $p->description ?? '',
+                    'vehicle_ids' => $meta['vehicle_ids'],
+                    'vehicle_titles' => $meta['vehicle_titles'],
+                    'is_all_vehicles' => $meta['is_all_vehicles'],
+                ];
+            }
         }
 
-        // Khuyến mãi tự nhập (custom)
+        // 2. Khuyến mãi tự nhập (custom)
         if (!empty($promotions['custom_promotions']) && is_array($promotions['custom_promotions'])) {
             foreach ($promotions['custom_promotions'] as $custom) {
+                $appliedVehicleIds = $custom['vehicle_ids'] ?? ['all'];
+                if (is_string($appliedVehicleIds) && !empty($appliedVehicleIds)) {
+                    $appliedVehicleIds = [$appliedVehicleIds];
+                } elseif (!is_array($appliedVehicleIds) || empty($appliedVehicleIds)) {
+                    $appliedVehicleIds = ['all'];
+                }
+
+                if (!$matchesVehicle($appliedVehicleIds)) {
+                    continue;
+                }
+
+                $meta = $formatAppliedVehicles($appliedVehicleIds);
+
                 $resolved['custom'][] = [
                     'title' => $custom['title'] ?? '',
                     'description' => $custom['description'] ?? '',
                     'image_url' => isset($custom['image']) ? $this->resolveFileUrl($custom['image']) : null,
-                    'link' => $custom['link'] ?? ''
+                    'link' => $custom['link'] ?? '',
+                    'vehicle_ids' => $meta['vehicle_ids'],
+                    'vehicle_titles' => $meta['vehicle_titles'],
+                    'is_all_vehicles' => $meta['is_all_vehicles'],
                 ];
             }
         }

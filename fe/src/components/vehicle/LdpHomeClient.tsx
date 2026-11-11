@@ -1041,6 +1041,26 @@ function LdpHomeInner({
               {allPromotionCards.map((promo: any, idx: number) => {
                 const promoImg = promo.image_url || promo.image || (promo.image ? resolveImageUrl(promo.image) : "");
                 const isCustom = promo._isCustom;
+                const isAllVehicles = promo.is_all_vehicles !== false && (!promo.vehicle_titles || promo.vehicle_titles.length === 0 || promo.vehicle_titles.includes('Tất cả dòng xe'));
+                const vehicleTitles: string[] = Array.isArray(promo.vehicle_titles)
+                  ? promo.vehicle_titles.filter((t: string) => t && t !== 'Tất cả dòng xe')
+                  : [];
+
+                // Tự động tìm xe đích để mở form báo giá chính xác dòng xe đó
+                let targetVehicleSlug = leadVehicle?.slug || leadVehicle?.id;
+                if (!isAllVehicles && vehicleTitles.length > 0 && Array.isArray(allVehicles)) {
+                  const matched = allVehicles.find((v: any) => {
+                    const vName = (v.name || v.title || "").toLowerCase();
+                    return vehicleTitles.some((vt: string) => {
+                      const cleanVt = vt.toLowerCase().replace(/^ford\s+/i, '').trim();
+                      const cleanVn = vName.replace(/^ford\s+/i, '').trim();
+                      return cleanVn.includes(cleanVt) || cleanVt.includes(cleanVn);
+                    });
+                  });
+                  if (matched) {
+                    targetVehicleSlug = matched.slug || matched.id;
+                  }
+                }
 
                 return (
                   <div
@@ -1059,7 +1079,7 @@ function LdpHomeInner({
                               (e.target as HTMLElement).style.display = "none";
                             }}
                           />
-                          <div className="absolute top-3 left-3">
+                          <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
                             <span className={`text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm ${
                               isCustom
                                 ? "bg-emerald-600 text-white"
@@ -1068,6 +1088,20 @@ function LdpHomeInner({
                               {isCustom ? "Ưu đãi độc quyền" : "Khuyến mãi đại lý"}
                             </span>
                           </div>
+
+                          {/* Badge xe áp dụng trên banner ảnh */}
+                          {!isAllVehicles && vehicleTitles.length > 0 && (
+                            <div className="absolute top-3 right-3 max-w-[65%] truncate">
+                              <span className="inline-flex items-center gap-1.5 text-[11px] font-bold px-3 py-1 rounded-full bg-slate-950/85 backdrop-blur-md text-amber-300 border border-amber-300/40 shadow-sm">
+                                <Car className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                                <span className="truncate">
+                                  {vehicleTitles.length === 1 
+                                    ? `Dành cho ${vehicleTitles[0].replace(/^Ford\s+/i, '')}`
+                                    : `Áp dụng ${vehicleTitles.length} dòng xe`}
+                                </span>
+                              </span>
+                            </div>
+                          )}
                         </div>
                       ) : (
                         <div className="relative h-28 w-full bg-gradient-to-r from-blue-900 to-[#0562D2] p-4 flex items-center justify-between text-white">
@@ -1077,14 +1111,43 @@ function LdpHomeInner({
                               {isCustom ? "Ưu đãi chuyên viên" : "Ưu đãi đại lý"}
                             </span>
                           </div>
-                          <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-white/20">
-                            Tháng {new Date().getMonth() + 1}
-                          </span>
+                          {!isAllVehicles && vehicleTitles.length > 0 ? (
+                            <span className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-amber-400 text-slate-950 shadow-sm">
+                              <Car className="w-3.5 h-3.5" />
+                              <span>{vehicleTitles.length === 1 ? vehicleTitles[0].replace(/^Ford\s+/i, '') : `${vehicleTitles.length} dòng xe`}</span>
+                            </span>
+                          ) : (
+                            <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-white/20">
+                              Tháng {new Date().getMonth() + 1}
+                            </span>
+                          )}
                         </div>
                       )}
 
                       {/* Content */}
                       <div className="p-6">
+                        {/* Vehicle scope badge */}
+                        {!isAllVehicles && vehicleTitles.length > 0 ? (
+                          <div className="flex flex-wrap items-center gap-1.5 mb-2.5">
+                            {vehicleTitles.map((vTitle: string, vIdx: number) => (
+                              <span
+                                key={vIdx}
+                                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-50 text-amber-900 border border-amber-200/80 shadow-xs"
+                              >
+                                <Car className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                                <span>Dành riêng cho {vTitle.replace(/^Ford\s+/i, '')}</span>
+                              </span>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-1.5 mb-2.5">
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 text-slate-600 border border-slate-200/60">
+                              <Sparkles className="w-3 h-3 text-slate-400 shrink-0" />
+                              <span>Áp dụng tất cả dòng xe</span>
+                            </span>
+                          </div>
+                        )}
+
                         <h3 className="text-base md:text-lg font-bold text-gray-900 line-clamp-2 leading-snug group-hover:text-[#0562D2] transition-colors">
                           {promo.title}
                         </h3>
@@ -1098,7 +1161,7 @@ function LdpHomeInner({
                     <div className="p-6 pt-0 border-t border-gray-100 mt-4 flex items-center gap-2">
                       <button
                         type="button"
-                        onClick={() => openQuoteDrawer(leadVehicle?.slug || leadVehicle?.id)}
+                        onClick={() => openQuoteDrawer(targetVehicleSlug)}
                         className="flex-1 py-2.5 px-3 bg-[#0562D2] hover:bg-[#0451B0] text-white rounded-lg text-xs font-bold transition-colors cursor-pointer border-0 flex items-center justify-center gap-1.5"
                       >
                         <FileText className="w-3.5 h-3.5" />

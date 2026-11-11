@@ -214,6 +214,27 @@ export interface APIPostCategory {
   description?: string;
 }
 
+/**
+ * Promotion types for LDP
+ */
+export interface APIPromotionItem {
+  id?: number;
+  title: string;
+  slug?: string;
+  image_url?: string | null;
+  image?: string | Record<string, unknown> | null;
+  description?: string;
+  link?: string;
+  vehicle_ids?: (number | string)[];
+  vehicle_titles?: string[];
+  is_all_vehicles?: boolean;
+}
+
+export interface APIPromotionsData {
+  global?: APIPromotionItem[];
+  custom?: APIPromotionItem[];
+}
+
 export interface APITag {
   id: number;
   name: string;

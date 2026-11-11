@@ -149,18 +149,54 @@
                             <!-- Khuyến mãi hệ thống (Global) -->
                             <div class="border-t border-gray-200 pt-3">
                                 <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">1. Khuyến mãi chung từ hệ thống</label>
-                                <div class="space-y-2 max-h-48 overflow-y-auto pr-1 border rounded p-2 bg-white">
-                                    <div v-for="promo in globalPromotions" :key="promo.id" class="flex items-start space-x-2 py-1">
-                                        <input
-                                            type="checkbox"
-                                            :id="'editor-promo-' + promo.id"
-                                            :value="promo.id"
-                                            v-model="vehicleData.promotions.global_promotion_ids"
-                                            class="mt-0.5 h-3.5 w-3.5 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
-                                        />
-                                        <label :for="'editor-promo-' + promo.id" class="text-xs font-medium text-gray-700 cursor-pointer">
-                                            {{ promo.title }}
-                                        </label>
+                                <div class="space-y-2 max-h-56 overflow-y-auto pr-1 border rounded-lg p-2 bg-white">
+                                    <div
+                                        v-for="promo in globalPromotions"
+                                        :key="promo.id"
+                                        class="p-2 border rounded-lg transition"
+                                        :class="isGlobalPromoChecked(promo.id) ? 'border-blue-400 bg-blue-50/20' : 'border-gray-200'"
+                                    >
+                                        <div class="flex items-start space-x-2">
+                                            <input
+                                                type="checkbox"
+                                                :id="'editor-promo-' + promo.id"
+                                                :value="promo.id"
+                                                v-model="vehicleData.promotions.global_promotion_ids"
+                                                @change="onGlobalPromoCheckboxChange(promo.id)"
+                                                class="mt-0.5 h-3.5 w-3.5 text-primary-600 border-gray-300 rounded focus:ring-primary-500 cursor-pointer"
+                                            />
+                                            <label :for="'editor-promo-' + promo.id" class="text-xs font-medium text-gray-800 cursor-pointer flex-1 select-none">
+                                                {{ promo.title }}
+                                            </label>
+                                        </div>
+                                        <!-- Bộ chọn dòng xe cho promo global -->
+                                        <div v-if="isGlobalPromoChecked(promo.id)" class="mt-1.5 pt-1.5 border-t border-gray-150 pl-5">
+                                            <div class="text-[10px] font-bold text-gray-500 mb-1">Áp dụng cho dòng xe:</div>
+                                            <div class="flex flex-wrap gap-1">
+                                                <button
+                                                    type="button"
+                                                    class="text-[10px] px-2 py-0.5 rounded border font-medium cursor-pointer transition select-none"
+                                                    :class="isGlobalPromoVehicleSelected(promo.id, 'all')
+                                                        ? 'bg-blue-600 text-white border-blue-600 font-bold shadow-xs'
+                                                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'"
+                                                    @click="toggleGlobalPromoVehicle(promo.id, 'all')"
+                                                >
+                                                    🌐 Tất cả
+                                                </button>
+                                                <button
+                                                    v-for="v in availablePromotionVehicles"
+                                                    :key="v.id"
+                                                    type="button"
+                                                    class="text-[10px] px-2 py-0.5 rounded border font-medium cursor-pointer transition select-none"
+                                                    :class="isGlobalPromoVehicleSelected(promo.id, v.id)
+                                                        ? 'bg-blue-600 text-white border-blue-600 font-bold shadow-xs'
+                                                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'"
+                                                    @click="toggleGlobalPromoVehicle(promo.id, v.id)"
+                                                >
+                                                    🚘 {{ v.title }}
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -169,9 +205,38 @@
                             <div class="border-t border-gray-200 pt-3">
                                 <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">2. Khuyến mãi riêng của bạn (Tự nhập)</label>
                                 <div v-for="(promo, index) in (vehicleData.promotions ? vehicleData.promotions.custom_promotions : [])" :key="index" class="border border-gray-200 rounded p-3 mb-2 bg-gray-50/50 relative">
-                                    <button type="button" class="absolute top-2 right-2 text-red-500 text-[10px] font-bold hover:underline" @click="vehicleData.promotions.custom_promotions.splice(index, 1)">❌ Xoá</button>
+                                    <button type="button" class="absolute top-2 right-2 text-red-500 text-[10px] font-bold hover:underline cursor-pointer" @click="vehicleData.promotions.custom_promotions.splice(index, 1); syncToIframe()">❌ Xoá</button>
                                     <Field v-model="vehicleData.promotions.custom_promotions[index].title" :field="{ type: 'text', name: 'c_title_' + index, label: 'Tiêu đề' }" class="mb-1" />
                                     <Field v-model="vehicleData.promotions.custom_promotions[index].description" :field="{ type: 'textarea', name: 'c_desc_' + index, label: 'Mô tả chi tiết' }" />
+                                    
+                                    <!-- Bộ chọn dòng xe cho promo custom -->
+                                    <div class="my-2 p-2 bg-white border border-gray-200 rounded">
+                                        <div class="text-[10px] font-bold text-gray-500 mb-1">Áp dụng cho dòng xe:</div>
+                                        <div class="flex flex-wrap gap-1">
+                                            <button
+                                                type="button"
+                                                class="text-[10px] px-2 py-0.5 rounded border font-medium cursor-pointer transition select-none"
+                                                :class="isCustomPromoVehicleSelected(index, 'all')
+                                                    ? 'bg-blue-600 text-white border-blue-600 font-bold shadow-xs'
+                                                    : 'bg-gray-50 text-gray-700 border-gray-300 hover:bg-gray-100'"
+                                                @click="toggleCustomPromoVehicle(index, 'all')"
+                                            >
+                                                🌐 Tất cả
+                                            </button>
+                                            <button
+                                                v-for="v in availablePromotionVehicles"
+                                                :key="v.id"
+                                                type="button"
+                                                class="text-[10px] px-2 py-0.5 rounded border font-medium cursor-pointer transition select-none"
+                                                :class="isCustomPromoVehicleSelected(index, v.id)
+                                                    ? 'bg-blue-600 text-white border-blue-600 font-bold shadow-xs'
+                                                    : 'bg-gray-50 text-gray-700 border-gray-300 hover:bg-gray-100'"
+                                                @click="toggleCustomPromoVehicle(index, v.id)"
+                                            >
+                                                🚘 {{ v.title }}
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                                 <button type="button" class="btn btn-outline-primary btn-xs mt-1" @click="addCustomPromoToVehicleData">➕ Thêm khuyến mãi riêng</button>
                             </div>
@@ -1526,6 +1591,24 @@ export default {
             }
             const slug = this.vehicleSlug || 'preview';
             return `${host}/${slug}?edit=true&embed=true`;
+        },
+        availablePromotionVehicles() {
+            let ids = this.vehicleData?.vehicle_ids;
+            if (typeof ids === 'string') {
+                try { ids = JSON.parse(ids); } catch (e) { ids = []; }
+            }
+            if (Array.isArray(ids) && ids.length > 0) {
+                const list = ids.map(id => {
+                    const realId = typeof id === 'object' && id !== null ? (id.id ?? id) : id;
+                    return (this.allVehicles || []).find(v => String(v.id) === String(realId));
+                }).filter(Boolean);
+                if (list.length > 0) return list;
+            }
+            if (this.vehicleData?.vehicle_id) {
+                const found = (this.allVehicles || []).find(v => String(v.id) === String(this.vehicleData.vehicle_id));
+                if (found) return [found];
+            }
+            return this.allVehicles || [];
         }
     },
     watch: {
@@ -1608,7 +1691,7 @@ export default {
         },
         addCustomPromoToVehicleData() {
             if (!this.vehicleData.promotions) {
-                this.vehicleData.$set ? this.vehicleData.$set(this.vehicleData, 'promotions', { global_promotion_ids: [], custom_promotions: [] }) : (this.vehicleData.promotions = { global_promotion_ids: [], custom_promotions: [] });
+                this.vehicleData.$set ? this.vehicleData.$set(this.vehicleData, 'promotions', { global_promotion_ids: [], global_promotion_vehicles: {}, custom_promotions: [] }) : (this.vehicleData.promotions = { global_promotion_ids: [], global_promotion_vehicles: {}, custom_promotions: [] });
             }
             if (!this.vehicleData.promotions.custom_promotions) {
                 this.vehicleData.promotions.custom_promotions = [];
@@ -1617,8 +1700,160 @@ export default {
                 title: '',
                 description: '',
                 image: null,
-                link: ''
+                link: '',
+                vehicle_ids: ['all']
             });
+            this.syncToIframe();
+        },
+        isGlobalPromoChecked(promoId) {
+            const ids = this.vehicleData?.promotions?.global_promotion_ids;
+            return Array.isArray(ids) && ids.includes(promoId);
+        },
+        onGlobalPromoCheckboxChange(promoId) {
+            if (!this.vehicleData.promotions) {
+                this.vehicleData.promotions = { global_promotion_ids: [], global_promotion_vehicles: {}, custom_promotions: [] };
+            }
+            if (!this.vehicleData.promotions.global_promotion_vehicles) {
+                this.vehicleData.promotions.global_promotion_vehicles = {};
+            }
+            const key = String(promoId);
+            if (!this.vehicleData.promotions.global_promotion_vehicles[key]) {
+                this.vehicleData.promotions.global_promotion_vehicles[key] = ['all'];
+            }
+            this.syncToIframe();
+        },
+        isGlobalPromoVehicleSelected(promoId, vehicleId) {
+            const list = this.vehicleData?.promotions?.global_promotion_vehicles?.[String(promoId)];
+            if (vehicleId === 'all') {
+                return !list || list.length === 0 || list.includes('all');
+            }
+            return Array.isArray(list) && !list.includes('all') && (list.includes(vehicleId) || list.includes(String(vehicleId)) || list.includes(Number(vehicleId)));
+        },
+        toggleGlobalPromoVehicle(promoId, vehicleId) {
+            if (!this.vehicleData.promotions) {
+                this.vehicleData.promotions = { global_promotion_ids: [], global_promotion_vehicles: {}, custom_promotions: [] };
+            }
+            if (!this.vehicleData.promotions.global_promotion_vehicles) {
+                this.vehicleData.promotions.global_promotion_vehicles = {};
+            }
+            const key = String(promoId);
+            let list = this.vehicleData.promotions.global_promotion_vehicles[key];
+            if (!Array.isArray(list) || list.length === 0) {
+                list = ['all'];
+            }
+
+            if (vehicleId === 'all') {
+                list = ['all'];
+            } else {
+                const vId = Number(vehicleId) || vehicleId;
+                if (list.includes('all')) {
+                    list = [vId];
+                } else {
+                    const idx = list.findIndex(x => String(x) === String(vId));
+                    if (idx !== -1) {
+                        list.splice(idx, 1);
+                        if (list.length === 0) list = ['all'];
+                    } else {
+                        list.push(vId);
+                    }
+                }
+            }
+
+            this.vehicleData.promotions.global_promotion_vehicles = {
+                ...this.vehicleData.promotions.global_promotion_vehicles,
+                [key]: list
+            };
+            this.syncToIframe();
+        },
+        isCustomPromoVehicleSelected(index, vehicleId) {
+            const promo = this.vehicleData?.promotions?.custom_promotions?.[index];
+            const list = promo?.vehicle_ids;
+            if (vehicleId === 'all') {
+                return !list || list.length === 0 || list.includes('all');
+            }
+            return Array.isArray(list) && !list.includes('all') && (list.includes(vehicleId) || list.includes(String(vehicleId)) || list.includes(Number(vehicleId)));
+        },
+        toggleCustomPromoVehicle(index, vehicleId) {
+            if (!this.vehicleData?.promotions?.custom_promotions?.[index]) return;
+            const promo = this.vehicleData.promotions.custom_promotions[index];
+            if (!promo.vehicle_ids || !Array.isArray(promo.vehicle_ids) || promo.vehicle_ids.length === 0) {
+                promo.vehicle_ids = ['all'];
+            }
+            let list = [...promo.vehicle_ids];
+
+            if (vehicleId === 'all') {
+                list = ['all'];
+            } else {
+                const vId = Number(vehicleId) || vehicleId;
+                if (list.includes('all')) {
+                    list = [vId];
+                } else {
+                    const idx = list.findIndex(x => String(x) === String(vId));
+                    if (idx !== -1) {
+                        list.splice(idx, 1);
+                        if (list.length === 0) list = ['all'];
+                    } else {
+                        list.push(vId);
+                    }
+                }
+            }
+            promo.vehicle_ids = list;
+            this.syncToIframe();
+        },
+        getResolvedPromotions() {
+            let resolved = { global: [], custom: [] };
+            if (!this.vehicleData || !this.vehicleData.promotions) return resolved;
+
+            // Xác định dòng xe đang xem trong BlockEditor (dựa theo vehicleSlug hoặc vehicleData)
+            let currentVehicle = null;
+            if (this.vehicleSlug) {
+                currentVehicle = (this.allVehicles || []).find(v => v.slug === this.vehicleSlug);
+            }
+            if (!currentVehicle && this.vehicleData) {
+                const vid = this.vehicleData.activeVehicleTab || this.vehicleData.vehicle_id;
+                if (vid) {
+                    currentVehicle = (this.allVehicles || []).find(v => String(v.id) === String(vid));
+                }
+            }
+            const currentVehicleId = currentVehicle ? currentVehicle.id : null;
+
+            const globalIds = this.vehicleData.promotions.global_promotion_ids || [];
+            const globalVehicles = this.vehicleData.promotions.global_promotion_vehicles || {};
+            const allPromos = this.globalPromotions || [];
+
+            resolved.global = allPromos
+                .filter(p => globalIds.includes(p.id))
+                .filter(p => {
+                    if (!currentVehicleId) return true;
+                    const applied = globalVehicles[String(p.id)] || globalVehicles[p.id] || ['all'];
+                    if (applied.includes('all')) return true;
+                    return applied.map(String).includes(String(currentVehicleId));
+                })
+                .map(p => ({
+                    id: p.id,
+                    title: p.title,
+                    slug: p.slug,
+                    image_url: p.image_url || (p.image ? this.resolveImageUrl(p.image) : null),
+                    description: p.description || '',
+                    vehicle_ids: globalVehicles[String(p.id)] || ['all']
+                }));
+
+            resolved.custom = (this.vehicleData.promotions.custom_promotions || [])
+                .filter(p => {
+                    if (!currentVehicleId) return true;
+                    const applied = p.vehicle_ids || ['all'];
+                    if (applied.includes('all')) return true;
+                    return applied.map(String).includes(String(currentVehicleId));
+                })
+                .map(p => ({
+                    title: p.title || '',
+                    description: p.description || '',
+                    image_url: p.image ? this.resolveImageUrl(p.image) : null,
+                    link: p.link || '',
+                    vehicle_ids: p.vehicle_ids || ['all']
+                }));
+
+            return resolved;
         },
         getLayoutSetting(block, key, defaultValue = '') {
             if (!block.layout_settings) {
@@ -1661,41 +1896,21 @@ export default {
                 const resolvedBlocks = this.resolveBlockImages(this.blocks);
                 
                 // Resolve promotions and sales consultant
-                let resolvedPromotions = { global: [], custom: [] };
+                const resolvedPromotions = this.getResolvedPromotions();
                 let resolvedConsultant = null;
-                if (this.vehicleData) {
-                    if (this.vehicleData.promotions) {
-                        const globalIds = this.vehicleData.promotions.global_promotion_ids || [];
-                        const allPromos = this.globalPromotions || [];
-                        resolvedPromotions.global = allPromos.filter(p => globalIds.includes(p.id)).map(p => ({
-                            id: p.id,
-                            title: p.title,
-                            slug: p.slug,
-                            image_url: p.image_url || (p.image ? this.resolveImageUrl(p.image) : null),
-                            description: p.description || ''
-                        }));
-                        
-                        resolvedPromotions.custom = (this.vehicleData.promotions.custom_promotions || []).map(p => ({
-                            title: p.title || '',
-                            description: p.description || '',
-                            image_url: p.image ? this.resolveImageUrl(p.image) : null,
-                            link: p.link || ''
-                        }));
-                    }
-                    if (this.vehicleData.sales_consultant_id) {
-                        const allConsultants = this.salesConsultants || [];
-                        const c = allConsultants.find(x => x.id == this.vehicleData.sales_consultant_id);
-                        if (c) {
-                            resolvedConsultant = {
-                                id: c.id,
-                                name: c.name,
-                                avatar: c.avatar,
-                                phone: c.phone,
-                                zalo_url: c.zalo_url,
-                                job_title: c.job_title,
-                                short_bio: c.short_bio
-                            };
-                        }
+                if (this.vehicleData && this.vehicleData.sales_consultant_id) {
+                    const allConsultants = this.salesConsultants || [];
+                    const c = allConsultants.find(x => x.id == this.vehicleData.sales_consultant_id);
+                    if (c) {
+                        resolvedConsultant = {
+                            id: c.id,
+                            name: c.name,
+                            avatar: c.avatar,
+                            phone: c.phone,
+                            zalo_url: c.zalo_url,
+                            job_title: c.job_title,
+                            short_bio: c.short_bio
+                        };
                     }
                 }
 
@@ -1719,41 +1934,21 @@ export default {
             const iframe = this.$refs.previewIframe;
             if (iframe && iframe.contentWindow) {
                 // Resolve promotions and sales consultant
-                let resolvedPromotions = { global: [], custom: [] };
+                const resolvedPromotions = this.getResolvedPromotions();
                 let resolvedConsultant = null;
-                if (this.vehicleData) {
-                    if (this.vehicleData.promotions) {
-                        const globalIds = this.vehicleData.promotions.global_promotion_ids || [];
-                        const allPromos = this.globalPromotions || [];
-                        resolvedPromotions.global = allPromos.filter(p => globalIds.includes(p.id)).map(p => ({
-                            id: p.id,
-                            title: p.title,
-                            slug: p.slug,
-                            image_url: p.image_url || (p.image ? this.resolveImageUrl(p.image) : null),
-                            description: p.description || ''
-                        }));
-                        
-                        resolvedPromotions.custom = (this.vehicleData.promotions.custom_promotions || []).map(p => ({
-                            title: p.title || '',
-                            description: p.description || '',
-                            image_url: p.image ? this.resolveImageUrl(p.image) : null,
-                            link: p.link || ''
-                        }));
-                    }
-                    if (this.vehicleData.sales_consultant_id) {
-                        const allConsultants = this.salesConsultants || [];
-                        const c = allConsultants.find(x => x.id == this.vehicleData.sales_consultant_id);
-                        if (c) {
-                            resolvedConsultant = {
-                                id: c.id,
-                                name: c.name,
-                                avatar: c.avatar,
-                                phone: c.phone,
-                                zalo_url: c.zalo_url,
-                                job_title: c.job_title,
-                                short_bio: c.short_bio
-                            };
-                        }
+                if (this.vehicleData && this.vehicleData.sales_consultant_id) {
+                    const allConsultants = this.salesConsultants || [];
+                    const c = allConsultants.find(x => x.id == this.vehicleData.sales_consultant_id);
+                    if (c) {
+                        resolvedConsultant = {
+                            id: c.id,
+                            name: c.name,
+                            avatar: c.avatar,
+                            phone: c.phone,
+                            zalo_url: c.zalo_url,
+                            job_title: c.job_title,
+                            short_bio: c.short_bio
+                        };
                     }
                 }
 
