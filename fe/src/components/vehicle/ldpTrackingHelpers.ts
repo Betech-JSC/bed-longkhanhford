@@ -36,6 +36,35 @@ export const cleanConversionLabel = (raw?: string, gtagId?: string) => (!raw ? "
 export const extractGtmId = (raw?: string) => (raw ? (raw.trim().match(/GTM-[A-Za-z0-9]+/i)?.[0]?.toUpperCase() || "") : "");
 export const extractNumericId = (raw?: string) => (raw ? (raw.trim().match(/\d{8,22}/)?.[0] || "") : "");
 export const extractAlphanumericId = (raw?: string) => (raw ? (raw.trim().match(/^[A-Za-z0-9]{10,32}$/)?.[0] || raw.trim().match(/ttq\.load\(['"]([A-Za-z0-9]{10,32})['"]\)/)?.[1] || "") : "");
+
+export function normalizeCarModel(targetVehicleName?: string): string {
+  if (!targetVehicleName || !targetVehicleName.trim()) {
+    return "Territory";
+  }
+  const clean = targetVehicleName.trim();
+  const lower = clean.toLowerCase();
+
+  // Kiểm tra Ranger Raptor trước Ranger để tránh match nhầm
+  if (lower.includes("ranger raptor") || lower.includes("raptor")) {
+    return "Ranger Raptor";
+  }
+  if (lower.includes("ranger")) {
+    return "Ranger";
+  }
+  if (lower.includes("everest")) {
+    return "Everest";
+  }
+  if (lower.includes("territory")) {
+    return "Territory";
+  }
+  if (lower.includes("explorer")) {
+    return "Explorer";
+  }
+  if (lower.includes("transit")) {
+    return "Transit";
+  }
+  return clean;
+}
 export function injectRawHtmlFragment(html: string, target: HTMLElement, position: "append" | "prepend", markerAttr: string): Element[] {
   const created: Element[] = [];
   if (!html || !html.trim() || typeof document === "undefined") return created;
@@ -92,7 +121,24 @@ export function fireLdpFormConversion(params: {
         window.gtag("event", "generate_lead", { send_to: gtagId, event_category: "ldp_form", event_label: targetVehicleName || salesConsultant?.name || "" });
       }
     }
+    const normalizedCarModel = normalizeCarModel(targetVehicleName);
+    const resolvedCustomerFormType =
+      isTestDrive === true || resolvedFormType === "TEST_DRIVE"
+        ? "lai_thu"
+        : resolvedFormType === "SERVICE_BOOKING"
+          ? "dich_vu"
+          : "bao_gia";
+
     window.dataLayer = window.dataLayer || [];
+
+    // Push sự kiện chuẩn lead_submit theo đúng cấu trúc yêu cầu của GTM LDP
+    window.dataLayer.push({
+      event: "lead_submit",
+      form_type: resolvedCustomerFormType,
+      car_model: normalizedCarModel || "Territory",
+    });
+
+    // Giữ song song sự kiện ldp_form_submit cũ để đảm bảo tính tương thích
     window.dataLayer.push({
       event: "ldp_form_submit",
       ldp_action: resolvedFormType,
