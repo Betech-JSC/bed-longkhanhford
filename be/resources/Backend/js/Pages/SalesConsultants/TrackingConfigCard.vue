@@ -77,9 +77,9 @@
                     <h4 class="text-sm font-bold text-gray-900">3. Mã Script Tuỳ Chỉnh Nâng Cao (Tuỳ chọn)</h4>
                     <span class="text-[11px] text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">Chỉ dùng khi cần nhúng thêm mã khác</span>
                 </div>
-                <Field v-model="config.inject_head" :field="{ type: 'textarea', name: 'tracking_inject_head', label: 'Mã Script Tuỳ Chỉnh Trong <Head>', placeholder: 'Dán thẻ <script>...<\/script> hoặc <meta> riêng của Sale (nếu có)...', rows: 3 }" />
+                <Field v-model="config.inject_head" :field="{ type: 'textarea', name: 'tracking_inject_head', label: 'Mã Script Tuỳ Chỉnh Trong <Head>', placeholder: 'Dán thẻ script hoặc meta riêng của Sale (nếu có)...', rows: 3 }" />
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Field v-model="config.inject_body_start" :field="{ type: 'textarea', name: 'tracking_inject_body_start', label: 'Mã Script Ngay Sau <Body>', placeholder: 'vd: <noscript> GTM của Sale...', rows: 2 }" />
+                    <Field v-model="config.inject_body_start" :field="{ type: 'textarea', name: 'tracking_inject_body_start', label: 'Mã Script Ngay Sau <Body>', placeholder: 'vd: Mã noscript GTM của Sale...', rows: 2 }" />
                     <Field v-model="config.inject_body_end" :field="{ type: 'textarea', name: 'tracking_inject_body_end', label: 'Mã Script Trước </Body>', placeholder: 'vd: Mã livechat hoặc widget riêng...', rows: 2 }" />
                 </div>
             </div>
