@@ -40,8 +40,8 @@ export default function LdpStickyNav({
   if (!vehicles || vehicles.length <= 1) return null;
 
   return (
-    <div id="ldp-vehicles-tabs" className="bg-[#0b192e]/95 backdrop-blur-md text-white py-2 px-3 sm:px-6 border-y border-white/10 sticky top-0 z-[40] shadow-lg">
-      <div className="max-w-[1440px] mx-auto flex items-center justify-between gap-3">
+    <div id="ldp-vehicles-tabs" className="bg-[#0b192e]/95 backdrop-blur-md text-white py-2 border-y border-white/10 sticky top-0 z-[40] shadow-lg">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 xl:px-[144px] flex items-center justify-between gap-3">
         <div className="relative flex-1 min-w-0 flex items-center">
           {canScrollLeft && (
             <button type="button" onClick={() => handleScroll("left")} aria-label="Cuộn sang trái" className="absolute left-0 z-10 p-1 rounded-full bg-[#0b192e]/90 text-white border border-white/20 shadow-md hover:bg-[#0562D2] transition-colors shrink-0">
