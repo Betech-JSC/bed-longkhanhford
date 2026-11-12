@@ -1212,7 +1212,7 @@ function LdpHomeInner({
                       {/* Image banner */}
                       {renderPromoClickable(
                         promoImg ? (
-                          <div className="relative aspect-[5/4] w-full bg-gray-100 overflow-hidden">
+                          <div className="relative aspect-[6/4] w-full bg-gray-100 overflow-hidden">
                             <img
                               src={promoImg}
                               alt={promo.title || "Khuyến mãi"}
