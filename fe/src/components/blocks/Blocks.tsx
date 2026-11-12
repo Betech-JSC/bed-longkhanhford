@@ -2692,7 +2692,7 @@ function LdpPromotionsBlock({ blockIndex, data, promotions, salesConsultant, ope
                 <div>
                   {renderPromoClickable(
                     promo.image_url ? (
-                      <div className="relative aspect-[5/4] w-full bg-slate-100 overflow-hidden">
+                      <div className="relative aspect-[6/4] w-full bg-slate-100 overflow-hidden">
                         <img
                           src={promo.image_url}
                           alt={promo.title}
@@ -2842,7 +2842,7 @@ function LdpPromotionsBlock({ blockIndex, data, promotions, salesConsultant, ope
                 <div>
                   {renderCustomPromoClickable(
                     promo.image_url ? (
-                      <div className="relative aspect-[5/4] w-full bg-slate-100 overflow-hidden">
+                      <div className="relative aspect-[6/4] w-full bg-slate-100 overflow-hidden">
                         <img
                           src={promo.image_url}
                           alt={promo.title}

@@ -306,7 +306,7 @@ function NewsListPageContent({ initialData, initialReviews }: { initialData?: an
                 className="bg-white rounded-none overflow-hidden border border-[#e5e5e5] hover:shadow-sm transition-premium group flex flex-col"
               >
                 {/* Image Container */}
-                <div className="aspect-[5/4] relative overflow-hidden w-full bg-slate-100">
+                <div className="aspect-[6/4] relative overflow-hidden w-full bg-slate-100">
                   <img
                     src={art.image?.url || "/placeholder-news.jpg"}
                     alt={art.title}
@@ -407,7 +407,7 @@ function NewsListPageContent({ initialData, initialReviews }: { initialData?: an
                   href={`/tin-tuc/${art.slug || art.id}`}
                   className="bg-white rounded-none overflow-hidden border border-[#e5e5e5] hover:shadow-xs transition-premium group flex flex-col h-full"
                 >
-                  <div className="aspect-[5/4] relative overflow-hidden w-full bg-slate-100">
+                  <div className="aspect-[6/4] relative overflow-hidden w-full bg-slate-100">
                     <img
                       src={art.image?.url || "/placeholder-news.jpg"}
                       alt={art.title}
