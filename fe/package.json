@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "node -e \"fs.rmSync('.next', {recursive: true, force: true})\" && next build",
+    "dev": "node init && next dev",
+    "build": "node init && node -e \"fs.rmSync('.next', {recursive: true, force: true})\" && next build",
     "clean": "node -e \"fs.rmSync('.next', {recursive: true, force: true}); fs.rmSync('node_modules/.cache', {recursive: true, force: true})\"",
-    "start": "next start",
+    "start": "node init && next start",
     "lint": "eslint"
   },
   "dependencies": {
