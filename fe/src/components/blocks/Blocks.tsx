@@ -2654,8 +2654,11 @@ function LdpPromotionsBlock({ blockIndex, data, promotions, salesConsultant, ope
 
             const renderPromoClickable = (children: React.ReactNode, extraClass = "") => {
               if (promo.slug) {
+                const promoHref = salesConsultant?.slug
+                  ? `/ldp/${salesConsultant.slug}/tin-tuc/${promo.slug}`
+                  : `/tin-tuc/${promo.slug}`;
                 return (
-                  <Link href={`/tin-tuc/${promo.slug}`} className={`block group/link cursor-pointer ${extraClass}`}>
+                  <Link href={promoHref} className={`block group/link cursor-pointer ${extraClass}`}>
                     {children}
                   </Link>
                 );

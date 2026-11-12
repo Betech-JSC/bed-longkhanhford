@@ -1081,8 +1081,11 @@ function LdpHomeInner({
 
                 const renderPromoClickable = (children: React.ReactNode, extraClass = "") => {
                   if (promo.slug) {
+                    const promoHref = consultantSlug
+                      ? `/ldp/${consultantSlug}/tin-tuc/${promo.slug}`
+                      : `/tin-tuc/${promo.slug}`;
                     return (
-                      <Link href={`/tin-tuc/${promo.slug}`} className={`block group/link cursor-pointer ${extraClass}`}>
+                      <Link href={promoHref} className={`block group/link cursor-pointer ${extraClass}`}>
                         {children}
                       </Link>
                     );
