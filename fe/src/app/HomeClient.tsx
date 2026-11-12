@@ -1067,79 +1067,75 @@ export default function HomeClient({
               </motion.div>
 
               {homeArticles.length > 0 ? (
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
-                  {/* Left: Large featured article (66% width) */}
-                  {homeArticles[0] && (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                  {homeArticles.slice(0, 3).map((art, idx) => (
                     <motion.div
+                      key={art.id || idx}
                       initial={{ opacity: 0, y: 30 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
-                      transition={{ duration: 0.6, ease: "easeOut" }}
-                      className="lg:col-span-8 flex"
+                      transition={{ duration: 0.5, delay: idx * 0.1, ease: "easeOut" }}
+                      className="flex"
                     >
                       <Link
-                        href={`/tin-tuc/${homeArticles[0].id}`}
-                        className="w-full relative aspect-[5/3] overflow-hidden rounded-[8px] border border-neutral-200/80 group block animate-fade-in"
+                        href={`/tin-tuc/${art.id}`}
+                        className="bg-white rounded-[8px] overflow-hidden border border-neutral-200/80 hover:shadow-md hover:border-neutral-300 transition-all duration-300 group flex flex-col w-full h-full"
                       >
-                        <img
-                          src={homeArticles[0].image}
-                          alt={homeArticles[0].title}
-                          loading="lazy"
-                          decoding="async"
-                          className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-102 transition-transform duration-500"
-                          onError={handleImageError}
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
-                        <div className="absolute bottom-8 left-8 right-8 text-left text-white">
-                          <h3 className="text-xl md:text-2xl font-bold uppercase tracking-wide font-sans line-clamp-2 drop-shadow-md">
-                            {homeArticles[0].title}
-                          </h3>
-                        </div>
-                      </Link>
-                    </motion.div>
-                  )}
-
-                  {/* Right: Stacked smaller articles (33% width) */}
-                  <div className="lg:col-span-4 flex flex-col justify-between gap-4">
-                    {homeArticles.slice(1, 3).map((art, idx) => (
-                      <motion.div
-                        key={art.id}
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: (idx + 1) * 0.1, ease: "easeOut" }}
-                        className="flex-1 flex animate-fade-in"
-                      >
-                        <Link
-                          href={`/tin-tuc/${art.id}`}
-                          className="w-full relative flex-1 min-h-[190px] overflow-hidden rounded-[8px] border border-neutral-200/80 group block"
-                        >
+                        {/* Image Container with 5:3 ratio */}
+                        <div className="aspect-[5/3] relative overflow-hidden w-full bg-slate-100">
                           <img
                             src={art.image}
                             alt={art.title}
                             loading="lazy"
                             decoding="async"
-                            className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-102 transition-transform duration-500"
+                            className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                             onError={handleImageError}
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
-                          <div className="absolute bottom-6 left-6 right-6 text-left text-white space-y-2">
-                            <h3 className="text-sm font-bold uppercase tracking-wide font-sans line-clamp-2 leading-snug drop-shadow-md">
-                              {art.title}
-                            </h3>
+                          {art.category?.title && (
+                            <div className="absolute top-3 left-3 bg-[#066FEF] text-white text-[11px] font-bold px-2.5 py-1 rounded-[4px] uppercase tracking-wider z-10 shadow-xs">
+                              {art.category.title}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Content Container */}
+                        <div className="p-5 flex flex-col flex-1 gap-2 text-left">
+                          {art.published_at && (
+                            <span className="text-xs font-medium text-neutral-500">
+                              {formatDate(art.published_at)}
+                            </span>
+                          )}
+                          <h3 className="font-sans font-bold text-[16px] md:text-[17px] leading-snug text-neutral-900 group-hover:text-[#066FEF] transition-colors duration-200 line-clamp-2">
+                            {art.title}
+                          </h3>
+                          {art.description && (
+                            <p className="text-xs md:text-sm text-neutral-600 leading-relaxed line-clamp-3 font-sans">
+                              {art.description}
+                            </p>
+                          )}
+                          <div className="mt-auto pt-3 flex items-center text-xs font-bold text-[#066FEF] group-hover:translate-x-1 transition-transform duration-200">
+                            <span>Đọc tiếp</span>
+                            <svg className="w-3.5 h-3.5 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
                           </div>
-                        </Link>
-                      </motion.div>
-                    ))}
-                  </div>
+                        </div>
+                      </Link>
+                    </motion.div>
+                  ))}
                 </div>
               ) : (
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 animate-pulse">
-                  <div className="lg:col-span-8 aspect-[5/3] bg-neutral-100 rounded-none border border-neutral-200/80" />
-                  <div className="lg:col-span-4 flex flex-col gap-6">
-                    <div className="flex-1 min-h-[190px] bg-neutral-100 rounded-none border border-neutral-200/80" />
-                    <div className="flex-1 min-h-[190px] bg-neutral-100 rounded-none border border-neutral-200/80" />
-                  </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 animate-pulse">
+                  {[1, 2, 3].map((n) => (
+                    <div key={n} className="bg-white rounded-[8px] overflow-hidden border border-neutral-200/80 flex flex-col">
+                      <div className="aspect-[5/3] bg-neutral-100" />
+                      <div className="p-5 flex-1 space-y-3">
+                        <div className="h-3 bg-neutral-200 rounded w-1/3" />
+                        <div className="h-5 bg-neutral-200 rounded w-4/5" />
+                        <div className="h-3 bg-neutral-100 rounded w-full" />
+                      </div>
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
