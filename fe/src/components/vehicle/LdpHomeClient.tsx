@@ -741,12 +741,6 @@ function LdpHomeInner({
         {/* Hero Content Area */}
         <div className="max-w-[1440px] mx-auto w-full h-full px-6 xl:px-[144px] flex flex-col justify-end text-center relative z-10 pb-10 sm:pb-14 md:pb-20">
           <div className="max-w-3xl mx-auto flex flex-col items-center">
-            {salesConsultant?.name && (
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-xs font-semibold mb-4 border border-white/30">
-                <Sparkles className="w-3.5 h-3.5 text-yellow-300" />
-                <span>Trang giới thiệu chính thức: Chuyên viên kinh doanh {formatPersonName(salesConsultant.name)}</span>
-              </div>
-            )}
             {heroSlides[activeHeroIndex]?.consultantName ? (
               <h1 className="flex flex-col items-center tracking-tight leading-tight uppercase animate-fade-in">
                 <span className="text-xs sm:text-lg md:text-2xl font-semibold text-white/90 tracking-wider">

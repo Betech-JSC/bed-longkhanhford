@@ -87,7 +87,7 @@ export default function LdpHeroBannerBlock({
   const youtubeId = vehicle ? getYoutubeId(data?.background_video || vehicle?.video_url) : null;
   const hasVehicleVideo = vehicle?.video && (
     (typeof vehicle.video === "string" && vehicle.video.trim() !== "") ||
-    (typeof vehicle.video === "object" && (vehicle.video.url || vehicle.video.path))
+    (typeof vehicle.video === "object" && (vehicle.video.url || vehicle.video.static_url || vehicle.video.path))
   );
   const bgVideo = vehicle && !youtubeId
     ? (data?.background_video ||
@@ -290,7 +290,6 @@ export default function LdpHeroBannerBlock({
             // @ts-ignore
             webkit-playsinline="true"
             className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none z-0"
-            poster={vehicleImage || undefined}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/30 z-1" />
         </div>
@@ -337,16 +336,6 @@ export default function LdpHeroBannerBlock({
 
       {/* Main Content Area */}
       <div className="max-w-[1440px] mx-auto w-full px-6 xl:px-[144px] flex flex-col items-center justify-end text-center relative z-10 mt-auto pt-20 pb-8 md:pb-[24px]">
-        {salesConsultant?.name && (
-          <div className="mb-3 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-white text-xs font-semibold tracking-wide uppercase">
-            <span>
-              {vehicle
-                ? `Trang giới thiệu chính thức: Chuyên viên kinh doanh ${consultantName || salesConsultant.name}`
-                : `Showroom Chuyên Viên Kinh Doanh: ${consultantName || salesConsultant.name}`}
-            </span>
-          </div>
-        )}
-
         <div key={activeIndex} className="max-w-3xl flex flex-col items-center text-center animate-fade-in">
           <h1 className="text-2xl sm:text-4xl lg:text-[46px] font-bold tracking-tight leading-[1.2] text-white uppercase">
             {currentSlide.consultantName ? (

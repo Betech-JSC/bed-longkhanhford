@@ -106,11 +106,26 @@ export const resolveImageUrl = (img: string | { url?: string; path?: string; sta
   if (!img) return "";
   let path = "";
   if (typeof img === "string") {
-    path = img.trim();
+    const trimmed = img.trim();
+    if (trimmed.startsWith("{") && trimmed.endsWith("}")) {
+      try {
+        const parsed = JSON.parse(trimmed);
+        if (parsed && typeof parsed === "object") {
+          return resolveImageUrl(parsed);
+        }
+      } catch {
+        // Not valid JSON
+      }
+    }
+    path = trimmed;
   } else if (typeof img === "object") {
-    path = img.url || img.path || img.static_url || "";
+    path = img.url || img.static_url || img.path || "";
   }
   if (!path) return "";
+
+  if (path.startsWith("cms.")) {
+    path = `https://${path}`;
+  }
 
   // 1. Data URLs
   if (path.startsWith("data:")) {
