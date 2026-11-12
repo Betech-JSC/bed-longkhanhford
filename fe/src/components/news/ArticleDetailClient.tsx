@@ -109,7 +109,7 @@ export default function ArticleDetailClient({
               <img 
                 src={article.image.url} 
                 alt={article.title} 
-                className="absolute inset-0 w-full h-full object-cover"
+                className="absolute inset-0 w-full h-full object-cover object-top"
                 onError={handleImageError}
               />
             </div>
@@ -225,7 +225,7 @@ export default function ArticleDetailClient({
                         <img
                           src={art.image?.url || "/placeholder-news.jpg"}
                           alt={art.title}
-                          className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
+                          className="w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-500"
                           onError={handleImageError}
                         />
                         {art.category && (

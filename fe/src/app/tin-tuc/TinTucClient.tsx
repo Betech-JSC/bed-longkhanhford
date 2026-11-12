@@ -310,7 +310,7 @@ function NewsListPageContent({ initialData, initialReviews }: { initialData?: an
                   <img
                     src={art.image?.url || "/placeholder-news.jpg"}
                     alt={art.title}
-                    className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
+                    className="w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-500"
                     onError={handleImageError}
                   />
                   {art.category && (
@@ -411,7 +411,7 @@ function NewsListPageContent({ initialData, initialReviews }: { initialData?: an
                     <img
                       src={art.image?.url || "/placeholder-news.jpg"}
                       alt={art.title}
-                      className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
+                      className="w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-500"
                       onError={handleImageError}
                     />
                     {art.category && (

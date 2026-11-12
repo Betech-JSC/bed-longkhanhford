@@ -1086,7 +1086,7 @@ export default function HomeClient({
                           alt={homeArticles[0].title}
                           loading="lazy"
                           decoding="async"
-                          className="absolute inset-0 w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
+                          className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-102 transition-transform duration-500"
                           onError={handleImageError}
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
@@ -1119,7 +1119,7 @@ export default function HomeClient({
                             alt={art.title}
                             loading="lazy"
                             decoding="async"
-                            className="absolute inset-0 w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
+                            className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-102 transition-transform duration-500"
                             onError={handleImageError}
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />

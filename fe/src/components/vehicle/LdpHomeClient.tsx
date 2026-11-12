@@ -1123,13 +1123,13 @@ function LdpHomeInner({
                             <img
                               src={promoImg}
                               alt={promo.title || "Khuyến mãi"}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                              className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                               onError={(e) => {
                                 (e.target as HTMLElement).style.display = "none";
                               }}
                             />
-                            <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
-                              <span className={`text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm ${
+                            <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 pointer-events-none">
+                              <span className={`text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm select-none ${
                                 isCustom
                                   ? "bg-emerald-600 text-white"
                                   : "bg-[#0562D2] text-white"
@@ -1140,8 +1140,8 @@ function LdpHomeInner({
 
                             {/* Badge xe áp dụng trên banner ảnh */}
                             {!isAllVehicles && vehicleTitles.length > 0 && (
-                              <div className="absolute top-3 right-3 max-w-[65%] truncate">
-                                <span className="inline-flex items-center gap-1.5 text-[11px] font-bold px-3 py-1 rounded-full bg-slate-950/85 backdrop-blur-md text-amber-300 border border-amber-300/40 shadow-sm">
+                              <div className="absolute top-3 right-3 max-w-[65%] truncate pointer-events-none">
+                                <span className="inline-flex items-center gap-1.5 text-[11px] font-bold px-3 py-1 rounded-full bg-slate-950/85 backdrop-blur-md text-amber-300 border border-amber-300/40 shadow-sm select-none">
                                   <Car className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                                   <span className="truncate">
                                     {vehicleTitles.length === 1 

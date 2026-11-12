@@ -2629,7 +2629,7 @@ function LdpPromotionsBlock({ blockIndex, data, promotions, salesConsultant, ope
   const currentVehicleName = vehicle?.name || vehicle?.title || "";
 
   return (
-    <section id={anchorId || "promotions"} className="bg-[#f8fafc] border-y border-slate-100 py-16 px-4 select-none w-full scroll-mt-12">
+    <section id={anchorId || "promotions"} className="bg-[#f8fafc] border-y border-slate-100 py-16 px-4 w-full scroll-mt-12">
       <div className="max-w-[1152px] mx-auto">
         <div className="text-center max-w-2xl mx-auto mb-12">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100/80 text-[#0562D2] text-xs font-bold uppercase tracking-wider mb-3">
@@ -2675,7 +2675,7 @@ function LdpPromotionsBlock({ blockIndex, data, promotions, salesConsultant, ope
               return (
                 <button
                   type="button"
-                  onClick={() => openQuoteDrawer(targetVehicleSlug)}
+                  onClick={() => openQuoteDrawer?.(targetVehicleSlug)}
                   className={`block w-full text-left group/link cursor-pointer border-0 bg-transparent p-0 ${extraClass}`}
                 >
                   {children}
@@ -2692,19 +2692,19 @@ function LdpPromotionsBlock({ blockIndex, data, promotions, salesConsultant, ope
                         <img
                           src={promo.image_url}
                           alt={promo.title}
-                          className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                          className="object-cover object-top w-full h-full group-hover:scale-105 transition-transform duration-500"
                           onError={(e) => {
                             (e.target as HTMLElement).style.display = "none";
                           }}
                         />
-                        <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
-                          <span className="text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm bg-[#0562D2] text-white">
+                        <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 pointer-events-none">
+                          <span className="text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm bg-[#0562D2] text-white select-none">
                             Khuyến mãi đại lý
                           </span>
                         </div>
                         {!isAll && (
-                          <div className="absolute top-3 right-3 max-w-[65%] truncate">
-                            <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full bg-slate-900/85 backdrop-blur-md text-amber-300 border border-amber-300/40 shadow-sm">
+                          <div className="absolute top-3 right-3 max-w-[65%] truncate pointer-events-none">
+                            <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full bg-slate-900/85 backdrop-blur-md text-amber-300 border border-amber-300/40 shadow-sm select-none">
                               <Car className="w-3 h-3 text-amber-300 shrink-0" />
                               <span className="truncate">
                                 {displayVehicleName ? `Ưu đãi ${displayVehicleName.replace(/^Ford\s+/i, '')}` : 'Ưu đãi theo xe'}
@@ -2737,14 +2737,14 @@ function LdpPromotionsBlock({ blockIndex, data, promotions, salesConsultant, ope
                     {/* Badge dòng xe áp dụng */}
                     {!isAll ? (
                       <div className="flex items-center gap-1.5 mb-2.5">
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-50 text-amber-900 border border-amber-200/80 shadow-xs">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-50 text-amber-900 border border-amber-200/80 shadow-xs select-none cursor-default">
                           <Car className="w-3.5 h-3.5 text-amber-600 shrink-0" />
                           <span>Dành riêng cho {displayVehicleName.replace(/^Ford\s+/i, '') || 'dòng xe này'}</span>
                         </span>
                       </div>
                     ) : (
                       <div className="flex items-center gap-1.5 mb-2.5">
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 text-slate-600 border border-slate-200/60">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 text-slate-600 border border-slate-200/60 select-none cursor-default">
                           <Sparkles className="w-3 h-3 text-slate-400 shrink-0" />
                           <span>Áp dụng toàn bộ dòng xe</span>
                         </span>
@@ -2761,7 +2761,7 @@ function LdpPromotionsBlock({ blockIndex, data, promotions, salesConsultant, ope
                 </div>
 
                 <div className="p-6 pt-0 border-t border-slate-100 mt-4 flex items-center justify-between gap-3">
-                  <span className={`inline-flex items-center gap-1 text-xs font-semibold px-3 py-1 rounded-full ${
+                  <span className={`inline-flex items-center gap-1 text-xs font-semibold px-3 py-1 rounded-full select-none cursor-default ${
                     isAll 
                       ? "text-[#0562D2] bg-blue-50 border border-blue-100" 
                       : "text-amber-800 bg-amber-50 border border-amber-200/70"
@@ -2779,8 +2779,12 @@ function LdpPromotionsBlock({ blockIndex, data, promotions, salesConsultant, ope
                     )}
                   </span>
                   <button
-                    onClick={() => openQuoteDrawer(vehicle?.slug || vehicle?.id)}
-                    className="text-xs font-bold text-[#0562D2] hover:text-[#0052b4] inline-flex items-center gap-1 cursor-pointer border-0 bg-transparent shrink-0"
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openQuoteDrawer?.(targetVehicleSlug);
+                    }}
+                    className="text-xs font-bold text-[#0562D2] hover:text-[#0052b4] inline-flex items-center gap-1 cursor-pointer border-0 bg-transparent shrink-0 transition-colors"
                   >
                     Nhận báo giá <ChevronRight className="w-3 h-3" />
                   </button>
@@ -2821,7 +2825,7 @@ function LdpPromotionsBlock({ blockIndex, data, promotions, salesConsultant, ope
               return (
                 <button
                   type="button"
-                  onClick={() => openQuoteDrawer(targetVehicleSlug)}
+                  onClick={() => openQuoteDrawer?.(targetVehicleSlug)}
                   className={`block w-full text-left group/link cursor-pointer border-0 bg-transparent p-0 ${extraClass}`}
                 >
                   {children}
@@ -2838,19 +2842,19 @@ function LdpPromotionsBlock({ blockIndex, data, promotions, salesConsultant, ope
                         <img
                           src={promo.image_url}
                           alt={promo.title}
-                          className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                          className="object-cover object-top w-full h-full group-hover:scale-105 transition-transform duration-500"
                           onError={(e) => {
                             (e.target as HTMLElement).style.display = "none";
                           }}
                         />
-                        <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
-                          <span className="text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm bg-emerald-600 text-white">
+                        <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 pointer-events-none">
+                          <span className="text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm bg-emerald-600 text-white select-none">
                             Ưu đãi độc quyền
                           </span>
                         </div>
                         {!isAll && (
-                          <div className="absolute top-3 right-3 max-w-[65%] truncate">
-                            <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full bg-slate-900/85 backdrop-blur-md text-emerald-300 border border-emerald-300/40 shadow-sm">
+                          <div className="absolute top-3 right-3 max-w-[65%] truncate pointer-events-none">
+                            <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full bg-slate-900/85 backdrop-blur-md text-emerald-300 border border-emerald-300/40 shadow-sm select-none">
                               <Car className="w-3 h-3 text-emerald-300 shrink-0" />
                               <span className="truncate">
                                 {displayVehicleName ? `Ưu đãi ${displayVehicleName.replace(/^Ford\s+/i, '')}` : 'Ưu đãi theo xe'}
@@ -2883,14 +2887,14 @@ function LdpPromotionsBlock({ blockIndex, data, promotions, salesConsultant, ope
                     {/* Badge dòng xe áp dụng */}
                     {!isAll ? (
                       <div className="flex items-center gap-1.5 mb-2.5">
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200/80 shadow-xs">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200/80 shadow-xs select-none cursor-default">
                           <Car className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                           <span>Dành riêng cho {displayVehicleName.replace(/^Ford\s+/i, '') || 'dòng xe này'}</span>
                         </span>
                       </div>
                     ) : (
                       <div className="flex items-center gap-1.5 mb-2.5">
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 text-slate-600 border border-slate-200/60">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 text-slate-600 border border-slate-200/60 select-none cursor-default">
                           <Sparkles className="w-3 h-3 text-slate-400 shrink-0" />
                           <span>Áp dụng toàn bộ dòng xe</span>
                         </span>
@@ -2907,7 +2911,7 @@ function LdpPromotionsBlock({ blockIndex, data, promotions, salesConsultant, ope
                 </div>
 
                 <div className="p-6 pt-0 border-t border-slate-100 mt-4 flex items-center justify-between gap-3">
-                  <span className={`inline-flex items-center gap-1 text-xs font-semibold px-3 py-1 rounded-full ${
+                  <span className={`inline-flex items-center gap-1 text-xs font-semibold px-3 py-1 rounded-full select-none cursor-default ${
                     isAll 
                       ? "text-emerald-700 bg-emerald-50 border border-emerald-100" 
                       : "text-emerald-800 bg-emerald-100/70 border border-emerald-200/70"
@@ -2916,8 +2920,12 @@ function LdpPromotionsBlock({ blockIndex, data, promotions, salesConsultant, ope
                     <span>{isAll ? "Ưu đãi độc quyền" : `Độc quyền ${displayVehicleName ? `• ${displayVehicleName.replace(/^Ford\s+/i, '')}` : 'theo xe'}`}</span>
                   </span>
                   <button
-                    onClick={() => openQuoteDrawer(vehicle?.slug || vehicle?.id)}
-                    className="text-xs font-bold text-[#0562D2] hover:text-[#0052b4] inline-flex items-center gap-1 cursor-pointer border-0 bg-transparent shrink-0"
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openQuoteDrawer?.(targetVehicleSlug);
+                    }}
+                    className="text-xs font-bold text-[#0562D2] hover:text-[#0052b4] inline-flex items-center gap-1 cursor-pointer border-0 bg-transparent shrink-0 transition-colors"
                   >
                     Nhận báo giá <ChevronRight className="w-3 h-3" />
                   </button>
