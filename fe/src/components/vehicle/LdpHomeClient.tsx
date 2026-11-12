@@ -778,28 +778,124 @@ function LdpHomeInner({
                 type="button"
                 onClick={() => {
                   const activeSlide = heroSlides[activeHeroIndex];
-                  const link = activeSlide?.buttonLink;
-                  if (link && link !== "#showroom" && !link.startsWith("#")) {
-                    if (link.startsWith("http://") || link.startsWith("https://")) {
-                      window.open(link, "_blank", "noopener,noreferrer");
+                  let rawLink = (activeSlide?.buttonLink || "").trim();
+
+                  // 1. Hàm cuộn mượt xuống khối Showroom xe trên LDP
+                  const scrollToLdpShowroom = () => {
+                    const target =
+                      document.getElementById("showroom") ||
+                      document.getElementById("ldp-vehicles-grid") ||
+                      document.getElementById("consultant-vehicles") ||
+                      document.getElementById("ldp-vehicles");
+                    if (target) {
+                      target.scrollIntoView({ behavior: "smooth" });
                     } else {
-                      router.push(link);
+                      router.push("#showroom");
                     }
+                  };
+
+                  // 2. Link rỗng, anchor showroom hoặc link chung của hệ thống -> Cuộn xuống Showroom LDP
+                  if (
+                    !rawLink ||
+                    rawLink === "#" ||
+                    rawLink === "#showroom" ||
+                    rawLink === "/san-pham" ||
+                    rawLink === "/san-pham/" ||
+                    rawLink === "/bang-gia" ||
+                    rawLink === "/"
+                  ) {
+                    scrollToLdpShowroom();
                     return;
                   }
-                  if (link && link.startsWith("#")) {
-                    const targetEl = document.getElementById(link.replace(/^#/, ""));
+
+                  // 3. Anchor nội bộ khác (#...)
+                  if (rawLink.startsWith("#")) {
+                    const targetEl = document.getElementById(rawLink.replace(/^#/, ""));
                     if (targetEl) {
                       targetEl.scrollIntoView({ behavior: "smooth" });
                       return;
                     }
+                    scrollToLdpShowroom();
+                    return;
                   }
-                  const target = document.getElementById("showroom") || document.getElementById("ldp-vehicles-grid") || document.getElementById("consultant-vehicles") || document.getElementById("ldp-vehicles");
-                  if (target) {
-                    target.scrollIntoView({ behavior: "smooth" });
-                  } else {
-                    router.push("#showroom");
+
+                  // 4. Nếu là link tin tức / khuyến mãi -> Giữ nguyên trong LDP Cố vấn
+                  if (rawLink.startsWith("/tin-tuc/")) {
+                    const postSlug = rawLink.replace(/^\/tin-tuc\//, "").replace(/\/$/, "");
+                    if (postSlug) {
+                      router.push(`/ldp/${consultantSlug}/tin-tuc/${postSlug}`);
+                      return;
+                    }
                   }
+
+                  // 5. Nếu là URL ngoài (http/https)
+                  if (rawLink.startsWith("http://") || rawLink.startsWith("https://")) {
+                    try {
+                      const urlObj = new URL(rawLink);
+                      if (
+                        typeof window !== "undefined" &&
+                        (urlObj.hostname === window.location.hostname ||
+                          urlObj.hostname.includes("longkhanhford"))
+                      ) {
+                        rawLink = urlObj.pathname;
+                      } else {
+                        window.open(rawLink, "_blank", "noopener,noreferrer");
+                        return;
+                      }
+                    } catch {
+                      window.open(rawLink, "_blank", "noopener,noreferrer");
+                      return;
+                    }
+                  }
+
+                  // 6. Xử lý link trỏ đến dòng xe -> Điều hướng sang LDP chi tiết dòng xe của Cố vấn
+                  const cleanPath = rawLink
+                    .toLowerCase()
+                    .replace(/^\//, "")
+                    .replace(/\/$/, "")
+                    .replace(/^(san-pham|dong-xe)\//, "");
+
+                  const searchPool = vehiclesList && vehiclesList.length > 0 ? vehiclesList : allVehicles;
+                  let matchedVehicle: any = null;
+
+                  if (Array.isArray(searchPool) && searchPool.length > 0) {
+                    matchedVehicle = searchPool.find((v: any) => {
+                      const vSlug = (v.slug || v.id || "").toLowerCase();
+                      return (
+                        vSlug === cleanPath ||
+                        cleanPath.endsWith(`/${vSlug}`) ||
+                        cleanPath === vSlug.replace(/^ford-/, "") ||
+                        cleanPath.replace(/^ford-/, "") === vSlug
+                      );
+                    });
+
+                    if (!matchedVehicle) {
+                      const keyWords = [
+                        { key: "raptor", match: (v: any) => (v.name || v.title || v.slug || "").toLowerCase().includes("raptor") },
+                        { key: "ranger", match: (v: any) => (v.name || v.title || v.slug || "").toLowerCase().includes("ranger") && !(v.name || v.title || v.slug || "").toLowerCase().includes("raptor") },
+                        { key: "everest", match: (v: any) => (v.name || v.title || v.slug || "").toLowerCase().includes("everest") },
+                        { key: "territory", match: (v: any) => (v.name || v.title || v.slug || "").toLowerCase().includes("territory") },
+                        { key: "transit", match: (v: any) => (v.name || v.title || v.slug || "").toLowerCase().includes("transit") },
+                        { key: "explorer", match: (v: any) => (v.name || v.title || v.slug || "").toLowerCase().includes("explorer") },
+                      ];
+
+                      for (const kw of keyWords) {
+                        if (cleanPath.includes(kw.key)) {
+                          matchedVehicle = searchPool.find(kw.match);
+                          if (matchedVehicle) break;
+                        }
+                      }
+                    }
+                  }
+
+                  if (matchedVehicle) {
+                    const targetVehicleSlug = matchedVehicle.slug || matchedVehicle.id;
+                    router.push(`/ldp/${consultantSlug}/${targetVehicleSlug}`);
+                    return;
+                  }
+
+                  // 7. Fallback an toàn tuyệt đối: Cuộn xuống Showroom LDP
+                  scrollToLdpShowroom();
                 }}
                 className="bg-transparent hover:bg-white/10 border border-white text-white px-6 py-3 rounded-full text-sm md:text-base font-bold transition-all duration-300 cursor-pointer"
               >
