@@ -7,6 +7,13 @@ import { bannersAPI } from "@/lib/api";
 import { siteAssets, resolveImageUrl, getPopularVehicleImage } from "@/lib/site-assets";
 import { formatPersonName } from "@/lib/formatters";
 
+const getYoutubeId = (url: string | null | undefined): string | null => {
+  if (!url) return null;
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const match = url.match(regExp);
+  return match && match[2].length === 11 ? match[2] : null;
+};
+
 interface LdpHeroBannerBlockProps {
   data?: any;
   salesConsultant?: any;
@@ -66,7 +73,7 @@ export default function LdpHeroBannerBlock({
   const consultantCoverUrl = resolveImageUrl(salesConsultant?.cover_image_url || salesConsultant?.cover_image);
   const consultantName = salesConsultant?.name ? formatPersonName(salesConsultant.name) : "";
 
-  // 1. Dành riêng cho trang chi tiết xe của LDP: Cố định thông tin & hình ảnh của đúng dòng xe đang xem
+  // 1. Dành riêng cho trang chi tiết xe của LDP: Cố định thông tin & hình ảnh/video của đúng dòng xe đang xem
   const vehicleRawImage = vehicle
     ? data?.background_image ||
       (Array.isArray(vehicle.images) && vehicle.images.length > 0 ? vehicle.images[0] : null) ||
@@ -75,6 +82,31 @@ export default function LdpHeroBannerBlock({
       getPopularVehicleImage(vehicle.slug || vehicle.id)
     : null;
   const vehicleImage = vehicleRawImage ? resolveImageUrl(vehicleRawImage) : null;
+
+  // Kiểm tra video nền chuẩn 100% như trang chi tiết xe chính thức (/san-pham/[slug])
+  const youtubeId = vehicle ? getYoutubeId(data?.background_video || vehicle?.video_url) : null;
+  const hasVehicleVideo = vehicle?.video && (
+    (typeof vehicle.video === "string" && vehicle.video.trim() !== "") ||
+    (typeof vehicle.video === "object" && (vehicle.video.url || vehicle.video.path))
+  );
+  const bgVideo = vehicle && !youtubeId
+    ? (data?.background_video ||
+       (typeof vehicle?.video_url === "string" && (vehicle.video_url.endsWith(".mp4") || vehicle.video_url.includes(".mp4")) ? vehicle.video_url : null) ||
+       (hasVehicleVideo ? resolveImageUrl(vehicle.video) : null))
+    : null;
+
+  const videoRef = (el: HTMLVideoElement | null) => {
+    if (el) {
+      el.muted = true;
+      el.setAttribute("muted", "true");
+      el.setAttribute("playsinline", "true");
+      el.setAttribute("webkit-playsinline", "true");
+      const playPromise = el.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {});
+      }
+    }
+  };
 
   const vehicleTitle = (
     data?.title ||
@@ -233,44 +265,75 @@ export default function LdpHeroBannerBlock({
       onTouchStart={(e) => { if (slides.length > 1) handleDragStart(e.touches[0].clientX); }}
       onTouchEnd={(e) => { if (slides.length > 1) handleDragEnd(e.changedTouches[0].clientX); }}
     >
-      {/* Background Slides */}
-      {slides.map((slide, idx) => (
-        <div
-          key={idx}
-          className={`absolute inset-0 transition-opacity duration-1000 ease-in-out pointer-events-none ${
-            activeIndex === idx ? "opacity-95 scale-100" : "opacity-0 scale-105"
-          }`}
-        >
-          {/* Desktop Image */}
-          <div className="hidden md:block relative w-full h-full">
-            <Image
-              src={slide.image}
-              alt={slide.title}
-              fill
-              priority={idx === 0}
-              sizes="100vw"
-              className={`object-cover w-full h-full transform transition-transform duration-10000 ${
-                slide.isConsultantSlide ? "object-[15%_center]" : "object-center"
-              }`}
-            />
-          </div>
-          {/* Mobile Image */}
-          <div className="block md:hidden relative w-full h-full">
-            <Image
-              src={slide.imageMobile || slide.image}
-              alt={slide.title}
-              fill
-              priority={idx === 0}
-              sizes="100vw"
-              className={`object-cover w-full h-full transform transition-transform duration-10000 ${
-                slide.isConsultantSlide ? "object-[15%_center]" : "object-center"
-              }`}
-            />
-          </div>
-          {/* Dark gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/25" />
+      {/* Background Media: Video nền nếu xe có video (chuẩn như trang chi tiết chính), ngược lại hiển thị Slides/Image */}
+      {youtubeId ? (
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+          <iframe
+            src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&mute=1&loop=1&playlist=${youtubeId}&controls=0&showinfo=0&rel=0&playsinline=1&enablejsapi=1`}
+            className="absolute inset-0 w-full h-full object-cover scale-125 z-0"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/30 z-1" />
         </div>
-      ))}
+      ) : bgVideo ? (
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+          <video
+            ref={videoRef}
+            src={bgVideo}
+            preload="auto"
+            autoPlay
+            loop
+            muted
+            playsInline
+            // @ts-ignore
+            webkit-playsinline="true"
+            className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none z-0"
+            poster={vehicleImage || undefined}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/30 z-1" />
+        </div>
+      ) : (
+        /* Background Slides */
+        slides.map((slide, idx) => (
+          <div
+            key={idx}
+            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out pointer-events-none ${
+              activeIndex === idx ? "opacity-95 scale-100" : "opacity-0 scale-105"
+            }`}
+          >
+            {/* Desktop Image */}
+            <div className="hidden md:block relative w-full h-full">
+              <Image
+                src={slide.image}
+                alt={slide.title}
+                fill
+                priority={idx === 0}
+                sizes="100vw"
+                className={`object-cover w-full h-full transform transition-transform duration-10000 ${
+                  slide.isConsultantSlide ? "object-[15%_center]" : "object-center"
+                }`}
+              />
+            </div>
+            {/* Mobile Image */}
+            <div className="block md:hidden relative w-full h-full">
+              <Image
+                src={slide.imageMobile || slide.image}
+                alt={slide.title}
+                fill
+                priority={idx === 0}
+                sizes="100vw"
+                className={`object-cover w-full h-full transform transition-transform duration-10000 ${
+                  slide.isConsultantSlide ? "object-[15%_center]" : "object-center"
+                }`}
+              />
+            </div>
+            {/* Dark gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/25" />
+          </div>
+        ))
+      )}
 
       {/* Main Content Area */}
       <div className="max-w-[1440px] mx-auto w-full px-6 xl:px-[144px] flex flex-col items-center justify-end text-center relative z-10 mt-auto pt-20 pb-8 md:pb-[24px]">
