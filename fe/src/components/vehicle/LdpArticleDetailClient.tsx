@@ -407,7 +407,7 @@ function LdpArticleDetailInner({
                   >
                     <div>
                       {itemImg && (
-                        <div className="relative aspect-[5/3] w-full bg-slate-100 overflow-hidden">
+                        <div className="relative aspect-[5/4] w-full bg-slate-100 overflow-hidden">
                           <img
                             src={itemImg}
                             alt={item.title}

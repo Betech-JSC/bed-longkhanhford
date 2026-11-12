@@ -221,7 +221,7 @@ export default function ArticleDetailClient({
                       href={`/tin-tuc/${art.slug || art.id}`}
                       className="bg-white rounded-none overflow-hidden border border-gray-200 shadow-xs hover:shadow-sm transition-premium group flex flex-col h-full no-underline"
                     >
-                      <div className="aspect-[5/3] relative overflow-hidden w-full bg-slate-100">
+                      <div className="aspect-[5/4] relative overflow-hidden w-full bg-slate-100">
                         <img
                           src={art.image?.url || "/placeholder-news.jpg"}
                           alt={art.title}

@@ -1081,8 +1081,8 @@ export default function HomeClient({
                         href={`/tin-tuc/${art.id}`}
                         className="bg-white rounded-[8px] overflow-hidden border border-neutral-200/80 hover:shadow-md hover:border-neutral-300 transition-all duration-300 group flex flex-col w-full h-full"
                       >
-                        {/* Image Container with 5:3 ratio */}
-                        <div className="aspect-[5/3] relative overflow-hidden w-full bg-slate-100">
+                        {/* Image Container with 5:4 ratio */}
+                        <div className="aspect-[5/4] relative overflow-hidden w-full bg-slate-100">
                           <img
                             src={art.image}
                             alt={art.title}
@@ -1128,7 +1128,7 @@ export default function HomeClient({
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 animate-pulse">
                   {[1, 2, 3].map((n) => (
                     <div key={n} className="bg-white rounded-[8px] overflow-hidden border border-neutral-200/80 flex flex-col">
-                      <div className="aspect-[5/3] bg-neutral-100" />
+                      <div className="aspect-[5/4] bg-neutral-100" />
                       <div className="p-5 flex-1 space-y-3">
                         <div className="h-3 bg-neutral-200 rounded w-1/3" />
                         <div className="h-5 bg-neutral-200 rounded w-4/5" />
