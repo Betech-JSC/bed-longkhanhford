@@ -1079,7 +1079,7 @@ export default function HomeClient({
                     >
                       <Link
                         href={`/tin-tuc/${homeArticles[0].id}`}
-                        className="w-full relative aspect-[16/10] overflow-hidden rounded-[8px] border border-neutral-200/80 group block animate-fade-in"
+                        className="w-full relative aspect-[16/9] overflow-hidden rounded-[8px] border border-neutral-200/80 group block animate-fade-in"
                       >
                         <img
                           src={homeArticles[0].image}
@@ -1135,7 +1135,7 @@ export default function HomeClient({
                 </div>
               ) : (
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 animate-pulse">
-                  <div className="lg:col-span-8 aspect-[16/10] bg-neutral-100 rounded-none border border-neutral-200/80" />
+                  <div className="lg:col-span-8 aspect-[16/9] bg-neutral-100 rounded-none border border-neutral-200/80" />
                   <div className="lg:col-span-4 flex flex-col gap-6">
                     <div className="flex-1 min-h-[190px] bg-neutral-100 rounded-none border border-neutral-200/80" />
                     <div className="flex-1 min-h-[190px] bg-neutral-100 rounded-none border border-neutral-200/80" />

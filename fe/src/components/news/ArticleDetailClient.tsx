@@ -221,11 +221,11 @@ export default function ArticleDetailClient({
                       href={`/tin-tuc/${art.slug || art.id}`}
                       className="bg-white rounded-none overflow-hidden border border-gray-200 shadow-xs hover:shadow-sm transition-premium group flex flex-col h-full no-underline"
                     >
-                      <div className="aspect-[600/400] relative overflow-hidden w-full bg-white flex items-center justify-center p-4">
+                      <div className="aspect-[16/9] relative overflow-hidden w-full bg-slate-100">
                         <img
                           src={art.image?.url || "/placeholder-news.jpg"}
                           alt={art.title}
-                          className="w-full h-full object-contain group-hover:scale-[1.03] transition-transform duration-500"
+                          className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
                           onError={handleImageError}
                         />
                         {art.category && (

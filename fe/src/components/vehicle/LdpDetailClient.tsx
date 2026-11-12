@@ -18,7 +18,7 @@ const ZaloIcon = ({ className = "w-6 h-6" }: { className?: string }) => (
 
 const resolveZaloUrl = (zaloUrl?: string, phone?: string): string => {
   const target = (zaloUrl || phone || "").trim();
-  if (!target) return "";
+  if (!target) return "https://zalo.me/0397987689";
   if (target.startsWith("http://") || target.startsWith("https://")) {
     return target;
   }
@@ -29,7 +29,7 @@ const resolveZaloUrl = (zaloUrl?: string, phone?: string): string => {
   if (cleanPhone) {
     return `https://zalo.me/${cleanPhone}`;
   }
-  return target;
+  return "https://zalo.me/0397987689";
 };
 
 function LdpInnerContent({ salesConsultant, landingPageId, salesEmail, layoutBlocks, promotions, vehicle, allVehicles }: any) {

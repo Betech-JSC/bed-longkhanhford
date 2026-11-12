@@ -2,8 +2,16 @@
 
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import ScrollReveal from "@/components/common/ScrollReveal";
 import { Plus, Minus, ChevronDown, ChevronUp, Phone, Bookmark, ChevronLeft, ChevronRight, Sparkles, Mail, Car, Award } from "lucide-react";
+
+const ZaloIcon = ({ className = "w-4 h-4" }: { className?: string }) => (
+  <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <circle cx="50" cy="50" r="50" fill="white" />
+    <text x="50" y="63" fontStyle="normal" fontWeight="900" fontSize="32" fill="#0068FF" textAnchor="middle">Zalo</text>
+  </svg>
+);
 import { mediaAPI } from "@/lib/api";
 import { resolveImageUrl } from "@/lib/site-assets";
 import { formatPersonName } from "@/lib/formatters";
@@ -326,6 +334,7 @@ export default function Blocks({
                 vehicle={vehicle}
                 openQuoteDrawer={openQuoteDrawer}
                 anchorId={block.anchorId}
+                salesConsultant={salesConsultant}
               />
             );
             break;
@@ -2573,6 +2582,16 @@ function LdpSalesConsultantBlock({ blockIndex, data, salesConsultant, openQuoteD
               <Phone className="w-4 h-4" /> Gọi điện tư vấn ({salesConsultant.phone})
             </a>
           )}
+          <a
+            href={salesConsultant.zalo_url || (salesConsultant.phone ? `https://zalo.me/${salesConsultant.phone.replace(/[^0-9]/g, '')}` : "https://zalo.me/0397987689")}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-[#0068ff] hover:bg-[#0057d6] text-white font-bold px-6 py-3.5 rounded-xl shadow-lg flex items-center justify-center gap-2 transition duration-200 text-sm active:scale-95 border-0"
+            title="Chat Zalo với Chuyên viên kinh doanh"
+          >
+            <ZaloIcon className="w-4 h-4" />
+            <span>Chat Zalo</span>
+          </a>
           <button
             onClick={() => openQuoteDrawer()}
             className="bg-[#0562D2] hover:bg-[#0052b4] text-white font-bold px-6 py-3.5 rounded-xl shadow-lg transition duration-200 text-sm active:scale-95 border-0 cursor-pointer"
@@ -2631,53 +2650,87 @@ function LdpPromotionsBlock({ blockIndex, data, promotions, salesConsultant, ope
               ? promo.vehicle_titles.filter((t: string) => t && t !== 'Tất cả dòng xe')
               : [];
             const displayVehicleName = currentVehicleName || (vehicleTitles.length > 0 ? vehicleTitles[0] : "");
+            const targetVehicleSlug = vehicle?.slug || vehicle?.id;
+
+            const renderPromoClickable = (children: React.ReactNode, extraClass = "") => {
+              if (promo.slug) {
+                return (
+                  <Link href={`/tin-tuc/${promo.slug}`} className={`block group/link cursor-pointer ${extraClass}`}>
+                    {children}
+                  </Link>
+                );
+              }
+              if (promo.link) {
+                return (
+                  <a
+                    href={promo.link}
+                    target={promo.link.startsWith("http") ? "_blank" : undefined}
+                    rel="noopener noreferrer"
+                    className={`block group/link cursor-pointer ${extraClass}`}
+                  >
+                    {children}
+                  </a>
+                );
+              }
+              return (
+                <button
+                  type="button"
+                  onClick={() => openQuoteDrawer(targetVehicleSlug)}
+                  className={`block w-full text-left group/link cursor-pointer border-0 bg-transparent p-0 ${extraClass}`}
+                >
+                  {children}
+                </button>
+              );
+            };
 
             return (
               <div key={promo.id} className="bg-white rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col justify-between group">
                 <div>
-                  {promo.image_url ? (
-                    <div className="relative h-52 sm:h-56 w-full bg-slate-100 overflow-hidden">
-                      <img
-                        src={promo.image_url}
-                        alt={promo.title}
-                        className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
-                        onError={(e) => {
-                          (e.target as HTMLElement).style.display = "none";
-                        }}
-                      />
-                      <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
-                        <span className="text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm bg-[#0562D2] text-white">
-                          Khuyến mãi đại lý
-                        </span>
-                      </div>
-                      {!isAll && (
-                        <div className="absolute top-3 right-3 max-w-[65%] truncate">
-                          <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full bg-slate-900/85 backdrop-blur-md text-amber-300 border border-amber-300/40 shadow-sm">
-                            <Car className="w-3 h-3 text-amber-300 shrink-0" />
-                            <span className="truncate">
-                              {displayVehicleName ? `Ưu đãi ${displayVehicleName.replace(/^Ford\s+/i, '')}` : 'Ưu đãi theo xe'}
-                            </span>
+                  {renderPromoClickable(
+                    promo.image_url ? (
+                      <div className="relative aspect-[16/9] w-full bg-slate-100 overflow-hidden">
+                        <img
+                          src={promo.image_url}
+                          alt={promo.title}
+                          className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                          onError={(e) => {
+                            (e.target as HTMLElement).style.display = "none";
+                          }}
+                        />
+                        <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
+                          <span className="text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm bg-[#0562D2] text-white">
+                            Khuyến mãi đại lý
                           </span>
                         </div>
-                      )}
-                    </div>
-                  ) : (
-                    <div className="relative h-24 w-full bg-gradient-to-r from-blue-900 to-[#0562D2] p-4 flex items-center justify-between text-white">
-                      <div className="flex items-center gap-2">
-                        <Sparkles className="w-5 h-5 text-yellow-300" />
-                        <span className="text-xs font-bold uppercase tracking-wider">Khuyến mãi đại lý</span>
-                      </div>
-                      <span className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full bg-white/20">
-                        {!isAll ? (
-                          <>
-                            <Car className="w-3.5 h-3.5 text-amber-300" />
-                            <span>{displayVehicleName ? displayVehicleName.replace(/^Ford\s+/i, '') : 'Ưu đãi theo xe'}</span>
-                          </>
-                        ) : (
-                          <span>Toàn bộ xe</span>
+                        {!isAll && (
+                          <div className="absolute top-3 right-3 max-w-[65%] truncate">
+                            <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full bg-slate-900/85 backdrop-blur-md text-amber-300 border border-amber-300/40 shadow-sm">
+                              <Car className="w-3 h-3 text-amber-300 shrink-0" />
+                              <span className="truncate">
+                                {displayVehicleName ? `Ưu đãi ${displayVehicleName.replace(/^Ford\s+/i, '')}` : 'Ưu đãi theo xe'}
+                              </span>
+                            </span>
+                          </div>
                         )}
-                      </span>
-                    </div>
+                      </div>
+                    ) : (
+                      <div className="relative h-24 w-full bg-gradient-to-r from-blue-900 to-[#0562D2] p-4 flex items-center justify-between text-white">
+                        <div className="flex items-center gap-2">
+                          <Sparkles className="w-5 h-5 text-yellow-300" />
+                          <span className="text-xs font-bold uppercase tracking-wider">Khuyến mãi đại lý</span>
+                        </div>
+                        <span className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full bg-white/20">
+                          {!isAll ? (
+                            <>
+                              <Car className="w-3.5 h-3.5 text-amber-300" />
+                              <span>{displayVehicleName ? displayVehicleName.replace(/^Ford\s+/i, '') : 'Ưu đãi theo xe'}</span>
+                            </>
+                          ) : (
+                            <span>Toàn bộ xe</span>
+                          )}
+                        </span>
+                      </div>
+                    )
                   )}
 
                   <div className="p-6">
@@ -2698,9 +2751,11 @@ function LdpPromotionsBlock({ blockIndex, data, promotions, salesConsultant, ope
                       </div>
                     )}
 
-                    <h3 className="text-lg font-bold text-slate-800 line-clamp-2 leading-snug group-hover:text-[#0562D2] transition-colors">
-                      {promo.title}
-                    </h3>
+                    {renderPromoClickable(
+                      <h3 className="text-lg font-bold text-slate-800 line-clamp-2 leading-snug group-hover:text-[#0562D2] group-hover/link:text-[#0562D2] transition-colors">
+                        {promo.title}
+                      </h3>
+                    )}
                     <p className="text-slate-500 text-sm mt-2.5 line-clamp-3 leading-relaxed">{promo.description}</p>
                   </div>
                 </div>
@@ -2741,53 +2796,87 @@ function LdpPromotionsBlock({ blockIndex, data, promotions, salesConsultant, ope
               ? promo.vehicle_titles.filter((t: string) => t && t !== 'Tất cả dòng xe')
               : [];
             const displayVehicleName = currentVehicleName || (vehicleTitles.length > 0 ? vehicleTitles[0] : "");
+            const targetVehicleSlug = vehicle?.slug || vehicle?.id;
+
+            const renderCustomPromoClickable = (children: React.ReactNode, extraClass = "") => {
+              if (promo.slug) {
+                return (
+                  <Link href={`/tin-tuc/${promo.slug}`} className={`block group/link cursor-pointer ${extraClass}`}>
+                    {children}
+                  </Link>
+                );
+              }
+              if (promo.link) {
+                return (
+                  <a
+                    href={promo.link}
+                    target={promo.link.startsWith("http") ? "_blank" : undefined}
+                    rel="noopener noreferrer"
+                    className={`block group/link cursor-pointer ${extraClass}`}
+                  >
+                    {children}
+                  </a>
+                );
+              }
+              return (
+                <button
+                  type="button"
+                  onClick={() => openQuoteDrawer(targetVehicleSlug)}
+                  className={`block w-full text-left group/link cursor-pointer border-0 bg-transparent p-0 ${extraClass}`}
+                >
+                  {children}
+                </button>
+              );
+            };
 
             return (
               <div key={idx} className="bg-white rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col justify-between group">
                 <div>
-                  {promo.image_url ? (
-                    <div className="relative h-52 sm:h-56 w-full bg-slate-100 overflow-hidden">
-                      <img
-                        src={promo.image_url}
-                        alt={promo.title}
-                        className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
-                        onError={(e) => {
-                          (e.target as HTMLElement).style.display = "none";
-                        }}
-                      />
-                      <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
-                        <span className="text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm bg-emerald-600 text-white">
-                          Ưu đãi độc quyền
-                        </span>
-                      </div>
-                      {!isAll && (
-                        <div className="absolute top-3 right-3 max-w-[65%] truncate">
-                          <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full bg-slate-900/85 backdrop-blur-md text-emerald-300 border border-emerald-300/40 shadow-sm">
-                            <Car className="w-3 h-3 text-emerald-300 shrink-0" />
-                            <span className="truncate">
-                              {displayVehicleName ? `Ưu đãi ${displayVehicleName.replace(/^Ford\s+/i, '')}` : 'Ưu đãi theo xe'}
-                            </span>
+                  {renderCustomPromoClickable(
+                    promo.image_url ? (
+                      <div className="relative aspect-[16/9] w-full bg-slate-100 overflow-hidden">
+                        <img
+                          src={promo.image_url}
+                          alt={promo.title}
+                          className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                          onError={(e) => {
+                            (e.target as HTMLElement).style.display = "none";
+                          }}
+                        />
+                        <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
+                          <span className="text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm bg-emerald-600 text-white">
+                            Ưu đãi độc quyền
                           </span>
                         </div>
-                      )}
-                    </div>
-                  ) : (
-                    <div className="relative h-24 w-full bg-gradient-to-r from-emerald-800 to-teal-600 p-4 flex items-center justify-between text-white">
-                      <div className="flex items-center gap-2">
-                        <Sparkles className="w-5 h-5 text-emerald-200" />
-                        <span className="text-xs font-bold uppercase tracking-wider">Ưu đãi độc quyền</span>
-                      </div>
-                      <span className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full bg-white/20">
-                        {!isAll ? (
-                          <>
-                            <Car className="w-3.5 h-3.5 text-emerald-200" />
-                            <span>{displayVehicleName ? displayVehicleName.replace(/^Ford\s+/i, '') : 'Ưu đãi theo xe'}</span>
-                          </>
-                        ) : (
-                          <span>Toàn bộ xe</span>
+                        {!isAll && (
+                          <div className="absolute top-3 right-3 max-w-[65%] truncate">
+                            <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full bg-slate-900/85 backdrop-blur-md text-emerald-300 border border-emerald-300/40 shadow-sm">
+                              <Car className="w-3 h-3 text-emerald-300 shrink-0" />
+                              <span className="truncate">
+                                {displayVehicleName ? `Ưu đãi ${displayVehicleName.replace(/^Ford\s+/i, '')}` : 'Ưu đãi theo xe'}
+                              </span>
+                            </span>
+                          </div>
                         )}
-                      </span>
-                    </div>
+                      </div>
+                    ) : (
+                      <div className="relative h-24 w-full bg-gradient-to-r from-emerald-800 to-teal-600 p-4 flex items-center justify-between text-white">
+                        <div className="flex items-center gap-2">
+                          <Sparkles className="w-5 h-5 text-emerald-200" />
+                          <span className="text-xs font-bold uppercase tracking-wider">Ưu đãi độc quyền</span>
+                        </div>
+                        <span className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full bg-white/20">
+                          {!isAll ? (
+                            <>
+                              <Car className="w-3.5 h-3.5 text-emerald-200" />
+                              <span>{displayVehicleName ? displayVehicleName.replace(/^Ford\s+/i, '') : 'Ưu đãi theo xe'}</span>
+                            </>
+                          ) : (
+                            <span>Toàn bộ xe</span>
+                          )}
+                        </span>
+                      </div>
+                    )
                   )}
 
                   <div className="p-6">
@@ -2808,9 +2897,11 @@ function LdpPromotionsBlock({ blockIndex, data, promotions, salesConsultant, ope
                       </div>
                     )}
 
-                    <h3 className="text-lg font-bold text-slate-800 line-clamp-2 leading-snug group-hover:text-emerald-700 transition-colors">
-                      {promo.title}
-                    </h3>
+                    {renderCustomPromoClickable(
+                      <h3 className="text-lg font-bold text-slate-800 line-clamp-2 leading-snug group-hover:text-emerald-700 group-hover/link:text-emerald-700 transition-colors">
+                        {promo.title}
+                      </h3>
+                    )}
                     <p className="text-slate-500 text-sm mt-2.5 line-clamp-3 leading-relaxed">{promo.description}</p>
                   </div>
                 </div>
@@ -2840,7 +2931,7 @@ function LdpPromotionsBlock({ blockIndex, data, promotions, salesConsultant, ope
   );
 }
 
-function InstallmentCalculatorBlock({ data, vehicle, openQuoteDrawer, anchorId }: any) {
+function InstallmentCalculatorBlock({ data, vehicle, openQuoteDrawer, anchorId, salesConsultant }: any) {
   const [downpaymentPct, setDownpaymentPct] = React.useState<number>(data.default_downpayment_pct || 20);
   const [loanYears, setLoanYears] = React.useState<number>(5);
 
@@ -2857,6 +2948,15 @@ function InstallmentCalculatorBlock({ data, vehicle, openQuoteDrawer, anchorId }
 
   const title = data.title || "Bảng Tính Chi Phí Trả Góp Ước Tính";
   const subtitle = data.subtitle || "Hỗ trợ vay lên đến 80% giá trị xe với lãi suất ưu đãi";
+
+  const handleZaloClick = () => {
+    const targetZalo = data.zalo_url || data.zalo_link || salesConsultant?.zalo_url || (salesConsultant?.phone ? `https://zalo.me/${salesConsultant.phone.replace(/[^0-9]/g, '')}` : "https://zalo.me/0397987689");
+    if (targetZalo) {
+      window.open(targetZalo, "_blank", "noopener,noreferrer");
+    } else {
+      openQuoteDrawer(vehicle?.slug || vehicle?.id);
+    }
+  };
 
   return (
     <section id={anchorId || undefined} className="w-full bg-[#f8fafc] py-12 px-4 md:px-12 flex justify-center">
@@ -2957,9 +3057,10 @@ function InstallmentCalculatorBlock({ data, vehicle, openQuoteDrawer, anchorId }
 
             <button
               type="button"
-              onClick={() => openQuoteDrawer()}
-              className="w-full py-3 px-4 bg-amber-400 hover:bg-amber-300 text-slate-900 font-extrabold rounded-xl text-sm transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
+              onClick={handleZaloClick}
+              className="w-full py-3 px-4 bg-amber-400 hover:bg-amber-300 text-slate-900 font-extrabold rounded-xl text-sm transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer active:scale-95"
             >
+              <ZaloIcon className="w-5 h-5 shrink-0" />
               <span>{data.zalo_button_text || "Nhận Bảng Tính Chi Tiết Qua Zalo"}</span>
             </button>
           </div>

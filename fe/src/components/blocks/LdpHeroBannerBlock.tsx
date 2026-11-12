@@ -162,8 +162,12 @@ export default function LdpHeroBannerBlock({
 
   const scrollToVehicles = () => {
     const target =
+      document.getElementById("ldp-vehicles-grid") ||
+      document.getElementById("showroom") ||
+      document.getElementById("default-versions-grid") ||
       document.getElementById("consultant-vehicles") ||
       document.getElementById("ldp-vehicles") ||
+      document.getElementById("ldp-vehicle-intro") ||
       document.querySelector("[data-block-type='LdpVehiclesGrid']");
     if (target) {
       target.scrollIntoView({ behavior: "smooth" });
