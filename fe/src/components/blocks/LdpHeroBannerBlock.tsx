@@ -4,14 +4,15 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { bannersAPI } from "@/lib/api";
-import { siteAssets, resolveImageUrl } from "@/lib/site-assets";
+import { siteAssets, resolveImageUrl, getPopularVehicleImage } from "@/lib/site-assets";
 import { formatPersonName } from "@/lib/formatters";
 
 interface LdpHeroBannerBlockProps {
   data?: any;
   salesConsultant?: any;
-  openQuoteDrawer?: () => void;
-  openDriveModal?: () => void;
+  vehicle?: any;
+  openQuoteDrawer?: (vehicleId?: any, versionId?: any) => void;
+  openDriveModal?: (vehicleId?: any) => void;
   anchorId?: string;
   isEditMode?: boolean;
 }
@@ -56,6 +57,7 @@ const DEFAULT_SLIDES: BannerSlide[] = [
 export default function LdpHeroBannerBlock({
   data,
   salesConsultant,
+  vehicle,
   openQuoteDrawer,
   openDriveModal,
   anchorId = "hero-banner",
@@ -63,6 +65,40 @@ export default function LdpHeroBannerBlock({
 }: LdpHeroBannerBlockProps) {
   const consultantCoverUrl = resolveImageUrl(salesConsultant?.cover_image_url || salesConsultant?.cover_image);
   const consultantName = salesConsultant?.name ? formatPersonName(salesConsultant.name) : "";
+
+  // 1. Dành riêng cho trang chi tiết xe của LDP: Cố định thông tin & hình ảnh của đúng dòng xe đang xem
+  const vehicleRawImage = vehicle
+    ? data?.background_image ||
+      (Array.isArray(vehicle.images) && vehicle.images.length > 0 ? vehicle.images[0] : null) ||
+      vehicle.image_url ||
+      vehicle.image ||
+      getPopularVehicleImage(vehicle.slug || vehicle.id)
+    : null;
+  const vehicleImage = vehicleRawImage ? resolveImageUrl(vehicleRawImage) : null;
+
+  const vehicleTitle = (
+    data?.title ||
+    vehicle?.name ||
+    vehicle?.title ||
+    "LONG KHÁNH FORD"
+  ).toUpperCase();
+
+  const vehicleSubtitle =
+    data?.tagline ||
+    data?.subtitle ||
+    vehicle?.tagline ||
+    (vehicle?.typeName
+      ? `Dòng xe ${vehicle.typeName} thế hệ mới tại Long Khánh Ford`
+      : "Trải nghiệm sức mạnh, công nghệ và sự an toàn vượt trội cùng Ford Việt Nam.");
+
+  const vehicleSlide: BannerSlide = {
+    id: `vehicle-${vehicle?.id || vehicle?.slug || "lead"}`,
+    title: vehicleTitle,
+    subtitle: vehicleSubtitle,
+    image: vehicleImage || siteAssets.heroSlides[0],
+    imageMobile: vehicleImage || siteAssets.heroSlides[0],
+    buttonText: "Đăng ký lái thử",
+  };
 
   const prependCoverSlide = (list: BannerSlide[]): BannerSlide[] => {
     if (!consultantCoverUrl) return list;
@@ -85,6 +121,9 @@ export default function LdpHeroBannerBlock({
   };
 
   const [slides, setSlides] = useState<BannerSlide[]>(() => {
+    if (vehicle) {
+      return [vehicleSlide];
+    }
     if (data?.banners && Array.isArray(data.banners) && data.banners.length > 0) {
       return prependCoverSlide(data.banners);
     }
@@ -94,8 +133,14 @@ export default function LdpHeroBannerBlock({
   const touchStartX = useRef<number>(0);
   const isDragging = useRef<boolean>(false);
 
-  // Nạp banner chính thức từ hệ thống nếu chưa có trong cấu hình block
+  // Nạp banner chính thức từ hệ thống nếu chưa có trong cấu hình block VÀ không phải trang chi tiết xe
   useEffect(() => {
+    if (vehicle) {
+      setSlides([vehicleSlide]);
+      setActiveIndex(0);
+      return;
+    }
+
     if (data?.banners && Array.isArray(data.banners) && data.banners.length > 0) {
       return;
     }
@@ -111,8 +156,8 @@ export default function LdpHeroBannerBlock({
               id: item.id,
               title: item.title || "LONG KHÁNH FORD",
               subtitle: item.subtitle || item.description || "Đại lý ủy quyền chính hãng chuẩn Signature tại Long Khánh",
-              image: item.image_url || siteAssets?.heroSlides?.[0] || DEFAULT_SLIDES[0].image,
-              imageMobile: item.image_mobile_url || item.image_url || siteAssets?.heroSlides?.[0] || DEFAULT_SLIDES[0].image,
+              image: resolveImageUrl(item.image_url || item.image) || siteAssets?.heroSlides?.[0] || DEFAULT_SLIDES[0].image,
+              imageMobile: resolveImageUrl(item.image_mobile_url || item.image_url || item.image) || siteAssets?.heroSlides?.[0] || DEFAULT_SLIDES[0].image,
               buttonText: item.button_text || "Đăng ký lái thử",
               buttonLink: item.button_link || "#consultant-vehicles",
             }));
@@ -125,9 +170,9 @@ export default function LdpHeroBannerBlock({
       .catch(() => {
         // Giữ fallback mặc định nếu API lỗi
       });
-  }, [data, consultantCoverUrl]);
+  }, [data, consultantCoverUrl, vehicle?.id, vehicle?.slug, vehicleImage, vehicleTitle, vehicleSubtitle]);
 
-  // Tự động chuyển slide sau mỗi 6s
+  // Tự động chuyển slide sau mỗi 6s (chỉ chạy khi có nhiều slide)
   useEffect(() => {
     if (slides.length <= 1) return;
     const timer = setInterval(() => {
@@ -179,12 +224,14 @@ export default function LdpHeroBannerBlock({
   return (
     <section
       id={anchorId}
-      className="relative h-[62vh] min-h-[460px] sm:h-[70vh] sm:min-h-[520px] md:h-[calc(100vh-112px)] md:min-h-[680px] flex flex-col justify-end bg-black text-white overflow-hidden select-none cursor-grab active:cursor-grabbing w-full"
-      onMouseDown={(e) => handleDragStart(e.clientX)}
-      onMouseUp={(e) => handleDragEnd(e.clientX)}
+      className={`relative h-[62vh] min-h-[460px] sm:h-[70vh] sm:min-h-[520px] md:h-[calc(100vh-112px)] md:min-h-[680px] flex flex-col justify-end bg-black text-white overflow-hidden select-none w-full ${
+        slides.length > 1 ? "cursor-grab active:cursor-grabbing" : ""
+      }`}
+      onMouseDown={(e) => { if (slides.length > 1) handleDragStart(e.clientX); }}
+      onMouseUp={(e) => { if (slides.length > 1) handleDragEnd(e.clientX); }}
       onMouseLeave={() => { isDragging.current = false; }}
-      onTouchStart={(e) => handleDragStart(e.touches[0].clientX)}
-      onTouchEnd={(e) => handleDragEnd(e.changedTouches[0].clientX)}
+      onTouchStart={(e) => { if (slides.length > 1) handleDragStart(e.touches[0].clientX); }}
+      onTouchEnd={(e) => { if (slides.length > 1) handleDragEnd(e.changedTouches[0].clientX); }}
     >
       {/* Background Slides */}
       {slides.map((slide, idx) => (
@@ -229,7 +276,11 @@ export default function LdpHeroBannerBlock({
       <div className="max-w-[1440px] mx-auto w-full px-6 xl:px-[144px] flex flex-col items-center justify-end text-center relative z-10 mt-auto pt-20 pb-8 md:pb-[24px]">
         {salesConsultant?.name && (
           <div className="mb-3 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-white text-xs font-semibold tracking-wide uppercase">
-            <span>Showroom Chuyên Viên Kinh Doanh: {salesConsultant.name}</span>
+            <span>
+              {vehicle
+                ? `Trang giới thiệu chính thức: Chuyên viên kinh doanh ${consultantName || salesConsultant.name}`
+                : `Showroom Chuyên Viên Kinh Doanh: ${consultantName || salesConsultant.name}`}
+            </span>
           </div>
         )}
 
@@ -257,22 +308,34 @@ export default function LdpHeroBannerBlock({
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                if (openDriveModal) openDriveModal();
-                else if (openQuoteDrawer) openQuoteDrawer();
+                if (openDriveModal) openDriveModal(vehicle?.id);
+                else if (openQuoteDrawer) openQuoteDrawer(vehicle?.id);
               }}
               className="bg-[#0562d2] hover:bg-[#066FEF] text-white px-5 py-2.5 md:px-7 md:py-3 rounded-full text-xs md:text-base font-semibold tracking-wide transition-all duration-300 cursor-pointer shadow-lg hover:shadow-blue-500/30 border-0 active:scale-95"
             >
-              {currentSlide.buttonText || "Đăng ký lái thử"}
+              {vehicle ? "Đăng ký lái thử" : (currentSlide.buttonText || "Đăng ký lái thử")}
             </button>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                scrollToVehicles();
-              }}
-              className="bg-transparent hover:bg-white/10 border border-white text-white px-5 py-2.5 md:px-7 md:py-3 rounded-full text-xs md:text-base font-semibold tracking-wide transition-all duration-300 cursor-pointer active:scale-95"
-            >
-              Khám phá dòng xe
-            </button>
+            {vehicle ? (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (openQuoteDrawer) openQuoteDrawer(vehicle?.id);
+                }}
+                className="bg-transparent hover:bg-white/10 border border-white text-white px-5 py-2.5 md:px-7 md:py-3 rounded-full text-xs md:text-base font-semibold tracking-wide transition-all duration-300 cursor-pointer active:scale-95"
+              >
+                Nhận báo giá lăn bánh
+              </button>
+            ) : (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  scrollToVehicles();
+                }}
+                className="bg-transparent hover:bg-white/10 border border-white text-white px-5 py-2.5 md:px-7 md:py-3 rounded-full text-xs md:text-base font-semibold tracking-wide transition-all duration-300 cursor-pointer active:scale-95"
+              >
+                Khám phá dòng xe
+              </button>
+            )}
           </div>
         </div>
       </div>

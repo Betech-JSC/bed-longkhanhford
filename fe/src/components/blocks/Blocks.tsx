@@ -177,6 +177,7 @@ export default function Blocks({
               <LdpHeroBannerBlock
                 data={block.data}
                 salesConsultant={salesConsultant}
+                vehicle={vehicle}
                 openQuoteDrawer={openQuoteDrawer}
                 openDriveModal={openDriveModal}
                 anchorId={block.anchorId}
