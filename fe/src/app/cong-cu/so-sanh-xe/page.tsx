@@ -37,11 +37,11 @@ function getStaticFallbackSpecs(vehicleIdOrName: string, versionIdOrName: string
 
   if (staticV.versions && staticV.versions.length > 0) {
     let staticVer = staticV.versions.find(ver => 
-      ver.id.toLowerCase() === verTarget ||
-      ver.name.toLowerCase() === verTarget ||
-      verTarget.includes(ver.id.toLowerCase()) ||
-      ver.name.toLowerCase().includes(verTarget) ||
-      verTarget.includes(ver.name.toLowerCase())
+      (ver.id || "").toLowerCase() === verTarget ||
+      (ver.name || "").toLowerCase() === verTarget ||
+      verTarget.includes((ver.id || "").toLowerCase()) ||
+      (ver.name || "").toLowerCase().includes(verTarget) ||
+      verTarget.includes((ver.name || "").toLowerCase())
     );
 
     if (!staticVer && verTarget) {

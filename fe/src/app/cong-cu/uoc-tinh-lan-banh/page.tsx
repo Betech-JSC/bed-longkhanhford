@@ -75,8 +75,8 @@ function groupVehiclesBySeries(apiVehicles: any[]) {
         }];
 
     vehicleVersions.forEach((v: any) => {
-      const vName = (v.name || v.title || vehicle.title).trim();
-      const existing = groups[seriesKey].versions.find((item: any) => item.name.toLowerCase() === vName.toLowerCase());
+      const vName = (v.name || v.title || vehicle.title || "").trim();
+      const existing = groups[seriesKey].versions.find((item: any) => (item.name || "").toLowerCase() === vName.toLowerCase());
       if (!existing) {
         groups[seriesKey].versions.push({
           id: v.slug || v.id || `v-${vName}`,

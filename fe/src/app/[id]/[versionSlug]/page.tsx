@@ -10,7 +10,8 @@ type Props = {
 };
 
 // Vietnamese-accent-safe URL slug generator
-const getVersionSlug = (verName: string) => {
+const getVersionSlug = (verName?: string | null) => {
+  if (!verName || typeof verName !== "string") return "phien-ban";
   return verName.toLowerCase()
     .replace(/\+/g, "-plus")
     .normalize("NFD")
@@ -21,11 +22,14 @@ const getVersionSlug = (verName: string) => {
     .replace(/\s+/g, "-");
 };
 
-const getVersionDisplayName = (verName: string, vehicleName: string) => {
-  if (verName.toLowerCase().startsWith(vehicleName.toLowerCase())) {
-    return verName.substring(vehicleName.length).trim();
+const getVersionDisplayName = (verName?: string | null, vehicleName?: string | null) => {
+  if (!verName) return "";
+  const vName = verName || "";
+  const vehName = vehicleName || "";
+  if (vehName && vName.toLowerCase().startsWith(vehName.toLowerCase())) {
+    return vName.substring(vehName.length).trim();
   }
-  return verName;
+  return vName;
 };
 
 export async function generateMetadata({ params }: Props) {
@@ -37,11 +41,11 @@ export async function generateMetadata({ params }: Props) {
     if (!vehicle) return {};
 
     const versions = vehicle.versions || [];
-    const matchedVersion = versions.find((v: any) => getVersionSlug(v.name) === versionSlug);
+    const matchedVersion = versions.find((v: any) => getVersionSlug(v?.name || v?.title) === versionSlug);
 
     const vehicleName = vehicle.title || "";
     const versionDisplayName = matchedVersion 
-      ? getVersionDisplayName(matchedVersion.name, vehicleName) 
+      ? getVersionDisplayName(matchedVersion.name || matchedVersion.title, vehicleName) 
       : "";
 
     const title = matchedVersion 

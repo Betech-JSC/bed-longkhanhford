@@ -9,7 +9,8 @@ import { resolveImageUrl, handleImageError, getPopularVehicleImage } from "@/lib
 import ScrollReveal from "@/components/common/ScrollReveal";
 
 // Vietnamese-accent-safe URL slug generator
-const getVersionSlug = (verName: string) => {
+const getVersionSlug = (verName?: string | null) => {
+  if (!verName || typeof verName !== "string") return "phien-ban";
   return verName.toLowerCase()
     .replace(/\+/g, "-plus")
     .normalize("NFD")
@@ -21,11 +22,14 @@ const getVersionSlug = (verName: string) => {
 };
 
 // Extract version specific display name (e.g. "Titanium X" instead of "Ford Territory Titanium X")
-const getVersionDisplayName = (verName: string, vehicleName: string) => {
-  if (verName.toLowerCase().startsWith(vehicleName.toLowerCase())) {
-    return verName.substring(vehicleName.length).trim();
+const getVersionDisplayName = (verName?: string | null, vehicleName?: string | null) => {
+  if (!verName) return "";
+  const vName = verName || "";
+  const vehName = vehicleName || "";
+  if (vehName && vName.toLowerCase().startsWith(vehName.toLowerCase())) {
+    return vName.substring(vehName.length).trim();
   }
-  return verName;
+  return vName;
 };
 
 export default function VehicleVersionDetailClient() {
@@ -42,7 +46,7 @@ export default function VehicleVersionDetailClient() {
   const activeVersionIndex = useMemo(() => {
     if (!vehicle || !vehicle.versions || vehicle.versions.length === 0) return 0;
     const idx = vehicle.versions.findIndex(
-      (v: any) => getVersionSlug(v.name) === versionSlug
+      (v: any) => getVersionSlug(v?.name || v?.title) === versionSlug
     );
     return idx !== -1 ? idx : 0;
   }, [vehicle, versionSlug]);
@@ -51,10 +55,10 @@ export default function VehicleVersionDetailClient() {
   useEffect(() => {
     if (!vehicle || !vehicle.versions || vehicle.versions.length === 0) return;
     const matchedIdx = vehicle.versions.findIndex(
-      (v: any) => getVersionSlug(v.name) === versionSlug
+      (v: any) => getVersionSlug(v?.name || v?.title) === versionSlug
     );
     if (matchedIdx === -1) {
-      const firstSlug = getVersionSlug(vehicle.versions[0].name);
+      const firstSlug = getVersionSlug(vehicle.versions[0]?.name || vehicle.versions[0]?.title);
       router.replace(`/${id}/${firstSlug}`);
     }
   }, [vehicle, versionSlug, id, router]);
@@ -63,7 +67,7 @@ export default function VehicleVersionDetailClient() {
 
   const handleVersionSelect = (idx: number) => {
     if (vehicle && vehicle.versions[idx]) {
-      const targetSlug = getVersionSlug(vehicle.versions[idx].name);
+      const targetSlug = getVersionSlug(vehicle.versions[idx]?.name || vehicle.versions[idx]?.title);
       router.push(`/${id}/${targetSlug}`);
     }
   };

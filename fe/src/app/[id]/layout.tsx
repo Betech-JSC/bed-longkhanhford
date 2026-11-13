@@ -188,14 +188,18 @@ export default async function VehicleDetailLayout({
         const allVersions: any[] = [];
         familyVehicles.forEach((fv: any) => {
           (fv.versions || []).forEach((ver: any) => {
-            const vName = (ver.name || "").trim().toLowerCase();
+            const rawName = ver.name || ver.title || (fv.title ? `${fv.title} Tiêu chuẩn` : apiVehicle.title) || "Phiên bản tiêu chuẩn";
+            const vName = (rawName || "").trim().toLowerCase();
             const verId = String(ver.id || "");
             const exists = allVersions.some((x: any) => 
               (verId && String(x.id) === verId) || 
-              (x.name || "").trim().toLowerCase() === vName
+              ((x.name || "").trim().toLowerCase() === vName)
             );
             if (!exists) {
-              allVersions.push(ver);
+              allVersions.push({
+                ...ver,
+                name: rawName
+              });
             }
           });
         });
@@ -243,7 +247,7 @@ export default async function VehicleDetailLayout({
       const parsedSpecs = parseSpecsArray(v.specs);
       return {
         id: String(v.id),
-        name: v.name,
+        name: v.name || v.title || apiVehicle.title || "Phiên bản tiêu chuẩn",
         price: typeof v.price === 'string' ? parseFloat(v.price) : v.price,
         image_url: v.image_url || resolveFileUrl(v.image) || null,
         image_thumbnail_url: v.image_thumbnail_url || resolveFileUrl(v.image_thumbnail) || null,
