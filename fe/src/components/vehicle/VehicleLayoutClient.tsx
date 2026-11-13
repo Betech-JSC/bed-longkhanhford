@@ -38,7 +38,8 @@ export function useVehicle() {
   return context;
 }
 
-const getVersionSlug = (verName: string) => {
+const getVersionSlug = (verName?: string | null) => {
+  if (!verName || typeof verName !== "string") return "phien-ban";
   return verName.toLowerCase()
     .replace(/\+/g, "-plus")
     .normalize("NFD")
@@ -825,7 +826,8 @@ export function VehicleTabBar() {
 
   const firstVersionSlug = useMemo(() => {
     const firstVer = vehicle?.versions?.[0];
-    return firstVer ? getVersionSlug(firstVer.name) : "phien-ban";
+    const vName = firstVer?.name || firstVer?.title || vehicle?.name || vehicle?.title;
+    return vName ? getVersionSlug(vName) : "phien-ban";
   }, [vehicle]);
 
   const subTabs = useMemo(() => [
