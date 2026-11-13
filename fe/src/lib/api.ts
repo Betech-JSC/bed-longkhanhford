@@ -92,9 +92,9 @@ import { cache } from 'react';
  * Vehicles API
  */
 export const vehiclesAPI = {
-  getAll: (params?: Record<string, any>) => {
+  getAll: (params?: Record<string, any>, options?: RequestInit & { next?: { tags?: string[]; revalidate?: number } }) => {
     const query = params ? '?' + new URLSearchParams(params as any).toString() : '';
-    return fetchAPI<any>(`/vehicles${query}`, undefined, ['vehicles']);
+    return fetchAPI<any>(`/vehicles${query}`, options, ['vehicles']);
   },
 
   getFeatured: () => fetchAPI('/vehicles/featured', undefined, ['vehicles', 'homepage']),

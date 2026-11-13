@@ -19,6 +19,8 @@ export default function LdpStickyNav({
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
+  const safeVehicles = Array.isArray(vehicles) ? vehicles.filter((v: any) => v && (v.slug || v.id)) : [];
+  const safeConsultantSlug = consultantSlug || "tu-van";
 
   const checkScroll = () => {
     const el = scrollRef.current;
@@ -37,7 +39,7 @@ export default function LdpStickyNav({
     scrollRef.current?.scrollBy({ left: dir === "left" ? -240 : 240, behavior: "smooth" });
   };
 
-  if (!vehicles || vehicles.length <= 1) return null;
+  if (!safeVehicles || safeVehicles.length <= 1) return null;
 
   return (
     <div id="ldp-vehicles-tabs" className="bg-[#0b192e]/95 backdrop-blur-md text-white py-2 border-y border-white/10 sticky top-0 z-[40] shadow-lg">
@@ -50,15 +52,16 @@ export default function LdpStickyNav({
           )}
 
           <div ref={scrollRef} onScroll={checkScroll} className="flex items-center gap-1.5 overflow-x-auto scrollbar-none w-full scroll-smooth py-0.5 px-1">
-            {vehicles.map((v: any) => {
+            {safeVehicles.map((v: any, index: number) => {
               const vSlug = v.slug || v.id;
               const isActive = activeSlug && (vSlug === activeSlug || String(v.id) === String(activeSlug));
-              const href = customDomain ? `/${vSlug}#ldp-vehicle-intro` : `/ldp/${consultantSlug}/${vSlug}#ldp-vehicle-intro`;
-              const displayName = (v.title || v.name || "").replace(/^FORD\s+/i, "");
+              const href = customDomain ? `/${vSlug}#ldp-vehicle-intro` : `/ldp/${safeConsultantSlug}/${vSlug}#ldp-vehicle-intro`;
+              // Luôn hiển thị in hoa, không phụ thuộc việc title trong CMS đã được viết hoa hay chưa.
+              const displayName = (v.title || v.name || "").replace(/^FORD\s+/i, "").toUpperCase();
 
               return (
                 <Link
-                  key={v.id}
+                  key={v.id || vSlug || index}
                   href={href}
                   scroll={false}
                   onClick={(e) => {

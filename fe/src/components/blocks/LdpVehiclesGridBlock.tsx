@@ -20,8 +20,9 @@ interface LdpVehiclesGridBlockProps {
 
 // Phân nhóm danh mục dựa trên loại xe hoặc tên xe (fallback)
 function resolveCategory(vehicle: any): string {
-  const type = (vehicle.type || "").toLowerCase();
-  const title = (vehicle.title || vehicle.name || "").toLowerCase();
+  if (!vehicle) return "other";
+  const type = String(vehicle.type || "").toLowerCase();
+  const title = String(vehicle.title || vehicle.name || "").toLowerCase();
 
   if (type === "ev" || title.includes("mach-e") || title.includes("điện")) return "ev";
   if (type === "pickup" || title.includes("ranger")) return "pickup";
@@ -42,7 +43,7 @@ export default function LdpVehiclesGridBlock({
   const [selectedCat, setSelectedCat] = useState<string>("all");
   const [categories, setCategories] = useState<any[]>([]);
   const [vehicles, setVehicles] = useState<any[]>(() => {
-    if (Array.isArray(allVehicles) && allVehicles.length > 0) return allVehicles;
+    if (Array.isArray(allVehicles) && allVehicles.length > 0) return allVehicles.filter(Boolean);
     if (currentVehicle) return [currentVehicle];
     return [];
   });
@@ -69,9 +70,9 @@ export default function LdpVehiclesGridBlock({
         const list = res?.data || res || [];
         if (Array.isArray(list) && list.length > 0) {
           // Luôn hiển thị trọn vẹn danh mục xe đại lý, kết hợp thông tin tùy biến nếu có
-          const enriched = list.map((hv: any) => {
+          const enriched = list.filter(Boolean).map((hv: any) => {
             const custom = Array.isArray(allVehicles)
-              ? allVehicles.find(
+              ? allVehicles.filter(Boolean).find(
                   (v: any) =>
                     (v.slug && (v.slug === hv.slug || v.slug === hv.id)) ||
                     String(hv.id) === String(v.id)
@@ -81,14 +82,14 @@ export default function LdpVehiclesGridBlock({
           });
           setVehicles(enriched);
         } else if (Array.isArray(allVehicles) && allVehicles.length > 0) {
-          setVehicles(allVehicles);
+          setVehicles(allVehicles.filter(Boolean));
         } else if (currentVehicle) {
           setVehicles([currentVehicle]);
         }
       })
       .catch(() => {
         if (Array.isArray(allVehicles) && allVehicles.length > 0) {
-          setVehicles(allVehicles);
+          setVehicles(allVehicles.filter(Boolean));
         } else if (currentVehicle) {
           setVehicles([currentVehicle]);
         }
@@ -100,7 +101,9 @@ export default function LdpVehiclesGridBlock({
 
   const consultantSlug =
     salesConsultant?.slug ||
-    salesConsultant?.name?.toLowerCase().trim().replace(/\s+/g, "-") ||
+    (typeof salesConsultant?.name === "string"
+      ? salesConsultant.name.toLowerCase().trim().replace(/\s+/g, "-")
+      : "") ||
     "tu-van";
 
   // Định dạng tiền tệ VND chuẩn (phân tách hàng nghìn bằng dấu phẩy giống homepage)

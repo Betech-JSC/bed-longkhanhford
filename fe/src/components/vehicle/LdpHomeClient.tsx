@@ -58,7 +58,7 @@ const OfferIcon = ({ className }: { className?: string }) => (
       <path d="M15.6903 3.68096 C16.8591 4.84308 17.0148 6.67473 16.214 8.08677 H32 V2.93039 C32 1.312 30.6856 0 29.0643 0 H11.2615 V3.16397 C12.7002 2.35214 14.5182 2.51549 15.6903 3.68096 C16.3562 4.34304 14.5182 2.51549 15.6903 3.68096 Z" fill="currentColor" />
       <path d="M6.95515 13.8543 L5.49867 12.4072 L7.76144 10.1381 H0 V19.6336 C0 21.2521 1.31439 22.5641 2.93573 22.5641 H9.20643 V11.5967 L6.95515 13.8543 Z" fill="currentColor" />
       <path d="M12.6974 10.1381 L14.9301 12.3885 L13.4698 13.8318 L11.2615 11.6058 V22.5641 H29.0643 C30.6856 22.5641 32 21.2521 32 19.6337 V10.1381 H12.6974 Z" fill="currentColor" />
-      <path d="M4.25388 8.08677 C3.45299 6.67453 3.60896 4.84301 4.77757 3.68096 C5.94961 2.51549 7.76759 2.35221 9.20643 V0 H2.93573 C1.31439 0 0 1.312 0 2.93039 V8.08677 H4.25388 Z" fill="currentColor" />
+      <path d="M4.25388 8.08677 C3.45299 6.67453 3.60896 4.84301 4.77757 3.68096 C5.94961 2.51549 7.76759 2.35221 9.20643 3.16397 V0 H2.93573 C1.31439 0 0 1.312 0 2.93039 V8.08677 H4.25388 Z" fill="currentColor" />
     </g>
   </svg>
 );
@@ -88,6 +88,24 @@ const resolveZaloUrl = (zaloUrl?: string, phone?: string): string => {
   const cleanPhone = target.replace(/[^0-9]/g, "");
   if (cleanPhone) return `https://zalo.me/${cleanPhone}`;
   return "https://zalo.me/0397987689";
+};
+
+/**
+ * Safely extract a human-readable error message from the CMS response.
+ * The API may return `message` as a string, an object of validation errors, null or undefined.
+ */
+const extractApiErrorMessage = (message: any, fallback: string): string => {
+  if (!message) return fallback;
+  if (typeof message === "string") return message;
+  try {
+    const text = Object.values(message)
+      .flat()
+      .filter(Boolean)
+      .join(", ");
+    return text || fallback;
+  } catch {
+    return fallback;
+  }
 };
 
 // FAQ Data
@@ -159,7 +177,7 @@ const formatBannersList = (items: any[], salesConsultant?: any): LdpBannerSlide[
   const consultantName = salesConsultant?.name ? formatPersonName(salesConsultant.name) : "";
 
   let baseList: LdpBannerSlide[] = Array.isArray(items) && items.length > 0
-    ? items.map((item: any) => ({
+    ? items.filter(Boolean).map((item: any) => ({
         title: item.title || "",
         subtitle: item.subtitle || "",
         image: resolveImageUrl(item.image_url || item.image) || siteAssets.heroSlides[0],
@@ -273,7 +291,12 @@ function LdpHomeInner({
   const router = useRouter();
   const { openQuoteDrawer, openDriveDrawer } = useVehicle();
   const finalZaloUrl = resolveZaloUrl(salesConsultant?.zalo_url, salesConsultant?.phone);
-  const consultantSlug = salesConsultant?.slug || salesConsultant?.name?.toLowerCase().trim().replace(/\s+/g, "-") || "tu-van";
+  const consultantSlug =
+    salesConsultant?.slug ||
+    (typeof salesConsultant?.name === "string"
+      ? salesConsultant.name.toLowerCase().trim().replace(/\s+/g, "-")
+      : "") ||
+    "tu-van";
 
   // Banner State
   const [heroSlides, setHeroSlides] = useState<LdpBannerSlide[]>(() => formatBannersList(initialBanners, salesConsultant));
@@ -281,7 +304,9 @@ function LdpHomeInner({
 
   // Showroom & Filter State
   const [categories, setCategories] = useState<any[]>(initialCategories);
-  const [vehiclesList, setVehiclesList] = useState<any[]>(allVehicles);
+  const [vehiclesList, setVehiclesList] = useState<any[]>(() =>
+    Array.isArray(allVehicles) ? allVehicles.filter(Boolean) : []
+  );
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
   // Technology State
@@ -293,15 +318,15 @@ function LdpHomeInner({
 
   // Promotions Data
   const globalPromos = useMemo(() => {
-    return Array.isArray(promotions?.global) ? promotions.global.map((p: any) => ({ ...p, _isCustom: false })) : [];
+    return Array.isArray(promotions?.global) ? promotions.global.filter(Boolean).map((p: any) => ({ ...p, _isCustom: false })) : [];
   }, [promotions?.global]);
 
   const customPromos = useMemo(() => {
-    return Array.isArray(promotions?.custom) ? promotions.custom.map((p: any) => ({ ...p, _isCustom: true })) : [];
+    return Array.isArray(promotions?.custom) ? promotions.custom.filter(Boolean).map((p: any) => ({ ...p, _isCustom: true })) : [];
   }, [promotions?.custom]);
 
   const rawPromosList = useMemo(() => {
-    return Array.isArray(promotions) ? promotions.map((p: any) => ({ ...p, _isCustom: false })) : [];
+    return Array.isArray(promotions) ? promotions.filter(Boolean).map((p: any) => ({ ...p, _isCustom: false })) : [];
   }, [promotions]);
 
   const allPromotionCards = useMemo(() => {
@@ -548,7 +573,7 @@ function LdpHomeInner({
   }, [isTechHovered]);
 
   // Filter Vehicles for Showroom (Đồng bộ 100% logic trang chủ Long Khánh Ford)
-  const filteredVehicles = vehiclesList.filter((v: any) => {
+  const filteredVehicles = (Array.isArray(vehiclesList) ? vehiclesList : []).filter(Boolean).filter((v: any) => {
     if (selectedCategory === "all") return true;
     const cat = categories.find((c: any) => c.slug === selectedCategory);
     if (cat && cat.id) {
@@ -592,7 +617,7 @@ function LdpHomeInner({
 
     try {
       const selectedVehicle = vehiclesList.find((v: any) => String(v.id) === String(leadVehicleId) || v.slug === leadVehicleId) || leadVehicle;
-      const pId = selectedVehicle ? String(selectedVehicle.id || selectedVehicle.slug) : "ford-longkhanh";
+      const pId = selectedVehicle ? String(selectedVehicle.id || selectedVehicle.slug || "ford-longkhanh") : "ford-longkhanh";
       const pSlug = selectedVehicle?.slug || "ford-longkhanh";
       const pTitle = selectedVehicle?.title || selectedVehicle?.name || "Tất cả các dòng xe Ford";
 
@@ -621,8 +646,7 @@ function LdpHomeInner({
 
       if (response && response.success === false) {
         setLeadSubmitStatus("error");
-        const msg = typeof response.message === "object" ? Object.values(response.message).flat().join(", ") : response.message;
-        setLeadErrorMessage(msg || "Gửi yêu cầu không thành công. Vui lòng thử lại sau.");
+        setLeadErrorMessage(extractApiErrorMessage(response.message, "Gửi yêu cầu không thành công. Vui lòng thử lại sau."));
         return;
       }
 
@@ -670,8 +694,7 @@ function LdpHomeInner({
       });
       if (response && response.success === false) {
         setSrvStatus("error");
-        const msg = typeof response.message === "object" ? Object.values(response.message).flat().join(", ") : response.message;
-        setSrvError(msg || "Gửi yêu cầu không thành công. Vui lòng thử lại.");
+        setSrvError(extractApiErrorMessage(response.message, "Gửi yêu cầu không thành công. Vui lòng thử lại."));
         return;
       }
       setSrvStatus("success");
@@ -685,7 +708,9 @@ function LdpHomeInner({
 
   // Helper for vehicle card links (retaining consultant context)
   const getVehicleLink = (vehicle: any) => {
+    if (!vehicle) return "#showroom";
     const vehicleSlug = vehicle.slug || vehicle.id;
+    if (!vehicleSlug) return "#showroom";
     return salesConsultant?.custom_domain
       ? `/${vehicleSlug}`
       : `/ldp/${consultantSlug}/${vehicleSlug}`;
@@ -1159,7 +1184,7 @@ function LdpHomeInner({
                   const matched = allVehicles.find((v: any) => {
                     const vName = (v.name || v.title || "").toLowerCase();
                     return vehicleTitles.some((vt: string) => {
-                      const cleanVt = vt.toLowerCase().replace(/^ford\s+/i, '').trim();
+                      const cleanVt = String(vt || "").toLowerCase().replace(/^ford\s+/i, '').trim();
                       const cleanVn = vName.replace(/^ford\s+/i, '').trim();
                       return cleanVn.includes(cleanVt) || cleanVt.includes(cleanVn);
                     });
@@ -1183,8 +1208,8 @@ function LdpHomeInner({
                   if (promo.link) {
                     return (
                       <a
-                        href={promo.link}
-                        target={promo.link.startsWith("http") ? "_blank" : undefined}
+                        href={String(promo.link)}
+                        target={typeof promo.link === "string" && promo.link.startsWith("http") ? "_blank" : undefined}
                         rel="noopener noreferrer"
                         className={`block group/link cursor-pointer ${extraClass}`}
                       >

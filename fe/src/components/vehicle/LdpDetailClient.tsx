@@ -184,7 +184,12 @@ function LdpInnerContent({ salesConsultant, landingPageId, salesEmail, layoutBlo
 
   const hasVehiclesGrid = bottomBlocks.some((b: any) => b.type === "LdpVehiclesGrid");
 
-  const consultantSlug = salesConsultant?.slug || salesConsultant?.name?.toLowerCase().replace(/\s+/g, '-');
+  const consultantSlug =
+    salesConsultant?.slug ||
+    (typeof salesConsultant?.name === "string"
+      ? salesConsultant.name.toLowerCase().replace(/\s+/g, "-")
+      : "") ||
+    "tu-van";
 
   return (
     <div className="relative pb-16 md:pb-0">
@@ -278,7 +283,7 @@ function LdpInnerContent({ salesConsultant, landingPageId, salesEmail, layoutBlo
         )}
         
         {/* Hotline Button */}
-        {salesConsultant.phone && (
+        {salesConsultant?.phone && (
           <a
             href={`tel:${salesConsultant.phone}`}
             className="flex items-center gap-2 px-3.5 py-2.5 md:px-4 md:py-2.5 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white rounded-full shadow-lg shadow-green-600/30 hover:scale-105 active:scale-95 transition-all duration-200 border border-emerald-400/30"
@@ -300,10 +305,12 @@ export default function LdpDetailClient({
   initialData: any;
   allVehicles?: any[];
 }) {
-  const { vehicle, vehicles, sales_consultant, layout_blocks, promotions } = initialData;
-  const allVehicles = (passedAllVehicles && passedAllVehicles.length > 0)
-    ? passedAllVehicles
-    : ((vehicles && vehicles.length > 0) ? vehicles : [vehicle]);
+  const { vehicle, vehicles, sales_consultant, layout_blocks, promotions } = initialData || {};
+  const safePassedVehicles = Array.isArray(passedAllVehicles) ? passedAllVehicles.filter(Boolean) : [];
+  const safeLdpVehicles = Array.isArray(vehicles) ? vehicles.filter(Boolean) : [];
+  const allVehicles = safePassedVehicles.length > 0
+    ? safePassedVehicles
+    : (safeLdpVehicles.length > 0 ? safeLdpVehicles : (vehicle ? [vehicle] : []));
 
   return (
     <VehicleLayoutClient
@@ -311,13 +318,13 @@ export default function LdpDetailClient({
       allVehicles={allVehicles}
       salesConsultant={sales_consultant}
       salesConsultantId={sales_consultant?.id}
-      salesEmail={initialData.sales_email || sales_consultant?.email}
-      landingPageId={initialData.id}
+      salesEmail={initialData?.sales_email || sales_consultant?.email}
+      landingPageId={initialData?.id}
     >
       <LdpInnerContent
         salesConsultant={sales_consultant}
-        landingPageId={initialData.id}
-        salesEmail={initialData.sales_email || sales_consultant?.email}
+        landingPageId={initialData?.id}
+        salesEmail={initialData?.sales_email || sales_consultant?.email}
         layoutBlocks={layout_blocks}
         promotions={promotions}
         vehicle={vehicle}

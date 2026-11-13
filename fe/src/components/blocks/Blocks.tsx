@@ -528,8 +528,8 @@ function HeroBannerBlock({ blockIndex, data, vehicle, openQuoteDrawer, openDrive
     }
   }, []);
 
-  const title = data.title || vehicle.name;
-  const tagline = data.tagline || vehicle.tagline;
+  const title = data?.title || vehicle?.name || "";
+  const tagline = data?.tagline || vehicle?.tagline || "";
   const btnText = data.button_text || "Book Lái thử";
   const btnLink = data.button_link || "#drive";
   const youtubeId = getYoutubeId(data.background_video || vehicle.video_url);
@@ -793,7 +793,7 @@ function VersionSpecsAccordion({
 }
 
 function SpecsGridBlock({ data, vehicle, isEditMode, onChangeData, openQuoteDrawer, anchorId }: any) {
-  const versions = vehicle.versions || [];
+  const versions = vehicle?.versions || [];
 
   if (versions.length === 0) return null;
 
@@ -835,7 +835,7 @@ function SpecsGridBlock({ data, vehicle, isEditMode, onChangeData, openQuoteDraw
     id: ver.id,
     name: ver.name,
     price: ver.price,
-    image: resolveImageUrl(ver.image_thumbnail_url || ver.image_url || ver.image || vehicle.image_thumbnail_url || vehicle.image_url || vehicle.images?.[idx] || vehicle.images?.[0] || (idx === 0
+    image: resolveImageUrl(ver.image_thumbnail_url || ver.image_url || ver.image || vehicle?.image_thumbnail_url || vehicle?.image_url || vehicle?.images?.[idx] || vehicle?.images?.[0] || (idx === 0
       ? "/assets/territory-hero.jpg"
       : idx === 1
         ? "/assets/territory-tech-split.jpg"
@@ -866,7 +866,7 @@ function SpecsGridBlock({ data, vehicle, isEditMode, onChangeData, openQuoteDraw
           <div className="space-y-2 text-left">
             <span className="text-xs font-bold uppercase tracking-wider text-[#0562d2] block">So sánh trực quan</span>
             <h2 className="font-['Ford_Antenna',sans-serif] font-semibold text-[#00095b] text-[32px] sm:text-[40px] uppercase tracking-[-0.96px] leading-[1.2]">
-              So sánh các phiên bản {vehicle.name.replace("NEW ", "")}
+              So sánh các phiên bản {(vehicle?.name || "").replace("NEW ", "")}
             </h2>
             <p className="text-xs text-gray-500 font-medium">
               Bảng đối chiếu thông số kỹ thuật và trang bị trực quan giữa các phiên bản xe
@@ -983,14 +983,14 @@ function SpecsGridBlock({ data, vehicle, isEditMode, onChangeData, openQuoteDraw
 
                 {/* specs */}
                 <VersionSpecsAccordion 
-                  specs={parseSpecs(item.specs, vehicle.name)} 
+                  specs={parseSpecs(item.specs, vehicle?.name)}
                   openSectionTitles={openSectionTitles}
                   onToggleSection={handleToggleSection}
                 />
 
                 <div className="p-4 bg-white flex flex-col items-center justify-center shrink-0 w-full border-t border-gray-100/50 rounded-b-[12px] mt-auto">
                   <button
-                    onClick={() => openQuoteDrawer(vehicle.id, item.id)}
+                    onClick={() => openQuoteDrawer(vehicle?.id, item.id)}
                     className="bg-[#0562d2] hover:bg-[#044ea7] border border-[#0562d2] border-solid flex gap-[8px] items-center justify-center overflow-clip px-[24px] py-[10px] rounded-[800px] text-white text-[16px] font-semibold transition-all cursor-pointer shadow-xs w-full"
                   >
                     Báo giá
@@ -1644,14 +1644,14 @@ function ThreeSixtyViewerBlock({ data, vehicle, isEditMode, onChangeData, threeS
                     onClick={() => setIsTrimDropdownOpen(!isTrimDropdownOpen)}
                     onBlur={() => setTimeout(() => setIsTrimDropdownOpen(false), 200)}
                   >
-                    <div className="dropdown-activeTrim">{vehicle.versions[activeVersionIndex]?.name || vehicle.name}</div>
+                    <div className="dropdown-activeTrim">{vehicle?.versions?.[activeVersionIndex]?.name || vehicle?.name || ""}</div>
                     <div className="dropdown-active__icon">
                       <ChevronDown className="w-5 h-5 text-gray-500" />
                     </div>
                   </div>
 
                   <div className="dropdown-menu-wrapper" role="listbox" tabIndex={-1}>
-                    {vehicle.versions.map((ver: any, idx: number) => (
+                    {(vehicle?.versions || []).map((ver: any, idx: number) => (
                       <div
                         key={ver.id}
                         className={`dropdown-item trimAware__item trimAware__item--enable ${activeVersionIndex === idx ? "active-option" : ""}`}
@@ -1789,9 +1789,9 @@ function ThreeSixtyViewerBlock({ data, vehicle, isEditMode, onChangeData, threeS
                 ) : (
                   <>
                     <img
-                      src={resolveImageUrl(vehicle.id === "mustang-fastback"
+                      src={resolveImageUrl(vehicle?.id === "mustang-fastback"
                         ? `/images/360/mustang/ecoboostfastback/exterior/desktop/adriatic-blue-green/64f/001-adriatic-blue-green-64f.jpeg`
-                        : vehicle.id === "new-territory"
+                        : vehicle?.id === "new-territory"
                           ? (viewType === "exterior" ? "/assets/territory-3d.webp" : "/assets/territory-interior.webp")
                           : (viewType === "exterior"
                             ? (() => {
@@ -1799,7 +1799,7 @@ function ThreeSixtyViewerBlock({ data, vehicle, isEditMode, onChangeData, threeS
                               if (colorImg) {
                                 return colorImg;
                               }
-                              return vehicle.images?.[0] || vehicle.image_url || "/assets/car-everest.webp";
+                              return vehicle?.images?.[0] || vehicle?.image_url || "/assets/car-everest.webp";
                             })()
                             : media.splitLeft))}
                       alt="3D vehicle preview"
@@ -3180,7 +3180,7 @@ function DualVehicleComparisonBlock({ data, vehicle, openQuoteDrawer, anchorId }
               <span className="text-xs bg-amber-400/10 text-amber-300 px-2.5 py-1 rounded font-semibold">Xe đang chọn</span>
             </div>
             {vehicle?.image_url && (
-              <img src={vehicle.image_url} alt={vehicle.title} className="w-full h-48 object-contain my-2" />
+              <img src={vehicle?.image_url} alt={vehicle?.title} className="w-full h-48 object-contain my-2" />
             )}
             <div className="space-y-2 text-xs text-slate-300">
               <div className="flex justify-between py-1 border-b border-slate-700/50">

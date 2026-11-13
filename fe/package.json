@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "node -e \"fs.rmSync('.next', {recursive: true, force: true})\" && next build",
+    "postbuild": "node scripts/copy-standalone-assets.cjs",
     "clean": "node -e \"fs.rmSync('.next', {recursive: true, force: true}); fs.rmSync('node_modules/.cache', {recursive: true, force: true})\"",
     "start": "next start",
     "lint": "eslint"

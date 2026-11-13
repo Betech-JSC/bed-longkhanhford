@@ -79,8 +79,8 @@ function normalizeVehicle(apiVehicle: any) {
   if (!apiVehicle) return null;
   return {
     ...apiVehicle,
-    id: apiVehicle.slug || String(apiVehicle.id),
-    name: apiVehicle.title || apiVehicle.name,
+    id: apiVehicle.slug || String(apiVehicle.id ?? ''),
+    name: apiVehicle.title || apiVehicle.name || '',
     typeName: apiVehicle.type_name || apiVehicle.typeName || (
       apiVehicle.type === 'suv'
         ? (apiVehicle.title?.toLowerCase().includes('everest') ? 'SUV 7 Chỗ' : apiVehicle.title?.toLowerCase().includes('territory') ? 'SUV 5 Chỗ' : 'SUV')
@@ -90,7 +90,7 @@ function normalizeVehicle(apiVehicle: any) {
     ),
     basePrice: typeof apiVehicle.base_price === 'string' ? parseFloat(apiVehicle.base_price) : apiVehicle.base_price,
     image_url: apiVehicle.image_url || resolveFileUrl(apiVehicle.image),
-    colors: apiVehicle.colors ? safeArray(apiVehicle.colors).map((c: any) => ({
+    colors: apiVehicle.colors ? safeArray(apiVehicle.colors).filter(Boolean).map((c: any) => ({
       name: c.name || c.color_name || '',
       hex: c.hex || c.color_code || '',
       image: resolveFileUrl(c.image_path || c.image),
@@ -101,7 +101,7 @@ function normalizeVehicle(apiVehicle: any) {
     images: (apiVehicle.images && Array.isArray(apiVehicle.images) && apiVehicle.images.length > 0)
       ? apiVehicle.images.map((img: any) => resolveFileUrl(img)).filter(Boolean)
       : [apiVehicle.image_url || resolveFileUrl(apiVehicle.image)].filter(Boolean),
-    versions: apiVehicle.versions ? safeArray(apiVehicle.versions).map((v: any) => {
+    versions: apiVehicle.versions ? safeArray(apiVehicle.versions).filter(Boolean).map((v: any) => {
       const parsedSpecs = parseSpecsArray(v.specs);
       return {
         id: String(v.id),
@@ -147,7 +147,7 @@ export default async function Page({ params }: Props) {
   try {
     const [res, vehiclesRes] = await Promise.all([
       ldpAPI.getBySlug(salesSlug, vehicleSlug),
-      vehiclesAPI.getAll({ with_versions: true }).catch(() => null),
+      vehiclesAPI.getAll({ with_versions: true }, { cache: "no-store" }).catch(() => null),
     ]);
     ldpData = res?.data;
     const vItems = (vehiclesRes as any)?.data || vehiclesRes;
@@ -169,23 +169,23 @@ export default async function Page({ params }: Props) {
 
   const currentLead = ldpData.vehicle;
   const rawLdpVehicles = Array.isArray(ldpData.vehicles) && ldpData.vehicles.length > 0
-    ? ldpData.vehicles
+    ? ldpData.vehicles.filter(Boolean)
     : (currentLead ? [currentLead] : []);
 
   // Đồng bộ 100% dòng xe đại lý: Giữ danh sách xe đồng bộ hoàn toàn giữa trang chủ LDP và trang chi tiết
   const showroomVehicles = homepageVehicles.length > 0
-    ? homepageVehicles.map((hv: any) => {
+    ? homepageVehicles.filter(Boolean).map((hv: any) => {
         const isCurrent = currentLead && (currentLead.slug === hv.slug || String(currentLead.id) === String(hv.id));
         const custom = isCurrent
           ? currentLead
-          : rawLdpVehicles.find(
+          : rawLdpVehicles.filter(Boolean).find(
               (v: any) =>
                 (v.slug && (v.slug === hv.slug || v.slug === hv.id)) ||
                 String(v.id) === String(hv.id)
             );
         return custom ? { ...hv, ...custom, id: hv.slug || hv.id } : { ...hv, id: hv.slug || hv.id };
       })
-    : (currentLead ? [currentLead, ...rawLdpVehicles.filter((v: any) => v.id !== currentLead.id)] : rawLdpVehicles);
+    : (currentLead ? [currentLead, ...rawLdpVehicles.filter((v: any) => v && v.id !== currentLead.id)] : rawLdpVehicles.filter(Boolean));
 
   return <LdpDetailClient initialData={ldpData} allVehicles={showroomVehicles} />;
 }

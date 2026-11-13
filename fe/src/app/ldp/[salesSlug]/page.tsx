@@ -80,8 +80,8 @@ function normalizeVehicle(apiVehicle: any) {
   if (!apiVehicle) return null;
   return {
     ...apiVehicle,
-    id: apiVehicle.slug || String(apiVehicle.id),
-    name: apiVehicle.title || apiVehicle.name,
+    id: apiVehicle.slug || String(apiVehicle.id ?? ""),
+    name: apiVehicle.title || apiVehicle.name || "",
     typeName: apiVehicle.type_name || apiVehicle.typeName || (
       apiVehicle.type === "suv"
         ? (apiVehicle.title?.toLowerCase().includes("everest") ? "SUV 7 Chỗ" : apiVehicle.title?.toLowerCase().includes("territory") ? "SUV 5 Chỗ" : "SUV")
@@ -91,7 +91,7 @@ function normalizeVehicle(apiVehicle: any) {
     ),
     basePrice: typeof apiVehicle.base_price === "string" ? parseFloat(apiVehicle.base_price) : apiVehicle.base_price,
     image_url: apiVehicle.image_url || resolveFileUrl(apiVehicle.image),
-    colors: apiVehicle.colors ? safeArray(apiVehicle.colors).map((c: any) => ({
+    colors: apiVehicle.colors ? safeArray(apiVehicle.colors).filter(Boolean).map((c: any) => ({
       name: c.name || c.color_name || "",
       hex: c.hex || c.color_code || "",
       image: resolveFileUrl(c.image_path || c.image),
@@ -102,7 +102,7 @@ function normalizeVehicle(apiVehicle: any) {
     images: (apiVehicle.images && Array.isArray(apiVehicle.images) && apiVehicle.images.length > 0)
       ? apiVehicle.images.map((img: any) => resolveFileUrl(img)).filter(Boolean)
       : [apiVehicle.image_url || resolveFileUrl(apiVehicle.image)].filter(Boolean),
-    versions: apiVehicle.versions ? safeArray(apiVehicle.versions).map((v: any) => {
+    versions: apiVehicle.versions ? safeArray(apiVehicle.versions).filter(Boolean).map((v: any) => {
       const parsedSpecs = parseSpecsArray(v.specs);
       return {
         id: String(v.id),
@@ -203,7 +203,7 @@ export default async function Page({ params }: Props) {
       ldpAPI.getBySalesSlug(salesSlug),
       bannersAPI.getAll().catch(() => null),
       vehiclesAPI.getCategories().catch(() => null),
-      vehiclesAPI.getAll().catch(() => null),
+      vehiclesAPI.getAll(undefined, { cache: "no-store" }).catch(() => null),
       servicesAPI.getAll().catch(() => null),
       customerHandoversAPI.getAll().catch(() => null),
       postsAPI.getAll({ categories: 3 }).catch(() => null),
@@ -239,26 +239,30 @@ export default async function Page({ params }: Props) {
 
   const normalizedLeadVehicle = ldpData.vehicle ? normalizeVehicle(ldpData.vehicle) : null;
   const rawLdpVehicles = Array.isArray(ldpData.vehicles) && ldpData.vehicles.length > 0
-    ? ldpData.vehicles
+    ? ldpData.vehicles.filter(Boolean)
     : (normalizedLeadVehicle ? [normalizedLeadVehicle] : []);
 
   // Danh sách dòng xe chuyên viên phụ trách (dùng cho thanh tab switcher ghim đầu trang)
-  const assignedVehicles = rawLdpVehicles.map((v: any) => {
+  const assignedVehicles = rawLdpVehicles.filter(Boolean).map((v: any) => {
     const matched = homepageVehicles.find(
       (hv: any) =>
-        (hv.slug && (hv.slug === v.slug || hv.slug === v.id)) ||
-        String(hv.id) === String(v.id)
+        hv && (
+          (hv.slug && (hv.slug === v.slug || hv.slug === v.id)) ||
+          String(hv.id) === String(v.id)
+        )
     );
     return matched ? { ...v, ...matched, id: v.slug || matched.slug || v.id } : v;
   });
 
   // Đồng bộ 100% dòng xe đại lý: Showroom LDP luôn hiển thị đầy đủ tất cả xe từ trang chính đại lý
   const showroomVehicles = homepageVehicles.length > 0
-    ? homepageVehicles.map((hv: any) => {
+    ? homepageVehicles.filter(Boolean).map((hv: any) => {
         const custom = rawLdpVehicles.find(
           (v: any) =>
-            (v.slug && (v.slug === hv.slug || v.slug === hv.id)) ||
-            String(v.id) === String(hv.id)
+            v && (
+              (v.slug && (v.slug === hv.slug || v.slug === hv.id)) ||
+              String(v.id) === String(hv.id)
+            )
         );
         return custom ? { ...hv, ...custom, id: hv.slug || hv.id } : { ...hv, id: hv.slug || hv.id };
       })
