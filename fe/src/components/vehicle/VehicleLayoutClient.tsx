@@ -339,6 +339,7 @@ export default function VehicleLayoutClient({
             isTestDrive,
             targetVehicleName: productTitle,
             customerPhone: formData.phone,
+            customerEmail: formData.email,
           });
         }
         setTimeout(() => {

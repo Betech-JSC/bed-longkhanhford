@@ -99,15 +99,52 @@ export function resolveClickedButtonLabel(anchor: HTMLAnchorElement): string {
   if (anchor.closest("footer")) return combined ? `Chân trang (${combined.slice(0, 60)})` : "Chân trang";
   return combined ? `Nút trên trang (${combined.slice(0, 70)})` : "Nút liên hệ trực tiếp trên LDP";
 }
+export function normalizePhoneForEC(phone?: string): string {
+  if (!phone || typeof phone !== "string") return "";
+  const trimmed = phone.trim();
+  if (!trimmed) return "";
+
+  const hasPlus = trimmed.startsWith("+");
+  let digits = trimmed.replace(/\D/g, "");
+  if (!digits) return "";
+
+  if (hasPlus && !digits.startsWith("84")) {
+    return digits.length >= 10 && digits.length <= 15 ? `+${digits}` : "";
+  }
+
+  if (digits.startsWith("0084") && digits.length >= 12) {
+    digits = digits.slice(4);
+  } else if (digits.startsWith("84") && (hasPlus || digits.length >= 11)) {
+    digits = digits.slice(2);
+  }
+
+  digits = digits.replace(/^0+/, "");
+  if (digits.length < 8 || digits.length > 11) {
+    return "";
+  }
+
+  return `+84${digits}`;
+}
+
+export function normalizeEmailForEC(email?: string): string {
+  if (!email || typeof email !== "string") return "";
+  const cleaned = email.trim().toLowerCase();
+  if (!cleaned || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleaned)) {
+    return "";
+  }
+  return cleaned;
+}
+
 export function fireLdpFormConversion(params: {
   salesConsultant?: LdpConsultantForTracking | null;
   formType?: string;
   isTestDrive?: boolean;
   targetVehicleName?: string;
   customerPhone?: string;
+  customerEmail?: string;
 }) {
   if (typeof window === "undefined") return;
-  const { salesConsultant, formType, isTestDrive, targetVehicleName } = params;
+  const { salesConsultant, formType, isTestDrive, targetVehicleName, customerPhone, customerEmail } = params;
   const tc = salesConsultant?.tracking_config;
   const resolvedFormType = formType || (isTestDrive ? "TEST_DRIVE" : "ADVISE_FORM");
   const gtagId = extractGtagId(tc?.google_ads_id);
@@ -131,12 +168,22 @@ export function fireLdpFormConversion(params: {
 
     window.dataLayer = window.dataLayer || [];
 
-    // Push sự kiện chuẩn lead_submit theo đúng cấu trúc yêu cầu của GTM LDP
-    window.dataLayer.push({
+    const phoneEC = normalizePhoneForEC(customerPhone);
+    const emailEC = normalizeEmailForEC(customerEmail);
+    const leadSubmitPayload: Record<string, string> = {
       event: "lead_submit",
       form_type: resolvedCustomerFormType,
       car_model: normalizedCarModel || "Territory",
-    });
+    };
+    if (phoneEC) {
+      leadSubmitPayload.phoneEC = phoneEC;
+    }
+    if (emailEC) {
+      leadSubmitPayload.emailEC = emailEC;
+    }
+
+    // Push sự kiện chuẩn lead_submit theo đúng cấu trúc yêu cầu của GTM LDP
+    window.dataLayer.push(leadSubmitPayload);
 
     // Giữ song song sự kiện ldp_form_submit cũ để đảm bảo tính tương thích
     window.dataLayer.push({
