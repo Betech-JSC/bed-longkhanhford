@@ -4,6 +4,7 @@ import { ldpAPI, bannersAPI, vehiclesAPI, servicesAPI, customerHandoversAPI, pos
 import { resolveImageUrl as resolveFileUrl } from "@/lib/site-assets";
 import { formatPersonName } from "@/lib/formatters";
 import LdpHomeClient from "@/components/vehicle/LdpHomeClient";
+import LdpSsrTracking from "@/components/vehicle/LdpSsrTracking";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -269,19 +270,22 @@ export default async function Page({ params }: Props) {
     : assignedVehicles;
 
   return (
-    <LdpHomeClient
-      salesConsultant={ldpData.sales_consultant}
-      allVehicles={showroomVehicles}
-      assignedVehicles={assignedVehicles}
-      leadVehicle={normalizedLeadVehicle || showroomVehicles[0]}
-      landingPageId={ldpData.id}
-      salesEmail={ldpData.sales_email || ldpData.sales_consultant?.email}
-      promotions={ldpData.promotions}
-      initialBanners={initialBanners}
-      initialCategories={initialCategories}
-      initialServices={initialServices}
-      initialHandovers={initialHandovers}
-      initialArticles={initialArticles}
-    />
+    <>
+      <LdpSsrTracking salesConsultant={ldpData.sales_consultant} />
+      <LdpHomeClient
+        salesConsultant={ldpData.sales_consultant}
+        allVehicles={showroomVehicles}
+        assignedVehicles={assignedVehicles}
+        leadVehicle={normalizedLeadVehicle || showroomVehicles[0]}
+        landingPageId={ldpData.id}
+        salesEmail={ldpData.sales_email || ldpData.sales_consultant?.email}
+        promotions={ldpData.promotions}
+        initialBanners={initialBanners}
+        initialCategories={initialCategories}
+        initialServices={initialServices}
+        initialHandovers={initialHandovers}
+        initialArticles={initialArticles}
+      />
+    </>
   );
 }

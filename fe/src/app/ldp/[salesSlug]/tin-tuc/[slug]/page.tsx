@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { ldpAPI, postsAPI } from "@/lib/api";
 import { formatPersonName } from "@/lib/formatters";
 import LdpArticleDetailClient from "@/components/vehicle/LdpArticleDetailClient";
+import LdpSsrTracking from "@/components/vehicle/LdpSsrTracking";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -130,6 +131,7 @@ export default async function LdpArticlePage({ params }: Props) {
 
   return (
     <>
+      <LdpSsrTracking salesConsultant={ldpData.sales_consultant} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}

@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { ldpAPI, vehiclesAPI } from "@/lib/api";
 import { resolveImageUrl as resolveFileUrl } from "@/lib/site-assets";
 import LdpDetailClient from "@/components/vehicle/LdpDetailClient";
+import LdpSsrTracking from "@/components/vehicle/LdpSsrTracking";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -187,5 +188,10 @@ export default async function Page({ params }: Props) {
       })
     : (currentLead ? [currentLead, ...rawLdpVehicles.filter((v: any) => v && v.id !== currentLead.id)] : rawLdpVehicles.filter(Boolean));
 
-  return <LdpDetailClient initialData={ldpData} allVehicles={showroomVehicles} />;
+  return (
+    <>
+      <LdpSsrTracking salesConsultant={ldpData.sales_consultant} />
+      <LdpDetailClient initialData={ldpData} allVehicles={showroomVehicles} />
+    </>
+  );
 }
