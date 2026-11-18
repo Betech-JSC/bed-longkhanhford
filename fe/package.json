@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "node -e \"fs.rmSync('.next', {recursive: true, force: true})\" && next build",
-    "postbuild": "node scripts/copy-standalone-assets.cjs",
+    "postbuild": "node -e \"const fs=require('fs'),p=require('path'),r=process.cwd(),s=p.join(r,'.next','standalone');if(!fs.existsSync(s))process.exit(0);const pairs=[[p.join(r,'.next','static'),p.join(s,'.next','static')],[p.join(r,'public'),p.join(s,'public')]];for(const [a,b] of pairs){if(!fs.existsSync(a))continue;fs.rmSync(b,{recursive:true,force:true});fs.cpSync(a,b,{recursive:true});}console.log('[postbuild] copied .next/static + public into .next/standalone');\"",
     "clean": "node -e \"fs.rmSync('.next', {recursive: true, force: true}); fs.rmSync('node_modules/.cache', {recursive: true, force: true})\"",
     "start": "next start",
     "lint": "eslint"
