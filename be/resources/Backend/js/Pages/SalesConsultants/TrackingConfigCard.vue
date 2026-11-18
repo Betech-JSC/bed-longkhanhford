@@ -24,6 +24,68 @@
                     <li><strong>Chuyển đổi 3 — Khách bấm nút Chat Zalo (zalo.me):</strong> Tự động bắn Google Ads Zalo Label, FB Pixel <code>Contact</code>, TikTok <code>Contact</code>, GTM <code>ldp_click_zalo</code> + <strong>Báo về Quản lý Liên hệ & Telegram kèm tên Sale</strong>.</li>
                 </ul>
             </div>
+            <div class="p-4 rounded-xl border-2 border-dashed border-emerald-300 bg-emerald-50/60 space-y-3">
+                <div class="flex items-center justify-between border-b border-emerald-200 pb-2 flex-wrap gap-2">
+                    <h4 class="text-sm font-bold text-emerald-900">⚡ Dán 1 lần — tự tách Google Ads / GTM / GA4 / Pixel</h4>
+                    <span class="text-[11px] font-semibold text-emerald-800 bg-white px-2 py-0.5 rounded border border-emerald-200">Không cần tách ID</span>
+                </div>
+                <p class="text-[11px] text-emerald-900 leading-relaxed">
+                    Dán <strong>nguyên khối</strong> mã Sale nhận được từ Google Ads / GTM / GA4 / Facebook / TikTok vào ô dưới.
+                    Hệ thống tự bóc ID và điền vào đúng ô bên dưới — <strong>không cần xoá thẻ &lt;script&gt;</strong>.
+                </p>
+                <textarea
+                    v-model="pasteText"
+                    rows="4"
+                    class="w-full rounded-lg border border-emerald-300 p-2.5 font-mono text-[11px] bg-white"
+                    placeholder="&lt;script async src=&quot;https://www.googletagmanager.com/gtm.js?id=GTM-XXXXXXX&quot;&gt;&lt;/script&gt; ..."
+                    @paste="onPaste"
+                ></textarea>
+                <div class="flex items-center gap-2 flex-wrap">
+                    <button
+                        type="button"
+                        class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                        :disabled="!pasteText.trim()"
+                        @click="applyPaste"
+                    >
+                        Phân tích &amp; điền
+                    </button>
+                    <button
+                        type="button"
+                        class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-white text-gray-600 border border-gray-300 hover:bg-gray-50"
+                        @click="resetPaste"
+                    >
+                        Xoá
+                    </button>
+                    <span v-if="pasteResult?.matched?.length" class="text-[11px] font-semibold text-emerald-800">
+                        Đã nhận diện {{ pasteResult.matched.length }} mã
+                    </span>
+                </div>
+                <div v-if="pasteResult?.matched?.length" class="flex flex-wrap gap-1.5">
+                    <span
+                        v-for="chip in pasteResult.matched"
+                        :key="chip"
+                        class="text-[11px] font-mono font-semibold text-emerald-900 bg-white px-2 py-0.5 rounded border border-emerald-200"
+                    >{{ chip }}</span>
+                </div>
+                <div v-if="pasteResult?.skipped_enhanced_conversion" class="text-[11px] text-emerald-800 bg-white/70 border border-emerald-200 rounded-lg p-2 leading-relaxed">
+                    ℹ️ Đã bỏ qua đoạn <code>lead_submit</code> / <code>phoneEC</code> — hệ thống <strong>tự bắn sự kiện này</strong> ngay khi khách gửi form,
+                    với số điện thoại thật đã chuẩn hoá về <code>+84…</code>. Không cần dán.
+                </div>
+                <div v-if="pasteResult?.warnings?.length" class="text-[11px] text-amber-900 bg-amber-50 border border-amber-200 rounded-lg p-2 space-y-1">
+                    <div v-for="w in pasteResult.warnings" :key="w">⚠️ {{ w }}</div>
+                </div>
+                <div v-if="pasteResult?.unknown_script" class="space-y-2">
+                    <div class="text-[11px] font-semibold text-gray-700">Mã chưa nhận diện (kiểm tra trước khi dùng):</div>
+                    <pre class="text-[10px] bg-white border border-gray-200 rounded-lg p-2 max-h-32 overflow-auto whitespace-pre-wrap break-all">{{ pasteResult.unknown_script }}</pre>
+                    <button
+                        type="button"
+                        class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
+                        @click="pushUnknownToInjectHead"
+                    >
+                        Đưa vào ô "Mã Script Tuỳ Chỉnh Trong &lt;Head&gt;"
+                    </button>
+                </div>
+            </div>
             <div class="p-4 bg-gray-50/70 rounded-xl border border-gray-200 space-y-4">
                 <div class="flex items-center justify-between border-b border-gray-200 pb-2">
                     <h4 class="text-sm font-bold text-gray-900">1. Google Ads Tag &amp; 3 Nhãn Chuyển Đổi (Conversion Label)</h4>
@@ -56,10 +118,14 @@
                     <h4 class="text-sm font-bold text-gray-900">2. Google Tag Manager (GTM), Facebook Pixel &amp; TikTok Pixel</h4>
                     <span class="text-[11px] text-gray-500 font-mono">GTM / Meta / TikTok</span>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div>
                         <Field v-model="config.gtm_id" :field="{ type: 'text', name: 'tracking_gtm_id', label: 'Mã Google Tag Manager (GTM)', placeholder: 'vd: GTM-XXXXXXX' }" />
-                        <p class="text-[11px] text-gray-500 mt-1">Tự động đẩy sự kiện <code>ldp_form_submit</code>, <code>ldp_click_call</code>, <code>ldp_click_zalo</code> vào <code>dataLayer</code>.</p>
+                        <p class="text-[11px] text-gray-500 mt-1">Tự động đẩy sự kiện <code>ldp_form_submit</code>, <code>lead_submit</code>, <code>ldp_click_call</code>, <code>ldp_click_zalo</code> vào <code>dataLayer</code>.</p>
+                    </div>
+                    <div>
+                        <Field v-model="config.ga4_id" :field="{ type: 'text', name: 'tracking_ga4_id', label: 'Mã GA4 (G-XXXXXXXXXX)', placeholder: 'vd: G-ABC123XYZ9' }" />
+                        <p class="text-[11px] text-gray-500 mt-1">Chỉ điền Measurement ID của GA4. Tự động <code>gtag('config')</code> cho trang LDP của Sale.</p>
                     </div>
                     <div>
                         <Field v-model="config.facebook_pixel_id" :field="{ type: 'text', name: 'tracking_facebook_pixel_id', label: 'Mã Facebook Pixel ID', placeholder: 'vd: 123456789012345' }" />
@@ -88,6 +154,8 @@
 </template>
 
 <script>
+import { parseTrackingPaste, mergePasteIntoConfig } from './trackingPasteParser'
+
 export function normalizeTrackingConfig(raw) {
     let parsed = raw
     if (typeof parsed === 'string') {
@@ -100,6 +168,7 @@ export function normalizeTrackingConfig(raw) {
         google_ads_call_label: tc.google_ads_call_label ?? '',
         google_ads_zalo_label: tc.google_ads_zalo_label ?? '',
         gtm_id: tc.gtm_id ?? '',
+        ga4_id: tc.ga4_id ?? '',
         facebook_pixel_id: tc.facebook_pixel_id ?? '',
         tiktok_pixel_id: tc.tiktok_pixel_id ?? '',
         inject_head: tc.inject_head ?? '',
@@ -113,6 +182,42 @@ export default {
         config: { type: Object, default: null },
         consultantName: { type: String, default: '' },
         isLdpSync: { type: Boolean, default: false },
+    },
+    data() {
+        return {
+            pasteText: '',
+            pasteResult: null,
+        }
+    },
+    methods: {
+        analyze(raw) {
+            const text = typeof raw === 'string' ? raw : ''
+            this.pasteResult = parseTrackingPaste(text)
+            if (!this.config) return
+            const merged = mergePasteIntoConfig(this.config, this.pasteResult)
+            Object.keys(merged).forEach((key) => {
+                if (merged[key] !== undefined) this.config[key] = merged[key]
+            })
+        },
+        applyPaste() {
+            this.analyze(this.pasteText)
+        },
+        onPaste(event) {
+            const clipboard = event?.clipboardData || window?.clipboardData
+            const raw = clipboard ? clipboard.getData('text') : ''
+            this.pasteText = raw
+            this.$nextTick(() => this.analyze(raw))
+        },
+        resetPaste() {
+            this.pasteText = ''
+            this.pasteResult = null
+        },
+        pushUnknownToInjectHead() {
+            if (!this.config || !this.pasteResult?.unknown_script) return
+            const existing = (this.config.inject_head || '').trim()
+            this.config.inject_head = existing ? `${existing}\n${this.pasteResult.unknown_script}` : this.pasteResult.unknown_script
+            this.pasteResult = { ...this.pasteResult, unknown_script: '' }
+        },
     },
 }
 </script>

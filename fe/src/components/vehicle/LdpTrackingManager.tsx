@@ -36,11 +36,13 @@ export default function LdpTrackingManager({ salesConsultant, landingPageId, sal
     const marker = `sale-${salesConsultant.id || "ldp"}`;
 
     const gtagId = extractGtagId(tc.google_ads_id);
-    if (gtagId) {
-      if (!document.querySelector(`script[src*="googletagmanager.com/gtag/js?id=${gtagId}"]`)) {
+    const ga4Id = extractGtagId(tc.ga4_id);
+    if (gtagId || ga4Id) {
+      const primaryTagId = gtagId || ga4Id;
+      if (!document.querySelector(`script[src*="googletagmanager.com/gtag/js?id=${primaryTagId}"]`)) {
         const s = document.createElement("script");
         s.async = true;
-        s.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(gtagId)}`;
+        s.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(primaryTagId)}`;
         s.setAttribute("data-ldp-sale-track", marker);
         document.head.appendChild(s);
         insertedElements.push(s);
@@ -50,7 +52,8 @@ export default function LdpTrackingManager({ salesConsultant, landingPageId, sal
         window.gtag = function () { window.dataLayer!.push(arguments); };
         window.gtag("js", new Date());
       }
-      window.gtag("config", gtagId);
+      if (gtagId) window.gtag("config", gtagId);
+      if (ga4Id) window.gtag("config", ga4Id);
     }
 
     const gtmId = extractGtmId(tc.gtm_id);

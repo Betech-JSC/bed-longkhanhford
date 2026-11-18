@@ -128,7 +128,7 @@ class LandingPageController extends Controller
         }
         $keys = [
             'google_ads_id', 'google_ads_form_label', 'google_ads_call_label', 'google_ads_zalo_label',
-            'gtm_id', 'facebook_pixel_id', 'tiktok_pixel_id',
+            'gtm_id', 'ga4_id', 'facebook_pixel_id', 'tiktok_pixel_id',
             'inject_head', 'inject_body_start', 'inject_body_end',
         ];
         $cleanConfig = [];

@@ -4,6 +4,7 @@ export interface LdpTrackingConfig {
   google_ads_call_label?: string;
   google_ads_zalo_label?: string;
   gtm_id?: string;
+  ga4_id?: string;
   facebook_pixel_id?: string;
   tiktok_pixel_id?: string;
   inject_head?: string;
