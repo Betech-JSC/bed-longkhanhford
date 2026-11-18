@@ -38,12 +38,11 @@ export const extractGtmId = (raw?: string) => (raw ? (raw.trim().match(/GTM-[A-Z
 export const extractNumericId = (raw?: string) => (raw ? (raw.trim().match(/\d{8,22}/)?.[0] || "") : "");
 export const extractAlphanumericId = (raw?: string) => (raw ? (raw.trim().match(/^[A-Za-z0-9]{10,32}$/)?.[0] || raw.trim().match(/ttq\.load\(['"]([A-Za-z0-9]{10,32})['"]\)/)?.[1] || "") : "");
 
-export function normalizeCarModel(targetVehicleName?: string): string {
+function matchKnownFordModel(targetVehicleName?: string): string | null {
   if (!targetVehicleName || !targetVehicleName.trim()) {
-    return "Territory";
+    return null;
   }
-  const clean = targetVehicleName.trim();
-  const lower = clean.toLowerCase();
+  const lower = targetVehicleName.trim().toLowerCase();
 
   // Kiểm tra Ranger Raptor trước Ranger để tránh match nhầm
   if (lower.includes("ranger raptor") || lower.includes("raptor")) {
@@ -64,7 +63,20 @@ export function normalizeCarModel(targetVehicleName?: string): string {
   if (lower.includes("transit")) {
     return "Transit";
   }
-  return clean;
+  if (lower.includes("mach-e")) {
+    return "Mustang Mach-E";
+  }
+  if (lower.includes("tourneo")) {
+    return "Tourneo";
+  }
+  return null;
+}
+
+export function normalizeCarModel(targetVehicleName?: string): string {
+  if (!targetVehicleName || !targetVehicleName.trim()) {
+    return "Territory";
+  }
+  return matchKnownFordModel(targetVehicleName) || targetVehicleName.trim();
 }
 export function injectRawHtmlFragment(html: string, target: HTMLElement, position: "append" | "prepend", markerAttr: string): Element[] {
   const created: Element[] = [];
@@ -159,13 +171,17 @@ export function fireLdpFormConversion(params: {
         window.gtag("event", "generate_lead", { send_to: gtagId, event_category: "ldp_form", event_label: targetVehicleName || salesConsultant?.name || "" });
       }
     }
-    const normalizedCarModel = normalizeCarModel(targetVehicleName);
     const resolvedCustomerFormType =
       isTestDrive === true || resolvedFormType === "TEST_DRIVE"
         ? "lai_thu"
         : resolvedFormType === "SERVICE_BOOKING"
           ? "dich_vu"
           : "bao_gia";
+    const matchedModel = matchKnownFordModel(targetVehicleName);
+    const normalizedCarModel =
+      resolvedFormType === "SERVICE_BOOKING"
+        ? (matchedModel || "Dịch vụ bảo dưỡng")
+        : normalizeCarModel(targetVehicleName);
 
     window.dataLayer = window.dataLayer || [];
 
