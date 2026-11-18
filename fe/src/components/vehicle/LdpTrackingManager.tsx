@@ -45,22 +45,27 @@ export default function LdpTrackingManager({ salesConsultant, landingPageId, sal
     if (!tc || typeof tc !== "object") return;
     const insertedElements: Element[] = [];
     const marker = `sale-${salesConsultant.id || "ldp"}`;
+    const hasSsrTrack = Boolean(document.querySelector(`script[data-ldp-ssr-track="${marker}"]`));
 
     const gtagId = extractGtagId(tc.google_ads_id);
     const ga4Id = extractGtagId(tc.ga4_id);
     if (gtagId || ga4Id) {
       const primaryTagId = gtagId || ga4Id;
-      if (!document.querySelector(`script[src*="googletagmanager.com/gtag/js?id=${primaryTagId}"]`)) {
+      const encodedPrimaryTagId = encodeURIComponent(primaryTagId);
+      if (!document.querySelector(`script[src*="googletagmanager.com/gtag/js?id=${encodedPrimaryTagId}"]`)) {
         const s = document.createElement("script");
         s.async = true;
-        s.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(primaryTagId)}`;
+        s.src = `https://www.googletagmanager.com/gtag/js?id=${encodedPrimaryTagId}`;
         s.setAttribute("data-ldp-sale-track", marker);
         document.head.appendChild(s);
         insertedElements.push(s);
       }
       ensureGtagShim();
-      if (gtagId) window.gtag!("config", gtagId);
-      if (ga4Id) window.gtag!("config", ga4Id);
+      const hasSsrGtag = hasSsrTrack || Boolean(document.getElementById(`${marker}-gtag`));
+      if (!hasSsrGtag) {
+        if (gtagId) window.gtag!("config", gtagId);
+        if (ga4Id) window.gtag!("config", ga4Id);
+      }
     }
 
     const gtmId = extractGtmId(tc.gtm_id);
@@ -101,27 +106,33 @@ export default function LdpTrackingManager({ salesConsultant, landingPageId, sal
     }
     const fbPixelId = extractNumericId(tc.facebook_pixel_id);
     if (fbPixelId) {
-      if (typeof window.fbq !== "function") {
-        const n: any = (window.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); });
-        if (!window._fbq) window._fbq = n;
-        n.push = n; n.loaded = true; n.version = "2.0"; n.queue = [];
-        const s = document.createElement("script");
-        s.async = true; s.src = "https://connect.facebook.net/en_US/fbevents.js";
-        s.setAttribute("data-ldp-sale-track", marker);
-        document.head.appendChild(s);
-        insertedElements.push(s);
+      const hasSsrFbq = hasSsrTrack || Boolean(document.getElementById(`${marker}-fbq`));
+      if (!hasSsrFbq) {
+        if (typeof window.fbq !== "function") {
+          const n: any = (window.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); });
+          if (!window._fbq) window._fbq = n;
+          n.push = n; n.loaded = true; n.version = "2.0"; n.queue = [];
+          const s = document.createElement("script");
+          s.async = true; s.src = "https://connect.facebook.net/en_US/fbevents.js";
+          s.setAttribute("data-ldp-sale-track", marker);
+          document.head.appendChild(s);
+          insertedElements.push(s);
+        }
+        window.fbq!("init", fbPixelId);
+        window.fbq!("track", "PageView");
       }
-      window.fbq!("init", fbPixelId);
-      window.fbq!("track", "PageView");
     }
 
     const ttPixelId = extractAlphanumericId(tc.tiktok_pixel_id);
     if (ttPixelId) {
-      const s = document.createElement("script");
-      s.setAttribute("data-ldp-sale-track", marker);
-      s.textContent = `!function(w,d,t){w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.load(${JSON.stringify(ttPixelId)});ttq.page()}(window,document,'ttq');`;
-      document.head.appendChild(s);
-      insertedElements.push(s);
+      const hasSsrTtq = hasSsrTrack || Boolean(document.getElementById(`${marker}-ttq`)) || Boolean(window.ttq);
+      if (!hasSsrTtq) {
+        const s = document.createElement("script");
+        s.setAttribute("data-ldp-sale-track", marker);
+        s.textContent = `!function(w,d,t){w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.load(${JSON.stringify(ttPixelId)});ttq.page()}(window,document,'ttq');`;
+        document.head.appendChild(s);
+        insertedElements.push(s);
+      }
     }
 
     if (tc.inject_head) insertedElements.push(...injectRawHtmlFragment(tc.inject_head, document.head, "append", `${marker}-head`));
