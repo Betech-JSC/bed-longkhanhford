@@ -9,9 +9,18 @@
 const KNOWN_HOST = /(googletagmanager\.com|google-analytics\.com|googleadservices\.com|googlesyndication\.com|doubleclick\.net|connect\.facebook\.net|facebook\.com\/tr|analytics\.tiktok\.com)/i;
 const SKIPPED_EC = /(lead_submit|phoneEC|emailEC)/i;
 // Đoạn boilerplate mà hệ thống đã tự sinh — không coi là "script lạ"
-const BOILERPLATE = /(dataLayer|gtag\(|fbq\(|ttq\b|TiktokAnalyticsObject|fbevents\.js|google-analytics\.com\/gtag)/i;
+const BOILERPLATE = /(dataLayer|gtag\(|gtm\.start|gtm\.js|fbq\(|ttq\b|TiktokAnalyticsObject|fbevents\.js|google-analytics\.com\/gtag)/i;
 
 const uniq = (list) => Array.from(new Set(list));
+
+/**
+ * Trích xuất & chuẩn hoá mã GTM (vd: GTM-TVZBCJ4H) từ text/URL/snippet.
+ */
+export function extractGtmIdFromText(raw) {
+    if (typeof raw !== "string") return "";
+    const match = raw.match(/\bGTM-[A-Za-z0-9]{4,16}\b/i);
+    return match ? match[0].toUpperCase() : "";
+}
 
 export function parseTrackingPaste(raw) {
     const text = typeof raw === "string" ? raw : "";
@@ -33,7 +42,7 @@ export function parseTrackingPaste(raw) {
     }
 
     // ---------- Google Tag Manager ----------
-    const gtmIds = uniq(text.match(/\bGTM-[A-Za-z0-9]{4,12}\b/g) || []).map((s) => s.toUpperCase());
+    const gtmIds = uniq((text.match(/\bGTM-[A-Za-z0-9]{4,16}\b/gi) || []).map((s) => s.toUpperCase()));
     if (gtmIds.length > 1) {
         result.warnings.push(`Phát hiện ${gtmIds.length} mã GTM (${gtmIds.join(", ")}). Chỉ dùng mã đầu tiên.`);
     }
@@ -43,7 +52,7 @@ export function parseTrackingPaste(raw) {
     }
 
     // ---------- Google Ads AW- (kèm Conversion Label nếu có) ----------
-    const awMatches = uniq(text.match(/\bAW-[A-Za-z0-9]{6,20}(?:\/[A-Za-z0-9_-]{3,60})?/g) || []);
+    const awMatches = uniq(text.match(/\bAW-[A-Za-z0-9]{6,20}(?:\/[A-Za-z0-9_-]{3,60})?/gi) || []);
     if (awMatches.length) {
         // Ưu tiên bản có kèm Conversion Label (AW-xxx/AbCd...) hơn bản trần trong src=
         const rawAw = awMatches.find((id) => id.includes("/")) || awMatches[0];
@@ -68,6 +77,23 @@ export function parseTrackingPaste(raw) {
         result.matched.push(`GA4: ${ga4Ids[0]}`);
         if (ga4Ids.length > 1) {
             result.warnings.push(`Phát hiện ${ga4Ids.length} mã GA4 (${ga4Ids.join(", ")}). Chỉ dùng mã đầu tiên.`);
+        }
+    }
+
+    // ---------- Google Tag (GT-XXXXXXX) ----------
+    const gtIds = uniq((text.match(/\bGT-[A-Za-z0-9]{4,20}\b/gi) || []).map((s) => s.toUpperCase()));
+    if (gtIds.length) {
+        if (!result.ga4_id) {
+            result.ga4_id = gtIds[0];
+            result.matched.push(`Google Tag: ${gtIds[0]}`);
+        } else if (!result.google_ads_id) {
+            result.google_ads_id = gtIds[0];
+            result.matched.push(`Google Tag: ${gtIds[0]}`);
+        } else {
+            result.warnings.push(`Phát hiện Google Tag ${gtIds[0]} nhưng đã có cả mã Google Ads và GA4 nên giữ nguyên 2 mã đó.`);
+        }
+        if (gtIds.length > 1) {
+            result.warnings.push(`Phát hiện ${gtIds.length} mã Google Tag (${gtIds.join(", ")}). Chỉ dùng mã đầu tiên.`);
         }
     }
 

@@ -19,10 +19,59 @@
                 <div class="font-bold">💡 Chỉ cần nhập 1 lần — Tự động áp dụng cho toàn bộ các trang LDP của {{ consultantName || 'Cố vấn này' }}:</div>
                 <p v-if="isLdpSync">Khi bạn lưu trang này, bộ mã bên dưới sẽ được <strong>lưu trực tiếp vào hồ sơ Cố vấn ({{ consultantName || 'Sale phụ trách' }})</strong> và tự động kích hoạt trên <strong>Trang Showroom Tổng (/ldp/[ten-sale])</strong> lẫn <strong>tất cả các dòng xe</strong> mà Cố vấn phụ trách.</p>
                 <ul class="list-disc pl-5 space-y-0.5">
-                    <li><strong>Chuyển đổi 1 — Khách gửi Form Báo giá / Lái thử:</strong> Tự động bắn Google Ads Form Label, FB Pixel <code>Lead</code>, TikTok <code>SubmitForm</code>, GTM <code>ldp_form_submit</code>.</li>
+                    <li><strong>Chuyển đổi 1 — Khách gửi Form Báo giá / Lái thử:</strong> Tự động bắn Google Ads Form Label, FB Pixel <code>Lead</code>, TikTok <code>SubmitForm</code>, GTM <code>lead_submit</code> (kèm <code>phoneEC</code> chuẩn <code>+84...</code>, <code>emailEC</code> viết thường) &amp; <code>ldp_form_submit</code>.</li>
                     <li><strong>Chuyển đổi 2 — Khách bấm nút Gọi điện (tel:):</strong> Tự động bắn Google Ads Call Label, FB Pixel <code>Contact</code>, TikTok <code>Contact</code>, GTM <code>ldp_click_call</code> + <strong>Báo về Quản lý Liên hệ & Telegram kèm tên Sale</strong>.</li>
                     <li><strong>Chuyển đổi 3 — Khách bấm nút Chat Zalo (zalo.me):</strong> Tự động bắn Google Ads Zalo Label, FB Pixel <code>Contact</code>, TikTok <code>Contact</code>, GTM <code>ldp_click_zalo</code> + <strong>Báo về Quản lý Liên hệ & Telegram kèm tên Sale</strong>.</li>
                 </ul>
+            </div>
+            <div class="p-4 rounded-xl border border-indigo-200 bg-indigo-50/50 space-y-2.5">
+                <div class="flex items-center justify-between flex-wrap gap-2">
+                    <label for="quick-gtm-id" class="text-sm font-bold text-indigo-950">
+                        🚀 Cài nhanh Google Tag Manager (GTM Container ID)
+                    </label>
+                    <span class="text-[11px] font-semibold text-indigo-700 bg-white px-2 py-0.5 rounded border border-indigo-200">
+                        Add vào là chạy
+                    </span>
+                </div>
+                <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+                    <input
+                        id="quick-gtm-id"
+                        v-model="config.gtm_id"
+                        type="text"
+                        name="tracking_gtm_id"
+                        class="w-full rounded-lg border border-indigo-300 px-3 py-2 font-mono text-xs bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                        placeholder="vd: GTM-TVZBCJ4H (hoặc dán link gtm.js?id=GTM-...)"
+                        @blur="normalizeGtmInput"
+                        @change="normalizeGtmInput"
+                        @paste="onGtmInputPaste"
+                    />
+                    <button
+                        v-if="config.gtm_id"
+                        type="button"
+                        class="px-3 py-2 text-xs font-semibold rounded-lg bg-white text-gray-600 border border-gray-300 hover:bg-gray-50 shrink-0"
+                        @click="config.gtm_id = ''"
+                    >
+                        Xoá
+                    </button>
+                </div>
+                <div
+                    v-if="activeGtmId"
+                    class="text-[11px] font-medium text-emerald-900 bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2 leading-relaxed"
+                >
+                    ✅ Đã kích hoạt GTM (<code>{{ activeGtmId }}</code>) — tự động nhúng <code>gtm.js</code>, <code>gtag</code> shim và bắn <code>lead_submit</code> (<code>phoneEC</code> chuẩn <code>+84...</code>, <code>emailEC</code> viết thường), <code>ldp_form_submit</code>, <code>ldp_click_call</code>, <code>ldp_click_zalo</code> cho mọi form LDP.
+                </div>
+                <div
+                    v-else-if="config.gtm_id && config.gtm_id.trim()"
+                    class="text-[11px] font-medium text-amber-900 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 leading-relaxed"
+                >
+                    ⚠️ Mã GTM chưa đúng định dạng <code>GTM-XXXXXXX</code> (vd: <code>GTM-TVZBCJ4H</code>).
+                </div>
+                <div
+                    v-else
+                    class="text-[11px] text-indigo-900/80 bg-white/80 border border-indigo-100 rounded-lg px-3 py-1.5 leading-relaxed"
+                >
+                    Chỉ cần nhập mã <code>GTM-XXXXXXX</code> rồi bấm Lưu — hoặc dán nguyên khối mã nhận được vào khung <strong>Dán 1 lần</strong> ngay bên dưới.
+                </div>
             </div>
             <div class="p-4 rounded-xl border-2 border-dashed border-emerald-300 bg-emerald-50/60 space-y-3">
                 <div class="flex items-center justify-between border-b border-emerald-200 pb-2 flex-wrap gap-2">
@@ -68,8 +117,8 @@
                     >{{ chip }}</span>
                 </div>
                 <div v-if="pasteResult?.skipped_enhanced_conversion" class="text-[11px] text-emerald-800 bg-white/70 border border-emerald-200 rounded-lg p-2 leading-relaxed">
-                    ℹ️ Đã bỏ qua đoạn <code>lead_submit</code> / <code>phoneEC</code> — hệ thống <strong>tự bắn sự kiện này</strong> ngay khi khách gửi form,
-                    với số điện thoại thật đã chuẩn hoá về <code>+84…</code>. Không cần dán.
+                    ℹ️ Đã bỏ qua đoạn <code>lead_submit</code> / <code>phoneEC</code> / <code>emailEC</code> mẫu — hệ thống <strong>tự động bắn sự kiện này</strong> ngay khi khách gửi form,
+                    với <code>phoneEC</code> chuẩn <code>+84…</code> và <code>emailEC</code> viết thường. Không cần dán thủ công.
                 </div>
                 <div v-if="pasteResult?.warnings?.length" class="text-[11px] text-amber-900 bg-amber-50 border border-amber-200 rounded-lg p-2 space-y-1">
                     <div v-for="w in pasteResult.warnings" :key="w">⚠️ {{ w }}</div>
@@ -114,18 +163,14 @@
                 </div>
             </div>
             <div class="p-4 bg-gray-50/70 rounded-xl border border-gray-200 space-y-4">
-                <div class="flex items-center justify-between border-b border-gray-200 pb-2">
-                    <h4 class="text-sm font-bold text-gray-900">2. Google Tag Manager (GTM), Facebook Pixel &amp; TikTok Pixel</h4>
-                    <span class="text-[11px] text-gray-500 font-mono">GTM / Meta / TikTok</span>
+                <div class="flex items-center justify-between border-b border-gray-200 pb-2 flex-wrap gap-2">
+                    <h4 class="text-sm font-bold text-gray-900">2. GA4, Facebook Pixel &amp; TikTok Pixel</h4>
+                    <span class="text-[11px] text-gray-500 font-mono">GA4 / Meta / TikTok (GTM ở mục cài nhanh phía trên)</span>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                        <Field v-model="config.gtm_id" :field="{ type: 'text', name: 'tracking_gtm_id', label: 'Mã Google Tag Manager (GTM)', placeholder: 'vd: GTM-XXXXXXX' }" />
-                        <p class="text-[11px] text-gray-500 mt-1">Tự động đẩy sự kiện <code>ldp_form_submit</code>, <code>lead_submit</code>, <code>ldp_click_call</code>, <code>ldp_click_zalo</code> vào <code>dataLayer</code>.</p>
-                    </div>
-                    <div>
-                        <Field v-model="config.ga4_id" :field="{ type: 'text', name: 'tracking_ga4_id', label: 'Mã GA4 (G-XXXXXXXXXX)', placeholder: 'vd: G-ABC123XYZ9' }" />
-                        <p class="text-[11px] text-gray-500 mt-1">Chỉ điền Measurement ID của GA4. Tự động <code>gtag('config')</code> cho trang LDP của Sale.</p>
+                        <Field v-model="config.ga4_id" :field="{ type: 'text', name: 'tracking_ga4_id', label: 'Mã GA4 / Google Tag (G- / GT-)', placeholder: 'vd: G-ABC123XYZ9' }" />
+                        <p class="text-[11px] text-gray-500 mt-1">Chỉ điền Measurement ID (<code>G-...</code> hoặc <code>GT-...</code>). Tự động <code>gtag('config')</code> cho trang LDP của Sale.</p>
                     </div>
                     <div>
                         <Field v-model="config.facebook_pixel_id" :field="{ type: 'text', name: 'tracking_facebook_pixel_id', label: 'Mã Facebook Pixel ID', placeholder: 'vd: 123456789012345' }" />
@@ -154,7 +199,7 @@
 </template>
 
 <script>
-import { parseTrackingPaste, mergePasteIntoConfig } from './trackingPasteParser'
+import { parseTrackingPaste, mergePasteIntoConfig, extractGtmIdFromText } from './trackingPasteParser'
 
 export function normalizeTrackingConfig(raw) {
     let parsed = raw
@@ -189,7 +234,25 @@ export default {
             pasteResult: null,
         }
     },
+    computed: {
+        activeGtmId() {
+            return extractGtmIdFromText(this.config?.gtm_id || '')
+        },
+    },
     methods: {
+        normalizeGtmInput() {
+            if (!this.config) return
+            const raw = typeof this.config.gtm_id === 'string' ? this.config.gtm_id.trim() : ''
+            if (!raw) {
+                this.config.gtm_id = ''
+                return
+            }
+            const extracted = extractGtmIdFromText(raw)
+            this.config.gtm_id = extracted || raw
+        },
+        onGtmInputPaste() {
+            this.$nextTick(() => this.normalizeGtmInput())
+        },
         analyze(raw) {
             const text = typeof raw === 'string' ? raw : ''
             this.pasteResult = parseTrackingPaste(text)

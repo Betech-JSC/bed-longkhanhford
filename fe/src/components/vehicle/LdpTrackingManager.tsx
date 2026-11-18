@@ -16,6 +16,17 @@ import {
 
 export { fireLdpFormConversion };
 
+function ensureGtagShim() {
+  window.dataLayer = window.dataLayer || [];
+  if (typeof window.gtag !== "function") {
+    // gtag.js expects an Arguments object in dataLayer rather than a plain Array
+    // eslint-disable-next-line prefer-rest-params
+    window.gtag = function () { window.dataLayer!.push(arguments); };
+    window.gtag("js", new Date());
+  }
+  return window.dataLayer;
+}
+
 interface LdpTrackingManagerProps {
   salesConsultant?: LdpConsultantForTracking | null;
   landingPageId?: number | string;
@@ -47,25 +58,46 @@ export default function LdpTrackingManager({ salesConsultant, landingPageId, sal
         document.head.appendChild(s);
         insertedElements.push(s);
       }
-      window.dataLayer = window.dataLayer || [];
-      if (typeof window.gtag !== "function") {
-        window.gtag = function () { window.dataLayer!.push(arguments); };
-        window.gtag("js", new Date());
-      }
-      if (gtagId) window.gtag("config", gtagId);
-      if (ga4Id) window.gtag("config", ga4Id);
+      ensureGtagShim();
+      if (gtagId) window.gtag!("config", gtagId);
+      if (ga4Id) window.gtag!("config", ga4Id);
     }
 
     const gtmId = extractGtmId(tc.gtm_id);
-    if (gtmId && !document.querySelector(`script[src*="googletagmanager.com/gtm.js?id=${gtmId}"]`)) {
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
-      const s = document.createElement("script");
-      s.async = true;
-      s.src = `https://www.googletagmanager.com/gtm.js?id=${encodeURIComponent(gtmId)}`;
-      s.setAttribute("data-ldp-sale-track", marker);
-      document.head.appendChild(s);
-      insertedElements.push(s);
+    if (gtmId) {
+      const dataLayer = ensureGtagShim();
+
+      const encodedGtmId = encodeURIComponent(gtmId);
+      if (!document.querySelector(`script[src*="googletagmanager.com/gtm.js?id=${encodedGtmId}"]`)) {
+        dataLayer.push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        const s = document.createElement("script");
+        s.async = true;
+        s.src = `https://www.googletagmanager.com/gtm.js?id=${encodedGtmId}`;
+        s.setAttribute("data-ldp-sale-track", marker);
+        document.head.appendChild(s);
+        insertedElements.push(s);
+      }
+
+      const hasNoscript = Array.from(document.querySelectorAll("noscript")).some((ns) => {
+        const html = ns.innerHTML || "";
+        return (
+          html.includes(`googletagmanager.com/ns.html?id=${encodedGtmId}`) ||
+          Boolean(ns.querySelector(`iframe[src*="googletagmanager.com/ns.html?id=${encodedGtmId}"]`))
+        );
+      });
+      if (!hasNoscript && document.body) {
+        const noscript = document.createElement("noscript");
+        const iframe = document.createElement("iframe");
+        iframe.src = `https://www.googletagmanager.com/ns.html?id=${encodedGtmId}`;
+        iframe.height = "0";
+        iframe.width = "0";
+        iframe.style.display = "none";
+        iframe.style.visibility = "hidden";
+        noscript.appendChild(iframe);
+        noscript.setAttribute("data-ldp-sale-track", marker);
+        document.body.insertBefore(noscript, document.body.firstChild);
+        insertedElements.push(noscript);
+      }
     }
     const fbPixelId = extractNumericId(tc.facebook_pixel_id);
     if (fbPixelId) {
